@@ -15,7 +15,6 @@ const Announcement = defineAsyncComponent(() => import('src/components/announcem
 
 <style lang='sass' scoped>
 .banner
-  background-image: url('../../assets/BannerBg.svg')
   background-repeat: no-repeat
   background-size: 100% 660px
   min-height: 660px
