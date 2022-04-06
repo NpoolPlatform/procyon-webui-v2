@@ -1,10 +1,10 @@
-*, *:before, *:after 
+*, *:before, *:after
 	-webkit-box-sizing: border-box
 	-moz-box-sizing: border-box
 	box-sizing: border-box
 
 
-::selection 
+::selection
 	background: #1ec498
 	color: #27424c
 	-webkit-background-clip: unset
@@ -45,7 +45,7 @@ body::before
 	z-index: 1000
 
 
-.mobile 
+.mobile
 	display: none
 
 
@@ -53,7 +53,7 @@ body::before
 /* HEADINGS */
 
 
-h1 
+h1
 	background: linear-gradient(to left, #54e280 0, #1ec498 50%)
 	background-clip: border-box
 	filter: contrast(2)
@@ -66,7 +66,7 @@ h1
 	-webkit-text-fill-color: transparent
 
 
-h2:not(#hero h2) 
+h2:not(#hero h2)
 	background: linear-gradient(to left, #54e280 0, #1ec498 50%)
 	background-clip: border-box
 	filter: contrast(2)
@@ -81,11 +81,11 @@ h2:not(#hero h2)
 	-webkit-text-fill-color: transparent
 
 
-h2:not(#hero h2):first-child 
+h2:not(#hero h2):first-child
 	margin-top: 12px
 
 
-h2:not(#hero h2)::after 
+h2:not(#hero h2)::after
 	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 30%)
 	display: block
 	content: ''
@@ -96,7 +96,7 @@ h2:not(#hero h2)::after
 	width: 100%
 
 
-h3:not([class]) 
+h3:not([class])
 	background: linear-gradient(to left, #54e280 0, #1ec498 100%)
 	background-clip: border-box
 	filter: contrast(2)
@@ -111,7 +111,7 @@ h3:not([class])
 	-webkit-text-fill-color: transparent
 
 
-h3:not([class])::after 
+h3:not([class])::after
 	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
 	display: block
 	content: ''
@@ -122,7 +122,7 @@ h3:not([class])::after
 	width: 100%
 
 
-h4 
+h4
 	font-size: 18px
 	font-weight: 600
 	margin: 12px 0
@@ -135,31 +135,31 @@ h4
 
 a,
 a:active,
-a:visited 
+a:visited
 	color: #e1eeef
 	cursor: pointer
 	text-decoration: none
 	transition: all ease-in-out .3s
 
 
-a:not([class]) 
+a:not([class])
 	color: #1ec498
 	filter: contrast(1.5)
 	transition: all ease-in-out .3s
 
 
-a:not([class]):hover 
+a:not([class]):hover
 	color: #1ec498
 	filter: contrast(1.5)
 	text-decoration: underline 1px solid #11afaf
 
 
-a:hover 
+a:hover
 	color: #11afaf
 
 
 button,
-input[type='submit'] 
+input[type='submit']
 	background: linear-gradient(to bottom right, #ff964a 0, #ce5417 100%)
 	border: 0
 	border-radius: 18px
@@ -176,7 +176,7 @@ input[type='submit']
 
 
 button.alt,
-input[type='submit'].send-code 
+input[type='submit'].send-code
 	background: none
 	border: 2px solid #ff964a
 	color: #ff964a
@@ -184,24 +184,24 @@ input[type='submit'].send-code
 
 
 button:hover,
-input[type='submit']:hover 
+input[type='submit']:hover
 	border-radius: 4px
 	filter: contrast(1.5)
 
 
-.nav button 
+.nav button
 	font-size: 16px
 	height: auto
 	margin: 0 0 0 12px
 	padding: 12px 20px
 
 
-button.in-active 
+button.in-active
 	cursor: not-allowed
 	filter: saturate(0) contrast(.7)
 
 
-button.in-active:hover 
+button.in-active:hover
 	border-radius: 18px
 
 
@@ -209,42 +209,42 @@ button.in-active:hover
 /* HEADER & NAVIGATION */
 
 
-header.mobile 
+header.mobile
 	display: none
 
 
-header 
+header
 	background: linear-gradient(to bottom, #092023 0, transparent 50px)
 	display: flex
 	justify-content: space-between
 	padding: 24px
 
 
-.logo 
+.logo
 	width: 150px
 
 
-.nav 
+.nav
 	font-size: 14px
 
 
-.nav ul 
+.nav ul
 	margin: 0
 
 
-.nav li 
+.nav li
 	display: inline
 	list-style: none
 	padding: 12px
 
 
-.nav li a.nav-link 
+.nav li a.nav-link
 	color: #e1eeef
 	position: relative
 	text-transform: uppercase
 
 
-.nav li a.nav-link::after 
+.nav li a.nav-link::after
 	background: linear-gradient(to right, transparent 0, #54E280 50%, transparent 100%)
 	display: block
 	content: ''
@@ -257,18 +257,18 @@ header
 	transform: scaleX(0)
 
 
-.nav li:hover a::after 
+.nav li:hover a::after
 	transform: scaleX(1)
 
 
-.user-icon 
+.user-icon
 	cursor: pointer
 	vertical-align: middle
 	width: 28px
 	transition: all ease-in-out .2s
 
 
-.user-icon:hover 
+.user-icon:hover
 	filter: hue-rotate(20deg) contrast(1.5)
 
 
@@ -276,12 +276,12 @@ header
 /* LANGUAGE PICKER */
 
 
-ul.language-picker 
+ul.language-picker
 	display: inline
 	padding: 0
 
 
-ul.language-picker li 
+ul.language-picker li
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
 	border-radius: 4px
 	display: inline
@@ -289,15 +289,15 @@ ul.language-picker li
 	padding: 8px
 
 
-ul.language-picker li:hover 
+ul.language-picker li:hover
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.6) 100%)
 
 
-ul.language-picker li:hover a 
+ul.language-picker li:hover a
 	color: #11afaf
 
 
-ul.language-picker li.selected 
+ul.language-picker li.selected
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.6) 100%)
 
 
@@ -305,17 +305,17 @@ ul.language-picker li.selected
 /* MAIN CONTENT */
 
 
-#main:not([class]) 
+#main:not([class])
 	width: 100%
 
 
-.content 
+.content
 	max-width: 1280px
 	margin: 0 auto
 	padding: 0 24px
 
 
-.content-glass 
+.content-glass
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
 	box-shadow: 16px 16px 20px 0 #23292b
 	border-radius: 12px
@@ -324,13 +324,13 @@ ul.language-picker li.selected
 	margin: 24px
 
 
-.content p:not([class]) 
+.content p:not([class])
 	font-size: 18px
 	font-weight: 300
 	line-height: 36px
 
 
-.content p:not([class]) em 
+.content p:not([class]) em
 	background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
 	background-clip: border-box
 	font-weight: 500
@@ -339,7 +339,7 @@ ul.language-picker li.selected
 	-webkit-text-fill-color: transparent
 
 
-.content p:not([class]) strong 
+.content p:not([class]) strong
 	background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
 	background-clip: border-box
 	font-weight: 500
@@ -348,14 +348,14 @@ ul.language-picker li.selected
 	-webkit-text-fill-color: transparent
 
 
-.content ul 
+.content ul
 	font-size: 18px
 	font-weight: 300
 	line-height: 36px
 	list-style: none
 
 
-.content ul li::before 
+.content ul li::before
 	color: #1ec498
 	content: '\2727' /*hollow star*/
 	/* content: '\2726' /*filled star*/
@@ -365,11 +365,11 @@ ul.language-picker li.selected
 	width: 32px
 
 
-.content ul strong 
+.content ul strong
 	font-weight: 700
 
 
-div.hr 
+div.hr
 	background: linear-gradient(to right, transparent 10%, #e85f1a 40%, #ffe91d 50%, #1ec498 60%, transparent 90%)
 	margin: 48px 0
 	opacity: .7
@@ -377,7 +377,7 @@ div.hr
 	width: 100%
 
 
-div.back-button 
+div.back-button
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
 	box-shadow: 16px 16px 20px 0 #23292b
 	border-radius: 0 12px 12px 0
@@ -391,11 +391,11 @@ div.back-button
 	transition: all ease-in-out .2s
 
 
-div.back-button:hover 
+div.back-button:hover
 	opacity: 1
 
 
-img.content-image 
+img.content-image
 	border-radius: 24px
 	box-shadow: 4px 4px 20px 0 #1f293a
 	width: 100%
@@ -405,13 +405,13 @@ img.content-image
 /* HERO */
 
 
-#hero 
+#hero
 	margin: 24px 0 48px 0
 	padding: 0 0 48px 0
 	position: relative
 
 
-#hero::after 
+#hero::after
 	background: linear-gradient(to right, transparent 0, #e85f1a 30%, #ffe91d 50%, #1ec498 80%, transparent 100%)
 	display: block
 	content: ''
@@ -422,11 +422,11 @@ img.content-image
 	width: 100%
 
 
-#hero h1 
+#hero h1
 	font-size: 40px
 
 
-#hero h2 
+#hero h2
 	color: #e4f4f0
 	font-size: 28px
 	font-weight: 300
@@ -437,14 +437,14 @@ img.content-image
 /* PRODUCTS */
 
 
-.products 
+.products
 	display: flex
 	flex-wrap: wrap
 	justify-content: flex-start
 	margin: 0 0 96px 0
 
 
-.product 
+.product
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
 	box-shadow: 16px 16px 20px 0 #23292b
 	border-radius: 12px
@@ -457,16 +457,16 @@ img.content-image
 	width: 30%
 
 
-.product:last-of-type 
+.product:last-of-type
 	margin-right: 0
 
 
-.product:hover 
+.product:hover
 	transition: all ease-in-out .5s
 	box-shadow: 8px 8px 20px 0 #051319
 
 
-.product-heading 
+.product-heading
 	align-items: center
 	display: flex
 	justify-content: center
@@ -475,7 +475,7 @@ img.content-image
 	width: 100%
 
 
-.product-heading::after 
+.product-heading::after
 	background: linear-gradient(to right, transparent 0, #e85f1a 30%, #ffe91d 50%, #1ec498 80%, transparent 100%)
 	display: block
 	content: ''
@@ -486,14 +486,14 @@ img.content-image
 	width: 100%
 
 
-.product .icon 
+.product .icon
 	filter: opacity(.9)
 	margin: 0 8px 0 0
 	max-width: 32px
 	max-height: 32px
 
 
-h3.product-title 
+h3.product-title
 	color: #e1eeef
 	font-size: 28px
 	font-weight: 200
@@ -501,7 +501,7 @@ h3.product-title
 	text-transform: uppercase
 
 
-.product .price 
+.product .price
 	color: #1ec498
 	filter: contrast(1.1) brightness(1.1)
 	font-size: 18px
@@ -511,13 +511,13 @@ h3.product-title
 	padding: 8px 0
 
 
-.product .price span 
+.product .price span
 	color: #e1eeef
 	font-weight: 700
 	font-size: 200%
 
 
-.product .line 
+.product .line
 	border-bottom: 1px dashed #a1d0d0
 	display: flex
 	justify-content: space-between
@@ -525,16 +525,16 @@ h3.product-title
 	padding: 8px 0
 
 
-.product .label 
+.product .label
 	font-weight: 400
 
 
-.product .value 
+.product .value
 	color: #e4f4f0
 	font-weight: 700
 
 
-.product button 
+.product button
 	font-size: 16px
 	margin: 24px 0 0 0
 	height: auto
@@ -545,7 +545,7 @@ h3.product-title
 /* FEATURE SECTION */
 
 
-.feature 
+.feature
 	background: linear-gradient(to bottom right, #1f293a 0, #23292b 100%)
 	box-shadow: 0px 0px 60px 15px #051319
 	margin: 96px 0
@@ -555,7 +555,7 @@ h3.product-title
 
 
 .feature::before,
-.feature::after 
+.feature::after
 	background: linear-gradient(to right, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
 	display: block
 	content: ''
@@ -565,21 +565,21 @@ h3.product-title
 	width: 100%
 
 
-.feature::before 
+.feature::before
 	left: 0
 	top: 0
 
 
-.feature::after 
+.feature::after
 	left: 0
 	bottom: 0
 
 
-.feature h2:not(#hero h2) 
+.feature h2:not(#hero h2)
 	margin: 12px auto
 
 
-h3.feature-title 
+h3.feature-title
 	font-size: 28px
 	font-weight: 100
 	margin: 16px 0
@@ -588,7 +588,7 @@ h3.feature-title
 	text-transform: uppercase
 
 
-h3.feature-title::after 
+h3.feature-title::after
 	background: linear-gradient(to right, transparent 0, #ffcc4a 50%, transparent 100%)
 	display: block
 	content: ''
@@ -599,7 +599,7 @@ h3.feature-title::after
 	width: 100%
 
 
-.feature .icon 
+.feature .icon
 	height: 160px
 	margin: 0 0 12px 0
 
@@ -608,43 +608,43 @@ h3.feature-title::after
 /* COLUMNS */
 
 
-.columns-1 
+.columns-1
 	padding: 0 36px
 
 
 
-.columns-1 img 
+.columns-1 img
 	max-width: 100%
 	padding: 18px 60px
 
 
 
-.columns-2 
+.columns-2
 	display: flex
 	justify-content: space-between
 	flex-wrap: wrap
 
 
-.column-2 
+.column-2
 	margin: 24px 0
 	max-width: 400px
 	min-width: 48%
 
 
-.columns-3 
+.columns-3
 	display: flex
 	justify-content: center
 	flex-wrap: wrap
 
 
-.column-3 
+.column-3
 	margin: 24px 1.5% 24px 1.5%
 	max-width: 360px
 	text-align: center
 	width: 30%
 
 
-.column-3 p 
+.column-3 p
 	font-size: 18px
 	font-weight: 300
 	line-height: 36px
@@ -652,13 +652,13 @@ h3.feature-title::after
 	text-align: left
 
 
-.columns-4 
+.columns-4
 	display: flex
 	justify-content: flex-start
 	flex-wrap: wrap
 
 
-.column-4 
+.column-4
 	margin: 24px 5% 24px 0
 	max-width: 20%
 	min-width: 240px
@@ -667,16 +667,16 @@ h3.feature-title::after
 
 /* SIDEBAR */
 
-.with-sidebar 
+.with-sidebar
 	margin: 0 0 0 240px
 	width: calc(100% - 240px)
 
 
-header.with-sidebar 
+header.with-sidebar
 	justify-content: flex-end
 
 
-.sidebar 
+.sidebar
 	background: linear-gradient(to bottom, #092023 0, transparent 50px)
 	float: left
 	position: fixed
@@ -686,24 +686,24 @@ header.with-sidebar
 	width: 240px
 
 
-.sidebar .logo 
+.sidebar .logo
 	margin: 36px 0 12px 40px
 	position: relative
 
 
-.sidebar .hr 
+.sidebar .hr
 	height: 1px
 	margin: 0 0 16px 0
 
 
-.sidebar ul 
+.sidebar ul
 	list-style: none
 	margin: 24px 0
 	padding: 0
 	text-align: left
 
 
-.sidebar ul li 
+.sidebar ul li
 	border-radius: 0 50px 50px 0
 	cursor: pointer
 	font-size: 18px
@@ -714,7 +714,7 @@ header.with-sidebar
 	width: 100%
 
 
-.sidebar ul li::before 
+.sidebar ul li::before
 	background: linear-gradient(to right, transparent 0, #e1eeef 30%, transparent 90%)
 	display: block
 	content: ''
@@ -725,7 +725,7 @@ header.with-sidebar
 	width: 100%
 
 
-.sidebar ul li:last-of-type::after 
+.sidebar ul li:last-of-type::after
 	background: linear-gradient(to right, transparent 0, #e1eeef 30%, transparent 90%)
 	display: block
 	content: ''
@@ -736,22 +736,22 @@ header.with-sidebar
 	width: 100%
 
 
-.sidebar ul li:hover 
+.sidebar ul li:hover
 	background: linear-gradient(to bottom right, #1ec498 0, #11afaf 100%)
 	color: #092023
 
 
-.sidebar ul li:hover img 
+.sidebar ul li:hover img
 	filter: invert(100%) hue-rotate(180deg)
 
 
-.sidebar ul li img 
+.sidebar ul li img
 	margin: 0 8px 0 0
 	width: 24px
 
 
 .sidebar ul li img,
-.sidebar ul li span 
+.sidebar ul li span
 	vertical-align: middle
 
 
@@ -759,15 +759,15 @@ header.with-sidebar
 
 /* SEARCH */
 
-#search-box 
+#search-box
 	margin: 32px 0
 
 
-#search-box form 
+#search-box form
 	display: flex
 
 
-input#search-field 
+input#search-field
 	border-radius: 12px 0 0 12px
 	height: 48px
 	margin: 0
@@ -775,19 +775,19 @@ input#search-field
 	width: auto
 
 
-input#search-button 
+input#search-button
 	border-radius: 0 12px 12px 0
 	margin: 0
 
 
-input#search-button:hover 
+input#search-button:hover
 	border-radius: 0 4px 4px 0
 	margin: 0
 
 
 /* REGISTER */
 
-.form-container 
+.form-container
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
 	box-shadow: 16px 16px 20px 0 #23292b
 	border-radius: 12px
@@ -798,7 +798,7 @@ input#search-button:hover
 	max-width: 480px
 
 
-h3.form-title 
+h3.form-title
 	color: #e1eeef
 	font-size: 24px
 	font-weight: 200
@@ -807,7 +807,7 @@ h3.form-title
 	padding: 0 0 24px 0
 
 
-h3.form-title::after 
+h3.form-title::after
 	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
 	display: block
 	content: ''
@@ -818,7 +818,7 @@ h3.form-title::after
 	width: 100%
 
 
-label 
+label
 	font-size: 16px
 	font-weight: 100
 
@@ -827,7 +827,7 @@ input[type='email'],
 input[type='password'],
 input[type='text'],
 input[type='number'],
-select 
+select
 	background: #e1eeef
 	border: none
 	border-radius: 12px
@@ -839,13 +839,13 @@ select
 	width: 100%
 
 
-input[type='checkbox'] 
+input[type='checkbox']
 	cursor: pointer
 	width: 16px
 	height: 16px
 
 
-.form-container label[for='agreement'] 
+.form-container label[for='agreement']
 	font-size: 16px
 	font-weight: 400
 	opacity: .7
@@ -862,67 +862,67 @@ input[type='checkbox']:focus,
 input[type='number']:active,
 input[type='number']:focus,
 select:active,
-select:focus 
+select:focus
 	outline: 2px solid #1ec498
 
 
-input.error 
+input.error
 	outline: 2px solid #e85f1a
 
 
-.register 
+.register
 	margin: 36px 0 0 0
 	width: 100%
 
 
-input[type='submit'].send-code 
+input[type='submit'].send-code
 	font-size: 16px
 	margin: 0 0 24px 0
 	width: 100%
 
 
-p.skip-registration 
+p.skip-registration
 	font-size: 14px
 	font-weight: 400
 	opacity: .7
 	text-align: center
 
 
-.confirmation h3 
+.confirmation h3
 	margin-top: 0
 
 
-.confirmation h3.form-title 
+.confirmation h3.form-title
 	font-size: 18px
 	padding: 0
 
 
-.confirmation h3.form-title::after 
+.confirmation h3.form-title::after
 	display: none
 
 
-.confirmation button 
+.confirmation button
 	margin: 0 0 24px 0
 	width: 100%
 
 
-.confirmation button 
+.confirmation button
 	margin: 0 0 24px 0
 	width: 100%
 
 
-.confirmation button:last-child 
+.confirmation button:last-child
 	margin: 0
 
 
 /* CONTACT FORM */
 
-.contact-page 
+.contact-page
 	display: flex
 	flex-wrap: wrap
 
 
-.contact-page .form-container 
+.contact-page .form-container
 	width: 35%
 
 
@@ -939,50 +939,50 @@ textarea#message
 	width: 100%
 
 
-h4#signature 
+h4#signature
 	color: #1ec498
 	font-weight: 400
 
 
 /* QR Code Box */
 
-.qr-code-text 
+.qr-code-text
 	font-size: 16px
 	line-height: 28px
 
 
-.qr-code-text strong 
+.qr-code-text strong
 	color: #1ec498
 
 
-.qr-code-text:first-of-type 
+.qr-code-text:first-of-type
 	background: #ffffff22
 	border-radius: 12px
 	padding: 12px
 
 
-.qr-code-container 
+.qr-code-container
 	margin: 24px 0
 	text-align: center
 	width: 100%
 
 
-.qr-code-container img 
+.qr-code-container img
 	border-radius: 12px
 	width: 100%
 
 
-.order-form .qr-code-container img 
+.order-form .qr-code-container img
 	border-radius: 0 0 12px 12px
 	width: 100%
 
 
-.form-container .hr 
+.form-container .hr
 	height: 1px
 	margin: 24px 0
 
 
-.qr-code-container h5 
+.qr-code-container h5
 	background: #fc4468
 	border-radius: 12px 12px 0 0
 	font-size: 20px
@@ -996,7 +996,7 @@ h4#signature
 /* PRODUCT, IDO, ORDER, WITHDRAW */
 
 
-.product-container 
+.product-container
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
 	box-shadow: 16px 16px 20px 0 #23292b
 	border-radius: 12px
@@ -1010,7 +1010,7 @@ h4#signature
 	position: relative
 
 
-.product-page-icon 
+.product-page-icon
 	background: linear-gradient(to bottom right, #54e280 0, #1ec498 100%)
 	border-radius: 4px
 	box-shadow: 2px 2px 4px #23292b88
@@ -1023,79 +1023,79 @@ h4#signature
 	width: 60px
 
 
-.product-page-icon img 
+.product-page-icon img
 	filter: opacity(.9)
 	vertical-align: middle
 	height: 40px
 	width: 40px
 
 
-.product-container h1 
+.product-container h1
 	display: inline-block
 	margin: 0
 	vertical-align: middle
 
 
-.product-title-section 
+.product-title-section
 	margin: 0 0 24px 0
 	width: 100%
 
 
-.product-container .info 
+.product-container .info
 	padding: 0 5% 0 0
 	width: 75%
 
 
-.product-container .withdraw 
+.product-container .withdraw
 	padding: 0 5% 0 0
 	width: 100%
 
 
 .product-container .withdraw .submit,
-.product-container .withdraw input 
+.product-container .withdraw input
 	width: 200px
 
 
-.product-container .info-flex 
+.product-container .info-flex
 	display: flex
 	flex-wrap: wrap
 
 
-.product-container .info-no-flex 
+.product-container .info-no-flex
 	margin: 0 0 36px 0
 
 
-.product-container .info-no-flex .full-section 
+.product-container .info-no-flex .full-section
 	margin: 24px 0
 
 
-.product-container .info-no-flex .number 
+.product-container .info-no-flex .number
 	font-size: 22px
 
 
-.product-container .info-no-flex .unit 
+.product-container .info-no-flex .unit
 	font-size: 14px
 
 
-.product-container .three-section 
+.product-container .three-section
 	margin: 0 5% 12px 0
 	width: 30%
 
 
-.product-container .three-section:nth-child(3n) 
+.product-container .three-section:nth-child(3n)
 	margin-right: 0
 
 
-.product-container .three-section input 
+.product-container .three-section input
 	margin: 0
 
 
-.product-container .full-section 
+.product-container .full-section
 	margin: 12px 0
 	width: 100%
 
 
-.product-container .address-option 
+.product-container .address-option
 	border-radius: 18px
 	cursor: pointer
 	display: inline-block
@@ -1103,82 +1103,82 @@ h4#signature
 	transition: all ease-in-out .1s
 
 
-.product-container .address-option .number 
+.product-container .address-option .number
 	filter: contrast(.5)
 
 
-.product-container .checkmark 
+.product-container .checkmark
 	display: none
 	opacity: 0
 
 
-.product-container .address-option:hover .number 
+.product-container .address-option:hover .number
 	filter: contrast(1.5)
 
 
-.product-container .address-option:hover .checkmark 
+.product-container .address-option:hover .checkmark
 	display: inline
 	opacity: .8
 
 
-.product-container .address-selected .number 
+.product-container .address-selected .number
 	filter: contrast(1.5)
 
 
-.product-container .address-selected .checkmark 
+.product-container .address-selected .checkmark
 	filter: contrast(1.5)
 	display: inline
 	opacity: 1
 
 
 .order-form,
-.product-sidebar 
+.product-sidebar
 	width: 25%
 
 
-.product-sidebar-section 
+.product-sidebar-section
 	margin: 0 0 24px 0
 
 
-img.graph 
+img.graph
 	margin: 12px 0
 	max-width: 100%
 
 
-.product-detail-text 
+.product-detail-text
 	margin: 30px 0
 
 
-.product-detail-text h3 
+.product-detail-text h3
 	margin: 48px 0 24px 0
 
 
-.product-detail-text h3::after 
+.product-detail-text h3::after
 	width: 60%
 
 
-.product-container h4 
+.product-container h4
 	font-size: 18px
 	font-weight: 400
 	margin: 12px 0 4px 0
 	text-transform: unset
 
 
-.content .product-container p:not([class]) 
+.content .product-container p:not([class])
 	font-size: 16px
 	line-height: 28px
 	margin: 16px 0
 
 
-.content .product-container ul 
+.content .product-container ul
 	font-size: 16px
 
 
-.product-container span 
+.product-container span
 	font-size: 28px
 
 
-.product-container .number 
+.product-container .number
 	background: linear-gradient(to bottom right, #ffe91d -50%, #ce5417 150%)
 	background-clip: border-box
 	filter: contrast(1.5)
@@ -1189,32 +1189,32 @@ img.graph
 
 
 .product-container .unit,
-.product-container .wallet-type 
+.product-container .wallet-type
 	color: #e4f4f0
 	filter: contrast(1.5)
 	font-size: 16px
 	font-weight: 700
 
 
-.product-container .hr 
+.product-container .hr
 	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
 	height: 1px
 	margin: 24px 0
 
 
-.product-container button 
+.product-container button
 	margin: 0 0 24px 0
 	width: 100%
 
 
-.product-container > button 
+.product-container > button
 	margin: 0 auto 24px auto
 	width: 320px
 
 
 img.copy-button,
 img.checkmark,
-img.more-info 
+img.more-info
 	filter: opacity(.8)
 	cursor: pointer
 	margin: 0 0 0 4px
@@ -1223,33 +1223,33 @@ img.more-info
 
 
 img.copy-button:hover,
-img.more-info:hover 
+img.more-info:hover
 	filter: opacity(1)
 
 
-.tooltip 
+.tooltip
 	align-items: center
 	display: flex
 	margin: 4px 0 0 0
 	position: relative
 
 
-.tooltip span 
+.tooltip span
 	cursor: pointer
 	font-size: 10px
 	text-transform: uppercase
 
 
-.tooltip img.more-info 
+.tooltip img.more-info
 	margin: 0 4px 0 0
 	width: 12px
 
 
-.tooltip:hover img.more-info 
+.tooltip:hover img.more-info
 	filter: opacity(1)
 
 
-.tooltip p.tooltip-text 
+.tooltip p.tooltip-text
 	background: #23292b
 	border-radius: 4px
 	box-shadow: 5px 5px 10px 0 #101417
@@ -1266,17 +1266,17 @@ img.more-info:hover
 	z-index: 1
 
 
-.tooltip:hover p.tooltip-text 
+.tooltip:hover p.tooltip-text
 	opacity: 1
 	visibility: visible
 
 
-.submit 
+.submit
 	margin: 36px 0 0 0
 	width: 100%
 
 
-.product-container .coupon-error 
+.product-container .coupon-error
 	background: #fc4468
 	border-radius: 8px
 	color: #ffffff
@@ -1285,36 +1285,36 @@ img.more-info:hover
 	padding: 4px
 
 
-.content ul.product-links 
+.content ul.product-links
 	margin: 0 0 36px 0
 	padding: 0
 
 
-.content ul.product-links li 
+.content ul.product-links li
 	padding: 4px 0
 
 
-.content ul.product-links li::before 
+.content ul.product-links li::before
 	display: none
 
 
-.product-links a 
+.product-links a
 	align-items: center
 	display: flex
 
 
-.product-links span 
+.product-links span
 	font-size: 18px
 
 
-.link-icon 
+.link-icon
 	filter: opacity(.8)
 	margin: 0 8px 0 0
 	height: 24px
 	width: 24px
 
 
-.warning 
+.warning
 	align-items: center
 	border: 1px solid #1ec498
 	border-radius: 18px
@@ -1324,19 +1324,19 @@ img.more-info:hover
 	padding: 8px
 
 
-.warning img 
+.warning img
 	filter: opacity(.8)
 	margin: 0 8px 0 0
 	height: 24px
 	width: 24px
 
 
-.warning span 
+.warning span
 	font-size: 12px
 	font-weight: 600
 
 
-.video-box	
+.video-box
 	border-radius: 20px
 	margin: 36px 0
 	overflow: hidden
@@ -1345,7 +1345,7 @@ img.more-info:hover
 	width: 100%
 
 
-.video-box iframe 
+.video-box iframe
 	position: absolute
 	top: 0
 	left: 0
@@ -1359,7 +1359,7 @@ img.more-info:hover
 	filter: blur(12px)
 
 
-.popup 
+.popup
 	border-radius: 12px
 	display: flex
 	align-items: center
@@ -1372,12 +1372,12 @@ img.more-info:hover
 	z-index: 10
 
 
-.popup .form-container 
+.popup .form-container
 	background: linear-gradient(to bottom right, #2a3943 0, #092023 100%)
 	box-shadow: 16px 16px 20px 0 #101417ee
 
 
-.popup .form-container button 
+.popup .form-container button
 	margin: 18px 0 0 0
 
 
@@ -1385,12 +1385,12 @@ img.more-info:hover
 /* IDO PRODUCT */
 
 
-.ido-container 
+.ido-container
 	background: linear-gradient(to bottom right, #23292b 0, #101417 100%)
 	box-shadow: 16px 16px 20px 0 #05131999
 
 
-img.ido-promo-content 
+img.ido-promo-content
 	border-radius: 20px
 	margin: 12px 0
 	max-width: 100%
@@ -1402,7 +1402,7 @@ img.product-banner
 	width: calc(100% + 96px)
 
 
-.ido-title-section 
+.ido-title-section
 	background-size: auto calc(100% + 16px)
 	background-repeat: no-repeat
 	background-position: center center
@@ -1415,7 +1415,7 @@ img.product-banner
 	width: calc(100% + 96px)
 
 
-.product-title-container 
+.product-title-container
 	background: #23292b
 	border-radius: 12px 12px 0 0
 	padding: 16px
@@ -1424,7 +1424,7 @@ img.product-banner
 	left: 32px
 
 
-.product-title-container::before 
+.product-title-container::before
 	background-color: transparent
 	border-bottom-right-radius: 20px
 	box-shadow: 0 20px 0 0 #23292b
@@ -1436,7 +1436,7 @@ img.product-banner
 	width: 20px
 
 
-.product-title-container::after 
+.product-title-container::after
 	background-color: transparent
 	border-bottom-left-radius: 20px
 	box-shadow: 0 20px 0 0 #23292b
@@ -1448,44 +1448,44 @@ img.product-banner
 	width: 20px
 
 
-.project-team 
+.project-team
 	display: flex
 	flex-wrap: wrap
 	justify-content: flex-start
 
 
-.team-member 
+.team-member
 	margin: 0 5% 40px 0
 	width: 30%
 
 
-.team-member:nth-child(3n) 
+.team-member:nth-child(3n)
 	margin-right: 0
 
 
-.team-member img 
+.team-member img
 	border-radius: 18px
 	width: 100%
 
 
-.team-member h4.name 
+.team-member h4.name
 	font-size: 20px
 	margin: 8px 0
 	text-transform: uppercase
 
 
-.team-member h5.title 
+.team-member h5.title
 	font-size: 16px
 	margin: 4px 0
 
 
-.team-member .bio 
+.team-member .bio
 	font-size: 14px
 	line-height: 1.5
 	margin: 0
 
 
-.ido-progress-bar 
+.ido-progress-bar
 	background: #3d4c52
 	border-radius: 8px
 	margin: 8px 0
@@ -1493,7 +1493,7 @@ img.product-banner
 	width: 100%
 
 
-.ido-progress 
+.ido-progress
 	background: linear-gradient(to bottom right, #ffe91d -50%, #ce5417 150%)
 	border-radius: 8px
 	height: 100%
@@ -1504,11 +1504,11 @@ img.product-banner
 
 /* #ff3e51 #1636d3 */
 
-.project-affyn .product-page-icon 
+.project-affyn .product-page-icon
 	background: #ff3e51
 
 
-.project-affyn h1 
+.project-affyn h1
 	background: linear-gradient(to bottom right, transparent 0, #ff3e51 0, #1636d3 100%)
 	background-clip: text
 	filter: contrast(1) brightness(1.25)
@@ -1517,7 +1517,7 @@ img.product-banner
 	-webkit-text-fill-color: transparent
 
 
-.project-affyn h3:not(.form-title) 
+.project-affyn h3:not(.form-title)
 	background: linear-gradient(to bottom right, transparent 0, #ff3e51 0, #1636d3 100%)
 	background-clip: text
 	filter: contrast(1) brightness(1.25)
@@ -1526,23 +1526,23 @@ img.product-banner
 	-webkit-text-fill-color: transparent
 
 
-.project-affyn a:not([class]) 
+.project-affyn a:not([class])
 	color: #ff3e51
 	filter: brightness(1.5)
 	transition: all ease-in-out .3s
 
 
-.project-affyn a:not([class]):hover 
+.project-affyn a:not([class]):hover
 	filter: contrast(1.5)
 	text-decoration: underline 1px solid #ff3e51
 
 
 .project-affyn button,
-.project-affyn input[type='submit'] 
+.project-affyn input[type='submit']
 	background: linear-gradient(to bottom right, #ff3e51 0, #1636d3 100%)
 
 
-.project-affyn .number 
+.project-affyn .number
 	background: linear-gradient(to right, transparent 0, #ff3e51 0, #1636d3 150%)
 	background-clip: text
 	filter: contrast(1) brightness(1.5)
@@ -1551,11 +1551,11 @@ img.product-banner
 	-webkit-text-fill-color: transparent
 
 
-.project-affyn .warning 
+.project-affyn .warning
 	border: 1px solid #ff3e51
 
 
-.content .project-affyn ul li::before 
+.content .project-affyn ul li::before
 	color: #ff3e51
 
 
@@ -1564,24 +1564,15 @@ img.product-banner
 
 /* #d3fc51 #ea5bc5 */
 
-.project-mixmob .product-page-icon 
+.project-mixmob .product-page-icon
 	background: #d3fc51
 
 
-.project-mixmob .product-page-icon img 
+.project-mixmob .product-page-icon img
 	filter: none
 
 
-.project-mixmob h1 
-	background: #d3fc51
-	background-clip: text
-	filter: none
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
-
-
-.project-mixmob h3:not(.form-title) 
+.project-mixmob h1
 	background: #d3fc51
 	background-clip: text
 	filter: none
@@ -1590,37 +1581,46 @@ img.product-banner
 	-webkit-text-fill-color: transparent
 
 
-.project-mixmob a:not([class]) 
+.project-mixmob h3:not(.form-title)
+	background: #d3fc51
+	background-clip: text
+	filter: none
+	-webkit-background-clip: text
+	-webkit-box-decoration-break: clone
+	-webkit-text-fill-color: transparent
+
+
+.project-mixmob a:not([class])
 	color: #ea5bc5
 	filter: brightness(1.5)
 	transition: all ease-in-out .3s
 
 
-.project-mixmob a:not([class]):hover 
+.project-mixmob a:not([class]):hover
 	filter: contrast(1.5)
 	text-decoration: underline 1px solid #d3fc51
 
 
 .project-mixmob button,
-.project-mixmob input[type='submit'] 
+.project-mixmob input[type='submit']
 	background: #d3fc51
 	color: #111111
 	text-shadow: none
 
 
 .project-mixmob button:hover,
-.project-mixmob input[type='submit']:hover 
+.project-mixmob input[type='submit']:hover
 	background: #ea5bc5
 	filter: none
 
 
-.project-mixmob button.alt 
+.project-mixmob button.alt
 	background: none
 	border-color: #ea5bc5
 	color: #ea5bc5
 
 
-.project-mixmob .number 
+.project-mixmob .number
 	background: #ea5bc5
 	background-clip: text
 	filter: none
@@ -1629,26 +1629,26 @@ img.product-banner
 	-webkit-text-fill-color: transparent
 
 
-.project-mixmob .warning 
+.project-mixmob .warning
 	border: 1px solid #d3fc51
 
 
-.content .project-mixmob ul li::before 
+.content .project-mixmob ul li::before
 	color: #d3fc51
 
 
-.content .project-mixmob p:not([class]) strong 
+.content .project-mixmob p:not([class]) strong
 	background: none
 	color: #d3fc51
 	-webkit-text-fill-color: unset
 
 
-.project-mixmob .ido-progress 
+.project-mixmob .ido-progress
 	background: #d3fc51
 	filter: saturate(1.5)
 
 
-.project-mixmob .team-member h5.title 
+.project-mixmob .team-member h5.title
 	color: #d3fc51
 
 
@@ -1656,15 +1656,15 @@ img.product-banner
 /* FAQ */
 
 
-.faq h2:not(#hero h2) 
+.faq h2:not(#hero h2)
 	margin: 96px 0 36px 0
 
 
-.faq h2:not(#hero h2):first-of-type 
+.faq h2:not(#hero h2):first-of-type
 	margin: 36px 0
 
 
-.faq h3 
+.faq h3
 	background: linear-gradient(to right, #e1eeef	0, #e4f4f0 100%)
 	background-clip: border-box
 	font-size: 24px
@@ -1678,7 +1678,7 @@ img.product-banner
 	-webkit-text-fill-color: transparent
 
 
-.faq h3::before 
+.faq h3::before
 	color: #1ec498
 	content: '\2727' /*hollow star*/
 	/* content: '\2726' /*filled star*/
@@ -1691,11 +1691,11 @@ img.product-banner
 	-webkit-text-fill-color: #1ec498
 
 
-.faq h3:not([class])::after 
+.faq h3:not([class])::after
 	opacity: .5
 
 
-.line-account img 
+.line-account img
 	filter: hue-rotate(30deg) contrast(1.2)
 	margin: 0 0 0 8px
 	opacity: .9
@@ -1704,11 +1704,11 @@ img.product-banner
 
 /* LEGAL */
 
-.legal h2:not(#hero h2) 
+.legal h2:not(#hero h2)
 	text-transform: unset
 
 
-.legal h3 
+.legal h3
 	background: linear-gradient(to right, #e1eeef	0, #e4f4f0 100%)
 	background-clip: border-box
 	font-size: 24px
@@ -1725,13 +1725,13 @@ img.product-banner
 /* MINING PAGE - EARNINGS SUMMARY */
 
 
-.earnings-summary 
+.earnings-summary
 	display: flex
 	flex-wrap: wrap
 	justify-content: center
 
 
-.earnings-figure 
+.earnings-figure
 	margin: 0 5% 0 0
 	padding: 0
 	text-align: center
@@ -1739,17 +1739,17 @@ img.product-banner
 	width: 30%
 
 
-.earnings-figure:last-of-type 
+.earnings-figure:last-of-type
 	margin-right: 0
 
 
-.amount 
+.amount
 	font-size: 36px
 	font-weight: 700
 	text-transform: uppercase
 
 
-.unit 
+.unit
 	color: #1ec498
 	font-size: 18px
 	font-weight: 700
@@ -1757,12 +1757,12 @@ img.product-banner
 	text-transform: uppercase
 
 
-.earnings-summary .hr 
+.earnings-summary .hr
 	background: linear-gradient(to right, transparent 0, #1ec498 50%, transparent 100%)
 	margin: 12px 0
 
 
-h4.description 
+h4.description
 	font-size: 18px
 	text-transform: uppercase
 
@@ -1771,7 +1771,7 @@ h4.description
 /* MINING PAGE - MINING SUMMARY */
 
 
-.mining-summary 
+.mining-summary
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
 	box-shadow: 16px 16px 20px 0 #23292b
 	border-radius: 12px
@@ -1780,19 +1780,19 @@ h4.description
 	margin: 24px 0
 
 
-.mining-heading 
+.mining-heading
 	display: flex
 	justify-content: flex-start
 	align-items: center
 
 
-.mining-icon 
+.mining-icon
 	margin: 0 8px 0 0
 	max-width: 36px
 	max-height: 36px
 
 
-h3.mining-title 
+h3.mining-title
 	color: #e1eeef
 	font-size: 36px
 	font-weight: 700
@@ -1800,7 +1800,7 @@ h3.mining-title
 	text-transform: uppercase
 
 
-.top-line-summary 
+.top-line-summary
 	display: flex
 	flex-wrap: wrap
 	justify-content: space-between
@@ -1808,7 +1808,7 @@ h3.mining-title
 	position: relative
 
 
-.top-line-summary::after 
+.top-line-summary::after
 	background: linear-gradient(to right, transparent -10%, #e1eeef 50%, transparent 110%)
 	display: block
 	content: ''
@@ -1819,36 +1819,36 @@ h3.mining-title
 	width: 100%
 
 
-.top-line-item 
+.top-line-item
 	font-size: 24px
 	margin: 0 16px 16px 0
 
 
-.top-line-item:last-of-type 
+.top-line-item:last-of-type
 	margin-right: 0
 
 
-.top-line-item .label 
+.top-line-item .label
 	font-weight: 200
 
 
-.top-line-item .value 
+.top-line-item .value
 	color: #1ec498
 	filter: contrast(1.5)
 	font-weight: 700
 
 
 
-.top-line-item .sub-value 
+.top-line-item .sub-value
 	font-size: 16px
 	font-weight: 600
 
 
-.detailed-summary 
+.detailed-summary
 	font-size: 16px
 
 
-.detailed-summary .line 
+.detailed-summary .line
 	border-bottom: 1px dashed #a1d0d0
 	display: flex
 	justify-content: space-between
@@ -1856,23 +1856,23 @@ h3.mining-title
 	padding: 8px 0
 
 
-.detailed-summary .label 
+.detailed-summary .label
 	font-weight: 200
 
 
-.detailed-summary .value 
+.detailed-summary .value
 	color: #1ec498
 	filter: contrast(1.5)
 	font-weight: 500
 
 
-.mining-summary .buttons 
+.mining-summary .buttons
 	display: flex
 	justify-content: flex-end
 
 
 .buttons button,
-.buttons button.alt 
+.buttons button.alt
 	border-radius: 8px
 	font-size: 14px
 	height: auto
@@ -1881,11 +1881,11 @@ h3.mining-title
 
 
 .buttons button:hover,
-.buttons button.alt:hover 
+.buttons button.alt:hover
 	border-radius: 2px
 
 
-.add-mining 
+.add-mining
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
 	border-radius: 12px
 	cursor: pointer
@@ -1901,7 +1901,7 @@ h3.mining-title
 	transition: all ease-in-out .1s
 
 
-.add-mining:hover 
+.add-mining:hover
 	box-shadow: 8px 8px 20px 0 #23292b
 	opacity: .8
 
@@ -1910,14 +1910,14 @@ h3.mining-title
 /* SECURITY PAGE */
 
 
-.settings 
+.settings
 	align-items: flex-start
 	display: flex
 	flex-wrap: wrap
 	justify-content: flex-start
 
 
-.setting-box 
+.setting-box
 	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
 	box-shadow: 16px 16px 20px 0 #23292b
 	border-radius: 12px
@@ -1930,7 +1930,7 @@ h3.mining-title
 	width: 45%
 
 
-.settings-box-heading 
+.settings-box-heading
 	align-items: center
 	display: flex
 	padding: 0 0 12px 0
@@ -1938,7 +1938,7 @@ h3.mining-title
 	width: 100%
 
 
-.settings-box-heading::after 
+.settings-box-heading::after
 	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
 	display: block
 	content: ''
@@ -1949,7 +1949,7 @@ h3.mining-title
 	width: 100%
 
 
-.settings-box-heading img 
+.settings-box-heading img
 	filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
 	margin: 0 12px 0 0
 	opacity: .8
@@ -1957,26 +1957,26 @@ h3.mining-title
 	max-width: 32px
 
 
-.settings-box-heading h3.box-title 
+.settings-box-heading h3.box-title
 	color: #e4f4f0
 	font-size: 28px
 	font-weight: 700
 	margin: 0
 
 
-.setting-box p:not([class]) 
+.setting-box p:not([class])
 	font-size: 16px
 	line-height: 24px
 
 
-.setting-box .verification 
+.setting-box .verification
 	align-items: center
 	display: flex
 	margin: 0 0 16px 0
 	width: 100%
 
 
-.setting-box .verification img 
+.setting-box .verification img
 	filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
 	opacity: .5
 	margin: 0 8px 0 0
@@ -1984,17 +1984,17 @@ h3.mining-title
 	max-width: 24px
 
 
-.setting-box .verification img.verified 
+.setting-box .verification img.verified
 	filter: invert(35%) sepia(45%) saturate(600%) hue-rotate(114deg) brightness(100%) contrast(95%)
 	opacity: 1
 
 
-.setting-box .verification span 
+.setting-box .verification span
 	font-size: 18px
 	font-weight: 700
 
 
-.setting-box button 
+.setting-box button
 	margin: 0
 	width: 100%
 
@@ -2004,60 +2004,60 @@ h3.mining-title
 /* KYC PAGE */
 
 
-.kyc-status 
+.kyc-status
 	align-items: center
 	flex-wrap: wrap
 	display: flex
 
 
-.status 
+.status
 	font-size: 24px
 	font-weight: 600
 	text-transform: uppercase
 
 
-.rejection-note 
+.rejection-note
 	margin: 12px 0 0 0
 	width: 100%
 
 
-.kyc-status img 
+.kyc-status img
 	height: 32px
 	margin: 0 8px 0 0
 
 
-.kyc-documents 
+.kyc-documents
 	display: flex
 	flex-wrap: wrap
 	justify-content: flex-start
 
 
-.document-select 
+.document-select
 	width: 100%
 
 
-.document-select select 
+.document-select select
 	max-width: 240px
 
 
 
-.kyc-upload 
+.kyc-upload
 	margin: 0 3% 0 0
 	width: 30%
 
 
-.kyc-note 
+.kyc-note
 	font-size: 18px
 	font-weight: 300
 	line-height: 28px
 
 
-.kyc-documents strong 
+.kyc-documents strong
 	color: #1ec498
 	filter: contrast(1.5)
 
 
-.kyc-image 
+.kyc-image
 	border: 1px dashed #11afaf
 	border-radius: 32px
 	cursor: pointer
@@ -2066,28 +2066,28 @@ h3.mining-title
 	text-align: center
 
 
-.kyc-image span 
+.kyc-image span
 	line-height: 2
 	opacity: .7
 	text-transform: uppercase
 
 
-.kyc-image img 
+.kyc-image img
 	opacity: .5
 	transition: all ease-in-out .1s
 	width: 100%
 
 
 .kyc-image:hover img,
-.kyc-image:hover span 
+.kyc-image:hover span
 	opacity: 1
 
 
-.kyc-submit 
+.kyc-submit
 	width: 100%
 
 
-.kyc-submit p 
+.kyc-submit p
 	background: #ffffff22
 	border-radius: 12px
 	font-size: 18px
@@ -2097,12 +2097,12 @@ h3.mining-title
 	width: 70%
 
 
-.kyc-submit button 
+.kyc-submit button
 	margin: 16px 16px 16px 0
 	min-width: 220px
 
 
-.kyc-documents .hr 
+.kyc-documents .hr
 	margin: 24px 0
 
 
@@ -2110,7 +2110,7 @@ h3.mining-title
 /* FOOTER */
 
 
-footer 
+footer
 	background: linear-gradient(to bottom right, #27424c 0, #051319 100%)
 	box-shadow: 0px 0px 60px 15px #051319
 	margin: 96px 0 0 0
@@ -2121,7 +2121,7 @@ footer
 
 
 
-footer::before 
+footer::before
 	background: linear-gradient(to left, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
 	display: block
 	content: ''
@@ -2133,8 +2133,8 @@ footer::before
 	width: 100%
 
 
-footer::after 
-	background-image: require('../assets/procyon-logo.svg')
+footer::after
+	background-image: url('../assets/procyon-logo.svg') !important
 	background-position: 80% -20%
 	background-repeat: no-repeat
 	background-size: 500px
@@ -2150,17 +2150,17 @@ footer::after
 	z-index: -1
 
 
-footer .logo 
+footer .logo
 	width: 200px
 
 
-footer h1 
+footer h1
 	font-size: 24px
 	margin: 12px 0
 	padding: 0 0 12px 0
 
 
-footer h1::after 
+footer h1::after
 	background: linear-gradient(to left, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
 	display: block
 	content: ''
@@ -2171,53 +2171,53 @@ footer h1::after
 	width: 100%
 
 
-footer h4.tagline 
+footer h4.tagline
 	font-size: 16px
 	font-weight: 300
 
 
-footer .content ul 
+footer .content ul
 	margin: 0 0 12px 0
 	padding: 0
 	font-size: 16px
 
 
-footer .content ul li::before 
+footer .content ul li::before
 	display: none
 
 
-footer .copyright 
+footer .copyright
 	font-size: 14px
 	line-height: 14px
 	margin: 8px 0
 
 
-@media (max-width:990px) 
+@media (max-width:990px)
 
 html,
-body 
+body
 	min-width: 360px
 	width: 100%
 
 
-.desktop 
-	display: none
+.desktop
+	/* display: none */
 
 
-.mobile 
+.mobile
 	display: block
 
 
 button,
-input[type='submit'] 
+input[type='submit']
 	margin: 20px 0
 
 
-header.desktop 
+header.desktop
 	display: none
 
 
-header.mobile 
+header.mobile
 	background: linear-gradient(to bottom, #092023 0, transparent 50px)
 	display: flex
 	flex-wrap: wrap
@@ -2225,25 +2225,25 @@ header.mobile
 	padding: 12px 24px
 
 
-header.mobile .header-inner 
+header.mobile .header-inner
 	display: flex
 	justify-content: flex-end
 
 
-header.mobile .logo 
+header.mobile .logo
 	width: 40px
 
 
-header.mobile .hr 
+header.mobile .hr
 	height: 1px
 	margin: 12px 0
 
 
-header.mobile .nav 
+header.mobile .nav
 	width: 100%
 
 
-header.mobile .nav ul 
+header.mobile .nav ul
 	display: flex
 	justify-content: flex-end
 	padding: 0
@@ -2251,114 +2251,114 @@ header.mobile .nav ul
 	width: 100%
 
 
-header.mobile .nav ul li 
+header.mobile .nav ul li
 	padding: 0 0 0 12px
 
 
-header.mobile button 
+header.mobile button
 	font-size: 14px
 	margin: 0 0 0 12px
 	padding: 8px 12px
 
 
-#hero 
+#hero
 	margin: 24px 0
 	padding: 0 0 24px 0
 
 
-#hero h1 
+#hero h1
 	font-size: 32px
 
 
-#hero h2 
+#hero h2
 	font-size: 24px
 
 
-h2:not(#hero h2)::after 
+h2:not(#hero h2)::after
 	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 90%)
 
 
-div.back-button 
+div.back-button
 	padding: 8px 12px
 
 
-div.hr 
+div.hr
 	margin: 24px 0
 
 
-.content 
+.content
 	padding: 0 12px
 
 
-.content ul 
+.content ul
 	line-height: 24px
 
 
-.content ul li 
+.content ul li
 	margin: 0 0 8px 0
 
 
-.products 
+.products
 	margin: 0
 
 
-.product 
+.product
 	margin: 0 0 36px 0
 	width: 100%
 
 
-.product:last-of-type 
+.product:last-of-type
 	margin: 0
 
 
-.product-container > button 
+.product-container > button
 	width: 100%
 
 
-.feature img.icon 
+.feature img.icon
 	float: left
 	height: 50px
 
 
-h3.feature-title 
+h3.feature-title
 	margin: 0 0 0 60px
 	text-align: left
 
 
-.columns-1 
+.columns-1
 	padding: 0
 
 
-.columns-1 img 
+.columns-1 img
 	padding: 0
 
 
-.columns-2 
+.columns-2
 	display: block
 
 
-.column-2 
+.column-2
 	max-width: 100%
 	padding: 0
 	width: 100%
 
 
-.columns-3 
+.columns-3
 	display: block
 
 
-.column-3 
+.column-3
 	margin: 0 0 72px 0
 	max-width: 100%
 	padding: 0
 	width: 100%
 
 
-.columns-4 
+.columns-4
 	display: block
 
 
-.column-4 
+.column-4
 	margin: 0 0 24px 0
 	padding: 0
 	max-width: 100%
@@ -2367,78 +2367,78 @@ h3.feature-title
 
 /* SIDEBAR */
 
-.with-sidebar 
+.with-sidebar
 	margin: 0
 	width: 100%
 
 
-header.with-sidebar 
+header.with-sidebar
 	justify-content: flex-end
 
 
-.sidebar 
+.sidebar
 	display: none
 
 
 /* PRODUCT */
 
-.product-page-icon 
+.product-page-icon
 	height: 48px
 	width: 48px
 
 
-.product-page-icon img 
+.product-page-icon img
 	height: 28px
 	width: 28px
 
 
 /* PRODUCT & IDO */
 
-.product-container 
+.product-container
 	display: flex
 	padding: 12px
 
 
-.product-container h1 
+.product-container h1
 	font-size: 28px
 
 
 .product-container .three-section,
-.product-container .full-section 
-	margin: 0 
+.product-container .full-section
+	margin: 0
 	width: 100%
 
 
-.product-container .product-title-section 
+.product-container .product-title-section
 	order: 1
 
 
-.product-container .product-sidebar 
+.product-container .product-sidebar
 	margin-top: 16px
 	order: 2
 	width: 100%
 
 
-.product-container .info 
+.product-container .info
 	margin-top: 16px
 	order: 3
 	padding: 0
 	width: 100%
 
 
-.product-container .order-form 
+.product-container .order-form
 	margin-top: 16px
 	order: 4
 	width: 100%
 
 
-.product-detail-text 
+.product-detail-text
 	margin: 0
 
 
 /* IDO ONLY */
 
-.ido-container .product-sidebar 
+.ido-container .product-sidebar
 	display: flex
 	justify-content: flex-start
 	flex-wrap: wrap
@@ -2447,44 +2447,44 @@ header.with-sidebar
 	width: 100%
 
 
-#project-links 
+#project-links
 	order: 1
 	width: 100%
 
 
-#project-links .product-links 
+#project-links .product-links
 	display: flex
 	flex-wrap: wrap
 	justify-content: flex-start
 
 
-#project-links .product-links li 
+#project-links .product-links li
 	margin: 0
 	padding: 0 18px 18px 0
 
 
-#project-links .product-links span 
+#project-links .product-links span
 	display: none
 
 
-#project-links lie 
+#project-links lie
 	display: none
 
 
-#join-ido 
+#join-ido
 	order: 2
 	width: 100%
 
 
-#deal-terms 
+#deal-terms
 	order: 3
 
 
-#help 
+#help
 	order: 4
 
 
-.ido-title-section 
+.ido-title-section
 	order: 1
 	background-size: auto calc(100% + 32px)
 	height: 200px
@@ -2493,7 +2493,7 @@ header.with-sidebar
 	width: calc(100% + 48px)
 
 
-.ido-container .product-title-container 
+.ido-container .product-title-container
 	border-radius: 12px
 	top: 12px
 	left: 12px
@@ -2502,68 +2502,68 @@ header.with-sidebar
 
 
 .ido-container .product-title-container::before,
-.ido-container .product-title-container::after 
+.ido-container .product-title-container::after
 	display: none
 
 
-.ido-container .product-page-icon 
+.ido-container .product-page-icon
 	padding: 8px
 	height: 32px
 	width: 32px
 
 
-.ido-container .product-page-icon img 
+.ido-container .product-page-icon img
 	height: 16px
 	width: 16px
 
 
-.ido-container h1 
+.ido-container h1
 	font-size: 24px
 
 
 .team-member,
-.team-member:nth-child(3n) 
+.team-member:nth-child(3n)
 	margin-right: 4%
 	width: 48%
 
 
-.team-member:nth-child(2n) 
+.team-member:nth-child(2n)
 	margin-right: 0
 
 
 /* MINING DASHBOARD */
 
-.earnings-figure 
+.earnings-figure
 	margin: 0 0 24px 0
 	width: 100%
 
 
-.top-line-item 
+.top-line-item
 	font-size: 18px
 	width: 100%
 
 
-.mining-summary .buttons 
+.mining-summary .buttons
 	justify-content: space-between
 
 
-.mining-summary .buttons button 
+.mining-summary .buttons button
 	margin: 24px 12px
 
 
-.mining-summary .buttons button:first-of-type 
+.mining-summary .buttons button:first-of-type
 	margin-left: 0
 
 
 
-.mining-summary .buttons button:last-of-type 
+.mining-summary .buttons button:last-of-type
 	margin-right: 0
 
 
-.settings 
+.settings
 	justify-content: center
 
 
-.setting-box 
+.setting-box
 	margin: 12px 0
 	width: 100%
