@@ -24,10 +24,21 @@ const routes: RouteRecordRaw[] = [
           ShowTopTip: false,
           NeedLogined: false
         }
-      },
-      {
+      }, {
         path: 'contact',
         component: () => import('pages/Contact.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false
+        }
+      }, {
+        path: 'registration',
+        component: () => import('pages/Registration.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
           ShowMainHeader: false,

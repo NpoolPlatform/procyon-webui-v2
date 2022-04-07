@@ -1,7 +1,7 @@
 <template>
   <div class='product'>
     <div class='product-heading'>
-      <img class='icon' src='product-aleo.png'>
+      <img class='icon' :src='coin.getCoinLogo(good.Main as Coin)'>
       <h3 class='product-title'>
         {{ good.Good.Good.Title }}
       </h3>
@@ -41,7 +41,7 @@
 
 <script setup lang='ts'>
 import { defineProps, toRef } from 'vue'
-import { Good, useGoodStore, formatTime } from 'npool-cli-v2'
+import { Good, useGoodStore, formatTime, useCoinStore, Coin } from 'npool-cli-v2'
 
 interface Props {
   good: Good
@@ -51,5 +51,6 @@ const props = defineProps<Props>()
 const good = toRef(props, 'good')
 
 const goods = useGoodStore()
+const coin = useCoinStore()
 
 </script>
