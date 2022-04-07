@@ -57,13 +57,22 @@
         label='MSG_INVITATION_CODE'
         type='text'
         id='inv-code'
-        required
+        :required='false'
         :error='invCodeError'
         message='MSG_INVITATION_CODE_TIP'
         placeholder='MSG_INVITATION_CODE_PLACEHOLDER'
       />
-      <input type='checkbox' id='agreement' name='agreement'>
-      <label for='agreement' v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "/policy", USER_AGREEMENT: "/agreement" })' />
+      <div class='row'>
+        <div class='column  justify-center'>
+          <input class='agreement' type='checkbox' id='agreement' name='agreement'>
+        </div>
+        <div class='column  justify-center'>
+          <label
+            for='agreement'
+            v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "/policy", USER_AGREEMENT: "/agreement" })'
+          />
+        </div>
+      </div>
       <input type='submit' :value='$t("MSG_REGISTER")' class='register'>
       <p class='skip-registration' v-html='$t("MSG_GOTO_SIGNIN", { SIGNIN_PATH: "/signin" })' />
     </template>
@@ -78,10 +87,14 @@ import {
   validateEmailAddress,
   NotificationType,
   validateVerificationCode,
-  validatePassword
+  validatePassword,
+  useUserStore,
+  encryptPassword,
+  AccountType
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -131,6 +144,9 @@ const invCodeError = ref(false)
 
 const coderepo = useCodeRepoStore()
 const lang = useLangStore()
+const user = useUserStore()
+
+const router = useRouter()
 
 const onSendCodeClick = () => {
   if (!validateEmailAddress(emailAddress.value)) {
@@ -154,14 +170,37 @@ const onSendCodeClick = () => {
 }
 
 const onSubmit = () => {
-  if (!validateEmailAddress(emailAddress.value) ||
-      !validateVerificationCode(verificationCode.value)) {
+  if (emailError.value ||
+      verificationCodeError.value ||
+      pwdError.value ||
+      confirmPasswdError.value) {
     return
   }
+
+  user.signup({
+    PasswordHash: encryptPassword(password.value),
+    Account: emailAddress.value,
+    AccountType: AccountType.Email,
+    VerificationCode: verificationCode.value,
+    InvitationCode: invitationCode.value,
+    Message: {
+      Error: {
+        Title: t('MSG_SIGNUP'),
+        Message: t('MSG_SIGNUP_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    void router.push({ path: '/signin' })
+  })
+
   return false
 }
 
 </script>
 
 <style lang='sass' scoped>
+.agreement
+  margin-right: 8px
 </style>

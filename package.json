@@ -28,7 +28,7 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.26.1",
     "core-js": "^3.6.5",
-    "npool-cli-v2": "^0.0.94",
+    "npool-cli-v2": "^0.0.95",
     "pinia": "^2.0.13",
     "quasar": "^2.0.0",
     "vue": "^3.0.0",
