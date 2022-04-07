@@ -1,6 +1,6 @@
-<a href="https://github.com/NpoolPlatform/ohash-webui/actions/workflows/ci.yml"><img src="https://github.com/NpoolPlatform/ohash-webui/workflows/test/badge.svg" alt="build status"></a>
+<a href="https://github.com/NpoolPlatform/procyon-webui/actions/workflows/ci.yml"><img src="https://github.com/NpoolPlatform/procyon-webui/workflows/test/badge.svg" alt="build status"></a>
 
-# ohash webui (ohash-webui)
+# procyon webui (procyon-webui)
 
 vue3 framework use quasar ui and pinia manage store
 
