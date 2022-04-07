@@ -71,7 +71,7 @@ watch(countries, () => {
   countries.value.push({
     ID: '2',
     Country: 'Singapore',
-    Code: '+865',
+    Code: '+065',
     Flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Flag_of_Singapore.svg/383px-Flag_of_Singapore.svg.png',
     Short: 'SG'
   })
@@ -89,6 +89,7 @@ const onItemClick = (country: Country) => {
 
 onMounted(() => {
   if (countries.value.length > 0) {
+    emit('update:country', countries.value[0])
     return
   }
 
@@ -135,4 +136,7 @@ onMounted(() => {
 
 button
   margin: 0
+
+.selector
+  text-shadow: none
 </style>
