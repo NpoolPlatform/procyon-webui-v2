@@ -1,5 +1,7 @@
 <template>
-  <Banner />
+  <div class='content'>
+    <Banner />
+  </div>
 </template>
 
 <script setup lang='ts'>

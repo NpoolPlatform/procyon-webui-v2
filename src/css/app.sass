@@ -108,6 +108,11 @@ h1
 	-webkit-background-clip: text
 	-webkit-box-decoration-break: clone
 	-webkit-text-fill-color: transparent
+	line-height: 1.2em
+
+
+h2
+	line-height: 1.2em
 
 
 h2:not(#hero h2)
@@ -138,6 +143,8 @@ h2:not(#hero h2)::after
 	bottom: -4px
 	height: 1px
 	width: 100%
+	@media (max-width: $breakpoint-sm-max)
+		background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 90%)
 
 
 h3:not([class])
@@ -217,6 +224,8 @@ input[type='submit']
 	padding: 12px 24px
 	text-shadow: 1px 1px 1px #ce5417
 	transition: all ease-in-out .1s
+	@media (max-width: $breakpoint-sm-max)
+		margin: 20px 0
 
 
 button.alt,
@@ -448,6 +457,9 @@ img.content-image
 	margin: 24px 0 48px 0
 	padding: 0 0 48px 0
 	position: relative
+	@media (max-width: $breakpoint-sm-max)
+		margin: 24px 0
+		padding: 0 0 24px 0
 
 
 #hero::after
@@ -463,6 +475,8 @@ img.content-image
 
 #hero h1
 	font-size: 40px
+	@media (max-width: $breakpoint-sm-max)
+		font-size: 32px
 
 
 #hero h2
@@ -470,6 +484,8 @@ img.content-image
 	font-size: 28px
 	font-weight: 300
 	margin: 12px auto 12px auto
+	@media (max-width: $breakpoint-sm-max)
+		font-size: 24px
 
 
 

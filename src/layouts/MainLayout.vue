@@ -1,5 +1,8 @@
 <template>
   <MainHeader />
+  <div id='main'>
+    <router-view />
+  </div>
   <LangLoader />
 </template>
 
