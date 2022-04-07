@@ -1,23 +1,15 @@
 <template>
-  <q-layout view='hHh Lpr lFf background-main body-main'>
-    <MainHeader v-if='setting.ShowMainHeader' />
-
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-
-    <LangLoader />
-  </q-layout>
+  <MainHeader />
+  <LangLoader />
 </template>
 
 <script setup lang='ts'>
 import { defineAsyncComponent, onMounted } from 'vue'
-import { useSettingStore, useNotificationStore, notify } from 'npool-cli-v2'
+import { useNotificationStore, notify } from 'npool-cli-v2'
 
 const MainHeader = defineAsyncComponent(() => import('src/components/header/MainHeader.vue'))
 const LangLoader = defineAsyncComponent(() => import('src/components/lang/LangLoader.vue'))
 
-const setting = useSettingStore()
 const notification = useNotificationStore()
 
 onMounted(() => {

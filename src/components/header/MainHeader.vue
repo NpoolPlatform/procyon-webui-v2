@@ -1,32 +1,67 @@
 <template>
-  <q-toolbar class='header'>
-    <Logo :class='[setting.ShowBigLogo ? "big-logo" : "small-logo"]' />
-    <q-space />
-    <HeaderTools />
-  </q-toolbar>
+  <header class='desktop1'>
+    <img :src='lightLogo' class='attachment-large size-large logo'>
+    <div class='nav'>
+      <ul>
+        <li><a class='nav-link' href=''>{{ $t('MSG_HOME') }}</a></li>
+        <li><a class='nav-link' href=''>{{ $t('MSG_BLOG') }}</a></li>
+        <li><a class='nav-link' href=''>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
+        <li><a class='nav-link' href=''>{{ $t('MSG_CONTACT') }}</a></li>
+        <ul class='language-picker'>
+          <li class='selected'>
+            <a class='language'>EN</a>
+          </li>
+          <li>
+            <a class='language'>JP</a>
+          </li>
+        </ul>
+        <button>
+          {{ $t('MSG_REGISTER') }}
+        </button>
+        <button class='alt'>
+          {{ $t('MSG_SIGNIN') }}
+        </button>
+      </ul>
+    </div>
+  </header>
+
+  <header class='mobile'>
+    <img :src='logo' class='attachment-large size-large logo'>
+
+    <div class='header-inner'>
+      <ul class='language-picker'>
+        <li class='selected'>
+          <a class='language'>EN</a>
+        </li>
+        <li>
+          <a class='language'>JP</a>
+        </li>
+      </ul>
+      <button>
+        {{ $t('MSG_REGISTER') }}
+      </button>
+      <button class='alt'>
+        {{ $t('MSG_SIGNIN') }}
+      </button>
+    </div>
+    <div class='hr' />
+    <div class='nav'>
+      <ul>
+        <li><a class='nav-link' href=''>{{ $t('MSG_HOME') }}</a></li>
+        <li><a class='nav-link' href=''>{{ $t('MSG_BLOG') }}</a></li>
+        <li><a class='nav-link' href=''>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
+        <li><a class='nav-link' href=''>{{ $t('MSG_CONTACT') }}</a></li>
+      </ul>
+    </div>
+  </header>
 </template>
 
 <script setup lang='ts'>
-import { useSettingStore } from 'npool-cli-v2'
-import { defineAsyncComponent } from 'vue'
 
-const Logo = defineAsyncComponent(() => import('src/components/logo/Logo.vue'))
-const HeaderTools = defineAsyncComponent(() => import('src/components/header/HeaderTools.vue'))
-
-const setting = useSettingStore()
+import lightLogo from '../../assets/procyon-light.svg'
+import logo from '../../assets/procyon-logo.svg'
 
 </script>
 
 <style lang='sass' scoped>
-.header
-  height: 80px
-  padding: 0 80px
-
-.small-logo
-  max-height: 40px
-  max-width: 71px
-
-.big-logo
-  max-height: 60px
-  max-width: 106px
 </style>

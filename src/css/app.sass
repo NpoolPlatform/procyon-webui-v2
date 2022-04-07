@@ -15,6 +15,8 @@ html,
 body
 	min-width: 600px
 	width: 100%
+	@media (max-width: $breakpoint-sm-max)
+		min-width: 360px
 
 body
 	background: linear-gradient(to bottom right, #1f293a 0, #2a3943 50%, #092023 100%) !important
@@ -42,13 +44,55 @@ body::before
 	right: 0
 	height: 100%
 	width: 100%
-	z-index: 1000
+	z-index: 0
 
+.desktop1
+	display: flex
+	@media (max-width: $breakpoint-sm-max)
+		display: none
 
 .mobile
 	display: none
+	@media (max-width: $breakpoint-sm-max)
+		display: block
 
+header.mobile
+	background: linear-gradient(to bottom, #092023 0, transparent 50px)
+	display: none
+	flex-wrap: wrap
+	justify-content: space-between
+	padding: 12px 24px
+	@media (max-width: $breakpoint-sm-max)
+		display: flex
 
+header.mobile .header-inner
+	display: flex
+	justify-content: flex-end
+
+header.mobile .logo
+	width: 40px
+
+header.mobile .hr
+	height: 1px
+	margin: 12px 0
+
+header.mobile .nav
+	width: 100%
+
+header.mobile .nav ul
+	display: flex
+	justify-content: flex-end
+	padding: 0
+	text-align: center
+	width: 100%
+
+header.mobile .nav ul li
+	padding: 0 0 0 12px
+
+header.mobile button
+	font-size: 14px
+	margin: 0 0 0 12px
+	padding: 8px 12px
 
 /* HEADINGS */
 
@@ -208,11 +252,6 @@ button.in-active:hover
 
 /* HEADER & NAVIGATION */
 
-
-header.mobile
-	display: none
-
-
 header
 	background: linear-gradient(to bottom, #092023 0, transparent 50px)
 	display: flex
@@ -249,8 +288,8 @@ header
 	display: block
 	content: ''
 	position: absolute
-		left: 0
-		bottom: -4px
+	left: 0
+	bottom: -4px
 	height: 1px
 	width: 100%
 	transition: all ease-in-out .1s
@@ -2190,380 +2229,3 @@ footer .copyright
 	font-size: 14px
 	line-height: 14px
 	margin: 8px 0
-
-
-@media (max-width:990px)
-
-html,
-body
-	min-width: 360px
-	width: 100%
-
-
-.desktop
-	display: block
-
-
-.mobile
-	display: block
-
-
-button,
-input[type='submit']
-	margin: 20px 0
-
-
-header.desktop
-	display: none
-
-
-header.mobile
-	background: linear-gradient(to bottom, #092023 0, transparent 50px)
-	display: flex
-	flex-wrap: wrap
-	justify-content: space-between
-	padding: 12px 24px
-
-
-header.mobile .header-inner
-	display: flex
-	justify-content: flex-end
-
-
-header.mobile .logo
-	width: 40px
-
-
-header.mobile .hr
-	height: 1px
-	margin: 12px 0
-
-
-header.mobile .nav
-	width: 100%
-
-
-header.mobile .nav ul
-	display: flex
-	justify-content: flex-end
-	padding: 0
-	text-align: center
-	width: 100%
-
-
-header.mobile .nav ul li
-	padding: 0 0 0 12px
-
-
-header.mobile button
-	font-size: 14px
-	margin: 0 0 0 12px
-	padding: 8px 12px
-
-
-#hero
-	margin: 24px 0
-	padding: 0 0 24px 0
-
-
-#hero h1
-	font-size: 32px
-
-
-#hero h2
-	font-size: 24px
-
-
-h2:not(#hero h2)::after
-	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 90%)
-
-
-div.back-button
-	padding: 8px 12px
-
-
-div.hr
-	margin: 24px 0
-
-
-.content
-	padding: 0 12px
-
-
-.content ul
-	line-height: 24px
-
-
-.content ul li
-	margin: 0 0 8px 0
-
-
-.products
-	margin: 0
-
-
-.product
-	margin: 0 0 36px 0
-	width: 100%
-
-
-.product:last-of-type
-	margin: 0
-
-
-.product-container > button
-	width: 100%
-
-
-.feature img.icon
-	float: left
-	height: 50px
-
-
-h3.feature-title
-	margin: 0 0 0 60px
-	text-align: left
-
-
-.columns-1
-	padding: 0
-
-
-.columns-1 img
-	padding: 0
-
-
-.columns-2
-	display: block
-
-
-.column-2
-	max-width: 100%
-	padding: 0
-	width: 100%
-
-
-.columns-3
-	display: block
-
-
-.column-3
-	margin: 0 0 72px 0
-	max-width: 100%
-	padding: 0
-	width: 100%
-
-
-.columns-4
-	display: block
-
-
-.column-4
-	margin: 0 0 24px 0
-	padding: 0
-	max-width: 100%
-	width: 100%
-
-
-/* SIDEBAR */
-
-.with-sidebar
-	margin: 0
-	width: 100%
-
-
-header.with-sidebar
-	justify-content: flex-end
-
-
-.sidebar
-	display: none
-
-
-/* PRODUCT */
-
-.product-page-icon
-	height: 48px
-	width: 48px
-
-
-.product-page-icon img
-	height: 28px
-	width: 28px
-
-
-/* PRODUCT & IDO */
-
-.product-container
-	display: flex
-	padding: 12px
-
-
-.product-container h1
-	font-size: 28px
-
-
-.product-container .three-section,
-.product-container .full-section
-	margin: 0
-	width: 100%
-
-
-.product-container .product-title-section
-	order: 1
-
-
-.product-container .product-sidebar
-	margin-top: 16px
-	order: 2
-	width: 100%
-
-
-.product-container .info
-	margin-top: 16px
-	order: 3
-	padding: 0
-	width: 100%
-
-
-.product-container .order-form
-	margin-top: 16px
-	order: 4
-	width: 100%
-
-
-.product-detail-text
-	margin: 0
-
-
-/* IDO ONLY */
-
-.ido-container .product-sidebar
-	display: flex
-	justify-content: flex-start
-	flex-wrap: wrap
-	margin-top: 16px
-	order: 5
-	width: 100%
-
-
-#project-links
-	order: 1
-	width: 100%
-
-
-#project-links .product-links
-	display: flex
-	flex-wrap: wrap
-	justify-content: flex-start
-
-
-#project-links .product-links li
-	margin: 0
-	padding: 0 18px 18px 0
-
-
-#project-links .product-links span
-	display: none
-
-
-#project-links lie
-	display: none
-
-
-#join-ido
-	order: 2
-	width: 100%
-
-
-#deal-terms
-	order: 3
-
-
-#help
-	order: 4
-
-
-.ido-title-section
-	order: 1
-	background-size: auto calc(100% + 32px)
-	height: 200px
-	margin: -12px -12px 24px -12px
-	padding: 0
-	width: calc(100% + 48px)
-
-
-.ido-container .product-title-container
-	border-radius: 12px
-	top: 12px
-	left: 12px
-	bottom: unset
-	padding: 12px
-
-
-.ido-container .product-title-container::before,
-.ido-container .product-title-container::after
-	display: none
-
-
-.ido-container .product-page-icon
-	padding: 8px
-	height: 32px
-	width: 32px
-
-
-.ido-container .product-page-icon img
-	height: 16px
-	width: 16px
-
-
-.ido-container h1
-	font-size: 24px
-
-
-.team-member,
-.team-member:nth-child(3n)
-	margin-right: 4%
-	width: 48%
-
-
-.team-member:nth-child(2n)
-	margin-right: 0
-
-
-/* MINING DASHBOARD */
-
-.earnings-figure
-	margin: 0 0 24px 0
-	width: 100%
-
-
-.top-line-item
-	font-size: 18px
-	width: 100%
-
-
-.mining-summary .buttons
-	justify-content: space-between
-
-
-.mining-summary .buttons button
-	margin: 24px 12px
-
-
-.mining-summary .buttons button:first-of-type
-	margin-left: 0
-
-
-
-.mining-summary .buttons button:last-of-type
-	margin-right: 0
-
-
-.settings
-	justify-content: center
-
-
-.setting-box
-	margin: 12px 0
-	width: 100%
