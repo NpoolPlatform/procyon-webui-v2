@@ -14,12 +14,16 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent } from 'vue'
+import {
+  defineAsyncComponent,
+  defineEmits
+} from 'vue'
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
+const emit = defineEmits<{(e: 'submit'): void}>()
 const onSubmit = () => {
-  console.log('submit')
+  emit('submit')
 }
 
 </script>
