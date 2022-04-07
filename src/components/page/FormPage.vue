@@ -2,9 +2,15 @@
   <BackPage>
     <div class='content'>
       <div class='form-container'>
-        <h3 class='form-title'>
-          User Registration
-        </h3>
+        <div class='row'>
+          <h3 class='form-title'>
+            {{ $t(label) }}
+          </h3>
+          <q-space />
+          <div class='top-right'>
+            <slot name='top-right' />
+          </div>
+        </div>
         <form @submit='onSubmit' method='POST' action='javascript:void(0)'>
           <slot name='form-body' />
         </form>
@@ -16,8 +22,17 @@
 <script setup lang='ts'>
 import {
   defineAsyncComponent,
-  defineEmits
+  defineEmits,
+  defineProps,
+  toRef
 } from 'vue'
+
+interface Props {
+  label: string
+}
+
+const props = defineProps<Props>()
+const label = toRef(props, 'label')
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
@@ -27,3 +42,9 @@ const onSubmit = () => {
 }
 
 </script>
+
+<style lang='sass' scoped>
+.top-right
+  margin-top: -48px
+  margin-right: -48px
+</style>
