@@ -13,16 +13,10 @@
       </div>
     </template>
     <template #form-body>
-      <Input
+      <PhoneNO
         v-if='signupMethod === AccountType.Mobile'
         v-model:value='phoneNO'
-        label='MSG_PHONE_NO'
-        type='text'
-        id='text'
-        required
         :error='accountError'
-        message='MSG_PHONE_TIP'
-        placeholder='MSG_PHONE_NO_PLACEHOLDER'
         @focus='onPhoneNOFocusIn'
         @blur='onPhoneNOFocusOut'
       />
@@ -44,7 +38,7 @@
       </q-btn>
       <Input
         v-model:value='verificationCode'
-        label='MSG_EMAIL_VERIFICATION_CODE'
+        :label='signupMethod === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
         type='text'
         id='ver-code'
         required
@@ -57,7 +51,7 @@
       <Input
         v-model:value='password'
         label='MSG_PASSWORD'
-        type='password'
+        type='new-password'
         id='pass'
         required
         :error='pwdError'
@@ -69,7 +63,7 @@
       <Input
         v-model:value='confirmPassword'
         label='MSG_CONFIRM_PASSWORD'
-        type='password'
+        type='new-password'
         id='pass'
         required
         :error='confirmPasswdError'
@@ -136,6 +130,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
 
 const accountError = ref(false)
 
