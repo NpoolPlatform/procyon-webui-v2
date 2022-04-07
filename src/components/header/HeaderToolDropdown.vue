@@ -8,7 +8,7 @@
 import { defineProps, withDefaults, computed } from 'vue'
 
 interface Props {
-  icon: string
+  icon?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
