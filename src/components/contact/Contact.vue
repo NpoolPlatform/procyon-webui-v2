@@ -3,41 +3,47 @@
     ⭠
   </div>
   <div class='content'>
-    <h2>Contact Procyon Support</h2>
+    <h2>{{ $t('MSG_CONTACT_SUPPORT') }}</h2>
   </div>
   <div class='content contact-page'>
     <div class='form-container'>
       <h3 class='form-title'>
-        Contact Procyon via Email
+        {{ $t('MSG_CONTACT_VIA_EMAIL') }}
       </h3>
       <form action=''>
-        <label for='email'>E-mail Address</label>
+        <label for='email'>{{ $t('MSG_EMAIL_ADDRESS') }}</label>
         <input type='email' id='email' required>
-        <label for='name'>Name</label>
+        <label for='name'>{{ $t('MSG_NAME') }}</label>
         <input type='text' id='name' name='name' required>
-        <label for='subject'>Subject</label>
+        <label for='subject'>{{ $t('MSG_SUBJECT') }}</label>
         <input type='text' id='subject' name='subject' required>
-        <label for='message'>Message</label>
+        <label for='message'>{{ $t('MSG_MESSAGE') }}</label>
         <textarea type='text' id='message' name='message' required />
-        <input type='submit' value='Send Message' class='register'>
+        <input type='submit' :value='$t("MSG_SEND_MESSAGE")' class='register'>
       </form>
     </div>
     <div class='form-container'>
       <h3 class='form-title'>
-        Contact Procyon via LINE
+        {{ $t('MSG_CONTACT_VIA_LINE') }}
       </h3>
       <p class='qr-code-text'>
-        To scan the QR code below, open <strong>LINE</strong> on your phone and tap the <strong>'Add Friends'</strong> icon. Then select <strong>'QR code'</strong> at the top.
+        {{ $t('MSG_CONTACT_VIA_LINE_1') }}
       </p>
       <div class='qr-code-container'>
-        <img src='line-qr.png'>
+        <img :src='lineQr'>
       </div>
       <p class='qr-code-text'>
-        Feel free to contact us with questions about our platform, support issues, or just to say hi. We look forward to hearing from you!
+        {{ $t('MSG_CONTACT_VIA_LINE_2') }}
       </p>
       <h4 id='signature'>
-        —Procyon Support Team
+        {{ $t('MSG_SUPPORT_SIGNATURE') }}
       </h4>
     </div>
   </div>
 </template>
+
+<script setup lang='ts'>
+
+import lineQr from '../../assets/line-qr.png'
+
+</script>
