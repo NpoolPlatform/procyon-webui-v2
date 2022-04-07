@@ -1,12 +1,12 @@
 <template>
   <FormPage>
     <template #form-body>
-      <label for='email'>E-mail Address</label>
+      <label for='email'>{{ $t('MSG_EMAIL_ADDRESS') }}</label>
       <input type='email' id='email' required>
-      <input type='submit' value='Send Code' class='send-code'>
+      <input type='submit' :value='$t("MSG_SEND_CODE")' class='send-code'>
       <label for='ver-code'>E-mail Verification Code</label>
       <input type='text' id='ver-code' name='ver-code' required>
-      <label for='pass'>Password</label>
+      <label for='pass'>{{ $t('MSG_PASSWORD') }}</label>
       <input
         type='password'
         id='pass'
@@ -14,7 +14,7 @@
         minlength='8'
         required
       >
-      <label for='pass'>Confirm Password</label>
+      <label for='pass'>{{ $t('MSG_CONFIRM_PASSWORD') }}</label>
       <input
         type='password'
         id='pass'
@@ -23,15 +23,12 @@
         required
         class='error'
       >
-      <label for='inv-code'>Invitation Code</label>
+      <label for='inv-code'>{{ $t('MSG_INVITATION_CODE') }}</label>
       <input type='text' id='inv-code' name='inv-code' required>
       <input type='checkbox' id='agreement' name='agreement'>
-      <label for='agreement'>I have read and agree to the <a href=''>Privacy Policy</a> and <a href=''>User Agreements</a></label>
-
-      <input type='submit' value='Register' class='register'>
-      <p class='skip-registration'>
-        Already have an account? <a href=''>Click here to sign in.</a>
-      </p>
+      <label for='agreement' v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "/policy", USER_AGREEMENT: "/agreement" })' />
+      <input type='submit' :value='$t("MSG_REGISTER")' class='register'>
+      <p class='skip-registration' v-html='$t("MSG_GOTO_SIGNIN", { SIGNIN_PATH: "/signin" })' />
     </template>
   </FormPage>
 </template>
