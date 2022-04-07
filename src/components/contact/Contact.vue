@@ -26,17 +26,13 @@
       <h3 class='form-title'>
         {{ $t('MSG_CONTACT_VIA_LINE') }}
       </h3>
-      <p class='qr-code-text'>
-        {{ $t('MSG_CONTACT_VIA_LINE_1') }}
-      </p>
+      <p class='qr-code-text' v-html='$t("MSG_CONTACT_VIA_LINE_1")' />
       <div class='qr-code-container'>
         <img :src='lineQr'>
       </div>
-      <p class='qr-code-text'>
-        {{ $t('MSG_CONTACT_VIA_LINE_2') }}
-      </p>
+      <p class='qr-code-text' v-html='$t("MSG_CONTACT_VIA_LINE_2")' />
       <h4 id='signature'>
-        {{ $t('MSG_SUPPORT_SIGNATURE') }}
+        {{ $t('MSG_CONTACT_SIGNATURE') }}
       </h4>
     </div>
   </div>
