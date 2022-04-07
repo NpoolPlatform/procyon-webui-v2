@@ -16,7 +16,7 @@ const { t } = useI18n({ useScope: 'global' })
 const Product = defineAsyncComponent(() => import('src/components/product/Card.vue'))
 
 const good = useGoodStore()
-const goods = computed(() => good.getRecommendGoods)
+const goods = computed(() => good.getRecommendGoods.filter((_, index) => index < 3))
 
 onMounted(() => {
   if (goods.value.length > 0) {
