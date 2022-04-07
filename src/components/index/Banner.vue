@@ -1,12 +1,12 @@
 <template>
   <div id='hero'>
     <h1 class='hero'>
-      Shoot for the Stars with <strong>Procyon</strong>
+      <p class='hero' v-html='$t("MSG_SLOGAN")' />
     </h1>
     <h2 class='hero'>
-      Your global constellation of cryptocurrencies
+      {{ $t('MSG_SUB_SLOGAN') }}
     </h2>
-    <button>Register</button>
+    <button>{{ $t('MSG_REGISTER') }}</button>
   </div>
 </template>
 

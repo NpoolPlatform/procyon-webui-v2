@@ -8,11 +8,15 @@
         <li><a class='nav-link' href='#/faq'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
         <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <ul class='language-picker'>
-          <li class='selected'>
-            <a class='language'>EN</a>
-          </li>
-          <li>
-            <a class='language'>JP</a>
+          <li
+            class='selected'
+            v-for='language in lang.Languages'
+            :key='language.ID'
+            @click='onLangClick(language)'
+          >
+            <a class='language'>
+              {{ language.Short.length > 0 ? language.Short : language.Lang }}
+            </a>
           </li>
         </ul>
         <button>
@@ -30,11 +34,15 @@
 
     <div class='header-inner'>
       <ul class='language-picker'>
-        <li class='selected'>
-          <a class='language'>EN</a>
-        </li>
-        <li>
-          <a class='language'>JP</a>
+        <li
+          class='selected'
+          v-for='language in lang.Languages'
+          :key='language.ID'
+          @click='onLangClick(language)'
+        >
+          <a class='language'>
+            {{ language.Short.length > 0 ? language.Short : language.Lang }}
+          </a>
         </li>
       </ul>
       <button>
@@ -58,8 +66,14 @@
 
 <script setup lang='ts'>
 
+import { useLangStore, Language } from 'npool-cli-v2'
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
+
+const lang = useLangStore()
+const onLangClick = (language: Language) => {
+  lang.setLang(language)
+}
 
 </script>
 
