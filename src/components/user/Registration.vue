@@ -28,25 +28,40 @@
         @focus='onVerificationCodeFocusIn'
         @blur='onVerificationCodeFocusOut'
       />
-      <label for='pass'>{{ $t('MSG_PASSWORD') }}</label>
-      <input
+      <Input
+        v-model:value='password'
+        label='MSG_PASSWORD'
         type='password'
         id='pass'
-        name='password'
-        minlength='8'
         required
-      >
-      <label for='pass'>{{ $t('MSG_CONFIRM_PASSWORD') }}</label>
-      <input
+        :error='pwdError'
+        message='MSG_PASSWORD_TIP'
+        placeholder='MSG_PASSWORD_PLACEHOLDER'
+        @focus='onPasswordFocusIn'
+        @blur='onPasswordFocusOut'
+      />
+      <Input
+        v-model:value='confirmPassword'
+        label='MSG_CONFIRM_PASSWORD'
         type='password'
         id='pass'
-        name='password'
-        minlength='8'
         required
-        class='error'
-      >
-      <label for='inv-code'>{{ $t('MSG_INVITATION_CODE') }}</label>
-      <input type='text' id='inv-code' name='inv-code'>
+        :error='confirmPasswdError'
+        message='MSG_CONFIRM_PASSWORD_TIP'
+        placeholder='MSG_PASSWORD_PLACEHOLDER'
+        @focus='onConfirmPasswordFocusIn'
+        @blur='onConfirmPasswordFocusOut'
+      />
+      <Input
+        v-model:value='invitationCode'
+        label='MSG_INVITATION_CODE'
+        type='text'
+        id='inv-code'
+        required
+        :error='invCodeError'
+        message='MSG_INVITATION_CODE_TIP'
+        placeholder='MSG_INVITATION_CODE_PLACEHOLDER'
+      />
       <input type='checkbox' id='agreement' name='agreement'>
       <label for='agreement' v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "/policy", USER_AGREEMENT: "/agreement" })' />
       <input type='submit' :value='$t("MSG_REGISTER")' class='register'>
@@ -62,7 +77,8 @@ import {
   MessageUsedFor,
   validateEmailAddress,
   NotificationType,
-  validateVerificationCode
+  validateVerificationCode,
+  validatePassword
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -90,6 +106,28 @@ const onVerificationCodeFocusIn = () => {
 const onVerificationCodeFocusOut = () => {
   verificationCodeError.value = !validateVerificationCode(verificationCode.value)
 }
+
+const password = ref('')
+const pwdError = ref(false)
+const onPasswordFocusIn = () => {
+  pwdError.value = false
+}
+const onPasswordFocusOut = () => {
+  pwdError.value = !validatePassword(password.value)
+}
+
+const confirmPassword = ref('')
+const confirmPasswdError = ref(false)
+const onConfirmPasswordFocusIn = () => {
+  confirmPasswdError.value = false
+}
+const onConfirmPasswordFocusOut = () => {
+  confirmPasswdError.value = !validatePassword(confirmPassword.value) ||
+                             password.value !== confirmPassword.value
+}
+
+const invitationCode = ref('')
+const invCodeError = ref(false)
 
 const coderepo = useCodeRepoStore()
 const lang = useLangStore()
@@ -131,7 +169,7 @@ const onSubmit = () => {
   line-height: 1rem
   height: 48px
   border-radius: 18px
-  margin-top: 0
+  margin-top: 8px
 
 .send-code:hover
   border-radius: 4px

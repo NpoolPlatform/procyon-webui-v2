@@ -69,6 +69,7 @@ input
 .error-message
   color: $red-5
   font-size: 8px
-  margin-bottom: 10px
-  min-height: 18px
+  padding-bottom: 8px
+  min-height: 20px
+  max-height: 20px
 </style>
