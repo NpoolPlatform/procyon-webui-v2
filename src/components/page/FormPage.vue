@@ -1,0 +1,25 @@
+<template>
+  <BackPage>
+    <div class='content'>
+      <div class='form-container'>
+        <h3 class='form-title'>
+          User Registration
+        </h3>
+        <form @submit='onSubmit'>
+          <slot name='form-body' />
+        </form>
+      </div>
+    </div>
+  </BackPage>
+</template>
+
+<script setup lang='ts'>
+import { defineAsyncComponent } from 'vue'
+
+const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
+
+const onSubmit = () => {
+  console.log('submit')
+}
+
+</script>

@@ -8,7 +8,7 @@
         <li><a class='nav-link' href='#/faq'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
         <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
-        <button>
+        <button @click='onRegisterClick'>
           {{ $t('MSG_REGISTER') }}
         </button>
         <button class='alt'>
@@ -23,7 +23,7 @@
 
     <div class='header-inner'>
       <LangSwitcher />
-      <button>
+      <button @click='onRegisterClick'>
         {{ $t('MSG_REGISTER') }}
       </button>
       <button class='alt'>
@@ -44,10 +44,16 @@
 
 <script setup lang='ts'>
 import { defineAsyncComponent } from 'vue'
+import { useRouter } from 'vue-router'
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
+
+const router = useRouter()
+const onRegisterClick = () => {
+  void router.push({ path: '/registration' })
+}
 
 </script>
 
