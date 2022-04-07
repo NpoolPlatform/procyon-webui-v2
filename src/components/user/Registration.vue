@@ -164,13 +164,4 @@ const onSubmit = () => {
 </script>
 
 <style lang='sass' scoped>
-.send-code
-  width: 100%
-  line-height: 1rem
-  height: 48px
-  border-radius: 18px
-  margin-top: 8px
-
-.send-code:hover
-  border-radius: 4px
 </style>

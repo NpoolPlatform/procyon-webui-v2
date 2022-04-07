@@ -65,11 +65,4 @@ const onBlur = () => {
 <style lang='sass' scoped>
 input
   margin: 8px 0 4px 0
-
-.error-message
-  color: $red-5
-  font-size: 8px
-  padding-bottom: 8px
-  min-height: 20px
-  max-height: 20px
 </style>
