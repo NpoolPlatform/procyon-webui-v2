@@ -361,6 +361,8 @@ ul.language-picker li.selected
 	max-width: 1280px
 	margin: 0 auto
 	padding: 0 24px
+	@media (max-width: $breakpoint-sm-max)
+		padding: 0 12px
 
 
 .content-glass
@@ -401,7 +403,12 @@ ul.language-picker li.selected
 	font-weight: 300
 	line-height: 36px
 	list-style: none
+	@media (max-width: $breakpoint-sm-max)
+		line-height: 24px
 
+.content ul li
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0 0 8px 0
 
 .content ul li::before
 	color: #1ec498
@@ -423,6 +430,8 @@ div.hr
 	opacity: .7
 	height: 2px
 	width: 100%
+	@media (max-width: $breakpoint-sm-max)
+		margin: 24px 0
 
 
 div.back-button
@@ -437,6 +446,8 @@ div.back-button
 	padding: 16px 24px
 	text-transform: uppercase
 	transition: all ease-in-out .2s
+	@media (max-width: $breakpoint-sm-max)
+		padding: 8px 12px
 
 
 div.back-button:hover
@@ -497,6 +508,8 @@ img.content-image
 	flex-wrap: wrap
 	justify-content: flex-start
 	margin: 0 0 96px 0
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0
 
 
 .product
@@ -510,10 +523,15 @@ img.content-image
 	transition: all ease-in-out .5s
 	min-width: 320px
 	width: 30%
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0 0 36px 0
+		width: 100%
 
 
 .product:last-of-type
 	margin-right: 0
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0
 
 
 .product:hover
@@ -608,6 +626,11 @@ h3.product-title
 	position: relative
 	width: 100%
 
+.feature img.icon
+	@media (max-width: $breakpoint-sm-max)
+		float: left
+		height: 50px
+
 
 .feature::before,
 .feature::after
@@ -641,6 +664,9 @@ h3.feature-title
 	padding: 0 0 20px 0
 	position: relative
 	text-transform: uppercase
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0 0 0 60px
+		text-align: left
 
 
 h3.feature-title::after
@@ -665,31 +691,42 @@ h3.feature-title::after
 
 .columns-1
 	padding: 0 36px
+	@media (max-width: $breakpoint-sm-max)
+		padding: 0
 
 
 
 .columns-1 img
 	max-width: 100%
 	padding: 18px 60px
-
+	@media (max-width: $breakpoint-sm-max)
+		padding: 0
 
 
 .columns-2
 	display: flex
 	justify-content: space-between
 	flex-wrap: wrap
+	@media (max-width: $breakpoint-sm-max)
+		display: block
 
 
 .column-2
 	margin: 24px 0
 	max-width: 400px
 	min-width: 48%
+	@media (max-width: $breakpoint-sm-max)
+		max-width: 100%
+		padding: 0
+		width: 100%
 
 
 .columns-3
 	display: flex
 	justify-content: center
 	flex-wrap: wrap
+	@media (max-width: $breakpoint-sm-max)
+		display: block
 
 
 .column-3
@@ -697,6 +734,11 @@ h3.feature-title::after
 	max-width: 360px
 	text-align: center
 	width: 30%
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0 0 72px 0
+		max-width: 100%
+		padding: 0
+		width: 100%
 
 
 .column-3 p
@@ -711,13 +753,19 @@ h3.feature-title::after
 	display: flex
 	justify-content: flex-start
 	flex-wrap: wrap
+	@media (max-width: $breakpoint-sm-max)
+		display: block
 
 
 .column-4
 	margin: 24px 5% 24px 0
 	max-width: 20%
 	min-width: 240px
-
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0 0 24px 0
+		padding: 0
+		max-width: 100%
+		width: 100%
 
 
 /* SIDEBAR */
@@ -725,6 +773,9 @@ h3.feature-title::after
 .with-sidebar
 	margin: 0 0 0 240px
 	width: calc(100% - 240px)
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0
+		width: 100%
 
 
 header.with-sidebar
@@ -739,6 +790,8 @@ header.with-sidebar
 	left: 0
 	min-height: 100%
 	width: 240px
+	@media (max-width: $breakpoint-sm-max)
+		display: none
 
 
 .sidebar .logo
@@ -1063,6 +1116,9 @@ h4#signature
 	min-width: 360px
 	overflow: hidden
 	position: relative
+	@media (max-width: $breakpoint-sm-max)
+		display: flex
+		padding: 12px
 
 
 .product-page-icon
@@ -1076,6 +1132,9 @@ h4#signature
 	transition: all ease-in-out .1s
 	height: 60px
 	width: 60px
+	@media (max-width: $breakpoint-sm-max)
+		height: 48px
+		width: 48px
 
 
 .product-page-icon img
@@ -1083,12 +1142,17 @@ h4#signature
 	vertical-align: middle
 	height: 40px
 	width: 40px
+	@media (max-width: $breakpoint-sm-max)
+		height: 28px
+		width: 28px
 
 
 .product-container h1
 	display: inline-block
 	margin: 0
 	vertical-align: middle
+	@media (max-width: $breakpoint-sm-max)
+		font-size: 28px
 
 
 .product-title-section
@@ -1265,6 +1329,8 @@ img.graph
 .product-container > button
 	margin: 0 auto 24px auto
 	width: 320px
+	@media (max-width: $breakpoint-sm-max)
+		width: 100%
 
 
 img.copy-button,
