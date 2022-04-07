@@ -63,10 +63,18 @@
         placeholder='MSG_INVITATION_CODE_PLACEHOLDER'
       />
       <div class='row'>
-        <div class='column  justify-center'>
-          <input class='agreement' type='checkbox' id='agreement' name='agreement'>
+        <div class='agreement-check'>
+          <input
+            type='checkbox'
+            id='agreement'
+            name='agreement'
+            :class='[ agreeError ? "error" : "" ]'
+            v-model='agree'
+            @focus='onAgreeFocusIn'
+            @blur='onAgreeFocusOut'
+          >
         </div>
-        <div class='column  justify-center'>
+        <div class='agreement-label column  justify-center'>
           <label
             for='agreement'
             v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "/policy", USER_AGREEMENT: "/agreement" })'
@@ -142,6 +150,16 @@ const onConfirmPasswordFocusOut = () => {
 const invitationCode = ref('')
 const invCodeError = ref(false)
 
+const agree = ref(false)
+const agreeError = ref(false)
+const onAgreeFocusIn = () => {
+  agreeError.value = false
+}
+
+const onAgreeFocusOut = () => {
+  agreeError.value = !agree.value
+}
+
 const coderepo = useCodeRepoStore()
 const lang = useLangStore()
 const user = useUserStore()
@@ -201,6 +219,13 @@ const onSubmit = () => {
 </script>
 
 <style lang='sass' scoped>
-.agreement
-  margin-right: 8px
+.agreement-check
+  width: 24px
+
+.error
+  outline: 2px solid #e85f1a
+
+.agreement-label
+  width: calc(100% - 24px)
+  line-height: 100%
 </style>
