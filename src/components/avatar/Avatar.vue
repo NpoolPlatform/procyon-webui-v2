@@ -1,7 +1,5 @@
 <template>
-  <HeaderToolDropdown>
-    <div>HHHHHHHHHHHHHHH</div>
-  </HeaderToolDropdown>
+  <HeaderToolDropdown />
 </template>
 
 <script setup lang='ts'>
