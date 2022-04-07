@@ -1,19 +1,33 @@
 <template>
   <FormPage @submit='onSubmit'>
     <template #form-body>
-      <label for='email'>{{ $t('MSG_EMAIL_ADDRESS') }}</label>
-      <input
+      <Input
+        v-model:value='emailAddress'
+        label='MSG_EMAIL_ADDRESS'
         type='email'
         id='email'
         required
-        v-model='emailAddress'
-        ref='emailInput'
-      >
+        :error='emailError'
+        message='MSG_EMAIL_TIP'
+        placeholder='MSG_EMAIL_PLACEHOLDER'
+        @focus='onEmailFocusIn'
+        @blur='onEmailFocusOut'
+      />
       <q-btn class='send-code alt' @click='onSendCodeClick'>
         {{ $t('MSG_SEND_CODE') }}
       </q-btn>
-      <label for='ver-code'>{{ $t('MSG_EMAIL_VERIFICATION_CODE') }}</label>
-      <input type='text' id='ver-code' name='ver-code' required>
+      <Input
+        v-model:value='verificationCode'
+        label='MSG_EMAIL_VERIFICATION_CODE'
+        type='text'
+        id='ver-code'
+        required
+        :error='verificationCodeError'
+        message='MSG_VERIFICATION_CODE_TIP'
+        placeholder='MSG_VERIFICATION_CODE_PLACEHOLDER'
+        @focus='onVerificationCodeFocusIn'
+        @blur='onVerificationCodeFocusOut'
+      />
       <label for='pass'>{{ $t('MSG_PASSWORD') }}</label>
       <input
         type='password'
@@ -32,7 +46,7 @@
         class='error'
       >
       <label for='inv-code'>{{ $t('MSG_INVITATION_CODE') }}</label>
-      <input type='text' id='inv-code' name='inv-code' required>
+      <input type='text' id='inv-code' name='inv-code'>
       <input type='checkbox' id='agreement' name='agreement'>
       <label for='agreement' v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "/policy", USER_AGREEMENT: "/agreement" })' />
       <input type='submit' :value='$t("MSG_REGISTER")' class='register'>
@@ -47,7 +61,8 @@ import {
   useLangStore,
   MessageUsedFor,
   validateEmailAddress,
-  NotificationType
+  NotificationType,
+  validateVerificationCode
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -56,15 +71,31 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ useScope: 'global' })
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
+const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+
 const emailAddress = ref('')
-const emailInput = ref<HTMLInputElement>()
+const emailError = ref(false)
+const onEmailFocusIn = () => {
+  emailError.value = false
+}
+const onEmailFocusOut = () => {
+  emailError.value = !validateEmailAddress(emailAddress.value)
+}
+
+const verificationCode = ref('')
+const verificationCodeError = ref(false)
+const onVerificationCodeFocusIn = () => {
+  verificationCodeError.value = false
+}
+const onVerificationCodeFocusOut = () => {
+  verificationCodeError.value = !validateVerificationCode(verificationCode.value)
+}
 
 const coderepo = useCodeRepoStore()
 const lang = useLangStore()
 
 const onSendCodeClick = () => {
-  if (!validateEmailAddress(emailAddress.value) || !emailInput.value?.checkValidity) {
-    emailInput.value?.focus()
+  if (!validateEmailAddress(emailAddress.value)) {
     return
   }
 
@@ -85,7 +116,11 @@ const onSendCodeClick = () => {
 }
 
 const onSubmit = () => {
-  console.log('submit')
+  if (!validateEmailAddress(emailAddress.value) ||
+      !validateVerificationCode(verificationCode.value)) {
+    return
+  }
+  return false
 }
 
 </script>

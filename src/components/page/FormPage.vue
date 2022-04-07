@@ -5,7 +5,7 @@
         <h3 class='form-title'>
           User Registration
         </h3>
-        <form @submit='onSubmit'>
+        <form @submit='onSubmit' method='POST' action='javascript:void(0)'>
           <slot name='form-body' />
         </form>
       </div>
