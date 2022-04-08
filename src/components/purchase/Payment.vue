@@ -57,17 +57,24 @@
       </div>
     </PurchasePage>
   </div>
-  <q-dialog class='dialog' v-model='showStatus' maximized>
-    <PaymentState
-      :order-id='query.orderId'
-      :title='popupTitle'
-      :tip-message='tipMessage'
-      :state='orderStatus'
-      :show-type='showType'
-      :remain-time='remainTime'
-      @proceed='onPaymentProceed'
-    />
-  </q-dialog>
+  <transition
+    appear
+    enter-active-class='animated fadeIn'
+    leave-active-class='animated fadeOut'
+    :duration='3000'
+  >
+    <div class='popup' v-if='showStatus'>
+      <PaymentState
+        :order-id='query.orderId'
+        :title='popupTitle'
+        :tip-message='tipMessage'
+        :state='orderStatus'
+        :show-type='showType'
+        :remain-time='remainTime'
+        @proceed='onPaymentProceed'
+      />
+    </div>
+  </transition>
 </template>
 
 <script setup lang='ts'>
@@ -238,7 +245,7 @@ const onPaymentProceed = () => {
   padding: 4px
   text-transform: uppercase
 
-.dialog.q-dialog__backdrop
-  backdrop-filter: blur(12px) !important
-  background: transparent !important
+.form-container
+  position: absolute !important
+  top: 96px !important
 </style>
