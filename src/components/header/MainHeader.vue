@@ -8,12 +8,10 @@
         <li><a class='nav-link' href='#/faq'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
         <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
-        <button @click='onRegisterClick'>
-          {{ $t('MSG_REGISTER') }}
-        </button>
-        <button class='alt' @click='onSigninClick'>
-          {{ $t('MSG_SIGNIN') }}
-        </button>
+        <SignHelper v-if='!logined.getLogined' />
+        <AvatarDropdown v-else>
+          HHHHHHHHHHHHHHH
+        </AvatarDropdown>
       </ul>
     </div>
   </header>
@@ -23,12 +21,10 @@
 
     <div class='header-inner'>
       <LangSwitcher />
-      <button @click='onRegisterClick'>
-        {{ $t('MSG_REGISTER') }}
-      </button>
-      <button class='alt' @click='onSigninClick'>
-        {{ $t('MSG_SIGNIN') }}
-      </button>
+      <SignHelper v-if='!logined.getLogined' />
+      <AvatarDropdown v-else>
+        HHHHHHHHHHHHH
+      </AvatarDropdown>
     </div>
     <div class='hr' />
     <div class='nav'>
@@ -43,20 +39,16 @@
 </template>
 
 <script setup lang='ts'>
+import { useLoginedUserStore } from 'npool-cli-v2'
 import { defineAsyncComponent } from 'vue'
-import { useRouter } from 'vue-router'
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
+const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
+const AvatarDropdown = defineAsyncComponent(() => import('src/components/avatar/AvatarDropdown.vue'))
 
-const router = useRouter()
-const onRegisterClick = () => {
-  void router.push({ path: '/registration' })
-}
-const onSigninClick = () => {
-  void router.push({ path: '/signin' })
-}
+const logined = useLoginedUserStore()
 
 </script>
 

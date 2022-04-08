@@ -1,5 +1,12 @@
 <template>
-  <q-btn-dropdown flat dense :dropdown-icon='icon'>
+  <q-btn-dropdown
+    class='user-icon'
+    flat
+    dense
+    rounded
+    size='1.3rem'
+    :dropdown-icon='icon'
+  >
     <slot />
   </q-btn-dropdown>
 </template>
@@ -7,12 +14,14 @@
 <script setup lang='ts'>
 import { defineProps, withDefaults, computed } from 'vue'
 
+import avatar from '../../assets/icon-user.svg'
+
 interface Props {
-  icon?: string
+  icon: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  icon: 'https://cdn.quasar.dev/img/avatar.png'
+  icon: avatar
 })
 
 const icon = computed(() => 'img:' + props.icon)
@@ -20,6 +29,10 @@ const icon = computed(() => 'img:' + props.icon)
 </script>
 
 <style lang='sass' scoped>
-.btn-icon
-  background-color: red
+.user-icon
+  padidng: 8px 0 !important
+
+::v-deep .q-focus-helper
+  display: none !important
+  width: 0
 </style>
