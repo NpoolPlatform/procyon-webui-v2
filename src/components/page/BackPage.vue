@@ -1,10 +1,8 @@
 <template>
-  <div class='row'>
-    <div class='back-button' @click='onBackClick'>
-      ⭠
-    </div>
-    <slot />
+  <div class='back-button' @click='onBackClick'>
+    ⭠
   </div>
+  <slot />
 </template>
 
 <script setup lang='ts'>
