@@ -16,7 +16,7 @@
         <q-space />
         <p class='skip-registration'>
           <span class='no-account'>{{ $t('MSG_NO_ACCOUNT') }}? </span>
-          <a href='#/reset/registration'>{{ $t('MSG_REGISTER_NOW') }}.</a>
+          <a href='#/registration'>{{ $t('MSG_REGISTER_NOW') }}.</a>
         </p>
       </div>
     </template>
