@@ -6,7 +6,7 @@
           <div class='product-page-icon'>
             <img :src='good?.Main?.Logo'>
           </div>
-          <h1>{{ good?.Good.Good.Title }}</h1>
+          <h1>{{ good?.Good?.Good?.Title }}</h1>
         </div>
         <div class='info'>
           <h3 class='form-title'>
@@ -20,7 +20,7 @@
             </div>
             <div class='three-section'>
               <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
-              <span class='number'>{{ good?.Good.Good.DurationDays }}</span>
+              <span class='number'>{{ good?.Good?.Good?.DurationDays }}</span>
               <span class='unit'>{{ $t('MSG_DAYS') }}</span>
             </div>
             <div class='three-section'>
@@ -35,7 +35,7 @@
             </div>
             <div class='three-section'>
               <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-              <span class='number'>{{ formatTime(good.Good.Good.StartAt, true) }}</span>
+              <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
             </div>
             <div class='product-detail-text'>
               <div v-if='description'>
@@ -59,19 +59,27 @@
           </div>
         </div>
         <div class='product-sidebar'>
-          <h3 class='form-title'>Mining Purchase</h3>
+          <h3 class='form-title'>
+            {{ $t('MSG_MINING_PURCHASE') }}
+          </h3>
           <form action=''>
-            <h4>Purchase Amount (TBs)</h4>
+            <h4>{{ $t('MSG_PURCHASE_AMOUNT') }} ({{ good?.Good?.Good?.Unit }}s)</h4>
             <input type='number'>
-            <h4>Payment Method</h4>
-            <select name='Payment Method'>
-              <option value='USDT' selected>USDT</option>
-              <option value='USDC'>USDC</option>
+            <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
+            <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin'>
+              <option
+                v-for='myCoin in coins'
+                :key='myCoin.ID'
+                :value='myCoin'
+                :selected='paymentCoin?.ID === myCoin.ID'
+              >
+                {{ myCoin.Unit }} ({{ myCoin.Name }})
+              </option>
             </select>
             <!--<h4>Coupon Code</h4>
             <input type='text'>
             <div class='coupon-error'>Incorrect Coupon Code</div>-->
-            <input type='submit' value='Purchase' class='submit'>
+            <input type='submit' :value='$t("MSG_PURCHASE")' class='submit'>
           </form>
         </div>
       </div>
@@ -81,7 +89,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useGoodStore, NotificationType, formatTime, useCoinStore, Good } from 'npool-cli-v2'
+import { useGoodStore, NotificationType, formatTime, useCoinStore, Good, Coin } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -103,6 +111,8 @@ const good = computed(() => goods.getGoodByID(goodId.value))
 const usedFor = ref('PRODUCT_DETAIL')
 const coin = useCoinStore()
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
+const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale))
+const paymentCoin = ref(undefined as unknown as Coin)
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
@@ -131,6 +141,19 @@ onMounted(() => {
           }
         }
       })
+    })
+  }
+
+  if (coins.value.length === 0) {
+    coin.getCoins({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COINS'),
+          Message: t('MSG_GET_COINS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
     })
   }
 })
