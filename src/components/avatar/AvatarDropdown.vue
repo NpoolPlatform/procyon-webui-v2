@@ -7,6 +7,7 @@
     :ripple='false'
     size='1.3rem'
     :dropdown-icon='icon'
+    auto-close
   >
     <slot />
   </q-btn-dropdown>

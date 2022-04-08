@@ -19,7 +19,7 @@ import security from '../assets/icon-security.svg'
 import account from '../assets/icon-account.svg'
 import kyc from '../assets/icon-kyc.svg'
 
-const HeaderAvatarMenu = {
+const BaseMenu = {
   menuId: uid(),
   label: 'MSG_DASHBOARD',
   caption: '',
@@ -83,17 +83,39 @@ const HeaderAvatarMenu = {
       target: '/kyc',
       level: 0,
       children: []
-    }, {
-      menuId: uid(),
-      label: 'MSG_LOGOUT',
-      caption: '',
-      icon: 'logout',
-      target: '/',
-      sectionBegin: true,
-      level: 0,
-      children: []
     }
   ]
+}
+
+const menuLogout = {
+  menuId: uid(),
+  label: 'MSG_LOGOUT',
+  caption: '',
+  icon: 'logout',
+  target: '/',
+  sectionBegin: true,
+  level: 0,
+  children: []
+} as MenuItem
+
+const HeaderAvatarMenu = (): MenuItem => {
+  const menus = [] as Array<MenuItem>
+  BaseMenu.children.forEach((menu) => {
+    menus.push(menu)
+  })
+  menus.push(menuLogout)
+
+  const menu = {
+    menuId: BaseMenu.menuId,
+    label: BaseMenu.label,
+    caption: BaseMenu.caption,
+    icon: BaseMenu.icon,
+    target: BaseMenu.target,
+    level: BaseMenu.level,
+    children: menus
+  } as MenuItem
+
+  return menu
 }
 
 const formatMenuLabel = (item: MenuItem): string => {
@@ -103,5 +125,6 @@ const formatMenuLabel = (item: MenuItem): string => {
 export {
   MenuItem,
   HeaderAvatarMenu,
+  BaseMenu,
   formatMenuLabel
 }

@@ -1,11 +1,13 @@
 <template>
   <MainHeader />
-  <div id='main'>
-    <router-view />
+  <div class='main row'>
+    <SideMenu />
+    <div id='main'>
+      <router-view />
+    </div>
   </div>
   <Footer />
   <LangLoader />
-  <SideMenu />
 </template>
 
 <script setup lang='ts'>
@@ -31,3 +33,8 @@ onMounted(() => {
 })
 
 </script>
+
+<style lang='sass' scoped>
+.main
+  min-height: 400px
+</style>
