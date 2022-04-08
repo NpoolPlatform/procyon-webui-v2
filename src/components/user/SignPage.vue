@@ -35,9 +35,9 @@
       />
       <slot name='append-account' />
       <Input
-        v-model:value='password'
+        v-model:value='myPassword'
         label='MSG_PASSWORD'
-        type='new-password'
+        type='password'
         id='pass'
         required
         :error='pwdError'
@@ -67,6 +67,7 @@ interface Props {
   accountType: string
   account: string
   accountError: boolean
+  password: string
   submitText: string
 }
 
@@ -95,13 +96,13 @@ const onEmailFocusOut = () => {
   accountError.value = !validateEmailAddress(emailAddress.value)
 }
 
-const password = ref('')
+const myPassword = ref('')
 const pwdError = ref(false)
 const onPasswordFocusIn = () => {
   pwdError.value = false
 }
 const onPasswordFocusOut = () => {
-  pwdError.value = !validatePassword(password.value)
+  pwdError.value = !validatePassword(myPassword.value)
 }
 
 const emit = defineEmits<{(e: 'update:accountType', type: string): void,
@@ -135,6 +136,10 @@ watch(emailAddress, () => {
 
 watch(accountError, () => {
   emit('update:accountError', accountError.value)
+})
+
+watch(myPassword, () => {
+  emit('update:password', myPassword.value)
 })
 
 const onSubmit = () => {

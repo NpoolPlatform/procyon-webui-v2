@@ -11,7 +11,7 @@
         <button @click='onRegisterClick'>
           {{ $t('MSG_REGISTER') }}
         </button>
-        <button class='alt'>
+        <button class='alt' @click='onSigninClick'>
           {{ $t('MSG_SIGNIN') }}
         </button>
       </ul>
@@ -26,7 +26,7 @@
       <button @click='onRegisterClick'>
         {{ $t('MSG_REGISTER') }}
       </button>
-      <button class='alt'>
+      <button class='alt' @click='onSigninClick'>
         {{ $t('MSG_SIGNIN') }}
       </button>
     </div>
@@ -53,6 +53,9 @@ const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/Lang
 const router = useRouter()
 const onRegisterClick = () => {
   void router.push({ path: '/registration' })
+}
+const onSigninClick = () => {
+  void router.push({ path: '/signin' })
 }
 
 </script>

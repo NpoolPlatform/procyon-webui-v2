@@ -29,7 +29,7 @@
       <Input
         v-model:value='confirmPassword'
         label='MSG_CONFIRM_PASSWORD'
-        type='new-password'
+        type='password'
         id='pass'
         required
         :error='confirmPasswdError'
@@ -180,6 +180,9 @@ const onSendCodeClick = () => {
 }
 
 const onSubmit = () => {
+  confirmPasswdError.value = !validatePassword(confirmPassword.value) ||
+                             password.value !== confirmPassword.value
+
   if (accountError.value ||
       verificationCodeError.value ||
       confirmPasswdError.value) {
