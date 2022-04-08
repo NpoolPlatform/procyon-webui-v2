@@ -30,4 +30,6 @@ const icon = computed(() => 'img:' + props.icon)
 </script>
 
 <style lang='sass' scoped>
+::v-deep .q-focus-helper
+  display: none !important
 </style>

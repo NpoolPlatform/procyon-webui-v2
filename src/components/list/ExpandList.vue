@@ -5,14 +5,15 @@
     </q-item-label>
     <q-item
       dense
-      class='caption menu-item column justify-center'
+      class='menu-item column justify-center'
       v-for='item in menu.children'
       :key='item.menuId'
       @click='onMenuClick(item)'
       clickable
     >
+      <q-separator v-if='item.sectionBegin' />
       <div :class='[margin ? "menu-item-margin row" : "row"]'>
-        <q-img class='icon' v-if='showIcon && item.icon && item.icon.length > 0' :src='item.icon' />
+        <q-icon class='icon' v-if='showIcon && item.icon && item.icon.length > 0' :name='item.icon' />
         <q-item-label class='menu-item-label'>
           {{ $t(item.label) }}
         </q-item-label>
@@ -63,6 +64,9 @@ const onMenuClick = (item: MenuItem) => {
 </script>
 
 <style lang='sass' scoped>
+.container
+  background-color: #23292b
+
 .menu
   font-size: 16px
   margin: 0 0 10px 0

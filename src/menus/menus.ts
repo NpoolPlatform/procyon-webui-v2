@@ -12,152 +12,16 @@ interface MenuItem {
   children: Array<MenuItem>
 }
 
-const FooterTerms = {
-  menuId: uid(),
-  label: 'MSG_TERMS',
-  caption: '',
-  icon: '',
-  target: '',
-  level: 0,
-  children: [
-    {
-      menuId: uid(),
-      label: 'MSG_PRIVACY_POLICY',
-      caption: '',
-      icon: '',
-      target: '',
-      level: 1,
-      children: []
-    }, {
-      menuId: uid(),
-      label: 'MSG_TERMS_OF_USE',
-      caption: '',
-      icon: '',
-      target: '',
-      level: 1,
-      children: []
-    }
-  ]
-}
-
-const FooterBlog = {
-  menuId: uid(),
-  label: 'MSG_BLOG',
-  caption: '',
-  icon: '',
-  target: '',
-  level: 0,
-  children: [
-    {
-      menuId: uid(),
-      label: 'MSG_ANNOUNCEMENT',
-      caption: '',
-      icon: '',
-      target: '',
-      level: 1,
-      children: []
-    }, {
-      menuId: uid(),
-      label: 'MSG_PRESS',
-      caption: '',
-      icon: '',
-      target: '',
-      level: 1,
-      children: []
-    }, {
-      menuId: uid(),
-      label: 'MSG_NEWS',
-      caption: '',
-      icon: '',
-      target: '',
-      level: 1,
-      children: []
-    }, {
-      menuId: uid(),
-      label: 'MSG_REPORTS',
-      caption: '',
-      icon: '',
-      target: '',
-      level: 1,
-      children: []
-    }
-  ]
-}
-
-const FooterSupport = {
-  menuId: uid(),
-  label: 'MSG_SUPPORT',
-  caption: '',
-  icon: '',
-  target: '',
-  level: 0,
-  children: [
-    {
-      menuId: uid(),
-      label: 'MSG_FAQS',
-      caption: '',
-      icon: '',
-      target: '',
-      level: 1,
-      children: []
-    }, {
-      menuId: uid(),
-      label: 'MSG_CUSTOMER_SERVICE',
-      caption: '',
-      icon: '',
-      target: '',
-      level: 1,
-      children: []
-    }
-  ]
-}
-
-const FooterContact = {
-  menuId: uid(),
-  label: 'MSG_CONTACT',
-  caption: '',
-  icon: '',
-  target: '',
-  level: 0,
-  children: [
-    {
-      menuId: uid(),
-      label: 'MSG_COTACT_EMAIL_ADDRESS',
-      caption: '',
-      icon: '',
-      target: '',
-      level: 1,
-      children: []
-    }, {
-      menuId: uid(),
-      label: 'MSG_CONTACT_PHONE_NO',
-      caption: '',
-      icon: '',
-      target: '',
-      level: 1,
-      children: []
-    }
-  ]
-}
-
-const FooterMenus = [
-  FooterTerms,
-  FooterBlog,
-  FooterSupport,
-  FooterContact
-]
-
-import computingPower from 'src/assets/ComputingPower.svg'
-import order from 'src/assets/Order.svg'
-import referral from 'src/assets/Referral.svg'
-import withdrawalAddress from 'src/assets/WithdrawalAddress.svg'
-import security from 'src/assets/Security.svg'
-import identification from 'src/assets/Identification.svg'
-import rewardCenter from 'src/assets/RewardCenter.svg'
+import dashboard from '../assets/icon-mining.svg'
+import wallet from '../assets/icon-wallet.svg'
+import reffiliates from '../assets/icon-affiliates.svg'
+import security from '../assets/icon-security.svg'
+import account from '../assets/icon-account.svg'
+import kyc from '../assets/icon-kyc.svg'
 
 const HeaderAvatarMenu = {
   menuId: uid(),
-  label: 'MSG_PERSONAL_CENTER',
+  label: 'MSG_DASHBOARD',
   caption: '',
   icon: '',
   target: '',
@@ -165,59 +29,67 @@ const HeaderAvatarMenu = {
   children: [
     {
       menuId: uid(),
-      label: 'MSG_COMPUTING_POWER',
+      label: 'MSG_DASHBOARD',
       caption: '',
-      icon: computingPower,
-      target: '/user/center',
+      icon: 'img:' + dashboard,
+      target: '/dashboard',
       level: 0,
       children: []
     }, {
       menuId: uid(),
-      label: 'MSG_ORDER',
+      label: 'MSG_WALLET',
       caption: '',
-      icon: order,
-      target: '/user/center',
+      icon: 'img:' + wallet,
+      target: '/wallet',
       level: 0,
       children: []
     }, {
       menuId: uid(),
       label: 'MSG_REFERRAL',
       caption: '',
-      icon: referral,
-      target: '/user/center',
+      icon: 'img:' + reffiliates,
+      target: '/reffiliates',
       level: 0,
       children: []
     }, {
       menuId: uid(),
-      label: 'MSG_WITHDRAWAL_ADDRESS',
+      label: 'MSG_SECURITY',
       caption: '',
-      icon: withdrawalAddress,
-      target: '/user/center',
+      icon: 'img:' + security,
+      target: '/security',
       level: 0,
       children: []
     }, {
       menuId: uid(),
-      label: 'MSG_REWARD_CENTER',
+      label: 'MSG_ACCOUNT',
       caption: '',
-      icon: rewardCenter,
-      target: '/user/center',
+      icon: 'img:' + account,
+      target: '/account',
       level: 0,
       children: []
     }, {
       menuId: uid(),
       label: 'MSG_SECURITY_CENTER',
       caption: '',
-      icon: security,
+      icon: 'img:' + security,
       target: '/user/center',
       level: 0,
-      sectionBegin: true,
       children: []
     }, {
       menuId: uid(),
-      label: 'MSG_IDENTIFICATION',
+      label: 'MSG_KYC',
       caption: '',
-      icon: identification,
-      target: '/user/center',
+      icon: 'img:' + kyc,
+      target: '/kyc',
+      level: 0,
+      children: []
+    }, {
+      menuId: uid(),
+      label: 'MSG_LOGOUT',
+      caption: '',
+      icon: 'logout',
+      target: '/',
+      sectionBegin: true,
       level: 0,
       children: []
     }
@@ -230,7 +102,6 @@ const formatMenuLabel = (item: MenuItem): string => {
 
 export {
   MenuItem,
-  FooterMenus,
   HeaderAvatarMenu,
   formatMenuLabel
 }

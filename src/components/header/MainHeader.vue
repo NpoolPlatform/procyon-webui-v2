@@ -10,7 +10,15 @@
         <LangSwitcher />
         <SignHelper v-if='!logined.getLogined' />
         <AvatarDropdown v-else>
-          HHHHHHHHHHHHHHH
+          <ExpandList
+            :menu='HeaderAvatarMenu'
+            :show-icon='true'
+            :show-icon-right='true'
+            :show-label='false'
+            :handle-router='false'
+            :margin='true'
+            @switch-menu='onSwitchMenu'
+          />
         </AvatarDropdown>
       </ul>
     </div>
@@ -23,7 +31,15 @@
       <LangSwitcher />
       <SignHelper v-if='!logined.getLogined' />
       <AvatarDropdown v-else>
-        HHHHHHHHHHHHH
+        <ExpandList
+          :menu='HeaderAvatarMenu'
+          :show-icon='true'
+          :show-icon-right='true'
+          :show-label='false'
+          :handle-router='false'
+          :margin='true'
+          @switch-menu='onSwitchMenu'
+        />
       </AvatarDropdown>
     </div>
     <div class='hr' />
@@ -41,14 +57,34 @@
 <script setup lang='ts'>
 import { useLoginedUserStore } from 'npool-cli-v2'
 import { defineAsyncComponent } from 'vue'
+import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
+import { useRouter } from 'vue-router'
+
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
 const AvatarDropdown = defineAsyncComponent(() => import('src/components/avatar/AvatarDropdown.vue'))
+const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
 
 const logined = useLoginedUserStore()
+
+const router = useRouter()
+
+const onSwitchMenu = (item: MenuItem) => {
+  if (item.label === 'MSG_LOGOUT') {
+    // TODO
+    return
+  }
+
+  void router.push({
+    path: item.target,
+    query: {
+      menuId: item.menuId
+    }
+  })
+}
 
 </script>
 
