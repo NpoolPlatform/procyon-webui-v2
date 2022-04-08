@@ -63,7 +63,7 @@
         <div class='agreement-label column  justify-center'>
           <label
             for='agreement'
-            v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "/policy", USER_AGREEMENT: "/agreement" })'
+            v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "/legal", USER_AGREEMENT: "/legal" })'
           />
         </div>
       </div>

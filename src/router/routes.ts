@@ -60,6 +60,30 @@ const routes: RouteRecordRaw[] = [
           ShowTopTip: false,
           NeedLogined: false
         }
+      }, {
+        path: 'legal',
+        component: () => import('pages/Legal.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false
+        }
+      }, {
+        path: 'faq',
+        component: () => import('pages/FAQ.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false
+        }
       }
     ]
   },
