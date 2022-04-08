@@ -1,44 +1,20 @@
 <template>
-  <FormPage @submit='onSubmit' label='MSG_USER_REGISTRATION'>
-    <template #top-right>
-      <div class='switcher' @click='onSwitcherClick'>
-        <q-icon
-          class='icon'
-          size='1.5em'
-          :name='signupMethod === AccountType.Email ? "smartphone" : "email"'
-        />
-        <q-tooltip anchor='center end'>
-          {{ signupMethod === AccountType.Email ? $t('MSG_SWITCH_REGISTER_WITH_MOBILE') : $t('MSG_SWITCH_REGISTER_WITH_EMAIL') }}
-        </q-tooltip>
-      </div>
-    </template>
-    <template #form-body>
-      <PhoneNO
-        v-if='signupMethod === AccountType.Mobile'
-        v-model:value='phoneNO'
-        :error='accountError'
-        @focus='onPhoneNOFocusIn'
-        @blur='onPhoneNOFocusOut'
-      />
-      <Input
-        v-if='signupMethod === AccountType.Email'
-        v-model:value='emailAddress'
-        label='MSG_EMAIL_ADDRESS'
-        type='email'
-        id='email'
-        required
-        :error='accountError'
-        message='MSG_EMAIL_TIP'
-        placeholder='MSG_EMAIL_PLACEHOLDER'
-        @focus='onEmailFocusIn'
-        @blur='onEmailFocusOut'
-      />
+  <SignPage
+    v-model:account='account'
+    v-model:account-type='accountType'
+    v-model:password='password'
+    v-model:accountError='accountError'
+    @submit='onSubmit'
+    label='MSG_USER_REGISTRATION'
+    submit-text='MSG_REGISTER'
+  >
+    <template #append-account>
       <q-btn class='send-code alt' @click='onSendCodeClick'>
         {{ $t('MSG_SEND_CODE') }}
       </q-btn>
       <Input
         v-model:value='verificationCode'
-        :label='signupMethod === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
+        :label='accountType === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
         type='text'
         id='ver-code'
         required
@@ -48,18 +24,8 @@
         @focus='onVerificationCodeFocusIn'
         @blur='onVerificationCodeFocusOut'
       />
-      <Input
-        v-model:value='password'
-        label='MSG_PASSWORD'
-        type='new-password'
-        id='pass'
-        required
-        :error='pwdError'
-        message='MSG_PASSWORD_TIP'
-        placeholder='MSG_PASSWORD_PLACEHOLDER'
-        @focus='onPasswordFocusIn'
-        @blur='onPasswordFocusOut'
-      />
+    </template>
+    <template #append-password>
       <Input
         v-model:value='confirmPassword'
         label='MSG_CONFIRM_PASSWORD'
@@ -101,10 +67,11 @@
           />
         </div>
       </div>
-      <input type='submit' :value='$t("MSG_REGISTER")' class='register'>
+    </template>
+    <template #append-submit>
       <p class='skip-registration' v-html='$t("MSG_GOTO_SIGNIN", { SIGNIN_PATH: "/signin" })' />
     </template>
-  </FormPage>
+  </SignPage>
 </template>
 
 <script setup lang='ts'>
@@ -112,14 +79,12 @@ import {
   useCodeRepoStore,
   useLangStore,
   MessageUsedFor,
-  validateEmailAddress,
   NotificationType,
   validateVerificationCode,
   validatePassword,
   useUserStore,
   encryptPassword,
-  AccountType,
-  validateMobileNO
+  AccountType
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -128,27 +93,13 @@ import { useRouter } from 'vue-router'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
+const SignPage = defineAsyncComponent(() => import('src/components/user/SignPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
-const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
 
 const accountError = ref(false)
-
-const phoneNO = ref('')
-const onPhoneNOFocusIn = () => {
-  accountError.value = false
-}
-const onPhoneNOFocusOut = () => {
-  accountError.value = !validateMobileNO(phoneNO.value)
-}
-
-const emailAddress = ref('')
-const onEmailFocusIn = () => {
-  accountError.value = false
-}
-const onEmailFocusOut = () => {
-  accountError.value = !validateEmailAddress(emailAddress.value)
-}
+const account = ref('')
+const accountType = ref('')
+const password = ref('')
 
 const verificationCode = ref('')
 const verificationCodeError = ref(false)
@@ -157,15 +108,6 @@ const onVerificationCodeFocusIn = () => {
 }
 const onVerificationCodeFocusOut = () => {
   verificationCodeError.value = !validateVerificationCode(verificationCode.value)
-}
-
-const password = ref('')
-const pwdError = ref(false)
-const onPasswordFocusIn = () => {
-  pwdError.value = false
-}
-const onPasswordFocusOut = () => {
-  pwdError.value = !validatePassword(password.value)
 }
 
 const confirmPassword = ref('')
@@ -191,19 +133,6 @@ const onAgreeFocusOut = () => {
   agreeError.value = !agree.value
 }
 
-const signupMethod = ref(AccountType.Email)
-const onSwitcherClick = () => {
-  switch (signupMethod.value) {
-    case AccountType.Email:
-      signupMethod.value = AccountType.Mobile
-      break
-    case AccountType.Mobile:
-      signupMethod.value = AccountType.Email
-      break
-  }
-  accountError.value = false
-}
-
 const coderepo = useCodeRepoStore()
 const lang = useLangStore()
 const user = useUserStore()
@@ -215,13 +144,13 @@ const onSendCodeClick = () => {
     return
   }
 
-  switch (signupMethod.value) {
+  switch (accountType.value) {
     case AccountType.Email:
       coderepo.sendEmailCode({
         LangID: lang.CurLang?.ID as string,
-        EmailAddress: emailAddress.value,
+        EmailAddress: account.value,
         UsedFor: MessageUsedFor.Signup,
-        ToUsername: emailAddress.value,
+        ToUsername: account.value,
         Message: {
           Error: {
             Title: t('MSG_SEND_EMAIL_CODE'),
@@ -235,7 +164,7 @@ const onSendCodeClick = () => {
     case AccountType.Mobile:
       coderepo.sendSMSCode({
         LangID: lang.CurLang?.ID as string,
-        PhoneNO: phoneNO.value,
+        PhoneNO: account.value,
         UsedFor: MessageUsedFor.Signup,
         Message: {
           Error: {
@@ -253,20 +182,14 @@ const onSendCodeClick = () => {
 const onSubmit = () => {
   if (accountError.value ||
       verificationCodeError.value ||
-      pwdError.value ||
       confirmPasswdError.value) {
     return
   }
 
-  let account = emailAddress.value
-  if (signupMethod.value === AccountType.Mobile) {
-    account = phoneNO.value
-  }
-
   user.signup({
     PasswordHash: encryptPassword(password.value),
-    Account: account,
-    AccountType: signupMethod.value,
+    Account: account.value,
+    AccountType: accountType.value,
     VerificationCode: verificationCode.value,
     InvitationCode: invitationCode.value,
     Message: {
@@ -296,17 +219,4 @@ const onSubmit = () => {
 .agreement-label
   width: calc(100% - 24px)
   line-height: 100%
-
-.switcher
-  width: 0
-  height: 0
-  border-width: 32px
-  border-style: solid
-  border-color: #ff964a #ff964a transparent transparent
-  cursor: pointer
-  border-top-right-radius: 12px
-
-.icon
-  margin-right: -48px
-  margin-top: -56px
 </style>

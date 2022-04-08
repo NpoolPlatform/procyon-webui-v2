@@ -1,8 +1,10 @@
 <template>
-  <div class='back-button' @click='onBackClick'>
-    ⭠
+  <div class='row'>
+    <div class='back-button' @click='onBackClick'>
+      ⭠
+    </div>
+    <slot />
   </div>
-  <slot />
 </template>
 
 <script setup lang='ts'>
@@ -14,3 +16,9 @@ const onBackClick = () => {
 }
 
 </script>
+
+<style lang='sass' scoped>
+.back-button
+  line-height: 32px
+  max-height: 64px
+</style>
