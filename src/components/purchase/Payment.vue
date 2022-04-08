@@ -1,61 +1,63 @@
 <template>
-  <PurchasePage :good='order?.Good'>
-    <div class='info'>
-      <h3 class='form-title'>
-        {{ order?.PayWithCoin?.Name }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
-      </h3>
-      <div class='info-flex'>
-        <div class='three-section'>
-          <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}:</h4>
-          <span class='number'>{{ order?.Order?.Order?.Units }}</span>
-          <span class='unit'>{{ order?.Good?.Good?.Good?.Unit }}</span>
+  <div :class='[ "row", showStatus ? "blur" : "" ]'>
+    <PurchasePage :good='order?.Good'>
+      <div class='info'>
+        <h3 class='form-title'>
+          {{ order?.PayWithCoin?.Name }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
+        </h3>
+        <div class='info-flex'>
+          <div class='three-section'>
+            <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}:</h4>
+            <span class='number'>{{ order?.Order?.Order?.Units }}</span>
+            <span class='unit'>{{ order?.Good?.Good?.Good?.Unit }}</span>
+          </div>
+          <div class='three-section'>
+            <h4>{{ $t('MSG_AMOUNT_DUE') }}:</h4>
+            <span class='number'>{{ order?.Order?.Payment?.Amount }}</span>
+            <span class='unit'>{{ order?.PayWithCoin?.Unit }}</span>
+            <img class='copy-button' :src='copy'>
+          </div>
+          <div class='three-section'>
+            <h4>{{ $t('MSG_TIME_REMAIN') }}:</h4>
+            <span class='number'>{{ remainSeconds }}</span>
+          </div>
+          <div class='full-section'>
+            <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
+            <span class='wallet-type'>{{ order?.PayWithCoin?.Name }}</span>
+            <span class='number'>{{ order?.PayToAccount?.Address }}</span>
+            <img class='copy-button' :src='copy'>
+          </div>
         </div>
-        <div class='three-section'>
-          <h4>{{ $t('MSG_AMOUNT_DUE') }}:</h4>
-          <span class='number'>{{ order?.Order?.Payment?.Amount }}</span>
-          <span class='unit'>{{ order?.PayWithCoin?.Unit }}</span>
-          <img class='copy-button' :src='copy'>
-        </div>
-        <div class='three-section'>
-          <h4>{{ $t('MSG_TIME_REMAIN') }}:</h4>
-          <span class='number'>{{ remainSeconds }}</span>
-        </div>
-        <div class='full-section'>
-          <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
-          <span class='wallet-type'>{{ order?.PayWithCoin?.Name }}</span>
-          <span class='number'>{{ order?.PayToAccount?.Address }}</span>
-          <img class='copy-button' :src='copy'>
-        </div>
+        <div class='hr' />
+        <h4>{{ $t('MSG_IMPORTANT_INFORMATION') }}</h4>
+        <p v-html='$t("MSG_PAYMENT_NOTE")' />
       </div>
-      <div class='hr' />
-      <h4>{{ $t('MSG_IMPORTANT_INFORMATION') }}</h4>
-      <p v-html='$t("MSG_PAYMENT_NOTE")' />
-    </div>
-    <div class='order-form'>
-      <h3 class='form-title'>
-        {{ $t('MSG_SCAN_QR_CODE_TO_PAY') }}
-      </h3>
-      <div class='qr-code-container'>
-        <div class='qr-code-container' ref='qrCodeContainer'>
-          <h5>{{ order?.PayWithCoin?.Name }} {{ $t('MSG_ADDRESS') }}</h5>
-          <qrcode-vue
-            :value='order?.PayToAccount?.Address'
-            :size='qrCodeContainer?.clientWidth as number - 1'
-            :margin='3'
-            class='qr-code'
-          />
+      <div class='order-form'>
+        <h3 class='form-title'>
+          {{ $t('MSG_SCAN_QR_CODE_TO_PAY') }}
+        </h3>
+        <div class='qr-code-container'>
+          <div class='qr-code-container' ref='qrCodeContainer'>
+            <h5>{{ order?.PayWithCoin?.Name }} {{ $t('MSG_ADDRESS') }}</h5>
+            <qrcode-vue
+              :value='order?.PayToAccount?.Address'
+              :size='qrCodeContainer?.clientWidth as number - 1'
+              :margin='3'
+              class='qr-code'
+            />
+          </div>
         </div>
+        <div class='hr' />
+        <button @click='onPaymentCompletedClick'>
+          {{ $t('MSG_PAYMENT_COMPLETED') }}
+        </button>
+        <button class='alt' @click='onPayLaterClick'>
+          {{ $t('MSG_PAY_LATER') }}
+        </button>
       </div>
-      <div class='hr' />
-      <button @click='onPaymentCompletedClick'>
-        {{ $t('MSG_PAYMENT_COMPLETED') }}
-      </button>
-      <button class='alt' @click='onPayLaterClick'>
-        {{ $t('MSG_PAY_LATER') }}
-      </button>
-    </div>
-  </PurchasePage>
-  <q-dialog content-class='blur' v-model='showStatus'>
+    </PurchasePage>
+  </div>
+  <q-dialog content-class='dialog' v-model='showStatus' maximized>
     <PaymentState
       :order-id='query.orderId'
       :title='popupTitle'
@@ -236,9 +238,6 @@ const onPaymentProceed = () => {
   padding: 4px
   text-transform: uppercase
 
-.blur
-  filter: blur(12px)
-
-.blur > .q-dialog__backdrop
+.dialog > .q-dialog__backdrop
   backdrop-filter: blur(12px)
 </style>
