@@ -17,6 +17,7 @@ body
 	width: 100%
 	@media (max-width: $breakpoint-sm-max)
 		min-width: 360px
+		width: 100%
 
 body
 	background: linear-gradient(to bottom right, #1f293a 0, #2a3943 50%, #092023 100%) !important
@@ -55,6 +56,10 @@ body::before
 	display: none
 	@media (max-width: $breakpoint-sm-max)
 		display: block
+
+header.desktop
+	@media (max-width: $breakpoint-sm-max)
+		display: none
 
 header.mobile
 	background: linear-gradient(to bottom, #092023 0, transparent 50px)
@@ -1177,14 +1182,21 @@ h4#signature
 		font-size: 28px
 
 
-.product-title-section
+.product-container .product-title-section
 	margin: 0 0 24px 0
 	width: 100%
+	@media (max-width: $breakpoint-sm-max)
+		order: 1
 
 
 .product-container .info
 	padding: 0 5% 0 0
 	width: 75%
+	@media (max-width: $breakpoint-sm-max)
+		margin-top: 16px
+		order: 3
+		padding: 0
+		width: 100%
 
 
 .product-container .withdraw
@@ -1221,6 +1233,9 @@ h4#signature
 .product-container .three-section
 	margin: 0 5% 12px 0
 	width: 30%
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0
+		width: 100%
 
 
 .product-container .three-section:nth-child(3n)
@@ -1234,6 +1249,9 @@ h4#signature
 .product-container .full-section
 	margin: 12px 0
 	width: 100%
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0
+		width: 100%
 
 
 .product-container .address-option
@@ -1272,9 +1290,20 @@ h4#signature
 	opacity: 1
 
 
-.order-form,
-.product-sidebar
+.product-container .order-form
 	width: 25%
+	@media (max-width: $breakpoint-sm-max)
+		margin-top: 16px
+		order: 4
+		width: 100%
+
+
+.product-container .product-sidebar
+	width: 25%
+	@media (max-width: $breakpoint-sm-max)
+		margin-top: 16px
+		order: 2
+		width: 100%
 
 
 .product-sidebar-section
@@ -1288,6 +1317,8 @@ img.graph
 
 .product-detail-text
 	margin: 30px 0
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0
 
 
 .product-detail-text h3
@@ -1533,6 +1564,61 @@ img.more-info:hover
 	box-shadow: 16px 16px 20px 0 #05131999
 
 
+.ido-container .product-sidebar
+	@media (max-width: $breakpoint-sm-max)
+		display: flex
+		justify-content: flex-start
+		flex-wrap: wrap
+		margin-top: 16px
+		order: 5
+		width: 100%
+
+
+#project-links
+	@media (max-width: $breakpoint-sm-max)
+		order: 1
+		width: 100%
+
+
+#project-links .product-links
+	@media (max-width: $breakpoint-sm-max)
+		display: flex
+		flex-wrap: wrap
+		justify-content: flex-start
+
+
+#project-links .product-links li
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0
+		padding: 0 18px 18px 0
+
+
+#project-links .product-links span
+	@media (max-width: $breakpoint-sm-max)
+		display: none
+
+
+#project-links lie
+	@media (max-width: $breakpoint-sm-max)
+		display: none
+
+
+#join-ido
+	@media (max-width: $breakpoint-sm-max)
+		order: 2
+		width: 100%
+
+
+#deal-terms
+	@media (max-width: $breakpoint-sm-max)
+		order: 3
+
+
+#help
+	@media (max-width: $breakpoint-sm-max)
+		order: 4
+
+
 img.ido-promo-content
 	border-radius: 20px
 	margin: 12px 0
@@ -1556,18 +1642,31 @@ img.product-banner
 	position: relative
 	height: 300px
 	width: calc(100% + 96px)
+	@media (max-width: $breakpoint-sm-max)
+		order: 1
+		background-size: auto calc(100% + 32px)
+		height: 200px
+		margin: -12px -12px 24px -12px
+		padding: 0
+		width: calc(100% + 48px)
 
 
-.product-title-container
+.ido-container .product-title-container
 	background: #23292b
 	border-radius: 12px 12px 0 0
 	padding: 16px
 	position: absolute
 	bottom: 0
 	left: 32px
+	@media (max-width: $breakpoint-sm-max)
+		border-radius: 12px
+		top: 12px
+		left: 12px
+		bottom: unset
+		padding: 12px
 
 
-.product-title-container::before
+.ido-container .product-title-container::before
 	background-color: transparent
 	border-bottom-right-radius: 20px
 	box-shadow: 0 20px 0 0 #23292b
@@ -1577,9 +1676,11 @@ img.product-banner
 	left: -20px
 	height: 40px
 	width: 20px
+	@media (max-width: $breakpoint-sm-max)
+		display: none
 
 
-.product-title-container::after
+.ido-container .product-title-container::after
 	background-color: transparent
 	border-bottom-left-radius: 20px
 	box-shadow: 0 20px 0 0 #23292b
@@ -1589,6 +1690,26 @@ img.product-banner
 	right: -20px
 	height: 40px
 	width: 20px
+	@media (max-width: $breakpoint-sm-max)
+		display: none
+
+
+.ido-container .product-page-icon
+	@media (max-width: $breakpoint-sm-max)
+		padding: 8px
+		height: 32px
+		width: 32px
+
+
+.ido-container .product-page-icon img
+	@media (max-width: $breakpoint-sm-max)
+		height: 16px
+		width: 16px
+
+
+.ido-container h1
+	@media (max-width: $breakpoint-sm-max)
+		font-size: 24px
 
 
 .project-team
@@ -1600,10 +1721,21 @@ img.product-banner
 .team-member
 	margin: 0 5% 40px 0
 	width: 30%
+	@media (max-width: $breakpoint-sm-max)
+		margin-right: 4%
+		width: 48%
 
 
 .team-member:nth-child(3n)
 	margin-right: 0
+	@media (max-width: $breakpoint-sm-max)
+		margin-right: 4%
+		width: 48%
+
+
+.team-member:nth-child(2n)
+	@media (max-width: $breakpoint-sm-max)
+		margin-right: 0
 
 
 .team-member img
@@ -1880,6 +2012,9 @@ img.product-banner
 	text-align: center
 	min-width: 240px
 	width: 30%
+	@media (max-width: $breakpoint-sm-max)
+		margin: 0 0 24px 
+		width: 100%
 
 
 .earnings-figure:last-of-type
@@ -1965,6 +2100,9 @@ h3.mining-title
 .top-line-item
 	font-size: 24px
 	margin: 0 16px 16px 0
+	@media (max-width: $breakpoint-sm-max)
+		font-size: 18px
+		width: 100%
 
 
 .top-line-item:last-of-type
@@ -2012,6 +2150,8 @@ h3.mining-title
 .mining-summary .buttons
 	display: flex
 	justify-content: flex-end
+	@media (max-width: $breakpoint-sm-max)
+		justify-content: space-between
 
 
 .buttons button,
@@ -2021,6 +2161,18 @@ h3.mining-title
 	height: auto
 	margin: 24px 0 0 12px
 	padding: 8px 20px
+	@media (max-width: $breakpoint-sm-max)
+		margin: 24px 12px
+
+
+.buttons button:first-of-type
+	@media (max-width: $breakpoint-sm-max)
+		margin-left: 0
+
+
+.buttons button:last-of-type
+	@media (max-width: $breakpoint-sm-max)
+		margin-right: 0
 
 
 .buttons button:hover,
@@ -2058,6 +2210,8 @@ h3.mining-title
 	display: flex
 	flex-wrap: wrap
 	justify-content: flex-start
+	@media (max-width: $breakpoint-sm-max)
+		justify-content: center
 
 
 .setting-box
@@ -2071,6 +2225,9 @@ h3.mining-title
 	margin: 0 5% 5% 0
 	max-width: 600px
 	width: 45%
+	@media (max-width: $breakpoint-sm-max)
+		margin: 12px 0
+		width: 100%
 
 
 .settings-box-heading
