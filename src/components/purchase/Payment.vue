@@ -55,18 +55,30 @@
       </button>
     </div>
   </PurchasePage>
+  <q-dialog content-class='blur' v-model='showStatus'>
+    <PaymentState
+      :order-id='query.orderId'
+      :title='popupTitle'
+      :tip-message='tipMessage'
+      :state='orderStatus'
+      :show-type='showType'
+      :remain-time='remainTime'
+      @proceed='onPaymentProceed'
+    />
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
-import { useOrderStore, NotificationType } from 'npool-cli-v2'
+import { useOrderStore, NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, ref, onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 import copy from 'src/assets/icon-copy.svg'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
+const PaymentState = defineAsyncComponent(() => import('src/components/purchase/PaymentState.vue'))
 
 interface Query {
   paymentId: string
@@ -88,12 +100,50 @@ const ticker = ref(-1)
 
 const qrCodeContainer = ref<HTMLDivElement>()
 
+const showStatus = ref(false)
+const popupTitle = ref('')
+const tipMessage = ref('')
+const orderStatus = ref('')
+const showType = ref('')
+const remainTime = ref(RemainMax)
+
+const remainTicker = ref(-1)
+
 const launchTicker = () => {
   ticker.value = window.setInterval(() => {
     remainSeconds.value = orders.getOrderState(order.value)
+
     if (!orders.validateOrder(order.value)) {
       window.clearInterval(ticker.value)
       ticker.value = -1
+      return
+    }
+
+    if (orders.orderPaid(order.value)) {
+      showStatus.value = true
+      popupTitle.value = 'MSG_ORDER_COMPLETE'
+      tipMessage.value = 'MSG_REVIEW_ORDER'
+      orderStatus.value = 'MSG_COMPLETE'
+      showType.value = 'date'
+      if (remainTicker.value >= 0) {
+        clearInterval(remainTicker.value)
+        remainTicker.value = -1
+      }
+      return
+    }
+
+    let start = order.value?.Order.Payment ? order.value?.Order.Payment.CreateAt : 0
+    start += OrderTimeoutSeconds
+    remainTime.value = remain(start)
+    if (remainTime.value === RemainZero) {
+      showStatus.value = true
+      popupTitle.value = 'MSG_ORDER_TIMEOUT'
+      tipMessage.value = 'MSG_ORDER_TIMEOUT'
+      orderStatus.value = 'MSG_TIMEOUT'
+      if (remainTicker.value >= 0) {
+        clearInterval(remainTicker.value)
+        remainTicker.value = -1
+      }
     }
   }, 1000)
 }
@@ -122,12 +172,47 @@ onUnmounted(() => {
   }
 })
 
+const router = useRouter()
+
 const onPaymentCompletedClick = () => {
-  // TODO
+  const payment = order.value?.Order.Payment
+  if (!payment) {
+    return
+  }
+
+  payment.UserSetPaid = true
+  orders.updatePayment({
+    Info: payment,
+    Message: {
+      Error: {
+        Title: t('MSG_UPDATE_PAYMENT'),
+        Message: t('MSG_UPDATE_PAYMENT_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
+
+  showStatus.value = true
+  popupTitle.value = 'MSG_ORDER_PENDING'
+  tipMessage.value = 'MSG_ORDER_PAYMENT_AWAITING'
+  orderStatus.value = 'MSG_PENDING'
 }
 
 const onPayLaterClick = () => {
-  // TODO
+  showStatus.value = true
+  popupTitle.value = 'MSG_PAY_LATER'
+  tipMessage.value = 'MSG_ORDER_PAY_LATER'
+  orderStatus.value = 'MSG_NOT_PAID'
+  showType.value = 'remain'
+}
+
+const onPaymentProceed = () => {
+  void router.push({
+    path: '/dashboard'
+  })
 }
 
 </script>
@@ -150,4 +235,10 @@ const onPayLaterClick = () => {
   margin: 0
   padding: 4px
   text-transform: uppercase
+
+.blur
+  filter: blur(12px)
+
+.blur > .q-dialog__backdrop
+  backdrop-filter: blur(12px)
 </style>
