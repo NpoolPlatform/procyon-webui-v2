@@ -2,8 +2,8 @@ import { RouteRecordRaw } from 'vue-router'
 import { RouteMetaImpl } from 'npool-cli-v2/utils'
 
 declare module 'vue-router' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface RouteMeta extends RouteMetaImpl {
+    ShowSideMenu?: boolean
   }
 }
 
@@ -83,6 +83,19 @@ const routes: RouteRecordRaw[] = [
           ShowSignHelper: true,
           ShowTopTip: false,
           NeedLogined: false
+        }
+      }, {
+        path: 'dashboard',
+        component: () => import('pages/Dashboard.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: true
         }
       }
     ]
