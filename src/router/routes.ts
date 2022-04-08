@@ -162,6 +162,19 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: true,
           ShowSideMenu: true
         }
+      }, {
+        path: 'purchase',
+        component: () => import('pages/Purchase.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
       }
     ]
   },
