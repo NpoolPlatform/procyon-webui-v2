@@ -62,7 +62,7 @@
           <h3 class='form-title'>
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
-          <form action='' @submit='onSubmit'>
+          <form action='javascript:void(0)' @submit='onSubmit'>
             <h4>{{ $t('MSG_PURCHASE_AMOUNT') }} ({{ good?.Good?.Good?.Unit }}s)</h4>
             <input type='number' v-model='purchaseAmount' required min='0'>
             <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
