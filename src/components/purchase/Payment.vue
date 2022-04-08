@@ -57,7 +57,7 @@
       </div>
     </PurchasePage>
   </div>
-  <q-dialog content-class='dialog' v-model='showStatus' maximized>
+  <q-dialog class='dialog' v-model='showStatus' maximized>
     <PaymentState
       :order-id='query.orderId'
       :title='popupTitle'
@@ -238,6 +238,7 @@ const onPaymentProceed = () => {
   padding: 4px
   text-transform: uppercase
 
-.dialog > .q-dialog__backdrop
-  backdrop-filter: blur(12px)
+.dialog.q-dialog__backdrop
+  backdrop-filter: blur(12px) !important
+  background: transparent !important
 </style>
