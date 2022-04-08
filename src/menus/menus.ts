@@ -14,7 +14,7 @@ interface MenuItem {
 
 import dashboard from '../assets/icon-mining.svg'
 import wallet from '../assets/icon-wallet.svg'
-import reffiliates from '../assets/icon-affiliates.svg'
+import affiliates from '../assets/icon-affiliates.svg'
 import security from '../assets/icon-security.svg'
 import account from '../assets/icon-account.svg'
 import kyc from '../assets/icon-kyc.svg'
@@ -47,8 +47,8 @@ const BaseMenu = {
       menuId: uid(),
       label: 'MSG_REFERRAL',
       caption: '',
-      icon: 'img:' + reffiliates,
-      target: '/reffiliates',
+      icon: 'img:' + affiliates,
+      target: '/affiliates',
       level: 0,
       children: []
     }, {
@@ -65,14 +65,6 @@ const BaseMenu = {
       caption: '',
       icon: 'img:' + account,
       target: '/account',
-      level: 0,
-      children: []
-    }, {
-      menuId: uid(),
-      label: 'MSG_SECURITY_CENTER',
-      caption: '',
-      icon: 'img:' + security,
-      target: '/user/center',
       level: 0,
       children: []
     }, {
