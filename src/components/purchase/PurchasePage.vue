@@ -16,47 +16,17 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  useGoodStore,
-  NotificationType
-} from 'npool-cli-v2'
-import { defineAsyncComponent, computed, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { Good } from 'npool-cli-v2'
+import { defineAsyncComponent, defineProps, toRef } from 'vue'
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
-interface Query {
-  goodId: string
+interface Props {
+  good: Good
 }
 
-const route = useRoute()
-const query = computed(() => route.query as unknown as Query)
-const goodId = computed(() => query.value.goodId)
-
-const goods = useGoodStore()
-const good = computed(() => goods.getGoodByID(goodId.value))
+const props = defineProps<Props>()
+const good = toRef(props, 'good')
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
-
-onMounted(() => {
-  if (!good.value) {
-    goods.getGood({
-      ID: goodId.value,
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOOD'),
-          Message: t('MSG_GET_GOOD_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-})
 
 </script>
 

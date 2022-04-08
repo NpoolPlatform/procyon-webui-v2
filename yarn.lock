@@ -7557,10 +7557,10 @@ npm-run-path@^4.0.0, npm-run-path@^4.0.1:
   dependencies:
     path-key "^3.0.0"
 
-npool-cli-v2@^0.0.102:
-  version "0.0.102"
-  resolved "https://registry.npmjs.org/npool-cli-v2/-/npool-cli-v2-0.0.102.tgz#2b0154c4a6ed2deb60f4c87c1c10485ff8b960cc"
-  integrity sha512-kOZHaw/VCjn7A53cIRCqraoQVVlrZBgH7A6+nEoXEncxN9WIbAowLVp6xdEhPkMAl0w6h5d49D0uKZQM1PFLUw==
+npool-cli-v2@^0.0.103:
+  version "0.0.103"
+  resolved "https://registry.npmjs.org/npool-cli-v2/-/npool-cli-v2-0.0.103.tgz#49988002a362306e89551ed7fcdf0a82e49659f4"
+  integrity sha512-XX+JKAjrHC8nstWIGkdnlAQEgQ22q9fRBmIOOMao9Ut2ogl+OanxDS9Ug221s3xT+5LCLSNTRdwErqeuNLt/QQ==
   dependencies:
     "@quasar/extras" "^1.0.0"
     "@typescript-eslint/eslint-plugin" "^5.17.0"
@@ -8495,6 +8495,11 @@ punycode@^2.1.0, punycode@^2.1.1:
   version "2.1.1"
   resolved "https://registry.npmmirror.com/punycode/-/punycode-2.1.1.tgz"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
+
+qrcode.vue@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.npmjs.org/qrcode.vue/-/qrcode.vue-3.3.3.tgz#00262244311a0ee1956fb7a0e238197ff7e14cfa"
+  integrity sha512-OsD4tQjIbxg/K6D5ZkWjBdYI9eg9K2i8qeYILdEAX5mdAydSAxV7xKmmZSP/hA12olLqEMZ9ryqDQrwa9jEMgw==
 
 qs@6.9.6:
   version "6.9.6"

@@ -1,5 +1,5 @@
 <template>
-  <PurchasePage>
+  <PurchasePage :good='good'>
     <div class='info'>
       <h3 class='form-title'>
         {{ $t('MSG_PRODUCT_DETAILS') }}
