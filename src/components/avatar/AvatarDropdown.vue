@@ -4,6 +4,7 @@
     flat
     dense
     rounded
+    :ripple='false'
     size='1.3rem'
     :dropdown-icon='icon'
   >
@@ -29,10 +30,4 @@ const icon = computed(() => 'img:' + props.icon)
 </script>
 
 <style lang='sass' scoped>
-.user-icon
-  padidng: 8px 0 !important
-
-::v-deep .q-focus-helper
-  display: none !important
-  width: 0
 </style>
