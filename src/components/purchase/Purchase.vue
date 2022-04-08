@@ -62,7 +62,7 @@
           <h3 class='form-title'>
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
-          <form action='javascript:void(0)' @submit='onSubmit'>
+          <form action='javascript:void(0)' @submit='onSubmit' id='purchase'>
             <h4>{{ $t('MSG_PURCHASE_AMOUNT') }} ({{ good?.Good?.Good?.Unit }}s)</h4>
             <input type='number' v-model='purchaseAmount' required min='0'>
             <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
@@ -79,7 +79,21 @@
             <!--<h4>Coupon Code</h4>
             <input type='text'>
             <div class='coupon-error'>Incorrect Coupon Code</div>-->
-            <input type='submit' :value='$t("MSG_PURCHASE")' class='submit'>
+            <q-btn
+              dense
+              flat
+              :label='$t("MSG_PURCHASE")'
+              :loading='submitting'
+              form-id='purchase'
+              @click='onPurchaseClick'
+            />
+            <input
+              type='submit'
+              :value='$t("MSG_PURCHASE")'
+              class='submit'
+              hidden
+              ref='purchaseSubmit'
+            >
           </form>
         </div>
       </div>
@@ -89,10 +103,20 @@
 </template>
 
 <script setup lang='ts'>
-import { useGoodStore, NotificationType, formatTime, useCoinStore, Good, Coin } from 'npool-cli-v2'
+import {
+  useGoodStore,
+  NotificationType,
+  formatTime,
+  useCoinStore,
+  Good,
+  Coin,
+  useOrderStore
+} from 'npool-cli-v2'
+import { throttle } from 'quasar'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { ThrottleSeconds } from 'src/const/const'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -114,6 +138,10 @@ const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.val
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale))
 const paymentCoin = ref(undefined as unknown as Coin)
 const purchaseAmount = ref(1)
+const submitting = ref(false)
+
+const order = useOrderStore()
+const router = useRouter()
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
@@ -159,9 +187,61 @@ onMounted(() => {
   }
 })
 
-const onSubmit = () => {
-  // TODO
-  console.log(paymentCoin.value, purchaseAmount.value)
+const onSubmit = throttle(() => {
+  if (purchaseAmount.value <= 0) {
+    return
+  }
+
+  submitting.value = true
+
+  order.submitOrder({
+    GoodID: goodId.value,
+    Units: purchaseAmount.value,
+    Message: {
+      Error: {
+        Title: t('MSG_CREATE_ORDER'),
+        Message: t('MSG_CREATE_ORDER_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (orderId: string, error: boolean) => {
+    if (error) {
+      submitting.value = false
+      return
+    }
+
+    order.createPayment({
+      OrderID: orderId,
+      PaymentCoinTypeID: paymentCoin.value.ID as string,
+      Message: {
+        Error: {
+          Title: t('MSG_CREATE_PAYMENT'),
+          Message: t('MSG_CREATE_PAYMENT_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, (paymentId: string, error: boolean) => {
+      submitting.value = true
+      if (error) {
+        return
+      }
+
+      void router.push({
+        path: '/payment',
+        query: {
+          paymentId: paymentId,
+          orderId: orderId
+        }
+      })
+    })
+  })
+}, ThrottleSeconds * 1000)
+
+const purchaseSubmit = ref<HTMLInputElement>()
+const onPurchaseClick = () => {
+  purchaseSubmit.value?.click()
 }
 
 </script>
@@ -169,4 +249,8 @@ const onSubmit = () => {
 <style lang='sass' scoped>
 .product-detail-text
   width: 100%
+
+::v-deep .product-container span
+  font-size: 18px !important
+  line-height: 100% !important
 </style>
