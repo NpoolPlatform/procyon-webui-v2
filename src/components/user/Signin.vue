@@ -10,8 +10,13 @@
   >
     <template #append-submit>
       <div class='row'>
-        <p class='skip-registration' v-html='$t("MSG_FORGOT_PASSWORD", { SIGNIN_PATH: "/reset/password" })' />
-        <p class='skip-registration' v-html='$t("MSG_NO_ACCOUNT_REGISTER", { SIGNIN_PATH: "/registration" })' />
+        <p class='skip-registration'>
+          <a href='#/reset/password'>{{ $t('MSG_FORGOT_PASSWORD') }}?</a>
+        </p>
+        <p class='skip-registration'>
+          {{ $t('MSG_NO_ACCOUNT') }}?
+          <a href='#/reset/registration'>{{ $t('MSG_REGISTER_NOW') }}.</a>
+        </p>
       </div>
     </template>
   </SignPage>
@@ -47,6 +52,8 @@ const recaptcha = useReCaptcha()
 const router = useRouter()
 
 const onSubmit = () => {
+  console.log('submit', account.value, accountError.value, accountType.value)
+
   if (accountError.value) {
     return
   }
@@ -77,7 +84,7 @@ const onSubmit = () => {
         }
       }
     }, () => {
-      void router.push({ path: '/signin' })
+      void router.push({ path: '/' })
     })
   })
 

@@ -60,7 +60,7 @@ import {
   AccountType,
   validateMobileNO
 } from 'npool-cli-v2'
-import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch } from 'vue'
+import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted } from 'vue'
 
 interface Props {
   label: string
@@ -149,6 +149,10 @@ const onSubmit = () => {
   emit('submit')
   return false
 }
+
+onMounted(() => {
+  emit('update:accountType', signupMethod.value)
+})
 
 </script>
 

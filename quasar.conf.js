@@ -32,7 +32,8 @@ module.exports = configure(function (ctx) {
       'pinia',
       'i18n',
       'axios',
-      'notify-defaults'
+      'notify-defaults',
+      'recaptcha'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
