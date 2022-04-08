@@ -62,11 +62,11 @@
           <h3 class='form-title'>
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
-          <form action=''>
+          <form action='' @submit='onSubmit'>
             <h4>{{ $t('MSG_PURCHASE_AMOUNT') }} ({{ good?.Good?.Good?.Unit }}s)</h4>
-            <input type='number'>
+            <input type='number' v-model='purchaseAmount' required min='0'>
             <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
-            <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin'>
+            <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
               <option
                 v-for='myCoin in coins'
                 :key='myCoin.ID'
@@ -113,6 +113,7 @@ const coin = useCoinStore()
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale))
 const paymentCoin = ref(undefined as unknown as Coin)
+const purchaseAmount = ref(1)
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
@@ -157,6 +158,11 @@ onMounted(() => {
     })
   }
 })
+
+const onSubmit = () => {
+  // TODO
+  console.log(paymentCoin.value, purchaseAmount.value)
+}
 
 </script>
 
