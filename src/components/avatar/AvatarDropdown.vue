@@ -33,4 +33,9 @@ const icon = computed(() => 'img:' + props.icon)
 <style lang='sass' scoped>
 ::v-deep .q-focus-helper
   display: none !important
+
+button
+  background: transparent !important
+  margin: auto 0 !important
+  height: 100% !important
 </style>
