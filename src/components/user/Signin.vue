@@ -13,8 +13,9 @@
         <p class='skip-registration'>
           <a href='#/reset/password'>{{ $t('MSG_FORGOT_PASSWORD') }}?</a>
         </p>
+        <q-space />
         <p class='skip-registration'>
-          {{ $t('MSG_NO_ACCOUNT') }}?
+          <span class='no-account'>{{ $t('MSG_NO_ACCOUNT') }}? </span>
           <a href='#/reset/registration'>{{ $t('MSG_REGISTER_NOW') }}.</a>
         </p>
       </div>
@@ -103,4 +104,7 @@ const onSubmit = () => {
 .agreement-label
   width: calc(100% - 24px)
   line-height: 100%
+
+.no-account
+  color: white
 </style>
