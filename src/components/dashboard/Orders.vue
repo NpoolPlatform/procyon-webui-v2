@@ -1,28 +1,41 @@
 <template>
-  <div class='row'>
-    <h2>{{ $t('MSG_ORDER_HISTORY') }}</h2>
-    <q-space />
-    <div class='buttons'>
-      <button disabled>
-        {{ $t('MSG_EXPORT_ORDER_CSV') }}
-      </button>
+  <h2>{{ $t('MSG_ORDER_HISTORY') }}</h2>
+  <div class='mining-summary content-glass'>
+    <q-table
+      flat
+      :bordered='false'
+      class='table-box'
+      :rows='displayOrders'
+      :columns='table'
+      row-key='ID'
+      color='#e1eeef'
+      hide-pagination
+      :no-data-label='$t("NoData")'
+      :rows-per-page-options='[countPerPage]'
+      @row-click='(evt, row, index) => onRowClick(row as OrderModel)'
+    />
+    <div class='row'>
+      <div class='buttons'>
+        <button disabled>
+          {{ $t('MSG_EXPORT_ORDER_CSV') }}
+        </button>
+      </div>
+      <q-space />
+      <q-pagination
+        color='white'
+        active-color='orange-1'
+        v-model='page'
+        :max='pages'
+        :max-pages='9'
+        boundary-links
+        direction-links
+      />
     </div>
   </div>
-  <q-table
-    flat
-    class='table-box'
-    :rows='orders'
-    :columns='table'
-    row-key='ID'
-    color='#e1eeef'
-    :no-data-label='$t("NoData")'
-    :rows-per-page-options='[10, 15, 20, 25]'
-    @row-click='(evt, row, index) => onRowClick(row as OrderModel)'
-  />
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useOrderStore, buildOrders, OrderGroup, OrderModel, useGoodStore, formatTime, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -58,7 +71,7 @@ const table = computed(() => [
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: OrderModel) => good.getGoodPrice(good.getGoodByID(row.GoodID)).toString() + ' USDT'
+    field: (row: OrderModel) => good.getGoodByID(row.GoodID) ? good.getGoodPrice(good.getGoodByID(row.GoodID)).toString() + ' USDT' : 'NaN'
   },
   {
     name: 'TechFee',
@@ -76,7 +89,7 @@ const table = computed(() => [
     name: 'Total',
     label: t('MSG_TOTAL'),
     align: 'center',
-    field: (row: OrderModel) => row.Units.toString() + good.getGoodByID(row.GoodID)?.Good.Good.Unit
+    field: (row: OrderModel) => row.Units.toString() + good.getGoodByID(row.GoodID)?.Good?.Good?.Unit
   },
   {
     name: 'State',
@@ -95,7 +108,7 @@ const onRowClick = (myOrder: OrderModel) => {
   void router.push({
     path: '/payment',
     query: {
-      paymentId: order.getOrderByID(myOrder.OrderID)?.Order.Payment?.ID,
+      paymentId: order.getOrderByID(myOrder.OrderID)?.Order?.Payment?.ID,
       orderId: myOrder.OrderID
     }
   })
@@ -135,15 +148,24 @@ onMounted(() => {
   }
 })
 
+const countPerPage = ref(10)
+const page = ref(1)
+const pages = computed(() => orders.value.length / countPerPage.value + orders.value.length % countPerPage.value ? 1 : 0)
+
+const displayOrders = computed(() => orders.value.filter((_, index) => index >= countPerPage.value * (page.value - 1) && index < countPerPage.value * page.value))
+
 </script>
 
 <stype lang='sass' scoped>
 .table-box
-  background: linear-gradient(to bottom right,rgba(225, 238, 239, 0.2) 0,rgba(161, 208, 208, 0.2) 100%)
-  box-shadow: 16px 16px 20px 0 #23292b
-  border-radius: 12px
+  background: transparent
+  border-bottom: 1px solid #23292b
+  border-radius: 0
   color: #e1eeef
 
 .table-box >>> th
   font-size: 16px !important
+
+.buttons
+  height: 64px
 </stype>
