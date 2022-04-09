@@ -10,7 +10,7 @@
       </h4>
     </div>
     <div class='earnings-figure'>
-      <span class='amount'>*</span>
+      <span class='amount'>{{ last24HoursEarning }}</span>
       <span class='unit'>USDT</span>
       <div class='hr' />
       <h4 class='description'>
@@ -18,7 +18,7 @@
       </h4>
     </div>
     <div class='earnings-figure'>
-      <span class='amount'>*</span>
+      <span class='amount'>{{ totalWithdrawed }}</span>
       <span class='unit'>USDT</span>
       <div class='hr' />
       <h4 class='description'>
@@ -29,7 +29,16 @@
 </template>
 
 <script setup lang='ts'>
-import { Currency, totalEarningUSD, useCurrencyStore, NotificationType, useCoinStore } from 'npool-cli-v2'
+import {
+  Currency,
+  totalEarningUSD,
+  useCurrencyStore,
+  NotificationType,
+  useCoinStore,
+  last24HoursEarningUSD,
+  useTransactionStore,
+  totalWithdrawedEarningUSD
+} from 'npool-cli-v2'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -37,11 +46,51 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ useScope: 'global' })
 
 const totalEarning = ref(0)
+const last24HoursEarning = ref(0)
+const totalWithdrawed = ref(0)
 
 const currency = useCurrencyStore()
 const coin = useCoinStore()
+const transaction = useTransactionStore()
 
-onMounted(() => {
+const getEarning = () => {
+  totalEarningUSD((usdAmount: number) => {
+    totalEarning.value = usdAmount
+  })
+  last24HoursEarningUSD((usdAmount: number) => {
+    last24HoursEarning.value = usdAmount
+  })
+}
+
+const getWithdrawed = () => {
+  transaction.getTransactions({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_TRANSACTIONS'),
+        Message: t('MSG_GET_TRANSACTIONS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    transaction.getWithdraws({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_WITHDRAWS'),
+          Message: t('MSG_GET_WITHDRAWS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      totalWithdrawedEarningUSD((usdAmount: number) => {
+        totalWithdrawed.value = usdAmount
+      })
+    })
+  })
+}
+
+const getCurrencies = () => {
   currency.getCoinCurrencies({
     Currencies: [Currency.USD],
     Message: {
@@ -53,9 +102,12 @@ onMounted(() => {
       }
     }
   }, () => {
-    // TODO
+    getEarning()
+    getWithdrawed()
   })
+}
 
+const getCoins = () => {
   coin.getCoins({
     Message: {
       Error: {
@@ -65,10 +117,24 @@ onMounted(() => {
         Type: NotificationType.Error
       }
     }
+  }, () => {
+    getCurrencies()
   })
+}
+
+onMounted(() => {
+  if (coin.Coins.length === 0) {
+    getCoins()
+  }
 
   totalEarningUSD((usdAmount: number) => {
     totalEarning.value = usdAmount
+  })
+  last24HoursEarningUSD((usdAmount: number) => {
+    last24HoursEarning.value = usdAmount
+  })
+  totalWithdrawedEarningUSD((usdAmount: number) => {
+    totalWithdrawed.value = usdAmount
   })
 })
 
