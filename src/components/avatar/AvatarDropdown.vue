@@ -8,6 +8,7 @@
     size='1.3rem'
     :dropdown-icon='icon'
     auto-close
+    menu-self='top end'
   >
     <slot />
   </q-btn-dropdown>
