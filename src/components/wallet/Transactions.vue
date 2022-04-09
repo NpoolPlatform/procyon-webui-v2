@@ -3,7 +3,31 @@
     label='MSG_TRANSACTIONS'
     :rows='(transactions as Array<never>)'
     :table='(table as never)'
-  />
+    :customize-body='true'
+  >
+    <template #table-body='myProps'>
+      <q-tr :props='myProps'>
+        <q-td key='Name' :props='myProps'>
+          <LogoName
+            :logo='coin.getCoinByID(myProps.row.CoinTypeID)?.Logo'
+            :name='coin.getCoinByID(myProps.row.CoinTypeID)?.Name'
+          />
+        </q-td>
+        <q-td key='Date' :props='myProps'>
+          {{ formatTime(myProps.row.CreateAt) }}
+        </q-td>
+        <q-td key='Amount' :props='myProps'>
+          {{ myProps.row.Amount }}
+        </q-td>
+        <q-td key='Status' :props='myProps'>
+          {{ myProps.row.State }}
+        </q-td>
+        <q-td key='Type' :props='myProps'>
+          Withdrawal
+        </q-td>
+      </q-tr>
+    </template>
+  </ShowSwitchTable>
 </template>
 
 <script setup lang='ts'>
@@ -12,6 +36,7 @@ import { NotificationType, useCoinStore, useTransactionStore, Transaction, forma
 import { useI18n } from 'vue-i18n'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
+const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })

@@ -15,7 +15,10 @@
     <template #table-body='myProps'>
       <q-tr :props='myProps'>
         <q-td key='Blockchain' :props='myProps'>
-          {{ coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name }}
+          <LogoName
+            :logo='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Logo'
+            :name='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name'
+          />
         </q-td>
         <q-td key='Address' :props='myProps'>
           {{ myProps.row.Account.Address }}
@@ -42,6 +45,7 @@ import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccount
 import { useI18n } from 'vue-i18n'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
+const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
