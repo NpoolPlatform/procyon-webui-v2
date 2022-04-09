@@ -1,5 +1,13 @@
 <template>
-  <h2>{{ $t('MSG_ORDER_HISTORY') }}</h2>
+  <div class='row'>
+    <h2>{{ $t('MSG_ORDER_HISTORY') }}</h2>
+    <q-space />
+    <div class='buttons'>
+      <button disabled>
+        {{ $t('MSG_EXPORT_ORDER_CSV') }}
+      </button>
+    </div>
+  </div>
   <q-table
     flat
     class='table-box'
@@ -11,10 +19,6 @@
     :rows-per-page-options='[10, 15, 20, 25]'
     @row-click='(evt, row, index) => onRowClick(row as OrderModel)'
   />
-
-  <button disabled>
-    {{ $t('MSG_EXPORT_ORDER_CSV') }}
-  </button>
 </template>
 
 <script setup lang='ts'>
