@@ -2,8 +2,10 @@
   <MainHeader />
   <div class='main row'>
     <SideMenu />
-    <div id='main' :class='[ setting.ShowSideMenu ? "with-sidebar" : "" ]'>
-      <router-view />
+    <div id='main'>
+      <div :class='[ setting.ShowSideMenu ? "with-sidebar" : "" ]'>
+        <router-view />
+      </div>
     </div>
   </div>
   <Footer />
