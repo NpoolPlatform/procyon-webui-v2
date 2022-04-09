@@ -3,7 +3,35 @@
     label='MSG_ASSETS'
     :rows='(benefits as Array<never>)'
     :table='(table as never)'
-  />
+    :customize-body='true'
+  >
+    <template #table-body='myProps'>
+      <q-tr :props='myProps'>
+        <q-td key='Name' :props='myProps'>
+          {{ coin.getCoinByID(myProps.row.CoinTypeID)?.Name }}
+        </q-td>
+        <q-td key='Balance' :props='myProps'>
+          {{ myProps.row.Balance }}
+        </q-td>
+        <q-td key='Last24HoursIncoming' :props='myProps'>
+          {{ myProps.row.Last24HoursIncoming }}
+        </q-td>
+        <q-td key='USDTValue' :props='myProps'>
+          {{ myProps.row.USDTValue }}
+        </q-td>
+        <q-td key='JPYValue' :props='myProps'>
+          {{ myProps.row.JPYValue }}
+        </q-td>
+        <q-td key='ActionButtons' :props='myProps'>
+          <div class='buttons'>
+            <button disabled class='alt'>
+              {{ $t('MSG_WITHDRAW') }}
+            </button>
+          </div>
+        </q-td>
+      </q-tr>
+    </template>
+  </ShowSwitchTable>
 </template>
 
 <script setup lang='ts'>

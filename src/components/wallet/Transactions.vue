@@ -78,19 +78,7 @@ onMounted(() => {
         }
       }
     }, () => {
-      transaction.Transactions.push({
-        ID: 'AAAAAAAAAAAAAAAAAAAA',
-        CoinTypeID: '2bf1c8b3-1839-4fb5-87b3-834d60fb9b2d',
-        CreateAt: 0,
-        FromAddressID: 'AAAAAAAAAAAAAAAAAAAAAAAAA',
-        ToAddressID: 'BBBBBBBBBBBBBBBBBBBBB',
-        Amount: 100000000000,
-        State: 'done',
-        Message: 'AAAAAAAAAAAAAAAAA',
-        AppID: 'AAAAAAAAAAAAAAAA',
-        UserID: 'BBBBBBBBBBBBBBBBBBBBB',
-        ChainTransactionID: 'BBBBBBBBBBBBBBBBBBB'
-      })
+      // TODO
     })
   }
 })

@@ -19,8 +19,8 @@
       :rows-per-page-options='[countPerPage]'
       @row-click='(evt, row, index) => onRowClick(row as never)'
     >
-      <template v-if='cutomizeBody' #body>
-        <slot name='table-body' />
+      <template v-if='customizeBody' #body='myProps'>
+        <slot name='table-body' v-bind='myProps' />
       </template>
     </q-table>
     <div class='row'>
@@ -47,17 +47,17 @@ interface Props {
   rows: Array<never>
   table: never
   countPerPage: number
-  cutomizeBody?: boolean
+  customizeBody: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  cutomizeBody: false
+  customizeBody: false
 })
 const label = toRef(props, 'label')
 const rows = toRef(props, 'rows')
 const table = toRef(props, 'table')
 const countPerPage = toRef(props, 'countPerPage')
-const cutomizeBody = toRef(props, 'cutomizeBody')
+const customizeBody = toRef(props, 'customizeBody')
 
 const page = ref(1)
 const pages = computed(() => rows.value.length / countPerPage.value + rows.value.length % countPerPage.value ? 1 : 0)

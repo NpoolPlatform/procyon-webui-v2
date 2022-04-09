@@ -3,6 +3,7 @@
     label='MSG_APPROVED_ADDRESSES'
     :rows='(accounts as Array<never>)'
     :table='(table as never)'
+    :customize-body='true'
   >
     <template #top-right>
       <div class='buttons'>
@@ -10,6 +11,27 @@
           {{ $t('MSG_ADD_NEW_ADDRESS') }}
         </button>
       </div>
+    </template>
+    <template #table-body='myProps'>
+      <q-tr :props='myProps'>
+        <q-td key='Blockchain' :props='myProps'>
+          {{ coin.getCoinByID(myProps.row.CoinTypeID)?.Name }}
+        </q-td>
+        <q-td key='Address' :props='myProps'>
+          {{ myProps.row.Account.Address }}
+        </q-td>
+        <q-td key='Label' :props='myProps'>
+          {{ myProps.row.Address.Labels?.join(',') }}
+        </q-td>
+        <q-td key='DateAdded' :props='myProps'>
+          {{ formatTime(myProps.row.Address.CreateAt) }}
+        </q-td>
+        <q-td key='ActionButtons' :props='myProps'>
+          <button class='small'>
+            {{ $t('MSG_REMOVE') }}
+          </button>
+        </q-td>
+      </q-tr>
     </template>
   </ShowSwitchTable>
 </template>
@@ -54,7 +76,7 @@ const table = computed(() => [
     field: (row: WithdrawAccount) => formatTime(row.Address.CreateAt)
   },
   {
-    name: '',
+    name: 'ActionButtons',
     label: '',
     align: 'center',
     field: ''

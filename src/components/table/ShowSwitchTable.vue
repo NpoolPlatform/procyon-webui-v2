@@ -4,11 +4,11 @@
     :rows='rows'
     :table='(table as never)'
     :count-per-page='countPerPage'
-    :cutomize-body='cutomizeBody'
+    :customize-body='customizeBody'
     @row-click='(row: never) => onRowClick(row as never)'
   >
-    <template #table-body>
-      <slot name='table-body' />
+    <template #table-body='myProps'>
+      <slot name='table-body' v-bind='myProps' />
     </template>
     <template #top-right>
       <slot name='top-right' />
@@ -32,16 +32,16 @@ interface Props {
   label: string
   rows: Array<never>
   table: never
-  cutomizeBody?: boolean
+  customizeBody: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  cutomizeBody: false
+  customizeBody: false
 })
 const label = toRef(props, 'label')
 const rows = toRef(props, 'rows')
 const table = toRef(props, 'table')
-const cutomizeBody = toRef(props, 'cutomizeBody')
+const customizeBody = toRef(props, 'customizeBody')
 
 const countPerPage = ref(2)
 const showMore = ref(false)
