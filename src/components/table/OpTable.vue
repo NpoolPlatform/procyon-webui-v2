@@ -1,9 +1,11 @@
 <template>
-  <div class='row'>
-    <h2 class='title'>
+  <div ref='headerDiv' class='row'>
+    <h2 :style='{"width": titleWidth}'>
       {{ $t(label) }}
     </h2>
-    <slot name='top-right' />
+    <div ref='topRightSlot'>
+      <slot name='top-right' />
+    </div>
   </div>
   <div class='mining-summary content-glass'>
     <q-table
@@ -69,6 +71,13 @@ const emit = defineEmits<{(e: 'row-click', row: never): void}>()
 const onRowClick = (row: never) => {
   emit('row-click', row)
 }
+
+const topRightSlot = ref<HTMLDivElement>()
+const headerDiv = ref<HTMLDivElement>()
+
+const headerWidth = computed(() => headerDiv.value ? headerDiv.value.clientWidth : 0)
+const topRightWidth = computed(() => topRightSlot.value ? topRightSlot.value.clientWidth : 0)
+const titleWidth = computed(() => (headerWidth.value - topRightWidth.value - 1).toString() + 'px')
 
 </script>
 

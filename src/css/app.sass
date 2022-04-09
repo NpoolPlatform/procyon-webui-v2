@@ -795,7 +795,7 @@ h3.feature-title::after
 
 .with-sidebar
   margin: 0 0 0 240px
-  width: calc(100% - 240px)
+  width: calc(100% - 240px) !important
   @media (max-width: $breakpoint-sm-max)
     margin: 0
     width: 100%
@@ -2491,16 +2491,6 @@ footer .copyright
   margin: 8px 0
 
 // SPECIAL
-.title::after
-  background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 30%)
-  display: block
-  content: ''
-  position: absolute
-  left: 0
-  bottom: -4px
-  height: 1px
-  width: 1400px !important
-
 button.small
   max-height: 32px
   font-size: 12px !important

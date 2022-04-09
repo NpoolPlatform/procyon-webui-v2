@@ -17,3 +17,8 @@ const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/
 const Orders = defineAsyncComponent(() => import('src/components/dashboard/Orders.vue'))
 
 </script>
+
+<style lang='sass' scoped>
+.order
+  max-width: 1040px
+</style>
