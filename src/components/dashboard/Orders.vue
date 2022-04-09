@@ -1,48 +1,28 @@
 <template>
-  <div class='row'>
-    <h2 class='title'>
-      {{ $t('MSG_ORDER_HISTORY') }}
-    </h2>
-    <div class='buttons'>
-      <button disabled class='alt'>
-        {{ $t('MSG_EXPORT_ORDER_CSV') }}
-      </button>
-    </div>
-  </div>
-  <div class='mining-summary content-glass'>
-    <q-table
-      flat
-      :bordered='false'
-      class='table-box'
-      :rows='displayOrders'
-      :columns='table'
-      row-key='ID'
-      color='#e1eeef'
-      hide-pagination
-      :no-data-label='$t("NoData")'
-      :rows-per-page-options='[countPerPage]'
-      @row-click='(evt, row, index) => onRowClick(row as OrderModel)'
-    />
-    <div class='row'>
-      <q-space />
-      <q-pagination
-        color='white'
-        active-color='orange-1'
-        v-model='page'
-        :max='pages'
-        :max-pages='9'
-        boundary-links
-        direction-links
-      />
-    </div>
-  </div>
+  <OpTable
+    label='MSG_ORDER_HISTORY'
+    :rows='(orders as Array<never>)'
+    :table='(table as never)'
+    :count-per-page='10'
+    @row-click='(row) => onRowClick(row as OrderModel)'
+  >
+    <template #top-right>
+      <div class='buttons'>
+        <button disabled class='alt'>
+          {{ $t('MSG_EXPORT_ORDER_CSV') }}
+        </button>
+      </div>
+    </template>
+  </OpTable>
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, defineAsyncComponent } from 'vue'
 import { useOrderStore, buildOrders, OrderGroup, OrderModel, useGoodStore, formatTime, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+
+const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -152,28 +132,7 @@ onMounted(() => {
   }
 })
 
-const countPerPage = ref(10)
-const page = ref(1)
-const pages = computed(() => orders.value.length / countPerPage.value + orders.value.length % countPerPage.value ? 1 : 0)
-
-const displayOrders = computed(() => orders.value.filter((_, index) => index >= countPerPage.value * (page.value - 1) && index < countPerPage.value * page.value))
-
 </script>
 
 <stype lang='sass' scoped>
-.table-box
-  background: transparent
-  border-bottom: 1px solid #23292b
-  border-radius: 0
-  color: #e1eeef
-
-.table-box >>> th
-  font-size: 16px !important
-
-.buttons
-  height: 64px
-
-h2
-  max-width: 100% !important
-  margin-left: 0 !important
 </stype>

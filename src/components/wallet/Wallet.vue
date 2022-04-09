@@ -2,9 +2,11 @@
   <div class='content'>
     <Balance />
     <div class='hr' />
-    <MiningCards />
+    <Assets />
     <div class='hr' />
-    <Orders />
+    <Transactions />
+    <div class='hr' />
+    <WithdrawAddresses />
     <div class='hr' />
   </div>
 </template>
@@ -13,7 +15,8 @@
 import { defineAsyncComponent } from 'vue'
 
 const Balance = defineAsyncComponent(() => import('src/components/wallet/Balance.vue'))
-const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/MiningCards.vue'))
-const Orders = defineAsyncComponent(() => import('src/components/dashboard/Orders.vue'))
+const Assets = defineAsyncComponent(() => import('src/components/wallet/Assets.vue'))
+const Transactions = defineAsyncComponent(() => import('src/components/wallet/Transactions.vue'))
+const WithdrawAddresses = defineAsyncComponent(() => import('src/components/wallet/WithdrawAddresses.vue'))
 
 </script>
