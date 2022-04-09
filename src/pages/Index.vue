@@ -5,6 +5,9 @@
     <WhyMe />
   </div>
   <Feature />
+  <div class='content'>
+    <WhatIsMining />
+  </div>
 </template>
 
 <script setup lang='ts'>
@@ -14,6 +17,7 @@ const Banner = defineAsyncComponent(() => import('src/components/index/Banner.vu
 const Products = defineAsyncComponent(() => import('src/components/index/Products.vue'))
 const WhyMe = defineAsyncComponent(() => import('src/components/index/WhyMe.vue'))
 const Feature = defineAsyncComponent(() => import('src/components/index/Feature.vue'))
+const WhatIsMining = defineAsyncComponent(() => import('src/components/index/WhatIsMining.vue'))
 
 </script>
 

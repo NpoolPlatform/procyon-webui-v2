@@ -3,7 +3,7 @@
     <div class='content'>
       <div class='columns-3'>
         <div class='column-3'>
-          <img class='icon' src='../../assets/icon-vc-backing.svg'>
+          <img class='icon' :src='backing'>
           <h3 class='feature-title'>
             Market Leader
           </h3>
@@ -11,7 +11,7 @@
         </div>
 
         <div class='column-3'>
-          <img class='icon' src='../../assets/icon-team.svg'>
+          <img class='icon' :src='team'>
           <h3 class='feature-title'>
             Dream Team
           </h3>
@@ -19,7 +19,7 @@
         </div>
 
         <div class='column-3'>
-          <img class='icon' src='../../assets/icon-technology.svg'>
+          <img class='icon' :src='technology'>
           <h3 class='feature-title'>
             The Big Picture
           </h3>
@@ -30,3 +30,9 @@
     <div class='hr' />
   </div>
 </template>
+
+<script setup lang='ts'>
+import backing from '../../assets/icon-vc-backing.svg'
+import team from '../../assets/icon-team.svg'
+import technology from '../../assets/icon-technology.svg'
+</script>
