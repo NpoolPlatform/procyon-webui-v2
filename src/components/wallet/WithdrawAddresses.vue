@@ -3,7 +3,15 @@
     label='MSG_APPROVED_ADDRESSES'
     :rows='(accounts as Array<never>)'
     :table='(table as never)'
-  />
+  >
+    <template #top-right>
+      <div class='buttons'>
+        <button @click='onAddNewAddressClick'>
+          {{ $t('MSG_ADD_NEW_ADDRESS') }}
+        </button>
+      </div>
+    </template>
+  </ShowSwitchTable>
 </template>
 
 <script setup lang='ts'>
@@ -80,6 +88,10 @@ onMounted(() => {
     })
   }
 })
+
+const onAddNewAddressClick = () => {
+  // TODO
+}
 
 </script>
 

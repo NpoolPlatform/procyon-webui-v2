@@ -18,7 +18,11 @@
       :no-data-label='$t("NoData")'
       :rows-per-page-options='[countPerPage]'
       @row-click='(evt, row, index) => onRowClick(row as never)'
-    />
+    >
+      <template #body>
+        <slot name='table-body' />
+      </template>
+    </q-table>
     <div class='row'>
       <slot name='bottom-left' />
       <q-space />
