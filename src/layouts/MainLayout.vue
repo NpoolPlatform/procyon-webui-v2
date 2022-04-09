@@ -2,7 +2,7 @@
   <MainHeader />
   <div class='main row'>
     <SideMenu />
-    <div id='main'>
+    <div id='main' :class='[ setting.ShowSideMenu ? "with-sidebar" : "" ]'>
       <router-view />
     </div>
   </div>
@@ -13,6 +13,7 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useNotificationStore, notify } from 'npool-cli-v2'
+import { useSettingStore } from 'src/store/setting'
 
 const MainHeader = defineAsyncComponent(() => import('src/components/header/MainHeader.vue'))
 const Footer = defineAsyncComponent(() => import('src/components/footer/Footer.vue'))
@@ -20,6 +21,7 @@ const LangLoader = defineAsyncComponent(() => import('src/components/lang/LangLo
 const SideMenu = defineAsyncComponent(() => import('src/components/menu/SideMenu.vue'))
 
 const notification = useNotificationStore()
+const setting = useSettingStore()
 
 onMounted(() => {
   notification.$subscribe((_, state) => {

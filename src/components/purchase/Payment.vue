@@ -15,7 +15,7 @@
             <h4>{{ $t('MSG_AMOUNT_DUE') }}:</h4>
             <span class='number'>{{ order?.Order?.Payment?.Amount }}</span>
             <span class='unit'>{{ order?.PayWithCoin?.Unit }}</span>
-            <img class='copy-button' :src='copy'>
+            <img class='copy-button' :src='copyIcon' @click='onCopyAmountClick'>
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_TIME_REMAIN') }}:</h4>
@@ -25,7 +25,7 @@
             <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
             <span class='wallet-type'>{{ order?.PayWithCoin?.Name }}</span>
             <span class='number'>{{ order?.PayToAccount?.Address }}</span>
-            <img class='copy-button' :src='copy'>
+            <img class='copy-button' :src='copyIcon' @click='onCopyAddressClick'>
           </div>
         </div>
         <div class='hr' />
@@ -62,16 +62,18 @@
     seamless
     maximized
   >
-    <div class='popup'>
-      <PaymentState
-        :order-id='query.orderId'
-        :title='popupTitle'
-        :tip-message='tipMessage'
-        :state='orderStatus'
-        :show-type='showType'
-        :remain-time='remainTime'
-        @proceed='onPaymentProceed'
-      />
+    <div class='product-container'>
+      <div class='popup'>
+        <PaymentState
+          :order-id='query.orderId'
+          :title='popupTitle'
+          :tip-message='tipMessage'
+          :state='orderStatus'
+          :show-type='showType'
+          :remain-time='remainTime'
+          @proceed='onPaymentProceed'
+        />
+      </div>
     </div>
   </q-dialog>
 </template>
@@ -81,8 +83,9 @@ import { useOrderStore, NotificationType, RemainMax, RemainZero, remain, OrderTi
 import { defineAsyncComponent, computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import copy from 'copy-to-clipboard'
 
-import copy from 'src/assets/icon-copy.svg'
+import copyIcon from 'src/assets/icon-copy.svg'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
@@ -223,6 +226,14 @@ const onPaymentProceed = () => {
   })
 }
 
+const onCopyAmountClick = () => {
+  copy(order.value?.Order.Payment?.Amount.toString())
+}
+
+const onCopyAddressClick = () => {
+  copy(order.value?.PayToAccount?.Address)
+}
+
 </script>
 
 <style lang='sass' scoped>
@@ -243,4 +254,7 @@ const onPaymentProceed = () => {
   margin: 0
   padding: 4px
   text-transform: uppercase
+
+.product-container
+  background: transparent
 </style>
