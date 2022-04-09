@@ -73,4 +73,10 @@ const onProceedClick = () => {
 </script>
 
 <style lang='sass' scoped>
+.form-title
+  white-space: nowrap
+  text-overflow: ellipsis
+
+.form-container
+  max-width: 100%
 </style>

@@ -57,13 +57,12 @@
       </div>
     </PurchasePage>
   </div>
-  <transition
-    appear
-    enter-active-class='animated fadeIn'
-    leave-active-class='animated fadeOut'
-    :duration='3000'
+  <q-dialog
+    v-model='showStatus'
+    seamless
+    maximized
   >
-    <div class='popup' v-if='showStatus'>
+    <div class='popup'>
       <PaymentState
         :order-id='query.orderId'
         :title='popupTitle'
@@ -74,7 +73,7 @@
         @proceed='onPaymentProceed'
       />
     </div>
-  </transition>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
@@ -244,8 +243,4 @@ const onPaymentProceed = () => {
   margin: 0
   padding: 4px
   text-transform: uppercase
-
-.form-container
-  position: absolute !important
-  top: 96px !important
 </style>
