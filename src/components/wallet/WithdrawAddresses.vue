@@ -15,7 +15,7 @@
     <template #table-body='myProps'>
       <q-tr :props='myProps'>
         <q-td key='Blockchain' :props='myProps'>
-          {{ coin.getCoinByID(myProps.row.CoinTypeID)?.Name }}
+          {{ coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name }}
         </q-td>
         <q-td key='Address' :props='myProps'>
           {{ myProps.row.Account.Address }}
