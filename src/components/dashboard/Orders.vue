@@ -85,7 +85,7 @@ const table = computed(() => [
 const router = useRouter()
 
 const onRowClick = (myOrder: OrderModel) => {
-  if (order.validateOrder(order.getOrderByID(myOrder.OrderID))) {
+  if (!order.validateOrder(order.getOrderByID(myOrder.OrderID))) {
     return
   }
   void router.push({
