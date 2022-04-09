@@ -4,8 +4,12 @@
     :rows='rows'
     :table='(table as never)'
     :count-per-page='countPerPage'
+    :cutomize-body='cutomizeBody'
     @row-click='(row: never) => onRowClick(row as never)'
   >
+    <template #table-body>
+      <slot name='table-body' />
+    </template>
     <template #top-right>
       <slot name='top-right' />
     </template>
@@ -20,7 +24,7 @@
 </template>
 
 <script setup lang='ts'>
-import { defineProps, toRef, ref, defineEmits, defineAsyncComponent } from 'vue'
+import { defineProps, toRef, ref, defineEmits, defineAsyncComponent, withDefaults } from 'vue'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
@@ -28,12 +32,16 @@ interface Props {
   label: string
   rows: Array<never>
   table: never
+  cutomizeBody?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  cutomizeBody: false
+})
 const label = toRef(props, 'label')
 const rows = toRef(props, 'rows')
 const table = toRef(props, 'table')
+const cutomizeBody = toRef(props, 'cutomizeBody')
 
 const countPerPage = ref(2)
 const showMore = ref(false)

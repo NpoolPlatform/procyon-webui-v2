@@ -62,7 +62,7 @@ const table = computed(() => [
 ])
 
 onMounted(() => {
-  if (coin.Coins.length < 0) {
+  if (coin.Coins.length === 0) {
     coin.getCoins({
       Message: {
         Error: {
@@ -76,7 +76,7 @@ onMounted(() => {
     })
   }
 
-  if (accounts.value.length < 0) {
+  if (accounts.value.length === 0) {
     account.getWithdrawAccounts({
       Message: {
         Error: {

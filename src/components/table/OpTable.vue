@@ -19,7 +19,7 @@
       :rows-per-page-options='[countPerPage]'
       @row-click='(evt, row, index) => onRowClick(row as never)'
     >
-      <template #body>
+      <template v-if='cutomizeBody' #body>
         <slot name='table-body' />
       </template>
     </q-table>
@@ -40,20 +40,24 @@
 </template>
 
 <script setup lang='ts'>
-import { defineProps, toRef, ref, computed, defineEmits } from 'vue'
+import { defineProps, toRef, ref, computed, defineEmits, withDefaults } from 'vue'
 
 interface Props {
   label: string
   rows: Array<never>
   table: never
   countPerPage: number
+  cutomizeBody?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  cutomizeBody: false
+})
 const label = toRef(props, 'label')
 const rows = toRef(props, 'rows')
 const table = toRef(props, 'table')
 const countPerPage = toRef(props, 'countPerPage')
+const cutomizeBody = toRef(props, 'cutomizeBody')
 
 const page = ref(1)
 const pages = computed(() => rows.value.length / countPerPage.value + rows.value.length % countPerPage.value ? 1 : 0)

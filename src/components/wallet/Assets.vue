@@ -60,7 +60,7 @@ const table = computed(() => [
 ])
 
 onMounted(() => {
-  if (order.Orders.length < 0) {
+  if (order.Orders.length === 0) {
     order.getOrders({
       Message: {
         Error: {
@@ -72,7 +72,7 @@ onMounted(() => {
     })
   }
 
-  if (coin.Coins.length < 0) {
+  if (coin.Coins.length === 0) {
     coin.getCoins({
       Message: {
         Error: {
@@ -86,7 +86,7 @@ onMounted(() => {
     })
   }
 
-  if (benefit.Benefits.length < 0) {
+  if (benefit.Benefits.length === 0) {
     benefit.getBenefits({
       Message: {
         Error: {
