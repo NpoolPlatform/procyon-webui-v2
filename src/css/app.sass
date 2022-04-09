@@ -1,208 +1,208 @@
 *, *:before, *:after
-	-webkit-box-sizing: border-box
-	-moz-box-sizing: border-box
-	box-sizing: border-box
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
 
 
 ::selection
-	background: #1ec498
-	color: #27424c
-	-webkit-background-clip: unset
-	-webkit-text-fill-color: #27424c
+  background: #1ec498
+  color: #27424c
+  -webkit-background-clip: unset
+  -webkit-text-fill-color: #27424c
 
 
 html,
 body
-	min-width: 600px
-	width: 100%
-	@media (max-width: $breakpoint-sm-max)
-		min-width: 360px
-		width: 100%
+  min-width: 600px
+  width: 100%
+  @media (max-width: $breakpoint-sm-max)
+    min-width: 360px
+    width: 100%
 
 body
-	background: linear-gradient(to bottom right, #1f293a 0, #2a3943 50%, #092023 100%)
-	color: #e1eeef
-	font-family: 'Barlow', sans-serif
-	/*font-family: 'Noto Sans JP', sans-serif*/
-	font-size: 16px
-	margin: 0
-	min-height: 100%
-	padding: 0
-	position: relative
-	transition: all ease-in-out .1s
+  background: linear-gradient(to bottom right, #1f293a 0, #2a3943 50%, #092023 100%)
+  color: #e1eeef
+  font-family: 'Barlow', sans-serif
+  /*font-family: 'Noto Sans JP', sans-serif*/
+  font-size: 16px
+  margin: 0
+  min-height: 100%
+  padding: 0
+  position: relative
+  transition: all ease-in-out .1s
 
 
 body::before
-	background-image: url('../assets/procyon-logo.svg') !important
-	background-position: 90% -360px
-	background-repeat: no-repeat
-	background-size: 800px
-	content: ''
-	display: block
-	opacity: 0.025
-	position: absolute
-	top: 0
-	right: 0
-	height: 100%
-	width: 100%
-	z-index: -1
+  background-image: url('../assets/procyon-logo.svg') !important
+  background-position: 90% -360px
+  background-repeat: no-repeat
+  background-size: 800px
+  content: ''
+  display: block
+  opacity: 0.025
+  position: absolute
+  top: 0
+  right: 0
+  height: 100%
+  width: 100%
+  z-index: -1
 
 .desktop1
-	display: flex
-	@media (max-width: $breakpoint-sm-max)
-		display: none
+  display: flex
+  @media (max-width: $breakpoint-sm-max)
+    display: none
 
 .mobile
-	display: none
-	@media (max-width: $breakpoint-sm-max)
-		display: block
+  display: none
+  @media (max-width: $breakpoint-sm-max)
+    display: block
 
 header.desktop
-	@media (max-width: $breakpoint-sm-max)
-		display: none
+  @media (max-width: $breakpoint-sm-max)
+    display: none
 
 header.mobile
-	background: linear-gradient(to bottom, #092023 0, transparent 50px)
-	display: none
-	flex-wrap: wrap
-	justify-content: space-between
-	padding: 12px 24px
-	@media (max-width: $breakpoint-sm-max)
-		display: flex
+  background: linear-gradient(to bottom, #092023 0, transparent 50px)
+  display: none
+  flex-wrap: wrap
+  justify-content: space-between
+  padding: 12px 24px
+  @media (max-width: $breakpoint-sm-max)
+    display: flex
 
 header.mobile .header-inner
-	display: flex
-	justify-content: flex-end
+  display: flex
+  justify-content: flex-end
 
 header.mobile .logo
-	width: 40px
+  width: 40px
 
 header.mobile .hr
-	height: 1px
-	margin: 12px 0
+  height: 1px
+  margin: 12px 0
 
 header.mobile .nav
-	width: 100%
+  width: 100%
 
 header.mobile .nav ul
-	display: flex
-	justify-content: flex-end
-	padding: 0
-	text-align: center
-	width: 100%
+  display: flex
+  justify-content: flex-end
+  padding: 0
+  text-align: center
+  width: 100%
 
 header.mobile .nav ul li
-	padding: 0 0 0 12px
+  padding: 0 0 0 12px
 
 header.mobile button
-	font-size: 14px
-	margin: 0 0 0 12px
-	padding: 8px 12px
+  font-size: 14px
+  margin: 0 0 0 12px
+  padding: 8px 12px
 
 /* HEADINGS */
 
 
 h1
-	background: linear-gradient(to left, #54e280 0, #1ec498 50%)
-	background-clip: border-box
-	filter: contrast(2)
-	font-size: 40px
-	font-weight: 500
-	margin: 24px auto 24px auto
-	text-transform: uppercase
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
-	line-height: 1.2em
+  background: linear-gradient(to left, #54e280 0, #1ec498 50%)
+  background-clip: border-box
+  filter: contrast(2)
+  font-size: 40px
+  font-weight: 500
+  margin: 24px auto 24px auto
+  text-transform: uppercase
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+  line-height: 1.2em
 
 
 h2
-	line-height: 1.2em
+  line-height: 1.2em
 
 
 h2:not(#hero h2)
-	background: linear-gradient(to left, #54e280 0, #1ec498 50%)
-	background-clip: border-box
-	filter: contrast(2)
-	font-size: 28px
-	font-weight: 400
-	margin: 36px auto
-	padding: 0 0 8px 0
-	position: relative
-	text-transform: uppercase
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: linear-gradient(to left, #54e280 0, #1ec498 50%)
+  background-clip: border-box
+  filter: contrast(2)
+  font-size: 28px
+  font-weight: 400
+  margin: 36px auto
+  padding: 0 0 8px 0
+  position: relative
+  text-transform: uppercase
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 h2:not(#hero h2):first-child
-	margin-top: 12px
+  margin-top: 12px
 
 
 h2:not(#hero h2)::after
-	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 30%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: -4px
-	height: 1px
-	width: 100%
-	@media (max-width: $breakpoint-sm-max)
-		background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 90%)
+  background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 30%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: -4px
+  height: 1px
+  width: 100%
+  @media (max-width: $breakpoint-sm-max)
+    background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 90%)
 
 
 h3:not([class])
-	background: linear-gradient(to left, #54e280 0, #1ec498 100%)
-	background-clip: border-box
-	filter: contrast(2)
-	font-size: 24px
-	font-weight: 400
-	margin: 24px auto
-	position: relative
-	padding: 0 0 8px 0
-	text-transform: uppercase
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: linear-gradient(to left, #54e280 0, #1ec498 100%)
+  background-clip: border-box
+  filter: contrast(2)
+  font-size: 24px
+  font-weight: 400
+  margin: 24px auto
+  position: relative
+  padding: 0 0 8px 0
+  text-transform: uppercase
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 h3:not([class])::after
-	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: -4px
-	height: 1px
-	width: 100%
+  background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: -4px
+  height: 1px
+  width: 100%
 
 
 h4
-	font-size: 18px
-	font-weight: 600
-	margin: 12px 0
-	text-transform: uppercase
-	line-height: 1.2em
+  font-size: 18px
+  font-weight: 600
+  margin: 12px 0
+  text-transform: uppercase
+  line-height: 1.2em
 
 
 .send-code
-	width: 100%
-	line-height: 1rem
-	height: 48px
-	border-radius: 18px
-	margin: 8px 0 20px 0
+  width: 100%
+  line-height: 1rem
+  height: 48px
+  border-radius: 18px
+  margin: 8px 0 20px 0
 
 .send-code:hover
-	border-radius: 4px
+  border-radius: 4px
 
 
 .error-message
-	color: #e85f1a
-	font-size: 8px
-	padding-bottom: 8px
-	min-height: 20px
-	max-height: 20px
+  color: #e85f1a
+  font-size: 8px
+  padding-bottom: 8px
+  min-height: 20px
+  max-height: 20px
 
 /* LINKS & BUTTONS */
 
@@ -210,137 +210,137 @@ h4
 a,
 a:active,
 a:visited
-	color: #e1eeef
-	cursor: pointer
-	text-decoration: none
-	transition: all ease-in-out .3s
+  color: #e1eeef
+  cursor: pointer
+  text-decoration: none
+  transition: all ease-in-out .3s
 
 
 a:not([class])
-	color: #1ec498
-	filter: contrast(1.5)
-	transition: all ease-in-out .3s
+  color: #1ec498
+  filter: contrast(1.5)
+  transition: all ease-in-out .3s
 
 
 a:not([class]):hover
-	color: #1ec498
-	filter: contrast(1.5)
-	text-decoration: underline 1px solid #11afaf
+  color: #1ec498
+  filter: contrast(1.5)
+  text-decoration: underline 1px solid #11afaf
 
 
 a:hover
-	color: #11afaf
+  color: #11afaf
 
 button,
 input[type='submit']
-	background: linear-gradient(to bottom right, #ff964a 0, #ce5417 100%)
-	border: 0
-	border-radius: 18px
-	color: #e4f4f0
-	cursor: pointer
-	font-family: 'Barlow', sans-serif
-	font-size: 18px
-	font-weight: 600
-	height: 48px
-	margin: 24px 24px 24px 0
-	padding: 12px 24px
-	text-shadow: 1px 1px 1px #ce5417
-	transition: all ease-in-out .1s
-	@media (max-width: $breakpoint-sm-max)
-		margin: 20px 0
+  background: linear-gradient(to bottom right, #ff964a 0, #ce5417 100%)
+  border: 0
+  border-radius: 18px
+  color: #e4f4f0
+  cursor: pointer
+  font-family: 'Barlow', sans-serif
+  font-size: 18px
+  font-weight: 600
+  height: 48px
+  margin: 24px 24px 24px 0
+  padding: 12px 24px
+  text-shadow: 1px 1px 1px #ce5417
+  transition: all ease-in-out .1s
+  @media (max-width: $breakpoint-sm-max)
+    margin: 20px 0
 
 
 button.alt,
 input[type='submit'].send-code
-	background: none
-	border: 2px solid #ff964a
-	color: #ff964a
-	text-shadow: 1px 1px 1px #27424c
-	line-height: 100%
+  background: none
+  border: 2px solid #ff964a
+  color: #ff964a
+  text-shadow: 1px 1px 1px #27424c
+  line-height: 100%
 
 
 button:hover,
 input[type='submit']:hover
-	border-radius: 4px
-	filter: contrast(1.5)
+  border-radius: 4px
+  filter: contrast(1.5)
 
 
 .nav button
-	font-size: 16px
-	height: auto
-	margin: 0 0 0 12px
-	padding: 12px 20px
+  font-size: 16px
+  height: auto
+  margin: 0 0 0 12px
+  padding: 12px 20px
 
 
 button.in-active
-	cursor: not-allowed
-	filter: saturate(0) contrast(.7)
+  cursor: not-allowed
+  filter: saturate(0) contrast(.7)
 
 
 button.in-active:hover
-	border-radius: 18px
+  border-radius: 18px
 
 
 
 /* HEADER & NAVIGATION */
 
 header
-	background: linear-gradient(to bottom, #092023 0, transparent 50px)
-	display: flex
-	justify-content: space-between
-	padding: 24px
+  background: linear-gradient(to bottom, #092023 0, transparent 50px)
+  display: flex
+  justify-content: space-between
+  padding: 24px
 
 
 .logo
-	width: 150px
+  width: 150px
 
 
 .nav
-	font-size: 14px
+  font-size: 14px
 
 
 .nav ul
-	margin: 0
+  margin: 0
 
 
 .nav li
-	display: inline
-	list-style: none
-	padding: 12px
+  display: inline
+  list-style: none
+  padding: 12px
 
 
 .nav li a.nav-link
-	color: #e1eeef
-	position: relative
-	text-transform: uppercase
+  color: #e1eeef
+  position: relative
+  text-transform: uppercase
 
 
 .nav li a.nav-link::after
-	background: linear-gradient(to right, transparent 0, #54E280 50%, transparent 100%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: -4px
-	height: 1px
-	width: 100%
-	transition: all ease-in-out .1s
-	transform: scaleX(0)
+  background: linear-gradient(to right, transparent 0, #54E280 50%, transparent 100%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: -4px
+  height: 1px
+  width: 100%
+  transition: all ease-in-out .1s
+  transform: scaleX(0)
 
 
 .nav li:hover a::after
-	transform: scaleX(1)
+  transform: scaleX(1)
 
 
 .user-icon
-	cursor: pointer
-	vertical-align: middle
-	width: 28px
-	transition: all ease-in-out .2s
+  cursor: pointer
+  vertical-align: middle
+  width: 28px
+  transition: all ease-in-out .2s
 
 
 .user-icon:hover
-	filter: hue-rotate(20deg) contrast(1.5)
+  filter: hue-rotate(20deg) contrast(1.5)
 
 
 
@@ -348,28 +348,28 @@ header
 
 
 ul.language-picker
-	display: inline
-	padding: 0
+  display: inline
+  padding: 0
 
 
 ul.language-picker li
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
-	border-radius: 4px
-	display: inline
-	margin: 0 8px 8px 0
-	padding: 8px
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
+  border-radius: 4px
+  display: inline
+  margin: 0 8px 8px 0
+  padding: 8px
 
 
 ul.language-picker li:hover
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.6) 100%)
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.6) 100%)
 
 
 ul.language-picker li:hover a
-	color: #11afaf
+  color: #11afaf
 
 
 ul.language-picker li.selected
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.6) 100%)
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.6) 100%)
 
 
 
@@ -377,110 +377,110 @@ ul.language-picker li.selected
 
 
 #main:not([class])
-	width: 100%
+  width: 100%
 
 
 .content
-	max-width: 1280px
-	margin: 0 auto
-	padding: 0 24px
-	@media (max-width: $breakpoint-sm-max)
-		padding: 0 12px
+  max-width: 1280px
+  margin: 0 auto
+  padding: 0 24px
+  @media (max-width: $breakpoint-sm-max)
+    padding: 0 12px
 
 
 .content-glass
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
-	box-shadow: 16px 16px 20px 0 #23292b
-	border-radius: 12px
-	color: #e1eeef
-	padding: 24px
-	margin: 24px
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
+  box-shadow: 16px 16px 20px 0 #23292b
+  border-radius: 12px
+  color: #e1eeef
+  padding: 24px
+  margin: 24px
 
 
 .content p:not([class])
-	font-size: 18px
-	font-weight: 300
-	line-height: 36px
+  font-size: 18px
+  font-weight: 300
+  line-height: 36px
 
 
 .content p:not([class]) em
-	background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
-	background-clip: border-box
-	font-weight: 500
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
+  background-clip: border-box
+  font-weight: 500
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 .content p:not([class]) strong
-	background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
-	background-clip: border-box
-	font-weight: 500
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
+  background-clip: border-box
+  font-weight: 500
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 .content ul
-	font-size: 18px
-	font-weight: 300
-	line-height: 36px
-	list-style: none
-	@media (max-width: $breakpoint-sm-max)
-		line-height: 24px
+  font-size: 18px
+  font-weight: 300
+  line-height: 36px
+  list-style: none
+  @media (max-width: $breakpoint-sm-max)
+    line-height: 24px
 
 .content ul li
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0 0 8px 0
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0 0 8px 0
 
 .content ul li::before
-	color: #1ec498
-	content: '\2727' /*hollow star*/
-	/* content: '\2726' /*filled star*/
-	/* content: '\21e2' /*dashed arrow*/
-	display: inline-block
-	margin-left: -32px
-	width: 32px
+  color: #1ec498
+  content: '\2727' /*hollow star*/
+  /* content: '\2726' /*filled star*/
+  /* content: '\21e2' /*dashed arrow*/
+  display: inline-block
+  margin-left: -32px
+  width: 32px
 
 
 .content ul strong
-	font-weight: 700
+  font-weight: 700
 
 
 div.hr
-	background: linear-gradient(to right, transparent 10%, #e85f1a 40%, #ffe91d 50%, #1ec498 60%, transparent 90%)
-	margin: 48px 0
-	opacity: .7
-	height: 2px
-	width: 100%
-	@media (max-width: $breakpoint-sm-max)
-		margin: 24px 0
+  background: linear-gradient(to right, transparent 10%, #e85f1a 40%, #ffe91d 50%, #1ec498 60%, transparent 90%)
+  margin: 48px 0
+  opacity: .7
+  height: 2px
+  width: 100%
+  @media (max-width: $breakpoint-sm-max)
+    margin: 24px 0
 
 
 div.back-button
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
-	box-shadow: 16px 16px 20px 0 #23292b
-	border-radius: 0 12px 12px 0
-	cursor: pointer
-	display: inline-block
-	font-size: 24px
-	margin: 0
-	opacity: .7
-	padding: 16px 24px
-	text-transform: uppercase
-	transition: all ease-in-out .2s
-	@media (max-width: $breakpoint-sm-max)
-		padding: 8px 12px
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
+  box-shadow: 16px 16px 20px 0 #23292b
+  border-radius: 0 12px 12px 0
+  cursor: pointer
+  display: inline-block
+  font-size: 24px
+  margin: 0
+  opacity: .7
+  padding: 16px 24px
+  text-transform: uppercase
+  transition: all ease-in-out .2s
+  @media (max-width: $breakpoint-sm-max)
+    padding: 8px 12px
 
 
 div.back-button:hover
-	opacity: 1
+  opacity: 1
 
 
 img.content-image
-	border-radius: 24px
-	box-shadow: 4px 4px 20px 0 #1f293a
-	width: 100%
+  border-radius: 24px
+  box-shadow: 4px 4px 20px 0 #1f293a
+  width: 100%
 
 
 
@@ -488,38 +488,38 @@ img.content-image
 
 
 #hero
-	margin: 24px 0 48px 0
-	padding: 0 0 48px 0
-	position: relative
-	@media (max-width: $breakpoint-sm-max)
-		margin: 24px 0
-		padding: 0 0 24px 0
+  margin: 24px 0 48px 0
+  padding: 0 0 48px 0
+  position: relative
+  @media (max-width: $breakpoint-sm-max)
+    margin: 24px 0
+    padding: 0 0 24px 0
 
 
 #hero::after
-	background: linear-gradient(to right, transparent 0, #e85f1a 30%, #ffe91d 50%, #1ec498 80%, transparent 100%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: 0
-	height: 4px
-	width: 100%
+  background: linear-gradient(to right, transparent 0, #e85f1a 30%, #ffe91d 50%, #1ec498 80%, transparent 100%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: 0
+  height: 4px
+  width: 100%
 
 
 #hero h1
-	font-size: 40px
-	@media (max-width: $breakpoint-sm-max)
-		font-size: 32px
+  font-size: 40px
+  @media (max-width: $breakpoint-sm-max)
+    font-size: 32px
 
 
 #hero h2
-	color: #e4f4f0
-	font-size: 28px
-	font-weight: 300
-	margin: 12px auto 12px auto
-	@media (max-width: $breakpoint-sm-max)
-		font-size: 24px
+  color: #e4f4f0
+  font-size: 28px
+  font-weight: 300
+  margin: 12px auto 12px auto
+  @media (max-width: $breakpoint-sm-max)
+    font-size: 24px
 
 
 
@@ -527,114 +527,114 @@ img.content-image
 
 
 .products
-	display: flex
-	flex-wrap: wrap
-	justify-content: flex-start
-	margin: 0 0 96px 0
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0
+  display: flex
+  flex-wrap: wrap
+  justify-content: flex-start
+  margin: 0 0 96px 0
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0
 
 
 .product
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
-	box-shadow: 16px 16px 20px 0 #23292b
-	border-radius: 12px
-	color: #e1eeef
-	padding: 36px
-	margin: 0 5% 5% 0
-	text-align: center
-	transition: all ease-in-out .5s
-	min-width: 320px
-	width: 30%
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0 0 36px 0
-		width: 100%
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
+  box-shadow: 16px 16px 20px 0 #23292b
+  border-radius: 12px
+  color: #e1eeef
+  padding: 36px
+  margin: 0 5% 5% 0
+  text-align: center
+  transition: all ease-in-out .5s
+  min-width: 320px
+  width: 30%
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0 0 36px 0
+    width: 100%
 
 
 .product:last-of-type
-	margin-right: 0
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0
+  margin-right: 0
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0
 
 
 .product:hover
-	transition: all ease-in-out .5s
-	box-shadow: 8px 8px 20px 0 #051319
+  transition: all ease-in-out .5s
+  box-shadow: 8px 8px 20px 0 #051319
 
 
 .product-heading
-	align-items: center
-	display: flex
-	justify-content: center
-	padding: 0 0 12px 0
-	position: relative
-	width: 100%
+  align-items: center
+  display: flex
+  justify-content: center
+  padding: 0 0 12px 0
+  position: relative
+  width: 100%
 
 
 .product-heading::after
-	background: linear-gradient(to right, transparent 0, #e85f1a 30%, #ffe91d 50%, #1ec498 80%, transparent 100%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: 0
-	height: 1px
-	width: 100%
+  background: linear-gradient(to right, transparent 0, #e85f1a 30%, #ffe91d 50%, #1ec498 80%, transparent 100%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: 0
+  height: 1px
+  width: 100%
 
 
 .product .icon
-	filter: opacity(.9)
-	margin: 0 8px 0 0
-	max-width: 32px
-	max-height: 32px
+  filter: opacity(.9)
+  margin: 0 8px 0 0
+  max-width: 32px
+  max-height: 32px
 
 
 h3.product-title
-	color: #e1eeef
-	font-size: 28px
-	font-weight: 200
-	margin: 0
-	text-transform: uppercase
+  color: #e1eeef
+  font-size: 28px
+  font-weight: 200
+  margin: 0
+  text-transform: uppercase
 
 
 .product .price
-	color: #1ec498
-	filter: contrast(1.1) brightness(1.1)
-	font-size: 18px
-	font-weight: 500
-	line-height: 1
-	margin: 0
-	padding: 8px 0
+  color: #1ec498
+  filter: contrast(1.1) brightness(1.1)
+  font-size: 18px
+  font-weight: 500
+  line-height: 1
+  margin: 0
+  padding: 8px 0
 
 
 .product .price span
-	color: #e1eeef
-	font-weight: 700
-	font-size: 200%
+  color: #e1eeef
+  font-weight: 700
+  font-size: 200%
 
 
 .product .line
-	border-bottom: 1px dashed #a1d0d0
-	display: flex
-	justify-content: space-between
-	flex-wrap: nowrap
-	padding: 8px 0
+  border-bottom: 1px dashed #a1d0d0
+  display: flex
+  justify-content: space-between
+  flex-wrap: nowrap
+  padding: 8px 0
 
 
 .product .label
-	font-weight: 400
+  font-weight: 400
 
 
 .product .value
-	color: #e4f4f0
-	font-weight: 700
+  color: #e4f4f0
+  font-weight: 700
 
 
 .product button
-	font-size: 16px
-	margin: 24px 0 0 0
-	height: auto
-	width: 100%
+  font-size: 16px
+  margin: 24px 0 0 0
+  height: auto
+  width: 100%
 
 
 
@@ -642,70 +642,70 @@ h3.product-title
 
 
 .feature
-	background: linear-gradient(to bottom right, #1f293a 0, #23292b 100%)
-	box-shadow: 0px 0px 60px 15px #051319
-	margin: 96px 0
-	padding: 24px 0
-	position: relative
-	width: 100%
+  background: linear-gradient(to bottom right, #1f293a 0, #23292b 100%)
+  box-shadow: 0px 0px 60px 15px #051319
+  margin: 96px 0
+  padding: 24px 0
+  position: relative
+  width: 100%
 
 .feature img.icon
-	@media (max-width: $breakpoint-sm-max)
-		float: left
-		height: 50px
+  @media (max-width: $breakpoint-sm-max)
+    float: left
+    height: 50px
 
 
 .feature::before,
 .feature::after
-	background: linear-gradient(to right, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
-	display: block
-	content: ''
-	position: absolute
-	opacity: .5
-	height: 1px
-	width: 100%
+  background: linear-gradient(to right, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
+  display: block
+  content: ''
+  position: absolute
+  opacity: .5
+  height: 1px
+  width: 100%
 
 
 .feature::before
-	left: 0
-	top: 0
+  left: 0
+  top: 0
 
 
 .feature::after
-	left: 0
-	bottom: 0
+  left: 0
+  bottom: 0
 
 
 .feature h2:not(#hero h2)
-	margin: 12px auto
+  margin: 12px auto
 
 
 h3.feature-title
-	font-size: 28px
-	font-weight: 100
-	margin: 16px 0
-	padding: 0 0 20px 0
-	position: relative
-	text-transform: uppercase
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0 0 0 60px
-		text-align: left
+  font-size: 28px
+  font-weight: 100
+  margin: 16px 0
+  padding: 0 0 20px 0
+  position: relative
+  text-transform: uppercase
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0 0 0 60px
+    text-align: left
 
 
 h3.feature-title::after
-	background: linear-gradient(to right, transparent 0, #ffcc4a 50%, transparent 100%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: 0
-	height: 1px
-	width: 100%
+  background: linear-gradient(to right, transparent 0, #ffcc4a 50%, transparent 100%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: 0
+  height: 1px
+  width: 100%
 
 
 .feature .icon
-	height: 160px
-	margin: 0 0 12px 0
+  height: 160px
+  margin: 0 0 12px 0
 
 
 
@@ -713,177 +713,177 @@ h3.feature-title::after
 
 
 .columns-1
-	padding: 0 36px
-	@media (max-width: $breakpoint-sm-max)
-		padding: 0
+  padding: 0 36px
+  @media (max-width: $breakpoint-sm-max)
+    padding: 0
 
 
 
 .columns-1 img
-	max-width: 100%
-	padding: 18px 60px
-	@media (max-width: $breakpoint-sm-max)
-		padding: 0
+  max-width: 100%
+  padding: 18px 60px
+  @media (max-width: $breakpoint-sm-max)
+    padding: 0
 
 
 .columns-2
-	display: flex
-	justify-content: space-between
-	flex-wrap: wrap
-	@media (max-width: $breakpoint-sm-max)
-		display: block
+  display: flex
+  justify-content: space-between
+  flex-wrap: wrap
+  @media (max-width: $breakpoint-sm-max)
+    display: block
 
 
 .column-2
-	margin: 24px 0
-	max-width: 400px
-	min-width: 48%
-	@media (max-width: $breakpoint-sm-max)
-		max-width: 100%
-		padding: 0
-		width: 100%
+  margin: 24px 0
+  max-width: 400px
+  min-width: 48%
+  @media (max-width: $breakpoint-sm-max)
+    max-width: 100%
+    padding: 0
+    width: 100%
 
 
 .columns-3
-	display: flex
-	justify-content: center
-	flex-wrap: wrap
-	@media (max-width: $breakpoint-sm-max)
-		display: block
+  display: flex
+  justify-content: center
+  flex-wrap: wrap
+  @media (max-width: $breakpoint-sm-max)
+    display: block
 
 
 .column-3
-	margin: 24px 1.5% 24px 1.5%
-	max-width: 360px
-	text-align: center
-	width: 30%
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0 0 72px 0
-		max-width: 100%
-		padding: 0
-		width: 100%
+  margin: 24px 1.5% 24px 1.5%
+  max-width: 360px
+  text-align: center
+  width: 30%
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0 0 72px 0
+    max-width: 100%
+    padding: 0
+    width: 100%
 
 
 .column-3 p
-	font-size: 18px
-	font-weight: 300
-	line-height: 36px
-	margin: 12px 0
-	text-align: left
+  font-size: 18px
+  font-weight: 300
+  line-height: 36px
+  margin: 12px 0
+  text-align: left
 
 
 .columns-4
-	display: flex
-	justify-content: flex-start
-	flex-wrap: wrap
-	@media (max-width: $breakpoint-sm-max)
-		display: block
+  display: flex
+  justify-content: flex-start
+  flex-wrap: wrap
+  @media (max-width: $breakpoint-sm-max)
+    display: block
 
 
 .column-4
-	margin: 24px 5% 24px 0
-	max-width: 20%
-	min-width: 240px
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0 0 24px 0
-		padding: 0
-		max-width: 100%
-		width: 100%
+  margin: 24px 5% 24px 0
+  max-width: 20%
+  min-width: 240px
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0 0 24px 0
+    padding: 0
+    max-width: 100%
+    width: 100%
 
 
 /* SIDEBAR */
 
 .with-sidebar
-	margin: 0 0 0 240px
-	width: calc(100% - 240px)
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0
-		width: 100%
+  margin: 0 0 0 240px
+  width: calc(100% - 240px)
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0
+    width: 100%
 
 
 header.with-sidebar
-	justify-content: flex-end
+  justify-content: flex-end
 
 
 .sidebar
-	background: linear-gradient(to bottom, #092023 0, transparent 50px)
-	float: left
-	position: fixed
-	top: 0
-	left: 0
-	min-height: 100%
-	width: 240px
-	@media (max-width: $breakpoint-sm-max)
-		display: none
+  background: linear-gradient(to bottom, #092023 0, transparent 50px)
+  float: left
+  position: fixed
+  top: 0
+  left: 0
+  min-height: 100%
+  width: 240px
+  @media (max-width: $breakpoint-sm-max)
+    display: none
 
 
 .sidebar .logo
-	margin: 36px 0 12px 40px
-	position: relative
+  margin: 36px 0 12px 40px
+  position: relative
 
 
 .sidebar .hr
-	height: 1px
-	margin: 0 0 16px 0
+  height: 1px
+  margin: 0 0 16px 0
 
 
 .sidebar ul
-	list-style: none
-	margin: 24px 0
-	padding: 0
-	text-align: left
+  list-style: none
+  margin: 24px 0
+  padding: 0
+  text-align: left
 
 
 .sidebar ul li
-	border-radius: 0 50px 50px 0
-	cursor: pointer
-	font-size: 18px
-	padding: 18px 12px 18px 40px
-	position: relative
-	text-transform: uppercase
-	transition: all ease-in-out .1s
-	width: 100%
+  border-radius: 0 50px 50px 0
+  cursor: pointer
+  font-size: 18px
+  padding: 18px 12px 18px 40px
+  position: relative
+  text-transform: uppercase
+  transition: all ease-in-out .1s
+  width: 100%
 
 
 .sidebar ul li::before
-	background: linear-gradient(to right, transparent 0, #e1eeef 30%, transparent 90%)
-	display: block
-	content: ''
-	position: absolute
-	top: 0
-	left: 0
-	height: 1px
-	width: 100%
+  background: linear-gradient(to right, transparent 0, #e1eeef 30%, transparent 90%)
+  display: block
+  content: ''
+  position: absolute
+  top: 0
+  left: 0
+  height: 1px
+  width: 100%
 
 
 .sidebar ul li:last-of-type::after
-	background: linear-gradient(to right, transparent 0, #e1eeef 30%, transparent 90%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: 0
-	height: 1px
-	width: 100%
+  background: linear-gradient(to right, transparent 0, #e1eeef 30%, transparent 90%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: 0
+  height: 1px
+  width: 100%
 
 
 .sidebar ul li:hover
-	background: linear-gradient(to bottom right, #1ec498 0, #11afaf 100%)
-	color: #092023
+  background: linear-gradient(to bottom right, #1ec498 0, #11afaf 100%)
+  color: #092023
 
 
 .sidebar ul li:hover img
-	filter: invert(100%) hue-rotate(180deg)
+  filter: invert(100%) hue-rotate(180deg)
 
 
 .sidebar ul li img
-	margin: 0 8px 0 0
-	width: 24px
+  margin: 0 8px 0 0
+  width: 24px
 
 
 .sidebar ul li img,
 .sidebar ul li span
-	vertical-align: middle
+  vertical-align: middle
 
 
 /* FORMS */
@@ -891,67 +891,67 @@ header.with-sidebar
 /* SEARCH */
 
 #search-box
-	margin: 32px 0
+  margin: 32px 0
 
 
 #search-box form
-	display: flex
+  display: flex
 
 
 input#search-field
-	border-radius: 12px 0 0 12px
-	height: 48px
-	margin: 0
-	min-width: 320px
-	width: auto
+  border-radius: 12px 0 0 12px
+  height: 48px
+  margin: 0
+  min-width: 320px
+  width: auto
 
 
 input#search-button
-	border-radius: 0 12px 12px 0
-	margin: 0
+  border-radius: 0 12px 12px 0
+  margin: 0
 
 
 input#search-button:hover
-	border-radius: 0 4px 4px 0
-	margin: 0
+  border-radius: 0 4px 4px 0
+  margin: 0
 
 
 /* REGISTER */
 
 .form-container
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
-	box-shadow: 16px 16px 20px 0 #23292b
-	border-radius: 12px
-	color: #e1eeef
-	padding: 48px
-	margin: 0px auto
-	min-width: 360px
-	max-width: 480px
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
+  box-shadow: 16px 16px 20px 0 #23292b
+  border-radius: 12px
+  color: #e1eeef
+  padding: 48px
+  margin: 0px auto
+  min-width: 360px
+  max-width: 480px
 
 
 h3.form-title
-	color: #e1eeef
-	font-size: 24px
-	font-weight: 200
-	position: relative
-	margin: 0 0 24px 0
-	padding: 0 0 24px 0
+  color: #e1eeef
+  font-size: 24px
+  font-weight: 200
+  position: relative
+  margin: 0 0 24px 0
+  padding: 0 0 24px 0
 
 
 h3.form-title::after
-	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: 0
-	height: 1px
-	width: 100%
+  background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: 0
+  height: 1px
+  width: 100%
 
 
 label
-	font-size: 16px
-	font-weight: 100
+  font-size: 16px
+  font-weight: 100
 
 
 input[type='email'],
@@ -960,27 +960,27 @@ input[type='new-password'],
 input[type='text'],
 input[type='number'],
 select
-	background: #e1eeef
-	border: none
-	border-radius: 12px
-	box-shadow: 2px 2px 4px 0 #27424c
-	color: #27424c
-	font-size: 14px
-	margin: 8px 0 24px 0
-	padding: 12px
-	width: 100%
+  background: #e1eeef
+  border: none
+  border-radius: 12px
+  box-shadow: 2px 2px 4px 0 #27424c
+  color: #27424c
+  font-size: 14px
+  margin: 8px 0 24px 0
+  padding: 12px
+  width: 100%
 
 
 input[type='checkbox']
-	cursor: pointer
-	width: 16px
-	height: 16px
+  cursor: pointer
+  width: 16px
+  height: 16px
 
 
 .form-container label[for='agreement']
-	font-size: 16px
-	font-weight: 400
-	opacity: .7
+  font-size: 16px
+  font-weight: 400
+  opacity: .7
 
 
 input[type='email']:active,
@@ -997,133 +997,133 @@ input[type='number']:active,
 input[type='number']:focus,
 select:active,
 select:focus
-	outline: 2px solid #1ec498
+  outline: 2px solid #1ec498
 
 
 input.error
-	outline: 2px solid #e85f1a
+  outline: 2px solid #e85f1a
 
 
 .register
-	margin: 36px 0 0 0
-	width: 100%
+  margin: 36px 0 0 0
+  width: 100%
 
 
 input[type='submit'].send-code
-	font-size: 16px
-	margin: 0 0 24px 0
-	width: 100%
+  font-size: 16px
+  margin: 0 0 24px 0
+  width: 100%
 
 
 p.skip-registration
-	font-size: 14px
-	font-weight: 400
-	opacity: .7
-	text-align: center
+  font-size: 14px
+  font-weight: 400
+  opacity: .7
+  text-align: center
 
 
 .confirmation h3
-	margin-top: 0
+  margin-top: 0
 
 
 .confirmation h3.form-title
-	font-size: 18px
-	padding: 0
+  font-size: 18px
+  padding: 0
 
 
 .confirmation h3.form-title::after
-	display: none
+  display: none
 
 
 .confirmation button
-	margin: 0 0 24px 0
-	width: 100%
+  margin: 0 0 24px 0
+  width: 100%
 
 
 .confirmation button
-	margin: 0 0 24px 0
-	width: 100%
+  margin: 0 0 24px 0
+  width: 100%
 
 
 .confirmation button:last-child
-	margin: 0
+  margin: 0
 
 
 /* CONTACT FORM */
 
 .contact-page
-	display: flex
-	flex-wrap: wrap
+  display: flex
+  flex-wrap: wrap
 
 
 .contact-page .form-container
-	width: 35%
+  width: 35%
 
 
 textarea#message
-	background: #e1eeef
-	border: none
-	border-radius: 12px
-	box-shadow: 2px 2px 4px 0 #27424c
-	color: #27424c
-	font-size: 14px
-	margin: 8px 0 24px 0
-	min-height: 200px
-	padding: 12px
-	width: 100%
+  background: #e1eeef
+  border: none
+  border-radius: 12px
+  box-shadow: 2px 2px 4px 0 #27424c
+  color: #27424c
+  font-size: 14px
+  margin: 8px 0 24px 0
+  min-height: 200px
+  padding: 12px
+  width: 100%
 
 
 h4#signature
-	color: #1ec498
-	font-weight: 400
+  color: #1ec498
+  font-weight: 400
 
 
 /* QR Code Box */
 
 .qr-code-text
-	font-size: 16px
-	line-height: 28px
+  font-size: 16px
+  line-height: 28px
 
 
 .qr-code-text strong
-	color: #1ec498
+  color: #1ec498
 
 
 .qr-code-text:first-of-type
-	background: #ffffff22
-	border-radius: 12px
-	padding: 12px
+  background: #ffffff22
+  border-radius: 12px
+  padding: 12px
 
 
 .qr-code-container
-	margin: 24px 0
-	text-align: center
-	width: 100%
+  margin: 24px 0
+  text-align: center
+  width: 100%
 
 
 .qr-code-container img
-	border-radius: 12px
-	width: 100%
+  border-radius: 12px
+  width: 100%
 
 
 .order-form .qr-code-container img
-	border-radius: 0 0 12px 12px
-	width: 100%
+  border-radius: 0 0 12px 12px
+  width: 100%
 
 
 .form-container .hr
-	height: 1px
-	margin: 24px 0
+  height: 1px
+  margin: 24px 0
 
 
 .qr-code-container h5
-	background: #fc4468
-	border-radius: 12px 12px 0 0
-	font-size: 20px
-	font-weight: 400
-	margin: 0
-	padding: 4px
-	text-transform: uppercase
+  background: #fc4468
+  border-radius: 12px 12px 0 0
+  font-size: 20px
+  font-weight: 400
+  margin: 0
+  padding: 4px
+  text-transform: uppercase
 
 
 
@@ -1131,427 +1131,427 @@ h4#signature
 
 
 .product-container
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
-	box-shadow: 16px 16px 20px 0 #23292b
-	border-radius: 12px
-	color: #e1eeef
-	display: flex
-	flex-wrap: wrap
-	padding: 48px
-	margin: 24px auto
-	min-width: 360px
-	overflow: hidden
-	position: relative
-	@media (max-width: $breakpoint-sm-max)
-		display: flex
-		padding: 12px
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
+  box-shadow: 16px 16px 20px 0 #23292b
+  border-radius: 12px
+  color: #e1eeef
+  display: flex
+  flex-wrap: wrap
+  padding: 48px
+  margin: 24px auto
+  min-width: 360px
+  overflow: hidden
+  position: relative
+  @media (max-width: $breakpoint-sm-max)
+    display: flex
+    padding: 12px
 
 
 .product-page-icon
-	background: linear-gradient(to bottom right, #54e280 0, #1ec498 100%)
-	border-radius: 4px
-	box-shadow: 2px 2px 4px #23292b88
-	display: inline-block
-	margin: 0 8px 0 0
-	padding: 10px
-	text-align: center
-	transition: all ease-in-out .1s
-	height: 60px
-	width: 60px
-	@media (max-width: $breakpoint-sm-max)
-		height: 48px
-		width: 48px
+  background: linear-gradient(to bottom right, #54e280 0, #1ec498 100%)
+  border-radius: 4px
+  box-shadow: 2px 2px 4px #23292b88
+  display: inline-block
+  margin: 0 8px 0 0
+  padding: 10px
+  text-align: center
+  transition: all ease-in-out .1s
+  height: 60px
+  width: 60px
+  @media (max-width: $breakpoint-sm-max)
+    height: 48px
+    width: 48px
 
 
 .product-page-icon img
-	filter: opacity(.9)
-	vertical-align: middle
-	height: 40px
-	width: 40px
-	@media (max-width: $breakpoint-sm-max)
-		height: 28px
-		width: 28px
+  filter: opacity(.9)
+  vertical-align: middle
+  height: 40px
+  width: 40px
+  @media (max-width: $breakpoint-sm-max)
+    height: 28px
+    width: 28px
 
 
 .product-container h1
-	display: inline-block
-	margin: 0
-	vertical-align: middle
-	@media (max-width: $breakpoint-sm-max)
-		font-size: 28px
+  display: inline-block
+  margin: 0
+  vertical-align: middle
+  @media (max-width: $breakpoint-sm-max)
+    font-size: 28px
 
 
 .product-container .product-title-section
-	margin: 0 0 24px 0
-	width: 100%
-	@media (max-width: $breakpoint-sm-max)
-		order: 1
+  margin: 0 0 24px 0
+  width: 100%
+  @media (max-width: $breakpoint-sm-max)
+    order: 1
 
 
 .product-container .info
-	padding: 0 5% 0 0
-	width: 75%
-	@media (max-width: $breakpoint-sm-max)
-		margin-top: 16px
-		order: 3
-		padding: 0
-		width: 100%
+  padding: 0 5% 0 0
+  width: 75%
+  @media (max-width: $breakpoint-sm-max)
+    margin-top: 16px
+    order: 3
+    padding: 0
+    width: 100%
 
 
 .product-container .withdraw
-	padding: 0 5% 0 0
-	width: 100%
+  padding: 0 5% 0 0
+  width: 100%
 
 
 .product-container .withdraw .submit,
 .product-container .withdraw input
-	width: 200px
+  width: 200px
 
 
 .product-container .info-flex
-	display: flex
-	flex-wrap: wrap
+  display: flex
+  flex-wrap: wrap
 
 
 .product-container .info-no-flex
-	margin: 0 0 36px 0
+  margin: 0 0 36px 0
 
 
 .product-container .info-no-flex .full-section
-	margin: 24px 0
+  margin: 24px 0
 
 
 .product-container .info-no-flex .number
-	font-size: 22px
+  font-size: 22px
 
 
 .product-container .info-no-flex .unit
-	font-size: 14px
+  font-size: 14px
 
 
 .product-container .three-section
-	margin: 0 5% 12px 0
-	width: 30%
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0
-		width: 100%
+  margin: 0 5% 12px 0
+  width: 30%
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0
+    width: 100%
 
 
 .product-container .three-section:nth-child(3n)
-	margin-right: 0
+  margin-right: 0
 
 
 .product-container .three-section input
-	margin: 0
+  margin: 0
 
 
 .product-container .full-section
-	margin: 12px 0
-	width: 100%
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0
-		width: 100%
+  margin: 12px 0
+  width: 100%
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0
+    width: 100%
 
 
 .product-container .address-option
-	border-radius: 18px
-	cursor: pointer
-	display: inline-block
-	margin: 12px 0 24px 0
-	transition: all ease-in-out .1s
+  border-radius: 18px
+  cursor: pointer
+  display: inline-block
+  margin: 12px 0 24px 0
+  transition: all ease-in-out .1s
 
 
 .product-container .address-option .number
-	filter: contrast(.5)
+  filter: contrast(.5)
 
 
 .product-container .checkmark
-	display: none
-	opacity: 0
+  display: none
+  opacity: 0
 
 
 .product-container .address-option:hover .number
-	filter: contrast(1.5)
+  filter: contrast(1.5)
 
 
 .product-container .address-option:hover .checkmark
-	display: inline
-	opacity: .8
+  display: inline
+  opacity: .8
 
 
 .product-container .address-selected .number
-	filter: contrast(1.5)
+  filter: contrast(1.5)
 
 
 .product-container .address-selected .checkmark
-	filter: contrast(1.5)
-	display: inline
-	opacity: 1
+  filter: contrast(1.5)
+  display: inline
+  opacity: 1
 
 
 .product-container .order-form
-	width: 25%
-	@media (max-width: $breakpoint-sm-max)
-		margin-top: 16px
-		order: 4
-		width: 100%
+  width: 25%
+  @media (max-width: $breakpoint-sm-max)
+    margin-top: 16px
+    order: 4
+    width: 100%
 
 
 .product-container .product-sidebar
-	width: 25%
-	@media (max-width: $breakpoint-sm-max)
-		margin-top: 16px
-		order: 2
-		width: 100%
+  width: 25%
+  @media (max-width: $breakpoint-sm-max)
+    margin-top: 16px
+    order: 2
+    width: 100%
 
 
 .product-sidebar-section
-	margin: 0 0 24px 0
+  margin: 0 0 24px 0
 
 
 img.graph
-	margin: 12px 0
-	max-width: 100%
+  margin: 12px 0
+  max-width: 100%
 
 
 .product-detail-text
-	margin: 30px 0
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0
+  margin: 30px 0
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0
 
 
 .product-detail-text h3
-	margin: 48px 0 24px 0
+  margin: 48px 0 24px 0
 
 
 .product-detail-text h3::after
-	width: 60%
+  width: 60%
 
 
 .product-container h4
-	font-size: 18px
-	font-weight: 400
-	margin: 12px 0 4px 0
-	text-transform: unset
+  font-size: 18px
+  font-weight: 400
+  margin: 12px 0 4px 0
+  text-transform: unset
 
 
 .content .product-container p:not([class])
-	font-size: 16px
-	line-height: 28px
-	margin: 16px 0
+  font-size: 16px
+  line-height: 28px
+  margin: 16px 0
 
 
 .content .product-container ul
-	font-size: 16px
+  font-size: 16px
 
 
 .product-container span
-	font-size: 28px
+  font-size: 28px
 
 
 .product-container .number
-	background: linear-gradient(to bottom right, #ffe91d -50%, #ce5417 150%)
-	background-clip: border-box
-	filter: contrast(1.5)
-	overflow-wrap: anywhere
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: linear-gradient(to bottom right, #ffe91d -50%, #ce5417 150%)
+  background-clip: border-box
+  filter: contrast(1.5)
+  overflow-wrap: anywhere
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 .product-container .unit,
 .product-container .wallet-type
-	color: #e4f4f0
-	filter: contrast(1.5)
-	font-size: 16px
-	font-weight: 700
+  color: #e4f4f0
+  filter: contrast(1.5)
+  font-size: 16px
+  font-weight: 700
 
 
 .product-container .hr
-	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
-	height: 1px
-	margin: 24px 0
+  background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
+  height: 1px
+  margin: 24px 0
 
 
 .product-container button
-	margin: 0 0 24px 0
-	width: 100%
+  margin: 0 0 24px 0
+  width: 100%
 
 
 .product-container > button
-	margin: 0 auto 24px auto
-	width: 320px
-	@media (max-width: $breakpoint-sm-max)
-		width: 100%
+  margin: 0 auto 24px auto
+  width: 320px
+  @media (max-width: $breakpoint-sm-max)
+    width: 100%
 
 
 img.copy-button,
 img.checkmark,
 img.more-info
-	filter: opacity(.8)
-	cursor: pointer
-	margin: 0 0 0 4px
-	width: 16px
-	transition: all ease-in-out .3s
+  filter: opacity(.8)
+  cursor: pointer
+  margin: 0 0 0 4px
+  width: 16px
+  transition: all ease-in-out .3s
 
 
 img.copy-button:hover,
 img.more-info:hover
-	filter: opacity(1)
+  filter: opacity(1)
 
 
 .tooltip
-	align-items: center
-	display: flex
-	margin: 4px 0 0 0
-	position: relative
+  align-items: center
+  display: flex
+  margin: 4px 0 0 0
+  position: relative
 
 
 .tooltip span
-	cursor: pointer
-	font-size: 10px
-	text-transform: uppercase
+  cursor: pointer
+  font-size: 10px
+  text-transform: uppercase
 
 
 .tooltip img.more-info
-	margin: 0 4px 0 0
-	width: 12px
+  margin: 0 4px 0 0
+  width: 12px
 
 
 .tooltip:hover img.more-info
-	filter: opacity(1)
+  filter: opacity(1)
 
 
 .tooltip p.tooltip-text
-	background: #23292b
-	border-radius: 4px
-	box-shadow: 5px 5px 10px 0 #101417
-	font-size: 12px
-	line-height: 1.5
-	opacity: 0
-	padding: 8px
-	position: absolute
-	top: 10px
-	left: 0
-	transition: all ease-in-out .3s
-	visibility: hidden
-	width: 100%
-	z-index: 1
+  background: #23292b
+  border-radius: 4px
+  box-shadow: 5px 5px 10px 0 #101417
+  font-size: 12px
+  line-height: 1.5
+  opacity: 0
+  padding: 8px
+  position: absolute
+  top: 10px
+  left: 0
+  transition: all ease-in-out .3s
+  visibility: hidden
+  width: 100%
+  z-index: 1
 
 
 .tooltip:hover p.tooltip-text
-	opacity: 1
-	visibility: visible
+  opacity: 1
+  visibility: visible
 
 
 .submit
-	margin: 36px 0 0 0
-	width: 100%
+  margin: 36px 0 0 0
+  width: 100%
 
 
 .product-container .coupon-error
-	background: #fc4468
-	border-radius: 8px
-	color: #ffffff
-	font-size: 14px
-	margin-top: -18px
-	padding: 4px
+  background: #fc4468
+  border-radius: 8px
+  color: #ffffff
+  font-size: 14px
+  margin-top: -18px
+  padding: 4px
 
 
 .content ul.product-links
-	margin: 0 0 36px 0
-	padding: 0
+  margin: 0 0 36px 0
+  padding: 0
 
 
 .content ul.product-links li
-	padding: 4px 0
+  padding: 4px 0
 
 
 .content ul.product-links li::before
-	display: none
+  display: none
 
 
 .product-links a
-	align-items: center
-	display: flex
+  align-items: center
+  display: flex
 
 
 .product-links span
-	font-size: 18px
+  font-size: 18px
 
 
 .link-icon
-	filter: opacity(.8)
-	margin: 0 8px 0 0
-	height: 24px
-	width: 24px
+  filter: opacity(.8)
+  margin: 0 8px 0 0
+  height: 24px
+  width: 24px
 
 
 .warning
-	align-items: center
-	border: 1px solid #1ec498
-	border-radius: 18px
-	display: flex
-	font-size: 16px
-	font-weight: 600
-	padding: 8px
+  align-items: center
+  border: 1px solid #1ec498
+  border-radius: 18px
+  display: flex
+  font-size: 16px
+  font-weight: 600
+  padding: 8px
 
 
 .warning img
-	filter: opacity(.8)
-	margin: 0 8px 0 0
-	height: 24px
-	width: 24px
+  filter: opacity(.8)
+  margin: 0 8px 0 0
+  height: 24px
+  width: 24px
 
 
 .warning span
-	font-size: 12px
-	font-weight: 600
+  font-size: 12px
+  font-weight: 600
 
 
 .video-box
-	border-radius: 20px
-	margin: 36px 0
-	overflow: hidden
-	padding-top: 56.25%
-	position: relative
-	width: 100%
+  border-radius: 20px
+  margin: 36px 0
+  overflow: hidden
+  padding-top: 56.25%
+  position: relative
+  width: 100%
 
 
 .video-box iframe
-	position: absolute
-	top: 0
-	left: 0
-	bottom: 0
-	right: 0
-	width: 100%
-	height: 100%
+  position: absolute
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  width: 100%
+  height: 100%
 
 
 .blur > div:not(.popup)
-	filter: blur(12px)
+  filter: blur(12px)
 
 
 .popup
-	border-radius: 12px
-	display: flex
-	align-items: center
-	justify-content: center
-	height: 100%
-	width: 100%
-	position: absolute
-	top: 0
-	left: 0
-	z-index: 10
+  border-radius: 12px
+  display: flex
+  align-items: center
+  justify-content: center
+  height: 100%
+  width: 100%
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 10
 
 
 .popup .form-container
-	background: linear-gradient(to bottom right, #2a3943 0, #092023 100%)
-	box-shadow: 16px 16px 20px 0 #101417ee
+  background: linear-gradient(to bottom right, #2a3943 0, #092023 100%)
+  box-shadow: 16px 16px 20px 0 #101417ee
 
 
 .popup .form-container button
-	margin: 18px 0 0 0
+  margin: 18px 0 0 0
 
 
 
@@ -1559,218 +1559,218 @@ img.more-info:hover
 
 
 .ido-container
-	background: linear-gradient(to bottom right, #23292b 0, #101417 100%)
-	box-shadow: 16px 16px 20px 0 #05131999
+  background: linear-gradient(to bottom right, #23292b 0, #101417 100%)
+  box-shadow: 16px 16px 20px 0 #05131999
 
 
 .ido-container .product-sidebar
-	@media (max-width: $breakpoint-sm-max)
-		display: flex
-		justify-content: flex-start
-		flex-wrap: wrap
-		margin-top: 16px
-		order: 5
-		width: 100%
+  @media (max-width: $breakpoint-sm-max)
+    display: flex
+    justify-content: flex-start
+    flex-wrap: wrap
+    margin-top: 16px
+    order: 5
+    width: 100%
 
 
 #project-links
-	@media (max-width: $breakpoint-sm-max)
-		order: 1
-		width: 100%
+  @media (max-width: $breakpoint-sm-max)
+    order: 1
+    width: 100%
 
 
 #project-links .product-links
-	@media (max-width: $breakpoint-sm-max)
-		display: flex
-		flex-wrap: wrap
-		justify-content: flex-start
+  @media (max-width: $breakpoint-sm-max)
+    display: flex
+    flex-wrap: wrap
+    justify-content: flex-start
 
 
 #project-links .product-links li
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0
-		padding: 0 18px 18px 0
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0
+    padding: 0 18px 18px 0
 
 
 #project-links .product-links span
-	@media (max-width: $breakpoint-sm-max)
-		display: none
+  @media (max-width: $breakpoint-sm-max)
+    display: none
 
 
 #project-links lie
-	@media (max-width: $breakpoint-sm-max)
-		display: none
+  @media (max-width: $breakpoint-sm-max)
+    display: none
 
 
 #join-ido
-	@media (max-width: $breakpoint-sm-max)
-		order: 2
-		width: 100%
+  @media (max-width: $breakpoint-sm-max)
+    order: 2
+    width: 100%
 
 
 #deal-terms
-	@media (max-width: $breakpoint-sm-max)
-		order: 3
+  @media (max-width: $breakpoint-sm-max)
+    order: 3
 
 
 #help
-	@media (max-width: $breakpoint-sm-max)
-		order: 4
+  @media (max-width: $breakpoint-sm-max)
+    order: 4
 
 
 img.ido-promo-content
-	border-radius: 20px
-	margin: 12px 0
-	max-width: 100%
+  border-radius: 20px
+  margin: 12px 0
+  max-width: 100%
 
 
 img.product-banner
-	border-radius: 16px 16px 0 0
-	margin: -48px -48px 32px -48px
-	width: calc(100% + 96px)
+  border-radius: 16px 16px 0 0
+  margin: -48px -48px 32px -48px
+  width: calc(100% + 96px)
 
 
 .ido-title-section
-	background-size: auto calc(100% + 16px)
-	background-repeat: no-repeat
-	background-position: center center
-	border-radius: 12px 12px 0 0
-	box-shadow: 0px 20px 80px 40px #23292b
-	margin: -48px -48px 32px -48px
-	padding: 48px 48px 0 48px
-	position: relative
-	height: 300px
-	width: calc(100% + 96px)
-	@media (max-width: $breakpoint-sm-max)
-		order: 1
-		background-size: auto calc(100% + 32px)
-		height: 200px
-		margin: -12px -12px 24px -12px
-		padding: 0
-		width: calc(100% + 48px)
+  background-size: auto calc(100% + 16px)
+  background-repeat: no-repeat
+  background-position: center center
+  border-radius: 12px 12px 0 0
+  box-shadow: 0px 20px 80px 40px #23292b
+  margin: -48px -48px 32px -48px
+  padding: 48px 48px 0 48px
+  position: relative
+  height: 300px
+  width: calc(100% + 96px)
+  @media (max-width: $breakpoint-sm-max)
+    order: 1
+    background-size: auto calc(100% + 32px)
+    height: 200px
+    margin: -12px -12px 24px -12px
+    padding: 0
+    width: calc(100% + 48px)
 
 
 .ido-container .product-title-container
-	background: #23292b
-	border-radius: 12px 12px 0 0
-	padding: 16px
-	position: absolute
-	bottom: 0
-	left: 32px
-	@media (max-width: $breakpoint-sm-max)
-		border-radius: 12px
-		top: 12px
-		left: 12px
-		bottom: unset
-		padding: 12px
+  background: #23292b
+  border-radius: 12px 12px 0 0
+  padding: 16px
+  position: absolute
+  bottom: 0
+  left: 32px
+  @media (max-width: $breakpoint-sm-max)
+    border-radius: 12px
+    top: 12px
+    left: 12px
+    bottom: unset
+    padding: 12px
 
 
 .ido-container .product-title-container::before
-	background-color: transparent
-	border-bottom-right-radius: 20px
-	box-shadow: 0 20px 0 0 #23292b
-	content: ''
-	position: absolute
-	bottom: 0px
-	left: -20px
-	height: 40px
-	width: 20px
-	@media (max-width: $breakpoint-sm-max)
-		display: none
+  background-color: transparent
+  border-bottom-right-radius: 20px
+  box-shadow: 0 20px 0 0 #23292b
+  content: ''
+  position: absolute
+  bottom: 0px
+  left: -20px
+  height: 40px
+  width: 20px
+  @media (max-width: $breakpoint-sm-max)
+    display: none
 
 
 .ido-container .product-title-container::after
-	background-color: transparent
-	border-bottom-left-radius: 20px
-	box-shadow: 0 20px 0 0 #23292b
-	content: ''
-	position: absolute
-	bottom: 0px
-	right: -20px
-	height: 40px
-	width: 20px
-	@media (max-width: $breakpoint-sm-max)
-		display: none
+  background-color: transparent
+  border-bottom-left-radius: 20px
+  box-shadow: 0 20px 0 0 #23292b
+  content: ''
+  position: absolute
+  bottom: 0px
+  right: -20px
+  height: 40px
+  width: 20px
+  @media (max-width: $breakpoint-sm-max)
+    display: none
 
 
 .ido-container .product-page-icon
-	@media (max-width: $breakpoint-sm-max)
-		padding: 8px
-		height: 32px
-		width: 32px
+  @media (max-width: $breakpoint-sm-max)
+    padding: 8px
+    height: 32px
+    width: 32px
 
 
 .ido-container .product-page-icon img
-	@media (max-width: $breakpoint-sm-max)
-		height: 16px
-		width: 16px
+  @media (max-width: $breakpoint-sm-max)
+    height: 16px
+    width: 16px
 
 
 .ido-container h1
-	@media (max-width: $breakpoint-sm-max)
-		font-size: 24px
+  @media (max-width: $breakpoint-sm-max)
+    font-size: 24px
 
 
 .project-team
-	display: flex
-	flex-wrap: wrap
-	justify-content: flex-start
+  display: flex
+  flex-wrap: wrap
+  justify-content: flex-start
 
 
 .team-member
-	margin: 0 5% 40px 0
-	width: 30%
-	@media (max-width: $breakpoint-sm-max)
-		margin-right: 4%
-		width: 48%
+  margin: 0 5% 40px 0
+  width: 30%
+  @media (max-width: $breakpoint-sm-max)
+    margin-right: 4%
+    width: 48%
 
 
 .team-member:nth-child(3n)
-	margin-right: 0
-	@media (max-width: $breakpoint-sm-max)
-		margin-right: 4%
-		width: 48%
+  margin-right: 0
+  @media (max-width: $breakpoint-sm-max)
+    margin-right: 4%
+    width: 48%
 
 
 .team-member:nth-child(2n)
-	@media (max-width: $breakpoint-sm-max)
-		margin-right: 0
+  @media (max-width: $breakpoint-sm-max)
+    margin-right: 0
 
 
 .team-member img
-	border-radius: 18px
-	width: 100%
+  border-radius: 18px
+  width: 100%
 
 
 .team-member h4.name
-	font-size: 20px
-	margin: 8px 0
-	text-transform: uppercase
+  font-size: 20px
+  margin: 8px 0
+  text-transform: uppercase
 
 
 .team-member h5.title
-	font-size: 16px
-	margin: 4px 0
+  font-size: 16px
+  margin: 4px 0
 
 
 .team-member .bio
-	font-size: 14px
-	line-height: 1.5
-	margin: 0
+  font-size: 14px
+  line-height: 1.5
+  margin: 0
 
 
 .ido-progress-bar
-	background: #3d4c52
-	border-radius: 8px
-	margin: 8px 0
-	height: 12px
-	width: 100%
+  background: #3d4c52
+  border-radius: 8px
+  margin: 8px 0
+  height: 12px
+  width: 100%
 
 
 .ido-progress
-	background: linear-gradient(to bottom right, #ffe91d -50%, #ce5417 150%)
-	border-radius: 8px
-	height: 100%
+  background: linear-gradient(to bottom right, #ffe91d -50%, #ce5417 150%)
+  border-radius: 8px
+  height: 100%
 
 
 
@@ -1779,58 +1779,58 @@ img.product-banner
 /* #ff3e51 #1636d3 */
 
 .project-affyn .product-page-icon
-	background: #ff3e51
+  background: #ff3e51
 
 
 .project-affyn h1
-	background: linear-gradient(to bottom right, transparent 0, #ff3e51 0, #1636d3 100%)
-	background-clip: text
-	filter: contrast(1) brightness(1.25)
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: linear-gradient(to bottom right, transparent 0, #ff3e51 0, #1636d3 100%)
+  background-clip: text
+  filter: contrast(1) brightness(1.25)
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 .project-affyn h3:not(.form-title)
-	background: linear-gradient(to bottom right, transparent 0, #ff3e51 0, #1636d3 100%)
-	background-clip: text
-	filter: contrast(1) brightness(1.25)
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: linear-gradient(to bottom right, transparent 0, #ff3e51 0, #1636d3 100%)
+  background-clip: text
+  filter: contrast(1) brightness(1.25)
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 .project-affyn a:not([class])
-	color: #ff3e51
-	filter: brightness(1.5)
-	transition: all ease-in-out .3s
+  color: #ff3e51
+  filter: brightness(1.5)
+  transition: all ease-in-out .3s
 
 
 .project-affyn a:not([class]):hover
-	filter: contrast(1.5)
-	text-decoration: underline 1px solid #ff3e51
+  filter: contrast(1.5)
+  text-decoration: underline 1px solid #ff3e51
 
 
 .project-affyn button,
 .project-affyn input[type='submit']
-	background: linear-gradient(to bottom right, #ff3e51 0, #1636d3 100%)
+  background: linear-gradient(to bottom right, #ff3e51 0, #1636d3 100%)
 
 
 .project-affyn .number
-	background: linear-gradient(to right, transparent 0, #ff3e51 0, #1636d3 150%)
-	background-clip: text
-	filter: contrast(1) brightness(1.5)
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: linear-gradient(to right, transparent 0, #ff3e51 0, #1636d3 150%)
+  background-clip: text
+  filter: contrast(1) brightness(1.5)
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 .project-affyn .warning
-	border: 1px solid #ff3e51
+  border: 1px solid #ff3e51
 
 
 .content .project-affyn ul li::before
-	color: #ff3e51
+  color: #ff3e51
 
 
 
@@ -1839,91 +1839,91 @@ img.product-banner
 /* #d3fc51 #ea5bc5 */
 
 .project-mixmob .product-page-icon
-	background: #d3fc51
+  background: #d3fc51
 
 
 .project-mixmob .product-page-icon img
-	filter: none
+  filter: none
 
 
 .project-mixmob h1
-	background: #d3fc51
-	background-clip: text
-	filter: none
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: #d3fc51
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 .project-mixmob h3:not(.form-title)
-	background: #d3fc51
-	background-clip: text
-	filter: none
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: #d3fc51
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 .project-mixmob a:not([class])
-	color: #ea5bc5
-	filter: brightness(1.5)
-	transition: all ease-in-out .3s
+  color: #ea5bc5
+  filter: brightness(1.5)
+  transition: all ease-in-out .3s
 
 
 .project-mixmob a:not([class]):hover
-	filter: contrast(1.5)
-	text-decoration: underline 1px solid #d3fc51
+  filter: contrast(1.5)
+  text-decoration: underline 1px solid #d3fc51
 
 
 .project-mixmob button,
 .project-mixmob input[type='submit']
-	background: #d3fc51
-	color: #111111
-	text-shadow: none
+  background: #d3fc51
+  color: #111111
+  text-shadow: none
 
 
 .project-mixmob button:hover,
 .project-mixmob input[type='submit']:hover
-	background: #ea5bc5
-	filter: none
+  background: #ea5bc5
+  filter: none
 
 
 .project-mixmob button.alt
-	background: none
-	border-color: #ea5bc5
-	color: #ea5bc5
+  background: none
+  border-color: #ea5bc5
+  color: #ea5bc5
 
 
 .project-mixmob .number
-	background: #ea5bc5
-	background-clip: text
-	filter: none
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: #ea5bc5
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 .project-mixmob .warning
-	border: 1px solid #d3fc51
+  border: 1px solid #d3fc51
 
 
 .content .project-mixmob ul li::before
-	color: #d3fc51
+  color: #d3fc51
 
 
 .content .project-mixmob p:not([class]) strong
-	background: none
-	color: #d3fc51
-	-webkit-text-fill-color: unset
+  background: none
+  color: #d3fc51
+  -webkit-text-fill-color: unset
 
 
 .project-mixmob .ido-progress
-	background: #d3fc51
-	filter: saturate(1.5)
+  background: #d3fc51
+  filter: saturate(1.5)
 
 
 .project-mixmob .team-member h5.title
-	color: #d3fc51
+  color: #d3fc51
 
 
 
@@ -1931,68 +1931,68 @@ img.product-banner
 
 
 .faq h2:not(#hero h2)
-	margin: 96px 0 36px 0
+  margin: 96px 0 36px 0
 
 
 .faq h2:not(#hero h2):first-of-type
-	margin: 36px 0
+  margin: 36px 0
 
 
 .faq h3
-	background: linear-gradient(to right, #e1eeef	0, #e4f4f0 100%)
-	background-clip: border-box
-	font-size: 24px
-	font-weight: 600
-	margin: 48px auto 18px auto
-	position: relative
-	padding: 0 0 18px 0
-	text-transform: unset
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: linear-gradient(to right, #e1eeef  0, #e4f4f0 100%)
+  background-clip: border-box
+  font-size: 24px
+  font-weight: 600
+  margin: 48px auto 18px auto
+  position: relative
+  padding: 0 0 18px 0
+  text-transform: unset
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 .faq h3::before
-	color: #1ec498
-	content: '\2727' /*hollow star*/
-	/* content: '\2726' /*filled star*/
-	/* content: '\21e2' /*dashed arrow*/
-	display: inline-block
-	font-size: 20px
-	position: absolute
-	top: 0
-	left: -20px
-	-webkit-text-fill-color: #1ec498
+  color: #1ec498
+  content: '\2727' /*hollow star*/
+  /* content: '\2726' /*filled star*/
+  /* content: '\21e2' /*dashed arrow*/
+  display: inline-block
+  font-size: 20px
+  position: absolute
+  top: 0
+  left: -20px
+  -webkit-text-fill-color: #1ec498
 
 
 .faq h3:not([class])::after
-	opacity: .5
+  opacity: .5
 
 
 .line-account img
-	filter: hue-rotate(30deg) contrast(1.2)
-	margin: 0 0 0 8px
-	opacity: .9
-	vertical-align: top
+  filter: hue-rotate(30deg) contrast(1.2)
+  margin: 0 0 0 8px
+  opacity: .9
+  vertical-align: top
 
 
 /* LEGAL */
 
 .legal h2:not(#hero h2)
-	text-transform: unset
+  text-transform: unset
 
 
 .legal h3
-	background: linear-gradient(to right, #e1eeef	0, #e4f4f0 100%)
-	background-clip: border-box
-	font-size: 24px
-	font-weight: 400
-	position: relative
-	padding: 0 0 18px 0
-	text-transform: unset
-	-webkit-background-clip: text
-	-webkit-box-decoration-break: clone
-	-webkit-text-fill-color: transparent
+  background: linear-gradient(to right, #e1eeef  0, #e4f4f0 100%)
+  background-clip: border-box
+  font-size: 24px
+  font-weight: 400
+  position: relative
+  padding: 0 0 18px 0
+  text-transform: unset
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 
 
@@ -2000,48 +2000,48 @@ img.product-banner
 
 
 .earnings-summary
-	display: flex
-	flex-wrap: wrap
-	justify-content: center
+  display: flex
+  flex-wrap: wrap
+  justify-content: center
 
 
 .earnings-figure
-	margin: 0 5% 0 0
-	padding: 0
-	text-align: center
-	min-width: 240px
-	width: 30%
-	@media (max-width: $breakpoint-sm-max)
-		margin: 0 0 24px 
-		width: 100%
+  margin: 0 5% 0 0
+  padding: 0
+  text-align: center
+  min-width: 240px
+  width: 30%
+  @media (max-width: $breakpoint-sm-max)
+    margin: 0 0 24px 
+    width: 100%
 
 
 .earnings-figure:last-of-type
-	margin-right: 0
+  margin-right: 0
 
 
 .amount
-	font-size: 36px
-	font-weight: 700
-	text-transform: uppercase
+  font-size: 36px
+  font-weight: 700
+  text-transform: uppercase
 
 
 .unit
-	color: #1ec498
-	font-size: 18px
-	font-weight: 700
-	margin: 0 0 0 2px
-	text-transform: uppercase
+  color: #1ec498
+  font-size: 18px
+  font-weight: 700
+  margin: 0 0 0 2px
+  text-transform: uppercase
 
 
 .earnings-summary .hr
-	background: linear-gradient(to right, transparent 0, #1ec498 50%, transparent 100%)
-	margin: 12px 0
+  background: linear-gradient(to right, transparent 0, #1ec498 50%, transparent 100%)
+  margin: 12px 0
 
 
 h4.description
-	font-size: 18px
-	text-transform: uppercase
+  font-size: 18px
+  text-transform: uppercase
 
 
 
@@ -2049,155 +2049,155 @@ h4.description
 
 
 .mining-summary
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
-	box-shadow: 16px 16px 20px 0 #23292b
-	border-radius: 12px
-	color: #e1eeef
-	padding: 24px
-	margin: 24px 0
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
+  box-shadow: 16px 16px 20px 0 #23292b
+  border-radius: 12px
+  color: #e1eeef
+  padding: 24px
+  margin: 24px 0
 
 
 .mining-heading
-	display: flex
-	justify-content: flex-start
-	align-items: center
+  display: flex
+  justify-content: flex-start
+  align-items: center
 
 
 .mining-icon
-	margin: 0 8px 0 0
-	max-width: 36px
-	max-height: 36px
+  margin: 0 8px 0 0
+  max-width: 36px
+  max-height: 36px
 
 
 h3.mining-title
-	color: #e1eeef
-	font-size: 36px
-	font-weight: 700
-	margin: 0
-	text-transform: uppercase
+  color: #e1eeef
+  font-size: 36px
+  font-weight: 700
+  margin: 0
+  text-transform: uppercase
 
 
 .top-line-summary
-	display: flex
-	flex-wrap: wrap
-	justify-content: space-between
-	margin: 16px 0
-	position: relative
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+  margin: 16px 0
+  position: relative
 
 
 .top-line-summary::after
-	background: linear-gradient(to right, transparent -10%, #e1eeef 50%, transparent 110%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: 0
-	height: 1px
-	width: 100%
+  background: linear-gradient(to right, transparent -10%, #e1eeef 50%, transparent 110%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: 0
+  height: 1px
+  width: 100%
 
 
 .top-line-item
-	font-size: 24px
-	margin: 0 16px 16px 0
-	@media (max-width: $breakpoint-sm-max)
-		font-size: 18px
-		width: 100%
+  font-size: 24px
+  margin: 0 16px 16px 0
+  @media (max-width: $breakpoint-sm-max)
+    font-size: 18px
+    width: 100%
 
 
 .top-line-item:last-of-type
-	margin-right: 0
+  margin-right: 0
 
 
 .top-line-item .label
-	font-weight: 200
+  font-weight: 200
 
 
 .top-line-item .value
-	color: #1ec498
-	filter: contrast(1.5)
-	font-weight: 700
+  color: #1ec498
+  filter: contrast(1.5)
+  font-weight: 700
 
 
 
 .top-line-item .sub-value
-	font-size: 16px
-	font-weight: 600
+  font-size: 16px
+  font-weight: 600
 
 
 .detailed-summary
-	font-size: 16px
+  font-size: 16px
 
 
 .detailed-summary .line
-	border-bottom: 1px dashed #a1d0d0
-	display: flex
-	justify-content: space-between
-	flex-wrap: nowrap
-	padding: 8px 0
+  border-bottom: 1px dashed #a1d0d0
+  display: flex
+  justify-content: space-between
+  flex-wrap: nowrap
+  padding: 8px 0
 
 
 .detailed-summary .label
-	font-weight: 200
+  font-weight: 200
 
 
 .detailed-summary .value
-	color: #1ec498
-	filter: contrast(1.5)
-	font-weight: 500
+  color: #1ec498
+  filter: contrast(1.5)
+  font-weight: 500
 
 
 .mining-summary .buttons
-	display: flex
-	justify-content: flex-end
-	@media (max-width: $breakpoint-sm-max)
-		justify-content: space-between
+  display: flex
+  justify-content: flex-end
+  @media (max-width: $breakpoint-sm-max)
+    justify-content: space-between
 
 
 .buttons button,
 .buttons button.alt
-	border-radius: 8px
-	font-size: 14px
-	height: auto
-	margin: 24px 0 0 12px
-	padding: 8px 20px
-	@media (max-width: $breakpoint-sm-max)
-		margin: 24px 12px
+  border-radius: 8px
+  font-size: 14px
+  height: auto
+  margin: 24px 0 0 12px
+  padding: 8px 20px
+  @media (max-width: $breakpoint-sm-max)
+    margin: 24px 12px
 
 
 .buttons button:first-of-type
-	@media (max-width: $breakpoint-sm-max)
-		margin-left: 0
+  @media (max-width: $breakpoint-sm-max)
+    margin-left: 0
 
 
 .buttons button:last-of-type
-	@media (max-width: $breakpoint-sm-max)
-		margin-right: 0
+  @media (max-width: $breakpoint-sm-max)
+    margin-right: 0
 
 
 .buttons button:hover,
 .buttons button.alt:hover
-	border-radius: 2px
+  border-radius: 2px
 
 
 .add-mining
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
-	border-radius: 12px
-	cursor: pointer
-	display: flex
-	align-content: center
-	justify-content: center
-	font-size: 48px
-	margin: 64px auto
-	padding: 24px
-	opacity: .5
-	height: 160px
-	width: 300px
-	transition: all ease-in-out .1s
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
+  border-radius: 12px
+  cursor: pointer
+  display: flex
+  align-content: center
+  justify-content: center
+  font-size: 48px
+  margin: 64px auto
+  padding: 24px
+  opacity: .5
+  height: 160px
+  width: 300px
+  transition: all ease-in-out .1s
 
 
 .add-mining:hover
-	box-shadow: 8px 8px 20px 0 #23292b
-	opacity: .8
+  box-shadow: 8px 8px 20px 0 #23292b
+  opacity: .8
 
 
 
@@ -2205,97 +2205,97 @@ h3.mining-title
 
 
 .settings
-	align-items: flex-start
-	display: flex
-	flex-wrap: wrap
-	justify-content: flex-start
-	@media (max-width: $breakpoint-sm-max)
-		justify-content: center
+  align-items: flex-start
+  display: flex
+  flex-wrap: wrap
+  justify-content: flex-start
+  @media (max-width: $breakpoint-sm-max)
+    justify-content: center
 
 
 .setting-box
-	background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
-	box-shadow: 16px 16px 20px 0 #23292b
-	border-radius: 12px
-	color: #e1eeef
-	display: flex
-	flex-wrap: wrap
-	padding: 24px
-	margin: 0 5% 5% 0
-	max-width: 600px
-	width: 45%
-	@media (max-width: $breakpoint-sm-max)
-		margin: 12px 0
-		width: 100%
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
+  box-shadow: 16px 16px 20px 0 #23292b
+  border-radius: 12px
+  color: #e1eeef
+  display: flex
+  flex-wrap: wrap
+  padding: 24px
+  margin: 0 5% 5% 0
+  max-width: 600px
+  width: 45%
+  @media (max-width: $breakpoint-sm-max)
+    margin: 12px 0
+    width: 100%
 
 
 .settings-box-heading
-	align-items: center
-	display: flex
-	padding: 0 0 12px 0
-	position: relative
-	width: 100%
+  align-items: center
+  display: flex
+  padding: 0 0 12px 0
+  position: relative
+  width: 100%
 
 
 .settings-box-heading::after
-	background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: 0
-	height: 1px
-	width: 100%
+  background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: 0
+  height: 1px
+  width: 100%
 
 
 .settings-box-heading img
-	filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
-	margin: 0 12px 0 0
-	opacity: .8
-	max-height: 32px
-	max-width: 32px
+  filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
+  margin: 0 12px 0 0
+  opacity: .8
+  max-height: 32px
+  max-width: 32px
 
 
 .settings-box-heading h3.box-title
-	color: #e4f4f0
-	font-size: 28px
-	font-weight: 700
-	margin: 0
+  color: #e4f4f0
+  font-size: 28px
+  font-weight: 700
+  margin: 0
 
 
 .setting-box p:not([class])
-	font-size: 16px
-	line-height: 24px
+  font-size: 16px
+  line-height: 24px
 
 
 .setting-box .verification
-	align-items: center
-	display: flex
-	margin: 0 0 16px 0
-	width: 100%
+  align-items: center
+  display: flex
+  margin: 0 0 16px 0
+  width: 100%
 
 
 .setting-box .verification img
-	filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
-	opacity: .5
-	margin: 0 8px 0 0
-	max-height: 24px
-	max-width: 24px
+  filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
+  opacity: .5
+  margin: 0 8px 0 0
+  max-height: 24px
+  max-width: 24px
 
 
 .setting-box .verification img.verified
-	filter: invert(35%) sepia(45%) saturate(600%) hue-rotate(114deg) brightness(100%) contrast(95%)
-	opacity: 1
+  filter: invert(35%) sepia(45%) saturate(600%) hue-rotate(114deg) brightness(100%) contrast(95%)
+  opacity: 1
 
 
 .setting-box .verification span
-	font-size: 18px
-	font-weight: 700
+  font-size: 18px
+  font-weight: 700
 
 
 .setting-box button
-	margin: 0
-	width: 100%
+  margin: 0
+  width: 100%
 
 
 
@@ -2304,105 +2304,105 @@ h3.mining-title
 
 
 .kyc-status
-	align-items: center
-	flex-wrap: wrap
-	display: flex
+  align-items: center
+  flex-wrap: wrap
+  display: flex
 
 
 .status
-	font-size: 24px
-	font-weight: 600
-	text-transform: uppercase
+  font-size: 24px
+  font-weight: 600
+  text-transform: uppercase
 
 
 .rejection-note
-	margin: 12px 0 0 0
-	width: 100%
+  margin: 12px 0 0 0
+  width: 100%
 
 
 .kyc-status img
-	height: 32px
-	margin: 0 8px 0 0
+  height: 32px
+  margin: 0 8px 0 0
 
 
 .kyc-documents
-	display: flex
-	flex-wrap: wrap
-	justify-content: flex-start
+  display: flex
+  flex-wrap: wrap
+  justify-content: flex-start
 
 
 .document-select
-	width: 100%
+  width: 100%
 
 
 .document-select select
-	max-width: 240px
+  max-width: 240px
 
 
 
 .kyc-upload
-	margin: 0 3% 0 0
-	width: 30%
+  margin: 0 3% 0 0
+  width: 30%
 
 
 .kyc-note
-	font-size: 18px
-	font-weight: 300
-	line-height: 28px
+  font-size: 18px
+  font-weight: 300
+  line-height: 28px
 
 
 .kyc-documents strong
-	color: #1ec498
-	filter: contrast(1.5)
+  color: #1ec498
+  filter: contrast(1.5)
 
 
 .kyc-image
-	border: 1px dashed #11afaf
-	border-radius: 32px
-	cursor: pointer
-	margin: 24px 0
-	padding: 24px 24px 0 24px
-	text-align: center
+  border: 1px dashed #11afaf
+  border-radius: 32px
+  cursor: pointer
+  margin: 24px 0
+  padding: 24px 24px 0 24px
+  text-align: center
 
 
 .kyc-image span
-	line-height: 2
-	opacity: .7
-	text-transform: uppercase
+  line-height: 2
+  opacity: .7
+  text-transform: uppercase
 
 
 .kyc-image img
-	opacity: .5
-	transition: all ease-in-out .1s
-	width: 100%
+  opacity: .5
+  transition: all ease-in-out .1s
+  width: 100%
 
 
 .kyc-image:hover img,
 .kyc-image:hover span
-	opacity: 1
+  opacity: 1
 
 
 .kyc-submit
-	width: 100%
+  width: 100%
 
 
 .kyc-submit p
-	background: #ffffff22
-	border-radius: 12px
-	font-size: 18px
-	line-height: 28px
-	min-width: 400px
-	padding: 8px 16px
-	width: 70%
+  background: #ffffff22
+  border-radius: 12px
+  font-size: 18px
+  line-height: 28px
+  min-width: 400px
+  padding: 8px 16px
+  width: 70%
 
 
 .kyc-submit button
-	margin: 16px 16px 16px 0
-	min-width: 220px
+  margin: 16px 16px 16px 0
+  min-width: 220px
 
 
 .kyc-documents .hr
-	margin: 24px 0
+  margin: 24px 0
 
 
 
@@ -2410,82 +2410,93 @@ h3.mining-title
 
 
 footer
-	background: linear-gradient(to bottom right, #27424c 0, #051319 100%)
-	box-shadow: 0px 0px 60px 15px #051319
-	margin: 96px 0 0 0
-	padding: 16px 0
-	position: relative
-	width: 100%
-	z-index: 1
+  background: linear-gradient(to bottom right, #27424c 0, #051319 100%)
+  box-shadow: 0px 0px 60px 15px #051319
+  margin: 96px 0 0 0
+  padding: 16px 0
+  position: relative
+  width: 100%
+  z-index: 1
 
 
 
 footer::before
-	background: linear-gradient(to left, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
-	display: block
-	content: ''
-	opacity: .5
-	position: absolute
-	top: 0
-	left: 0
-	height: 1px
-	width: 100%
+  background: linear-gradient(to left, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
+  display: block
+  content: ''
+  opacity: .5
+  position: absolute
+  top: 0
+  left: 0
+  height: 1px
+  width: 100%
 
 
 footer::after
-	background-image: url('../assets/procyon-logo.svg') !important
-	background-position: 80% -20%
-	background-repeat: no-repeat
-	background-size: 500px
-	content: ''
-	display: block
-	opacity: 0.1
-	position: absolute
-	top: 0
-	right: 0
-	height: 100%
-	width: 100%
-	max-width: 1280px
-	z-index: -1
+  background-image: url('../assets/procyon-logo.svg') !important
+  background-position: 80% -20%
+  background-repeat: no-repeat
+  background-size: 500px
+  content: ''
+  display: block
+  opacity: 0.1
+  position: absolute
+  top: 0
+  right: 0
+  height: 100%
+  width: 100%
+  max-width: 1280px
+  z-index: -1
 
 
 footer .logo
-	width: 200px
+  width: 200px
 
 
 footer h1
-	font-size: 24px
-	margin: 12px 0
-	padding: 0 0 12px 0
+  font-size: 24px
+  margin: 12px 0
+  padding: 0 0 12px 0
 
 
 footer h1::after
-	background: linear-gradient(to left, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
-	display: block
-	content: ''
-	position: absolute
-	left: 0
-	bottom: 0
-	height: 1px
-	width: 100%
+  background: linear-gradient(to left, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: 0
+  height: 1px
+  width: 100%
 
 
 footer h4.tagline
-	font-size: 16px
-	font-weight: 300
+  font-size: 16px
+  font-weight: 300
 
 
 footer .content ul
-	margin: 0 0 12px 0
-	padding: 0
-	font-size: 16px
+  margin: 0 0 12px 0
+  padding: 0
+  font-size: 16px
 
 
 footer .content ul li::before
-	display: none
+  display: none
 
 
 footer .copyright
-	font-size: 14px
-	line-height: 14px
-	margin: 8px 0
+  font-size: 14px
+  line-height: 14px
+  margin: 8px 0
+
+// SPECIAL
+.title::after
+  background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 30%)
+  display: block
+  content: ''
+  position: absolute
+  left: 0
+  bottom: -4px
+  height: 1px
+  width: 1400px !important

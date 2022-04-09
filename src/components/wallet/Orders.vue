@@ -1,14 +1,5 @@
 <template>
-  <div class='row'>
-    <h2 class='title'>
-      {{ $t('MSG_ORDER_HISTORY') }}
-    </h2>
-    <div class='buttons'>
-      <button disabled class='alt'>
-        {{ $t('MSG_EXPORT_ORDER_CSV') }}
-      </button>
-    </div>
-  </div>
+  <h2>{{ $t('MSG_ORDER_HISTORY') }}</h2>
   <div class='mining-summary content-glass'>
     <q-table
       flat
@@ -24,6 +15,11 @@
       @row-click='(evt, row, index) => onRowClick(row as OrderModel)'
     />
     <div class='row'>
+      <div class='buttons'>
+        <button disabled>
+          {{ $t('MSG_EXPORT_ORDER_CSV') }}
+        </button>
+      </div>
       <q-space />
       <q-pagination
         color='white'
@@ -172,8 +168,4 @@ const displayOrders = computed(() => orders.value.filter((_, index) => index >= 
 
 .buttons
   height: 64px
-
-h2
-  max-width: 100% !important
-  margin-left: 0 !important
 </stype>
