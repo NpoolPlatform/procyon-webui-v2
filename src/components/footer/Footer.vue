@@ -25,8 +25,8 @@
           <h4>Help</h4>
           <ul>
             <li><a class='footer-link'>FAQ</a></li>
-            <li><a class='footer-link' href='mailto:support@procyon.vip'>Contact</a></li>
-            <li><a class='footer-link'>LEGAL</a></li>
+            <li><a class='footer-link' href='mailto:support@procyon.vip'>CONTACT</a></li>
+            <li><a class='footer-link' href='#/legal'>LEGAL</a></li>
           </ul>
         </div>
       </div>
