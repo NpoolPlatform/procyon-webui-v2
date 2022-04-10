@@ -6,7 +6,7 @@
     :customize-body='true'
   >
     <template #table-body='myProps'>
-      <q-tr v-if='!myProps.node.Referral.Kol' :props='myProps'>
+      <q-tr :props='myProps' v-if='!myProps.row.Kol'>
         <q-td key='Name' :props='myProps'>
           {{ myProps.row.User.EmailAddress.length > 0 ? myProps.row.User.EmailAddress : myProps.row.User.PhoneNO }}
         </q-td>

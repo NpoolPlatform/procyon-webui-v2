@@ -1,12 +1,13 @@
 <template>
   <h2>{{ $t('MSG_AFFILIATE_TREE') }}</h2>
   <q-tree
+    v-if='referralTree'
     :nodes='referralTree'
-    node-key='UserID'
+    node-key='Referral.User.ID'
     default-expand-all
     :expanded='[logined.LoginedUser?.User.ID]'
   >
-    <template v-if='prop.node.Referral.Kol' #default-header='prop'>
+    <template #default-header='prop'>
       <div class='content-glass'>
         <div class='invitation-header referral row'>
           <h3>
@@ -27,7 +28,7 @@
           </div>
         </div>
       </div>
-      <q-inner-loading dark :showing='innerLoading' v-if='logined.LoginedUser?.User.ID === prop.node.UserID'>
+      <q-inner-loading dark :showing='innerLoading' v-if='logined.LoginedUser?.User.ID === prop.node.Referral.User.ID'>
         <q-spinner-gears size='50px' color='primary' />
       </q-inner-loading>
     </template>
