@@ -139,28 +139,46 @@ const onSubmit = () => {
     return
   }
 
-  user.updateAccount({
-    Account: account.value,
-    AccountType: accountType.value,
-    VerificationCode: myVerificationCode.value,
-    VerificationCodes: [
-      {
-        Account: oldAccount.value,
-        AccountType: oldAccountType.value,
-        VerificationCode: oldVerificationCode.value
-      }
-    ],
-    Message: {
-      Error: {
-        Title: t('MSG_UPDATE_ACCOUNT'),
-        Message: t('MSG_UPDATE_ACCOUNT_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    void router.back()
-  })
+  switch (accountType.value) {
+    case AccountType.Email:
+      user.updateEmail({
+        NewEmailAddress: account.value,
+        NewEmailVerificationCode: myVerificationCode.value,
+        OldAccount: oldAccount.value,
+        OldVerificationCode: oldVerificationCode.value,
+        OldAccountType: oldAccountType.value,
+        Message: {
+          Error: {
+            Title: t('MSG_UPDATE_EMAIL'),
+            Message: t('MSG_UPDATE_EMAIL_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      }, () => {
+        void router.back()
+      })
+      break
+    case AccountType.Mobile:
+      user.updateMobile({
+        NewPhoneNO: account.value,
+        NewPhoneVerificationCode: myVerificationCode.value,
+        OldAccount: oldAccount.value,
+        OldVerificationCode: oldVerificationCode.value,
+        OldAccountType: oldAccountType.value,
+        Message: {
+          Error: {
+            Title: t('MSG_UPDATE_MOBILE'),
+            Message: t('MSG_UPDATE_MOBILE_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      }, () => {
+        void router.back()
+      })
+      break
+  }
 
   return false
 }
