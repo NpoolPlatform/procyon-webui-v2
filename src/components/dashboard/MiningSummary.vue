@@ -91,7 +91,7 @@ const getWithdrawed = () => {
 }
 
 const getCurrencies = () => {
-  currency.getCoinCurrencies({
+  currency.getAllCoinCurrencies({
     Currencies: [Currency.USD],
     Message: {
       Error: {
