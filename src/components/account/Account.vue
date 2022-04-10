@@ -1,7 +1,7 @@
 <template>
   <div class='content'>
     <h2>{{ $t('MSG_ACCOUNT') }}</h2>
-    <div class='content-glass alignment'>
+    <form class='content-glass alignment' action='javascript:void(0)' @submit='onSubmit'>
       <h3>{{ $t('MSG_PERSON_DETAILS_FOR_KYC') }}</h3>
       <div class='row'>
         <div class='account-field'>
@@ -158,10 +158,8 @@
           />
         </div>
       </div>
-      <button class='account-field'>
-        {{ $t('MSG_SAVE_CHANGES') }}
-      </button>
-    </div>
+      <input type='submit' :value='$t("MSG_SAVE_CHANGES")' class='account-field'>
+    </form>
   </div>
 </template>
 
@@ -207,6 +205,10 @@ const onLastNameFocusIn = () => {
 }
 const onLastNameFocusOut = () => {
   lastNameError.value = lastName.value.length === 0
+}
+
+const onSubmit = () => {
+  // TODO
 }
 
 </script>
