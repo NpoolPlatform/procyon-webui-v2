@@ -1,6 +1,6 @@
 <template>
   <header :class='[ "desktop1", setting.ShowSideMenu ? "with-sidebar" : "" ]'>
-    <img v-if='!setting.ShowSideMenu' :src='lightLogo' class='attachment-large size-large logo'>
+    <img v-if='!setting.ShowSideMenu' :src='lightLogo' class='attachment-large size-large logo' @click='onLogoClick'>
     <div class='nav'>
       <ul>
         <li><a class='nav-link' href='#'>{{ $t('MSG_HOME') }}</a></li>
@@ -110,6 +110,10 @@ onMounted(() => {
     }
   })
 })
+
+const onLogoClick = () => {
+  void router.push({ path: '/' })
+}
 
 </script>
 
