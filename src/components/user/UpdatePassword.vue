@@ -52,12 +52,22 @@
 <script setup lang='ts'>
 import {
   validatePassword,
-  AccountType
+  AccountType,
+  useUserStore,
+  encryptPassword,
+  NotificationType
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const UpdatePage = defineAsyncComponent(() => import('src/components/user/UpdatePage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
+
+const user = useUserStore()
 
 const account = ref('')
 const accountType = ref(AccountType.Email)
@@ -91,12 +101,32 @@ const onConfirmPasswordFocusOut = () => {
   confirmPwdError.value = !validatePassword(confirmPassword.value)
 }
 
+const router = useRouter()
+
 const onSubmit = () => {
+  confirmPwdError.value ||= newPassword.value !== confirmPassword.value
+
   if (newPwdError.value || pwdError.value || confirmPwdError.value || verificationCodeError.value) {
     return
   }
 
-  console.log('submit', account, 2, accountType, 3, verificationCode, 4, oldPassword, 5, newPassword, 6, confirmPassword)
+  user.updatePassword({
+    Account: account.value,
+    AccountType: accountType.value,
+    OldPasswordHash: encryptPassword(oldPassword.value),
+    PasswordHash: encryptPassword(newPassword.value),
+    VerificationCode: verificationCode.value,
+    Message: {
+      Error: {
+        Title: t('MSG_UPDATE_PASSWORD'),
+        Message: t('MSG_UPDATE_PASSWORD_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    void router.push({ path: '/signin' })
+  })
 
   return false
 }
