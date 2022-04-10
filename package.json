@@ -29,7 +29,7 @@
     "axios": "^0.26.1",
     "copy-to-clipboard": "^3.3.1",
     "core-js": "^3.6.5",
-    "npool-cli-v2": "^0.0.134",
+    "npool-cli-v2": "^0.0.137",
     "pinia": "^2.0.13",
     "qrcode.vue": "^3.3.3",
     "quasar": "^2.0.0",
