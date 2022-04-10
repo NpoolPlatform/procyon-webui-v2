@@ -3,28 +3,20 @@
   <q-tree
     :nodes='referralTree'
     node-key='UserID'
-    default-expand-all :expanded='[logined.LoginedUser?.User.ID]'>
+    default-expand-all
+    :expanded='[logined.LoginedUser?.User.ID]'
+  >
     <template #default-header='prop'>
-      <div class='invitation-box'>
-        <div class='invitation-header'>
-          <div class='header-content row'>
-            <span style='font-size: 20px; font-weight: 600;'>
-              {{ prop.node.Referral.Extra ? prop.node.Referral.Extra.Username : prop.node.Referral.User?.EmailAddress }}
-            </span>
-            <q-space />
-            <span
-              style='font-size: 14px; font-weight: 300; margin-right: 5px; margin-top: 6px;'
-            >
-              {{ $t('affiliate.OnBoarded') }}
-            </span>
-            <span class='invited-count'>{{ prop.node.InvitedCount }}</span>
-          </div>
+      <div class='content-glass'>
+        <div class='invitation-header referral row'>
+          <h3>
+            {{ prop.node.Referral.Extra ? prop.node.Referral.Extra.Username : prop.node.Referral.User?.EmailAddress }}
+          </h3>
+          <q-space />
+          <span class='onboard'>{{ $t('MSG_ONBOARD') }}</span>
+          <span class='invited-count'>{{ prop.node.Referral.InvitedCount }}</span>
         </div>
-
-        <div class='invitation-content'>
-          <span>{{ prop.node.Referral.User?.EmailAddress }}</span>
-        </div>
-
+        <span class='username'>{{ prop.node.Referral.User?.EmailAddress }}</span>
         <div class='invitation-content'>
           <div v-for='summary in prop.node.Referral.Summaries' :key='summary.CoinTypeID'>
             <span>{{ summary.CoinName }}: </span>
@@ -35,7 +27,7 @@
           </div>
         </div>
       </div>
-      <q-inner-loading dark :showing='innerLoading' v-if='userInfo.User.ID === prop.node.UserID'>
+      <q-inner-loading dark :showing='innerLoading' v-if='logined.LoginedUser?.User.ID === prop.node.UserID'>
         <q-spinner-gears size='50px' color='primary' />
       </q-inner-loading>
     </template>
@@ -76,4 +68,43 @@ onMounted(() => {
 </script>
 
 <stype lang='sass' scoped>
+h3
+  font-size: 20px !important
+  font-weight: 600 !important
+  padding: 0 !important
+  color: white !important
+  margin-top: 0 !important
+  line-height: 1.6em !important
+  border-bottom: solid 1px linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 30%)
+
+.referral
+  min-width: 400px
+
+.invited-count
+  background: linear-gradient(to left, #54e280 0, #1ec498 50%)
+  background-clip: border-box
+  filter: contrast(2)
+  font-size: 20px
+  font-weight: bold
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.onboard
+  font-size: 14px
+  font-weight: 300
+  margin-right: 5px
+  margin-top: 6px
+
+.invitation-content
+  margin-top: 10px
+
+.username
+  font-size: 20px
+  font-weight: 600
+
+.sales-number
+  color: white
+  font-weight: bold
+  font-size: 20px
 </stype>
