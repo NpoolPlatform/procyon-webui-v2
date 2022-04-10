@@ -42,7 +42,7 @@ const table = computed(() => [
 ])
 
 onMounted(() => {
-  if (user.LoginHistories.length < 0) {
+  if (user.LoginHistories.length <= 0) {
     user.getLoginHistories({
       Message: {
         Error: {
