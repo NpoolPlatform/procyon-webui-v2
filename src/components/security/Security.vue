@@ -24,7 +24,7 @@
         </div>
         <p>{{ $t('MSG_UPDATE_EMAIL_TIP') }}</p>
         <div class='verification'>
-          <img :src='squareCheck' class='verified'>
+          <img :src='squareCheck' :class='[ logined.LoginedUser?.User?.EmailAddress?.length ? "verified" : "" ]'>
           <span>{{ $t('MSG_VERIFIED') }}</span>
         </div>
         <q-space />
@@ -41,7 +41,7 @@
         </div>
         <p>{{ $t('MSG_MOBILE_AUTHENTICATION_TIP') }}</p>
         <div class='verification'>
-          <img :src='squareCheck' class=''>
+          <img :src='squareCheck' :class='[ logined.LoginedUser?.User?.PhoneNO?.length ? "verified" : "" ]'>
           <span>{{ $t('MSG_NOT_VERIFIED') }}</span>
         </div>
         <q-space />
@@ -58,7 +58,7 @@
         </div>
         <p>{{ $t('MSG_GOOGLE_AUTHENTICATE_TIP') }}</p>
         <div class='verification'>
-          <img :src='squareCheck' class='verified'>
+          <img :src='squareCheck' :class='[ logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified ? "verified" : "" ]'>
           <span>{{ $t('MSG_VERIFIED') }}</span>
         </div>
         <q-space />
@@ -73,11 +73,11 @@
         </div>
         <p>{{ $t('MSG_LOGIN_AUTHENTICATION_TIP') }}</p>
         <div class='verification'>
-          <img :src='circleDot' class='verified'>
+          <img :src='circleDot' :class='[ logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication ? "verified" : "" ]'>
           <span>{{ $t('MSG_GOOGLE_LOGIN_AUTHENTICATION') }}</span>
         </div>
         <div class='verification'>
-          <img :src='circleDot' class=''>
+          <img :src='circleDot' :class='[ !logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication ? "verified" : "" ]'>
           <span>{{ $t('MSG_EMAIL_LOGIN_AUTHENTICATION') }}</span>
         </div>
         <q-space />
@@ -92,7 +92,7 @@
         </div>
         <p>{{ $t('MSG_ID_VERIFICATION_TIP') }}</p>
         <div class='verification'>
-          <img :src='squareCheck' class='verified'>
+          <img :src='squareCheck' class=''>
           <span>{{ $t('MSG_VERIFIED') }}</span>
         </div>
         <q-space />
@@ -106,6 +106,7 @@
 
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
+import { useLoginedUserStore } from 'npool-cli-v2'
 
 import lock from 'src/assets/lock.svg'
 import mail from 'src/assets/mail.svg'
@@ -115,6 +116,8 @@ import shieldHalf from 'src/assets/shield-half.svg'
 import shieldSolid from 'src/assets/shield-solid.svg'
 import circleDot from 'src/assets/circle-dot.svg'
 import id from 'src/assets/id.svg'
+
+const logined = useLoginedUserStore()
 
 const router = useRouter()
 
