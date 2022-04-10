@@ -116,7 +116,7 @@ const onEmailFocusOut = () => {
   accountError.value = !validateEmailAddress(emailAddress.value)
 }
 watch(emailAddress, () => {
-  if (accountType.value === AccountType.Mobile) {
+  if (accountType.value === AccountType.Email) {
     account.value = emailAddress.value
   }
 })
