@@ -72,11 +72,11 @@
           </h3>
         </div>
         <p>{{ $t('MSG_LOGIN_AUTHENTICATION_TIP') }}</p>
-        <div class='verification option' @click='onGoogleSignClick'>
+        <div :class='[ "verification", !logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified ? "disabled" : "enabled" ]' @click='onGoogleSignClick'>
           <img :src='circleDot' :class='[ logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication ? "verified" : "" ]'>
           <span>{{ $t('MSG_GOOGLE_LOGIN_AUTHENTICATION') }}</span>
         </div>
-        <div class='verification option' @click='onEmailSignClick'>
+        <div class='verification enabled' @click='onEmailSignClick'>
           <img :src='circleDot' :class='[ !logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication ? "verified" : "" ]'>
           <span>{{ $t('MSG_EMAIL_LOGIN_AUTHENTICATION') }}</span>
         </div>
@@ -181,6 +181,9 @@ const onEmailSignClick = () => {
 </script>
 
 <style lang='sass' scoped>
-.option
+.disabled
+  cursor: not-allowed
+
+.enabled
   cursor: pointer
 </style>
