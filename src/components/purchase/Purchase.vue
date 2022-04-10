@@ -23,7 +23,7 @@
         <div class='three-section'>
           <h4>{{ $t('MSG_MAINTENANCE_FEE') }}:</h4>
           <span class='number'>1.5</span>
-          <span class='unit'>USDT / {{ $t('MSG_DAY') }}</span>
+          <span class='unit'>{{ PriceCoinName }} / {{ $t('MSG_DAY') }}</span>
         </div>
         <div class='three-section'>
           <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
@@ -37,14 +37,14 @@
           <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
           <p v-html='$t("MSG_WHY_CONTENT")' />
           <div v-if='good?.Main?.Specs'>
-            <h3>Official {{ good?.Main?.Name }} Specs</h3>
+            <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
             <p>
               <img class='content-image' :src='good?.Main?.Specs'>
             </p>
           </div>
           <p>
             <a :href='good?.Main?.HomePage' target='_blank'>
-              {{ good?.Main?.Name }} Homepage >>
+              {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
             </a>
           </p>
         </div>
@@ -98,7 +98,8 @@ import {
   useCoinStore,
   Good,
   Coin,
-  useOrderStore
+  useOrderStore,
+  PriceCoinName
 } from 'npool-cli-v2'
 import { throttle } from 'quasar'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
@@ -171,6 +172,8 @@ onMounted(() => {
           Type: NotificationType.Error
         }
       }
+    }, () => {
+      // TODO
     })
   }
 })

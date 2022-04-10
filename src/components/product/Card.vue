@@ -7,7 +7,7 @@
       </h3>
     </div>
     <h4 class='price'>
-      <span>{{ goods.getGoodPrice(good) }}</span> USDT / {{ good.Good.Good.Unit }}
+      <span>{{ goods.getGoodPrice(good) }}</span> {{ PriceCoinName }} / {{ good.Good.Good.Unit }}
     </h4>
     <div class='line'>
       <span class='label'>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</span>
@@ -41,7 +41,7 @@
 
 <script setup lang='ts'>
 import { defineProps, toRef } from 'vue'
-import { Good, useGoodStore, formatTime, useCoinStore, Coin } from 'npool-cli-v2'
+import { Good, useGoodStore, formatTime, useCoinStore, Coin, PriceCoinName } from 'npool-cli-v2'
 import { useRouter } from 'vue-router'
 
 interface Props {

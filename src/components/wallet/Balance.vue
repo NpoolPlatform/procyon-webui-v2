@@ -3,10 +3,10 @@
   <div class='earnings-summary'>
     <div class='earnings-figure'>
       <span class='amount'>{{ _totalEarningUSD - totalWithdrawedUSD }}</span>
-      <span class='unit'>USDT</span>
+      <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
-        {{ $t('MSG_CURRENT_BALANCE') }} (USDT)
+        {{ $t('MSG_CURRENT_BALANCE') }} ({{ PriceCoinName }})
       </h4>
     </div>
     <div class='earnings-figure'>
@@ -30,7 +30,8 @@ import {
   useTransactionStore,
   totalWithdrawedEarningUSD,
   totalEarningCurrency,
-  totalWithdrawedEarningCurrency
+  totalWithdrawedEarningCurrency,
+  PriceCoinName
 } from 'npool-cli-v2'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -89,7 +90,7 @@ const getWithdrawed = () => {
 }
 
 const getCurrencies = () => {
-  currency.getCoinCurrencies({
+  currency.getAllCoinCurrencies({
     Currencies: [Currency.USD],
     Message: {
       Error: {

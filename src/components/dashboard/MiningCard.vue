@@ -12,12 +12,12 @@
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
         <span class='value'>{{ coin?.PreSale ? '*' : _totalEarningCoin }} {{ coin?.Unit }}</span>
-        <span class='sub-value'>({{ totalEarningUSD }} USDT)</span>
+        <span class='sub-value'>({{ totalEarningUSD }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
         <span class='value'>{{ coin?.PreSale ? '*' : _last24HoursEarningCoin }} {{ coin.Unit }}</span>
-        <span class='sub-value'>({{ last24HoursEarningUSD }} USDT)</span>
+        <span class='sub-value'>({{ last24HoursEarningUSD }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
@@ -65,7 +65,8 @@ import {
   Currency,
   last30DaysEarningCoin,
   last24HoursEarningCoin,
-  useOrderStore
+  useOrderStore,
+  PriceCoinName
 } from 'npool-cli-v2'
 import { defineProps, toRef, computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'

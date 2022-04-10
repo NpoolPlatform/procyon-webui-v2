@@ -29,7 +29,8 @@ import {
   NotificationType,
   useUserStore,
   encryptPassword,
-  GoogleTokenType
+  GoogleTokenType,
+  useInspireStore
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -49,6 +50,7 @@ const password = ref('')
 const user = useUserStore()
 const coderepo = useCodeRepoStore()
 const recaptcha = useReCaptcha()
+const inspire = useInspireStore()
 
 const router = useRouter()
 
@@ -85,6 +87,15 @@ const onSubmit = () => {
         }
       }
     }, () => {
+      inspire.getInvitationCode({
+        Message: {
+          Error: {
+            Title: t('MSG_GET_INVITATION_CODE_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      })
       void router.push({ path: '/' })
     })
   })
