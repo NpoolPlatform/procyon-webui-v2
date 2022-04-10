@@ -2,7 +2,7 @@
   <div class='content'>
     <h2>{{ $t('MSG_SECURITY_SETTINGS') }}</h2>
     <div class='settings'>
-      <div class='setting-box'>
+      <div class='setting-box column'>
         <div class='settings-box-heading'>
           <img :src='lock'>
           <h3 class='box-title'>
@@ -10,9 +10,10 @@
           </h3>
         </div>
         <p>{{ $t('MSG_CHANGE_PASSWORD_TIP') }}</p>
+        <q-space />
         <button>{{ $t('MSG_CHANGE_PASSWORD') }}</button>
       </div>
-      <div class='setting-box'>
+      <div class='setting-box column'>
         <div class='settings-box-heading'>
           <img :src='mail'>
           <h3 class='box-title'>
@@ -24,9 +25,10 @@
           <img :src='squareCheck' class='verified'>
           <span>{{ $t('MSG_VERIFIED') }}</span>
         </div>
+        <q-space />
         <button>{{ $t('MSG_UPDATE_EMAIL_ADDRESS') }}</button>
       </div>
-      <div class='setting-box'>
+      <div class='setting-box column'>
         <div class='settings-box-heading'>
           <img :src='mobile'>
           <h3 class='box-title'>
@@ -38,9 +40,10 @@
           <img :src='squareCheck' class=''>
           <span>{{ $t('MSG_NOT_VERIFIED') }}</span>
         </div>
+        <q-space />
         <button>{{ $t('MSG_UPDATE_PHONE_NUMBER') }}</button>
       </div>
-      <div class='setting-box'>
+      <div class='setting-box column'>
         <div class='settings-box-heading'>
           <img :src='shieldHalf'>
           <h3 class='box-title'>
@@ -52,9 +55,10 @@
           <img :src='squareCheck' class='verified'>
           <span>{{ $t('MSG_VERIFIED') }}</span>
         </div>
+        <q-space />
         <button>{{ $t('MSG_ENABLE_2FA_AUTH') }}</button>
       </div>
-      <div class='setting-box'>
+      <div class='setting-box column'>
         <div class='settings-box-heading'>
           <img :src='shieldSolid'>
           <h3 class='box-title'>
@@ -70,9 +74,10 @@
           <img :src='circleDot' class=''>
           <span>{{ $t('MSG_EMAIL_LOGIN_AUTHENTICATION') }}</span>
         </div>
+        <q-space />
         <button>{{ $t('MSG_SUBMIT_CHANGE') }}</button>
       </div>
-      <div class='setting-box'>
+      <div class='setting-box column'>
         <div class='settings-box-heading'>
           <img :src='id'>
           <h3 class='box-title'>
@@ -84,6 +89,7 @@
           <img :src='squareCheck' class='verified'>
           <span>{{ $t('MSG_VERIFIED') }}</span>
         </div>
+        <q-space />
         <button class='in-active'>
           {{ $t('MSG_VERIFY_ID') }}
         </button>
