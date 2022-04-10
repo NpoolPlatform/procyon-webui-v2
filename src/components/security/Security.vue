@@ -62,7 +62,7 @@
           <span>{{ $t('MSG_VERIFIED') }}</span>
         </div>
         <q-space />
-        <button @click='onEnableGoogleClick'>
+        <button @click='onEnableGoogleClick' :disabled='logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified'>
           {{ $t('MSG_ENABLE_2FA_AUTH') }}
         </button>
       </div>
