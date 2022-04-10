@@ -201,6 +201,32 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: true,
           ShowSideMenu: false
         }
+      }, {
+        path: 'update/email',
+        component: () => import('pages/UpdateEmail.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
+        path: 'update/mobile',
+        component: () => import('pages/UpdateMobile.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
       }
     ]
   },

@@ -28,7 +28,9 @@
           <span>{{ $t('MSG_VERIFIED') }}</span>
         </div>
         <q-space />
-        <button>{{ $t('MSG_UPDATE_EMAIL_ADDRESS') }}</button>
+        <button @click='onUpdateEmailClick'>
+          {{ $t('MSG_UPDATE_EMAIL_ADDRESS') }}
+        </button>
       </div>
       <div class='setting-box column'>
         <div class='settings-box-heading'>
@@ -43,7 +45,9 @@
           <span>{{ $t('MSG_NOT_VERIFIED') }}</span>
         </div>
         <q-space />
-        <button>{{ $t('MSG_UPDATE_PHONE_NUMBER') }}</button>
+        <button @click='onUpdateMobileClick'>
+          {{ $t('MSG_UPDATE_PHONE_NUMBER') }}
+        </button>
       </div>
       <div class='setting-box column'>
         <div class='settings-box-heading'>
@@ -116,6 +120,14 @@ const router = useRouter()
 
 const onChangePasswordClick = () => {
   void router.push({ path: '/update/password' })
+}
+
+const onUpdateEmailClick = () => {
+  void router.push({ path: '/update/email' })
+}
+
+const onUpdateMobileClick = () => {
+  void router.push({ path: '/update/mobile' })
 }
 
 </script>

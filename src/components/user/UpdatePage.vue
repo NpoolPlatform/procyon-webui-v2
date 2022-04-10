@@ -1,5 +1,8 @@
 <template>
   <FormPage @submit='onSubmit' :label='label' :submit-text='submitText'>
+    <template #top-right>
+      <slot name='top-right' />
+    </template>
     <template #form-body>
       <div class='sent-tip'>
         <p v-html='$t("MSG_VERIFICATION_CODE_SENT_TO", { ACCOUNT: account })' />
@@ -73,8 +76,6 @@ const onSendCodeClick = () => {
   if (!myAccount.value?.length) {
     return
   }
-
-  console.log(lang.CurLang)
 
   switch (myAccountType.value) {
     case AccountType.Email:
