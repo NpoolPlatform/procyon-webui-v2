@@ -6,7 +6,7 @@
     default-expand-all
     :expanded='[logined.LoginedUser?.User.ID]'
   >
-    <template #default-header='prop'>
+    <template v-if='prop.node.Referral.Kol' #default-header='prop'>
       <div class='content-glass'>
         <div class='invitation-header referral row'>
           <h3>

@@ -1,38 +1,32 @@
 <template>
   <ShowSwitchTable
-    label='MSG_APPROVED_ADDRESSES'
-    :rows='(accounts as Array<never>)'
+    label='MSG_DIRECT_AFFILIATES'
+    :rows='(referrels as Array<never>)'
     :table='(table as never)'
     :customize-body='true'
   >
-    <template #top-right>
-      <div class='buttons'>
-        <button @click='onAddNewAddressClick'>
-          {{ $t('MSG_ADD_NEW_ADDRESS') }}
-        </button>
-      </div>
-    </template>
     <template #table-body='myProps'>
-      <q-tr :props='myProps'>
-        <q-td key='Blockchain' :props='myProps'>
-          <LogoName
-            :logo='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Logo'
-            :name='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name'
-          />
+      <q-tr v-if='!myProps.node.Referral.Kol' :props='myProps'>
+        <q-td key='Name' :props='myProps'>
+          {{ myProps.row.User.EmailAddress.length > 0 ? myProps.row.User.EmailAddress : myProps.row.User.PhoneNO }}
         </q-td>
-        <q-td key='Address' :props='myProps'>
-          {{ myProps.row.Account.Address }}
+        <q-td key='JoinDate' :props='myProps'>
+          {{ formatTime(myProps.row.User.CreateAt, true) }}
         </q-td>
-        <q-td key='Label' :props='myProps'>
-          {{ myProps.row.Address.Labels?.join(',') }}
+        <q-td key='Purchased' :props='myProps'>
+          <div v-for='summary in myProps.row.Summaries' :key='summary.CoinTypeID'>
+            <span>{{ summary.CoinName }}: </span>
+            <span class='sales-number'>{{ summary.Units }}</span>
+            <span> {{ summary.Unit }} / </span>
+            <span class='sales-number'>{{ Math.floor(summary.Amount) }}</span>
+            <span> {{ PriceCoinName }}</span>
+          </div>
         </q-td>
-        <q-td key='DateAdded' :props='myProps'>
-          {{ formatTime(myProps.row.Address.CreateAt) }}
+        <q-td key='TotalPayment' :props='myProps'>
+          {{ myProps.row.USDAmount.toFixed(4) + ' USDT' }}
         </q-td>
-        <q-td key='ActionButtons' :props='myProps'>
-          <button class='small'>
-            {{ $t('MSG_REMOVE') }}
-          </button>
+        <q-td key='ReferralValue' :props='myProps'>
+          {{ myProps.row.SubUSDAmount.toFixed(4) + ' USDT' }}
         </q-td>
       </q-tr>
     </template>
@@ -41,49 +35,48 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, formatTime, Referral, useInspireStore, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
-const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
-const account = useAccountStore()
-const accounts = computed(() => account.Accounts)
+const inspire = useInspireStore()
+const referrels = computed(() => inspire.Referrals)
 
 const table = computed(() => [
   {
-    name: 'Blockchain',
-    label: t('MSG_BLOCKCHAIN'),
-    align: 'left',
-    field: (row: WithdrawAccount) => coin.getCoinByID(row.Address.CoinTypeID)?.Name
+    name: 'Name',
+    label: t('MSG_USERNAME'),
+    align: 'center',
+    field: (row: Referral) => row
   },
   {
-    name: 'Address',
-    label: t('MSG_ADDRESS'),
+    name: 'JoinDate',
+    label: t('MSG_JOIN_DATE'),
     align: 'center',
-    field: (row: WithdrawAccount) => row.Account.Address
+    field: (row: Referral) => row
   },
   {
-    name: 'Label',
-    label: t('MSG_LABEL'),
+    name: 'Purchased',
+    label: t('MSG_PURCHASED'),
     align: 'center',
-    field: (row: WithdrawAccount) => row.Address.Labels?.join(',')
+    field: (row: Referral) => row
   },
   {
-    name: 'DateAdded',
-    label: t('MSG_DATE_ADDED'),
+    name: 'TotalPayment',
+    label: t('MSG_TOTAL_PAYMENT'),
     align: 'center',
-    field: (row: WithdrawAccount) => formatTime(row.Address.CreateAt)
+    field: (row: Referral) => row
   },
   {
-    name: 'ActionButtons',
-    label: '',
+    name: 'ReferralValue',
+    label: t('MSG_REFERRAL_VALUE'),
     align: 'center',
-    field: ''
+    field: (row: Referral) => row
   }
 ])
 
@@ -102,22 +95,20 @@ onMounted(() => {
     })
   }
 
-  if (accounts.value.length === 0) {
-    account.getWithdrawAccounts({
+  if (referrels.value.length === 0) {
+    inspire.getReferrals({
       Message: {
         Error: {
-          Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
+          Title: t('MSG_GET_REFERRALS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }
       }
+    }, () => {
+      // TODO
     })
   }
 })
-
-const onAddNewAddressClick = () => {
-  // TODO
-}
 
 </script>
 

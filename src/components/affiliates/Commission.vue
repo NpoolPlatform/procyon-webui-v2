@@ -3,10 +3,10 @@
   <div class='earnings-summary'>
     <div class='earnings-figure'>
       <span class='amount'>{{ commission.Total.toFixed(4) }}</span>
-      <span class='unit'>USDT</span>
+      <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
-        {{ $t('MSG_TOTAL_COMMISSION') }} (USDT)
+        {{ $t('MSG_TOTAL_COMMISSION') }} ({{ PriceCoinName }})
       </h4>
     </div>
     <div class='earnings-figure'>
@@ -25,7 +25,8 @@ import {
   Currency,
   useCurrencyStore,
   NotificationType,
-  useBenefitStore
+  useBenefitStore,
+  PriceCoinName
 } from 'npool-cli-v2'
 import { onMounted, ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
