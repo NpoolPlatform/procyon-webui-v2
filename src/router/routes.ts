@@ -227,6 +227,32 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: true,
           ShowSideMenu: false
         }
+      }, {
+        path: 'enable/google',
+        component: () => import('pages/EnableGoogle.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
+        path: 'verify/google',
+        component: () => import('pages/VerifyGoogle.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
       }
     ]
   },

@@ -62,7 +62,9 @@
           <span>{{ $t('MSG_VERIFIED') }}</span>
         </div>
         <q-space />
-        <button>{{ $t('MSG_ENABLE_2FA_AUTH') }}</button>
+        <button @click='onEnableGoogleClick'>
+          {{ $t('MSG_ENABLE_2FA_AUTH') }}
+        </button>
       </div>
       <div class='setting-box column'>
         <div class='settings-box-heading'>
@@ -136,6 +138,10 @@ const onUpdateEmailClick = () => {
 
 const onUpdateMobileClick = () => {
   void router.push({ path: '/update/mobile' })
+}
+
+const onEnableGoogleClick = () => {
+  void router.push({ path: '/enable/google' })
 }
 
 const onGoogleSignClick = () => {
