@@ -18,7 +18,7 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { useOrderStore, buildOrders, OrderGroup, OrderModel, useGoodStore, formatTime, NotificationType } from 'npool-cli-v2'
+import { useOrderStore, buildOrders, OrderGroup, OrderModel, useGoodStore, formatTime, NotificationType, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
@@ -55,7 +55,7 @@ const table = computed(() => [
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: OrderModel) => good.getGoodByID(row.GoodID) ? good.getGoodPrice(good.getGoodByID(row.GoodID)).toString() + ' USDT' : 'NaN'
+    field: (row: OrderModel) => good.getGoodByID(row.GoodID) ? good.getGoodPrice(good.getGoodByID(row.GoodID)).toString() + ' ' + PriceCoinName : 'NaN'
   },
   {
     name: 'TechFee',

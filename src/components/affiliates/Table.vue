@@ -23,10 +23,10 @@
           </div>
         </q-td>
         <q-td key='TotalPayment' :props='myProps'>
-          {{ myProps.row.USDAmount.toFixed(4) + ' USDT' }}
+          {{ myProps.row.USDAmount.toFixed(4) }} {{ PriceCoinName }}
         </q-td>
         <q-td key='ReferralValue' :props='myProps'>
-          {{ myProps.row.SubUSDAmount.toFixed(4) + ' USDT' }}
+          {{ myProps.row.SubUSDAmount.toFixed(4) }} {{ PriceCoinName }}
         </q-td>
       </q-tr>
     </template>

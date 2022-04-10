@@ -23,7 +23,7 @@
             <span class='sales-number'>{{ summary.Units }}</span>
             <span> {{ summary.Unit }} / </span>
             <span class='sales-number'>{{ Math.floor(summary.Amount) }}</span>
-            <span> USDT</span>
+            <span> {{ PriceCoinName }}</span>
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, ref } from 'vue'
-import { NotificationType, useInspireStore, buildReferralTree, useLoginedUserStore } from 'npool-cli-v2'
+import { NotificationType, useInspireStore, buildReferralTree, useLoginedUserStore, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
