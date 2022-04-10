@@ -3,7 +3,7 @@
   <q-tree
     v-if='referralTree'
     :nodes='referralTree'
-    node-key='Referral.User.ID'
+    node-key='UserID'
     default-expand-all
     :expanded='[logined.LoginedUser?.User.ID]'
   >
@@ -29,7 +29,7 @@
             </div>
           </div>
         </div>
-        <q-inner-loading dark :showing='innerLoading' v-if='logined.LoginedUser?.User.ID === props.node.Referral.User.ID'>
+        <q-inner-loading dark :showing='innerLoading' v-if='logined.LoginedUser?.User.ID === props.node.UserID'>
           <q-spinner-gears size='50px' color='primary' />
         </q-inner-loading>
       </div>
