@@ -125,7 +125,7 @@ const onSubmit = () => {
       }
     }
   }, () => {
-    void router.push({ path: '/signin' })
+    void router.push({ path: '/dashboard' })
   })
 
   return false
