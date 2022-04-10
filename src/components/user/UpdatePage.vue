@@ -19,9 +19,7 @@
         @focus='onVerificationCodeFocusIn'
         @blur='onVerificationCodeFocusOut'
       />
-      <q-btn class='send-code alt' @click='onSendCodeClick'>
-        {{ $t('MSG_SEND_CODE') }}
-      </q-btn>
+      <TimeoutSendBtn :initial-clicked='true' @click='onSendCodeClick' />
       <slot name='body' />
     </template>
   </FormPage>
@@ -59,6 +57,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
 
 const myVerificationCode = ref(verificationCode.value)
 const myVerificationCodeError = ref(verificationCodeError.value)

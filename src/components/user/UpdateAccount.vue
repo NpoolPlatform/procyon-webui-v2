@@ -38,9 +38,7 @@
         @focus='onEmailFocusIn'
         @blur='onEmailFocusOut'
       />
-      <q-btn class='send-code alt' @click='onSendCodeClick'>
-        {{ $t('MSG_SEND_CODE') }}
-      </q-btn>
+      <TimeoutSendBtn :initial-clicked='false' @click='onSendCodeClick' />
       <Input
         v-model:value='myVerificationCode'
         :label='accountType === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
@@ -86,6 +84,7 @@ const { t } = useI18n({ useScope: 'global' })
 const UpdatePage = defineAsyncComponent(() => import('src/components/user/UpdatePage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
+const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
 
 const oldAccount = ref('')
 const oldAccountType = ref(AccountType.Email)
@@ -167,7 +166,8 @@ const onSubmit = () => {
 }
 
 const onSendCodeClick = () => {
-  if (!account.value?.length) {
+  accountError.value = !account.value?.length
+  if (accountError.value) {
     return
   }
 
