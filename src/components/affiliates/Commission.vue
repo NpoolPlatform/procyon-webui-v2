@@ -1,5 +1,5 @@
 <template>
-  <h2>{{ $t('MSG_EARNINGS') }}</h2>
+  <h2>{{ $t('MSG_COMMISSION') }}</h2>
   <div class='earnings-summary'>
     <div class='earnings-figure'>
       <span class='amount'>{{ commission.Total.toFixed(4) }}</span>

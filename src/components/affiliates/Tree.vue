@@ -7,30 +7,32 @@
     default-expand-all
     :expanded='[logined.LoginedUser?.User.ID]'
   >
-    <template #default-header='prop'>
-      <div class='content-glass'>
-        <div class='invitation-header referral row'>
-          <h3>
-            {{ prop.node.Referral.Extra ? prop.node.Referral.Extra.Username : prop.node.Referral.User?.EmailAddress }}
-          </h3>
-          <q-space />
-          <span class='onboard'>{{ $t('MSG_ONBOARD') }}</span>
-          <span class='invited-count'>{{ prop.node.Referral.InvitedCount }}</span>
-        </div>
-        <span class='username'>{{ prop.node.Referral.User?.EmailAddress }}</span>
-        <div class='invitation-content'>
-          <div v-for='summary in prop.node.Referral.Summaries' :key='summary.CoinTypeID'>
-            <span>{{ summary.CoinName }}: </span>
-            <span class='sales-number'>{{ summary.Units }}</span>
-            <span> {{ summary.Unit }} / </span>
-            <span class='sales-number'>{{ Math.floor(summary.Amount) }}</span>
-            <span> {{ PriceCoinName }}</span>
+    <template #default-header='props'>
+      <div v-if='props.node.Referral.Kol'>
+        <div class='content-glass'>
+          <div class='invitation-header referral row'>
+            <h3>
+              {{ props.node.Referral.Extra ? props.node.Referral.Extra.Username : props.node.Referral.User?.EmailAddress }}
+            </h3>
+            <q-space />
+            <span class='onboard'>{{ $t('MSG_ONBOARD') }}</span>
+            <span class='invited-count'>{{ props.node.Referral.InvitedCount }}</span>
+          </div>
+          <span class='username'>{{ props.node.Referral.User?.EmailAddress }}</span>
+          <div class='invitation-content'>
+            <div v-for='summary in props.node.Referral.Summaries' :key='summary.CoinTypeID'>
+              <span>{{ summary.CoinName }}: </span>
+              <span class='sales-number'>{{ summary.Units }}</span>
+              <span> {{ summary.Unit }} / </span>
+              <span class='sales-number'>{{ Math.floor(summary.Amount) }}</span>
+              <span> {{ PriceCoinName }}</span>
+            </div>
           </div>
         </div>
+        <q-inner-loading dark :showing='innerLoading' v-if='logined.LoginedUser?.User.ID === props.node.Referral.User.ID'>
+          <q-spinner-gears size='50px' color='primary' />
+        </q-inner-loading>
       </div>
-      <q-inner-loading dark :showing='innerLoading' v-if='logined.LoginedUser?.User.ID === prop.node.Referral.User.ID'>
-        <q-spinner-gears size='50px' color='primary' />
-      </q-inner-loading>
     </template>
   </q-tree>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <ShowSwitchTable
     label='MSG_DIRECT_AFFILIATES'
-    :rows='(referrels as Array<never>)'
+    :rows='(referrals as Array<never>)'
     :table='(table as never)'
     :customize-body='true'
   >
@@ -35,7 +35,7 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, formatTime, Referral, useInspireStore, PriceCoinName } from 'npool-cli-v2'
+import { NotificationType, formatTime, Referral, useInspireStore, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
@@ -43,9 +43,8 @@ const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const coin = useCoinStore()
 const inspire = useInspireStore()
-const referrels = computed(() => inspire.Referrals)
+const referrals = computed(() => inspire.Referrals)
 
 const table = computed(() => [
   {
@@ -81,21 +80,7 @@ const table = computed(() => [
 ])
 
 onMounted(() => {
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-
-  if (referrels.value.length === 0) {
+  if (referrals.value.length === 0) {
     inspire.getReferrals({
       Message: {
         Error: {
