@@ -188,6 +188,19 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: true,
           ShowSideMenu: false
         }
+      }, {
+        path: 'update/password',
+        component: () => import('pages/UpdatePassword.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
       }
     ]
   },

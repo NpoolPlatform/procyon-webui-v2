@@ -1,5 +1,5 @@
 <template>
-  <FormPage @submit='onSubmit' :label='$t(label)'>
+  <FormPage @submit='onSubmit' :label='label' :submit-text='submitText'>
     <template #top-right>
       <div class='switcher' @click='onSwitcherClick'>
         <q-icon
@@ -47,7 +47,8 @@
         @blur='onPasswordFocusOut'
       />
       <slot name='append-password' />
-      <input type='submit' :value='$t(submitText)' class='register'>
+    </template>
+    <template #append-submit>
       <slot name='append-submit' />
     </template>
   </FormPage>

@@ -11,7 +11,9 @@
         </div>
         <p>{{ $t('MSG_CHANGE_PASSWORD_TIP') }}</p>
         <q-space />
-        <button>{{ $t('MSG_CHANGE_PASSWORD') }}</button>
+        <button @click='onChangePasswordClick'>
+          {{ $t('MSG_CHANGE_PASSWORD') }}
+        </button>
       </div>
       <div class='setting-box column'>
         <div class='settings-box-heading'>
@@ -99,6 +101,7 @@
 </template>
 
 <script setup lang='ts'>
+import { useRouter } from 'vue-router'
 
 import lock from 'src/assets/lock.svg'
 import mail from 'src/assets/mail.svg'
@@ -108,5 +111,11 @@ import shieldHalf from 'src/assets/shield-half.svg'
 import shieldSolid from 'src/assets/shield-solid.svg'
 import circleDot from 'src/assets/circle-dot.svg'
 import id from 'src/assets/id.svg'
+
+const router = useRouter()
+
+const onChangePasswordClick = () => {
+  void router.push({ path: '/update/password' })
+}
 
 </script>
