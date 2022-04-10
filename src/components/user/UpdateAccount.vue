@@ -192,7 +192,7 @@ const onSendCodeClick = () => {
       coderepo.sendSMSCode({
         LangID: lang.CurLang?.ID as string,
         PhoneNO: account.value,
-        UsedFor: MessageUsedFor.Signup,
+        UsedFor: MessageUsedFor.Update,
         Message: {
           Error: {
             Title: t('MSG_SEND_SMS_CODE'),
