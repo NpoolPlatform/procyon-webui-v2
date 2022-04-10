@@ -20,6 +20,7 @@ const timeout = ref(60)
 
 const startTimer = () => {
   timeout.value = 60
+  disabled.value = true
   ticker.value = window.setInterval(() => {
     timeout.value -= 1
     if (timeout.value <= 0) {
