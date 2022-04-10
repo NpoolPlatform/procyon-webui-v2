@@ -72,11 +72,11 @@
           </h3>
         </div>
         <p>{{ $t('MSG_LOGIN_AUTHENTICATION_TIP') }}</p>
-        <div class='verification'>
+        <div class='verification option' @click='onGoogleSignClick'>
           <img :src='circleDot' :class='[ logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication ? "verified" : "" ]'>
           <span>{{ $t('MSG_GOOGLE_LOGIN_AUTHENTICATION') }}</span>
         </div>
-        <div class='verification'>
+        <div class='verification option' @click='onEmailSignClick'>
           <img :src='circleDot' :class='[ !logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication ? "verified" : "" ]'>
           <span>{{ $t('MSG_EMAIL_LOGIN_AUTHENTICATION') }}</span>
         </div>
@@ -106,7 +106,8 @@
 
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
-import { useLoginedUserStore } from 'npool-cli-v2'
+import { useLoginedUserStore, useUserStore, NotificationType } from 'npool-cli-v2'
+import { useI18n } from 'vue-i18n'
 
 import lock from 'src/assets/lock.svg'
 import mail from 'src/assets/mail.svg'
@@ -117,7 +118,11 @@ import shieldSolid from 'src/assets/shield-solid.svg'
 import circleDot from 'src/assets/circle-dot.svg'
 import id from 'src/assets/id.svg'
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
+
 const logined = useLoginedUserStore()
+const user = useUserStore()
 
 const router = useRouter()
 
@@ -133,4 +138,49 @@ const onUpdateMobileClick = () => {
   void router.push({ path: '/update/mobile' })
 }
 
+const onGoogleSignClick = () => {
+  if (!logined.LoginedUser?.Ctrl || !logined.LoginedUser.Ctrl.GoogleAuthenticationVerified) {
+    return
+  }
+
+  logined.LoginedUser.Ctrl.SigninVerifyByGoogleAuthentication = true
+  user.updateCtrl({
+    Info: logined.LoginedUser.Ctrl,
+    Message: {
+      Error: {
+        Title: t('MSG_UPDATE_USER_CONTROL_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    void router.back()
+  })
+}
+
+const onEmailSignClick = () => {
+  if (!logined.LoginedUser?.Ctrl || !logined.LoginedUser.Ctrl.GoogleAuthenticationVerified) {
+    return
+  }
+
+  logined.LoginedUser.Ctrl.SigninVerifyByGoogleAuthentication = false
+  user.updateCtrl({
+    Info: logined.LoginedUser.Ctrl,
+    Message: {
+      Error: {
+        Title: t('MSG_UPDATE_USER_CONTROL_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    void router.back()
+  })
+}
+
 </script>
+
+<style lang='sass' scoped>
+.option
+  cursor: pointer
+</style>
