@@ -6,7 +6,7 @@
     :customize-body='true'
   >
     <template #table-body='myProps'>
-      <q-tr :props='myProps' v-if='!myProps.row.Kol'>
+      <q-tr :props='myProps'>
         <q-td key='Name' :props='myProps'>
           {{ myProps.row.User.EmailAddress.length > 0 ? myProps.row.User.EmailAddress : myProps.row.User.PhoneNO }}
         </q-td>
@@ -44,7 +44,7 @@ const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/
 const { t } = useI18n({ useScope: 'global' })
 
 const inspire = useInspireStore()
-const referrals = computed(() => inspire.Referrals)
+const referrals = computed(() => inspire.Referrals.filter((referral) => !referral.Kol))
 
 const table = computed(() => [
   {

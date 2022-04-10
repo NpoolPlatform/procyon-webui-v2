@@ -9,6 +9,7 @@
         <li
           v-if='showMenu(menu)'
           @click='onMenuSwitch(menu)'
+          :class='[ menuId === menu.menuId ? "selected" : "" ]'
         >
           <q-icon :name='menu.icon' class='img' />
           <span>{{ $t(menu.label) }}</span>
@@ -22,11 +23,11 @@
 import { useSettingStore } from '../../store/setting'
 import { useRouter } from 'vue-router'
 import { BaseMenu, MenuItem } from 'src/menus/menus'
-import { onMounted } from 'vue'
-
-import lightLogo from '../../assets/procyon-light.svg'
+import { onMounted, ref } from 'vue'
 import { useInspireStore, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+
+import lightLogo from '../../assets/procyon-light.svg'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -46,7 +47,10 @@ const showMenu = (menu: MenuItem) => {
   return true
 }
 
+const menuId = ref('')
+
 const onMenuSwitch = (menu: MenuItem) => {
+  menuId.value = menu.menuId
   void router.push({ path: menu.target })
 }
 

@@ -14,11 +14,9 @@
       class='table-box'
       :rows='displayRows'
       :columns='table'
-      row-key='ID'
       color='#e1eeef'
       hide-pagination
       :no-data-label='$t("NoData")'
-      :rows-per-page-options='[countPerPage]'
       @row-click='(evt, row, index) => onRowClick(row as never)'
     >
       <template v-if='customizeBody' #body='myProps'>
@@ -62,7 +60,7 @@ const countPerPage = toRef(props, 'countPerPage')
 const customizeBody = toRef(props, 'customizeBody')
 
 const page = ref(1)
-const pages = computed(() => rows.value.length / countPerPage.value + rows.value.length % countPerPage.value ? 1 : 0)
+const pages = computed(() => Math.ceil(rows.value.length / countPerPage.value))
 
 const displayRows = computed(() => rows.value.filter((_, index) => index >= countPerPage.value * (page.value - 1) && index < countPerPage.value * page.value))
 
