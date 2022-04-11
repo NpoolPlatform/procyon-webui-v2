@@ -253,6 +253,19 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: true,
           ShowSideMenu: false
         }
+      }, {
+        path: 'add/address',
+        component: () => import('pages/AddAddress.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
       }
     ]
   },

@@ -43,6 +43,7 @@
 import { computed, onMounted, defineAsyncComponent } from 'vue'
 import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -115,8 +116,10 @@ onMounted(() => {
   }
 })
 
+const router = useRouter()
+
 const onAddNewAddressClick = () => {
-  // TODO
+  void router.push({ path: '/add/address' })
 }
 
 </script>

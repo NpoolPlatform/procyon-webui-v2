@@ -1,5 +1,10 @@
 <template>
-  <label :for='id'>{{ $t(label) }}</label>
+  <div>
+    <label :for='id'>{{ $t(label) }}</label>
+  </div>
+  <div>
+    <span class='caption' v-if='caption'>({{ $t(caption) }})</span>
+  </div>
   <input
     :type='type'
     :id='id'
@@ -29,6 +34,7 @@ interface Props {
   error: boolean
   message: string
   placeholder: string
+  caption?: string
 }
 
 const props = defineProps<Props>()
@@ -41,6 +47,7 @@ const error = toRef(props, 'error')
 const message = toRef(props, 'message')
 const placeholder = toRef(props, 'placeholder')
 const value = toRef(props, 'value')
+const caption = toRef(props, 'caption')
 
 const myValue = ref(value.value)
 
@@ -65,4 +72,7 @@ const onBlur = () => {
 <style lang='sass' scoped>
 input
   margin: 8px 0 4px 0
+
+.caption
+  font-size: 12px
 </style>
