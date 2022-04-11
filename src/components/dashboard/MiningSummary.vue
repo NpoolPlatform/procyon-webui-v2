@@ -2,7 +2,7 @@
   <h2>{{ $t('MSG_EARNINGS') }}</h2>
   <div class='earnings-summary'>
     <div class='earnings-figure'>
-      <span class='amount'>{{ totalEarning }}</span>
+      <span class='amount'>{{ totalEarning.toFixed(4) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -10,7 +10,7 @@
       </h4>
     </div>
     <div class='earnings-figure'>
-      <span class='amount'>{{ last24HoursEarning }}</span>
+      <span class='amount'>{{ last24HoursEarning.toFixed(4) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -18,7 +18,7 @@
       </h4>
     </div>
     <div class='earnings-figure'>
-      <span class='amount'>{{ totalWithdrawed }}</span>
+      <span class='amount'>{{ (totalEarning - totalWithdrawed).toFixed(4) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
