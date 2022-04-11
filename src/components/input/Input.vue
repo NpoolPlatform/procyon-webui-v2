@@ -27,7 +27,7 @@
 import { defineProps, toRef, defineEmits, watch, ref } from 'vue'
 
 interface Props {
-  value: string
+  value: string | number
   label?: string
   type: string
   name?: string
@@ -55,7 +55,7 @@ const caption = toRef(props, 'caption')
 
 const myValue = ref(value.value)
 
-const emit = defineEmits<{(e: 'update:value', value: string): void,
+const emit = defineEmits<{(e: 'update:value', value: string | number): void,
   (e: 'focus'): void,
   (e: 'blur'): void
 }>()
@@ -78,5 +78,8 @@ input
   margin: 8px 0 4px 0
 
 .caption
+  font-size: 12px
+
+.error-message span
   font-size: 12px
 </style>

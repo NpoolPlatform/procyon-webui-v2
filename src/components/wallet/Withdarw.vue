@@ -50,26 +50,8 @@
               </div>
             </div>
             <input type='submit' value='Withdraw' class='submit' @click='onSubmit'>
-            <h3>Guide &amp; FAQ</h3>
-            <h4>How can I withdraw my assets?</h4>
-            <ul>
-              <li>Enter the amount you would like to transfer and select the address you would like to transfer to.</li>
-              <li>To add another address, please see the <a href=''>Dashboard page</a>.</li>
-              <li><strong>Entering an invalid address will result in the permanent loss of your funds.</strong></li>
-            </ul>
-
-            <h4>How long does a transaction take?</h4>
-            <ul>
-              <li>For small amounts (as determined by the network) the transaction is approved automatically and should take a few minutes but <strong>can take a much as 24 hours</strong>, depending on network congestion and gas fees.</li>
-              <li><strong>Large amounts (as determined by the network) will require manual processing</strong>, which takes up to 24 hours or more depending on the amount of transactions at the moment.</li>
-            </ul>
-
-            <h4>Where can I get a Spacemesh wallet?</h4>
-            <ul>
-              <li>Spacemesh will listed on big exchanges such as Coinbase and Binance.</li>
-              <li>Be sure to <strong>use a Spacemesh wallet address</strong> to transfer your funds.</li>
-              <li>Using an incorrect address will <strong>result in a loss of your SMH!</strong></li>
-            </ul>
+            <h3>{{ $t('MSG_GUIDE_AND_FAQ') }}</h3>
+            <p v-html='$t("MSG_WITHDRAW_GUIDE_AND_FAQ_CONTENT")' />
           </div>
         </div>
       </div>
@@ -91,6 +73,7 @@
       />
     </div>
   </q-dialog>
+  <Balance :display='false' />
 </template>
 
 <script setup lang='ts'>
@@ -112,6 +95,8 @@ import checkmark from 'src/assets/icon-checkmark.svg'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
+const Balance = defineAsyncComponent(() => import('src/components/wallet/Balance.vue'))
+const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -144,7 +129,7 @@ const earning = ref(0)
 const withdrawedEarning = ref(0)
 
 const onSubmit = () => {
-  amountError.value = amount.value > 0 && amount.value <= earning.value - withdrawedEarning.value
+  amountError.value = !amount.value || amount.value >= (earning.value - withdrawedEarning.value)
   if (amountError.value) {
     return
   }

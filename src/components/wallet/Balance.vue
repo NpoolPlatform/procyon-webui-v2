@@ -1,21 +1,23 @@
 <template>
-  <h2>{{ $t('MSG_EARNINGS') }}</h2>
-  <div class='earnings-summary'>
-    <div class='earnings-figure'>
-      <span class='amount'>{{ (_totalEarningUSD - totalWithdrawedUSD).toFixed(4) }}</span>
-      <span class='unit'>{{ PriceCoinName }}</span>
-      <div class='hr' />
-      <h4 class='description'>
-        {{ $t('MSG_CURRENT_BALANCE') }} ({{ PriceCoinName }})
-      </h4>
-    </div>
-    <div class='earnings-figure'>
-      <span class='amount'>{{ (totalEarningJPY - totalWithdrawedJPY).toFixed(4) }}</span>
-      <span class='unit'>JPY</span>
-      <div class='hr' />
-      <h4 class='description'>
-        {{ $t('MSG_CURRENT_BALANCE') }} (JPY)
-      </h4>
+  <div v-if='!hidden'>
+    <h2>{{ $t('MSG_EARNINGS') }}</h2>
+    <div class='earnings-summary'>
+      <div class='earnings-figure'>
+        <span class='amount'>{{ (_totalEarningUSD - totalWithdrawedUSD).toFixed(4) }}</span>
+        <span class='unit'>{{ PriceCoinName }}</span>
+        <div class='hr' />
+        <h4 class='description'>
+          {{ $t('MSG_CURRENT_BALANCE') }} ({{ PriceCoinName }})
+        </h4>
+      </div>
+      <div class='earnings-figure'>
+        <span class='amount'>{{ (totalEarningJPY - totalWithdrawedJPY).toFixed(4) }}</span>
+        <span class='unit'>JPY</span>
+        <div class='hr' />
+        <h4 class='description'>
+          {{ $t('MSG_CURRENT_BALANCE') }} (JPY)
+        </h4>
+      </div>
     </div>
   </div>
 </template>
@@ -35,8 +37,15 @@ import {
   useGoodStore,
   useBenefitStore
 } from 'npool-cli-v2'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, defineProps, toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+interface Props {
+  hidden?: boolean
+}
+
+const props = defineProps<Props>()
+const hidden = toRef(props, 'hidden')
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
