@@ -12,6 +12,8 @@
     :required='required'
     :placeholder='$t(placeholder)'
     :class='[ error ? "error" : "" ]'
+    :max='max'
+    :min='min'
     v-model='myValue'
     @focus='onFocus'
     @blur='onBlur'
@@ -35,6 +37,8 @@ interface Props {
   message: string
   placeholder: string
   caption?: string
+  max?: number
+  min?: number
 }
 
 const props = defineProps<Props>()
