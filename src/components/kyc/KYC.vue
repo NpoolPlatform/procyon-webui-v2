@@ -12,12 +12,12 @@
     <div class='content-glass kyc-documents'>
       <div class='document-select'>
         <h4>{{ $t('MSG_DOCUMENT_TYPE') }}</h4>
-        <select :name='$t("MSG_DOCUMENT_TYPE")' :disabled='!updatable'>
+        <select :name='$t("MSG_DOCUMENT_TYPE")' :disabled='!updatable' v-model='selectedType'>
           <option
             v-for='myType in types'
             :key='myType.value'
             :value='myType'
-            :selected='selectedType === myType.value'
+            :selected='selectedType.value === myType.value'
           >
             {{ myType.label }}
           </option>
@@ -28,12 +28,16 @@
           <img :src='kycIDFront'>
           <span>{{ $t('MSG_UPLOAD') }}</span>
         </div>
-        <div class='kyc-instructions'>
+        <div v-if='selectedType.value === DocumentType.IDCard' class='kyc-instructions'>
           <h4>{{ $t('MSG_ID_FRONT') }}</h4>
           <p class='kyc-note' v-html='$t("MSG_ID_FRONT_TIP")' />
         </div>
+        <div v-else class='kyc-instructions'>
+          <h4>{{ $t('MSG_PASSPORT_FRONT') }}</h4>
+          <p class='kyc-note' v-html='$t("MSG_PASSPORT_FRONT_TIP")' />
+        </div>
       </div>
-      <div class='kyc-upload'>
+      <div v-if='selectedType.value === DocumentType.IDCard' class='kyc-upload'>
         <div class='kyc-image'>
           <img :src='kycIDBack'>
           <span>{{ $t('MSG_UPLOAD') }}</span>
@@ -48,9 +52,13 @@
           <img :src='kycSelfieID'>
           <span>{{ $t('MSG_UPLOAD') }}</span>
         </div>
-        <div class='kyc-instructions'>
+        <div v-if='selectedType.value === DocumentType.IDCard' class='kyc-instructions'>
           <h4>{{ $t('MSG_SELFIE_ID') }}</h4>
           <p class='kyc-note' v-html='$t("MSG_SELFID_ID_TIP")' />
+        </div>
+        <div v-else class='kyc-instructions'>
+          <h4>{{ $t('MSG_PASSPORT_SELFID') }}</h4>
+          <p class='kyc-note' v-html='$t("MSG_PASSPORT_SELFID_TIP")' />
         </div>
       </div>
       <div class='hr' />
@@ -128,7 +136,7 @@ const types = ref([
     value: DocumentType.Passport
   } as DocTypeItem
 ])
-const selectedType = ref(DocumentType.IDCard)
+const selectedType = ref(types.value[0])
 
 onMounted(() => {
   kyc.getKYC({
