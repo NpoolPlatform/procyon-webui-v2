@@ -45,7 +45,8 @@ import {
   useCoinStore,
   useCurrencyStore,
   Currency,
-  BenefitModel
+  BenefitModel,
+  totalWithdrawedEarningCoin
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -70,18 +71,29 @@ const exBenefits = computed(() => {
   const myBenefits = [] as Array<MyBenefit>
 
   benefits.value.forEach((benefit: BenefitModel) => {
-    currencies.getCoinCurrency(coin.getCoinByID(benefit.CoinTypeID), Currency.USD, (currency: number) => {
-      const myBenefit = {
-        CoinTypeID: benefit.CoinTypeID,
-        Balance: benefit.Balance,
-        Total: benefit.Total,
-        Units: benefit.Units,
-        Last24Hours: benefit.Last24Hours,
-        USDValue: benefit.Total * currency
-      } as MyBenefit
-      currencies.getCoinCurrency(coin.getCoinByID(benefit.CoinTypeID), Currency.JPY, (currency: number) => {
-        myBenefit.JPYValue = benefit.Total * currency
-        myBenefits.push(myBenefit)
+    const myBenefit = {
+      CoinTypeID: benefit.CoinTypeID,
+      Balance: benefit.Balance,
+      Total: benefit.Total,
+      Units: benefit.Units,
+      Last24Hours: benefit.Last24Hours
+    } as MyBenefit
+    currencies.getCoinCurrency(coin.getCoinByID(benefit.CoinTypeID), Currency.USD, (usdCurrency: number) => {
+      currencies.getCoinCurrency(coin.getCoinByID(benefit.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
+        totalWithdrawedEarningCoin(benefit.CoinTypeID, (amount: number) => {
+          for (let i = 0; i < myBenefits.length; i++) {
+            if (myBenefits[i].CoinTypeID === benefit.CoinTypeID) {
+              myBenefits[i].Total = benefit.Total - amount
+              myBenefits[i].USDValue = myBenefits[i].Total * usdCurrency
+              myBenefits[i].JPYValue = myBenefits[i].Total * jpyCurrency
+              return
+            }
+          }
+          myBenefit.Total = benefit.Total - amount
+          myBenefit.USDValue = myBenefit.Total * usdCurrency
+          myBenefit.JPYValue = myBenefit.Total * jpyCurrency
+          myBenefits.push(myBenefit)
+        })
       })
     })
   })
