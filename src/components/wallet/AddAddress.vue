@@ -55,6 +55,7 @@
 import { Coin, useAccountStore, MessageUsedFor, AccountType, NotificationType } from 'npool-cli-v2'
 import { ref, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
@@ -93,6 +94,8 @@ const onMenuHide = () => {
 const account = ref('')
 const accountType = ref(AccountType.Email)
 
+const router = useRouter()
+
 const onCodeVerify = (code: string) => {
   console.log(code, selectedCoin, address, account, accountType)
 
@@ -114,7 +117,7 @@ const onCodeVerify = (code: string) => {
       }
     }
   }, () => {
-    // TODO
+    void router.back()
   })
   verifing.value = false
 }
