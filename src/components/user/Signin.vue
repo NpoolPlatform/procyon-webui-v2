@@ -1,26 +1,28 @@
 <template>
-  <SignPage
-    v-model:account='account'
-    v-model:account-type='accountType'
-    v-model:password='password'
-    v-model:accountError='accountError'
-    @submit='onSubmit'
-    label='MSG_USER_LOGIN'
-    submit-text='MSG_SIGNIN'
-  >
-    <template #append-submit>
-      <div class='row'>
-        <p class='skip-registration'>
-          <a href='#/reset/password'>{{ $t('MSG_FORGOT_PASSWORD') }}?</a>
-        </p>
-        <q-space />
-        <p class='skip-registration'>
-          <span class='no-account'>{{ $t('MSG_NO_ACCOUNT') }}? </span>
-          <a href='#/registration'>{{ $t('MSG_REGISTER_NOW') }}.</a>
-        </p>
-      </div>
-    </template>
-  </SignPage>
+  <div :class='[ verifing ? "blur" : "" ]'>
+    <SignPage
+      v-model:account='account'
+      v-model:account-type='accountType'
+      v-model:password='password'
+      v-model:accountError='accountError'
+      @submit='onSubmit'
+      label='MSG_USER_LOGIN'
+      submit-text='MSG_SIGNIN'
+    >
+      <template #append-submit>
+        <div class='row'>
+          <p class='skip-registration'>
+            <a href='#/reset/password'>{{ $t('MSG_FORGOT_PASSWORD') }}?</a>
+          </p>
+          <q-space />
+          <p class='skip-registration'>
+            <span class='no-account'>{{ $t('MSG_NO_ACCOUNT') }}? </span>
+            <a href='#/registration'>{{ $t('MSG_REGISTER_NOW') }}.</a>
+          </p>
+        </div>
+      </template>
+    </SignPage>
+  </div>
   <q-dialog
     v-model='verifing'
     seamless
