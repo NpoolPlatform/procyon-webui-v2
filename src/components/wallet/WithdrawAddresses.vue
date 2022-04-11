@@ -30,7 +30,7 @@
           {{ formatTime(myProps.row.Address.CreateAt) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps'>
-          <button class='small'>
+          <button class='small' @click='onRemove(myProps.row)'>
             {{ $t('MSG_REMOVE') }}
           </button>
         </q-td>
@@ -120,6 +120,19 @@ const router = useRouter()
 
 const onAddNewAddressClick = () => {
   void router.push({ path: '/add/address' })
+}
+
+const onRemove = (address: WithdrawAccount) => {
+  account.deleteWithdrawAddress({
+    ID: address.Address.ID,
+    Message: {
+      Error: {
+        Title: t('MSG_DELETE_WITHDRAW_ACCOUNT_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  })
 }
 
 </script>
