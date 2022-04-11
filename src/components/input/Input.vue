@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div v-if='label?.length'>
     <label :for='id'>{{ $t(label) }}</label>
   </div>
-  <div>
-    <span class='caption' v-if='caption'>({{ $t(caption) }})</span>
+  <div v-if='caption?.length'>
+    <span class='caption'>({{ $t(caption) }})</span>
   </div>
   <input
     :type='type'
@@ -26,7 +26,7 @@ import { defineProps, toRef, defineEmits, watch, ref } from 'vue'
 
 interface Props {
   value: string
-  label: string
+  label?: string
   type: string
   name?: string
   id: string

@@ -30,13 +30,10 @@ import {
   AccountType,
   MessageUsedFor,
   useCodeRepoStore,
-  useLangStore,
   useLoginedUserStore,
-  validateVerificationCode,
-  NotificationType
+  validateVerificationCode
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 interface Props {
   label: string
@@ -52,9 +49,6 @@ const label = toRef(props, 'label')
 const verificationCode = toRef(props, 'verificationCode')
 const verificationCodeError = toRef(props, 'verificationCodeError')
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
@@ -69,46 +63,12 @@ const onVerificationCodeFocusOut = () => {
 }
 
 const coderepo = useCodeRepoStore()
-const lang = useLangStore()
 
 const onSendCodeClick = () => {
   if (!myAccount.value?.length) {
     return
   }
-
-  switch (myAccountType.value) {
-    case AccountType.Email:
-      coderepo.sendEmailCode({
-        LangID: lang.CurLang?.ID as string,
-        EmailAddress: myAccount.value,
-        UsedFor: MessageUsedFor.Update,
-        ToUsername: myAccount.value,
-        Message: {
-          Error: {
-            Title: t('MSG_SEND_EMAIL_CODE'),
-            Message: t('MSG_SEND_EMAIL_CODE_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      })
-      break
-    case AccountType.Mobile:
-      coderepo.sendSMSCode({
-        LangID: lang.CurLang?.ID as string,
-        PhoneNO: myAccount.value,
-        UsedFor: MessageUsedFor.Update,
-        Message: {
-          Error: {
-            Title: t('MSG_SEND_SMS_CODE'),
-            Message: t('MSG_SEND_SMS_CODE_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      })
-      break
-  }
+  coderepo.sendVerificationCode(myAccount.value, myAccountType.value, MessageUsedFor.Update, myAccount.value)
 }
 
 const logined = useLoginedUserStore()

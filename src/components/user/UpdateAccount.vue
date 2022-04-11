@@ -62,7 +62,6 @@ import {
   validateMobileNO,
   validateVerificationCode,
   useCodeRepoStore,
-  useLangStore,
   MessageUsedFor,
   NotificationType,
   useUserStore
@@ -130,7 +129,6 @@ const onVerificationCodeFocusOut = () => {
 }
 
 const coderepo = useCodeRepoStore()
-const lang = useLangStore()
 const user = useUserStore()
 const router = useRouter()
 
@@ -188,40 +186,7 @@ const onSendCodeClick = () => {
   if (accountError.value) {
     return
   }
-
-  switch (accountType.value) {
-    case AccountType.Email:
-      coderepo.sendEmailCode({
-        LangID: lang.CurLang?.ID as string,
-        EmailAddress: account.value,
-        UsedFor: MessageUsedFor.Update,
-        ToUsername: account.value,
-        Message: {
-          Error: {
-            Title: t('MSG_SEND_EMAIL_CODE'),
-            Message: t('MSG_SEND_EMAIL_CODE_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      })
-      break
-    case AccountType.Mobile:
-      coderepo.sendSMSCode({
-        LangID: lang.CurLang?.ID as string,
-        PhoneNO: account.value,
-        UsedFor: MessageUsedFor.Update,
-        Message: {
-          Error: {
-            Title: t('MSG_SEND_SMS_CODE'),
-            Message: t('MSG_SEND_SMS_CODE_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      })
-      break
-  }
+  coderepo.sendVerificationCode(account.value, accountType.value, MessageUsedFor.Update, account.value)
 }
 
 </script>

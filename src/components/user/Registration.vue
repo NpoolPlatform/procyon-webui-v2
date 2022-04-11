@@ -77,7 +77,6 @@
 <script setup lang='ts'>
 import {
   useCodeRepoStore,
-  useLangStore,
   MessageUsedFor,
   NotificationType,
   validateVerificationCode,
@@ -98,7 +97,7 @@ const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'
 
 const accountError = ref(false)
 const account = ref('')
-const accountType = ref('')
+const accountType = ref(AccountType.Email)
 const password = ref('')
 
 const verificationCode = ref('')
@@ -134,7 +133,6 @@ const onAgreeFocusOut = () => {
 }
 
 const coderepo = useCodeRepoStore()
-const lang = useLangStore()
 const user = useUserStore()
 
 const router = useRouter()
@@ -144,40 +142,7 @@ const onSendCodeClick = () => {
   if (accountError.value) {
     return
   }
-
-  switch (accountType.value) {
-    case AccountType.Email:
-      coderepo.sendEmailCode({
-        LangID: lang.CurLang?.ID as string,
-        EmailAddress: account.value,
-        UsedFor: MessageUsedFor.Signup,
-        ToUsername: account.value,
-        Message: {
-          Error: {
-            Title: t('MSG_SEND_EMAIL_CODE'),
-            Message: t('MSG_SEND_EMAIL_CODE_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      })
-      break
-    case AccountType.Mobile:
-      coderepo.sendSMSCode({
-        LangID: lang.CurLang?.ID as string,
-        PhoneNO: account.value,
-        UsedFor: MessageUsedFor.Signup,
-        Message: {
-          Error: {
-            Title: t('MSG_SEND_SMS_CODE'),
-            Message: t('MSG_SEND_SMS_CODE_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      })
-      break
-  }
+  coderepo.sendVerificationCode(account.value, accountType.value, MessageUsedFor.Update, account.value)
 }
 
 const onSubmit = () => {
