@@ -25,7 +25,12 @@
       </div>
       <div class='kyc-upload'>
         <div class='kyc-image'>
-          <DragableImg v-model:src='srcFront' :placeholder='kycIDFront' v-model:selected='frontSelected' />
+          <DragableImg
+            v-model:src='srcFront'
+            :placeholder='kycIDFront'
+            v-model:selected='frontSelected'
+            :updatable='updatable'
+          />
           <span>{{ $t('MSG_UPLOAD') }}</span>
         </div>
         <div v-if='selectedType.value === DocumentType.IDCard' class='kyc-instructions'>
@@ -39,7 +44,12 @@
       </div>
       <div v-if='selectedType.value === DocumentType.IDCard' class='kyc-upload'>
         <div class='kyc-image'>
-          <DragableImg v-model:src='srcBack' :placeholder='kycIDBack' v-model:selected='backSelected' />
+          <DragableImg
+            v-model:src='srcBack'
+            :placeholder='kycIDBack'
+            v-model:selected='backSelected'
+            :updatable='updatable'
+          />
           <span>{{ $t('MSG_UPLOAD') }}</span>
         </div>
         <div class='kyc-instructions'>
@@ -49,7 +59,12 @@
       </div>
       <div class='kyc-upload'>
         <div class='kyc-image'>
-          <DragableImg v-model:src='srcSelfie' :placeholder='kycSelfieID' v-model:selected='selfieSelected' />
+          <DragableImg
+            v-model:src='srcSelfie'
+            :placeholder='kycSelfieID'
+            v-model:selected='selfieSelected'
+            :updatable='updatable'
+          />
           <span>{{ $t('MSG_UPLOAD') }}</span>
         </div>
         <div v-if='selectedType.value === DocumentType.IDCard' class='kyc-instructions'>
@@ -64,7 +79,7 @@
       <div class='hr' />
       <div class='kyc-submit'>
         <h4>{{ $t('MSG_KYC_CONFIRMATION_TITLE') }}</h4>
-        <p v-html='$t("MSG_KYC_CONFIRMATION_CONTENT")' />
+        <p class='kyc-confirmation' v-html='$t("MSG_KYC_CONFIRMATION_CONTENT")' />
         <button @click='onSubmit' :disabled='!updatable || submitting'>
           <div v-if='!submitting'>
             {{ $t('MSG_SUBMIT_DOCUMENTS') }}
@@ -81,7 +96,7 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted, computed, ref, defineAsyncComponent, watch } from 'vue'
+import { onMounted, computed, ref, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { NotificationType, useKYCStore, ReviewState, DocumentType, ImageType, KYCImage } from 'npool-cli-v2'
 
@@ -99,37 +114,40 @@ const DragableImg = defineAsyncComponent(() => import('src/components/image/Drag
 
 const kyc = useKYCStore()
 
-const srcFront = ref(kyc.Images.get(ImageType.Front)?.Base64)
-const srcBack = ref(kyc.Images.get(ImageType.Back)?.Base64)
-const srcSelfie = ref(kyc.Images.get(ImageType.Handing)?.Base64)
+const srcFront = computed({
+  get: () => kyc.Images.get(ImageType.Front)?.Base64,
+  set: (val) => {
+    kyc.Images.set(ImageType.Front, {
+      Type: ImageType.Front,
+      URI: '',
+      Base64: val
+    } as KYCImage)
+  }
+})
+const srcBack = computed({
+  get: () => kyc.Images.get(ImageType.Back)?.Base64,
+  set: (val) => {
+    kyc.Images.set(ImageType.Back, {
+      Type: ImageType.Back,
+      URI: '',
+      Base64: val
+    } as KYCImage)
+  }
+})
+const srcSelfie = computed({
+  get: () => kyc.Images.get(ImageType.Handing)?.Base64,
+  set: (val) => {
+    kyc.Images.set(ImageType.Handing, {
+      Type: ImageType.Handing,
+      URI: '',
+      Base64: val
+    } as KYCImage)
+  }
+})
 
 const frontSelected = ref(false)
 const backSelected = ref(false)
 const selfieSelected = ref(false)
-
-watch(srcFront, () => {
-  kyc.Images.set(ImageType.Front, {
-    Type: ImageType.Front,
-    URI: '',
-    Base64: srcFront.value
-  } as KYCImage)
-})
-
-watch(srcBack, () => {
-  kyc.Images.set(ImageType.Front, {
-    Type: ImageType.Front,
-    URI: '',
-    Base64: srcFront.value
-  } as KYCImage)
-})
-
-watch(srcSelfie, () => {
-  kyc.Images.set(ImageType.Front, {
-    Type: ImageType.Front,
-    URI: '',
-    Base64: srcFront.value
-  } as KYCImage)
-})
 
 const submitting = ref(false)
 
@@ -343,3 +361,8 @@ onMounted(() => {
 })
 
 </script>
+
+<style lang='sass' scoped>
+.kyc-confirmation
+  background: none
+</style>

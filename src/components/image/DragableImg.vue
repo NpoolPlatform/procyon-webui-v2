@@ -1,4 +1,3 @@
-/* eslint-disable no-new */
 <template>
   <input
     ref='selectImgFile'
@@ -8,8 +7,12 @@
     accept='image/jpeg, image/png, image/jpg'
   >
   <img
+    object-fit='cover'
     :src='src.length ? src : (placeholder.length ? placeholder : addImage)'
+    :disabled='!updatable'
+    :ratio='4/3'
     @click='onImgClick'
+    class='image'
   >
 </template>
 
@@ -25,6 +28,7 @@ interface Props {
   src: string
   placeholder: string
   selected: boolean
+  updatable: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -92,31 +96,6 @@ const onImgClick = () => {
 </script>
 
 <style lang='sass' scoped>
-.container
-  width: 140px
-  height: 120px
-
-.placeholder
-  width: 20px
-  height: 20px
-
-.img
-  width: 140px
-  height: 120px
-  background-color: #F2F2F2
-  border: 1px dashed rgba(45, 45, 45, 0.2)
-  border-radius: 4px
-
-.img:hover
-  cursor: pointer
-
-.caption
-  color: rgba(45, 45, 45, 0.6)
-  margin-top: 10px
-
-.full
-  width: 100%
-  height: 100%
-  background-color: transparent
-  align-items: center
+.image
+  height: 200px
 </style>
