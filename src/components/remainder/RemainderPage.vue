@@ -47,7 +47,7 @@ const onSubmit = () => {
 const router = useRouter()
 
 const onCancel = () => {
-  void router.back()
+  void router.push({ path: '/dashboard' })
 }
 
 </script>
