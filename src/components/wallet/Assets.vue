@@ -26,7 +26,7 @@
           {{ myProps.row.JPYValue.toFixed(4) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps'>
-          <button class='small'>
+          <button class='small' @click='onWithdrawClick(myProps.row)'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
         </q-td>
@@ -48,6 +48,7 @@ import {
   BenefitModel
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -165,6 +166,17 @@ onMounted(() => {
     })
   }
 })
+
+const router = useRouter()
+
+const onWithdrawClick = (asset: BenefitModel) => {
+  void router.push({
+    path: '/withdraw',
+    query: {
+      coinTypeId: asset.CoinTypeID
+    }
+  })
+}
 
 </script>
 

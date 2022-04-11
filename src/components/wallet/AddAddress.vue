@@ -97,8 +97,6 @@ const accountType = ref(AccountType.Email)
 const router = useRouter()
 
 const onCodeVerify = (code: string) => {
-  console.log(code, selectedCoin, address, account, accountType)
-
   accounts.setWithdrawAddress({
     CoinTypeID: selectedCoin.value?.ID as string,
     Address: address.value,

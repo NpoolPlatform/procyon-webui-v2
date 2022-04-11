@@ -266,6 +266,19 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: true,
           ShowSideMenu: false
         }
+      }, {
+        path: 'withdraw',
+        component: () => import('pages/Withdraw.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
       }
     ]
   },
