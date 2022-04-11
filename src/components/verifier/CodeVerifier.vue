@@ -152,6 +152,7 @@ const onSendCodeClick = () => {
 }
 
 onMounted(() => {
+  onSendCodeClick()
   emit('update:account', account.value as string)
   emit('update:accountType', myVerifyMethod.value)
 })
