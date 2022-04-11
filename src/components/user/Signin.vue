@@ -50,7 +50,9 @@ import {
   useApplicationStore,
   useLoginedUserStore,
   AccountType,
-  MessageUsedFor
+  MessageUsedFor,
+  useKYCStore,
+  ReviewState
 } from 'npool-cli-v2'
 import { AppID } from 'src/const/const'
 import { defineAsyncComponent, ref } from 'vue'
@@ -62,10 +64,11 @@ import { useRouter } from 'vue-router'
 const { t } = useI18n({ useScope: 'global' })
 
 const SignPage = defineAsyncComponent(() => import('src/components/user/SignPage.vue'))
+const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 
 const accountError = ref(false)
 const account = ref('')
-const accountType = ref('')
+const accountType = ref(AccountType.Email)
 const password = ref('')
 
 const user = useUserStore()
@@ -74,6 +77,7 @@ const recaptcha = useReCaptcha()
 const inspire = useInspireStore()
 const application = useApplicationStore()
 const logined = useLoginedUserStore()
+const kyc = useKYCStore()
 
 const router = useRouter()
 
@@ -84,11 +88,38 @@ const onMenuHide = () => {
   verifing.value = false
 }
 
+const remainder = () => {
+  if (!logined.LoginedUser?.User?.PhoneNO?.length) {
+    void router.push({ path: '/update/mobile' })
+    return
+  }
+
+  kyc.getKYC({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_KYC_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (error: boolean) => {
+    if (error || !kyc.KYC?.Kyc || kyc.KYC.State === ReviewState.Rejected) {
+      void router.push({ path: '/kyc' })
+      return
+    }
+    if (!logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified) {
+      void router.push({ path: '/enable/google' })
+      return
+    }
+    void router.push({ path: '/' })
+  })
+}
+
 const onCodeVerify = (code: string) => {
   verifing.value = false
   coderepo.verifyCode(verifyMethod.value, MessageUsedFor.Signin, code, (error: boolean) => {
     if (!error) {
-      void router.push({ path: '/' })
+      remainder()
       return
     }
     user.logout({
@@ -100,6 +131,7 @@ const onCodeVerify = (code: string) => {
         }
       }
     })
+    void router.push({ path: '/' })
   })
 }
 
@@ -111,8 +143,8 @@ const _verify = () => {
 
   verifing.value = true
 
-  if (logined.LoginedUser?.Ctrl.GoogleAuthenticationVerified &&
-    logined.LoginedUser.Ctrl.SigninVerifyByGoogleAuthentication) {
+  if (logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified &&
+    logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication) {
     verifyMethod.value = AccountType.Google
     return
   }
@@ -144,8 +176,6 @@ const verify = () => {
 }
 
 const onSubmit = () => {
-  console.log('submit', account.value, accountError.value, accountType.value)
-
   if (accountError.value) {
     return
   }

@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useInspireStore, useLoginedUserStore, NotificationType } from 'npool-cli-v2'
+import { useInspireStore, useLoginedUserStore, NotificationType, useUserStore } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
@@ -76,12 +76,22 @@ const { t } = useI18n({ useScope: 'global' })
 const logined = useLoginedUserStore()
 const setting = useSettingStore()
 const inspire = useInspireStore()
+const user = useUserStore()
 
 const router = useRouter()
 
 const onSwitchMenu = (item: MenuItem) => {
   if (item.label === 'MSG_LOGOUT') {
-    // TODO
+    user.logout({
+      Message: {
+        Error: {
+          Title: t('MSG_LOGOUT_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    })
+    void router.push({ path: '/' })
     return
   }
 
