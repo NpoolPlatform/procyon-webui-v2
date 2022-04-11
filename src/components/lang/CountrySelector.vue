@@ -12,7 +12,7 @@
         <div class='column justify-center country'>
           <q-img fit='contain' class='flag' :src='country.Flag' />
         </div>
-        <div class='column justify-center label'>
+        <div class='column justify-center'>
           {{ country.Code }}
         </div>
       </div>
@@ -124,9 +124,6 @@ onMounted(() => {
 
 .odd
   background-color: #E2E2E2
-
-.label
-  color: black
 
 .selector
   color: black
