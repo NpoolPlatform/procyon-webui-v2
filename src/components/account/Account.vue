@@ -68,16 +68,14 @@
       <div class='row'>
         <div class='account-field'>
           <Input
-            v-model:value='firstName'
-            label='MSG_FIRST_NAME'
+            v-model:value='postalCode'
+            label='MSG_POSTAL_CODE'
             type='text'
-            id='first-name'
+            id='postal-code'
             required
-            :error='firstNameError'
-            message='MSG_FIRST_NAME_TIP'
-            placeholder='MSG_FIRST_NAME_PLACEHOLDER'
-            @focus='onFirstNameFocusIn'
-            @blur='onFirstNameFocusOut'
+            :error='postalCodeError'
+            message='MSG_POSTAL_CODE_TIP'
+            placeholder='MSG_POSTAL_CODE_PLACEHOLDER'
           />
         </div>
         <q-space />
@@ -145,16 +143,14 @@
         <q-space />
         <div class='account-field'>
           <Input
-            v-model:value='lastName'
-            label='MSG_LAST_NAME'
+            v-model:value='country'
+            label='MSG_COUNTRY'
             type='text'
             id='last-name'
             required
-            :error='lastNameError'
-            message='MSG_LAST_NAME_TIP'
-            placeholder='MSG_LAST_NAME_PLACEHOLDER'
-            @focus='onLastNameFocusIn'
-            @blur='onLastNameFocusOut'
+            :error='countryError'
+            message='MSG_COUNTRY_TIP'
+            placeholder='MSG_COUNTRY_PLACEHOLDER'
           />
         </div>
       </div>
@@ -165,9 +161,10 @@
 
 <script setup lang='ts'>
 import {
-  useLoginedUserStore, validateUsername
+  useLoginedUserStore,
+  validateUsername
 } from 'npool-cli-v2'
-import { defineAsyncComponent, ref } from 'vue'
+import { defineAsyncComponent, ref, computed } from 'vue'
 // import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -206,6 +203,43 @@ const onLastNameFocusIn = () => {
 const onLastNameFocusOut = () => {
   lastNameError.value = lastName.value.length === 0
 }
+
+const addressFields = ref(logined.LoginedUser?.Extra?.AddressFields ? logined.LoginedUser?.Extra?.AddressFields : [])
+const country = computed({
+  get: () => addressFields.value.length > 0 ? addressFields.value[0] : '',
+  set: (val) => {
+    addressFields.value = [val, province.value, city.value, street1.value, street2.value]
+  }
+})
+const countryError = ref(false)
+
+const province = computed({
+  get: () => addressFields.value.length > 1 ? addressFields.value[1] : '',
+  set: (val) => {
+    addressFields.value = [country.value, val, city.value, street1.value, street2.value]
+  }
+})
+const city = computed({
+  get: () => addressFields.value.length > 2 ? addressFields.value[2] : '',
+  set: (val) => {
+    addressFields.value = [country.value, province.value, val, street1.value, street2.value]
+  }
+})
+const street1 = computed({
+  get: () => addressFields.value.length > 3 ? addressFields.value[3] : '',
+  set: (val) => {
+    addressFields.value = [country.value, province.value, city.value, val, street2.value]
+  }
+})
+const street2 = computed({
+  get: () => addressFields.value.length > 4 ? addressFields.value[4] : '',
+  set: (val) => {
+    addressFields.value = [country.value, province.value, city.value, street1.value, val]
+  }
+})
+
+const postalCode = ref(logined.LoginedUser?.Extra?.PostalCode as string)
+const postalCodeError = ref(false)
 
 const onSubmit = () => {
   // TODO
