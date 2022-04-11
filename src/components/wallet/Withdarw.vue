@@ -73,7 +73,6 @@
       />
     </div>
   </q-dialog>
-  <Balance :display='false' />
 </template>
 
 <script setup lang='ts'>
@@ -95,7 +94,6 @@ import checkmark from 'src/assets/icon-checkmark.svg'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
-const Balance = defineAsyncComponent(() => import('src/components/wallet/Balance.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
