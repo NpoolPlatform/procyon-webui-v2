@@ -140,6 +140,7 @@ const user = useUserStore()
 const router = useRouter()
 
 const onSendCodeClick = () => {
+  accountError.value = !account.value.length
   if (accountError.value) {
     return
   }

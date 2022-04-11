@@ -74,12 +74,17 @@ interface Props {
 
 const props = defineProps<Props>()
 const label = toRef(props, 'label')
+const _accountError = toRef(props, 'accountError')
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
 
 const accountError = ref(false)
+
+watch(_accountError, () => {
+  accountError.value = _accountError.value
+})
 
 const phoneNO = ref('')
 const onPhoneNOFocusIn = () => {
