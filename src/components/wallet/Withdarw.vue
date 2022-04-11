@@ -27,7 +27,7 @@
                 <span
                   v-for='withdraw in withdraws'
                   :key='withdraw.Address.ID'
-                  :class='[ "address-option", selectedAccount.Account.ID === withdraw.Account.ID ? "address-selected" : "" ]'
+                  :class='[ "address-option", selectedAccount?.Account?.ID === withdraw.Account.ID ? "address-selected" : "" ]'
                 >
                   <span class='wallet-type'>{{ withdraw.Address.Labels.join(',') }}</span>
                   <span class='wallet-type'>{{ coin.Name }}</span>
@@ -81,7 +81,15 @@
 </template>
 
 <script setup lang='ts'>
-import { MessageUsedFor, AccountType, useCoinStore, totalWithdrawedEarningCoin, totalEarningCoin, useAccountStore, WithdrawAccount } from 'npool-cli-v2'
+import {
+  MessageUsedFor,
+  AccountType,
+  useCoinStore,
+  totalWithdrawedEarningCoin,
+  totalEarningCoin,
+  useAccountStore,
+  WithdrawAccount
+} from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -132,7 +140,9 @@ const onCodeError = () => {
 onMounted(() => {
   totalEarningCoin(coinTypeId.value, (amount: number) => {
     earning.value = amount
-    withdrawdEarning.value = totalWithdrawedEarningCoin(coinTypeId.value)
+    totalWithdrawedEarningCoin(coinTypeId.value, (amount: number) => {
+      withdrawdEarning.value = amount
+    })
   })
 })
 

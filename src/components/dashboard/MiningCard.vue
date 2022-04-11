@@ -66,9 +66,11 @@ import {
   last30DaysEarningCoin,
   last24HoursEarningCoin,
   useOrderStore,
-  PriceCoinName
+  PriceCoinName,
+  NotificationType
 } from 'npool-cli-v2'
 import { defineProps, toRef, computed, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 interface Props {
@@ -77,6 +79,9 @@ interface Props {
 
 const props = defineProps<Props>()
 const coinTypeId = toRef(props, 'coinTypeId')
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 const coins = useCoinStore()
 const coin = computed(() => coins.getCoinByID(coinTypeId.value))
@@ -100,7 +105,7 @@ const last24HoursEarningUSD = ref(0)
 const _last30DaysEarningCoin = ref(0)
 const last30DaysEarningUSD = ref(0)
 
-onMounted(() => {
+const getEarning = () => {
   totalEarningCoin(coinTypeId.value, (coinAmount: number) => {
     _totalEarningCoin.value = coinAmount
     currency.getCoinCurrency(coin.value, Currency.USD, (currency: number) => {
@@ -121,6 +126,29 @@ onMounted(() => {
       last24HoursEarningUSD.value = _last24HoursEarningCoin.value * currency
     })
   })
+}
+
+const getCoins = () => {
+  coins.getCoins({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COINS'),
+        Message: t('MSG_GET_COINS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    getEarning()
+  })
+}
+
+onMounted(() => {
+  if (coins.Coins.length === 0) {
+    getCoins()
+    return
+  }
+  getEarning()
 })
 
 const router = useRouter()
