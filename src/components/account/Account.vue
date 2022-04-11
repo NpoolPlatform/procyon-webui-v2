@@ -81,63 +81,55 @@
         <q-space />
         <div class='account-field'>
           <Input
-            v-model:value='lastName'
-            label='MSG_LAST_NAME'
+            v-model:value='province'
+            label='MSG_PROVINCE'
             type='text'
-            id='last-name'
+            id='province'
             required
-            :error='lastNameError'
-            message='MSG_LAST_NAME_TIP'
-            placeholder='MSG_LAST_NAME_PLACEHOLDER'
-            @focus='onLastNameFocusIn'
-            @blur='onLastNameFocusOut'
+            :error='provinceError'
+            message='MSG_PROVINCE_TIP'
+            placeholder='MSG_PROVINCE_PLACEHOLDER'
           />
         </div>
       </div>
       <div class='row'>
         <div class='account-field'>
           <Input
-            v-model:value='firstName'
-            label='MSG_FIRST_NAME'
+            v-model:value='street1'
+            label='MSG_STREET1'
             type='text'
-            id='first-name'
+            id='street1'
             required
-            :error='firstNameError'
-            message='MSG_FIRST_NAME_TIP'
-            placeholder='MSG_FIRST_NAME_PLACEHOLDER'
-            @focus='onFirstNameFocusIn'
-            @blur='onFirstNameFocusOut'
+            :error='street1Error'
+            message='MSG_STREET1_TIP'
+            placeholder='MSG_STREE1_PLACEHOLDER'
           />
         </div>
         <q-space />
         <div class='account-field'>
           <Input
-            v-model:value='lastName'
-            label='MSG_LAST_NAME'
+            v-model:value='street2'
+            label='MSG_STREET2'
             type='text'
-            id='last-name'
+            id='street2'
             required
-            :error='lastNameError'
-            message='MSG_LAST_NAME_TIP'
-            placeholder='MSG_LAST_NAME_PLACEHOLDER'
-            @focus='onLastNameFocusIn'
-            @blur='onLastNameFocusOut'
+            :error='street2Error'
+            message='MSG_STREET2_TIP'
+            placeholder='MSG_STREET2_PLACEHOLDER'
           />
         </div>
       </div>
       <div class='row'>
         <div class='account-field'>
           <Input
-            v-model:value='firstName'
-            label='MSG_FIRST_NAME'
+            v-model:value='city'
+            label='MSG_CITY'
             type='text'
-            id='first-name'
+            id='city'
             required
-            :error='firstNameError'
-            message='MSG_FIRST_NAME_TIP'
-            placeholder='MSG_FIRST_NAME_PLACEHOLDER'
-            @focus='onFirstNameFocusIn'
-            @blur='onFirstNameFocusOut'
+            :error='cityError'
+            message='MSG_CITY'
+            placeholder='MSG_CITY_PLACEHOLDER'
           />
         </div>
         <q-space />
@@ -146,7 +138,7 @@
             v-model:value='country'
             label='MSG_COUNTRY'
             type='text'
-            id='last-name'
+            id='country'
             required
             :error='countryError'
             message='MSG_COUNTRY_TIP'
@@ -154,21 +146,25 @@
           />
         </div>
       </div>
-      <input type='submit' :value='$t("MSG_SAVE_CHANGES")' class='account-field'>
+      <input type='submit' :value='$t("MSG_SAVE_CHANGES")' class='account-field' @click='onSubmit'>
     </form>
   </div>
 </template>
 
 <script setup lang='ts'>
 import {
+  NotificationType,
   useLoginedUserStore,
+  useUserStore,
   validateUsername
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref, computed } from 'vue'
-// import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+
+import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-// const { t } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' })
 
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
@@ -204,6 +200,9 @@ const onLastNameFocusOut = () => {
   lastNameError.value = lastName.value.length === 0
 }
 
+const postalCode = ref(logined.LoginedUser?.Extra?.PostalCode as string)
+const postalCodeError = ref(false)
+
 const addressFields = ref(logined.LoginedUser?.Extra?.AddressFields ? logined.LoginedUser?.Extra?.AddressFields : [])
 const country = computed({
   get: () => addressFields.value.length > 0 ? addressFields.value[0] : '',
@@ -219,18 +218,27 @@ const province = computed({
     addressFields.value = [country.value, val, city.value, street1.value, street2.value]
   }
 })
+
+const provinceError = ref(false)
+
 const city = computed({
   get: () => addressFields.value.length > 2 ? addressFields.value[2] : '',
   set: (val) => {
     addressFields.value = [country.value, province.value, val, street1.value, street2.value]
   }
 })
+
+const cityError = ref(false)
+
 const street1 = computed({
   get: () => addressFields.value.length > 3 ? addressFields.value[3] : '',
   set: (val) => {
     addressFields.value = [country.value, province.value, city.value, val, street2.value]
   }
 })
+
+const street1Error = ref(false)
+
 const street2 = computed({
   get: () => addressFields.value.length > 4 ? addressFields.value[4] : '',
   set: (val) => {
@@ -238,11 +246,75 @@ const street2 = computed({
   }
 })
 
-const postalCode = ref(logined.LoginedUser?.Extra?.PostalCode as string)
-const postalCodeError = ref(false)
+const street2Error = ref(false)
+
+const user = useUserStore()
+const router = useRouter()
 
 const onSubmit = () => {
-  // TODO
+  if (usernameError.value) {
+    return
+  }
+
+  if (firstNameError.value) {
+    return
+  }
+
+  if (lastNameError.value) {
+    return
+  }
+
+  if (!logined.LoginedUser?.Extra) {
+    user.createExtra({
+      Info: {
+        IDNumber: '',
+        Username: username.value,
+        AddressFields: addressFields.value,
+        Gender: gender.value,
+        PostalCode: postalCode.value,
+        FirstName: firstName.value,
+        LastName: lastName.value
+      },
+      Message: {
+        Error: {
+          Title: t('MSG_CREATE_EXTRA'),
+          Message: t('MSG_CREATE_EXTRA_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, (error: boolean) => {
+      if (!error) {
+        void router.push({ path: '/account' })
+      }
+    })
+  }
+  if (logined.LoginedUser?.Extra) {
+    user.updateExtra({
+      Info: {
+        IDNumber: '',
+        Username: username.value,
+        AddressFields: addressFields.value,
+        Gender: gender.value,
+        PostalCode: postalCode.value,
+        FirstName: firstName.value,
+        LastName: lastName.value
+      },
+      Message: {
+        Error: {
+          Title: t('MSG_UPDATE_EXTRA'),
+          Message: t('MSG_UPDATE_EXTRA_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, (error: boolean) => {
+      if (!error) {
+        void router.push({ path: '/account' })
+      }
+    })
+  }
+  return false
 }
 
 </script>
