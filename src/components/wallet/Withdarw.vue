@@ -4,35 +4,35 @@
       <div class='content order-page'>
         <div class='product-container'>
           <div class='product-title-section'>
-            <div class='product-page-icon'><img src='product-spacemesh.svg'></div>
-            <h1>Spacemesh</h1>
+            <div class='product-page-icon'>
+              <img :src='coins.getCoinLogo(coin)'>
+            </div>
+            <h1>{{ coin.Name }}</h1>
           </div>
           <div class='withdraw'>
-            <h3>Asset Withdrawal</h3>
+            <h3>{{ $t('MSG_ASSET_WITHDRAWAL') }}</h3>
             <div class='info-flex'>
               <div class='full-section'>
-                <h4>Available for Withdrawal:</h4>
-                <span class='number'>10</span>
-                <span class='unit'>SMH</span>
+                <h4>{{ $t('MSG_AVAILABLE_FOR_WITHDRAWAL') }}:</h4>
+                <span class='number'>{{ earning - withdrawdEarning }}</span>
+                <span class='unit'>{{ coin.Unit }}</span>
               </div>
               <div class='full-section'>
-                <h4>Amount to Withdraw (SMH):</h4>
+                <h4>{{ $t('MSG_AMOUNT_TO_WITHDRAW') }} ({{ coin.Unit }}):</h4>
                 <input type='number'>
               </div>
 
               <div class='full-section'>
-                <h4>Select Recipient Address:</h4>
-                <span class='address-option'>
-                  <span class='wallet-type'>MetaMask</span>
-                  <span class='wallet-type'>ERC20</span>
-                  <span class='number'>fdaxjsaioxashcarueytyd8743y7898ash8x9xsa890</span>
-                  <img class='checkmark' src='icon-checkmark.svg'>
-                </span>
-                <span class='address-option address-selected'>
-                  <span class='wallet-type'>Coinbase</span>
-                  <span class='wallet-type'>SMH</span>
-                  <span class='number'>sa890a3y7898xjfdh8x9xsaioxashcarueytyd874as</span>
-                  <img class='checkmark' src='icon-checkmark.svg'>
+                <h4>{{ $t('MSG_SELECT_RECIPIENT_ADDRESS') }}:</h4>
+                <span
+                  v-for='withdraw in withdraws'
+                  :key='withdraw.Address.ID'
+                  :class='[ "address-option", selectedAccount.Account.ID === withdraw.Account.ID ? "address-selected" : "" ]'
+                >
+                  <span class='wallet-type'>{{ withdraw.Address.Labels.join(',') }}</span>
+                  <span class='wallet-type'>{{ coin.Name }}</span>
+                  <span class='number'>{{ withdraw.Account.Address }}</span>
+                  <img class='checkmark' :src='checkmark'>
                 </span>
               </div>
             </div>
@@ -81,13 +81,33 @@
 </template>
 
 <script setup lang='ts'>
-import { MessageUsedFor, AccountType } from 'npool-cli-v2'
-import { ref, defineAsyncComponent } from 'vue'
+import { MessageUsedFor, AccountType, useCoinStore, totalWithdrawedEarningCoin, totalEarningCoin, useAccountStore, WithdrawAccount } from 'npool-cli-v2'
+import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+
+import checkmark from 'src/assets/icon-checkmark.svg'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
 const verifing = ref(false)
+
+interface Query {
+  coinTypeId: string
+}
+
+const route = useRoute()
+const query = computed(() => route.query as unknown as Query)
+const coins = useCoinStore()
+const coinTypeId = computed(() => query.value.coinTypeId)
+const coin = computed(() => coins.getCoinByID(coinTypeId.value))
+
+const acounts = useAccountStore()
+const withdraws = computed(() => acounts.Accounts.filter((account) => account.Account.CoinTypeID === coinTypeId.value))
+const selectedAccount = ref(undefined as unknown as WithdrawAccount)
+
+const earning = ref(0)
+const withdrawdEarning = ref(0)
 
 const onSubmit = () => {
   verifing.value = true
@@ -108,6 +128,13 @@ const onCodeVerify = (code: string) => {
 const onCodeError = () => {
   verifing.value = false
 }
+
+onMounted(() => {
+  totalEarningCoin(coinTypeId.value, (amount: number) => {
+    earning.value = amount
+    withdrawdEarning.value = totalWithdrawedEarningCoin(coinTypeId.value)
+  })
+})
 
 </script>
 
