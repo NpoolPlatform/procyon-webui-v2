@@ -10,6 +10,7 @@
   </div>
   <Footer />
   <LangLoader />
+  <Prepare />
 </template>
 
 <script setup lang='ts'>
@@ -20,6 +21,7 @@ import { useSettingStore } from 'src/store/setting'
 const MainHeader = defineAsyncComponent(() => import('src/components/header/MainHeader.vue'))
 const Footer = defineAsyncComponent(() => import('src/components/footer/Footer.vue'))
 const LangLoader = defineAsyncComponent(() => import('src/components/lang/LangLoader.vue'))
+const Prepare = defineAsyncComponent(() => import('src/components/prepare/Prepare.vue'))
 const SideMenu = defineAsyncComponent(() => import('src/components/menu/SideMenu.vue'))
 
 const notification = useNotificationStore()

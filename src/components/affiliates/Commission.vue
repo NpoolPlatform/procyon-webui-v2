@@ -51,11 +51,13 @@ onMounted(() => {
     benefit.getCommission({
       Message: {
         Error: {
-          Title: t('MSG_GET_COMMISSIONS_FAIL'),
+          Title: t('MSG_GET_COMMISSION_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }
       }
+    }, () => {
+      // TODO
     })
   }
 

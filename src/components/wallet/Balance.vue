@@ -31,7 +31,9 @@ import {
   totalWithdrawedEarningUSD,
   totalEarningCurrency,
   totalWithdrawedEarningCurrency,
-  PriceCoinName
+  PriceCoinName,
+  useGoodStore,
+  useBenefitStore
 } from 'npool-cli-v2'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -48,13 +50,26 @@ const totalWithdrawedJPY = ref(0)
 const currency = useCurrencyStore()
 const coin = useCoinStore()
 const transaction = useTransactionStore()
+const good = useGoodStore()
+const benefit = useBenefitStore()
 
 const getEarning = () => {
-  totalEarningUSD((usdAmount: number) => {
-    _totalEarningUSD.value = usdAmount
-  })
-  totalEarningCurrency(Currency.JPY, (usdAmount: number) => {
-    totalEarningJPY.value = usdAmount
+  benefit.getBenefits({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_BENEFITS'),
+        Message: t('MSG_GET_BENEFITS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    totalEarningUSD((usdAmount: number) => {
+      _totalEarningUSD.value = usdAmount
+    })
+    totalEarningCurrency(Currency.JPY, (usdAmount: number) => {
+      totalEarningJPY.value = usdAmount
+    })
   })
 }
 
@@ -89,6 +104,22 @@ const getWithdrawed = () => {
   })
 }
 
+const getGoods = () => {
+  good.getGoods({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GOODS'),
+        Message: t('MSG_GET_GOODS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    getEarning()
+    getWithdrawed()
+  })
+}
+
 const getCurrencies = () => {
   currency.getAllCoinCurrencies({
     Currencies: [Currency.USD],
@@ -101,8 +132,7 @@ const getCurrencies = () => {
       }
     }
   }, () => {
-    getEarning()
-    getWithdrawed()
+    getGoods()
   })
 }
 
@@ -122,8 +152,9 @@ const getCoins = () => {
 }
 
 onMounted(() => {
-  if (coin.Coins.length === 0) {
+  if (benefit.Benefits.length === 0) {
     getCoins()
+    return
   }
 
   totalEarningUSD((usdAmount: number) => {
