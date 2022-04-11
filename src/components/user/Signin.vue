@@ -92,7 +92,7 @@ const onMenuHide = () => {
 
 const remainder = () => {
   if (!logined.LoginedUser?.User?.PhoneNO?.length) {
-    void router.push({ path: '/update/mobile' })
+    void router.push({ path: '/remainder/mobile' })
     return
   }
 
@@ -106,11 +106,11 @@ const remainder = () => {
     }
   }, (error: boolean) => {
     if (error || !kyc.KYC?.Kyc || kyc.KYC.State === ReviewState.Rejected) {
-      void router.push({ path: '/kyc' })
+      void router.push({ path: '/remainder/kyc' })
       return
     }
     if (!logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified) {
-      void router.push({ path: '/enable/google' })
+      void router.push({ path: '/remainder/ga' })
       return
     }
     void router.push({ path: '/' })
