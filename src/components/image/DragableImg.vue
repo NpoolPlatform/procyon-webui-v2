@@ -90,6 +90,7 @@ const onImgSelected = (evt: Event) => {
 }
 
 const onImgClick = () => {
+  // Call input click
   selectImgFile.value?.click()
 }
 
