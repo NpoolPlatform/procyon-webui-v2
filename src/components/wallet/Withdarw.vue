@@ -84,10 +84,12 @@ import {
   totalEarningCoin,
   useAccountStore,
   WithdrawAccount,
-  NotificationType
+  NotificationType,
+  useTransactionStore,
+  WithdrawType
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
@@ -109,6 +111,8 @@ const onAmountFocusOut = () => {
   amountError.value = amount.value > 0 && amount.value <= earning.value - withdrawedEarning.value
 }
 
+const withdrawType = ref(WithdrawType.Benefit)
+
 interface Query {
   coinTypeId: string
 }
@@ -119,6 +123,8 @@ const coins = useCoinStore()
 const coinTypeId = computed(() => query.value.coinTypeId)
 const coin = computed(() => coins.getCoinByID(coinTypeId.value))
 
+const transaction = useTransactionStore()
+
 const accounts = useAccountStore()
 const withdraws = computed(() => accounts.Accounts.filter((account) => account.Account.CoinTypeID === coinTypeId.value))
 const selectedAccount = ref(undefined as unknown as WithdrawAccount)
@@ -127,6 +133,10 @@ const earning = ref(0)
 const withdrawedEarning = ref(0)
 
 const onSubmit = () => {
+  if (!selectedAccount.value) {
+    return
+  }
+
   amountError.value = !amount.value || amount.value >= (earning.value - withdrawedEarning.value)
   if (amountError.value) {
     return
@@ -141,8 +151,29 @@ const onMenuHide = () => {
 const account = ref('')
 const accountType = ref(AccountType.Email)
 
+const router = useRouter()
+
 const onCodeVerify = (code: string) => {
-  console.log('verify', code)
+  transaction.submitWithdraw({
+    Info: {
+      CoinTypeID: coinTypeId.value,
+      WithdrawToAccountID: selectedAccount.value.Account.ID,
+      Amount: amount.value,
+      WithdrawType: withdrawType.value
+    },
+    Account: account.value,
+    AccountType: accountType.value,
+    VerificationCode: code,
+    Message: {
+      Error: {
+        Title: t('MSG_SUBMIT_WITHDRAW_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    void router.back()
+  })
   verifing.value = false
 }
 
