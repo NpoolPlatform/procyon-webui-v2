@@ -1,5 +1,6 @@
 <script setup lang='ts'>
-import { useCoinStore, useGoodStore, NotificationType, useCurrencyStore, Currency } from 'npool-cli-v2'
+import { useCoinStore, useGoodStore, NotificationType, useCurrencyStore, Currency, useApplicationStore } from 'npool-cli-v2'
+import { AppID } from 'src/const/const'
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -9,6 +10,7 @@ const { t } = useI18n({ useScope: 'global' })
 const coin = useCoinStore()
 const good = useGoodStore()
 const currency = useCurrencyStore()
+const application = useApplicationStore()
 
 const getCurrencies = () => {
   currency.getAllCoinCurrencies({
@@ -76,9 +78,25 @@ const getGoods = () => {
   })
 }
 
+const getApplication = () => {
+  application.getApplication({
+    ID: AppID,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_APP_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
+}
+
 onMounted(() => {
   getCoins()
   getGoods()
+  getApplication()
 })
 
 </script>

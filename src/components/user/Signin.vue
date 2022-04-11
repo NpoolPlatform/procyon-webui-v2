@@ -21,6 +21,22 @@
       </div>
     </template>
   </SignPage>
+  <q-dialog
+    v-model='verifing'
+    seamless
+    maximized
+    @hide='onMenuHide'
+  >
+    <div class='popup'>
+      <CodeVerifier
+        v-model:account='account'
+        v-model:account-type='accountType'
+        v-model:verify-method='verifyMethod'
+        @verify='onCodeVerify'
+        :used-for='MessageUsedFor.Signin'
+      />
+    </div>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
@@ -30,8 +46,13 @@ import {
   useUserStore,
   encryptPassword,
   GoogleTokenType,
-  useInspireStore
+  useInspireStore,
+  useApplicationStore,
+  useLoginedUserStore,
+  AccountType,
+  MessageUsedFor
 } from 'npool-cli-v2'
+import { AppID } from 'src/const/const'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useReCaptcha } from 'vue-recaptcha-v3'
@@ -51,8 +72,76 @@ const user = useUserStore()
 const coderepo = useCodeRepoStore()
 const recaptcha = useReCaptcha()
 const inspire = useInspireStore()
+const application = useApplicationStore()
+const logined = useLoginedUserStore()
 
 const router = useRouter()
+
+const verifing = ref(false)
+const verifyMethod = ref(AccountType.Email)
+
+const onMenuHide = () => {
+  verifing.value = false
+}
+
+const onCodeVerify = (code: string) => {
+  verifing.value = false
+  coderepo.verifyCode(verifyMethod.value, MessageUsedFor.Signin, code, (error: boolean) => {
+    if (!error) {
+      void router.push({ path: '/' })
+      return
+    }
+    user.logout({
+      Message: {
+        Error: {
+          Title: t('MSG_LOGOUT_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    })
+  })
+}
+
+const _verify = () => {
+  if (!application.Application.Ctrl.SigninVerifyEnable) {
+    void router.push({ path: '/' })
+    return
+  }
+
+  verifing.value = true
+
+  if (logined.LoginedUser?.Ctrl.GoogleAuthenticationVerified &&
+    logined.LoginedUser.Ctrl.SigninVerifyByGoogleAuthentication) {
+    verifyMethod.value = AccountType.Google
+    return
+  }
+  if (logined.LoginedUser?.User?.EmailAddress?.length) {
+    verifyMethod.value = AccountType.Email
+    return
+  }
+  verifyMethod.value = AccountType.Mobile
+}
+
+const verify = () => {
+  if (!application.Application) {
+    application.getApplication({
+      ID: AppID,
+      Message: {
+        Error: {
+          Title: t('MSG_GET_APP_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      _verify()
+    })
+    return
+  }
+
+  _verify()
+}
 
 const onSubmit = () => {
   console.log('submit', account.value, accountError.value, accountType.value)
@@ -96,7 +185,7 @@ const onSubmit = () => {
           }
         }
       })
-      void router.push({ path: '/' })
+      verify()
     })
   })
 

@@ -1,9 +1,9 @@
 <template>
   <RemainderPage
-    label='MSG_ADD_MOBILE_NUMBER'
-    caption='MSG_ADD_MOBILE_NUMBER_CAPTION'
-    submit-text='MSG_SETUP_MOBILE_NUMBER'
-    cancel-text='MSG_SET_MOBILE_LAYTER'
+    label='MSG_SETUP_GOOGLE_AUTHENTICATOR'
+    caption='MSG_SETUP_GOOGLE_AUTHENTICATOR_CAPTION'
+    submit-text='MSG_SETUP_TWO_FACTOR_AUTH'
+    cancel-text='MSG_SETUP_LAYTER'
     @submit='onSubmit'
     @cancel='onCancel'
   />
@@ -20,7 +20,7 @@ const RemainderPage = defineAsyncComponent(() => import('src/components/remainde
 const router = useRouter()
 
 const onSubmit = () => {
-  void router.push({ path: '/update/mobile' })
+  void router.push({ path: '/enable/google' })
 }
 const onCancel = () => {
   void router.back()

@@ -124,8 +124,7 @@ const onCodeFocusOut = () => {
 const emit = defineEmits<{(e: 'update:account', account: string): void,
   (e: 'update:accountType', code: string): void,
   (e: 'update:verifyMethod', method: string): void,
-  (e: 'verify', code: string): void,
-  (e: 'error'): void
+  (e: 'verify', code: string): void
 }>()
 
 watch(myVerifyMethod, () => {
@@ -138,11 +137,7 @@ watch(account, () => {
 
 const onVerifyClick = () => {
   codeError.value = !validateVerificationCode(myCode.value)
-
-  console.log(codeError.value, myCode.value)
-
   if (codeError.value) {
-    emit('error')
     return
   }
   emit('verify', myCode.value)

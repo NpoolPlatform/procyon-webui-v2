@@ -68,7 +68,6 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        @error='onCodeError'
         :used-for='MessageUsedFor.SetWithdrawAddress'
       />
     </div>
@@ -176,10 +175,6 @@ const onCodeVerify = (code: string) => {
       void router.back()
     }
   })
-  verifing.value = false
-}
-
-const onCodeError = () => {
   verifing.value = false
 }
 
