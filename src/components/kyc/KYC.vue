@@ -25,7 +25,7 @@
       </div>
       <div class='kyc-upload'>
         <div class='kyc-image'>
-          <img :src='kycIDFront'>
+          <DragableImg v-model:src='srcFront' :placeholder='kycIDFront' v-model:selected='frontSelected' />
           <span>{{ $t('MSG_UPLOAD') }}</span>
         </div>
         <div v-if='selectedType.value === DocumentType.IDCard' class='kyc-instructions'>
@@ -39,7 +39,7 @@
       </div>
       <div v-if='selectedType.value === DocumentType.IDCard' class='kyc-upload'>
         <div class='kyc-image'>
-          <img :src='kycIDBack'>
+          <DragableImg v-model:src='srcBack' :placeholder='kycIDBack' v-model:selected='backSelected' />
           <span>{{ $t('MSG_UPLOAD') }}</span>
         </div>
         <div class='kyc-instructions'>
@@ -49,7 +49,7 @@
       </div>
       <div class='kyc-upload'>
         <div class='kyc-image'>
-          <img :src='kycSelfieID'>
+          <DragableImg v-model:src='srcSelfie' :placeholder='kycSelfieID' v-model:selected='selfieSelected' />
           <span>{{ $t('MSG_UPLOAD') }}</span>
         </div>
         <div v-if='selectedType.value === DocumentType.IDCard' class='kyc-instructions'>
@@ -65,16 +65,25 @@
       <div class='kyc-submit'>
         <h4>{{ $t('MSG_KYC_CONFIRMATION_TITLE') }}</h4>
         <p v-html='$t("MSG_KYC_CONFIRMATION_CONTENT")' />
-        <button>{{ $t('MSG_SUBMIT_DOCUMENTS') }}</button>
+        <button @click='onSubmit' :disabled='!updatable || submitting'>
+          <div v-if='!submitting'>
+            {{ $t('MSG_SUBMIT_DOCUMENTS') }}
+          </div>
+          <q-spinner
+            v-else
+            color='primary'
+            size='1.5em'
+          />
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang='ts'>
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed, ref, defineAsyncComponent, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NotificationType, useKYCStore, ReviewState, DocumentType } from 'npool-cli-v2'
+import { NotificationType, useKYCStore, ReviewState, DocumentType, ImageType, KYCImage } from 'npool-cli-v2'
 
 import kycNotVerified from 'src/assets/kyc-not-verified.svg'
 import kycReview from 'src/assets/kyc-review.svg'
@@ -83,11 +92,162 @@ import kycVerified from 'src/assets/kyc-verified.svg'
 import kycIDFront from 'src/assets/kyc-id-front.svg'
 import kycIDBack from 'src/assets/kyc-id-back.svg'
 import kycSelfieID from 'src/assets/kyc-selfie-id.svg'
+import { ReqMessage } from 'npool-cli-v2/dist/store/notifications/types'
+import { uid } from 'quasar'
+
+const DragableImg = defineAsyncComponent(() => import('src/components/image/DragableImg.vue'))
+
+const kyc = useKYCStore()
+
+const srcFront = ref(kyc.Images.get(ImageType.Front)?.Base64)
+const srcBack = ref(kyc.Images.get(ImageType.Back)?.Base64)
+const srcSelfie = ref(kyc.Images.get(ImageType.Handing)?.Base64)
+
+const frontSelected = ref(false)
+const backSelected = ref(false)
+const selfieSelected = ref(false)
+
+watch(srcFront, () => {
+  kyc.Images.set(ImageType.Front, {
+    Type: ImageType.Front,
+    URI: '',
+    Base64: srcFront.value
+  } as KYCImage)
+})
+
+watch(srcBack, () => {
+  kyc.Images.set(ImageType.Front, {
+    Type: ImageType.Front,
+    URI: '',
+    Base64: srcFront.value
+  } as KYCImage)
+})
+
+watch(srcSelfie, () => {
+  kyc.Images.set(ImageType.Front, {
+    Type: ImageType.Front,
+    URI: '',
+    Base64: srcFront.value
+  } as KYCImage)
+})
+
+const submitting = ref(false)
+
+const uploadKyc = () => {
+  if (kyc.KYC?.Kyc) {
+    kyc.updateKYC({
+      Info: {
+        ID: kyc.KYC?.Kyc?.ID,
+        UserHandingCardImg: kyc.Images.get(ImageType.Handing)?.URI,
+        BackCardImg: kyc.Images.get(ImageType.Back)?.URI,
+        FrontCardImg: kyc.Images.get(ImageType.Front)?.URI,
+        CardType: selectedType.value.value,
+        CardID: 'NOT-USED-' + uid()
+      },
+      Message: {
+        Error: {
+          Title: t('MSG_UPDATE_KYC_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    })
+    submitting.value = false
+    return
+  }
+  kyc.createKYC({
+    Info: {
+      UserHandingCardImg: kyc.Images.get(ImageType.Handing)?.URI,
+      BackCardImg: kyc.Images.get(ImageType.Back)?.URI,
+      FrontCardImg: kyc.Images.get(ImageType.Front)?.URI,
+      CardType: selectedType.value.value,
+      CardID: 'NOT-USED-' + uid()
+    },
+    Message: {
+      Error: {
+        Title: t('MSG_CREATE_KYC_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    submitting.value = false
+  })
+}
+
+const onSubmit = () => {
+  if (selectedType.value.value === DocumentType.IDCard) {
+    if (!backSelected.value && !srcSelfie.value) {
+      return
+    }
+  }
+  if (!frontSelected.value && !srcFront.value) {
+    return
+  }
+  if (!backSelected.value && !srcBack.value) {
+    return
+  }
+
+  submitting.value = true
+
+  kyc.uploadImage({
+    ImageType: ImageType.Front,
+    ImageBase64: srcFront.value as string,
+    Message: {
+      Error: {
+        Title: t('MSG_UPDATE_KYC_IMAGE_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (error: boolean) => {
+    if (error) {
+      submitting.value = false
+      return
+    }
+    kyc.uploadImage({
+      ImageType: ImageType.Handing,
+      ImageBase64: srcSelfie.value as string,
+      Message: {
+        Error: {
+          Title: t('MSG_UPDATE_KYC_IMAGE_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, (error: boolean) => {
+      if (error) {
+        submitting.value = false
+        return
+      }
+      if (selectedType.value.value === DocumentType.Passport) {
+        uploadKyc()
+        return
+      }
+      kyc.uploadImage({
+        ImageType: ImageType.Back,
+        ImageBase64: srcBack.value as string,
+        Message: {
+          Error: {
+            Title: t('MSG_UPDATE_KYC_IMAGE_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      }, (error: boolean) => {
+        if (error) {
+          submitting.value = false
+          return
+        }
+        uploadKyc()
+      })
+    })
+  })
+}
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const kyc = useKYCStore()
 const state = computed(() => kyc.KYC?.State as unknown as ReviewState)
 const stateImg = computed(() => {
   switch (state.value) {
@@ -148,7 +308,37 @@ onMounted(() => {
       }
     }
   }, () => {
-    // TODO
+    kyc.getKYCImage({
+      ImageType: ImageType.Front,
+      ImageS3Key: kyc.KYC?.Kyc?.FrontCardImg as string,
+      Message: {
+        Error: {
+          Title: t('MSG_GET_KYC_FRONT_IMAGE_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      kyc.getKYCImage({
+        ImageType: ImageType.Handing,
+        ImageS3Key: kyc.KYC?.Kyc?.UserHandingCardImg as string,
+        Message: {
+          Error: {
+            Title: t('MSG_GET_KYC_HANDING_IMAGE_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      }, () => {
+        kyc.getKYCImage({
+          ImageType: ImageType.Back,
+          ImageS3Key: kyc.KYC?.Kyc?.BackCardImg as string,
+          Message: undefined as unknown as ReqMessage
+        }, () => {
+          // TODO
+        })
+      })
+    })
   })
 })
 

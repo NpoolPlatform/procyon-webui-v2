@@ -27,9 +27,10 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.26.1",
+    "compressorjs": "^1.1.1",
     "copy-to-clipboard": "^3.3.1",
     "core-js": "^3.6.5",
-    "npool-cli-v2": "^0.0.162",
+    "npool-cli-v2": "^0.0.163",
     "pinia": "^2.0.13",
     "qrcode.vue": "^3.3.3",
     "quasar": "^2.0.0",

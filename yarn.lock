@@ -2928,6 +2928,11 @@ bl@^4.0.3, bl@^4.1.0:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
+blueimp-canvas-to-blob@^3.29.0:
+  version "3.29.0"
+  resolved "https://registry.npmjs.org/blueimp-canvas-to-blob/-/blueimp-canvas-to-blob-3.29.0.tgz#d965f06cb1a67fdae207a2be56683f55ef531466"
+  integrity sha512-0pcSSGxC0QxT+yVkivxIqW0Y4VlO2XSDPofBAqoJ1qJxgH9eiUDLv50Rixij2cDuEfx4M6DpD9UGZpRhT5Q8qg==
+
 body-parser@1.19.1:
   version "1.19.1"
   resolved "https://registry.npmmirror.com/body-parser/-/body-parser-1.19.1.tgz"
@@ -3446,6 +3451,14 @@ compression@^1.7.4:
     on-headers "~1.0.2"
     safe-buffer "5.1.2"
     vary "~1.1.2"
+
+compressorjs@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/compressorjs/-/compressorjs-1.1.1.tgz#54c147cf37fb38828b08c48646d0258d52faf050"
+  integrity sha512-SysRuUPfmUNoq+RviE0iMFVUmoX2q/x+7PkEPUmk6NGkd85hDrmvujx0Qtp8UCGA6KMe5kuodsylPQcNaLf60w==
+  dependencies:
+    blueimp-canvas-to-blob "^3.29.0"
+    is-blob "^2.1.0"
 
 concat-map@0.0.1, concat-map@^0.0.1:
   version "0.0.1"
@@ -5596,6 +5609,11 @@ is-binary-path@~2.1.0:
   dependencies:
     binary-extensions "^2.0.0"
 
+is-blob@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/is-blob/-/is-blob-2.1.0.tgz#e36cd82c90653f1e1b930f11baf9c64216a05385"
+  integrity sha512-SZ/fTft5eUhQM6oF/ZaASFDEdbFVe89Imltn9uZr03wdKMcWNVYSMjQPFtg05QuNkt5l5c135ElvXEQG0rk4tw==
+
 is-boolean-object@^1.1.0:
   version "1.1.2"
   resolved "https://registry.npmmirror.com/is-boolean-object/-/is-boolean-object-1.1.2.tgz"
@@ -7530,10 +7548,10 @@ npm-run-path@^4.0.0, npm-run-path@^4.0.1:
   dependencies:
     path-key "^3.0.0"
 
-npool-cli-v2@^0.0.162:
-  version "0.0.162"
-  resolved "https://registry.npmjs.org/npool-cli-v2/-/npool-cli-v2-0.0.162.tgz#0d1af93742e195ecf7ce2d1ba46eefd00ee71eb6"
-  integrity sha512-oOFcYMCGsLY3biKvzPanyMu3q7QiNcXYbZAdzb3pgcO5wM5FaHT5xztLY+dVNF8ts2v+Z4yWbXo5nn0YYdTprw==
+npool-cli-v2@^0.0.163:
+  version "0.0.163"
+  resolved "https://registry.npmjs.org/npool-cli-v2/-/npool-cli-v2-0.0.163.tgz#def374a674ab2c9ef78638775a41cd7e2b466114"
+  integrity sha512-CHgR6GsUGMYCVKRrnU0ORWPN3ZzsdlQ/XThJlHgPL8PsEg3L4VK0Kt9Xl2dx7xKTbGnZqBj4Hdb+oSd9UUL3QQ==
   dependencies:
     "@quasar/extras" "^1.0.0"
     "@typescript-eslint/eslint-plugin" "^5.17.0"
