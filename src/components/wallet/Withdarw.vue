@@ -108,7 +108,7 @@ const onAmountFocusIn = () => {
   amountError.value = false
 }
 const onAmountFocusOut = () => {
-  amountError.value = amount.value > 0 && amount.value <= earning.value - withdrawedEarning.value
+  amountError.value = !amount.value || amount.value >= (earning.value - withdrawedEarning.value)
 }
 
 const withdrawType = ref(WithdrawType.Benefit)
@@ -171,8 +171,10 @@ const onCodeVerify = (code: string) => {
         Type: NotificationType.Error
       }
     }
-  }, () => {
-    void router.back()
+  }, (error: boolean) => {
+    if (!error) {
+      void router.back()
+    }
   })
   verifing.value = false
 }
