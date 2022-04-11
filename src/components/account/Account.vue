@@ -252,15 +252,11 @@ const user = useUserStore()
 const router = useRouter()
 
 const onSubmit = () => {
-  if (usernameError.value) {
-    return
-  }
+  usernameError.value = !username.value.length
+  firstNameError.value = !firstName.value.length
+  lastNameError.value = !lastName.value.length
 
-  if (firstNameError.value) {
-    return
-  }
-
-  if (lastNameError.value) {
+  if (usernameError.value || firstNameError.value || lastNameError.value) {
     return
   }
 
@@ -288,32 +284,32 @@ const onSubmit = () => {
         void router.push({ path: '/account' })
       }
     })
+    return false
   }
-  if (logined.LoginedUser?.Extra) {
-    user.updateExtra({
-      Info: {
-        IDNumber: '',
-        Username: username.value,
-        AddressFields: addressFields.value,
-        Gender: gender.value,
-        PostalCode: postalCode.value,
-        FirstName: firstName.value,
-        LastName: lastName.value
-      },
-      Message: {
-        Error: {
-          Title: t('MSG_UPDATE_EXTRA'),
-          Message: t('MSG_UPDATE_EXTRA_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+
+  logined.LoginedUser.Extra.AddressFields = addressFields.value
+  logined.LoginedUser.Extra.Username = username.value
+  logined.LoginedUser.Extra.Gender = gender.value
+  logined.LoginedUser.Extra.PostalCode = postalCode.value
+  logined.LoginedUser.Extra.FirstName = firstName.value
+  logined.LoginedUser.Extra.LastName = lastName.value
+
+  user.updateExtra({
+    Info: logined.LoginedUser.Extra,
+    Message: {
+      Error: {
+        Title: t('MSG_UPDATE_EXTRA'),
+        Message: t('MSG_UPDATE_EXTRA_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
       }
-    }, (error: boolean) => {
-      if (!error) {
-        void router.push({ path: '/account' })
-      }
-    })
-  }
+    }
+  }, (error: boolean) => {
+    if (!error) {
+      void router.push({ path: '/account' })
+    }
+  })
+
   return false
 }
 
