@@ -56,7 +56,7 @@
 
 <script setup lang='ts'>
 import { useInspireStore, useLoginedUserStore, NotificationType, useUserStore } from 'npool-cli-v2'
-import { defineAsyncComponent, computed, onMounted } from 'vue'
+import { defineAsyncComponent, computed } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
 
@@ -107,18 +107,6 @@ const menu = computed(() => {
   const myMenu = HeaderAvatarMenu()
   myMenu.children = myMenu.children.filter((m) => m.label !== 'MSG_REFERRAL' || inspire.InvitationCode?.InvitationCode?.length)
   return myMenu
-})
-
-onMounted(() => {
-  inspire.getInvitationCode({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_INVITATION_CODE_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  })
 })
 
 const onLogoClick = () => {
