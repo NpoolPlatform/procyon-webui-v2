@@ -108,6 +108,8 @@ onMounted(() => {
           Type: NotificationType.Error
         }
       }
+    }, () => {
+      // TODO
     })
 
     good.getPromotions({

@@ -31,6 +31,8 @@ onMounted(() => {
         Type: NotificationType.Error
       }
     }
+  }, () => {
+    // TODO
   })
 
   good.getRecommends({
