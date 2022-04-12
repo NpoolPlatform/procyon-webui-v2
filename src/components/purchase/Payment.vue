@@ -160,21 +160,24 @@ const launchTicker = () => {
 }
 
 onMounted(() => {
-  if (!order.value) {
-    orders.getOrder({
-      ID: orderId.value,
-      Message: {
-        Error: {
-          Title: t('MSG_GET_ORDER'),
-          Message: t('MSG_GET_ORDER_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      launchTicker()
-    })
+  if (order.value) {
+    launchTicker()
+    return
   }
+
+  orders.getOrder({
+    ID: orderId.value,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_ORDER'),
+        Message: t('MSG_GET_ORDER_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    launchTicker()
+  })
 })
 
 onUnmounted(() => {

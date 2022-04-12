@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineAsyncComponent } from 'vue'
+import { computed, onMounted, defineAsyncComponent, ref, onUnmounted } from 'vue'
 import { useOrderStore, buildOrders, OrderGroup, OrderModel, useGoodStore, formatTime, NotificationType, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -79,7 +79,7 @@ const table = computed(() => [
     name: 'State',
     label: t('MSG_STATE'),
     align: 'center',
-    field: (row: OrderModel) => order.getOrderState(order.getOrderByID(row.OrderID))
+    field: (row: OrderModel) => row.State
   }
 ])
 
@@ -97,6 +97,8 @@ const onRowClick = (myOrder: OrderModel) => {
     }
   })
 }
+
+const ticker = ref(-1)
 
 onMounted(() => {
   if (good.Goods.length < 0) {
@@ -131,6 +133,18 @@ onMounted(() => {
         }
       }
     })
+  }
+
+  ticker.value = window.setInterval(() => {
+    orders.value.forEach((myOrder) => {
+      myOrder.State = order.getOrderState(order.getOrderByID(myOrder.OrderID))
+    })
+  }, 1000)
+})
+
+onUnmounted(() => {
+  if (ticker.value >= 0) {
+    window.clearInterval(ticker.value)
   }
 })
 
