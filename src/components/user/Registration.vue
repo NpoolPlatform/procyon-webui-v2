@@ -142,7 +142,7 @@ const onSendCodeClick = () => {
   if (accountError.value) {
     return
   }
-  coderepo.sendVerificationCode(account.value, accountType.value, MessageUsedFor.Update, account.value)
+  coderepo.sendVerificationCode(account.value, accountType.value, MessageUsedFor.Signup, account.value)
 }
 
 const onSubmit = () => {
