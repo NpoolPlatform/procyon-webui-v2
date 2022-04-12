@@ -6,11 +6,16 @@
     <h2 class='hero'>
       {{ $t('MSG_SUB_SLOGAN') }}
     </h2>
-    <button>{{ $t('MSG_REGISTER') }}</button>
+    <button v-if='!logined.getLogined'>
+      {{ $t('MSG_REGISTER') }}
+    </button>
   </div>
 </template>
 
 <script setup lang='ts'>
+import { useLoginedUserStore } from 'npool-cli-v2'
+
+const logined = useLoginedUserStore()
 
 </script>
 
