@@ -21,7 +21,7 @@
 
 <script setup lang='ts'>
 import { useSettingStore } from '../../store/setting'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { BaseMenu, MenuItem } from 'src/menus/menus'
 import { onMounted, ref } from 'vue'
 import { useInspireStore, NotificationType } from 'npool-cli-v2'
@@ -47,6 +47,7 @@ const showMenu = (menu: MenuItem) => {
   return true
 }
 
+const route = useRoute()
 const menuId = ref('')
 
 const onMenuSwitch = (menu: MenuItem) => {
@@ -62,6 +63,12 @@ onMounted(() => {
         Popup: true,
         Type: NotificationType.Error
       }
+    }
+  })
+
+  BaseMenu.children.forEach((menu) => {
+    if (route.path.includes(menu.target)) {
+      menuId.value = menu.menuId
     }
   })
 })
