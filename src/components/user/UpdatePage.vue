@@ -19,7 +19,7 @@
         @focus='onVerificationCodeFocusIn'
         @blur='onVerificationCodeFocusOut'
       />
-      <TimeoutSendBtn :initial-clicked='true' @click='onSendCodeClick' />
+      <TimeoutSendBtn :initial-clicked='true' :target-error='false' @click='onSendCodeClick' />
       <slot name='body' />
     </template>
   </FormPage>

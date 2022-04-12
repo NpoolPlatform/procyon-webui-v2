@@ -24,6 +24,7 @@
         :initial-clicked='true'
         @click='onSendCodeClick'
         class='margin-top-0'
+        :target-error='false'
       />
       <button class='btn' @click='onVerifyClick'>
         {{ $t('MSG_VERIFY') }}

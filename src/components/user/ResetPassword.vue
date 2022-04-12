@@ -33,7 +33,7 @@
         @focus='onEmailFocusIn'
         @blur='onEmailFocusOut'
       />
-      <TimeoutSendBtn :initial-clicked='false' @click='onSendCodeClick' />
+      <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
       <Input
         v-model:value='verificationCode'
         :label='signupMethod === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
@@ -104,7 +104,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const accountError = ref(false)
 const onAccountError = () => {
-  accountError.value = signupMethod.value === AccountType.Email ? validateEmailAddress(emailAddress.value) : validateMobileNO(phoneNO.value)
+  accountError.value = signupMethod.value === AccountType.Email ? !validateEmailAddress(emailAddress.value) : !validateMobileNO(phoneNO.value)
 }
 
 const phoneNO = ref('')

@@ -38,7 +38,7 @@
         @focus='onEmailFocusIn'
         @blur='onEmailFocusOut'
       />
-      <TimeoutSendBtn :initial-clicked='false' @click='onSendCodeClick' />
+      <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
       <Input
         v-model:value='myVerificationCode'
         :label='accountType === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'

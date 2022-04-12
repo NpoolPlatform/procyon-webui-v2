@@ -5,16 +5,24 @@
 </template>
 
 <script setup lang='ts'>
-import { defineEmits, ref, onMounted, onUnmounted, defineProps, toRef } from 'vue'
+import { defineEmits, ref, onMounted, onUnmounted, defineProps, toRef, watch } from 'vue'
 
 interface Props {
   initialClicked: boolean
+  targetError: boolean
 }
 
 const props = defineProps<Props>()
 const initialClicked = toRef(props, 'initialClicked')
+const targetError = toRef(props, 'targetError')
 
 const disabled = ref(initialClicked.value)
+watch(targetError, () => {
+  if (targetError.value) {
+    disabled.value = false
+  }
+})
+
 const ticker = ref(-1)
 const timeout = ref(60)
 
@@ -33,6 +41,9 @@ const startTimer = () => {
 
 const emit = defineEmits<{(e: 'click'): void}>()
 const onClick = () => {
+  if (targetError.value) {
+    return
+  }
   emit('click')
   startTimer()
 }
