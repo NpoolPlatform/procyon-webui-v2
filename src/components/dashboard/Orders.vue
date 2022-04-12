@@ -28,7 +28,7 @@ const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.
 const { t } = useI18n({ useScope: 'global' })
 
 const order = useOrderStore()
-const orders = computed(() => buildOrders(order.Orders, OrderGroup.ALL))
+const orders = ref(buildOrders(order.Orders, OrderGroup.ALL))
 
 const good = useGoodStore()
 
@@ -136,9 +136,12 @@ onMounted(() => {
   }
 
   ticker.value = window.setInterval(() => {
+    const newOrders = [] as Array<OrderModel>
     orders.value.forEach((myOrder) => {
       myOrder.State = order.getOrderState(order.getOrderByID(myOrder.OrderID))
+      newOrders.push(myOrder)
     })
+    orders.value = newOrders
   }, 1000)
 })
 
