@@ -68,7 +68,7 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        :used-for='MessageUsedFor.SetWithdrawAddress'
+        :used-for='MessageUsedFor.Withdraw'
       />
     </div>
   </q-dialog>
