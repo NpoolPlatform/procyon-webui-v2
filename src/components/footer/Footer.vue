@@ -16,9 +16,9 @@
         <div class='column-4'>
           <h4>{{ $t('MSG_LINKS') }}</h4>
           <ul>
-            <li><a class='footer-link' href='#'>Home</a></li>
-            <li><a class='footer-link' href='#'>Products</a></li>
-            <li><a class='footer-link' href='https://procyon-vip.medium.com/'>Blog</a></li>
+            <li><a class='footer-link' href='#'>{{ $t('MSG_HOME') }}</a></li>
+            <li><a class='footer-link' href='#'>{{ $t('MSG_PRODUCTS') }}</a></li>
+            <li><a class='footer-link' href='https://procyon-vip.medium.com/'>{{ $t('MSG_BLOG') }}</a></li>
           </ul>
         </div>
         <div class='column-4'>
