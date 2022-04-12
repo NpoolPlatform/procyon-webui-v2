@@ -16,6 +16,7 @@
         :error='codeError'
         message='MSG_VERIFICATION_CODE_TIP'
         placeholder='MSG_VERIFICATION_CODE_PLACEHOLDER'
+        :autocompleted='false'
         @focus='onCodeFocusIn'
         @blur='onCodeFocusOut'
       />

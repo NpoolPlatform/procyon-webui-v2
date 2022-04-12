@@ -14,6 +14,7 @@
     :class='[ error ? "error" : "" ]'
     :max='max'
     :min='min'
+    :autocompleted='autocompleted'
     v-model='myValue'
     @focus='onFocus'
     @blur='onBlur'
@@ -24,7 +25,7 @@
 </template>
 
 <script setup lang='ts'>
-import { defineProps, toRef, defineEmits, watch, ref } from 'vue'
+import { defineProps, toRef, defineEmits, watch, ref, withDefaults } from 'vue'
 
 interface Props {
   value: string | number
@@ -39,9 +40,17 @@ interface Props {
   caption?: string
   max?: number
   min?: number
+  autocompleted?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  autocompleted: true,
+  label: undefined,
+  name: undefined,
+  caption: undefined,
+  max: undefined,
+  min: undefined
+})
 const label = toRef(props, 'label')
 const type = toRef(props, 'type')
 const name = toRef(props, 'name')

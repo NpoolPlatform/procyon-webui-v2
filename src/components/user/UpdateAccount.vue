@@ -154,7 +154,7 @@ const onSubmit = () => {
           }
         }
       }, () => {
-        void router.back()
+        void router.push({ path: '/dashboard' })
       })
       break
     case AccountType.Mobile:
@@ -173,7 +173,7 @@ const onSubmit = () => {
           }
         }
       }, () => {
-        void router.back()
+        void router.push({ path: '/dashboard' })
       })
       break
   }

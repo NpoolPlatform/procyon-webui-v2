@@ -133,7 +133,6 @@ const onCodeVerify = (code: string) => {
         }
       }
     })
-    void router.push({ path: '/' })
   })
 }
 
