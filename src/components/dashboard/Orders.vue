@@ -1,7 +1,7 @@
 <template>
   <OpTable
     label='MSG_ORDER_HISTORY'
-    :rows='(orders as Array<never>)'
+    :rows='(myOrders as Array<never>)'
     :table='(table as never)'
     :count-per-page='10'
     @row-click='(row) => onRowClick(row as OrderModel)'
@@ -28,7 +28,8 @@ const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.
 const { t } = useI18n({ useScope: 'global' })
 
 const order = useOrderStore()
-const orders = ref(buildOrders(order.Orders, OrderGroup.ALL))
+const orders = computed(() => buildOrders(order.Orders, OrderGroup.ALL))
+const myOrders = ref([] as Array<OrderModel>)
 
 const good = useGoodStore()
 
@@ -136,12 +137,11 @@ onMounted(() => {
   }
 
   ticker.value = window.setInterval(() => {
-    const newOrders = [] as Array<OrderModel>
+    myOrders.value = [] as Array<OrderModel>
     orders.value.forEach((myOrder) => {
       myOrder.State = order.getOrderState(order.getOrderByID(myOrder.OrderID))
-      newOrders.push(myOrder)
+      myOrders.value.push(myOrder)
     })
-    orders.value = newOrders
   }, 1000)
 })
 
