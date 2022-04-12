@@ -8,7 +8,7 @@ import {
 import routes from './routes'
 import { loginInterceptor } from 'npool-cli-v2/utils'
 import { api } from 'src/boot/axios'
-import { useSettingStore } from 'src/store/setting'
+import { useSettingStore } from 'src/localstore'
 
 /*
  * If not building with SSR mode, you can

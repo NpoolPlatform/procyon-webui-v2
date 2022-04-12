@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useSettingStore } from '../../store/setting'
+import { useSettingStore } from 'src/localstore'
 import { useRoute, useRouter } from 'vue-router'
 import { BaseMenu, MenuItem } from 'src/menus/menus'
 import { onMounted, ref } from 'vue'

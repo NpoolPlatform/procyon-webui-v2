@@ -62,7 +62,7 @@ import { useRouter } from 'vue-router'
 
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
-import { useSettingStore } from 'src/store/setting'
+import { useSettingStore } from 'src/localstore'
 import { useI18n } from 'vue-i18n'
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))

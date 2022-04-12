@@ -16,7 +16,7 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useNotificationStore, notify } from 'npool-cli-v2'
-import { useSettingStore } from 'src/store/setting'
+import { useSettingStore } from 'src/localstore'
 
 const MainHeader = defineAsyncComponent(() => import('src/components/header/MainHeader.vue'))
 const Footer = defineAsyncComponent(() => import('src/components/footer/Footer.vue'))
