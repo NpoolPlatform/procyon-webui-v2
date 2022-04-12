@@ -4,34 +4,34 @@
       <div class='columns-4'>
         <div class='column-4'>
           <img class='logo' :src='lightLogo'>
-          <h1>Shoot for the Stars</h1>
+          <h1>{{ $t('MSG_SHOOT_FOT_THE_STARS') }}</h1>
           <h4 class='tagline'>
-            Your global constellation of cryptocurrencies
+            {{ $t('MSG_YOUR_GLOBAL_CONSTELLATION') }}
           </h4>
         </div>
         <div class='column-4'>
-          <h4>Language</h4>
+          <h4>{{ $t('MSG_LANGUAGE') }}</h4>
           <LangSwitcher />
         </div>
         <div class='column-4'>
-          <h4>Links</h4>
+          <h4>{{ $t('MSG_LINKS') }}</h4>
           <ul>
-            <li><a class='footer-link'>Home</a></li>
-            <li><a class='footer-link'>Products</a></li>
-            <li><a class='footer-link'>Blog</a></li>
+            <li><a class='footer-link' href='#'>Home</a></li>
+            <li><a class='footer-link' href='#'>Products</a></li>
+            <li><a class='footer-link' href='https://procyon-vip.medium.com/'>Blog</a></li>
           </ul>
         </div>
         <div class='column-4'>
-          <h4>Help</h4>
+          <h4>{{ $t('MSG_HELP') }}</h4>
           <ul>
-            <li><a class='footer-link'>FAQ</a></li>
-            <li><a class='footer-link' href='mailto:support@procyon.vip'>CONTACT</a></li>
-            <li><a class='footer-link' href='#/legal'>LEGAL</a></li>
+            <li><a class='footer-link' href='#/faq'>{{ $t('MSG_FAQ') }}</a></li>
+            <li><a class='footer-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
+            <li><a class='footer-link' href='#/legal'>{{ $t('MSG_LEGAL') }}</a></li>
           </ul>
         </div>
       </div>
       <p class='copyright'>
-        © 2021 PRCN Technology Ltd.
+        © 2021-{{ new Date().getFullYear() }} {{ $t('MSG_ORGANIZATION') }}
       </p>
     </div>
   </footer>

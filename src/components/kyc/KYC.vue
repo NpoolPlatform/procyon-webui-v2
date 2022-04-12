@@ -95,7 +95,8 @@
 <script setup lang='ts'>
 import { onMounted, computed, ref, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NotificationType, useKYCStore, ReviewState, DocumentType, ImageType, KYCImage } from 'npool-cli-v2'
+import { NotificationType, useKYCStore, ReviewState, DocumentType, ImageType, KYCImage, ReqMessage } from 'npool-cli-v2'
+import { uid } from 'quasar'
 
 import kycNotVerified from 'src/assets/kyc-not-verified.svg'
 import kycReview from 'src/assets/kyc-review.svg'
@@ -104,8 +105,6 @@ import kycVerified from 'src/assets/kyc-verified.svg'
 import kycIDFront from 'src/assets/kyc-id-front.svg'
 import kycIDBack from 'src/assets/kyc-id-back.svg'
 import kycSelfieID from 'src/assets/kyc-selfie-id.svg'
-import { ReqMessage } from 'npool-cli-v2/dist/store/notifications/types'
-import { uid } from 'quasar'
 
 const DragableImg = defineAsyncComponent(() => import('src/components/image/DragableImg.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
