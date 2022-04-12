@@ -80,16 +80,13 @@
       <div class='kyc-submit'>
         <h4>{{ $t('MSG_KYC_CONFIRMATION_TITLE') }}</h4>
         <p class='kyc-confirmation' v-html='$t("MSG_KYC_CONFIRMATION_CONTENT")' />
-        <button @click='onSubmit' :disabled='!updatable || submitting'>
-          <div v-if='!submitting'>
-            {{ $t('MSG_SUBMIT_DOCUMENTS') }}
-          </div>
-          <q-spinner
-            v-else
-            color='primary'
-            size='1.5em'
-          />
-        </button>
+        <WaitingBtn
+          label='MSG_SUBMIT_DOCUMENTS'
+          type='button'
+          :disabled='!updatable || submitting'
+          :waiting='submitting'
+          @click='onSubmit'
+        />
       </div>
     </div>
   </div>
@@ -111,6 +108,7 @@ import { ReqMessage } from 'npool-cli-v2/dist/store/notifications/types'
 import { uid } from 'quasar'
 
 const DragableImg = defineAsyncComponent(() => import('src/components/image/DragableImg.vue'))
+const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 
 const kyc = useKYCStore()
 

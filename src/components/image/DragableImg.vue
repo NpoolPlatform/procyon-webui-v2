@@ -9,10 +9,9 @@
   <img
     object-fit='cover'
     :src='src.length ? src : (placeholder.length ? placeholder : addImage)'
-    :disabled='!updatable'
     :ratio='4/3'
     @click='onImgClick'
-    class='image'
+    :class='[ "image", updatable ? "" : "disable" ]'
   >
 </template>
 
@@ -35,6 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
   src: ''
 })
 const src = toRef(props, 'src')
+const updatable = toRef(props, 'updatable')
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -99,4 +99,7 @@ const onImgClick = () => {
 <style lang='sass' scoped>
 .image
   height: 200px
+
+.disable
+  cursor: not-allowed
 </style>

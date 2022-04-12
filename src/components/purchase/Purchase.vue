@@ -56,7 +56,19 @@
       </h3>
       <form action='javascript:void(0)' @submit='onSubmit' id='purchase'>
         <h4>{{ $t('MSG_PURCHASE_AMOUNT') }} ({{ good?.Good?.Good?.Unit }}s)</h4>
-        <input type='number' v-model='purchaseAmount' required min='0'>
+        <Input
+          v-model:value='purchaseAmount'
+          type='number'
+          id='amount'
+          required
+          :error='purchaseAmountError'
+          message='MSG_AMOUNT_TIP'
+          placeholder='MSG_AMOUNT_PLACEHOLDER'
+          :min='0'
+          :max='good.Good?.Good?.Total'
+          @focus='onPurchaseAmountFocusIn'
+          @blur='onPurchaseAmountFocusOut'
+        />
         <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
         <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
           <option
@@ -72,17 +84,12 @@
         <input type='text'>
         <div class='coupon-error'>Incorrect Coupon Code</div>-->
         <div class='submit-container'>
-          <input
+          <WaitingBtn
+            label='MSG_PURCHASE'
             type='submit'
-            :value='$t("MSG_PURCHASE")'
-            class='submit'
+            class='submit-btn'
             :disabled='submitting'
-          >
-          <q-linear-progress
-            indeterminate
-            color='positive'
-            class='q-mt-sm'
-            v-if='submitting'
+            :waiting='submitting'
           />
         </div>
       </form>
@@ -107,6 +114,10 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ThrottleSeconds } from 'src/const/const'
 
+const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
+const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
+const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
@@ -126,13 +137,20 @@ const coin = useCoinStore()
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale))
 const paymentCoin = ref(undefined as unknown as Coin)
+
 const purchaseAmount = ref(1)
+const purchaseAmountError = ref(false)
+const onPurchaseAmountFocusIn = () => {
+  purchaseAmountError.value = false
+}
+const onPurchaseAmountFocusOut = () => {
+  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > good?.value.Good?.Good?.Total
+}
+
 const submitting = ref(false)
 
 const order = useOrderStore()
 const router = useRouter()
-
-const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 
 onMounted(() => {
   if (!good.value) {
@@ -179,7 +197,8 @@ onMounted(() => {
 })
 
 const onSubmit = throttle(() => {
-  if (purchaseAmount.value <= 0) {
+  onPurchaseAmountFocusOut()
+  if (purchaseAmountError.value) {
     return
   }
 
@@ -236,6 +255,6 @@ const onSubmit = throttle(() => {
 .product-detail-text
   width: 100%
 
-.submit
-  margin-bottom: 0px !important
+.submit-btn
+  margin-top: 24px
 </style>
