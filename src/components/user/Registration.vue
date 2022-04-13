@@ -146,12 +146,14 @@ const onSendCodeClick = () => {
 }
 
 const onSubmit = () => {
-  confirmPasswdError.value = !validatePassword(confirmPassword.value) ||
-                             password.value !== confirmPassword.value
+  onConfirmPasswordFocusOut()
+  onAgreeFocusOut()
+  onVerificationCodeFocusOut()
 
   if (accountError.value ||
       verificationCodeError.value ||
-      confirmPasswdError.value) {
+      confirmPasswdError.value ||
+      agreeError.value) {
     return
   }
 
