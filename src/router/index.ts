@@ -7,7 +7,6 @@ import {
 } from 'vue-router'
 import routes from './routes'
 import { loginInterceptor } from 'npool-cli-v2/utils'
-import { api } from 'src/boot/axios'
 import { useSettingStore } from 'src/localstore'
 import { BaseMenu } from 'src/menus/menus'
 
@@ -48,7 +47,7 @@ export default route(function (/* { store, ssrContext } */) {
       }
     })
 
-    loginInterceptor(api, '/signin', to, next)
+    loginInterceptor('/signin', to, next)
   })
 
   return router

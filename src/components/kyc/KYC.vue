@@ -95,7 +95,7 @@
 <script setup lang='ts'>
 import { onMounted, computed, ref, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NotificationType, useKYCStore, ReviewState, DocumentType, ImageType, KYCImage, ReqMessage } from 'npool-cli-v2'
+import { NotificationType, useKYCStore, ReviewState, DocumentType, ImageType, KYCImage, Message } from 'npool-cli-v2'
 import { uid } from 'quasar'
 
 import kycNotVerified from 'src/assets/kyc-not-verified.svg'
@@ -348,7 +348,9 @@ onMounted(() => {
         kyc.getKYCImage({
           ImageType: ImageType.Back,
           ImageS3Key: kyc.KYC?.Kyc?.BackCardImg as string,
-          Message: undefined as unknown as ReqMessage
+          Message: {
+            Error: undefined as unknown as Message
+          }
         }, () => {
           // TODO
         })
