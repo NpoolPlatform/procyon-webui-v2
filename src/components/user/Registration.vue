@@ -83,6 +83,17 @@
         <div class='confirmation'>
           <Legal />
         </div>
+        <div class='row'>
+          <q-space />
+          <div class='buttons'>
+            <button @click='onAgreeClick'>
+              {{ $t('MSG_AGREE') }}
+            </button>
+            <button class='alt' @click='onCancelClick'>
+              {{ $t('MSG_CANCEL') }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </q-dialog>
@@ -150,6 +161,15 @@ const onAgreeFocusOut = () => {
 const showStatus = ref(false)
 const onAgreementClick = () => {
   showStatus.value = true
+}
+const onAgreeClick = () => {
+  showStatus.value = false
+  onAgreeFocusOut()
+  agree.value = true
+}
+const onCancelClick = () => {
+  showStatus.value = false
+  onAgreeFocusOut()
 }
 
 const coderepo = useCodeRepoStore()
