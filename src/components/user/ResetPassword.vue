@@ -129,7 +129,7 @@ const onVerificationCodeFocusIn = () => {
   verificationCodeError.value = false
 }
 const onVerificationCodeFocusOut = () => {
-  verificationCodeError.value = !validateVerificationCode(password.value)
+  verificationCodeError.value = !validateVerificationCode(verificationCode.value)
 }
 
 const password = ref('')

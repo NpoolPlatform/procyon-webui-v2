@@ -98,13 +98,15 @@ const onConfirmPasswordFocusIn = () => {
   confirmPwdError.value = false
 }
 const onConfirmPasswordFocusOut = () => {
-  confirmPwdError.value = !validatePassword(confirmPassword.value)
+  confirmPwdError.value = !validatePassword(confirmPassword.value) || confirmPassword.value !== newPassword.value
 }
 
 const router = useRouter()
 
 const onSubmit = () => {
-  confirmPwdError.value ||= newPassword.value !== confirmPassword.value
+  onConfirmPasswordFocusOut()
+  onNewPasswordFocusOut()
+  onPasswordFocusOut()
 
   if (newPwdError.value || pwdError.value || confirmPwdError.value || verificationCodeError.value) {
     return
