@@ -7,7 +7,7 @@
     accept='image/jpeg, image/png, image/jpg'
   >
   <img
-    object-fit='cover'
+    object-fit='contain'
     :src='src.length ? src : (placeholder.length ? placeholder : addImage)'
     :ratio='4/3'
     @click='onImgClick'
