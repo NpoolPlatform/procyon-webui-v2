@@ -158,7 +158,7 @@ const onGoogleSignClick = () => {
       }
     }
   }, () => {
-    void router.back()
+    // TODO
   })
 }
 
