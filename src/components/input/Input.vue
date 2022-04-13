@@ -14,7 +14,7 @@
     :class='[ error ? "error" : "" ]'
     :max='max'
     :min='min'
-    :autocompleted='autocompleted'
+    :autocomplete='autocomplete ? "on" : "new-password"'
     v-model='myValue'
     @focus='onFocus'
     @blur='onBlur'
@@ -40,11 +40,11 @@ interface Props {
   caption?: string
   max?: number
   min?: number
-  autocompleted?: boolean
+  autocomplete?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  autocompleted: true,
+  autocomplete: true,
   label: undefined,
   name: undefined,
   caption: undefined,

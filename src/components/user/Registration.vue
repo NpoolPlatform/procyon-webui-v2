@@ -18,7 +18,7 @@
         required
         :error='verificationCodeError'
         message='MSG_VERIFICATION_CODE_TIP'
-        :autocompleted='false'
+        :autocomplete='false'
         placeholder='MSG_VERIFICATION_CODE_PLACEHOLDER'
         @focus='onVerificationCodeFocusIn'
         @blur='onVerificationCodeFocusOut'
