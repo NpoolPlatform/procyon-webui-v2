@@ -72,7 +72,7 @@
             label='MSG_POSTAL_CODE'
             type='text'
             id='postal-code'
-            required
+            :required='false'
             :error='postalCodeError'
             message='MSG_POSTAL_CODE_TIP'
             placeholder='MSG_POSTAL_CODE_PLACEHOLDER'
@@ -85,7 +85,7 @@
             label='MSG_PROVINCE'
             type='text'
             id='province'
-            required
+            :required='false'
             :error='provinceError'
             message='MSG_PROVINCE_TIP'
             placeholder='MSG_PROVINCE_PLACEHOLDER'
@@ -99,7 +99,7 @@
             label='MSG_STREET1'
             type='text'
             id='street1'
-            required
+            :required='false'
             :error='street1Error'
             message='MSG_STREET1_TIP'
             placeholder='MSG_STREE1_PLACEHOLDER'
@@ -112,7 +112,7 @@
             label='MSG_STREET2'
             type='text'
             id='street2'
-            required
+            :required='false'
             :error='street2Error'
             message='MSG_STREET2_TIP'
             placeholder='MSG_STREET2_PLACEHOLDER'
@@ -126,7 +126,7 @@
             label='MSG_CITY'
             type='text'
             id='city'
-            required
+            :required='false'
             :error='cityError'
             message='MSG_CITY'
             placeholder='MSG_CITY_PLACEHOLDER'
@@ -139,7 +139,7 @@
             label='MSG_COUNTRY'
             type='text'
             id='country'
-            required
+            :required='false'
             :error='countryError'
             message='MSG_COUNTRY_TIP'
             placeholder='MSG_COUNTRY_PLACEHOLDER'
@@ -159,7 +159,6 @@ import {
   validateUsername
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
 
 import { useI18n } from 'vue-i18n'
 
@@ -249,7 +248,6 @@ const street2 = computed({
 const street2Error = ref(false)
 
 const user = useUserStore()
-const router = useRouter()
 
 const onSubmit = () => {
   usernameError.value = !username.value.length
@@ -279,10 +277,8 @@ const onSubmit = () => {
           Type: NotificationType.Error
         }
       }
-    }, (error: boolean) => {
-      if (!error) {
-        void router.push({ path: '/account' })
-      }
+    }, () => {
+    // TODO
     })
     return false
   }
@@ -304,10 +300,8 @@ const onSubmit = () => {
         Type: NotificationType.Error
       }
     }
-  }, (error: boolean) => {
-    if (!error) {
-      void router.push({ path: '/account' })
-    }
+  }, () => {
+    // TODO
   })
 
   return false
