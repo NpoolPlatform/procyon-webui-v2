@@ -79,6 +79,10 @@ const emit = defineEmits<{(e: 'update:src', img: string): void,
 }>()
 
 const onImgSelected = (evt: Event) => {
+  if (!updatable.value) {
+    return
+  }
+
   const target = evt.target as unknown as HTMLInputElement
   if (target.files) {
     const filename = target.files[0]
