@@ -192,14 +192,14 @@ const uploadKyc = () => {
 
 const onSubmit = () => {
   if (selectedType.value.value === DocumentType.IDCard) {
-    if (!backSelected.value && !srcSelfie.value) {
+    if (!backSelected.value && !srcBack.value) {
       return
     }
   }
   if (!frontSelected.value && !srcFront.value) {
     return
   }
-  if (!backSelected.value && !srcBack.value) {
+  if (!backSelected.value && !srcSelfie.value) {
     return
   }
 
