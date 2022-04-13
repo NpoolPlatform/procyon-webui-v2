@@ -9,6 +9,7 @@ import routes from './routes'
 import { loginInterceptor } from 'npool-cli-v2/utils'
 import { api } from 'src/boot/axios'
 import { useSettingStore } from 'src/localstore'
+import { BaseMenu } from 'src/menus/menus'
 
 /*
  * If not building with SSR mode, you can
@@ -40,6 +41,13 @@ export default route(function (/* { store, ssrContext } */) {
   router.beforeEach((to, _, next) => {
     const setting = useSettingStore()
     setting.ShowSideMenu = to.meta.ShowSideMenu ? to.meta.ShowSideMenu : false
+
+    BaseMenu.children.forEach((menu) => {
+      if (to.path.includes(menu.target)) {
+        setting.ActiveMenuTarget = menu.target
+      }
+    })
+
     loginInterceptor(api, '/signin', to, next)
   })
 

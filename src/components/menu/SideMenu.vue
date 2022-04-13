@@ -21,9 +21,9 @@
 
 <script setup lang='ts'>
 import { useSettingStore } from 'src/localstore'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { BaseMenu, MenuItem } from 'src/menus/menus'
-import { onMounted, ref } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useInspireStore, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
@@ -47,11 +47,13 @@ const showMenu = (menu: MenuItem) => {
   return true
 }
 
-const route = useRoute()
-const menuId = ref('')
+const menuId = computed(() => {
+  const index = BaseMenu.children.findIndex((el: MenuItem) => el.target === setting.ActiveMenuTarget)
+  return BaseMenu.children[index]?.menuId ? BaseMenu.children[index]?.menuId : BaseMenu.children[0].menuId
+})
 
 const onMenuSwitch = (menu: MenuItem) => {
-  menuId.value = menu.menuId
+  setting.ActiveMenuTarget = menu.target
   void router.push({ path: menu.target })
 }
 
@@ -63,12 +65,6 @@ onMounted(() => {
         Popup: true,
         Type: NotificationType.Error
       }
-    }
-  })
-
-  BaseMenu.children.forEach((menu) => {
-    if (route.path.includes(menu.target)) {
-      menuId.value = menu.menuId
     }
   })
 })
