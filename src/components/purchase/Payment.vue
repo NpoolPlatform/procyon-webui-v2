@@ -124,12 +124,6 @@ const launchTicker = () => {
   ticker.value = window.setInterval(() => {
     remainSeconds.value = orders.getOrderState(order.value)
 
-    if (!orders.validateOrder(order.value)) {
-      window.clearInterval(ticker.value)
-      ticker.value = -1
-      return
-    }
-
     if (orders.orderPaid(order.value)) {
       showStatus.value = true
       popupTitle.value = 'MSG_ORDER_COMPLETE'
