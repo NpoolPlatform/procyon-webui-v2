@@ -155,6 +155,9 @@ const launchTicker = () => {
 
 onMounted(() => {
   if (order.value) {
+    if (!orders.validateOrder(order.value)) {
+      return
+    }
     launchTicker()
     return
   }
@@ -170,6 +173,9 @@ onMounted(() => {
       }
     }
   }, () => {
+    if (!orders.validateOrder(order.value)) {
+      return
+    }
     launchTicker()
   })
 })
