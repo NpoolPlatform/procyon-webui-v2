@@ -9,9 +9,7 @@
     submit-text='MSG_REGISTER'
   >
     <template #append-account>
-      <q-btn class='send-code alt' @click='onSendCodeClick'>
-        {{ $t('MSG_SEND_CODE') }}
-      </q-btn>
+      <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
       <Input
         v-model:value='verificationCode'
         :label='accountType === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
@@ -20,6 +18,7 @@
         required
         :error='verificationCodeError'
         message='MSG_VERIFICATION_CODE_TIP'
+        :autocompleted='false'
         placeholder='MSG_VERIFICATION_CODE_PLACEHOLDER'
         @focus='onVerificationCodeFocusIn'
         @blur='onVerificationCodeFocusOut'
@@ -94,6 +93,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const SignPage = defineAsyncComponent(() => import('src/components/user/SignPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
 
 const accountError = ref(false)
 const account = ref('')
