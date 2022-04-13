@@ -30,12 +30,13 @@
     "compressorjs": "^1.1.1",
     "copy-to-clipboard": "^3.3.1",
     "core-js": "^3.6.5",
-    "npool-cli-v2": "^0.1.186",
+    "npool-cli-v2": "^0.1.188",
     "pinia": "^2.0.13",
     "qrcode.vue": "^3.3.3",
     "quasar": "^2.0.0",
     "vue": "^3.0.0",
     "vue-i18n": "^9.0.0",
+    "vue-recaptcha-v3": "^2.0.1",
     "vue-router": "4.0.11"
   },
   "devDependencies": {

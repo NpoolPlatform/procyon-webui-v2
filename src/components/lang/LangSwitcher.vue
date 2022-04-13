@@ -21,7 +21,6 @@ const locale = useLocaleStore()
 const lang = useLangStore()
 
 const onLangClick = (language: Language) => {
-  console.log(language)
   lang.setLang(language)
 }
 

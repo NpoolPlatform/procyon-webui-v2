@@ -2150,6 +2150,16 @@
     estree-walker "^2.0.2"
     source-map "^0.6.1"
 
+"@vue/compiler-core@3.2.32":
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/@vue/compiler-core/-/compiler-core-3.2.32.tgz#a0be08214c55ae48092b413d8b552c0573e3a883"
+  integrity sha512-bRQ8Rkpm/aYFElDWtKkTPHeLnX5pEkNxhPUcqu5crEJIilZH0yeFu/qUAcV4VfSE2AudNPkQSOwMZofhnuutmA==
+  dependencies:
+    "@babel/parser" "^7.16.4"
+    "@vue/shared" "3.2.32"
+    estree-walker "^2.0.2"
+    source-map "^0.6.1"
+
 "@vue/compiler-dom@3.2.31":
   version "3.2.31"
   resolved "https://registry.npmmirror.com/@vue/compiler-dom/-/compiler-dom-3.2.31.tgz"
@@ -2157,6 +2167,14 @@
   dependencies:
     "@vue/compiler-core" "3.2.31"
     "@vue/shared" "3.2.31"
+
+"@vue/compiler-dom@3.2.32":
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/@vue/compiler-dom/-/compiler-dom-3.2.32.tgz#8ddae1ee463c18c5c3353c4716ec7c84ee29e5ad"
+  integrity sha512-maa3PNB/NxR17h2hDQfcmS02o1f9r9QIpN1y6fe8tWPrS1E4+q8MqrvDDQNhYVPd84rc3ybtyumrgm9D5Rf/kg==
+  dependencies:
+    "@vue/compiler-core" "3.2.32"
+    "@vue/shared" "3.2.32"
 
 "@vue/compiler-sfc@3.2.31":
   version "3.2.31"
@@ -2174,6 +2192,22 @@
     postcss "^8.1.10"
     source-map "^0.6.1"
 
+"@vue/compiler-sfc@3.2.32":
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/@vue/compiler-sfc/-/compiler-sfc-3.2.32.tgz#63e09762812b985aa97876fb5cc3265ba8990a8a"
+  integrity sha512-uO6+Gh3AVdWm72lRRCjMr8nMOEqc6ezT9lWs5dPzh1E9TNaJkMYPaRtdY9flUv/fyVQotkfjY/ponjfR+trPSg==
+  dependencies:
+    "@babel/parser" "^7.16.4"
+    "@vue/compiler-core" "3.2.32"
+    "@vue/compiler-dom" "3.2.32"
+    "@vue/compiler-ssr" "3.2.32"
+    "@vue/reactivity-transform" "3.2.32"
+    "@vue/shared" "3.2.32"
+    estree-walker "^2.0.2"
+    magic-string "^0.25.7"
+    postcss "^8.1.10"
+    source-map "^0.6.1"
+
 "@vue/compiler-ssr@3.2.31":
   version "3.2.31"
   resolved "https://registry.npmmirror.com/@vue/compiler-ssr/-/compiler-ssr-3.2.31.tgz"
@@ -2181,6 +2215,14 @@
   dependencies:
     "@vue/compiler-dom" "3.2.31"
     "@vue/shared" "3.2.31"
+
+"@vue/compiler-ssr@3.2.32":
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/@vue/compiler-ssr/-/compiler-ssr-3.2.32.tgz#06cf7539c483ba4a25b30bd6741e440c222d4c02"
+  integrity sha512-ZklVUF/SgTx6yrDUkaTaBL/JMVOtSocP+z5Xz/qIqqLdW/hWL90P+ob/jOQ0Xc/om57892Q7sRSrex0wujOL2Q==
+  dependencies:
+    "@vue/compiler-dom" "3.2.32"
+    "@vue/shared" "3.2.32"
 
 "@vue/devtools-api@^6.0.0-beta.14", "@vue/devtools-api@^6.1.4":
   version "6.1.4"
@@ -2203,12 +2245,30 @@
     estree-walker "^2.0.2"
     magic-string "^0.25.7"
 
+"@vue/reactivity-transform@3.2.32":
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/@vue/reactivity-transform/-/reactivity-transform-3.2.32.tgz#974fd2a1e682e962fbc5840be8432ac4ab8650d3"
+  integrity sha512-CW1W9zaJtE275tZSWIfQKiPG0iHpdtSlmTqYBu7Y62qvtMgKG5yOxtvBs4RlrZHlaqFSE26avLAgQiTp4YHozw==
+  dependencies:
+    "@babel/parser" "^7.16.4"
+    "@vue/compiler-core" "3.2.32"
+    "@vue/shared" "3.2.32"
+    estree-walker "^2.0.2"
+    magic-string "^0.25.7"
+
 "@vue/reactivity@3.2.31":
   version "3.2.31"
   resolved "https://registry.npmmirror.com/@vue/reactivity/-/reactivity-3.2.31.tgz"
   integrity sha512-HVr0l211gbhpEKYr2hYe7hRsV91uIVGFYNHj73njbARVGHQvIojkImKMaZNDdoDZOIkMsBc9a1sMqR+WZwfSCw==
   dependencies:
     "@vue/shared" "3.2.31"
+
+"@vue/reactivity@3.2.32":
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/@vue/reactivity/-/reactivity-3.2.32.tgz#a859c8ab28a297d14a46cbd450bf70b3f6f87fac"
+  integrity sha512-4zaDumuyDqkuhbb63hRd+YHFGopW7srFIWesLUQ2su/rJfWrSq3YUvoKAJE8Eu1EhZ2Q4c1NuwnEreKj1FkDxA==
+  dependencies:
+    "@vue/shared" "3.2.32"
 
 "@vue/runtime-core@3.2.31":
   version "3.2.31"
@@ -2217,6 +2277,14 @@
   dependencies:
     "@vue/reactivity" "3.2.31"
     "@vue/shared" "3.2.31"
+
+"@vue/runtime-core@3.2.32":
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/@vue/runtime-core/-/runtime-core-3.2.32.tgz#8f8875dc032f99991bafb72070327ae5584a08dd"
+  integrity sha512-uKKzK6LaCnbCJ7rcHvsK0azHLGpqs+Vi9B28CV1mfWVq1F3Bj8Okk3cX+5DtD06aUh4V2bYhS2UjjWiUUKUF0w==
+  dependencies:
+    "@vue/reactivity" "3.2.32"
+    "@vue/shared" "3.2.32"
 
 "@vue/runtime-dom@3.2.31":
   version "3.2.31"
@@ -2227,6 +2295,15 @@
     "@vue/shared" "3.2.31"
     csstype "^2.6.8"
 
+"@vue/runtime-dom@3.2.32":
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/@vue/runtime-dom/-/runtime-dom-3.2.32.tgz#53a8be5c9d72105faf4d11d10202063e9a29c39c"
+  integrity sha512-AmlIg+GPqjkNoADLjHojEX5RGcAg+TsgXOOcUrtDHwKvA8mO26EnLQLB8nylDjU6AMJh2CIYn8NEgyOV5ZIScQ==
+  dependencies:
+    "@vue/runtime-core" "3.2.32"
+    "@vue/shared" "3.2.32"
+    csstype "^2.6.8"
+
 "@vue/server-renderer@3.2.31":
   version "3.2.31"
   resolved "https://registry.npmmirror.com/@vue/server-renderer/-/server-renderer-3.2.31.tgz"
@@ -2235,10 +2312,23 @@
     "@vue/compiler-ssr" "3.2.31"
     "@vue/shared" "3.2.31"
 
+"@vue/server-renderer@3.2.32":
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/@vue/server-renderer/-/server-renderer-3.2.32.tgz#432e0cb766feabe3b97956ae37b8f75c239f2c37"
+  integrity sha512-TYKpZZfRJpGTTiy/s6bVYwQJpAUx3G03z4G7/3O18M11oacrMTVHaHjiPuPqf3xQtY8R4LKmQ3EOT/DRCA/7Wg==
+  dependencies:
+    "@vue/compiler-ssr" "3.2.32"
+    "@vue/shared" "3.2.32"
+
 "@vue/shared@3.2.31":
   version "3.2.31"
   resolved "https://registry.npmmirror.com/@vue/shared/-/shared-3.2.31.tgz"
   integrity sha512-ymN2pj6zEjiKJZbrf98UM2pfDd6F2H7ksKw7NDt/ZZ1fh5Ei39X5tABugtT03ZRlWd9imccoK0hE8hpjpU7irQ==
+
+"@vue/shared@3.2.32":
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/@vue/shared/-/shared-3.2.32.tgz#1ca0c3b8c03a5e24129156e171df736b2c1d645f"
+  integrity sha512-bjcixPErUsAnTQRQX4Z5IQnICYjIfNCyCl8p29v1M6kfVzvwOICPw+dz48nNuWlTOOx2RHhzHdazJibE8GSnsw==
 
 "@vue/test-utils@^2.0.0-rc.10", "@vue/test-utils@^2.0.0-rc.17":
   version "2.0.0-rc.17"
@@ -7634,10 +7724,10 @@ npool-cli-v2@^0.0.168:
     wrappy "^1.0.2"
     yocto-queue "^0.1.0"
 
-npool-cli-v2@^0.1.186:
-  version "0.1.186"
-  resolved "https://registry.npmjs.org/npool-cli-v2/-/npool-cli-v2-0.1.186.tgz#8189dc453f6d18e43268a0f6ba738cb4d36db2b8"
-  integrity sha512-CDKxufrxcBbkDR+xWAkPbaRx5CsnR1YqhCmLgpYk4Y555YUCE82jGZI2nXEXKBZTYPg51+ZwpkMwNanoPEkHvg==
+npool-cli-v2@^0.1.188:
+  version "0.1.188"
+  resolved "https://registry.npmjs.org/npool-cli-v2/-/npool-cli-v2-0.1.188.tgz#f42c0afb90d75ea1f2772be7737053a198434279"
+  integrity sha512-2dEe/91UY+Lm9txCfH3J7P4HdwMstsbsxFX8JGQbK3+vjd39LSTBjAp+Hf0iEYAummLhFGDrgbXThNLs9xwtIw==
   dependencies:
     "@quasar/extras" "^1.0.0"
     "@typescript-eslint/eslint-plugin" "^5.17.0"
@@ -7715,6 +7805,7 @@ npool-cli-v2@^0.1.186:
     typescript "4.5.5"
     universalify "^2.0.0"
     upath2 "^3.1.12"
+    vue "^3.2.32"
     vue-i18n "^9.0.0"
     vue-recaptcha-v3 "^2.0.1"
     vue-router "4.0.11"
@@ -10205,7 +10296,7 @@ vue-loader@17.0.0:
 
 vue-recaptcha-v3@^2.0.1:
   version "2.0.1"
-  resolved "https://registry.npmmirror.com/vue-recaptcha-v3/-/vue-recaptcha-v3-2.0.1.tgz#10b07bbe07881734b9997111cfe3c9a9ca786bdb"
+  resolved "https://registry.npmjs.org/vue-recaptcha-v3/-/vue-recaptcha-v3-2.0.1.tgz#10b07bbe07881734b9997111cfe3c9a9ca786bdb"
   integrity sha512-isEDtOfHU4wWRrZZuxciAELtQmPOeEEdicPNa0f1AOyLPy3sCcBEcpFt+FOcO3RQv5unJ3Yn5NlsWtXv9rXqjg==
   dependencies:
     recaptcha-v3 "^1.8.0"
@@ -10235,6 +10326,17 @@ vue@^3.0.0:
     "@vue/runtime-dom" "3.2.31"
     "@vue/server-renderer" "3.2.31"
     "@vue/shared" "3.2.31"
+
+vue@^3.2.32:
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/vue/-/vue-3.2.32.tgz#a09840e237384c673f421ff7280c4469714f2ac0"
+  integrity sha512-6L3jKZApF042OgbCkh+HcFeAkiYi3Lovi8wNhWqIK98Pi5efAMLZzRHgi91v+60oIRxdJsGS9sTMsb+yDpY8Eg==
+  dependencies:
+    "@vue/compiler-dom" "3.2.32"
+    "@vue/compiler-sfc" "3.2.32"
+    "@vue/runtime-dom" "3.2.32"
+    "@vue/server-renderer" "3.2.32"
+    "@vue/shared" "3.2.32"
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"
