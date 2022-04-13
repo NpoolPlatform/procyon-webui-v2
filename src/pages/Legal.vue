@@ -1,5 +1,7 @@
 <template>
-  <Legal />
+  <div class='content legal'>
+    <Legal />
+  </div>
 </template>
 
 <script setup lang='ts'>

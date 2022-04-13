@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ "row", showStatus ? "blur" : "" ]'>
+  <div :class='[ showStatus ? "blur" : "" ]'>
     <PurchasePage :good='order?.Good'>
       <div class='info'>
         <h3 class='form-title'>
