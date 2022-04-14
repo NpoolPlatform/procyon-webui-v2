@@ -178,7 +178,7 @@ const onEmailSignClick = () => {
       }
     }
   }, () => {
-    void router.back()
+    // TODO
   })
 }
 
