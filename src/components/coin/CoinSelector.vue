@@ -28,7 +28,7 @@ const label = toRef(props, 'label')
 
 const coin = useCoinStore()
 const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale))
-const myCoin = ref(selectedCoin)
+const myCoin = ref(selectedCoin.value)
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
