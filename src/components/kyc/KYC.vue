@@ -147,6 +147,21 @@ const backSelected = ref(false)
 const selfieSelected = ref(false)
 
 const submitting = ref(false)
+interface DocTypeItem {
+  label: string
+  value: DocumentType
+}
+
+const types = ref([
+  {
+    label: 'MSG_ID_CARD',
+    value: DocumentType.IDCard
+  } as DocTypeItem, {
+    label: 'MSG_PASSPORT',
+    value: DocumentType.Passport
+  } as DocTypeItem
+])
+const selectedType = ref(types.value[0])
 
 const uploadKyc = () => {
   if (kyc.KYC?.Kyc) {
@@ -297,22 +312,6 @@ const stateText = computed(() => {
 const rejectedReason = computed(() => kyc.KYC?.Message)
 const updatable = computed(() => (state.value === ReviewState.Rejected || !state.value))
 
-interface DocTypeItem {
-  label: string
-  value: DocumentType
-}
-
-const types = ref([
-  {
-    label: 'MSG_ID_CARD',
-    value: DocumentType.IDCard
-  } as DocTypeItem, {
-    label: 'MSG_PASSPORT',
-    value: DocumentType.Passport
-  } as DocTypeItem
-])
-const selectedType = ref(types.value[0])
-
 onMounted(() => {
   kyc.getKYC({
     Message: {
@@ -323,6 +322,14 @@ onMounted(() => {
       }
     }
   }, () => {
+    if (kyc.KYC?.Kyc?.CardType?.length) {
+      types.value.forEach((t) => {
+        if (t.value === kyc.KYC?.Kyc?.CardType) {
+          selectedType.value = t
+        }
+      })
+    }
+
     kyc.getKYCImage({
       ImageType: ImageType.Front,
       ImageS3Key: kyc.KYC?.Kyc?.FrontCardImg as string,

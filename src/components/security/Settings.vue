@@ -82,7 +82,9 @@
         <span>{{ $t('MSG_EMAIL_LOGIN_AUTHENTICATION') }}</span>
       </div>
       <q-space />
-      <button>{{ $t('MSG_SUBMIT_CHANGE') }}</button>
+      <button @click='onSignVerifyClick'>
+        {{ $t('MSG_SUBMIT_CHANGE') }}
+      </button>
     </div>
     <div class='setting-box column'>
       <div class='settings-box-heading'>
@@ -108,6 +110,7 @@
 import { useRouter } from 'vue-router'
 import { useLoginedUserStore, useUserStore, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { ref } from 'vue'
 
 import lock from 'src/assets/lock.svg'
 import mail from 'src/assets/mail.svg'
@@ -142,32 +145,22 @@ const onEnableGoogleClick = () => {
   void router.push({ path: '/enable/google' })
 }
 
-const onGoogleSignClick = () => {
-  if (!logined.LoginedUser?.Ctrl || !logined.LoginedUser.Ctrl.GoogleAuthenticationVerified) {
-    return
-  }
+const signGoogleVerify = ref(false)
 
-  logined.LoginedUser.Ctrl.SigninVerifyByGoogleAuthentication = true
-  user.updateCtrl({
-    Info: logined.LoginedUser.Ctrl,
-    Message: {
-      Error: {
-        Title: t('MSG_UPDATE_USER_CONTROL_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
+const onGoogleSignClick = () => {
+  signGoogleVerify.value = true
 }
 
 const onEmailSignClick = () => {
+  signGoogleVerify.value = false
+}
+
+const onSignVerifyClick = () => {
   if (!logined.LoginedUser?.Ctrl || !logined.LoginedUser.Ctrl.GoogleAuthenticationVerified) {
     return
   }
 
-  logined.LoginedUser.Ctrl.SigninVerifyByGoogleAuthentication = false
+  logined.LoginedUser.Ctrl.SigninVerifyByGoogleAuthentication = signGoogleVerify.value
   user.updateCtrl({
     Info: logined.LoginedUser.Ctrl,
     Message: {
