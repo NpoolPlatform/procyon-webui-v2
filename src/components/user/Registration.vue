@@ -48,7 +48,7 @@
           message='MSG_INVITATION_CODE_TIP'
           placeholder='MSG_INVITATION_CODE_PLACEHOLDER'
         />
-        <div class='row agreement' @click='onAgreementClick'>
+        <div class='row'>
           <div class='agreement-check'>
             <input
               type='checkbox'
@@ -60,9 +60,8 @@
               @blur='onAgreeFocusOut'
             >
           </div>
-          <div class='agreement-label column  justify-center'>
+          <div class='agreement-label column  justify-center' @click='onAgreementClick'>
             <label
-              for='agreement'
               v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "javascript:void(0);", USER_AGREEMENT: "javascript:void(0);" })'
             />
           </div>
@@ -230,8 +229,6 @@ const onSubmit = () => {
 .agreement-label
   width: calc(100% - 24px)
   line-height: 100%
-
-.agreement
   cursor: pointer
 
 .product-container
