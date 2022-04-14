@@ -6,13 +6,13 @@
     @change='onImgSelected'
     accept='image/jpeg, image/png, image/jpg'
   >
-  <img
-    object-fit='contain'
+  <q-img
+    fit='contain'
     :src='src.length ? src : (placeholder.length ? placeholder : addImage)'
     :ratio='4/3'
     @click='onImgClick'
     :class='[ "image", updatable ? "" : "disable" ]'
-  >
+  />
 </template>
 
 <script setup lang='ts'>
@@ -79,10 +79,6 @@ const emit = defineEmits<{(e: 'update:src', img: string): void,
 }>()
 
 const onImgSelected = (evt: Event) => {
-  if (!updatable.value) {
-    return
-  }
-
   const target = evt.target as unknown as HTMLInputElement
   if (target.files) {
     const filename = target.files[0]
@@ -94,7 +90,9 @@ const onImgSelected = (evt: Event) => {
 }
 
 const onImgClick = () => {
-  // Call input click
+  if (!updatable.value) {
+    return
+  }
   selectImgFile.value?.click()
 }
 
