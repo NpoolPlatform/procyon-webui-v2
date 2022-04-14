@@ -31,8 +31,8 @@
   >
     <div class='popup'>
       <CodeVerifier
-        v-model:account='account'
-        v-model:account-type='accountType'
+        v-model:account='verifyAccount'
+        v-model:account-type='verifyAccountType'
         v-model:verify-method='verifyMethod'
         @verify='onCodeVerify'
         :used-for='MessageUsedFor.Signin'
@@ -72,6 +72,9 @@ const accountError = ref(false)
 const account = ref('')
 const accountType = ref(AccountType.Email)
 const password = ref('')
+
+const verifyAccount = ref(account)
+const verifyAccountType = ref(accountType)
 
 const user = useUserStore()
 const coderepo = useCodeRepoStore()
