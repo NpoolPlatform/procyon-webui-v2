@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: procyon-webui
+  name: procyon-webui-v2
   namespace: kube-system
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: procyon-webui
+      app: procyon-webui-v2
   template:
     metadata:
       labels:
-        app: procyon-webui
+        app: procyon-webui-v2
     spec:
       containers:
-        - name: procyon-webui
-          image: uhub.service.ucloud.cn/entropypool/procyon-webui:latest
+        - name: procyon-webui-v2
+          image: uhub.service.ucloud.cn/entropypool/procyon-webui-v2:latest
           imagePullPolicy: Always
           env:
             - name: ENV_ENVIRONMENT_TARGET
@@ -42,7 +42,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: procyon-webui
+  name: procyon-webui-v2
   namespace: kube-system
 spec:
   ports:
@@ -50,4 +50,4 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    app: procyon-webui
+    app: procyon-webui-v2

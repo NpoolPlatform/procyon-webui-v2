@@ -1,5 +1,5 @@
 commonLabels:
-  # app: procyon-webui
+  # app: procyon-webui-v2
 
 resources:
   - 01-procyon-webui.yaml

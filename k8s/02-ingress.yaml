@@ -1,11 +1,11 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: procyon-webui-ingress
+  name: procyon-webui-v2-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: procyon-webui
-    k8s.kuboard.cn/workload: procyon-webui
+    k8s.kuboard.cn/displayName: procyon-webui-v2
+    k8s.kuboard.cn/workload: procyon-webui-v2
     kubernetes.io/ingress.class: "traefik-internet"
     traefik.ingress.kubernetes.io/router.entrypoints: websecure, web
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-http-redirect-https@kubernetescrd,
@@ -28,12 +28,12 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: procyon-webui
+              serviceName: procyon-webui-v2
               servicePort: 80
     - host: procyon.vip
       http:
         paths:
           - path: /
             backend:
-              serviceName: procyon-webui
+              serviceName: procyon-webui-v2
               servicePort: 80
