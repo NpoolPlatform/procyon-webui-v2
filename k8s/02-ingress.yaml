@@ -1,26 +1,53 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: vue-template-webui-ingress
+  name: procyon-webui-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: vue-template-webui
-    k8s.kuboard.cn/workload: vue-template-webui
-    kubernetes.io/ingress.class: "devops-vpn-nginx-internal"
-    nginx.com/sticky-cookie-services: "serviceName=kuboard srv_id expires=1h path=/"
+    k8s.kuboard.cn/displayName: procyon-webui
+    k8s.kuboard.cn/workload: procyon-webui
+    kubernetes.io/ingress.class: "traefik-internet"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure, web
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-http-redirect-https@kubernetescrd,
+                                                      kube-system-http-redirect-https-testing@kubernetescrd,
+                                                      kube-system-common-headers@kubernetescrd
 
 spec:
+  tls:
+    - hosts:
+        - www.procyon.vip
+        - procyon.vip
+      secretName: procyon-vip-cert
+    - hosts:
+        - www.npool.top
+        - npool.top
+      secretName: npool-top-cert
   rules:
-    - host: vue-template.npool.top
-      http: &http_rules
+    - host: www.procyon.vip
+      http:
         paths:
           - path: /
             backend:
-              serviceName: vue-template-webui
+              serviceName: procyon-webui
               servicePort: 80
-    - host: vue-template.xpool.top
-      http: *http_rules
-    - host: www.vue-template.npool.top
-      http: *http_rules
-    - host: www.vue-template.xpool.top
-      http: *http_rules
+    - host: procyon.vip
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: procyon-webui
+              servicePort: 80
+    - host: www.npool.top
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: procyon-webui
+              servicePort: 80
+    - host: npool.top
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: procyon-webui
+              servicePort: 80

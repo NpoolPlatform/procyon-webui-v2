@@ -47,7 +47,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
-        sh 'docker build -t $DOCKER_REGISTRY/entropypool/vue-template-webui:latest .'
+        sh 'docker build -t $DOCKER_REGISTRY/entropypool/procyon-webui:latest .'
       }
     }
 
@@ -173,7 +173,7 @@ pipeline {
           fi
           PATH=/usr/local/bin:$PATH:./node_modules/@quasar/app/bin yarn install --registry https://registry.npm.taobao.org/
           PATH=/usr/local/bin:$PATH:./node_modules/@quasar/app/bin quasar build
-          docker build -t $DOCKER_REGISTRY/entropypool/vue-template-webui:$tag .
+          docker build -t $DOCKER_REGISTRY/entropypool/procyon-webui:$tag .
         '''.stripIndent())
       }
     }
@@ -183,9 +183,9 @@ pipeline {
         expression { RELEASE_TARGET == 'true' }
       }
       steps {
-        sh 'docker push $DOCKER_REGISTRY/entropypool/vue-template-webui:latest'
+        sh 'docker push $DOCKER_REGISTRY/entropypool/procyon-webui:latest'
         sh(returnStdout: true, script: '''
-          images=`docker images | grep entropypool | grep vue-template-webui | grep none | awk '{ print $3 }'`
+          images=`docker images | grep entropypool | grep procyon-webui | grep none | awk '{ print $3 }'`
           for image in $images; do
             docker rmi $image -f
           done
@@ -203,11 +203,11 @@ pipeline {
           tag=`git describe --tags $revlist`
 
           set +e
-          docker images | grep vue-template-webui | grep $tag
+          docker images | grep procyon-webui | grep $tag
           rc=$?
           set -e
           if [ 0 -eq $rc ]; then
-            docker push $DOCKER_REGISTRY/entropypool/vue-template-webui:$tag
+            docker push $DOCKER_REGISTRY/entropypool/procyon-webui:$tag
           fi
         '''.stripIndent())
       }
@@ -230,12 +230,41 @@ pipeline {
           tag=$major.$minor.$patch
 
           set +e
-          docker images | grep vue-template-webui | grep $tag
+          docker images | grep procyon-webui | grep $tag
           rc=$?
           set -e
           if [ 0 -eq $rc ]; then
-            docker push $DOCKER_REGISTRY/entropypool/vue-template-webui:$tag
+            docker push $DOCKER_REGISTRY/entropypool/procyon-webui:$tag
           fi
+        '''.stripIndent())
+      }
+    }
+
+    stage('Deploy https certificate') {
+      when {
+        expression { DEPLOY_TARGET == 'true' }
+      }
+      steps {
+        sh 'rm .server-https-ca -rf'
+        withCredentials([gitUsernamePassword(credentialsId: 'KK-github-key', gitToolName: 'git-tool')]) {
+          sh 'git clone https://github.com/NpoolPlatform/server-https-ca.git .server-https-ca'
+        }
+        sh(returnStdout: false, script: '''
+          set +e
+          kubectl get secret -n kube-system | grep procyon-vip-cert
+          rc=$?
+          set -e
+          if [ ! 0 -eq $rc ]; then
+            kubectl create secret tls procyon-vip-cert --cert=.server-https-ca/procyon.vip/tls.crt --key=.server-https-ca/procyon.vip/tls.key -n kube-system
+          fi
+          set +e
+          kubectl get secret -n kube-system | grep npool-top-cert
+          rc=$?
+          set -e
+          if [ ! 0 -eq $rc ]; then
+            kubectl create secret tls npool-top-cert --cert=.server-https-ca/npool.top/tls.crt --key=.server-https-ca/npool.top/tls.key -n kube-system
+          fi
+          rm .server-https-ca -rf
         '''.stripIndent())
       }
     }
@@ -243,10 +272,10 @@ pipeline {
     stage('Deploy for development') {
       when {
         expression { DEPLOY_TARGET == 'true' }
-        expression { TARGET_ENV == 'development' }
+        expression { TARGET_ENV ==~ /.*development.*/ }
       }
       steps {
-        sh 'sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-vue-template-webui.yaml'
+        sh 'sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui.yaml'
         sh 'kubectl apply -k k8s'
       }
     }
@@ -254,7 +283,7 @@ pipeline {
     stage('Deploy for testing') {
       when {
         expression { DEPLOY_TARGET == 'true' }
-        expression { TARGET_ENV == 'testing' }
+        expression { TARGET_ENV ==~ /.*testing.*/ }
       }
       steps {
         sh(returnStdout: true, script: '''
@@ -263,8 +292,8 @@ pipeline {
 
           git reset --hard
           git checkout $tag
-          sed -i "s/vue-template-webui:latest/vue-template-webui:$tag/g" k8s/01-vue-template-webui.yaml
-          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-vue-template-webui.yaml
+          sed -i "s/procyon-webui:latest/procyon-webui:$tag/g" k8s/01-procyon-webui.yaml
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui.yaml
           kubectl apply -k k8s
         '''.stripIndent())
       }
@@ -288,8 +317,8 @@ pipeline {
 
           git reset --hard
           git checkout $tag
-          sed -i "s/vue-template-webui:latest/vue-template-webui:$tag/g" k8s/01-vue-template-webui.yaml
-          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-vue-template-webui.yaml
+          sed -i "s/procyon-webui:latest/procyon-webui:$tag/g" k8s/01-procyon-webui.yaml
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui.yaml
           kubectl apply -k k8s
         '''.stripIndent())
       }
