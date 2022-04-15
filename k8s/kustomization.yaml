@@ -1,6 +1,6 @@
 commonLabels:
-  # app: vue-template-webui
+  # app: procyon-webui
 
 resources:
-  - 01-vue-template-webui.yaml
+  - 01-procyon-webui.yaml
   - 02-ingress.yaml
