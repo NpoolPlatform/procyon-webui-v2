@@ -5,8 +5,11 @@
       <div>
         <span>{{ $t(caption) }}</span>
       </div>
-      <div>
-        <p class='tip' v-html='$t("MSG_VERIFICATION_CODE_SENT_TO", { ACCOUNT: account })' />
+      <div v-if='myVerifyMethod !== AccountType.Google'>
+        <p
+          class='tip'
+          v-html='$t("MSG_VERIFICATION_CODE_SENT_TO", { ACCOUNT: account })'
+        />
       </div>
       <Input
         v-model:value='myCode'
