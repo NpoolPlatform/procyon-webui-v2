@@ -74,11 +74,11 @@
       </div>
       <p>{{ $t('MSG_LOGIN_AUTHENTICATION_TIP') }}</p>
       <div :class='[ "verification", !logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified ? "disabled" : "enabled" ]' @click='onGoogleSignClick'>
-        <img :src='circleDot' :class='[ logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication ? "verified" : "" ]'>
+        <img :src='circleDot' :class='[ signGoogleVerify ? "verified" : "" ]'>
         <span>{{ $t('MSG_GOOGLE_LOGIN_AUTHENTICATION') }}</span>
       </div>
       <div class='verification enabled' @click='onEmailSignClick'>
-        <img :src='circleDot' :class='[ !logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication ? "verified" : "" ]'>
+        <img :src='circleDot' :class='[ !signGoogleVerify ? "verified" : "" ]'>
         <span>{{ $t('MSG_EMAIL_LOGIN_AUTHENTICATION') }}</span>
       </div>
       <q-space />
@@ -147,7 +147,7 @@ const onEnableGoogleClick = () => {
   void router.push({ path: '/enable/google' })
 }
 
-const signGoogleVerify = ref(false)
+const signGoogleVerify = ref(logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified && logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication)
 
 const onGoogleSignClick = () => {
   signGoogleVerify.value = true
