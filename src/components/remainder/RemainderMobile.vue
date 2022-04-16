@@ -3,7 +3,7 @@
     label='MSG_ADD_MOBILE_NUMBER'
     caption='MSG_ADD_MOBILE_NUMBER_CAPTION'
     submit-text='MSG_SETUP_MOBILE_NUMBER'
-    cancel-text='MSG_SET_MOBILE_LAYTER'
+    cancel-text='MSG_SET_MOBILE_LATER'
     @submit='onSubmit'
     @cancel='onCancel'
   />

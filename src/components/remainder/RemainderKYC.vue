@@ -3,7 +3,7 @@
     label='MSG_SETUP_KYC'
     caption='MSG_SETUP_KYC_CAPTION'
     submit-text='MSG_PROCEED_KYC_SETUP'
-    cancel-text='MSG_SETUP_KYC_LAYTER'
+    cancel-text='MSG_SETUP_KYC_LATER'
     @submit='onSubmit'
     @cancel='onCancel'
   />
