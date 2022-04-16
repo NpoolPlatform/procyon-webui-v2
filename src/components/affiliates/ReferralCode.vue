@@ -1,5 +1,5 @@
 <template>
-  <h2>{{ $t('MSG_EREFERRAL_CODE') }}</h2>
+  <h2>{{ $t('MSG_REFERRAL_CODE') }}</h2>
   <div class='content-glass invitation-code row'>
     <span class='content-glass code'>{{ inspire.InvitationCode?.InvitationCode }}</span>
     <div class='column justify-center'>
