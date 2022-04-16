@@ -245,6 +245,7 @@ input[type='submit']
   margin: 24px 24px 24px 0
   padding: 12px 24px
   text-shadow: 1px 1px 1px #ce5417
+  line-height: 100%
   transition: all ease-in-out .1s
   @media (max-width: $breakpoint-sm-max)
     margin: 20px 0
@@ -2150,6 +2151,19 @@ h3.mining-title
   font-weight: 500
 
 
+.buttons button,
+.buttons button.alt
+  border-radius: 8px
+  font-size: 14px
+  height: auto
+  padding: 8px 20px
+
+
+.buttons button:hover,
+.buttons button.alt:hover
+  border-radius: 2px
+
+
 .mining-summary .buttons
   display: flex
   justify-content: flex-end
@@ -2167,32 +2181,6 @@ h3.mining-title
 .mining-summary .buttons button:last-of-type
   @media (max-width: $breakpoint-sm-max)
     margin-right: 0
-
-
-.buttons button,
-.buttons button.alt
-  border-radius: 8px
-  font-size: 14px
-  height: auto
-  margin: 24px 0 0 12px
-  padding: 8px 20px
-  @media (max-width: $breakpoint-sm-max)
-    margin: 12px 24px
-
-
-.buttons button:first-of-type
-  @media (max-width: $breakpoint-sm-max)
-    margin-left: 0
-
-
-.buttons button:last-of-type
-  @media (max-width: $breakpoint-sm-max)
-    margin-right: 0
-
-
-.buttons button:hover,
-.buttons button.alt:hover
-  border-radius: 2px
 
 
 .add-mining

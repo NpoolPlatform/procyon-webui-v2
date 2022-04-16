@@ -89,9 +89,6 @@ const titleWidth = computed(() => (headerWidth.value - topRightWidth.value - 1).
 .table-box >>> th
   font-size: 16px !important
 
-.buttons
-  height: 64px
-
 h2
   max-width: 100% !important
   margin-left: 0 !important
