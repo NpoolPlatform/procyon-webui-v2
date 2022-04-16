@@ -158,6 +158,7 @@ import {
   useUserStore,
   validateUsername
 } from 'npool-cli-v2'
+import { uid } from 'quasar'
 import { defineAsyncComponent, ref, computed } from 'vue'
 
 import { useI18n } from 'vue-i18n'
@@ -261,7 +262,7 @@ const onSubmit = () => {
   if (!logined.LoginedUser?.Extra) {
     user.createExtra({
       Info: {
-        IDNumber: '',
+        IDNumber: 'NOT-USED' + uid(),
         Username: username.value,
         AddressFields: addressFields.value,
         Gender: gender.value,
