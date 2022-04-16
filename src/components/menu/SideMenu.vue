@@ -23,7 +23,7 @@
 import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
 import { BaseMenu, MenuItem } from 'src/menus/menus'
-import { computed, watch } from 'vue'
+import { computed, watch, onMounted } from 'vue'
 import { useInspireStore, useLoginedUserStore, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
@@ -37,6 +37,9 @@ const inspire = useInspireStore()
 const logined = useLoginedUserStore()
 const user = computed(() => logined.LoginedUser)
 watch(user, () => {
+  if (!user.value) {
+    return
+  }
   inspire.getInvitationCode({
     Message: {
       Error: {
@@ -69,6 +72,22 @@ const onMenuSwitch = (menu: MenuItem) => {
   setting.ActiveMenuTarget = menu.target
   void router.push({ path: menu.target })
 }
+
+onMounted(() => {
+  if (!user.value) {
+    return
+  }
+  inspire.getInvitationCode({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_INVITATION_CODE_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  })
+})
+
 </script>
 
 <style lang='sass' scoped>
