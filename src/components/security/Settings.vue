@@ -95,11 +95,11 @@
       </div>
       <p>{{ $t('MSG_ID_VERIFICATION_TIP') }}</p>
       <div class='verification'>
-        <img :src='squareCheck' class=''>
+        <img :src='squareCheck' :class='[ kycVerified ? "verified" : "" ]'>
         <span>{{ $t('MSG_VERIFIED') }}</span>
       </div>
       <q-space />
-      <button class='in-active'>
+      <button @click='onKYCClick'>
         {{ $t('MSG_VERIFY_ID') }}
       </button>
     </div>
@@ -108,9 +108,9 @@
 
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
-import { useLoginedUserStore, useUserStore, NotificationType } from 'npool-cli-v2'
+import { useLoginedUserStore, useUserStore, NotificationType, useKYCStore, ReviewState } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 import lock from 'src/assets/lock.svg'
 import mail from 'src/assets/mail.svg'
@@ -126,6 +126,8 @@ const { t } = useI18n({ useScope: 'global' })
 
 const logined = useLoginedUserStore()
 const user = useUserStore()
+const kyc = useKYCStore()
+const kycVerified = computed(() => kyc.KYC?.State === ReviewState.Approved)
 
 const router = useRouter()
 
@@ -173,6 +175,10 @@ const onSignVerifyClick = () => {
   }, () => {
     // TODO
   })
+}
+
+const onKYCClick = () => {
+  void router.push({ path: '/kyc' })
 }
 
 </script>
