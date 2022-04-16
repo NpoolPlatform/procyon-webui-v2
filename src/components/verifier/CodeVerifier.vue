@@ -8,7 +8,13 @@
       <div v-if='myVerifyMethod !== AccountType.Google'>
         <p
           class='tip'
-          v-html='$t("MSG_VERIFICATION_CODE_SENT_TO", { ACCOUNT: account })'
+          v-if='myVerifyMethod === AccountType.Email'
+          v-html='$t("MSG_EMAIL_VERIFICATION_CODE_SENT_TO", { ACCOUNT: account })'
+        />
+        <p
+          class='tip'
+          v-if='myVerifyMethod === AccountType.Mobile'
+          v-html='$t("MSG_MOBILE_VERIFICATION_CODE_SENT_TO", { ACCOUNT: account })'
         />
       </div>
       <Input
