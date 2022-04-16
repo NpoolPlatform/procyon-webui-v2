@@ -23,14 +23,10 @@
 import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
 import { BaseMenu, MenuItem } from 'src/menus/menus'
-import { onMounted, computed } from 'vue'
-import { useInspireStore, NotificationType } from 'npool-cli-v2'
-import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+import { useInspireStore } from 'npool-cli-v2'
 
 import lightLogo from '../../assets/procyon-light.svg'
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 
 const setting = useSettingStore()
 const inspire = useInspireStore()
@@ -56,19 +52,6 @@ const onMenuSwitch = (menu: MenuItem) => {
   setting.ActiveMenuTarget = menu.target
   void router.push({ path: menu.target })
 }
-
-onMounted(() => {
-  inspire.getInvitationCode({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_INVITATION_CODE_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  })
-})
-
 </script>
 
 <style lang='sass' scoped>
