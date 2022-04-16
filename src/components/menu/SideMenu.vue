@@ -23,13 +23,30 @@
 import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
 import { BaseMenu, MenuItem } from 'src/menus/menus'
-import { computed } from 'vue'
-import { useInspireStore } from 'npool-cli-v2'
+import { computed, watch } from 'vue'
+import { useInspireStore, useLoginedUserStore, NotificationType } from 'npool-cli-v2'
+import { useI18n } from 'vue-i18n'
 
 import lightLogo from '../../assets/procyon-light.svg'
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
+
 const setting = useSettingStore()
 const inspire = useInspireStore()
+const logined = useLoginedUserStore()
+const user = computed(() => logined.LoginedUser)
+watch(user, () => {
+  inspire.getInvitationCode({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_INVITATION_CODE_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  })
+})
 
 const router = useRouter()
 const onLogoClick = () => {
