@@ -46,7 +46,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ useScope: 'global' })
 
 const inspire = useInspireStore()
-const referralTree = computed(() => buildReferralTree(inspire.Referrals))
+const referralTree = computed(() => buildReferralTree(inspire.Referrals.filter((el) => el.Kol)))
 
 const logined = useLoginedUserStore()
 const innerLoading = ref(false)
