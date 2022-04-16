@@ -3,7 +3,7 @@
     label='MSG_SETUP_GOOGLE_AUTHENTICATOR'
     caption='MSG_SETUP_GOOGLE_AUTHENTICATOR_CAPTION'
     submit-text='MSG_SETUP_TWO_FACTOR_AUTH'
-    cancel-text='MSG_SETUP_LAYTER'
+    cancel-text='MSG_SETUP_LATER'
     @submit='onSubmit'
     @cancel='onCancel'
   />
