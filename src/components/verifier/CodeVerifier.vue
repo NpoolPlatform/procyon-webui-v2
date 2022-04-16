@@ -176,7 +176,7 @@ onMounted(() => {
   text-overflow: ellipsis
 
 .form-container
-  max-width: 100%
+  max-width: 400px
 
 .margin-top-0
   margin-top: 0 !important
