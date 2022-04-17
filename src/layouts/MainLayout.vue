@@ -1,5 +1,5 @@
 <template>
-  <MainHeader />
+  <MainHeader :class='[ special ? "special" : "" ]' />
   <div :class='[ "main row", special ? "special" : "" ]'>
     <SideMenu />
     <div id='main'>
@@ -8,7 +8,7 @@
       </div>
     </div>
   </div>
-  <Footer />
+  <Footer :class='[ special ? "special" : "" ]' />
   <LangLoader />
   <Prepare />
 </template>
