@@ -150,6 +150,9 @@ const onEnableGoogleClick = () => {
 const signGoogleVerify = ref(logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified && logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication)
 
 const onGoogleSignClick = () => {
+  if (!logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified) {
+    return
+  }
   signGoogleVerify.value = true
 }
 
