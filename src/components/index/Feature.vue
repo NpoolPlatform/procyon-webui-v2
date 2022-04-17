@@ -16,8 +16,8 @@
 
         <div class='column-3'>
           <img class='icon' :src='technology'>
-          <h3 class='feature-title' v-html='$t("MSG_BIT_PICTURE_TITLE")' />
-          <p v-html='$t("MSG_BIT_PICTURE")' />
+          <h3 class='feature-title' v-html='$t("MSG_BIG_PICTURE_TITLE")' />
+          <p v-html='$t("MSG_BIG_PICTURE")' />
         </div>
       </div>
     </div>
