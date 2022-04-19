@@ -11,7 +11,7 @@
         <form action='javascript:void(0)' @submit='onSubmit'>
           <label for='email'>{{ $t('MSG_EMAIL_ADDRESS') }}</label>
           <input type='email' id='email' required v-model='sender'>
-          <label for='name'>{{ $t('MSG_NAME') }}</label>
+          <label for='name'>{{ $t('MSG_CONTACT_NAME') }}</label>
           <input
             type='text'
             id='name'
