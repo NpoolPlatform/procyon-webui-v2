@@ -132,7 +132,7 @@ const goodId = computed(() => query.value.goodId)
 const goods = useGoodStore()
 const good = computed(() => goods.getGoodByID(goodId.value))
 
-const usedFor = ref('PRODUCT_DETAIL')
+const usedFor = ref('PRODUCTDETAILS')
 const coin = useCoinStore()
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale))
@@ -165,9 +165,8 @@ onMounted(() => {
         }
       }
     }, (good: Good) => {
-      coin.getCoinDescription({
+      coin.getCoinDescriptions({
         CoinTypeID: good.Main?.ID as string,
-        UsedFor: usedFor.value,
         Message: {
           Error: {
             Title: t('MSG_GET_COIN_DESCRIPTION'),
