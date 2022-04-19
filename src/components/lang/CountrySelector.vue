@@ -7,8 +7,8 @@
     no-caps
     auto-close
   >
-    <template #label>
-      <div v-if='country' class='row country'>
+    <template v-if='!!country' #label>
+      <div class='row country'>
         <div class='column justify-center country'>
           <q-img fit='contain' class='flag' :src='country.Flag' />
         </div>
