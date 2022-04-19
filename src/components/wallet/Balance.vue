@@ -1,6 +1,6 @@
 <template>
   <div v-if='!hidden'>
-    <h2>{{ $t('MSG_EARNINGS') }}</h2>
+    <h2>{{ $t('MSG_ACCOUNT_BALANCE') }}</h2>
     <div class='earnings-summary'>
       <div class='earnings-figure'>
         <span class='amount'>{{ (_totalEarningUSD - totalWithdrawedUSD).toFixed(4) }}</span>
