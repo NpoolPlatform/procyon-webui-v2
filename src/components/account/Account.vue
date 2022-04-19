@@ -1,6 +1,6 @@
 <template>
   <div class='content'>
-    <h2>{{ $t('MSG_ACCOUNT') }}</h2>
+    <h2>{{ $t('MSG_ACCOUNT_TITLE') }}</h2>
     <form class='content-glass alignment' action='javascript:void(0)' @submit='onSubmit'>
       <h3>{{ $t('MSG_PERSON_DETAILS_FOR_KYC') }}</h3>
       <div class='row'>
