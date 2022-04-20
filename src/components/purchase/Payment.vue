@@ -30,7 +30,7 @@
         </div>
         <div class='hr' />
         <h4>{{ $t('MSG_IMPORTANT_INFORMATION') }}</h4>
-        <p v-html='$t("MSG_PAYMENT_NOTE")' />
+        <p v-html='$t("MSG_PAYMENT_NOTE", { COIN_NAME: order?.PayWithCoin?.Name })' />
       </div>
       <div class='order-form'>
         <h3 class='form-title'>
