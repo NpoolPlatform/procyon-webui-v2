@@ -5,8 +5,12 @@
         <img :src='coin?.Logo'>
       </div>
       <h3 class='mining-title'>
-        {{ coin?.Name }}
+        {{ coin?.Name }} ({{ $t('MSG_TESTNET') }})
       </h3>
+    </div>
+    <div class='warning'>
+      <img :src='warning'>
+      <span>{{ $t('MSG_TESTNET_WARNING', { COIN_NAME: coin.Name, COIN_UNIT: coin.Unit }) }}</span>
     </div>
     <div class='top-line-summary'>
       <div class='top-line-item'>
@@ -81,6 +85,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 import chevrons from '../../assets/chevrons.svg'
+import warning from '../../assets/warning.svg'
 
 const short = ref(true)
 
