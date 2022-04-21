@@ -2,21 +2,13 @@
   <q-btn-dropdown
     class='selector'
     dropdown-icon='expand_more'
+    :icon='"img:" + country?.Flag'
+    :label='country?.Code'
     dense
     flat
     no-caps
     auto-close
   >
-    <template #label>
-      <div class='row country'>
-        <div class='column justify-center country'>
-          <q-img fit='contain' class='flag' :src='country?.Flag' />
-        </div>
-        <div class='column justify-center'>
-          {{ country?.Code }}
-        </div>
-      </div>
-    </template>
     <q-list>
       <q-item
         dense
