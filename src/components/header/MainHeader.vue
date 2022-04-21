@@ -9,7 +9,7 @@
         <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
         <SignHelper v-if='!logined.getLogined' />
-        <AvatarDropdown v-else>
+        <AvatarDropdown class='avatar' v-else>
           <ExpandList
             :menu='menu'
             :show-icon='true'
@@ -30,7 +30,7 @@
     <div class='header-inner'>
       <LangSwitcher />
       <SignHelper v-if='!logined.getLogined' />
-      <AvatarDropdown v-else>
+      <AvatarDropdown class='avatar' v-else>
         <ExpandList
           :menu='menu'
           :show-icon='true'
@@ -116,4 +116,6 @@ const onLogoClick = () => {
 </script>
 
 <style lang='sass' scoped>
+.avatar
+  padding-left: 24px !important
 </style>
