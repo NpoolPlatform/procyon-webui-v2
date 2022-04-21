@@ -180,7 +180,7 @@ const onUsernameFocusOut = () => {
 }
 
 const genders = ref(['MSG_FAMALE', 'MSG_MALE', 'MSG_OTHER'])
-const gender = ref('')
+const gender = ref(logined.LoginedUser?.Extra?.Gender)
 
 const firstName = ref(logined.LoginedUser?.Extra?.FirstName as string)
 const firstNameError = ref(false)
