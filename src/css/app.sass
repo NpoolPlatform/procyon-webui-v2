@@ -13,6 +13,7 @@
 
 html,
 body
+  min-height: 100vh
   min-width: 600px
   width: 100%
   @media (max-width: $breakpoint-sm-max)
@@ -22,6 +23,8 @@ body
 body
   background: linear-gradient(to bottom right, #1f293a 0, #2a3943 50%, #092023 100%)
   color: #e1eeef
+  display: flex
+  flex-direction: column
   font-family: 'Barlow', sans-serif
   /*font-family: 'Noto Sans JP', sans-serif*/
   font-size: 16px
@@ -378,6 +381,7 @@ ul.language-picker li.selected
 
 
 #main:not([class])
+  flex: 1 0 auto
   width: 100%
 
 
