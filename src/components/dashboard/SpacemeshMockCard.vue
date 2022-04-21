@@ -15,8 +15,8 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
-        <span class='value'>{{ coin?.PreSale ? '*' : _totalEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
-        <span class='sub-value'>({{ totalEarningUSD.toFixed(2) }} {{ PriceCoinName }})</span>
+        <span class='value'>{{ _totalEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
+        <span class='sub-value'>(* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
@@ -32,15 +32,15 @@
       <div class='detailed-summary' v-show='!short'>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
-          <span class='value'>{{ _last30DaysEarningCoin / 30 }} {{ coin.Unit }}</span>
+          <span class='value'>{{ _last30DaysEarningCoin.toFixed(2) }} {{ coin.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
-          <span class='value'>{{ _last24HoursEarningCoin * 0.2 }} {{ coin.Unit }} (20%)</span>
+          <span class='value'>{{ (_last24HoursEarningCoin * 0.2).toFixed(2) }} {{ coin.Unit }} (20%)</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-          <span class='value'>{{ _last30DaysEarningCoin / 30 * 0.8 }} {{ coin.Unit }}</span>
+          <span class='value'>{{ (_last30DaysEarningCoin * 0.8).toFixed(2) }} {{ coin.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
@@ -48,7 +48,7 @@
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
-          <span class='value'>{{ daily }} {{ coin.Unit }}</span>
+          <span class='value'>{{ daily.toFixed(2) }} {{ coin.Unit }}</span>
         </div>
       </div>
     </q-slide-transition>
@@ -106,18 +106,20 @@ const orders = computed(() => order.Orders.filter((myOrder) => {
 const goodUnit = computed(() => order.Orders.length > 0 ? order.Orders[0].Good.Good.Good.Unit : '')
 const goodPeriod = computed(() => order.Orders.length > 0 ? order.Orders[0].Good.Good.Good.DurationDays : '')
 const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
-const unitsRatio = computed(() => order.Orders.length > 0 ? totalUnits.value / order.Orders[0].Good.Good.Good.Total : 0)
-const daily = computed(() => spacemesh.getNetworkDailyOutput.toFixed(2))
+const unitsRatio = computed(() => {
+  return order.Orders.length > 0 ? (totalUnits.value ? totalUnits.value : 1) / order.Orders[0].Good.Good.Good.Total : 0
+})
+const daily = computed(() => spacemesh.getNetworkDailyOutput)
 
 const spacemesh = useMockSpacemeshStore()
 
-const _totalEarningCoin = ref(0)
-const totalEarningUSD = ref(0)
-
-const _last24HoursEarningCoin = ref(0)
+const _last24HoursEarningCoin = computed(() => {
+  return spacemesh.getLastDaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.smeshers * 1.3)
+})
 const _last30DaysEarningCoin = computed(() => {
   return spacemesh.get30DaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.smeshers * 1.3)
 })
+const _totalEarningCoin = computed(() => _last30DaysEarningCoin.value)
 
 const getCoins = () => {
   coins.getCoins({

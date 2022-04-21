@@ -9,13 +9,23 @@ export const useMockSpacemeshStore = defineStore('mockspacemesh', {
     Networks: []
   }),
   getters: {
+    getLastDaysAvgOutput (): (ratio: number, accounts: number) => number {
+      return (ratio: number, accounts: number) => {
+        if (!this.NetworkInfo) {
+          return 0
+        }
+        ratio = accounts / (accounts + this.NetworkInfo.epoch.stats.current.smeshers) * ratio
+        const days = (new Date().getTime() / 1000 - this.NetworkInfo?.epoch?.start) / SecondsEachDay
+        return this.NetworkInfo.epoch.stats.current.rewards / days * ratio / 1000000000000
+      }
+    },
     get30DaysAvgOutput (): (ratio: number, accounts: number) => number {
       return (ratio: number, accounts: number) => {
         if (!this.NetworkInfo) {
           return 0
         }
         ratio = accounts / (accounts + this.NetworkInfo.epoch.stats.current.smeshers) * ratio
-        return this.NetworkInfo.epoch.stats.cumulative.rewards * ratio
+        return this.getNetworkDailyOutput * ratio
       }
     },
     getNetworkDailyOutput (): number {
