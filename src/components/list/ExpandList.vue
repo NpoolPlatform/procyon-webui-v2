@@ -73,6 +73,7 @@ const onMenuClick = (item: MenuItem) => {
 
 .menu-item
   padding: 0
+  min-width: 120px
 
 .menu-item-margin
   padding: 10px 16px

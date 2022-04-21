@@ -3,6 +3,7 @@
   <div class='products'>
     <Product v-for='myGood in goods' :key='myGood.Good.Good.ID' :good='myGood' />
   </div>
+  <div class='hr' />
 </template>
 
 <script setup lang='ts'>
