@@ -80,7 +80,7 @@ const table = computed(() => [
     name: 'State',
     label: t('MSG_STATE'),
     align: 'center',
-    field: (row: OrderModel) => row.State
+    field: (row: OrderModel) => t(row.State)
   }
 ])
 
