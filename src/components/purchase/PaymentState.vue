@@ -78,5 +78,5 @@ const onProceedClick = () => {
   text-overflow: ellipsis
 
 .form-container
-  max-width: 100%
+  max-width: 600px
 </style>
