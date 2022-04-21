@@ -24,29 +24,34 @@
         <span class='value'>{{ totalUnits }} {{ goodUnit }}</span>
       </div>
     </div>
-    <div class='detailed-summary'>
-      <div class='line'>
-        <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
-        <span class='value'>{{ coin?.PreSale ? '*' : _last30DaysEarningCoin / 30 }} {{ coin.Unit }}</span>
+    <q-slide-transition>
+      <div class='detailed-summary' v-show='!short'>
+        <div class='line'>
+          <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
+          <span class='value'>{{ coin?.PreSale ? '*' : _last30DaysEarningCoin / 30 }} {{ coin.Unit }}</span>
+        </div>
+        <div class='line'>
+          <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
+          <span class='value'>{{ coin?.PreSale ? '*' : _last24HoursEarningCoin * 0.2 }} {{ coin.Unit }} (20%)</span>
+        </div>
+        <div class='line'>
+          <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
+          <span class='value'>{{ coin?.PreSale ? '*' : _last30DaysEarningCoin / 30 * 0.8 }} {{ coin.Unit }}</span>
+        </div>
+        <div class='line'>
+          <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
+          <span class='value'>{{ goodPeriod }} {{ $t('MSG_DAYS') }}</span>
+        </div>
+        <div class='line'>
+          <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
+          <span class='value'>{{ coin?.PreSale ? '*' : 100000 }} {{ coin.Unit }}</span>
+        </div>
       </div>
-      <div class='line'>
-        <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
-        <span class='value'>{{ coin?.PreSale ? '*' : _last24HoursEarningCoin * 0.2 }} {{ coin.Unit }} (20%)</span>
-      </div>
-      <div class='line'>
-        <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-        <span class='value'>{{ coin?.PreSale ? '*' : _last30DaysEarningCoin / 30 * 0.8 }} {{ coin.Unit }}</span>
-      </div>
-      <div class='line'>
-        <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
-        <span class='value'>{{ goodPeriod }} {{ $t('MSG_DAYS') }}</span>
-      </div>
-      <div class='line'>
-        <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
-        <span class='value'>{{ coin?.PreSale ? '*' : 100000 }} {{ coin.Unit }}</span>
-      </div>
-    </div>
+    </q-slide-transition>
     <div class='buttons'>
+      <button :class='[ "alt show-more", short ? "" : "open" ]' @click='onExpandClick'>
+        <img :src='chevrons'>
+      </button>
       <button class='alt' disabled>
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
@@ -73,12 +78,15 @@ import { defineProps, toRef, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
+import chevrons from '../../assets/chevrons.svg'
+
 interface Props {
   coinTypeId: string
 }
 
 const props = defineProps<Props>()
 const coinTypeId = toRef(props, 'coinTypeId')
+const short = ref(true)
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -154,6 +162,10 @@ onMounted(() => {
 const router = useRouter()
 const onPurchaseClick = () => {
   void router.push({ path: '/' })
+}
+
+const onExpandClick = () => {
+  short.value = !short.value
 }
 
 </script>

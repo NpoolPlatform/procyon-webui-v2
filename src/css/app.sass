@@ -1522,6 +1522,9 @@ img.more-info:hover
   position: relative
   width: 100%
 
+.hidden
+  display: none
+
 
 .video-box iframe
   position: absolute
@@ -2182,6 +2185,19 @@ h3.mining-title
   @media (max-width: $breakpoint-sm-max)
     margin-right: 0
 
+.mining-summary .buttons button.show-more
+  border: 1px solid #a1d0d0
+  margin: auto auto auto 0
+  opacity: .7
+
+.mining-summary .buttons button.show-more img
+  filter: invert(89%) sepia(25%) saturate(304%) hue-rotate(126deg) brightness(87%) contrast(89%)
+  height: 18px
+  width: 18px
+  transition: all ease-in-out .2s
+
+.mining-summary .buttons button.open img
+  transform: rotate(-180deg)
 
 .add-mining
   background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
