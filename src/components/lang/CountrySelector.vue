@@ -7,13 +7,13 @@
     no-caps
     auto-close
   >
-    <template v-if='!!country' #label>
+    <template #label>
       <div class='row country'>
         <div class='column justify-center country'>
-          <q-img fit='contain' class='flag' :src='country.Flag' />
+          <q-img fit='contain' class='flag' :src='country?.Flag' />
         </div>
         <div class='column justify-center'>
-          {{ country.Code }}
+          {{ country?.Code }}
         </div>
       </div>
     </template>
