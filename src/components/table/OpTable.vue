@@ -92,4 +92,8 @@ const titleWidth = computed(() => (headerWidth.value - topRightWidth.value - 1).
 h2
   max-width: 100% !important
   margin-left: 0 !important
+
+button,
+input[type='submit']
+  text-shadow: none !important
 </stype>
