@@ -1,4 +1,4 @@
-import { doGet } from 'npool-cli-v2'
+import { doGet, SecondsEachDay } from 'npool-cli-v2'
 import { defineStore } from 'pinia'
 import { API, DEVNET_PATTERN } from './const'
 import { DevNet, GetNetworkInfoRequest, GetNetworksRequest, MockSpacemeshState, NetworkInfo } from './types'
@@ -8,7 +8,21 @@ export const useMockSpacemeshStore = defineStore('mockspacemesh', {
     NetworkInfo: undefined as unknown as NetworkInfo,
     Networks: []
   }),
-  getters: {},
+  getters: {
+    get30DaysAvgOutput (): (ratio: number, accounts: number) => number {
+      return (ratio: number, accounts: number) => {
+        if (!this.NetworkInfo) {
+          return 0
+        }
+        ratio = accounts / (accounts + this.NetworkInfo.epoch.stats.current.smeshers) * ratio
+        return this.NetworkInfo.epoch.stats.cumulative.rewards * ratio
+      }
+    },
+    getNetworkDailyOutput (): number {
+      const days = (new Date().getTime() / 1000 - this.NetworkInfo?.network?.genesis) / SecondsEachDay
+      return this.NetworkInfo?.epoch?.stats?.cumulative?.circulation / days / 1000000000000
+    }
+  },
   actions: {
     getNetworks (req: GetNetworksRequest, done: () => void) {
       doGet<GetNetworksRequest, Array<DevNet>>(

@@ -111,14 +111,10 @@ const _last24HoursEarningCoin = ref(0)
 const last24HoursEarningUSD = ref(0)
 
 const _last30DaysEarningCoin = ref(0)
-const last30DaysEarningUSD = ref(0)
 
 const getEarning = () => {
   totalEarningCoin(coinTypeId.value, (coinAmount: number) => {
     _totalEarningCoin.value = coinAmount
-    currency.getCoinCurrency(coin.value, Currency.USD, (currency: number) => {
-      last30DaysEarningUSD.value = _totalEarningCoin.value * currency
-    })
   })
 
   last30DaysEarningCoin(coinTypeId.value, (coinAmount: number) => {

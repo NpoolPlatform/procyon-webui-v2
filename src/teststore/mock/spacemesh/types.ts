@@ -13,6 +13,11 @@ interface Stat {
   txsamount: number
 }
 
+interface Stats {
+  current: Stat
+  cumulative: Stat
+}
+
 interface Epoch {
   number: number
   end: number
@@ -20,8 +25,7 @@ interface Epoch {
   layers: number
   layerstart: number
   start: number
-  current: Stat
-  cumulative: Stat
+  stats: Stats
 }
 
 interface Layer {
