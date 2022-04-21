@@ -1,6 +1,7 @@
 <template>
   <h2>{{ $t('MSG_MINING_DASHBOARD') }}</h2>
   <MiningCard v-for='myCoin in coins' :key='myCoin.ID' :coin-type-id='(myCoin.ID as string)' />
+  <SpacemeshMockCard />
 </template>
 
 <script setup lang='ts'>
@@ -12,6 +13,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ useScope: 'global' })
 
 const MiningCard = defineAsyncComponent(() => import('src/components/dashboard/MiningCard.vue'))
+const SpacemeshMockCard = defineAsyncComponent(() => import('src/components/dashboard/SpacemeshMockCard.vue'))
 
 const coin = useCoinStore()
 const orders = useOrderStore()

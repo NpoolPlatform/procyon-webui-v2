@@ -11,13 +11,13 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
-        <span class='value'>{{ coin?.PreSale ? '*' : _totalEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
-        <span class='sub-value'>({{ totalEarningUSD.toFixed(2) }} {{ PriceCoinName }})</span>
+        <span class='value'>{{ coin?.PreSale ? '*' : _totalEarningCoin.toFixed(4) }} {{ coin?.Unit }}</span>
+        <span class='sub-value'>({{ totalEarningUSD.toFixed(4) }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
-        <span class='value'>{{ coin?.PreSale ? '*' : _last24HoursEarningCoin.toFixed(2) }} {{ coin.Unit }}</span>
-        <span class='sub-value'>({{ last24HoursEarningUSD.toFixed(2) }} {{ PriceCoinName }})</span>
+        <span class='value'>{{ coin?.PreSale ? '*' : _last24HoursEarningCoin.toFixed(4) }} {{ coin.Unit }}</span>
+        <span class='sub-value'>({{ last24HoursEarningUSD.toFixed(4) }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
@@ -72,27 +72,33 @@ import {
   last24HoursEarningCoin,
   useOrderStore,
   PriceCoinName,
-  NotificationType
+  NotificationType,
+  Coin
 } from 'npool-cli-v2'
-import { defineProps, toRef, computed, onMounted, ref } from 'vue'
+import { useMockSpacemeshStore } from 'src/teststore'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 import chevrons from '../../assets/chevrons.svg'
 
-interface Props {
-  coinTypeId: string
-}
-
-const props = defineProps<Props>()
-const coinTypeId = toRef(props, 'coinTypeId')
 const short = ref(true)
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const coins = useCoinStore()
-const coin = computed(() => coins.getCoinByID(coinTypeId.value))
+const coin = computed(() => {
+  let myCoin = undefined as unknown as Coin
+  for (const c of coins.Coins) {
+    if (c.Name?.toLowerCase().includes('spacemesh')) {
+      myCoin = c
+      break
+    }
+  }
+  return myCoin
+})
+const coinTypeId = computed(() => coin.value?.ID)
 
 const order = useOrderStore()
 const orders = computed(() => order.Orders.filter((myOrder) => {
@@ -103,6 +109,7 @@ const goodPeriod = computed(() => order.Orders.length > 0 ? order.Orders[0].Good
 const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
 
 const currency = useCurrencyStore()
+const spacemesh = useMockSpacemeshStore()
 
 const _totalEarningCoin = ref(0)
 const totalEarningUSD = ref(0)
@@ -114,21 +121,21 @@ const _last30DaysEarningCoin = ref(0)
 const last30DaysEarningUSD = ref(0)
 
 const getEarning = () => {
-  totalEarningCoin(coinTypeId.value, (coinAmount: number) => {
+  totalEarningCoin(coinTypeId.value as string, (coinAmount: number) => {
     _totalEarningCoin.value = coinAmount
     currency.getCoinCurrency(coin.value, Currency.USD, (currency: number) => {
       last30DaysEarningUSD.value = _totalEarningCoin.value * currency
     })
   })
 
-  last30DaysEarningCoin(coinTypeId.value, (coinAmount: number) => {
+  last30DaysEarningCoin(coinTypeId.value as string, (coinAmount: number) => {
     _last30DaysEarningCoin.value = coinAmount
     currency.getCoinCurrency(coin.value, Currency.USD, (currency: number) => {
       totalEarningUSD.value = _totalEarningCoin.value * currency
     })
   })
 
-  last24HoursEarningCoin(coinTypeId.value, (coinAmount: number) => {
+  last24HoursEarningCoin(coinTypeId.value as string, (coinAmount: number) => {
     _last24HoursEarningCoin.value = coinAmount
     currency.getCoinCurrency(coin.value, Currency.USD, (currency: number) => {
       last24HoursEarningUSD.value = _last24HoursEarningCoin.value * currency
@@ -152,6 +159,30 @@ const getCoins = () => {
 }
 
 onMounted(() => {
+  spacemesh.getNetworks({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_SPACEMESH_NETWORKS'),
+        Message: t('MSG_GET_SPACEMESH_NETWORKS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    spacemesh.getNetworkInfo({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_SPACEMESH_NETWORK_INFOS'),
+          Message: t('MSG_GET_SPACEMESH_NETWORK_INFOS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  })
+
   if (coins.Coins.length === 0) {
     getCoins()
     return
