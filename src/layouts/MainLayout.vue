@@ -1,14 +1,17 @@
 <template>
-  <MainHeader :class='[ special ? "special" : "" ]' />
-  <div :class='[ "main row", special ? "special" : "" ]'>
-    <SideMenu />
-    <div id='main'>
-      <div :class='[ setting.ShowSideMenu ? "with-sidebar" : "" ]'>
-        <router-view />
+  <div class='page column'>
+    <MainHeader :class='[ special ? "special" : "" ]' />
+    <div :class='[ "main row", special ? "special" : "" ]'>
+      <SideMenu />
+      <div id='main'>
+        <div :class='[ setting.ShowSideMenu ? "with-sidebar" : "" ]'>
+          <router-view />
+        </div>
       </div>
     </div>
+    <q-space />
+    <Footer :class='[ special ? "special" : "" ]' />
   </div>
-  <Footer :class='[ special ? "special" : "" ]' />
   <LangLoader />
   <Prepare />
 </template>
@@ -49,4 +52,7 @@ onMounted(() => {
 
 .special
   font-family: 'Noto Sans JP'
+
+.page
+  min-height: 100vh
 </style>
