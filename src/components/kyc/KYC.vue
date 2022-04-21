@@ -19,7 +19,7 @@
             :value='myType'
             :selected='selectedType.value === myType.value'
           >
-            {{ myType.label }}
+            {{ $t(myType.label) }}
           </option>
         </select>
       </div>
