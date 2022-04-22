@@ -177,6 +177,18 @@ onMounted(() => {
         }
       })
     })
+  } else {
+    coin.getCoinDescriptions({
+      CoinTypeID: good.value.Main?.ID as string,
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COIN_DESCRIPTION'),
+          Message: t('MSG_GET_COIN_DESCRIPTION_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    })
   }
 
   if (coins.value.length === 0) {
