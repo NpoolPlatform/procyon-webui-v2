@@ -43,7 +43,7 @@
             </p>
           </div>
           <p>
-            <a :href='good?.Main?.HomePage' target='_blank'>
+            <a :href='good?.Main?.HomePage'>
               {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
             </a>
           </p>
