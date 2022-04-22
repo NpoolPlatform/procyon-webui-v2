@@ -65,7 +65,7 @@
           message='MSG_AMOUNT_TIP'
           placeholder='MSG_AMOUNT_PLACEHOLDER'
           :min='0'
-          :max='good.Good?.Good?.Total'
+          :max='good?.Good?.Good?.Total'
           @focus='onPurchaseAmountFocusIn'
           @blur='onPurchaseAmountFocusOut'
         />
