@@ -1,5 +1,5 @@
 <template>
-  <div ref='headerDiv' class='row'>
+  <div ref='headerDiv' class='row op'>
     <h2 :style='{"width": titleWidth}'>
       {{ $t(label) }}
     </h2>
@@ -23,7 +23,7 @@
         <slot name='table-body' v-bind='myProps' />
       </template>
     </q-table>
-    <div class='row'>
+    <div class='row op'>
       <slot name='bottom-left' />
       <q-space />
       <q-pagination
@@ -96,4 +96,8 @@ h2
 button,
 input[type='submit']
   text-shadow: none !important
+
+.row
+  @media (max-width: $breakpoint-sm-max)
+    width: 100%
 </stype>
