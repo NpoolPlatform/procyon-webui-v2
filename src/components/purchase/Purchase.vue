@@ -106,7 +106,6 @@ import {
   formatTime,
   useCoinStore,
   Good,
-  Coin,
   useOrderStore,
   PriceCoinName
 } from 'npool-cli-v2'
@@ -146,12 +145,12 @@ const paymentCoin = computed({
       if (coins.value.length > 0) {
         return coins.value[0]
       }
-      return undefined as unknown as Coin
+      return undefined
     }
     return myCoin
   },
   set: (val) => {
-    selectedCoinID.value = val.ID as string
+    selectedCoinID.value = val?.ID as string
   }
 })
 
@@ -251,7 +250,7 @@ const onSubmit = throttle(() => {
 
     order.createPayment({
       OrderID: orderId,
-      PaymentCoinTypeID: paymentCoin.value.ID as string,
+      PaymentCoinTypeID: paymentCoin.value?.ID as string,
       Message: {
         Error: {
           Title: t('MSG_CREATE_PAYMENT'),
