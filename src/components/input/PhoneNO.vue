@@ -1,9 +1,7 @@
 <template>
   <label for='phone'>{{ $t('MSG_PHONE_NO') }}</label>
   <div class='row'>
-    <div v-if='false'>
-      <CountrySelector class='code' v-model:country='country' />
-    </div>
+    <CountrySelector class='code' v-model:country='country' />
     <input
       type='text'
       id='phone'

@@ -13,7 +13,7 @@
       </div>
     </template>
     <template #form-body>
-      <div v-if='signupMethod === AccountType.Mobile'>
+      <div v-show='signupMethod === AccountType.Mobile'>
         <PhoneNO
           v-model:value='phoneNO'
           :error='accountError'
@@ -21,7 +21,7 @@
           @blur='onPhoneNOFocusOut'
         />
       </div>
-      <div v-if='signupMethod === AccountType.Email'>
+      <div v-show='signupMethod === AccountType.Email'>
         <Input
           v-model:value='emailAddress'
           label='MSG_EMAIL_ADDRESS'
