@@ -30,13 +30,13 @@
           <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
         </div>
         <div class='product-detail-text'>
-          <div v-if='description'>
+          <div v-show='description'>
             <h3>{{ description?.Title }}</h3>
             <p v-html='description?.Message' />
           </div>
           <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
           <p v-html='$t("MSG_WHY_CONTENT")' />
-          <div v-if='good?.Main?.Specs'>
+          <div v-show='good?.Main?.Specs'>
             <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
             <p>
               <img class='content-image' :src='good?.Main?.Specs'>
