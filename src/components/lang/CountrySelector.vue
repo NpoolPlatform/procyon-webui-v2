@@ -10,10 +10,10 @@
     <template #label>
       <div class='row country'>
         <div class='column justify-center country'>
-          <q-img fit='contain' class='flag' :src='country?.Flag' />
+          <q-img fit='contain' class='flag' :src='selectedCountry.Flag' />
         </div>
         <div class='column justify-center'>
-          {{ country?.Code }}
+          {{ selectedCountry.Code }}
         </div>
       </div>
     </template>
@@ -57,10 +57,6 @@ const { t } = useI18n({ useScope: 'global' })
 const lang = useLangStore()
 const countries = computed(() => lang.Countries)
 watch(countries, () => {
-  if (countries.value.length > 0) {
-    return
-  }
-
   countries.value.push({
     ID: '1',
     Country: 'China',
@@ -75,21 +71,32 @@ watch(countries, () => {
     Flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Flag_of_Singapore.svg/383px-Flag_of_Singapore.svg.png',
     Short: 'SG'
   })
+})
 
-  if (!country.value) {
-    emit('update:country', countries.value[0])
+const selectedCountry = computed({
+  get: () => {
+    if (country.value) {
+      return country.value
+    }
+    if (countries.value.length > 0) {
+      return countries.value[0]
+    }
+    return {} as unknown as Country
+  },
+  set: (val) => {
+    emit('update:country', val)
   }
 })
 
 const emit = defineEmits<{(e: 'update:country', country: Country): void}>()
 
 const onItemClick = (country: Country) => {
-  emit('update:country', country)
+  selectedCountry.value = country
 }
 
 onBeforeMount(() => {
   if (countries.value.length > 0) {
-    emit('update:country', countries.value[0])
+    selectedCountry.value = countries.value[0]
     return
   }
 
