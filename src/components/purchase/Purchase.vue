@@ -79,7 +79,7 @@
               :value='myCoin'
               :selected='paymentCoin?.ID === myCoin?.ID'
             >
-              {{ myCoin?.Unit }} ({{ myCoin?.Name }})
+              {{ myCoin?.Unit }} ({{ myCoin?.Name }}) {{ paymentCoin }} {{ myCoin }}
             </option>
           </select>
         </div>
