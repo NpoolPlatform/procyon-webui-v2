@@ -71,15 +71,18 @@
         />
         <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
         <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
-          <option
-            v-for='myCoin in coins'
-            :key='myCoin?.ID'
-            :value='myCoin'
-            :selected='paymentCoin?.ID === myCoin?.ID'
-            v-show='myCoin'
-          >
-            {{ myCoin?.Unit }} ({{ myCoin?.Name }})
-          </option>
+          <div v-if='coins.length > 0'>
+            <option
+              v-for='myCoin in coins'
+              :key='myCoin?.ID'
+              :value='myCoin'
+              :selected='paymentCoin?.ID === myCoin?.ID'
+            >
+              <div v-show='myCoin'>
+                {{ myCoin?.Unit }} ({{ myCoin?.Name }})
+              </div>
+            </option>
+          </div>
         </select>
         <!--<h4>Coupon Code</h4>
         <input type='text'>
