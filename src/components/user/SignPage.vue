@@ -13,26 +13,28 @@
       </div>
     </template>
     <template #form-body>
-      <PhoneNO
-        v-if='signupMethod === AccountType.Mobile'
-        v-model:value='phoneNO'
-        :error='accountError'
-        @focus='onPhoneNOFocusIn'
-        @blur='onPhoneNOFocusOut'
-      />
-      <Input
-        v-if='signupMethod === AccountType.Email'
-        v-model:value='emailAddress'
-        label='MSG_EMAIL_ADDRESS'
-        type='email'
-        id='email'
-        required
-        :error='accountError'
-        message='MSG_EMAIL_TIP'
-        placeholder='MSG_EMAIL_PLACEHOLDER'
-        @focus='onEmailFocusIn'
-        @blur='onEmailFocusOut'
-      />
+      <div v-if='signupMethod === AccountType.Mobile'>
+        <PhoneNO
+          v-model:value='phoneNO'
+          :error='accountError'
+          @focus='onPhoneNOFocusIn'
+          @blur='onPhoneNOFocusOut'
+        />
+      </div>
+      <div v-if='signupMethod === AccountType.Email'>
+        <Input
+          v-model:value='emailAddress'
+          label='MSG_EMAIL_ADDRESS'
+          type='email'
+          id='email'
+          required
+          :error='accountError'
+          message='MSG_EMAIL_TIP'
+          placeholder='MSG_EMAIL_PLACEHOLDER'
+          @focus='onEmailFocusIn'
+          @blur='onEmailFocusOut'
+        />
+      </div>
       <slot name='append-account' />
       <Input
         v-model:value='myPassword'

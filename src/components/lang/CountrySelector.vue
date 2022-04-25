@@ -1,5 +1,4 @@
 <template>
-  <div>1  {{ selectedCountry }}  1</div>
   <q-btn-dropdown
     class='selector'
     dropdown-icon='expand_more'
@@ -32,7 +31,7 @@
             <q-img fit='contain' class='flag' :src='myCountry?.Flag' />
           </div>
           <div class='column justify-center country'>
-            {{ myCountry?.Country }} ({{ myCountry?.Code }}) {{ selectedCountry }} {{ myCountry }}
+            {{ myCountry?.Country }} ({{ myCountry?.Code }})
           </div>
         </div>
       </q-item>
