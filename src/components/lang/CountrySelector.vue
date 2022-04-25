@@ -17,7 +17,7 @@
         </div>
       </div>
     </template>
-    <q-list>
+    <q-list v-show='selectedCountry'>
       <q-item
         dense
         clickable
