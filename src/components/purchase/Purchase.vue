@@ -70,16 +70,18 @@
           @blur='onPurchaseAmountFocusOut'
         />
         <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
-        <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
-          <option
-            v-for='myCoin in coins'
-            :key='myCoin?.ID'
-            :value='myCoin'
-            :selected='paymentCoin?.ID === myCoin?.ID'
-          >
-            {{ myCoin?.Unit }} ({{ myCoin?.Name }})
-          </option>
-        </select>
+        <div v-show='paymentCoin'>
+          <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
+            <option
+              v-for='myCoin in coins'
+              :key='myCoin?.ID'
+              :value='myCoin'
+              :selected='paymentCoin?.ID === myCoin?.ID'
+            >
+              {{ myCoin?.Unit }} ({{ myCoin?.Name }})
+            </option>
+          </select>
+        </div>
         <!--<h4>Coupon Code</h4>
         <input type='text'>
         <div class='coupon-error'>Incorrect Coupon Code</div>-->
