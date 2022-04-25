@@ -141,7 +141,7 @@ const usedFor = ref('PRODUCTDETAILS')
 const coin = useCoinStore()
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale))
-const paymentCoin = ref(undefined as unknown as Coin)
+const paymentCoin = ref({} as unknown as Coin)
 
 const purchaseAmount = ref(1)
 const purchaseAmountError = ref(false)

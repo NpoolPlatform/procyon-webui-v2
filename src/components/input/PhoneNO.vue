@@ -35,7 +35,7 @@ const error = toRef(props, 'error')
 const value = toRef(props, 'value')
 
 const myValue = ref(value.value)
-const country = ref(undefined as unknown as Country)
+const country = ref({} as unknown as Country)
 
 const emit = defineEmits<{(e: 'update:value', value: string): void,
   (e: 'focus'): void,
