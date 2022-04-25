@@ -250,7 +250,7 @@ const onSubmit = throttle(() => {
 
     order.createPayment({
       OrderID: orderId,
-      PaymentCoinTypeID: paymentCoin.value?.ID as string,
+      PaymentCoinTypeID: selectedCoinID.value,
       Message: {
         Error: {
           Title: t('MSG_CREATE_PAYMENT'),
