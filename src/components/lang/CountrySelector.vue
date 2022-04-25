@@ -10,10 +10,10 @@
     <template #label>
       <div v-show='selectedCountry' class='row country'>
         <div class='column justify-center country'>
-          <q-img fit='contain' class='flag' :src='selectedCountry.Flag' />
+          <q-img fit='contain' class='flag' :src='selectedCountry?.Flag' />
         </div>
         <div class='column justify-center'>
-          {{ selectedCountry.Code }}
+          {{ selectedCountry?.Code }}
         </div>
       </div>
     </template>
@@ -81,10 +81,10 @@ const selectedCountry = computed({
     if (countries.value.length > 0) {
       return countries.value[0]
     }
-    return undefined as unknown as Country
+    return undefined
   },
   set: (val) => {
-    emit('update:country', val)
+    emit('update:country', val as unknown as Country)
   }
 })
 
