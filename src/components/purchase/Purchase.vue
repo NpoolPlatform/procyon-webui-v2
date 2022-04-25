@@ -146,8 +146,9 @@ const paymentCoin = computed({
       if (coins.value.length > 0) {
         return coins.value[0]
       }
+      return undefined as unknown as Coin
     }
-    return {} as unknown as Coin
+    return myCoin
   },
   set: (val) => {
     selectedCoinID.value = val.ID as string
