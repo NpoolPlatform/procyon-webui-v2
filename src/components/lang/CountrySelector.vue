@@ -22,16 +22,16 @@
         dense
         clickable
         v-for='(myCountry, index) in countries'
-        :key='myCountry.ID'
+        :key='myCountry?.ID'
         @click='onItemClick(myCountry)'
         :class='[ index % 2 === 0 ? "even" : "odd" ]'
       >
         <div class='row country'>
           <div class='column justify-center country'>
-            <q-img fit='contain' class='flag' :src='myCountry.Flag' />
+            <q-img fit='contain' class='flag' :src='myCountry?.Flag' />
           </div>
           <div class='column justify-center country'>
-            {{ myCountry.Country }} ({{ myCountry.Code }})
+            {{ myCountry?.Country }} ({{ myCountry?.Code }})
           </div>
         </div>
       </q-item>

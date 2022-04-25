@@ -75,9 +75,9 @@
             v-for='myCoin in coins'
             :key='myCoin.ID'
             :value='myCoin'
-            :selected='paymentCoin?.ID === myCoin.ID'
+            :selected='paymentCoin?.ID === myCoin?.ID'
           >
-            {{ myCoin.Unit }} ({{ myCoin.Name }})
+            {{ myCoin?.Unit }} ({{ myCoin?.Name }})
           </option>
         </select>
         <!--<h4>Coupon Code</h4>
