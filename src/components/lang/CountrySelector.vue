@@ -6,6 +6,8 @@
     flat
     no-caps
     auto-close
+    menu-anchor='top start'
+    menu-self='bottom start'
   >
     <template #label>
       <div class='row country'>
