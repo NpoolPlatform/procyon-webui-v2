@@ -1,4 +1,5 @@
 <template>
+  <div>1  {{ country }} 1 {{ countries }} 2</div>
   <q-btn-dropdown
     class='selector'
     dropdown-icon='expand_more'
