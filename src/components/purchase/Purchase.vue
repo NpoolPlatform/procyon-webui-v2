@@ -70,20 +70,15 @@
           @blur='onPurchaseAmountFocusOut'
         />
         <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
-        <div>1  {{ paymentCoin }} 1 {{ coins }} 2</div>
-        <select v-show='paymentCoin' :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
-          <div v-if='coins.length > 0'>
-            <option
-              v-for='myCoin in coins'
-              :key='myCoin?.ID'
-              :value='myCoin'
-              :selected='paymentCoin?.ID === myCoin?.ID'
-            >
-              <div v-show='myCoin'>
-                {{ myCoin?.Unit }} ({{ myCoin?.Name }})
-              </div>
-            </option>
-          </div>
+        <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
+          <option
+            v-for='myCoin in coins'
+            :key='myCoin?.ID'
+            :value='myCoin'
+            :selected='paymentCoin?.ID === myCoin?.ID'
+          >
+            {{ myCoin?.Unit }} ({{ myCoin?.Name }})
+          </option>
         </select>
         <!--<h4>Coupon Code</h4>
         <input type='text'>
@@ -141,7 +136,21 @@ const usedFor = ref('PRODUCTDETAILS')
 const coin = useCoinStore()
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale))
-const paymentCoin = ref({} as unknown as Coin)
+const selectedCoinID = ref(undefined as unknown as string)
+const paymentCoin = computed({
+  get: () => {
+    const myCoin = coin.getCoinByID(selectedCoinID.value)
+    if (!myCoin) {
+      if (coins.value.length > 0) {
+        return coins.value[0]
+      }
+    }
+    return {} as unknown as Coin
+  },
+  set: (val) => {
+    selectedCoinID.value = val.ID as string
+  }
+})
 
 const purchaseAmount = ref(1)
 const purchaseAmountError = ref(false)

@@ -1,5 +1,4 @@
 <template>
-  <div>1  {{ country }} 1 {{ countries }} 2</div>
   <q-btn-dropdown
     class='selector'
     dropdown-icon='expand_more'
@@ -9,7 +8,7 @@
     auto-close
   >
     <template #label>
-      <div v-show='country' class='row country'>
+      <div class='row country'>
         <div class='column justify-center country'>
           <q-img fit='contain' class='flag' :src='country?.Flag' />
         </div>
@@ -18,7 +17,7 @@
         </div>
       </div>
     </template>
-    <q-list v-show='countries.length > 0'>
+    <q-list>
       <q-item
         dense
         clickable
@@ -27,7 +26,7 @@
         @click='onItemClick(myCountry)'
         :class='[ index % 2 === 0 ? "even" : "odd" ]'
       >
-        <div v-show='myCountry' class='row country'>
+        <div class='row country'>
           <div class='column justify-center country'>
             <q-img fit='contain' class='flag' :src='myCountry?.Flag' />
           </div>
@@ -41,7 +40,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineProps, toRef, defineEmits, watch } from 'vue'
+import { computed, onBeforeMount, defineProps, toRef, defineEmits, watch } from 'vue'
 import { useLangStore, NotificationType, Country } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
@@ -88,7 +87,7 @@ const onItemClick = (country: Country) => {
   emit('update:country', country)
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   if (countries.value.length > 0) {
     emit('update:country', countries.value[0])
     return
