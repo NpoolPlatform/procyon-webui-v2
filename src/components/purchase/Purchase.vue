@@ -70,6 +70,7 @@
           @blur='onPurchaseAmountFocusOut'
         />
         <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
+        <div>{{ paymentCoin }}</div>
         <div v-show='paymentCoin'>
           <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
             <option
