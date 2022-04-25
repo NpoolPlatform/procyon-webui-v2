@@ -71,7 +71,7 @@
         />
         <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
         <div>1  {{ paymentCoin }} 1 {{ coins }} 2</div>
-        <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
+        <select v-show='paymentCoin' :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
           <div v-if='coins.length > 0'>
             <option
               v-for='myCoin in coins'
