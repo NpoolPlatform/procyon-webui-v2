@@ -73,7 +73,7 @@
         <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
           <option
             v-for='myCoin in coins'
-            :key='myCoin.ID'
+            :key='myCoin?.ID'
             :value='myCoin'
             :selected='paymentCoin?.ID === myCoin?.ID'
             v-show='myCoin'
