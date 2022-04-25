@@ -7,7 +7,6 @@
     flat
     no-caps
     auto-close
-    v-show='selectedCountry'
   >
     <template #label>
       <div class='row country'>
@@ -19,7 +18,7 @@
         </div>
       </div>
     </template>
-    <q-list v-show='selectedCountry'>
+    <q-list>
       <q-item
         dense
         clickable
@@ -42,7 +41,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onBeforeMount, defineProps, toRef, defineEmits, watch } from 'vue'
+import { computed, onBeforeMount, defineProps, toRef, defineEmits } from 'vue'
 import { useLangStore, NotificationType, Country } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
@@ -57,22 +56,26 @@ const country = toRef(props, 'country')
 const { t } = useI18n({ useScope: 'global' })
 
 const lang = useLangStore()
-const countries = computed(() => lang.Countries)
-watch(countries, () => {
-  countries.value.push({
+const countries = computed(() => {
+  if (lang.Countries.length > 0) {
+    return lang.Countries
+  }
+  const cs = [] as Array<Country>
+  cs.push({
     ID: '1',
     Country: 'China',
     Code: '+86',
     Flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flag_of_the_People%27s_Republic_of_China.svg/300px-Flag_of_the_People%27s_Republic_of_China.svg.png',
     Short: 'CN'
   })
-  countries.value.push({
+  cs.push({
     ID: '2',
     Country: 'Singapore',
     Code: '+065',
     Flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Flag_of_Singapore.svg/383px-Flag_of_Singapore.svg.png',
     Short: 'SG'
   })
+  return cs
 })
 
 const selectedCountry = computed({
