@@ -120,7 +120,7 @@ const emit = defineEmits<{(e: 'update:accountType', type: string): void,
   (e: 'submit'): void
 }>()
 
-const signupMethod = ref(AccountType.Email)
+const signupMethod = ref(AccountType.Mobile)
 const onSwitcherClick = () => {
   switch (signupMethod.value) {
     case AccountType.Email:
