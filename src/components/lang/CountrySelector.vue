@@ -8,7 +8,7 @@
     auto-close
   >
     <template #label>
-      <div class='row country'>
+      <div v-show='country' class='row country'>
         <div class='column justify-center country'>
           <q-img fit='contain' class='flag' :src='country?.Flag' />
         </div>
@@ -17,7 +17,7 @@
         </div>
       </div>
     </template>
-    <q-list>
+    <q-list v-show='countries.length > 0'>
       <q-item
         dense
         clickable
@@ -25,9 +25,8 @@
         :key='myCountry?.ID'
         @click='onItemClick(myCountry)'
         :class='[ index % 2 === 0 ? "even" : "odd" ]'
-        v-show='myCountry'
       >
-        <div class='row country'>
+        <div v-show='myCountry' class='row country'>
           <div class='column justify-center country'>
             <q-img fit='contain' class='flag' :src='myCountry?.Flag' />
           </div>
