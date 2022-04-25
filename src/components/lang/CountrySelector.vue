@@ -8,7 +8,7 @@
     auto-close
   >
     <template #label>
-      <div class='row country'>
+      <div v-show='selectedCountry' class='row country'>
         <div class='column justify-center country'>
           <q-img fit='contain' class='flag' :src='selectedCountry.Flag' />
         </div>
@@ -81,7 +81,7 @@ const selectedCountry = computed({
     if (countries.value.length > 0) {
       return countries.value[0]
     }
-    return {} as unknown as Country
+    return undefined as unknown as Country
   },
   set: (val) => {
     emit('update:country', val)
