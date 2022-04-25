@@ -7,9 +7,10 @@
     flat
     no-caps
     auto-close
+    v-show='selectedCountry'
   >
     <template #label>
-      <div v-show='selectedCountry' class='row country'>
+      <div class='row country'>
         <div class='column justify-center country'>
           <q-img fit='contain' class='flag' :src='selectedCountry?.Flag' />
         </div>
