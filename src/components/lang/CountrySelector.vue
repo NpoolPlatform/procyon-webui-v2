@@ -25,6 +25,7 @@
         :key='myCountry?.ID'
         @click='onItemClick(myCountry)'
         :class='[ index % 2 === 0 ? "even" : "odd" ]'
+        v-show='myCountry'
       >
         <div class='row country'>
           <div class='column justify-center country'>

@@ -76,6 +76,7 @@
             :key='myCoin.ID'
             :value='myCoin'
             :selected='paymentCoin?.ID === myCoin?.ID'
+            v-show='myCoin'
           >
             {{ myCoin?.Unit }} ({{ myCoin?.Name }})
           </option>
