@@ -1,9 +1,9 @@
 <template>
-  <div ref='headerDiv' class='row op'>
-    <h2 :style='{"width": titleWidth}'>
+  <div class='row'>
+    <h2 class='title'>
       {{ $t(label) }}
     </h2>
-    <div ref='topRightSlot'>
+    <div>
       <slot name='top-right' />
     </div>
   </div>
@@ -28,11 +28,12 @@
       <q-space />
       <div class='pagination'>
         <q-pagination
+          dense
           color='white'
           active-color='orange-1'
           v-model='page'
           :max='pages'
-          :max-pages='9'
+          :max-pages='5'
           boundary-links
           direction-links
         />
@@ -72,13 +73,6 @@ const onRowClick = (row: never) => {
   emit('row-click', row)
 }
 
-const topRightSlot = ref<HTMLDivElement>()
-const headerDiv = ref<HTMLDivElement>()
-
-const headerWidth = computed(() => headerDiv.value ? headerDiv.value.clientWidth : 0)
-const topRightWidth = computed(() => topRightSlot.value ? topRightSlot.value.clientWidth : 0)
-const titleWidth = computed(() => (headerWidth.value - topRightWidth.value - 1).toString() + 'px')
-
 </script>
 
 <stype lang='sass' scoped>
@@ -92,8 +86,13 @@ const titleWidth = computed(() => (headerWidth.value - topRightWidth.value - 1).
   font-size: 16px !important
 
 h2
-  max-width: 100% !important
   margin-left: 0 !important
+
+.title
+  min-width: 240px
+
+.title::after
+  background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%) !important
 
 button,
 input[type='submit']
@@ -104,5 +103,5 @@ input[type='submit']
     width: 100%
 
 .pagination
-  max-width: 20%
+  max-width: 40%
 </stype>

@@ -8,7 +8,7 @@
   >
     <template #top-right>
       <div class='buttons'>
-        <button disabled class='alt'>
+        <button disabled class='alt last'>
           {{ $t('MSG_EXPORT_ORDER_CSV') }}
         </button>
       </div>
@@ -154,4 +154,6 @@ onUnmounted(() => {
 </script>
 
 <stype lang='sass' scoped>
+.last
+  margin-right: 0
 </stype>
