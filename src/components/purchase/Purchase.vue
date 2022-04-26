@@ -136,12 +136,17 @@ const good = computed(() => goods.getGoodByID(goodId.value))
 const usedFor = ref('PRODUCTDETAILS')
 const coin = useCoinStore()
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
-const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale))
+const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV))
 const selectedCoinID = ref(undefined as unknown as string)
 const paymentCoin = computed({
   get: () => {
     const myCoin = coin.getCoinByID(selectedCoinID.value)
     if (!myCoin) {
+      for (const scoin of coins.value) {
+        if (scoin.Name?.toLowerCase().includes(PriceCoinName.toLowerCase())) {
+          return scoin
+        }
+      }
       if (coins.value.length > 0) {
         return coins.value[0]
       }
@@ -218,9 +223,12 @@ onMounted(() => {
         }
       }
     }, () => {
-      // TODO
+      selectedCoinID.value = paymentCoin.value?.ID as string
     })
+    return
   }
+
+  selectedCoinID.value = paymentCoin.value?.ID as string
 })
 
 const onSubmit = throttle(() => {
