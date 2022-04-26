@@ -105,12 +105,10 @@ onBeforeMount(() => {
 
 .selector
   color: black
+  margin: 0
 
 .q-btn--dense
   line-height: 1rem
-
-button
-  margin: 0
 
 .selector
   text-shadow: none

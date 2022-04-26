@@ -87,7 +87,6 @@ const titleWidth = computed(() => (headerWidth.value - topRightWidth.value - 1).
   border-bottom: 1px solid #23292b
   border-radius: 0
   color: #e1eeef
-  margin-bottom: 24px
 
 .table-box >>> th
   font-size: 16px !important
