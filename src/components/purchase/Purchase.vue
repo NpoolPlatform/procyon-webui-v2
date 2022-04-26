@@ -260,7 +260,7 @@ const onSubmit = throttle(() => {
         }
       }
     }, (paymentId: string, error: boolean) => {
-      submitting.value = true
+      submitting.value = false
       if (error) {
         return
       }
