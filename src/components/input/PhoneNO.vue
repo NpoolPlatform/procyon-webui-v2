@@ -6,7 +6,7 @@
       type='text'
       id='phone'
       name='phone'
-      required
+      :required='required'
       :placeholder='$t("MSG_PHONE_NO_PLACEHOLDER")'
       :class='[ error ? "error" : "" ]'
       v-model='myValue'
@@ -26,6 +26,7 @@ import { Country } from 'npool-cli-v2'
 interface Props {
   value: string
   error: boolean
+  required: boolean
 }
 
 const CountrySelector = defineAsyncComponent(() => import('src/components/lang/CountrySelector.vue'))
@@ -33,6 +34,7 @@ const CountrySelector = defineAsyncComponent(() => import('src/components/lang/C
 const props = defineProps<Props>()
 const error = toRef(props, 'error')
 const value = toRef(props, 'value')
+const required = toRef(props, 'required')
 
 const myValue = ref(value.value)
 const country = ref(undefined as unknown as Country)
