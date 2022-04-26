@@ -80,7 +80,7 @@
 
 <script setup lang='ts'>
 import { useOrderStore, NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds } from 'npool-cli-v2'
-import { defineAsyncComponent, computed, ref, onMounted, onUnmounted } from 'vue'
+import { defineAsyncComponent, computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import copy from 'copy-to-clipboard'
@@ -108,6 +108,7 @@ const order = computed(() => orders.getOrderByID(orderId.value))
 
 const remainSeconds = ref(orders.getOrderState(order.value))
 const ticker = ref(-1)
+const counter = ref(0)
 
 const qrCodeContainer = ref<HTMLDivElement>()
 
@@ -119,6 +120,24 @@ const showType = ref('')
 const remainTime = ref(RemainMax)
 
 const remainTicker = ref(-1)
+
+watch(counter, () => {
+  if (counter.value % 30 === 0) {
+    orders.getOrder({
+      ID: orderId.value,
+      Message: {
+        Error: {
+          Title: t('MSG_GET_ORDER'),
+          Message: t('MSG_GET_ORDER_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+})
 
 const launchTicker = () => {
   ticker.value = window.setInterval(() => {
@@ -150,6 +169,7 @@ const launchTicker = () => {
         remainTicker.value = -1
       }
     }
+    counter.value++
   }, 1000)
 }
 
