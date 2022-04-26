@@ -23,18 +23,20 @@
         <slot name='table-body' v-bind='myProps' />
       </template>
     </q-table>
-    <div class='row op'>
+    <div class='row'>
       <slot name='bottom-left' />
       <q-space />
-      <q-pagination
-        color='white'
-        active-color='orange-1'
-        v-model='page'
-        :max='pages'
-        :max-pages='9'
-        boundary-links
-        direction-links
-      />
+      <div class='pagination'>
+        <q-pagination
+          color='white'
+          active-color='orange-1'
+          v-model='page'
+          :max='pages'
+          :max-pages='9'
+          boundary-links
+          direction-links
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -85,6 +87,7 @@ const titleWidth = computed(() => (headerWidth.value - topRightWidth.value - 1).
   border-bottom: 1px solid #23292b
   border-radius: 0
   color: #e1eeef
+  margin-bottom: 24px
 
 .table-box >>> th
   font-size: 16px !important
@@ -100,4 +103,7 @@ input[type='submit']
 .row
   @media (max-width: $breakpoint-sm-max)
     width: 100%
+
+.pagination
+  max-width: 20%
 </stype>
