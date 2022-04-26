@@ -50,7 +50,7 @@ const table = computed(() => [
   {
     name: 'Name',
     label: t('MSG_USERNAME'),
-    align: 'center',
+    align: 'left',
     field: (row: Referral) => row
   },
   {
