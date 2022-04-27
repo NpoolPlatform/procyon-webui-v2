@@ -114,10 +114,10 @@ const daily = computed(() => spacemesh.getNetworkDailyOutput)
 const spacemesh = useMockSpacemeshStore()
 
 const _last24HoursEarningCoin = computed(() => {
-  return spacemesh.getLastDaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.smeshers * 1.3)
+  return spacemesh.getLastDaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3)
 })
 const _last30DaysEarningCoin = computed(() => {
-  return spacemesh.get30DaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.smeshers * 1.3)
+  return spacemesh.get30DaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3)
 })
 const _totalEarningCoin = computed(() => _last30DaysEarningCoin.value)
 

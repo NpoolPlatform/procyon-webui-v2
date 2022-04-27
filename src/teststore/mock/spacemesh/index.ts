@@ -14,9 +14,10 @@ export const useMockSpacemeshStore = defineStore('mockspacemesh', {
         if (!this.NetworkInfo) {
           return 0
         }
-        ratio = accounts / (accounts + this.NetworkInfo.epoch.stats.current.smeshers) * ratio
-        const days = (new Date().getTime() / 1000 - this.NetworkInfo?.epoch?.start) / SecondsEachDay
-        return this.NetworkInfo.epoch.stats.current.rewards / days * ratio / 1000000000000
+        ratio = accounts / (accounts + this.NetworkInfo.epoch.stats.current.accounts) * ratio
+        const days = (new Date().getTime() / 1000 - this.NetworkInfo?.network?.genesis) / SecondsEachDay
+        const scale = Math.random() / 10 + 0.9
+        return this.NetworkInfo.epoch.stats.cumulative.circulation / days * ratio / 1000000000000 * scale
       }
     },
     get30DaysAvgOutput (): (ratio: number, accounts: number) => number {
@@ -24,8 +25,9 @@ export const useMockSpacemeshStore = defineStore('mockspacemesh', {
         if (!this.NetworkInfo) {
           return 0
         }
-        ratio = accounts / (accounts + this.NetworkInfo.epoch.stats.current.smeshers) * ratio
-        return this.getNetworkDailyOutput * ratio
+        ratio = accounts / (accounts + this.NetworkInfo.epoch.stats.current.accounts) * ratio
+        const days = (new Date().getTime() / 1000 - this.NetworkInfo?.network?.genesis) / SecondsEachDay
+        return this.NetworkInfo.epoch.stats.cumulative.circulation / days * ratio / 1000000000000
       }
     },
     getNetworkDailyOutput (): number {
