@@ -16,7 +16,7 @@ export const useMockSpacemeshStore = defineStore('mockspacemesh', {
         }
         ratio = accounts / (accounts + this.NetworkInfo.epoch.stats.current.accounts) * ratio
         const days = (new Date().getTime() / 1000 - this.NetworkInfo?.network?.genesis) / SecondsEachDay
-        const scale = Math.random() / 10 + 0.9
+        const scale = Math.random() / 10 * 2 + 0.9
         return this.NetworkInfo.epoch.stats.cumulative.circulation / days * ratio / 1000000000000 * scale
       }
     },
