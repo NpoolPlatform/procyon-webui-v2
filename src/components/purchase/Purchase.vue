@@ -223,12 +223,9 @@ onMounted(() => {
         }
       }
     }, () => {
-      selectedCoinID.value = paymentCoin.value?.ID as string
+      // TODO
     })
-    return
   }
-
-  selectedCoinID.value = paymentCoin.value?.ID as string
 })
 
 const onSubmit = throttle(() => {
@@ -258,7 +255,7 @@ const onSubmit = throttle(() => {
 
     order.createPayment({
       OrderID: orderId,
-      PaymentCoinTypeID: selectedCoinID.value,
+      PaymentCoinTypeID: paymentCoin.value?.ID as string,
       Message: {
         Error: {
           Title: t('MSG_CREATE_PAYMENT'),
