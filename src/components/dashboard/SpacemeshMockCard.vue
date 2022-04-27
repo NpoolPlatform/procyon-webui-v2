@@ -32,7 +32,7 @@
       <div class='detailed-summary' v-show='!short'>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
-          <span class='value'>{{ _last30DaysEarningCoin.toFixed(2) }} {{ coin.Unit }}</span>
+          <span class='value'>{{ _last30DaysDailyEarningCoin.toFixed(2) }} {{ coin.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
@@ -40,7 +40,7 @@
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-          <span class='value'>{{ (_last30DaysEarningCoin * 0.8).toFixed(2) }} {{ coin.Unit }}</span>
+          <span class='value'>{{ (_last30DaysDailyEarningCoin * 0.8).toFixed(2) }} {{ coin.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
@@ -116,10 +116,12 @@ const spacemesh = useMockSpacemeshStore()
 const _last24HoursEarningCoin = computed(() => {
   return spacemesh.getLastDaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3)
 })
-const _last30DaysEarningCoin = computed(() => {
-  return spacemesh.get30DaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3) * 30
+const _last30DaysDailyEarningCoin = computed(() => {
+  return spacemesh.get30DaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3)
 })
-const _totalEarningCoin = computed(() => _last30DaysEarningCoin.value)
+const _totalEarningCoin = computed(() => {
+  return spacemesh.getEarning(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3)
+})
 
 const getCoins = () => {
   coins.getCoins({
