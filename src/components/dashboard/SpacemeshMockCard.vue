@@ -107,7 +107,7 @@ const goodUnit = computed(() => orders.value.length > 0 ? orders.value[0].Good.G
 const goodPeriod = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.DurationDays : '')
 const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
 const unitsRatio = computed(() => {
-  return orders.value.length > 0 ? (totalUnits.value ? totalUnits.value : 1) / orders.value[0].Good.Good.Good.Total : 0
+  return orders.value.length > 0 ? (totalUnits.value ? totalUnits.value : 1) / orders.value[0].Good.Good.Good.Total : 1
 })
 const daily = computed(() => spacemesh.getNetworkDailyOutput)
 
