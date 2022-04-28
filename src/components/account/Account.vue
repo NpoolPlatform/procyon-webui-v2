@@ -146,7 +146,7 @@
           />
         </div>
       </div>
-      <input type='submit' :value='$t("MSG_SAVE_CHANGES")' class='account-field' @click='onSubmit'>
+      <input type='submit' :value='$t("MSG_SAVE_CHANGES")' class='account-field'>
     </form>
   </div>
 </template>
