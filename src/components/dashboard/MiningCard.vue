@@ -98,8 +98,8 @@ const order = useOrderStore()
 const orders = computed(() => order.Orders.filter((myOrder) => {
   return myOrder?.Good?.Main?.ID === coin.value.ID && order.validateOrder(myOrder)
 }))
-const goodUnit = computed(() => order.Orders.length > 0 ? order.Orders[0].Good.Good.Good.Unit : '')
-const goodPeriod = computed(() => order.Orders.length > 0 ? order.Orders[0].Good.Good.Good.DurationDays : '')
+const goodUnit = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.Unit : '')
+const goodPeriod = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.DurationDays : '')
 const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
 
 const currency = useCurrencyStore()
