@@ -107,10 +107,10 @@ pipeline {
             tag=0.1.1
           fi
 
-          sed +e
+          set +e
           grep $tag package.json
           rc=$?
-          sed -e
+          set -e
           if [ ! 0 -eq $rc ]; then
             sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
             git add package.json
