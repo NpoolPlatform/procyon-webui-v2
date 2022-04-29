@@ -106,16 +106,11 @@ pipeline {
           else
             tag=0.1.1
           fi
-
+          sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
           set +e
-          grep $tag package.json
-          rc=$?
+          git add package.json
+          git commit -m "Bump version to $tag"
           set -e
-          if [ ! 0 -eq $rc ]; then
-            sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
-            git add package.json
-            git commit -m "Bump version to $tag"
-          fi
           git tag -a $tag -m "Bump version to $tag"
         '''.stripIndent())
 
