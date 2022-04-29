@@ -30,6 +30,7 @@ const { t } = useI18n({ useScope: 'global' })
 const order = useOrderStore()
 const orders = computed(() => buildOrders(order.Orders, OrderGroup.ALL))
 const myOrders = ref([] as Array<OrderModel>)
+const loading = ref(false)
 
 const good = useGoodStore()
 
@@ -102,7 +103,7 @@ const onRowClick = (myOrder: OrderModel) => {
 const ticker = ref(-1)
 
 onMounted(() => {
-  if (good.Goods.length < 0) {
+  if (good.Goods.length === 0) {
     good.getGoods({
       Message: {
         Error: {
@@ -133,6 +134,21 @@ onMounted(() => {
           Type: NotificationType.Error
         }
       }
+    })
+  }
+
+  if (order.Orders.length === 0) {
+    loading.value = true
+    order.getOrders({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_ORDERS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      loading.value = false
     })
   }
 

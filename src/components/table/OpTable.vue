@@ -16,6 +16,7 @@
       :columns='table'
       color='#e1eeef'
       hide-pagination
+      :loading='loading'
       :no-data-label='$t("NoData")'
       @row-click='(evt, row, index) => onRowClick(row as never)'
     >
@@ -51,16 +52,19 @@ interface Props {
   table: never
   countPerPage: number
   customizeBody: boolean
+  loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  customizeBody: false
+  customizeBody: false,
+  loading: false
 })
 const label = toRef(props, 'label')
 const rows = toRef(props, 'rows')
 const table = toRef(props, 'table')
 const countPerPage = toRef(props, 'countPerPage')
 const customizeBody = toRef(props, 'customizeBody')
+const loading = toRef(props, 'loading')
 
 const page = ref(1)
 const pages = computed(() => Math.ceil(rows.value.length / countPerPage.value))
