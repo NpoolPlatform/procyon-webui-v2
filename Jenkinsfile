@@ -14,6 +14,32 @@ pipeline {
       steps {
         sh (returnStdout: false, script: '''
           set +e
+          revlist=`git rev-list --tags --max-count=1`
+          rc=$?
+          set -e
+          if [ 0 -eq $rc ]; then
+            tag=`git describe --tags $revlist`
+            major=`echo $tag | awk -F '.' '{ print $1 }'`
+            minor=`echo $tag | awk -F '.' '{ print $2 }'`
+            patch=`echo $tag | awk -F '.' '{ print $3 }'`
+            patch=$(( $patch + $patch % 2 + 1 ))
+            tag=$major.$minor.$patch
+            grep $tag package.json
+            rc=$?
+            if [ ! 0 -eq $rc ]; then
+              sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
+            fi
+          fi
+        '''.stripIndent())
+
+        withCredentials([gitUsernamePassword(credentialsId: 'KK-github-key', gitToolName: 'git-tool')]) {
+          sh 'git add package.json'
+          sh 'git commit -m "update package version"'
+          sh 'git push origin $BRANCH_NAME'
+        }
+
+        sh (returnStdout: false, script: '''
+          set +e
           PATH=/usr/local/bin:$PATH:./node_modules/@quasar/app/bin command quasar
           rc=$?
           set -e
@@ -113,6 +139,9 @@ pipeline {
           else
             tag=0.1.1
           fi
+          sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
+          git add package.json
+          git commit -m "Bump version to $tag"
           git tag -a $tag -m "Bump version to $tag"
         '''.stripIndent())
 
@@ -144,6 +173,9 @@ pipeline {
           else
             tag=0.1.1
           fi
+          sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
+          git add package.json
+          git commit -m "Bump version to $tag"
           git tag -a $tag -m "Bump version to $tag"
         '''.stripIndent())
 
