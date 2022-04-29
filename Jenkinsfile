@@ -81,6 +81,8 @@ pipeline {
             tag=0.1.1
           fi
           sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
+          git add package.json
+          git commit -m "Bump version to $tag"
           git tag -a $tag -m "Bump version to $tag"
         '''.stripIndent())
 
