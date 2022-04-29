@@ -24,11 +24,7 @@ pipeline {
             patch=`echo $tag | awk -F '.' '{ print $3 }'`
             patch=$(( $patch + $patch % 2 + 1 ))
             tag=$major.$minor.$patch
-            grep $tag package.json
-            rc=$?
-            if [ ! 0 -eq $rc ]; then
-              sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
-            fi
+            sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
           fi
         '''.stripIndent())
 
