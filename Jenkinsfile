@@ -80,6 +80,7 @@ pipeline {
           else
             tag=0.1.1
           fi
+          sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
           git tag -a $tag -m "Bump version to $tag"
         '''.stripIndent())
 
