@@ -82,7 +82,6 @@ pipeline {
           fi
           sed -ri "s/\"version(.*)/\"version\": \"$tag\",/" package.json
           git tag -a $tag -m "Bump version to $tag"
-          git tag -a $tag -m "Bump version to $tag"
         '''.stripIndent())
 
         withCredentials([gitUsernamePassword(credentialsId: 'KK-github-key', gitToolName: 'git-tool')]) {
