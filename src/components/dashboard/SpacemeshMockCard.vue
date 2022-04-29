@@ -1,5 +1,5 @@
 <template>
-  <div class='mining-summary content-glass'>
+  <div v-show='orders.length > 0' class='mining-summary content-glass'>
     <div class='mining-heading'>
       <div class='product-page-icon'>
         <img :src='coin?.Logo'>
