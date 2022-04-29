@@ -107,8 +107,10 @@ pipeline {
             tag=0.1.1
           fi
           sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
+          sed +e
           git add package.json
           git commit -m "Bump version to $tag"
+          sed -e
           git tag -a $tag -m "Bump version to $tag"
         '''.stripIndent())
 
@@ -140,8 +142,10 @@ pipeline {
             tag=0.1.1
           fi
           sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
+          set +e
           git add package.json
           git commit -m "Bump version to $tag"
+          set -e
           git tag -a $tag -m "Bump version to $tag"
         '''.stripIndent())
 
@@ -174,8 +178,10 @@ pipeline {
             tag=0.1.1
           fi
           sed -ri "s#\\\"version(.*)#\\\"version\\\": \\\"$tag\\\",#" package.json
+          set +e
           git add package.json
           git commit -m "Bump version to $tag"
+          set -e
           git tag -a $tag -m "Bump version to $tag"
         '''.stripIndent())
 
