@@ -33,7 +33,7 @@
       <span class='label'>{{ $t('MSG_ORDER_EFFECTIVE') }}:</span>
       <span class='value'>{{ formatTime(good.Good.Good.StartAt, true) }}</span>
     </div>
-    <button class='alt' @click='onPurchaseClick' disabled>
+    <button class='alt' @click='onPurchaseClick'>
       {{ $t('MSG_PURCHASE') }}
     </button>
   </div>
