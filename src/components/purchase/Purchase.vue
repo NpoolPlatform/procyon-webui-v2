@@ -65,7 +65,7 @@
           message='MSG_AMOUNT_TIP'
           placeholder='MSG_AMOUNT_PLACEHOLDER'
           :min='0'
-          :max='good?.Good?.Good?.Total'
+          :max='total'
           @focus='onPurchaseAmountFocusIn'
           @blur='onPurchaseAmountFocusOut'
         />
@@ -107,7 +107,8 @@ import {
   useCoinStore,
   Good,
   useOrderStore,
-  PriceCoinName
+  PriceCoinName,
+  useStockStore
 } from 'npool-cli-v2'
 import { throttle } from 'quasar'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
@@ -132,6 +133,9 @@ const goodId = computed(() => query.value.goodId)
 
 const goods = useGoodStore()
 const good = computed(() => goods.getGoodByID(goodId.value))
+
+const stock = useStockStore()
+const total = computed(() => stock.getStockByGoodID(goodId.value)?.Total)
 
 const usedFor = ref('PRODUCTDETAILS')
 const coin = useCoinStore()
