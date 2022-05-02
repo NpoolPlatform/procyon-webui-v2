@@ -72,7 +72,8 @@ import {
   useOrderStore,
   PriceCoinName,
   NotificationType,
-  Coin
+  Coin,
+  useStockStore
 } from 'npool-cli-v2'
 import { useMockSpacemeshStore } from 'src/teststore'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
@@ -106,7 +107,9 @@ const orders = computed(() => order.Orders.filter((myOrder) => {
 const goodUnit = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.Unit : '')
 const goodPeriod = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.DurationDays : '')
 const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
-const unitsRatio = computed(() => orders.value.length > 0 ? totalUnits.value / orders.value[0].Good.Good.Good.Total : 0)
+const stock = useStockStore()
+const total = computed(() => stock.getStockByGoodID(orders.value[0]?.Good.Good.Good.ID as string)?.Total)
+const unitsRatio = computed(() => orders.value.length > 0 && total.value ? totalUnits.value / total.value : 0)
 const daily = computed(() => spacemesh.getNetworkDailyOutput)
 
 const spacemesh = useMockSpacemeshStore()

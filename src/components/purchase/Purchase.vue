@@ -169,7 +169,7 @@ const onPurchaseAmountFocusIn = () => {
   purchaseAmountError.value = false
 }
 const onPurchaseAmountFocusOut = () => {
-  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > good?.value.Good?.Good?.Total
+  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > total.value
 }
 
 const submitting = ref(false)
