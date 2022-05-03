@@ -17,6 +17,7 @@
         v-if='signupMethod === AccountType.Mobile'
         v-model:value='phoneNO'
         :error='accountError'
+        :required='signupMethod === AccountType.Mobile'
         @focus='onPhoneNOFocusIn'
         @blur='onPhoneNOFocusOut'
       />
@@ -26,7 +27,7 @@
         label='MSG_EMAIL_ADDRESS'
         type='email'
         id='email'
-        required
+        :required='signupMethod === AccountType.Email'
         :error='accountError'
         message='MSG_EMAIL_TIP'
         placeholder='MSG_EMAIL_PLACEHOLDER'

@@ -22,6 +22,7 @@
         v-if='accountType === AccountType.Mobile'
         v-model:value='phoneNO'
         :error='accountError'
+        :required='accountType === AccountType.Mobile'
         @focus='onPhoneNOFocusIn'
         @blur='onPhoneNOFocusOut'
       />
@@ -31,7 +32,7 @@
         label='MSG_EMAIL_ADDRESS'
         type='email'
         id='email'
-        required
+        :required='accountType === AccountType.Email'
         :error='accountError'
         message='MSG_EMAIL_TIP'
         placeholder='MSG_EMAIL_PLACEHOLDER'
