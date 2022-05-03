@@ -5,7 +5,7 @@
     </template>
     <template #form-body>
       <div class='sent-tip'>
-        <p v-html='$t("MSG_VERIFICATION_CODE_SENT_TO", { ACCOUNT: account })' />
+        <p class='tip' v-html='$t("MSG_VERIFICATION_CODE_SENT_TO", { ACCOUNT: account })' />
       </div>
       <Input
         v-model:value='myVerificationCode'
@@ -123,4 +123,7 @@ onMounted(() => {
 <style lang='sass' scoped>
 .sent-tip
   margin-bottom: 20px
+
+.tip
+  line-height: 120%
 </style>
