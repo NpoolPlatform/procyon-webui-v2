@@ -26,7 +26,7 @@
 
     <div class='line'>
       <span class='label'>{{ $t('MSG_MAINTENANCE_FEE') }}:</span>
-      <span class='value'>$0.05 / {{ $t('MSG_DAY') }}</span>
+      <span class='value'>* / {{ $t('MSG_DAY') }}</span>
     </div>
 
     <div class='line'>
