@@ -4,24 +4,26 @@ metadata:
   name: procyon-webui-v2-ingress
   namespace: kube-system
   annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
     k8s.kuboard.cn/displayName: procyon-webui-v2
     k8s.kuboard.cn/workload: procyon-webui-v2
     kubernetes.io/ingress.class: "traefik-internet"
     traefik.ingress.kubernetes.io/router.entrypoints: websecure, web
-    traefik.ingress.kubernetes.io/router.middlewares: kube-system-http-redirect-https@kubernetescrd,
-                                                      kube-system-http-redirect-https-testing@kubernetescrd,
-                                                      kube-system-common-headers@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares:
+      kube-system-http-redirect-https@kubernetescrd,
+      kube-system-http-redirect-https-testing@kubernetescrd,
+      kube-system-common-headers@kubernetescrd
 
 spec:
   tls:
     - hosts:
         - www.procyon.vip
         - procyon.vip
-      secretName: procyon-vip-cert
+      secretName: procyon-vip-tls
     - hosts:
         - www.npool.top
         - npool.top
-      secretName: npool-top-cert
+      secretName: npool-top-tls
   rules:
     - host: www.procyon.vip
       http:
