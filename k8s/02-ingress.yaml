@@ -4,6 +4,7 @@ metadata:
   name: procyon-webui-v2-ingress
   namespace: kube-system
   annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
     k8s.kuboard.cn/displayName: procyon-webui-v2
     k8s.kuboard.cn/workload: procyon-webui-v2
     kubernetes.io/ingress.class: "traefik-internet"

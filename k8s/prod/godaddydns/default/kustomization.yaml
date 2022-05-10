@@ -1,5 +1,0 @@
-resources:
-  - ../../../base
-
-commonAnnotations:
-  cert-manager.io/cluster-issuer: godaadyns-default-cluster-issuer

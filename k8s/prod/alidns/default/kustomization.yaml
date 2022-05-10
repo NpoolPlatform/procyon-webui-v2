@@ -1,5 +1,0 @@
-resources:
-  - ../../../base
-
-commonAnnotations:
-  cert-manager.io/cluster-issuer: alidns-default-cluster-issuer

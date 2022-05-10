@@ -287,8 +287,11 @@ pipeline {
         expression { TARGET_ENV ==~ /.*development.*/ }
       }
       steps {
-        sh 'sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/base/01-procyon-webui-v2.yaml'
-        sh 'kubectl apply -k k8s'
+        sh '''
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui-v2.yaml
+          sed -i "s/selfsigned-cluster-issuer/${env.CERTIFICATE_CLASS_ISSUER}/g" k8s/02-ingress.yaml
+          kubectl apply -k k8s
+        '''
       }
     }
 
@@ -304,8 +307,10 @@ pipeline {
 
           git reset --hard
           git checkout $tag
-          sed -i "s/procyon-webui-v2:latest/procyon-webui-v2:$tag/g" k8s/base/01-procyon-webui.yaml
-          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/base/01-procyon-webui.yaml
+          sed -i "s/procyon-webui-v2:latest/procyon-webui-v2:$tag/g" k8s/01-procyon-webui.yaml
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui.yaml
+
+          sed -i "s/selfsigned-cluster-issuer/${env.CERTIFICATE_CLASS_ISSUER}/g" k8s/02-ingress.yaml
           kubectl apply -k k8s
         '''.stripIndent())
       }
@@ -329,10 +334,10 @@ pipeline {
 
           git reset --hard
           git checkout $tag
-          sed -i "s/procyon-webui-v2:latest/procyon-webui-v2:$tag/g" k8s/base/01-procyon-webui.yaml
-          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/base/01-procyon-webui.yaml
+          sed -i "s/procyon-webui-v2:latest/procyon-webui-v2:$tag/g" k8s/01-procyon-webui.yaml
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui.yaml
 
-
+          sed -i "s/selfsigned-cluster-issuer/${env.CERTIFICATE_CLASS_ISSUER}/g" k8s/02-ingress.yaml
           kubectl apply -k k8s
         '''.stripIndent())
       }
