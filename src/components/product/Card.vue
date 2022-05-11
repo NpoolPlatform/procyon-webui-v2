@@ -24,10 +24,10 @@
       <span class='value'>20%</span>
     </div>
 
-    <div class='line'>
+    <!-- div class='line'>
       <span class='label'>{{ $t('MSG_MAINTENANCE_FEE') }}:</span>
       <span class='value'>* / {{ $t('MSG_DAY') }}</span>
-    </div>
+    </div -->
 
     <div class='line'>
       <span class='label'>{{ $t('MSG_ORDER_EFFECTIVE') }}:</span>
