@@ -33,15 +33,15 @@
       <span class='label'>{{ $t('MSG_ORDER_EFFECTIVE') }}:</span>
       <span class='value'>{{ formatTime(good.Good.Good.StartAt, true) }}</span>
     </div>
-    <button class='alt' @click='onPurchaseClick' disabled>
+    <button class='alt' @click='onPurchaseClick' :disabled='!buyer'>
       {{ $t('MSG_PURCHASE') }}
     </button>
   </div>
 </template>
 
 <script setup lang='ts'>
-import { defineProps, toRef } from 'vue'
-import { Good, useGoodStore, formatTime, useCoinStore, Coin, PriceCoinName } from 'npool-cli-v2'
+import { defineProps, toRef, computed } from 'vue'
+import { Good, useGoodStore, formatTime, useCoinStore, Coin, PriceCoinName, useUserStore } from 'npool-cli-v2'
 import { useRouter } from 'vue-router'
 
 interface Props {
@@ -53,6 +53,9 @@ const good = toRef(props, 'good')
 
 const goods = useGoodStore()
 const coin = useCoinStore()
+
+const user = useUserStore()
+const buyer = computed(() => user.buyer)
 
 const router = useRouter()
 const onPurchaseClick = () => {
