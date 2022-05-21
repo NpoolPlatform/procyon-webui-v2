@@ -4,6 +4,16 @@
 
 vue3 framework use quasar ui and pinia manage store
 
+## Jenkins
+
+## Jenkins(额外的变量)
+
+Jenkins UI 涉及的环境变量和可选值
+
+| 环境变量                 | 值 | 说明                                                                          |
+|:-------------------------|:---|:------------------------------------------------------------------------------|
+| CERTIFICATE_CLASS_ISSUER |    | dev: selfsigned-cluster-issuer, prod: \${dns-verdor}-\${account}-cluster-issuer,例如(alidns-default-cluster-issuer) |
+
 ## Install the dependencies
 ```bash
 yarn

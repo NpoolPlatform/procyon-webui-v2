@@ -73,7 +73,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
-        sh 'docker build -t $DOCKER_REGISTRY/entropypool/procyon-webui-v2:latest .'
+        sh 'docker build -f ./Dockerfile -t $DOCKER_REGISTRY/entropypool/procyon-webui-v2:latest ./dist'
       }
     }
 
@@ -281,43 +281,17 @@ pipeline {
       }
     }
 
-    stage('Deploy https certificate') {
-      when {
-        expression { DEPLOY_TARGET == 'true' }
-      }
-      steps {
-        sh 'rm .server-https-ca -rf'
-        withCredentials([gitUsernamePassword(credentialsId: 'KK-github-key', gitToolName: 'git-tool')]) {
-          sh 'git clone https://github.com/NpoolPlatform/server-https-ca.git .server-https-ca'
-        }
-        sh(returnStdout: false, script: '''
-          set +e
-          kubectl get secret -n kube-system | grep procyon-vip-cert
-          rc=$?
-          set -e
-          if [ ! 0 -eq $rc ]; then
-            kubectl create secret tls procyon-vip-cert --cert=.server-https-ca/procyon.vip/tls.crt --key=.server-https-ca/procyon.vip/tls.key -n kube-system
-          fi
-          set +e
-          kubectl get secret -n kube-system | grep npool-top-cert
-          rc=$?
-          set -e
-          if [ ! 0 -eq $rc ]; then
-            kubectl create secret tls npool-top-cert --cert=.server-https-ca/npool.top/tls.crt --key=.server-https-ca/npool.top/tls.key -n kube-system
-          fi
-          rm .server-https-ca -rf
-        '''.stripIndent())
-      }
-    }
-
     stage('Deploy for development') {
       when {
         expression { DEPLOY_TARGET == 'true' }
         expression { TARGET_ENV ==~ /.*development.*/ }
       }
       steps {
-        sh 'sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui.yaml'
-        sh 'kubectl apply -k k8s'
+        sh '''
+          sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui-v2.yaml
+          sed -i "s/godaddydns-procyon-letsencrypt-issuer/selfsigned-cluster-issuer/g" k8s/02-ingress.yaml
+          kubectl apply -k k8s
+        '''
       }
     }
 
@@ -335,6 +309,8 @@ pipeline {
           git checkout $tag
           sed -i "s/procyon-webui-v2:latest/procyon-webui-v2:$tag/g" k8s/01-procyon-webui.yaml
           sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui.yaml
+
+          sed -i "s/godaddydns-procyon-letsencrypt-issuer/selfsigned-cluster-issuer/g" k8s/02-ingress.yaml
           kubectl apply -k k8s
         '''.stripIndent())
       }
