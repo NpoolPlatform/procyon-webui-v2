@@ -73,7 +73,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
-        sh 'docker build -f ./Dockerfile -t $DOCKER_REGISTRY/entropypool/procyon-webui-v2:latest ./dist'
+        sh 'docker build -t $DOCKER_REGISTRY/entropypool/procyon-webui-v2:latest .'
       }
     }
 
