@@ -105,10 +105,10 @@ import {
   NotificationType,
   formatTime,
   useCoinStore,
-  Good,
   useOrderStore,
   PriceCoinName,
-  useStockStore
+  useStockStore,
+  CoinDescriptionUsedFor
 } from 'npool-cli-v2'
 import { throttle } from 'quasar'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
@@ -137,7 +137,7 @@ const good = computed(() => goods.getGoodByID(goodId.value))
 const stock = useStockStore()
 const total = computed(() => stock.getStockByGoodID(goodId.value)?.Total)
 
-const usedFor = ref('PRODUCTDETAILS')
+const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const coin = useCoinStore()
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV))
@@ -189,30 +189,8 @@ onMounted(() => {
           Type: NotificationType.Error
         }
       }
-    }, (good: Good) => {
-      coin.getCoinDescriptions({
-        CoinTypeID: good.Main?.ID as string,
-        Message: {
-          Error: {
-            Title: t('MSG_GET_COIN_DESCRIPTION'),
-            Message: t('MSG_GET_COIN_DESCRIPTION_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      })
-    })
-  } else {
-    coin.getCoinDescriptions({
-      CoinTypeID: good.value.Main?.ID as string,
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COIN_DESCRIPTION'),
-          Message: t('MSG_GET_COIN_DESCRIPTION_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
+    }, () => {
+      // TODO
     })
   }
 
@@ -229,6 +207,19 @@ onMounted(() => {
     }, () => {
       // TODO
     })
+
+    if (!description.value) {
+      coin.getCoinDescriptions({
+        Message: {
+          Error: {
+            Title: t('MSG_GET_COIN_DESCRIPTION'),
+            Message: t('MSG_GET_COIN_DESCRIPTION_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      })
+    }
   }
 })
 
