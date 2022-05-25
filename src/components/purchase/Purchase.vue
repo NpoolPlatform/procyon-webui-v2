@@ -31,8 +31,8 @@
         </div>
         <div class='product-detail-text'>
           <div v-show='description'>
-            <h3>{{ description?.Title }}</h3>
-            <p v-html='description?.Message' />
+            <h3>{{ $t(description?.Title) }}</h3>
+            <p v-html='$t(description?.Message)' />
           </div>
           <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
           <p v-html='$t("MSG_WHY_CONTENT")' />
