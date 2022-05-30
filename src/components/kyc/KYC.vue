@@ -9,7 +9,7 @@
       </p>
     </div>
     <h2>{{ $t('MSG_IDENTIFICATION_DOCUMENTS') }}</h2>
-    <div class='content-glass kyc-documents'>
+    <div :class='[ "content-glass kyc-documents", state === ReviewState.Approved ? "kyc-verified" : "" ]'>
       <div class='document-select'>
         <h4>{{ $t('MSG_DOCUMENT_TYPE') }}</h4>
         <select :name='$t("MSG_DOCUMENT_TYPE")' :disabled='!updatable' v-model='selectedType'>
@@ -78,7 +78,9 @@
       </div>
       <div class='hr' />
       <div class='kyc-submit'>
-        <h4>{{ $t('MSG_KYC_CONFIRMATION_TITLE') }}</h4>
+        <h4>
+          {{ $t('MSG_KYC_CONFIRMATION_TITLE') }}
+        </h4>
         <p class='kyc-confirmation' v-html='$t("MSG_KYC_CONFIRMATION_CONTENT")' />
         <WaitingBtn
           label='MSG_SUBMIT_DOCUMENTS'
