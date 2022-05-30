@@ -30,7 +30,7 @@
           <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
         </div>
         <div class='product-detail-text'>
-          <div v-show='description'>
+          <div v-if='description'>
             <h3>{{ $t(description?.Title) }}</h3>
             <p v-html='$t(description?.Message)' />
           </div>

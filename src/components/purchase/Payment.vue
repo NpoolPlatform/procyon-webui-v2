@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useOrderStore, NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds } from 'npool-cli-v2'
+import { useOrderStore, NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds, useNotificationStore } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -105,6 +105,8 @@ const orderId = computed(() => query.value.orderId)
 
 const orders = useOrderStore()
 const order = computed(() => orders.getOrderByID(orderId.value))
+
+const notification = useNotificationStore()
 
 const remainSeconds = ref(orders.getOrderState(order.value))
 const ticker = ref(-1)
@@ -251,10 +253,22 @@ const onPaymentProceed = () => {
 
 const onCopyAmountClick = () => {
   copy(order.value?.Order.Payment?.Amount.toString())
+  notification.Notifications.push({
+    Title: t('MSG_AMOUNT_COPIED'),
+    Message: t('MSG_COPY_AMOUNT_SUCCESS'),
+    Popup: true,
+    Type: NotificationType.Success
+  })
 }
 
 const onCopyAddressClick = () => {
   copy(order.value?.PayToAccount?.Address)
+  notification.Notifications.push({
+    Title: t('MSG_ADDRESS_COPIED'),
+    Message: t('MSG_COPY_ADDRESS_SUCCESS'),
+    Popup: true,
+    Type: NotificationType.Success
+  })
 }
 
 </script>
