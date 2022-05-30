@@ -78,7 +78,7 @@
               :value='myCoin'
               :selected='paymentCoin?.ID === myCoin?.ID'
             >
-              {{ myCoin?.Unit }} ({{ myCoin?.Name }})
+              {{ myCoin?.Unit }} ({{ currency.formatCoinName(myCoin?.Name as string) }})
             </option>
           </select>
         </div>
@@ -108,7 +108,8 @@ import {
   useOrderStore,
   PriceCoinName,
   useStockStore,
-  CoinDescriptionUsedFor
+  CoinDescriptionUsedFor,
+  useCurrencyStore
 } from 'npool-cli-v2'
 import { throttle } from 'quasar'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
@@ -133,6 +134,8 @@ const goodId = computed(() => query.value.goodId)
 
 const goods = useGoodStore()
 const good = computed(() => goods.getGoodByID(goodId.value))
+
+const currency = useCurrencyStore()
 
 const stock = useStockStore()
 const total = computed(() => stock.getStockByGoodID(goodId.value)?.Total)
