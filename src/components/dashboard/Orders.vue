@@ -34,6 +34,16 @@ const loading = ref(false)
 
 const good = useGoodStore()
 
+const orderPrice = (orderModel: OrderModel) => {
+  const myOrder = order.getOrderByID(orderModel.OrderID)
+  if (!myOrder) {
+    return 'NaN'
+  }
+  const totalPay = myOrder.Order.Payment.CoinUSDCurrency * myOrder.Order.Payment.Amount
+  const price = totalPay / myOrder.Order.Order.Units
+  return price.toString() + ' ' + PriceCoinName
+}
+
 const table = computed(() => [
   {
     name: 'Date',
@@ -57,7 +67,7 @@ const table = computed(() => [
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: OrderModel) => good.getGoodByID(row.GoodID) ? good.getGoodPrice(good.getGoodByID(row.GoodID)).toString() + ' ' + PriceCoinName : 'NaN'
+    field: (row: OrderModel) => orderPrice(row)
   },
   {
     name: 'TechFee',
