@@ -3,7 +3,7 @@
     <h2>{{ $t('MSG_ACCOUNT_BALANCE') }}</h2>
     <div class='earnings-summary'>
       <div class='earnings-figure'>
-        <span class='amount'>{{ (_totalEarningUSD - totalWithdrawedUSD).toFixed(4) }}</span>
+        <span class='amount'>{{ (_totalEarningUSD - totalWithdrawedUSD + _totalPaymentBalanceUSD).toFixed(4) }}</span>
         <span class='unit'>{{ PriceCoinName }}</span>
         <div class='hr' />
         <h4 class='description'>
@@ -11,7 +11,7 @@
         </h4>
       </div>
       <div class='earnings-figure'>
-        <span class='amount'>{{ (totalEarningJPY - totalWithdrawedJPY).toFixed(4) }}</span>
+        <span class='amount'>{{ (totalEarningJPY - totalWithdrawedJPY + totalPaymentBalanceJPY).toFixed(4) }}</span>
         <span class='unit'>JPY</span>
         <div class='hr' />
         <h4 class='description'>
@@ -35,7 +35,11 @@ import {
   totalWithdrawedEarningCurrency,
   PriceCoinName,
   useGoodStore,
-  useBenefitStore
+  useBenefitStore,
+  useBillingStore,
+  totalPaymentBalanceUSD,
+  totalPaymentBalanceCurrency,
+  useOrderStore
 } from 'npool-cli-v2'
 import { onMounted, ref, defineProps, toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -52,15 +56,39 @@ const { t } = useI18n({ useScope: 'global' })
 
 const _totalEarningUSD = ref(0)
 const totalWithdrawedUSD = ref(0)
+const _totalPaymentBalanceUSD = ref(0)
 
 const totalEarningJPY = ref(0)
 const totalWithdrawedJPY = ref(0)
+const totalPaymentBalanceJPY = ref(0)
 
 const currency = useCurrencyStore()
 const coin = useCoinStore()
 const transaction = useTransactionStore()
 const good = useGoodStore()
 const benefit = useBenefitStore()
+const billing = useBillingStore()
+const order = useOrderStore()
+
+const getPaymentBalances = () => {
+  billing.getPaymentBalances({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_PAYMENT_BALANCES'),
+        Message: t('MSG_GET_PAYMENT_BALANCES_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    totalPaymentBalanceUSD((usdAmount: number) => {
+      _totalPaymentBalanceUSD.value = usdAmount
+    })
+    totalPaymentBalanceCurrency(Currency.JPY, (amount: number) => {
+      totalPaymentBalanceJPY.value = amount
+    })
+  })
+}
 
 const getEarning = () => {
   benefit.getBenefits({
@@ -129,6 +157,21 @@ const getGoods = () => {
   })
 }
 
+const getOrders = () => {
+  order.getOrders({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_ORDERS'),
+        Message: t('MSG_GET_ORDERS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    getPaymentBalances()
+  })
+}
+
 const getCurrencies = () => {
   currency.getAllCoinCurrencies({
     Currencies: [Currency.USD],
@@ -142,6 +185,7 @@ const getCurrencies = () => {
     }
   }, () => {
     getGoods()
+    getOrders()
   })
 }
 
@@ -169,14 +213,20 @@ onMounted(() => {
   totalEarningUSD((usdAmount: number) => {
     _totalEarningUSD.value = usdAmount
   })
-  totalEarningCurrency(Currency.JPY, (usdAmount: number) => {
-    totalEarningJPY.value = usdAmount
+  totalEarningCurrency(Currency.JPY, (amount: number) => {
+    totalEarningJPY.value = amount
   })
   totalWithdrawedEarningUSD((usdAmount: number) => {
     totalWithdrawedUSD.value = usdAmount
   })
-  totalWithdrawedEarningCurrency(Currency.JPY, (usdAmount: number) => {
-    totalWithdrawedJPY.value = usdAmount
+  totalWithdrawedEarningCurrency(Currency.JPY, (amount: number) => {
+    totalWithdrawedJPY.value = amount
+  })
+  totalPaymentBalanceUSD((usdAmount: number) => {
+    _totalPaymentBalanceUSD.value = usdAmount
+  })
+  totalPaymentBalanceCurrency(Currency.JPY, (amount: number) => {
+    totalPaymentBalanceJPY.value = amount
   })
 })
 
