@@ -181,6 +181,11 @@ const uploadKyc = () => {
           Title: t('MSG_UPDATE_KYC_FAIL'),
           Popup: true,
           Type: NotificationType.Error
+        },
+        Info: {
+          Title: t('MSG_UPDATE_KYC_SUCCESS'),
+          Popup: true,
+          Type: NotificationType.Success
         }
       }
     })
@@ -200,6 +205,11 @@ const uploadKyc = () => {
         Title: t('MSG_CREATE_KYC_FAIL'),
         Popup: true,
         Type: NotificationType.Error
+      },
+      Info: {
+        Title: t('MSG_CREATE_KYC_SUCCESS'),
+        Popup: true,
+        Type: NotificationType.Success
       }
     }
   }, () => {
