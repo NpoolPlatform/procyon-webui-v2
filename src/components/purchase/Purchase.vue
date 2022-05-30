@@ -29,6 +29,11 @@
           <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
           <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
         </div>
+        <div class='three-section'>
+          <h4>{{ $t('MSG_PRICE') }}:</h4>
+          <span class='number'>{{ good?.Good?.Good?.Price }}</span>
+          <span class='unit'>{{ PriceCoinName }}</span>
+        </div>
         <div class='product-detail-text'>
           <div v-if='description'>
             <h3>{{ $t(description?.Title) }}</h3>
