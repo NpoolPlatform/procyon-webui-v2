@@ -72,7 +72,8 @@ import {
   last24HoursEarningCoin,
   useOrderStore,
   PriceCoinName,
-  NotificationType
+  NotificationType,
+  PaymentState
 } from 'npool-cli-v2'
 import { defineProps, toRef, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -96,7 +97,10 @@ const coin = computed(() => coins.getCoinByID(coinTypeId.value))
 
 const order = useOrderStore()
 const orders = computed(() => order.Orders.filter((myOrder) => {
-  return myOrder?.Good?.Main?.ID === coin.value.ID && order.validateOrder(myOrder)
+  return myOrder?.Good?.Main?.ID === coin.value.ID &&
+      order.validateOrder(myOrder) &&
+      myOrder.Order.Payment &&
+      myOrder.Order.Payment.State === PaymentState.DONE
 }))
 const goodUnit = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.Unit : '')
 const goodPeriod = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.DurationDays : '')
