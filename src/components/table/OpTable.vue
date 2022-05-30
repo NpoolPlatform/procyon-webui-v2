@@ -18,6 +18,7 @@
       hide-pagination
       :loading='loading'
       :no-data-label='$t("NoData")'
+      :rows-per-page-options='[countPerPage]'
       @row-click='(evt, row, index) => onRowClick(row as never)'
     >
       <template v-if='customizeBody' #body='myProps'>
@@ -69,7 +70,9 @@ const loading = toRef(props, 'loading')
 const page = ref(1)
 const pages = computed(() => Math.ceil(rows.value.length / countPerPage.value))
 
-const displayRows = computed(() => rows.value.filter((_, index) => index >= countPerPage.value * (page.value - 1) && index < countPerPage.value * page.value))
+const displayRows = computed(() => rows.value.filter((_, index) => {
+  return index >= countPerPage.value * (page.value - 1) && index < countPerPage.value * page.value
+}))
 
 const emit = defineEmits<{(e: 'row-click', row: never): void}>()
 
