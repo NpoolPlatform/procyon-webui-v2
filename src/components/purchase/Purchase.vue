@@ -215,19 +215,19 @@ onMounted(() => {
     }, () => {
       // TODO
     })
+  }
 
-    if (!description.value) {
-      coin.getCoinDescriptions({
-        Message: {
-          Error: {
-            Title: t('MSG_GET_COIN_DESCRIPTIONS'),
-            Message: t('MSG_GET_COIN_DESCRIPTIONS_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
+  if (!description.value) {
+    coin.getCoinDescriptions({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COIN_DESCRIPTIONS'),
+          Message: t('MSG_GET_COIN_DESCRIPTIONS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
         }
-      })
-    }
+      }
+    })
   }
 })
 
