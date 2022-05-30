@@ -220,8 +220,8 @@ onMounted(() => {
       coin.getCoinDescriptions({
         Message: {
           Error: {
-            Title: t('MSG_GET_COIN_DESCRIPTION'),
-            Message: t('MSG_GET_COIN_DESCRIPTION_FAIL'),
+            Title: t('MSG_GET_COIN_DESCRIPTIONS'),
+            Message: t('MSG_GET_COIN_DESCRIPTIONS_FAIL'),
             Popup: true,
             Type: NotificationType.Error
           }
