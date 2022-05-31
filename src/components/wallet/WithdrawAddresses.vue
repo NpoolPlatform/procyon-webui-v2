@@ -124,7 +124,7 @@ const onAddNewAddressClick = () => {
 
 const onRemove = (address: WithdrawAccount) => {
   account.deleteWithdrawAddress({
-    ID: address.Address.ID,
+    ID: address.Address.ID as string,
     Message: {
       Error: {
         Title: t('MSG_DELETE_WITHDRAW_ACCOUNT_FAIL'),

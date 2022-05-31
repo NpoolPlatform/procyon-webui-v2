@@ -39,7 +39,8 @@ const orderPrice = (orderModel: OrderModel) => {
   if (!myOrder || !myOrder.Order.Payment) {
     return 'NaN'
   }
-  const totalPay = myOrder.Order.Payment.CoinUSDCurrency * myOrder.Order.Payment.Amount
+  const currency = myOrder.Order.Payment.CoinUSDCurrency ? myOrder.Order.Payment.CoinUSDCurrency : 1
+  const totalPay = currency * myOrder.Order.Payment.Amount
   const price = totalPay / myOrder.Order.Order.Units
   return price.toString() + ' ' + PriceCoinName
 }
