@@ -7,6 +7,7 @@
       <slot name='top-right' />
     </div>
   </div>
+  <div>{{ countPerPage }} - {{ page }}</div>
   <div class='mining-summary content-glass'>
     <q-table
       flat
@@ -18,7 +19,7 @@
       hide-pagination
       :loading='loading'
       :no-data-label='$t("NoData")'
-      :rows-per-page-options='[countPerPage]'
+      :rows-per-page-options='[0]'
       @row-click='(evt, row, index) => onRowClick(row as never)'
     >
       <template v-if='customizeBody' #body='myProps'>
@@ -45,7 +46,7 @@
 </template>
 
 <script setup lang='ts'>
-import { defineProps, toRef, ref, computed, defineEmits, withDefaults } from 'vue'
+import { defineProps, toRef, ref, computed, defineEmits, withDefaults, watch } from 'vue'
 
 interface Props {
   label: string
@@ -73,6 +74,10 @@ const pages = computed(() => Math.ceil(rows.value.length / countPerPage.value))
 const displayRows = computed(() => rows.value.filter((_, index) => {
   return index >= countPerPage.value * (page.value - 1) && index < countPerPage.value * page.value
 }))
+
+watch(countPerPage, () => {
+  page.value = 1
+})
 
 const emit = defineEmits<{(e: 'row-click', row: never): void}>()
 
