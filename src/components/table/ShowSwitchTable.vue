@@ -1,5 +1,4 @@
 <template>
-  <div>{{ showMore }}</div>
   <OpTable
     :label='label'
     :rows='rows'

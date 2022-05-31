@@ -7,7 +7,6 @@
       <slot name='top-right' />
     </div>
   </div>
-  <div>{{ countPerPage }} - {{ page }}</div>
   <div class='mining-summary content-glass'>
     <q-table
       flat
