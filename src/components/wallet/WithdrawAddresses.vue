@@ -17,11 +17,11 @@
         <q-td key='Blockchain' :props='myProps'>
           <LogoName
             :logo='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Logo'
-            :name='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name'
+            :name='(coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name as string)'
           />
         </q-td>
         <q-td key='Address' :props='myProps'>
-          {{ myProps.row.Account.Address }}
+          {{ myProps.row.Account?.Address }}
         </q-td>
         <q-td key='Label' :props='myProps'>
           {{ myProps.row.Address.Labels?.join(',') }}

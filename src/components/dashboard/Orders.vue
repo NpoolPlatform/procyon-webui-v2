@@ -36,7 +36,7 @@ const good = useGoodStore()
 
 const orderPrice = (orderModel: OrderModel) => {
   const myOrder = order.getOrderByID(orderModel.OrderID)
-  if (!myOrder) {
+  if (!myOrder || !myOrder.Order.Payment) {
     return 'NaN'
   }
   const totalPay = myOrder.Order.Payment.CoinUSDCurrency * myOrder.Order.Payment.Amount
