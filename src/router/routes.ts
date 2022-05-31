@@ -331,6 +331,19 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false,
           ShowSideMenu: false
         }
+      }, {
+        path: 'product/aleo',
+        component: () => import('pages/product/Aleo.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false,
+          ShowSideMenu: false
+        }
       }
     ]
   },
