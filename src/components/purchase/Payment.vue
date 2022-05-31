@@ -19,7 +19,7 @@
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_TIME_REMAIN') }}:</h4>
-            <span class='number'>{{ remainSeconds }}</span>
+            <span class='number'>{{ $t(remainSeconds) }}</span>
           </div>
           <div class='full-section'>
             <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
