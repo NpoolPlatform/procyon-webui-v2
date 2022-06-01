@@ -19,6 +19,57 @@
         </a>
       </p>
     </template>
+    <template #sidebar>
+      <div id='project-links' class='product-sidebar-section'>
+        <h3 class='form-title'>
+          {{ $t('MSG_PROJECT_LINKS') }}
+        </h3>
+        <ul class='product-links'>
+          <li>
+            <a href='https://spacemesh.io/' target='_blank'><img class='link-icon' src='font-awesome/homepage.svg'>
+              <span>{{ $t('MSG_SPACEMESH_HOMEPAGE') }}</span>
+            </a>
+          </li>
+          <li>
+            <a href='https://twitter.com/teamspacemesh' target='_blank'><img class='link-icon' src='font-awesome/twitter.svg'>
+              <span>{{ $t('MSG_TWITTER') }}</span>
+            </a>
+          </li>
+          <li>
+            <a href='https://medium.com/spacemesh' target='_blank'><img class='link-icon' src='font-awesome/medium.svg'>
+              <span>{{ $t('MSG_MEDIUM') }}</span>
+            </a>
+          </li>
+          <li>
+            <a href='https://www.youtube.com/channel/UCn-0T-qeP_SmKoiyvX49oVg' target='_blank'><img class='link-icon' src='font-awesome/youtube.svg'>
+              <span>{{ $t('MSG_YOUTUBE') }}</span>
+            </a>
+          </li>
+          <li>
+            <a href='https://discord.com/invite/yVhQ7rC' target='_blank'><img class='link-icon' src='font-awesome/discord.svg'>
+              <span>{{ $t('MSG_DISCORD') }}</span>
+            </a>
+          </li>
+          <li>
+            <a href='https://github.com/spacemeshos' target='_blank'><img class='link-icon' src='font-awesome/github.svg'>
+              <span>{{ $t('MSG_GITHUB') }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div id='help' class='product-sidebar-section'>
+        <h3 class='form-title'>
+          {{ $t('MSG_HELP_AND_FAQ') }}
+        </h3>
+        <ul class='product-links'>
+          <li>
+            <a href=''><img class='link-icon' src='font-awesome/lightbulb.svg'>
+              <span>{{ $t('MSG_MINING_BASICS') }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </template>
   </ProductPage>
 </template>
 
