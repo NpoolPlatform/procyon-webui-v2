@@ -105,9 +105,22 @@
 </template>
 
 <script setup lang='ts'>
-import { formatTime, PriceCoinName, CoinDescriptionUsedFor, useCoinStore, useGoodStore, NotificationType, useCurrencyStore } from 'npool-cli-v2'
+import {
+  formatTime,
+  PriceCoinName,
+  CoinDescriptionUsedFor,
+  useCoinStore,
+  useGoodStore,
+  NotificationType,
+  useCurrencyStore,
+  useOrderStore,
+  useStockStore
+} from 'npool-cli-v2'
 import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { throttle } from 'quasar'
+import { ThrottleSeconds } from 'src/const/const'
+import { useRouter } from 'vue-router'
 
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -152,6 +165,10 @@ const paymentCoin = computed({
 
 const goods = useGoodStore()
 const good = computed(() => goods.getGoodByID(goodId.value))
+
+const stock = useStockStore()
+const total = computed(() => stock.getStockByGoodID(goodId.value)?.Total)
+
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 
@@ -201,7 +218,89 @@ onMounted(() => {
       }
     })
   }
+
+  if (total.value === 0) {
+    stock.getStocks({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_GOOD_STOCKS'),
+          Message: t('MSG_GET_GOOD_STOCKS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
 })
+
+const purchaseAmount = ref(1)
+const purchaseAmountError = ref(false)
+const onPurchaseAmountFocusIn = () => {
+  purchaseAmountError.value = false
+}
+const onPurchaseAmountFocusOut = () => {
+  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > total.value
+}
+
+const submitting = ref(false)
+
+const order = useOrderStore()
+const router = useRouter()
+
+const onSubmit = throttle(() => {
+  onPurchaseAmountFocusOut()
+  if (purchaseAmountError.value) {
+    return
+  }
+
+  submitting.value = true
+
+  order.submitOrder({
+    GoodID: goodId.value,
+    Units: purchaseAmount.value,
+    Message: {
+      Error: {
+        Title: t('MSG_CREATE_ORDER'),
+        Message: t('MSG_CREATE_ORDER_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (orderId: string, error: boolean) => {
+    if (error) {
+      submitting.value = false
+      return
+    }
+
+    order.createPayment({
+      OrderID: orderId,
+      PaymentCoinTypeID: paymentCoin.value?.ID as string,
+      Message: {
+        Error: {
+          Title: t('MSG_CREATE_PAYMENT'),
+          Message: t('MSG_CREATE_PAYMENT_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, (paymentId: string, error: boolean) => {
+      submitting.value = false
+      if (error) {
+        return
+      }
+
+      void router.push({
+        path: '/payment',
+        query: {
+          paymentId: paymentId,
+          orderId: orderId
+        }
+      })
+    })
+  })
+}, ThrottleSeconds * 1000)
 
 </script>
 

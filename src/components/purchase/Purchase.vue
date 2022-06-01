@@ -229,6 +229,21 @@ onMounted(() => {
       }
     })
   }
+
+  if (total.value === 0) {
+    stock.getStocks({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_GOOD_STOCKS'),
+          Message: t('MSG_GET_GOOD_STOCKS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
 })
 
 const onSubmit = throttle(() => {
