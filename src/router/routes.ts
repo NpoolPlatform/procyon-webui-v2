@@ -341,7 +341,7 @@ const routes: RouteRecordRaw[] = [
           ShowFooterTop: true,
           ShowSignHelper: true,
           ShowTopTip: false,
-          NeedLogined: false,
+          NeedLogined: true,
           ShowSideMenu: false
         }
       }

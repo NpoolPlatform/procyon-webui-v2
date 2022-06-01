@@ -44,7 +44,26 @@
               <span class='number'>{{ good?.Good?.Good?.Price }}</span>
               <span class='unit'>{{ PriceCoinName }}</span>
             </div>
-            <slot />
+            <div class='product-detail-text'>
+              <div v-show='description'>
+                <h3>{{ description ? $t(description?.Title) : '' }}</h3>
+                <p v-html='description ? $t(description?.Message) : ""' />
+              </div>
+              <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
+              <p v-html='$t("MSG_WHY_CONTENT")' />
+              <div v-show='good?.Main?.Specs'>
+                <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
+                <p>
+                  <img class='content-image' :src='good?.Main?.Specs'>
+                </p>
+              </div>
+              <p>
+                <a :href='good?.Main?.HomePage'>
+                  {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
+                </a>
+              </p>
+              <slot />
+            </div>
           </div>
         </div>
       </div>
@@ -54,21 +73,79 @@
 </template>
 
 <script setup lang='ts'>
-import { Good, formatTime, PriceCoinName } from 'npool-cli-v2'
-import { defineAsyncComponent, defineProps, toRef } from 'vue'
+import { formatTime, PriceCoinName, CoinDescriptionUsedFor, useCoinStore, useGoodStore, NotificationType } from 'npool-cli-v2'
+import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
-  good: Good
+  goodId: string
   projectClass: string
   bgImg: string
 }
 
 const props = defineProps<Props>()
-const good = toRef(props, 'good')
+const goodId = toRef(props, 'goodId')
 const projectClass = toRef(props, 'projectClass')
 const bgImg = toRef(props, 'bgImg')
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
+
+const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
+const coin = useCoinStore()
+const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV))
+const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
+
+const goods = useGoodStore()
+const good = computed(() => goods.getGoodByID(goodId.value))
+
+onMounted(() => {
+  if (!good.value) {
+    goods.getGood({
+      ID: goodId.value,
+      Message: {
+        Error: {
+          Title: t('MSG_GET_GOOD'),
+          Message: t('MSG_GET_GOOD_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+
+  if (coins.value.length === 0) {
+    coin.getCoins({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COINS'),
+          Message: t('MSG_GET_COINS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+
+  if (!description.value) {
+    coin.getCoinDescriptions({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COIN_DESCRIPTIONS'),
+          Message: t('MSG_GET_COIN_DESCRIPTIONS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    })
+  }
+})
 
 </script>
 
