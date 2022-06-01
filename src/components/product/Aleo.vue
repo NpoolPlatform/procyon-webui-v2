@@ -130,17 +130,17 @@ const members = computed(() => [
     Title: t('MSG_CO_FOUNDER'),
     Background: t('MSG_HOWARD_WU_BACKGROUND')
   }, {
-    Name: 'Howard Wu',
+    Name: 'Collin Chin',
     Title: t('MSG_CO_FOUNDER'),
-    Background: t('MSG_HOWARD_WU_BACKGROUND')
+    Background: t('MSG_COLLIN_CHIN_BACKGROUND')
   }, {
-    Name: 'Howard Wu',
+    Name: 'Raymond Chu',
     Title: t('MSG_CO_FOUNDER'),
-    Background: t('MSG_HOWARD_WU_BACKGROUND')
+    Background: t('MSG_RAYMOND_CHU_BACKGROUND')
   }, {
-    Name: 'Howard Wu',
-    Title: t('MSG_CO_FOUNDER'),
-    Background: t('MSG_HOWARD_WU_BACKGROUND')
+    Name: 'Michael Beller',
+    Title: t('MSG_CFO'),
+    Background: t('MSG_MICHAEL_BELLER_BACKGROUND')
   }
 ] as Array<Member>)
 
