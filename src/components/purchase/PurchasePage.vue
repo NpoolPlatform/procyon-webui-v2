@@ -1,7 +1,7 @@
 <template>
   <BackPage>
     <div class='content order-page'>
-      <div class='product-container'>
+      <div class='product-container content-glass'>
         <div class='product-title-section'>
           <div class='product-page-icon'>
             <img :src='good?.Main?.Logo'>
