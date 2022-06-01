@@ -45,9 +45,58 @@
               <span class='unit'>{{ PriceCoinName }}</span>
             </div>
             <div class='product-detail-text'>
-              <slot />
+              <slot name='product-detail' />
             </div>
           </div>
+        </div>
+        <div class='product-sidebar'>
+          <div id='product-form' class='product-sidebar-section'>
+            <h3 class='form-title'>
+              {{ $t('MSG_MINING_PURCHASE') }}
+            </h3>
+            <form action='javascript:void(0)' @submit='onSubmit' id='purchase'>
+              <h4>{{ $t('MSG_PURCHASE_AMOUNT') }} ({{ good?.Good?.Good?.Unit }}s)</h4>
+              <Input
+                v-model:value='purchaseAmount'
+                type='number'
+                id='amount'
+                required
+                :error='purchaseAmountError'
+                message='MSG_AMOUNT_TIP'
+                placeholder='MSG_AMOUNT_PLACEHOLDER'
+                :min='0'
+                :max='total'
+                @focus='onPurchaseAmountFocusIn'
+                @blur='onPurchaseAmountFocusOut'
+              />
+              <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
+              <div v-show='paymentCoin'>
+                <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
+                  <option
+                    v-for='myCoin in coins'
+                    :key='myCoin?.ID'
+                    :value='myCoin'
+                    :selected='paymentCoin?.ID === myCoin?.ID'
+                  >
+                    {{ myCoin?.Unit }} ({{ currency.formatCoinName(myCoin?.Name as string) }})
+                  </option>
+                </select>
+              </div>
+              <!--<h4>Coupon Code</h4>
+              <input type='text'>
+              <div class='coupon-error'>Incorrect Coupon Code</div>-->
+              <div class='submit-container'>
+                <WaitingBtn
+                  label='MSG_PURCHASE'
+                  type='submit'
+                  class='submit-btn'
+                  :disabled='submitting'
+                  :waiting='submitting'
+                />
+              </div>
+            </form>
+          </div>
+          <slot name='sidebar' />
         </div>
       </div>
       <div class='hr' />
@@ -56,9 +105,12 @@
 </template>
 
 <script setup lang='ts'>
-import { formatTime, PriceCoinName, CoinDescriptionUsedFor, useCoinStore, useGoodStore, NotificationType } from 'npool-cli-v2'
+import { formatTime, PriceCoinName, CoinDescriptionUsedFor, useCoinStore, useGoodStore, NotificationType, useCurrencyStore } from 'npool-cli-v2'
 import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
+const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -74,15 +126,36 @@ const goodId = toRef(props, 'goodId')
 const projectClass = toRef(props, 'projectClass')
 const bgImg = toRef(props, 'bgImg')
 
-const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
-
 const coin = useCoinStore()
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV))
+const selectedCoinID = ref(undefined as unknown as string)
+const paymentCoin = computed({
+  get: () => {
+    const myCoin = coin.getCoinByID(selectedCoinID.value)
+    if (!myCoin) {
+      for (const scoin of coins.value) {
+        if (scoin.Name?.toLowerCase().includes(PriceCoinName.toLowerCase())) {
+          return scoin
+        }
+      }
+      if (coins.value.length > 0) {
+        return coins.value[0]
+      }
+      return undefined
+    }
+    return myCoin
+  },
+  set: (val) => {
+    selectedCoinID.value = val?.ID as string
+  }
+})
 
 const goods = useGoodStore()
 const good = computed(() => goods.getGoodByID(goodId.value))
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
+
+const currency = useCurrencyStore()
 
 onMounted(() => {
   if (!good.value) {

@@ -1,22 +1,24 @@
 <template>
   <ProductPage :good-id='goodId' project-class='project-spacemesh' bg-img='product/spacemesh/spacemesh-banner.jpg'>
-    <div v-show='description'>
-      <h3>{{ description ? $t(description?.Title) : '' }}</h3>
-      <p v-html='description ? $t(description?.Message) : ""' />
-    </div>
-    <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
-    <p v-html='$t("MSG_WHY_CONTENT")' />
-    <div v-show='good?.Main?.Specs'>
-      <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
+    <template #product-detail>
+      <div v-show='description'>
+        <h3>{{ description ? $t(description?.Title) : '' }}</h3>
+        <p v-html='description ? $t(description?.Message) : ""' />
+      </div>
+      <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
+      <p v-html='$t("MSG_WHY_CONTENT")' />
+      <div v-show='good?.Main?.Specs'>
+        <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
+        <p>
+          <img class='content-image' :src='good?.Main?.Specs'>
+        </p>
+      </div>
       <p>
-        <img class='content-image' :src='good?.Main?.Specs'>
+        <a :href='good?.Main?.HomePage'>
+          {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
+        </a>
       </p>
-    </div>
-    <p>
-      <a :href='good?.Main?.HomePage'>
-        {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
-      </a>
-    </p>
+    </template>
   </ProductPage>
 </template>
 
