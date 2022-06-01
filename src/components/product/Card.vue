@@ -40,9 +40,13 @@
 </template>
 
 <script setup lang='ts'>
-import { defineProps, toRef, computed } from 'vue'
-import { Good, useGoodStore, formatTime, useCoinStore, Coin, PriceCoinName, useUserStore } from 'npool-cli-v2'
+import { defineProps, toRef, computed, onMounted } from 'vue'
+import { Good, useGoodStore, formatTime, useCoinStore, Coin, PriceCoinName, useUserStore, NotificationType } from 'npool-cli-v2'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
   good: Good
@@ -53,19 +57,40 @@ const good = toRef(props, 'good')
 
 const goods = useGoodStore()
 const coin = useCoinStore()
+const productInfo = computed(() => coin.getCoinProductInfoByCoin(good.value?.Main?.ID as string))
 
 const user = useUserStore()
 const buyer = computed(() => user.buyer)
 
 const router = useRouter()
 const onPurchaseClick = () => {
+  let target = '/purchase'
+  if (productInfo.value?.ProductPage?.length) {
+    target = productInfo.value.ProductPage
+  }
+
   void router.push({
-    // path: '/purchase',
-    path: '/product/aleo',
+    path: target,
     query: {
       goodId: good.value.Good.Good.ID
     }
   })
 }
+
+onMounted(() => {
+  if (!productInfo.value) {
+    coin.getCoinProductInfos({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COIN_PRODUCT_INFOS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+})
 
 </script>
