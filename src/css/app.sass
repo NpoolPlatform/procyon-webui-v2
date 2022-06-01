@@ -400,7 +400,7 @@ ul.language-picker li.selected
   border-radius: 12px
   color: #e1eeef
   padding: 24px
-  margin: 24px
+  margin: 24px 0
 
 
 .content p:not([class])
@@ -1141,10 +1141,6 @@ h4#signature
 
 
 .product-container
-  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
-  box-shadow: 16px 16px 20px 0 #23292b
-  border-radius: 12px
-  color: #e1eeef
   display: flex
   flex-wrap: wrap
   padding: 48px
@@ -1192,8 +1188,6 @@ h4#signature
 
 
 .product-container .product-title-section
-  margin: 0 0 24px 0
-  width: 100%
   @media (max-width: $breakpoint-sm-max)
     order: 1
 
@@ -1568,29 +1562,101 @@ img.more-info:hover
 
 
 
-/* IDO PRODUCT */
+/* PROJECT BRANDED & IDO PRODUCTS */
 
 
-.ido-container
+.project
   background: linear-gradient(to bottom right, #23292b 0, #101417 100%)
-  box-shadow: 16px 16px 20px 0 #05131999
 
+img.project-promo-content
+  border-radius: 20px
+  margin: 12px 0
+  max-width: 100%
 
-.ido-container .product-sidebar
+.project-title-section
+  background-size: auto calc(100% + 16px)
+  background-repeat: no-repeat
+  background-position: center center
+  border-radius: 12px 12px 0 0
+  box-shadow: 0px 20px 80px 40px #23292b
+  margin: -48px -48px 32px -48px
+  padding: 48px 48px 0 48px
+  position: relative
+  height: 300px
+  width: calc(100% + 96px)
   @media (max-width: $breakpoint-sm-max)
-    display: flex
-    justify-content: flex-start
-    flex-wrap: wrap
-    margin-top: 16px
-    order: 5
-    width: 100%
+    order: 1
+    background-size: auto calc(100% + 32px)
+    height: 200px
+    margin: -12px -12px 24px -12px
+    padding: 0
+    width: calc(100% + 48px)
 
+.product-title-container
+  background: #23292b
+  border-radius: 12px 12px 0 0
+  padding: 16px
+  position: absolute
+  bottom: 0
+  left: 32px
+
+.product-title-container::before
+  background-color: transparent
+  border-bottom-right-radius: 20px
+  box-shadow: 0 20px 0 0 #23292b
+  content: ''
+  position: absolute
+  bottom: 0px
+  left: -20px
+  height: 40px
+  width: 20px
+
+.product-title-container::after
+  background-color: transparent
+  border-bottom-left-radius: 20px
+  box-shadow: 0 20px 0 0 #23292b
+  content: ''
+  position: absolute
+  bottom: 0px
+  right: -20px
+  height: 40px
+  width: 20px
+
+.project .product-title-container
+  @media (max-width: $breakpoint-sm-max)
+    border-radius: 12px
+    top: 12px
+    left: 12px
+    bottom: unset
+    padding: 12px
+
+.project .product-title-container::before,
+.project .product-title-container::after
+  @media (max-width: $breakpoint-sm-max)
+    display: none
 
 #project-links
   @media (max-width: $breakpoint-sm-max)
     order: 1
     width: 100%
 
+.logo-display
+  display: flex
+  justify-content: flex-start
+  flex-wrap: wrap
+
+.logo-display div
+  align-items: center
+  display: flex
+  justify-content: center
+  margin: 2%
+  max-height: 40px
+  width: 20%
+
+.logo-display img
+  filter: invert(100%) opacity(.9)
+  max-height: 100%
+  max-width: 100%
 
 #project-links .product-links
   @media (max-width: $breakpoint-sm-max)
@@ -1630,98 +1696,10 @@ img.more-info:hover
   @media (max-width: $breakpoint-sm-max)
     order: 4
 
-
-img.ido-promo-content
-  border-radius: 20px
-  margin: 12px 0
-  max-width: 100%
-
-
 img.product-banner
   border-radius: 16px 16px 0 0
   margin: -48px -48px 32px -48px
   width: calc(100% + 96px)
-
-
-.ido-title-section
-  background-size: auto calc(100% + 16px)
-  background-repeat: no-repeat
-  background-position: center center
-  border-radius: 12px 12px 0 0
-  box-shadow: 0px 20px 80px 40px #23292b
-  margin: -48px -48px 32px -48px
-  padding: 48px 48px 0 48px
-  position: relative
-  height: 300px
-  width: calc(100% + 96px)
-  @media (max-width: $breakpoint-sm-max)
-    order: 1
-    background-size: auto calc(100% + 32px)
-    height: 200px
-    margin: -12px -12px 24px -12px
-    padding: 0
-    width: calc(100% + 48px)
-
-
-.ido-container .product-title-container
-  background: #23292b
-  border-radius: 12px 12px 0 0
-  padding: 16px
-  position: absolute
-  bottom: 0
-  left: 32px
-  @media (max-width: $breakpoint-sm-max)
-    border-radius: 12px
-    top: 12px
-    left: 12px
-    bottom: unset
-    padding: 12px
-
-
-.ido-container .product-title-container::before
-  background-color: transparent
-  border-bottom-right-radius: 20px
-  box-shadow: 0 20px 0 0 #23292b
-  content: ''
-  position: absolute
-  bottom: 0px
-  left: -20px
-  height: 40px
-  width: 20px
-  @media (max-width: $breakpoint-sm-max)
-    display: none
-
-
-.ido-container .product-title-container::after
-  background-color: transparent
-  border-bottom-left-radius: 20px
-  box-shadow: 0 20px 0 0 #23292b
-  content: ''
-  position: absolute
-  bottom: 0px
-  right: -20px
-  height: 40px
-  width: 20px
-  @media (max-width: $breakpoint-sm-max)
-    display: none
-
-
-.ido-container .product-page-icon
-  @media (max-width: $breakpoint-sm-max)
-    padding: 8px
-    height: 32px
-    width: 32px
-
-
-.ido-container .product-page-icon img
-  @media (max-width: $breakpoint-sm-max)
-    height: 16px
-    width: 16px
-
-
-.ido-container h1
-  @media (max-width: $breakpoint-sm-max)
-    font-size: 24px
 
 
 .project-team
@@ -1786,6 +1764,82 @@ img.product-banner
   height: 100%
 
 
+/* SPACEMESH BRAND COLORS */
+
+/* #3affa7 #cdabfe #a971d1 */
+
+.project-spacemesh .product-page-icon
+  background: #3affa7
+
+.project-spacemesh .product-page-icon img
+  filter: invert(100%)
+
+.project-spacemesh h1
+  background: #3affa7
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.project-spacemesh h3:not(.form-title)
+  background: #3affa7
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.project-spacemesh a:not([class])
+  color: #cdabfe
+  transition: all ease-in-out .3s
+
+.project-spacemesh a:not([class]):hover
+  filter: contrast(1.5)
+  text-decoration: underline 1px solid #a971d1
+
+.project-spacemesh button,
+.project-spacemesh input[type="submit"]
+  background: #3affa7
+  color: #111111
+  text-shadow: none
+
+.project-spacemesh button:hover,
+.project-spacemesh input[type="submit"]:hover
+  background: #a971d1
+  filter: none
+
+.project-spacemesh button.alt
+  background: none
+  border-color: #3affa7
+  color: #3affa7
+
+.project-spacemesh .number
+  background: #a971d1
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.project-spacemesh .warning
+  border: 1px solid #3affa7
+
+.content .project-spacemesh ul li::before
+  color: #3affa7
+
+.content .project-spacemesh p:not([class]) strong
+  background: none
+  color: #3affa7
+  -webkit-text-fill-color: unset
+
+.project-spacemesh .ido-progress 
+  background: #3affa7
+  filter: saturate(1.5)
+
+.project-spacemesh .team-member h5.title
+  color: #3affa7
+
 
 /* IDO PROJECT AFFYN BRAND COLORS */
 
@@ -1845,7 +1899,81 @@ img.product-banner
 .content .project-affyn ul li::before
   color: #ff3e51
 
+/* ALEO BRAND COLORS */
 
+/* #154bf9 #00c0f9 #ff6f5f #931cff #e561e5 #12141d */
+.project-aleo .product-page-icon
+  background: #12141d
+
+.project-aleo .product-page-icon img
+  filter: none
+
+.project-aleo h1
+  background: #00c0f9
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.project-aleo h3:not(.form-title)
+  background: #00c0f9
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.project-aleo a:not([class])
+  color: #931cff
+  filter: brightness(1.5) contrast(.6)
+  transition: all ease-in-out .3s
+
+.project-aleo a:not([class]):hover
+  filter: contrast(1.5)
+  text-decoration: underline 1px solid #00c0f9
+
+.project-aleo button,
+.project-aleo input[type="submit"]
+  background: #ff6f5f
+  color: #111111
+  text-shadow: none
+
+.project-aleo button:hover,
+.project-aleo input[type="submit"]:hover
+  background: #154bf9
+  filter: none
+
+.project-aleo button.alt
+  background: none
+  border-color: #154bf9
+  color: #ea5bc5
+
+.project-aleo .number
+  background: #ff6f5f
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.project-aleo .warning
+  border: 1px solid #00c0f9
+
+.content .project-aleo ul li::before
+  color: #00c0f9
+
+.content .project-aleo p:not([class]) strong
+  background: none
+  color: #ff6f5f
+  -webkit-text-fill-color: unset
+
+.project-aleo .ido-progress
+  background: #00c0f9
+  filter: saturate(1.5)
+
+.project-aleo .team-member h5.title
+  color: #00c0f9
 
 /* IDO PROJECT MIXMOB BRAND COLORS */
 
@@ -2548,3 +2676,6 @@ button.small
   width: 24px
   height: 24px
   margin-right: 10px
+
+.submit-container
+  margin-top: 24px

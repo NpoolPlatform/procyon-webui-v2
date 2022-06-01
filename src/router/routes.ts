@@ -341,7 +341,20 @@ const routes: RouteRecordRaw[] = [
           ShowFooterTop: true,
           ShowSignHelper: true,
           ShowTopTip: false,
-          NeedLogined: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
+        path: 'product/spacemesh',
+        component: () => import('pages/product/Spacemesh.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
           ShowSideMenu: false
         }
       }

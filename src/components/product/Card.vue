@@ -60,7 +60,8 @@ const buyer = computed(() => user.buyer)
 const router = useRouter()
 const onPurchaseClick = () => {
   void router.push({
-    path: '/purchase',
+    // path: '/purchase',
+    path: '/product/aleo',
     query: {
       goodId: good.value.Good.Good.ID
     }
