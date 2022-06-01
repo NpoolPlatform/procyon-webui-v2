@@ -45,23 +45,6 @@
               <span class='unit'>{{ PriceCoinName }}</span>
             </div>
             <div class='product-detail-text'>
-              <div v-show='description'>
-                <h3>{{ description ? $t(description?.Title) : '' }}</h3>
-                <p v-html='description ? $t(description?.Message) : ""' />
-              </div>
-              <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
-              <p v-html='$t("MSG_WHY_CONTENT")' />
-              <div v-show='good?.Main?.Specs'>
-                <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
-                <p>
-                  <img class='content-image' :src='good?.Main?.Specs'>
-                </p>
-              </div>
-              <p>
-                <a :href='good?.Main?.HomePage'>
-                  {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
-                </a>
-              </p>
               <slot />
             </div>
           </div>
@@ -93,13 +76,13 @@ const bgImg = toRef(props, 'bgImg')
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
-const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const coin = useCoinStore()
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV))
-const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 
 const goods = useGoodStore()
 const good = computed(() => goods.getGoodByID(goodId.value))
+const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
+const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 
 onMounted(() => {
   if (!good.value) {
