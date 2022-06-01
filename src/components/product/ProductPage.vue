@@ -219,7 +219,7 @@ onMounted(() => {
     })
   }
 
-  if (total.value === 0) {
+  if (!total.value) {
     stock.getStocks({
       Message: {
         Error: {
