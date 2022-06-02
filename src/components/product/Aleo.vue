@@ -52,7 +52,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
+        <span class='number'>{{ true ? 'TBD*' : formatTime(good?.Good?.Good?.StartAt, true) }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
