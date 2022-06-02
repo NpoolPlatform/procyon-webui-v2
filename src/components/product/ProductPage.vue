@@ -16,6 +16,11 @@
           </h3>
           <div class='info-flex'>
             <div class='three-section'>
+              <h4>{{ $t('MSG_PRICE') }}:</h4>
+              <span class='number'>{{ good?.Good?.Good?.Price }}</span>
+              <span class='unit'>{{ PriceCoinName }}</span>
+            </div>
+            <div class='three-section'>
               <h4>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</h4>
               <span class='number'>*</span>
               <span class='unit'>{{ good?.Main?.Unit }} / {{ $t('MSG_DAY') }}</span>
@@ -31,18 +36,8 @@
               <span class='unit'>%</span>
             </div>
             <div class='three-section'>
-              <h4>{{ $t('MSG_MAINTENANCE_FEE') }}:</h4>
-              <span class='number'>1.5</span>
-              <span class='unit'>{{ PriceCoinName }} / {{ $t('MSG_DAY') }}</span>
-            </div>
-            <div class='three-section'>
               <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
               <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
-            </div>
-            <div class='three-section'>
-              <h4>{{ $t('MSG_PRICE') }}:</h4>
-              <span class='number'>{{ good?.Good?.Good?.Price }}</span>
-              <span class='unit'>{{ PriceCoinName }}</span>
             </div>
             <div class='product-detail-text'>
               <slot name='product-detail' />
