@@ -21,6 +21,7 @@
       <h3>{{ $t('MSG_WHY_ALEO_IMPORTANT_TO_WEB3') }}</h3>
       <p v-html='$t("MSG_WHY_ALEO_IMPORTANT_TO_WEB3_CAPTION")' />
       <h3>{{ $t('MSG_ALEO_TEAM') }}</h3>
+      <p v-html='$t("MSG_ALEO_TEAM_CAPTION")' />
       <div class='project-team'>
         <div v-for='member in members' :key='member.Name' class='team-member'>
           <h4 class='name'>
@@ -29,7 +30,7 @@
           <h5 class='title'>
             {{ member.Title }}
           </h5>
-          <p v-html='$t(member.Background)' />
+          <p class='bio' v-html='$t(member.Background)' />
         </div>
       </div>
       <h3>{{ $t('MSG_ALEO_TOKENOMICS') }}</h3>
