@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/Index.vue'),
+        component: () => import('pages/AleoIndex.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
           ShowMainHeader: false,
