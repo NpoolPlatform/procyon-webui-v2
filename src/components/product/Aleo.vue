@@ -5,7 +5,7 @@
         <h3>{{ description ? $t(description?.Title) : '' }}</h3>
         <p v-html='description ? $t(description?.Message) : ""' />
       </div>
-      <h4>{{ $t('MSG_VC_INVESTMENT') }}</h4>
+      <h3>{{ $t('MSG_VC_INVESTMENT') }}</h3>
       <p v-html='$t("MSG_VC_INVESTMENT_CAPTION")' />
       <div class='logo-display'>
         <div><img src='vc-logos/a16z.png'></div>
