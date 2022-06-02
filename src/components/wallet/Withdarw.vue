@@ -156,7 +156,7 @@ const onCodeVerify = (code: string) => {
   transaction.submitWithdraw({
     Info: {
       CoinTypeID: coinTypeId.value,
-      WithdrawToAccountID: selectedAccount.value.Account.ID,
+      WithdrawToAccountID: selectedAccount.value.Account.ID as string,
       Amount: amount.value,
       WithdrawType: withdrawType.value
     },
