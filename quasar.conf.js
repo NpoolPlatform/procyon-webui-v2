@@ -87,7 +87,7 @@ module.exports = configure(function (ctx) {
     devServer: {
       proxy: {
         '/api': {
-          target: 'https://api.procyon.vip',
+          target: 'https://api.procyon.vip:20402',
           pathRewrite: {
             '^/api': '/api'
           },
