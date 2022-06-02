@@ -1,5 +1,66 @@
 <template>
-  <ProductPage :good-id='goodId' project-class='project-aleo' bg-img='product/aleo/aleo-banner.jpg'>
+  <ProductPage
+    :good-id='goodId'
+    project-class='project-aleo'
+    bg-img='product/aleo/aleo-banner.jpg'
+    :customize-info='true'
+  >
+    <template #product-info>
+      <div class='three-section'>
+        <h4>{{ $t('MSG_PRICE') }}:</h4>
+        <span class='number'>{{ good?.Good?.Good?.Price }}</span>
+        <span class='unit'>{{ PriceCoinName }}</span>
+        <div class='tooltip'>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <p class='tooltip-text'>
+            {{ $t('MSG_PRICE_TIP') }}
+          </p>
+        </div>
+      </div>
+      <div class='three-section'>
+        <h4>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</h4>
+        <span class='number'>*</span>
+        <span class='unit'>{{ good?.Main?.Unit }} / {{ $t('MSG_DAY') }}</span>
+        <div class='tooltip'>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <p class='tooltip-text'>
+            {{ $t('MSG_DAILY_REWARD_TIP') }}
+          </p>
+        </div>
+      </div>
+      <div class='three-section'>
+        <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
+        <span class='number'>{{ good?.Good?.Good?.DurationDays }}</span>
+        <span class='unit'>{{ $t('MSG_DAYS') }}</span>
+        <div class='tooltip'>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <p class='tooltip-text'>
+            {{ $t('MSG_SERVICE_PERIOD_TIP') }}
+          </p>
+        </div>
+      </div>
+      <div class='three-section'>
+        <h4>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</h4>
+        <span class='number'>20</span>
+        <span class='unit'>%</span>
+        <div class='tooltip'>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <p class='tooltip-text'>
+            {{ $t('MSG_TECHNIQUE_SERVICE_FEE_TIP') }}
+          </p>
+        </div>
+      </div>
+      <div class='three-section'>
+        <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
+        <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
+        <div class='tooltip'>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <p class='tooltip-text'>
+            {{ $t('MSG_ORDER_EFFECTIVE_TIP') }}
+          </p>
+        </div>
+      </div>
+    </template>
     <template #product-detail>
       <div v-show='description'>
         <h3>{{ description ? $t(description?.Title) : '' }}</h3>
@@ -99,8 +160,10 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { CoinDescriptionUsedFor, useGoodStore, NotificationType, useCoinStore } from 'npool-cli-v2'
+import { CoinDescriptionUsedFor, useGoodStore, NotificationType, useCoinStore, PriceCoinName, formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+
+import question from '../../assets/question.svg'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -150,18 +213,28 @@ const members = computed(() => [
 
 onMounted(() => {
   if (!good.value) {
-    goods.getGood({
-      ID: goodId.value,
+    goods.getAppGoods({
       Message: {
         Error: {
-          Title: t('MSG_GET_GOOD'),
-          Message: t('MSG_GET_GOOD_FAIL'),
+          Title: t('MSG_GET_APP_GOODS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }
       }
     }, () => {
-      // TODO
+      goods.getGood({
+        ID: goodId.value,
+        Message: {
+          Error: {
+            Title: t('MSG_GET_GOOD'),
+            Message: t('MSG_GET_GOOD_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      }, () => {
+        // TODO
+      })
     })
   }
 

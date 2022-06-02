@@ -1,5 +1,10 @@
 <template>
-  <ProductPage :good-id='goodId' project-class='project-spacemesh' bg-img='product/spacemesh/spacemesh-banner.jpg'>
+  <ProductPage
+    :good-id='goodId'
+    project-class='project-spacemesh'
+    bg-img='product/spacemesh/spacemesh-banner.jpg'
+    :customize-info='false'
+  >
     <template #product-detail>
       <div v-show='description'>
         <h3>{{ description ? $t(description?.Title) : '' }}</h3>

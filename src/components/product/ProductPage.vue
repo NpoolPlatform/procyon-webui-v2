@@ -14,7 +14,13 @@
           <h3 class='form-title'>
             {{ $t('MSG_PRODUCT_DETAILS') }}
           </h3>
-          <div class='info-flex'>
+          <div v-if='customizeInfo' class='info-flex'>
+            <slot name='product-info' />
+            <div class='product-detail-text'>
+              <slot name='product-detail' />
+            </div>
+          </div>
+          <div v-else class='info-flex'>
             <div class='three-section'>
               <h4>{{ $t('MSG_PRICE') }}:</h4>
               <span class='number'>{{ good?.Good?.Good?.Price }}</span>
@@ -127,12 +133,14 @@ interface Props {
   goodId: string
   projectClass: string
   bgImg: string
+  customizeInfo?: boolean
 }
 
 const props = defineProps<Props>()
 const goodId = toRef(props, 'goodId')
 const projectClass = toRef(props, 'projectClass')
 const bgImg = toRef(props, 'bgImg')
+const customizeInfo = toRef(props, 'customizeInfo')
 
 const coin = useCoinStore()
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV))
