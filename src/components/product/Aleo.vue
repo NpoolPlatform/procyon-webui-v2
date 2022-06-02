@@ -28,7 +28,7 @@
             {{ member.Name }}
           </h4>
           <h5 class='title'>
-            {{ member.Title }}
+            {{ $t(member.Title) }}
           </h5>
           <p class='bio' v-html='$t(member.Background)' />
         </div>
