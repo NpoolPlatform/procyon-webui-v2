@@ -25,6 +25,18 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        path: 'aleo',
+        component: () => import('pages/AleoIndex.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false
+        }
+      }, {
         path: 'contact',
         component: () => import('pages/Contact.vue'),
         meta: {
