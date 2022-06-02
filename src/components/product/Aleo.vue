@@ -18,17 +18,8 @@
         <div><img src='vc-logos/softbank-vision-fund.png'></div>
         <div><img src='vc-logos/tiger-global.png'></div>
       </div>
-      <h3>{{ $t('MSG_ALEO_TOKENOMICS') }}</h3>
-      <p><img class='project-promo-content' src='product/aleo/aleo-posw-small.jpg'></p>
-      <p v-html='$t("MSG_ALEO_TOKENOMICS_CAPTION")' />
-      <h3>{{ $t('MSG_ALEO_VS_COMPETITORS') }}</h3>
-      <p v-html='$t("MSG_ALEO_VS_COMPETITORS_CAPTION")' />
-      <p><img class='project-promo-content' src='product/aleo/aleo-comparison.png'></p>
-      <h3>{{ $t('MSG_ALEO_ALGORITHM') }}</h3>
-      <p v-html='$t("MSG_ALEO_ALGORITHM_CAPTION")' />
-      <p><img class='project-promo-content' src='product/aleo/aleo-algorithm.png'></p>
-      <h3>{{ $t('MSG_ALEO_FUTURE') }}</h3>
-      <p v-html='$t("MSG_ALEO_FUTURE_CAPTION")' />
+      <h3>{{ $t('MSG_WHY_ALEO_IMPORTANT_TO_WEB3') }}</h3>
+      <p v-html='$t("MSG_WHY_ALEO_IMPORTANT_TO_WEB3_CAPTION")' />
       <h3>{{ $t('MSG_ALEO_TEAM') }}</h3>
       <div class='project-team'>
         <div v-for='member in members' :key='member.Name' class='team-member'>
@@ -41,6 +32,30 @@
           <p v-html='$t(member.Background)' />
         </div>
       </div>
+      <h3>{{ $t('MSG_ALEO_TOKENOMICS') }}</h3>
+      <p><img class='project-promo-content' src='product/aleo/aleo-posw-jp.jpg'></p>
+      <p>
+        <a href='https://coingenius.news/tokenomics-aleo/'>{{ $t('MSG_ALEO_TOKENOMICS_COINGENIUS_NEWS') }}</a>
+      </p>
+      <p v-html='$t("MSG_ALEO_TOKENOMICS_CAPTION")' />
+      <h3>{{ $t('MSG_ALEO_VS_COMPETITORS') }}</h3>
+      <p v-html='$t("MSG_ALEO_VS_COMPETITORS_CAPTION")' />
+      <p><img class='project-promo-content' src='product/aleo/aleo-comparison-jp.jpg'></p>
+      <h4>{{ $t('MSG_ZK_PROOF_PRIVACY') }}</h4>
+      <p><img class='project-promo-content' src='product/aleo/aleo-algorithm-jp.jpg'></p>
+      <h3>{{ $t('MSG_ALEO_FUTURE') }}</h3>
+      <p v-html='$t("MSG_ALEO_FUTURE_CAPTION_1")' />
+      <div class='logo-display'>
+        <div><img src='vc-logos/coinbase.png'></div>
+        <div><img src='vc-logos/gemini.png'></div>
+        <div><img src='vc-logos/kraken.png'></div>
+        <div><img src='vc-logos/binance.png'></div>
+        <div><img src='vc-logos/huobi.png'></div>
+        <div><img src='vc-logos/okex.png'></div>
+      </div>
+      <p v-html='$t("MSG_ALEO_FUTURE_CAPTION_2")' />
+      <h3>{{ $t('MSG_RISK_WARNING_AND_DISCLAIMER') }}</h3>
+      <p v-html='$t("MSG_RISK_WARNING_AND_DISCLAIMER_CAPTION")' />
     </template>
     <template #sidebar>
       <div id='project-links' class='product-sidebar-section'>
@@ -71,19 +86,6 @@
           <li>
             <a href='https://github.com/AleoHQ' target='_blank'><img class='link-icon' src='font-awesome/github.svg'>
               <span>{{ $t('MSG_GITHUB') }}</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div id='help' class='product-sidebar-section'>
-        <h3 class='form-title'>
-          {{ $t('MSG_HELP_AND_FAQ') }}
-        </h3>
-        <ul class='product-links'>
-          <li>
-            <a href=''>
-              <img class='link-icon' src='font-awesome/lightbulb.svg'>
-              <span>{{ $t('MSG_MINING_BASICS') }}</span>
             </a>
           </li>
         </ul>

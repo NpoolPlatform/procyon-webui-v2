@@ -2,7 +2,7 @@
   <BackPage>
     <div class='content order-page'>
       <div class='product-container content-glass'>
-        <div class='product-title-section'>
+        <div class='product-title-section fallback-title'>
           <div class='product-page-icon'>
             <img :src='good?.Main?.Logo'>
           </div>
@@ -31,4 +31,6 @@ const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage
 </script>
 
 <style lang='sass' scoped>
+.fallback-title
+  width: 100%
 </style>
