@@ -110,7 +110,7 @@ const onAmountFocusOut = () => {
   amountError.value = !amount.value || amount.value >= (earning.value - withdrawedEarning.value)
 }
 
-const withdrawType = ref(WithdrawType.Benefit)
+const withdrawType = ref(WithdrawType.Commission)
 
 interface Query {
   coinTypeId: string
