@@ -92,13 +92,18 @@ import {
   formatTime,
   PriceCoinName,
   useCoinStore,
-  Good
+  Good,
+  NotificationType
 } from 'npool-cli-v2'
-import { defineProps, toRef, computed } from 'vue'
+import { defineProps, toRef, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 import lightbulb from '../../assets/lightbulb.svg'
 import question from '../../assets/question.svg'
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
   good: Good
@@ -131,6 +136,22 @@ const onLearnMoreAndPurchaseClick = () => {
     }
   })
 }
+
+onMounted(() => {
+  if (!productInfo.value) {
+    coin.getCoinProductInfos({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COIN_PRODUCT_INFOS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+})
 
 </script>
 
