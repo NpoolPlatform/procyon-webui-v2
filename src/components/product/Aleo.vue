@@ -43,6 +43,7 @@
       <p v-html='$t("MSG_ALEO_VS_COMPETITORS_CAPTION")' />
       <p><img class='project-promo-content' src='product/aleo/aleo-comparison-jp.jpg'></p>
       <h4>{{ $t('MSG_ZK_PROOF_PRIVACY') }}</h4>
+      <p v-html='$t("MSG_ZK_PROOF_PRIVACY_CAPTION")' />
       <p><img class='project-promo-content' src='product/aleo/aleo-algorithm-jp.jpg'></p>
       <h3>{{ $t('MSG_ALEO_FUTURE') }}</h3>
       <p v-html='$t("MSG_ALEO_FUTURE_CAPTION_1")' />
