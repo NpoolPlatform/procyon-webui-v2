@@ -1,12 +1,12 @@
 <template>
   <h2>{{ $t('MSG_PREMIERE_PRODUCTS') }}</h2>
-  <CardLarge
+  <!-- CardLarge
     v-show='firstGood'
     :good='firstGood'
     project-class='project-aleo'
     bg-img='product/aleo/aleo-banner.jpg'
     purchase-caption='MSG_ALEO_PURCHASE_CAPTION'
-  />
+  / -->
   <div class='products'>
     <CardSmall v-for='myGood in goods' :key='myGood.Good.Good.ID' :good='myGood' />
   </div>
@@ -21,12 +21,12 @@ import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const CardLarge = defineAsyncComponent(() => import('src/components/product/CardLarge.vue'))
+// const CardLarge = defineAsyncComponent(() => import('src/components/product/CardLarge.vue'))
 const CardSmall = defineAsyncComponent(() => import('src/components/product/CardSmall.vue'))
 
 const good = useGoodStore()
-const firstGood = computed(() => good.getRecommendGoods?.[0])
-const goods = computed(() => good.getRecommendGoods.filter((_, index) => index > 0 && index < 4))
+// const firstGood = computed(() => good.getRecommendGoods?.[0])
+const goods = computed(() => good.getRecommendGoods.filter((_, index) => index >= 0 && index < 3))
 
 onMounted(() => {
   if (goods.value.length > 0) {
