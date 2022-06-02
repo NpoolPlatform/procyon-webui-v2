@@ -187,18 +187,28 @@ const router = useRouter()
 
 onMounted(() => {
   if (!good.value) {
-    goods.getGood({
-      ID: goodId.value,
+    goods.getAppGoods({
       Message: {
         Error: {
-          Title: t('MSG_GET_GOOD'),
-          Message: t('MSG_GET_GOOD_FAIL'),
+          Title: t('MSG_GET_APP_GOODS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }
       }
     }, () => {
-      // TODO
+      goods.getGood({
+        ID: goodId.value,
+        Message: {
+          Error: {
+            Title: t('MSG_GET_GOOD'),
+            Message: t('MSG_GET_GOOD_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      }, () => {
+        // TODO
+      })
     })
   }
 
