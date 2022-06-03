@@ -46,7 +46,8 @@ import {
   useCurrencyStore,
   Currency,
   BenefitModel,
-  totalWithdrawedEarningCoin
+  totalWithdrawedEarningCoin,
+  useKYCStore
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -62,6 +63,8 @@ const coin = useCoinStore()
 const currencies = useCurrencyStore()
 const benefit = useBenefitStore()
 const benefits = computed(() => buildBenefits(order.Orders, benefit.Benefits))
+
+const kyc = useKYCStore()
 
 interface MyBenefit extends BenefitModel {
   USDValue: number
@@ -184,11 +187,29 @@ onMounted(() => {
 const router = useRouter()
 
 const onWithdrawClick = (asset: BenefitModel) => {
-  void router.push({
-    path: '/withdraw',
-    query: {
-      coinTypeId: asset.CoinTypeID
+  kyc.getKYC({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_KYCS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
     }
+  }, (error: boolean) => {
+    if (error) {
+      void router.push({ path: '/kyc' })
+      return
+    }
+    if (!kyc.KYC.Kyc) {
+      void router.push({ path: '/kyc' })
+      return
+    }
+    void router.push({
+      path: '/withdraw',
+      query: {
+        coinTypeId: asset.CoinTypeID
+      }
+    })
   })
 }
 
