@@ -37,7 +37,7 @@ const good = useGoodStore()
 const orderPrice = (orderModel: OrderModel) => {
   const myOrder = order.getOrderByID(orderModel.OrderID)
   if (!myOrder || !myOrder.Order.Payment) {
-    return 'NaN'
+    return t('MSG_NOT_AVAILABLE')
   }
   const currency = myOrder.Order.Payment.CoinUSDCurrency ? myOrder.Order.Payment.CoinUSDCurrency : 1
   const totalPay = currency * myOrder.Order.Payment.Amount
