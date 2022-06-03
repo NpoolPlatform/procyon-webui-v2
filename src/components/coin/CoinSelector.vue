@@ -7,14 +7,14 @@
       :value='_myCoin'
       :selected='myCoin?.ID === _myCoin.ID'
     >
-      {{ _myCoin.Unit }} ({{ _myCoin.Name }})
+      {{ _myCoin.Unit }} ({{ currency.formatCoinName(_myCoin.Name as string) }})
     </option>
   </select>
 </template>
 
 <script setup lang='ts'>
 import { computed, defineEmits, ref, watch, defineProps, toRef, onMounted } from 'vue'
-import { useCoinStore, Coin, NotificationType } from 'npool-cli-v2'
+import { useCoinStore, Coin, NotificationType, useCurrencyStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
 interface Props {
@@ -29,6 +29,8 @@ const label = toRef(props, 'label')
 const coin = useCoinStore()
 const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale))
 const myCoin = ref(selectedCoin.value)
+
+const currency = useCurrencyStore()
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
