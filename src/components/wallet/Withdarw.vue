@@ -12,9 +12,14 @@
           <div class='withdraw'>
             <h3>{{ $t('MSG_ASSET_WITHDRAWAL') }}</h3>
             <div class='info-flex'>
-              <div class='full-section'>
+              <div class='three-section'>
                 <h4>{{ $t('MSG_AVAILABLE_FOR_WITHDRAWAL') }}:</h4>
                 <span class='number'>{{ earning - withdrawedEarning }}</span>
+                <span class='unit'>{{ coin.Unit }}</span>
+              </div>
+              <div class='three-section'>
+                <h4>{{ $t('MSG_TRANSACTION_FEE') }}:</h4>
+                <span class='number'>{{ feeAmount }}</span>
                 <span class='unit'>{{ coin.Unit }}</span>
               </div>
               <div class='full-section'>
@@ -32,6 +37,11 @@
                   @focus='onAmountFocusIn'
                   @blur='onAmountFocusOut'
                 />
+              </div>
+              <div class='three-section'>
+                <h4>{{ $t('MSG_AMOUNT_WILL_RECEIVE') }}:</h4>
+                <span class='number'>{{ amount - feeAmount }}</span>
+                <span class='unit'>{{ coin.Unit }}</span>
               </div>
 
               <div class='full-section'>
@@ -121,6 +131,7 @@ const query = computed(() => route.query as unknown as Query)
 const coins = useCoinStore()
 const coinTypeId = computed(() => query.value.coinTypeId)
 const coin = computed(() => coins.getCoinByID(coinTypeId.value))
+const feeAmount = ref(0)
 
 const transaction = useTransactionStore()
 
@@ -187,6 +198,19 @@ onMounted(() => {
         Type: NotificationType.Error
       }
     }
+  })
+
+  coins.getCurrentFee({
+    CoinTypeID: coinTypeId.value,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_CURRENT_FEE_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (amount: number) => {
+    feeAmount.value = amount
   })
 
   totalEarningCoin(coinTypeId.value, (amount: number) => {
