@@ -10,7 +10,7 @@
         <q-td key='Name' :props='myProps'>
           <LogoName
             :logo='coin.getCoinByID(myProps.row.CoinTypeID)?.Logo'
-            :name='(coin.getCoinByID(myProps.row.CoinTypeID)?.Name as string)'
+            :name='currencies.formatCoinName(coin.getCoinByID(myProps.row.CoinTypeID)?.Name as string)'
           />
         </q-td>
         <q-td key='Balance' :props='myProps'>

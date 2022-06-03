@@ -10,7 +10,7 @@
         <q-td key='Name' :props='myProps'>
           <LogoName
             :logo='coin.getCoinByID(myProps.row.CoinTypeID)?.Logo'
-            :name='coin.getCoinByID(myProps.row.CoinTypeID)?.Name'
+            :name='currency.formatCoinName(coin.getCoinByID(myProps.row.CoinTypeID)?.Name as string)'
           />
         </q-td>
         <q-td key='Date' :props='myProps'>
@@ -32,7 +32,7 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, useTransactionStore, Transaction, formatTime } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, useTransactionStore, Transaction, formatTime, useCurrencyStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
@@ -43,6 +43,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
 const transaction = useTransactionStore()
+const currency = useCurrencyStore()
 const transactions = computed(() => transaction.Transactions)
 
 const table = computed(() => [

@@ -17,7 +17,7 @@
         <q-td key='Blockchain' :props='myProps'>
           <LogoName
             :logo='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Logo'
-            :name='(coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name as string)'
+            :name='currency.formatCoinName(coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name as string)'
           />
         </q-td>
         <q-td key='Address' :props='myProps'>
@@ -41,7 +41,7 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore, useCurrencyStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
@@ -52,6 +52,7 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
+const currency = useCurrencyStore()
 const account = useAccountStore()
 const accounts = computed(() => account.Accounts)
 
