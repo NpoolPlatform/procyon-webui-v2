@@ -84,6 +84,7 @@
         </button>
       </div>
     </div>
+    <div class='hr' />
   </div>
 </template>
 
