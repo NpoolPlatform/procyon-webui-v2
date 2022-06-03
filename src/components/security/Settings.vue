@@ -24,7 +24,7 @@
       <p>{{ $t('MSG_UPDATE_EMAIL_TIP') }}</p>
       <div class='verification'>
         <img :src='squareCheck' :class='[ logined.LoginedUser?.User?.EmailAddress?.length ? "verified" : "" ]'>
-        <span>{{ $t('MSG_VERIFIED') }}</span>
+        <span>{{ logined.LoginedUser?.User?.EmailAddress?.length ? $t('MSG_VERIFIED') : $t('MSG_NOT_VERIFIED') }}</span>
       </div>
       <q-space />
       <button @click='onUpdateEmailClick'>
@@ -41,7 +41,7 @@
       <p>{{ $t('MSG_MOBILE_AUTHENTICATION_TIP') }}</p>
       <div class='verification'>
         <img :src='squareCheck' :class='[ logined.LoginedUser?.User?.PhoneNO?.length ? "verified" : "" ]'>
-        <span>{{ $t('MSG_NOT_VERIFIED') }}</span>
+        <span>{{ logined.LoginedUser?.User?.PhoneNO?.length ? $t('MSG_VERIFIED') : $t('MSG_NOT_VERIFIED') }}</span>
       </div>
       <q-space />
       <button @click='onUpdateMobileClick'>
