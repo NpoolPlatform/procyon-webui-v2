@@ -91,7 +91,7 @@
                   label='MSG_PURCHASE'
                   type='submit'
                   class='submit-btn'
-                  :disabled='submitting || true'
+                  :disabled='submitting'
                   :waiting='submitting'
                 />
               </div>
