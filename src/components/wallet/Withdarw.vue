@@ -136,7 +136,7 @@ const feeAmount = ref(0)
 const transaction = useTransactionStore()
 
 const accounts = useAccountStore()
-const withdraws = computed(() => accounts.Accounts.filter((account) => account.Account.CoinTypeID === coinTypeId.value))
+const withdraws = computed(() => accounts.Accounts.filter((account) => account.Account?.CoinTypeID === coinTypeId.value))
 const selectedAccount = ref(undefined as unknown as WithdrawAccount)
 
 const earning = ref(0)
