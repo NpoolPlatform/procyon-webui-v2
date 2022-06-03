@@ -2,7 +2,7 @@
   <div :class='[ verifing ? "blur" : "" ]'>
     <BackPage>
       <div class='content order-page'>
-        <div class='product-container'>
+        <div class='product-container content-glass'>
           <div class='product-title-section'>
             <div class='product-page-icon'>
               <img :src='coins.getCoinLogo(coin)'>
