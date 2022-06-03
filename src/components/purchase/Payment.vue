@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ showStatus ? "blur" : "" ]'>
+  <div :class='[ showStatus || showWarning ? "blur" : "" ]'>
     <PurchasePage :good='order?.Good'>
       <div class='info'>
         <h3 class='form-title'>
@@ -95,6 +95,30 @@
       </div>
     </div>
   </q-dialog>
+  <q-dialog
+    v-model='showWarning'
+    seamless
+    maximized
+  >
+    <div class='product-container'>
+      <div class='popup'>
+        <div class='form-container content-glass'>
+          <div class='confirmation'>
+            <h3>{{ $t('MSG_PAYMENT_WARNING_TITLE') }}</h3>
+            <p v-html='$t("MSG_PAYMENT_WARNING_CONTENT_1")' />
+            <div class='warning red-warning'>
+              <img :src='warning'>
+              <span>{{ $t('MSG_PAYMENT_WARNING_CONTENT_2') }}</span>
+            </div>
+            <p v-html='$t("MSG_PAYMENT_WARNING_CONTENT_3")' />
+            <button @click='showWarning = false'>
+              {{ $t('MSG_I_UNDERSTAND') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
@@ -141,6 +165,7 @@ const tipMessage = ref('')
 const orderStatus = ref('')
 const showType = ref('')
 const remainTime = ref(RemainMax)
+const showWarning = ref(true)
 
 const remainTicker = ref(-1)
 
