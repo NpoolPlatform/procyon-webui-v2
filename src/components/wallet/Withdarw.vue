@@ -210,7 +210,7 @@ onMounted(() => {
       }
     }
   }, (amount: number) => {
-    feeAmount.value = amount
+    feeAmount.value = Math.ceil(amount * 1000000) / 1000000
   })
 
   totalEarningCoin(coinTypeId.value, (amount: number) => {
