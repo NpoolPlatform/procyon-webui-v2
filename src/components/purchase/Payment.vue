@@ -16,16 +16,34 @@
             <span class='number'>{{ order?.Order?.Payment?.Amount }}</span>
             <span class='unit'>{{ order?.PayWithCoin?.Unit }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAmountClick'>
+            <div class='tooltip'>
+              <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+              <p class='tooltip-text'>
+                {{ $t('MSG_PAYMENT_AMOUNT_TIP') }}
+              </p>
+            </div>
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_TIME_REMAIN') }}:</h4>
             <span class='number'>{{ $t(remainSeconds) }}</span>
+            <div class='tooltip'>
+              <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+              <p class='tooltip-text'>
+                {{ $t('MSG_PAYMENT_TIMEOUT_TIP') }}
+              </p>
+            </div>
           </div>
           <div class='full-section'>
             <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
             <span class='wallet-type'>{{ order?.PayWithCoin?.Name }}</span>
             <span class='number'>{{ order?.PayToAccount?.Address }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAddressClick'>
+            <div class='tooltip'>
+              <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+              <p class='tooltip-text'>
+                {{ $t('MSG_PAYMENT_ADDRESS_TIP') }}
+              </p>
+            </div>
           </div>
         </div>
         <div class='hr' />
@@ -48,12 +66,13 @@
           </div>
         </div>
         <div class='hr' />
-        <button @click='onPaymentCompletedClick'>
-          {{ $t('MSG_PAYMENT_COMPLETED') }}
+        <button @click='onPaymentProceed'>
+          {{ $t('MSG_PROCEED_TO_DASHBOARD') }}
         </button>
-        <button class='alt' @click='onPayLaterClick'>
-          {{ $t('MSG_PAY_LATER') }}
-        </button>
+        <div class='warning'>
+          <img :src='warning'>
+          <span>{{ $t('MSG_PAYMENT_WARNING') }}</span>
+        </div>
       </div>
     </PurchasePage>
   </div>
@@ -86,6 +105,8 @@ import { useI18n } from 'vue-i18n'
 import copy from 'copy-to-clipboard'
 
 import copyIcon from 'src/assets/icon-copy.svg'
+import question from 'src/assets/question.svg'
+import warning from 'src/assets/warning.svg'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
@@ -209,41 +230,6 @@ onUnmounted(() => {
 })
 
 const router = useRouter()
-
-const onPaymentCompletedClick = () => {
-  const payment = order.value?.Order.Payment
-  if (!payment) {
-    return
-  }
-
-  payment.UserSetPaid = true
-  orders.updatePayment({
-    Info: payment,
-    Message: {
-      Error: {
-        Title: t('MSG_UPDATE_PAYMENT'),
-        Message: t('MSG_UPDATE_PAYMENT_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
-
-  showStatus.value = true
-  popupTitle.value = 'MSG_ORDER_PENDING'
-  tipMessage.value = 'MSG_ORDER_PAYMENT_AWAITING'
-  orderStatus.value = 'MSG_PENDING'
-}
-
-const onPayLaterClick = () => {
-  showStatus.value = true
-  popupTitle.value = 'MSG_PAY_LATER'
-  tipMessage.value = 'MSG_ORDER_PAY_LATER'
-  orderStatus.value = 'MSG_NOT_PAID'
-  showType.value = 'remain'
-}
 
 const onPaymentProceed = () => {
   void router.push({
