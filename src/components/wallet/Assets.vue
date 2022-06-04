@@ -132,6 +132,14 @@ const getBenefits = () => {
 
     currencies.getCoinCurrency(coin.getCoinByID(commissionCoin.value.CoinTypeID), Currency.USD, (usdCurrency: number) => {
       currencies.getCoinCurrency(coin.getCoinByID(commissionCoin.value.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
+        for (let i = 0; i < exBenefits.value.length; i++) {
+          if (exBenefits.value[i].CoinTypeID === commissionCoin.value.CoinTypeID) {
+            exBenefits.value[i].Total = commission.value.Balance
+            exBenefits.value[i].USDValue = commission.value.Balance * usdCurrency
+            exBenefits.value[i].JPYValue = commission.value.Balance * jpyCurrency
+            return
+          }
+        }
         myBenefit.USDValue = myBenefit.Total * usdCurrency
         myBenefit.JPYValue = myBenefit.Total * jpyCurrency
         exBenefits.value.push(myBenefit)

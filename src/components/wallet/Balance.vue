@@ -3,7 +3,7 @@
     <h2>{{ $t('MSG_ACCOUNT_BALANCE') }}</h2>
     <div class='earnings-summary'>
       <div class='earnings-figure'>
-        <span class='amount'>{{ (_totalEarningUSD - totalWithdrawedUSD + _totalPaymentBalanceUSD).toFixed(4) }}</span>
+        <span class='amount'>{{ (_totalEarningUSD - totalWithdrawedUSD + _totalPaymentBalanceUSD + commissionUSD).toFixed(4) }}</span>
         <span class='unit'>{{ PriceCoinName }}</span>
         <div class='hr' />
         <h4 class='description'>
@@ -11,7 +11,7 @@
         </h4>
       </div>
       <div class='earnings-figure'>
-        <span class='amount'>{{ (totalEarningJPY - totalWithdrawedJPY + totalPaymentBalanceJPY).toFixed(4) }}</span>
+        <span class='amount'>{{ (totalEarningJPY - totalWithdrawedJPY + totalPaymentBalanceJPY + commissionJPY).toFixed(4) }}</span>
         <span class='unit'>JPY</span>
         <div class='hr' />
         <h4 class='description'>
@@ -39,9 +39,10 @@ import {
   useBillingStore,
   totalPaymentBalanceUSD,
   totalPaymentBalanceCurrency,
-  useOrderStore
+  useOrderStore,
+  CoinType
 } from 'npool-cli-v2'
-import { onMounted, ref, defineProps, toRef } from 'vue'
+import { onMounted, ref, defineProps, toRef, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 interface Props {
@@ -69,6 +70,9 @@ const good = useGoodStore()
 const benefit = useBenefitStore()
 const billing = useBillingStore()
 const order = useOrderStore()
+
+const commissionUSD = computed(() => benefit.Commission.Balance)
+const commissionJPY = ref(0)
 
 const getPaymentBalances = () => {
   billing.getPaymentBalances({
@@ -205,6 +209,20 @@ const getCoins = () => {
 }
 
 onMounted(() => {
+  benefit.getCommission({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COMMISSION_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    currency.getCoinNameCurrency(CoinType.USDTERC20, Currency.JPY, (jpyCurrency: number) => {
+      commissionJPY.value = jpyCurrency * benefit.Commission.Balance
+    })
+  })
+
   if (benefit.Benefits.length === 0) {
     getCoins()
     return
