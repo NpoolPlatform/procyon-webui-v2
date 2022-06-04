@@ -69,6 +69,9 @@
         <button @click='onPaymentProceed'>
           {{ $t('MSG_PROCEED_TO_DASHBOARD') }}
         </button>
+        <button @click='onPaymentCanceled' class='alt'>
+          {{ $t('MSG_CANCEL_ORDER') }}
+        </button>
         <div class='warning'>
           <img :src='warning'>
           <span>{{ $t('MSG_PAYMENT_WARNING') }}</span>
@@ -259,6 +262,26 @@ const router = useRouter()
 const onPaymentProceed = () => {
   void router.push({
     path: '/dashboard'
+  })
+}
+
+const onPaymentCanceled = () => {
+  const payment = order.value.Order.Payment
+  payment.UserSetCanceled = true
+  orders.updatePayment({
+    Info: payment,
+    Message: {
+      Error: {
+        Title: t('MSG_UPDATE_PAYMENT'),
+        Message: t('MSG_UPDATE_PAYMENT_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    void router.push({
+      path: '/dashboard'
+    })
   })
 }
 
