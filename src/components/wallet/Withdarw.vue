@@ -14,7 +14,7 @@
             <div class='info-flex'>
               <div class='three-section'>
                 <h4>{{ $t('MSG_AVAILABLE_FOR_WITHDRAWAL') }}:</h4>
-                <span class='number'>{{ earning - withdrawedEarning }}</span>
+                <span class='number'>{{ (earning - withdrawedEarning).toFixed(4) }}</span>
                 <span class='unit'>{{ coin.Unit }}</span>
               </div>
               <div class='three-section'>
@@ -95,7 +95,8 @@ import {
   WithdrawAccount,
   NotificationType,
   useTransactionStore,
-  WithdrawType
+  WithdrawType,
+  useBenefitStore
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -141,6 +142,8 @@ const selectedAccount = ref(undefined as unknown as WithdrawAccount)
 
 const earning = ref(0)
 const withdrawedEarning = ref(0)
+
+const benefit = useBenefitStore()
 
 const onSubmit = () => {
   if (!selectedAccount.value) {
@@ -217,6 +220,33 @@ onMounted(() => {
     earning.value = amount
     totalWithdrawedEarningCoin(coinTypeId.value, (amount: number) => {
       withdrawedEarning.value = amount
+    })
+    benefit.getCommissionCoinSettings({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COMMISSION_COIN_SETTINGS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      const index = benefit.CommissionCoinSettings.findIndex((el) => el.Using)
+      if (index < 0) {
+        return
+      }
+      if (coinTypeId.value === benefit.CommissionCoinSettings[index].CoinTypeID) {
+        benefit.getCommission({
+          Message: {
+            Error: {
+              Title: t('MSG_GET_COMMISSION_FAIL'),
+              Popup: true,
+              Type: NotificationType.Error
+            }
+          }
+        }, () => {
+          earning.value += benefit.Commission.Balance
+        })
+      }
     })
   })
 })

@@ -59,10 +59,10 @@ const table = computed(() => [
     field: (row: OrderModel) => row.GoodTitle
   },
   {
-    name: 'Amount',
+    name: 'Total',
     label: t('MSG_AMOUNT'),
     align: 'center',
-    field: (row: OrderModel) => row.Units
+    field: (row: OrderModel) => row.Units.toString() + good.getGoodByID(row.GoodID)?.Good?.Good?.Unit
   },
   {
     name: 'Price',
@@ -71,22 +71,10 @@ const table = computed(() => [
     field: (row: OrderModel) => orderPrice(row)
   },
   {
-    name: 'TechFee',
-    label: t('MSG_TECHNIQUE_SERVICE_FEE'),
-    align: 'center',
-    field: () => '20%'
-  },
-  {
     name: 'Period',
     label: t('MSG_PERIOD'),
     align: 'center',
     field: (row: OrderModel) => row.DurationDays.toString() + t('MSG_DAY')
-  },
-  {
-    name: 'Total',
-    label: t('MSG_TOTAL'),
-    align: 'center',
-    field: (row: OrderModel) => row.Units.toString() + good.getGoodByID(row.GoodID)?.Good?.Good?.Unit
   },
   {
     name: 'State',

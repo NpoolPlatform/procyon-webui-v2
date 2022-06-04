@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineAsyncComponent } from 'vue'
+import { computed, onMounted, defineAsyncComponent, ref } from 'vue'
 import {
   useOrderStore,
   NotificationType,
@@ -47,7 +47,8 @@ import {
   Currency,
   BenefitModel,
   totalWithdrawedEarningCoin,
-  useKYCStore
+  useKYCStore,
+  CommissionCoinSetting
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -63,6 +64,14 @@ const coin = useCoinStore()
 const currencies = useCurrencyStore()
 const benefit = useBenefitStore()
 const benefits = computed(() => buildBenefits(order.Orders, benefit.Benefits))
+const commission = computed(() => benefit.Commission)
+const commissionCoin = computed(() => {
+  const index = benefit.CommissionCoinSettings.findIndex((el) => el.Using)
+  if (index >= 0) {
+    return benefit.CommissionCoinSettings[index]
+  }
+  return undefined as unknown as CommissionCoinSetting
+})
 
 const kyc = useKYCStore()
 
@@ -70,8 +79,12 @@ interface MyBenefit extends BenefitModel {
   USDValue: number
   JPYValue: number
 }
-const exBenefits = computed(() => {
-  const myBenefits = [] as Array<MyBenefit>
+
+const exBenefits = ref([] as Array<MyBenefit>)
+
+const getBenefits = () => {
+  exBenefits.value = [] as Array<MyBenefit>
+  let commissionIncluded = false
 
   benefits.value.forEach((benefit: BenefitModel) => {
     const myBenefit = {
@@ -81,28 +94,51 @@ const exBenefits = computed(() => {
       Units: benefit.Units,
       Last24Hours: benefit.Last24Hours
     } as MyBenefit
+
+    if (commissionCoin.value?.CoinTypeID === benefit.CoinTypeID) {
+      myBenefit.Total += commission.value.Total
+      myBenefit.Balance += commission.value.Balance
+      commissionIncluded = true
+    }
+
     currencies.getCoinCurrency(coin.getCoinByID(benefit.CoinTypeID), Currency.USD, (usdCurrency: number) => {
       currencies.getCoinCurrency(coin.getCoinByID(benefit.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
         totalWithdrawedEarningCoin(benefit.CoinTypeID, (amount: number) => {
-          for (let i = 0; i < myBenefits.length; i++) {
-            if (myBenefits[i].CoinTypeID === benefit.CoinTypeID) {
-              myBenefits[i].Total = benefit.Total - amount
-              myBenefits[i].USDValue = myBenefits[i].Total * usdCurrency
-              myBenefits[i].JPYValue = myBenefits[i].Total * jpyCurrency
+          for (let i = 0; i < exBenefits.value.length; i++) {
+            if (exBenefits.value[i].CoinTypeID === benefit.CoinTypeID) {
+              exBenefits.value[i].Total = benefit.Total - amount
+              exBenefits.value[i].USDValue = exBenefits.value[i].Total * usdCurrency
+              exBenefits.value[i].JPYValue = exBenefits.value[i].Total * jpyCurrency
               return
             }
           }
           myBenefit.Total = benefit.Total - amount
           myBenefit.USDValue = myBenefit.Total * usdCurrency
           myBenefit.JPYValue = myBenefit.Total * jpyCurrency
-          myBenefits.push(myBenefit)
+          exBenefits.value.push(myBenefit)
         })
       })
     })
   })
 
-  return myBenefits
-})
+  if (!commissionIncluded && commissionCoin.value) {
+    const myBenefit = {
+      CoinTypeID: commissionCoin.value.CoinTypeID,
+      Balance: commission.value.Balance,
+      Total: commission.value.Balance,
+      Units: 0,
+      Last24Hours: 0
+    } as MyBenefit
+
+    currencies.getCoinCurrency(coin.getCoinByID(commissionCoin.value.CoinTypeID), Currency.USD, (usdCurrency: number) => {
+      currencies.getCoinCurrency(coin.getCoinByID(commissionCoin.value.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
+        myBenefit.USDValue = myBenefit.Total * usdCurrency
+        myBenefit.JPYValue = myBenefit.Total * jpyCurrency
+        exBenefits.value.push(myBenefit)
+      })
+    })
+  }
+}
 
 const table = computed(() => [
   {
@@ -165,7 +201,7 @@ onMounted(() => {
         }
       }
     }, () => {
-      // TODO
+      getBenefits()
     })
   }
 
@@ -179,7 +215,35 @@ onMounted(() => {
         }
       }
     }, () => {
-      // TODO
+      getBenefits()
+    })
+  }
+
+  if (benefit.Commission.Total === 0) {
+    benefit.getCommission({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COMMISSION_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      getBenefits()
+    })
+  }
+
+  if (!commissionCoin.value) {
+    benefit.getCommissionCoinSettings({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COMMISSION_COIN_SETTINGS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      getBenefits()
     })
   }
 })
