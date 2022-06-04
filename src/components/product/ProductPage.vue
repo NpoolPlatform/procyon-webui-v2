@@ -172,7 +172,15 @@ const goods = useGoodStore()
 const good = computed(() => goods.getGoodByID(goodId.value))
 
 const stock = useStockStore()
-const total = computed(() => stock.getStockByGoodID(goodId.value)?.Total)
+const total = computed(() => {
+  const total1 = stock.getStockByGoodID(goodId.value)?.Total
+  let total2 = total1
+  const index = goods.AppGoods.findIndex((el) => el.GoodID === goodId.value)
+  if (index >= 0) {
+    total2 = goods.AppGoods[index].PurchaseLimit
+  }
+  return total1 > total2 ? total2 : total1
+})
 
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
