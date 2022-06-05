@@ -109,7 +109,7 @@
           <div class='confirmation'>
             <h3>{{ $t('MSG_PAYMENT_WARNING_TITLE') }}</h3>
             <p v-html='$t("MSG_PAYMENT_WARNING_CONTENT_1")' />
-            <div class='warning red-warning'>
+            <div class='warning normal-tip'>
               <img :src='warning'>
               <span>{{ $t('MSG_PAYMENT_WARNING_CONTENT_2') }}</span>
             </div>
@@ -361,4 +361,16 @@ const onCopyAddressClick = () => {
 
 .product-container
   background: transparent
+
+.normal-tip
+  padding: 12px
+  margin: 24px 0
+
+::v-deep p:not([class]) strong
+  background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
+  background-clip: border-box
+  font-weight: 500
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 </style>
