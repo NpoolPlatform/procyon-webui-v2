@@ -135,7 +135,7 @@
             <p v-html='$t("MSG_ORDER_CANCELLATION_CONTENT_1")' />
             <div class='warning red-warning'>
               <img :src='warning'>
-              <span>{{ $t('MSG_ORDER_CANCELLATION_CONTENT_2') }}</span>
+              <p v-html='$t("MSG_ORDER_CANCELLATION_CONTENT_2")' />
             </div>
             <button @click='showCancelling = false' class='alt'>
               {{ $t('MSG_GO_BACK') }}
