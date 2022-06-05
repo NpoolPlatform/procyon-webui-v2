@@ -91,7 +91,7 @@
                   label='MSG_PURCHASE'
                   type='submit'
                   class='submit-btn'
-                  :disabled='submitting || !buyer'
+                  :disabled='submitting'
                   :waiting='submitting'
                 />
               </div>
@@ -115,8 +115,7 @@ import {
   NotificationType,
   useCurrencyStore,
   useOrderStore,
-  useStockStore,
-  useUserStore
+  useStockStore
 } from 'npool-cli-v2'
 import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -186,8 +185,6 @@ const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 
 const currency = useCurrencyStore()
-const user = useUserStore()
-const buyer = computed(() => user.buyer)
 
 onMounted(() => {
   if (!good.value) {
