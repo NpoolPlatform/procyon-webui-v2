@@ -57,16 +57,23 @@ import {
   ReviewState
 } from 'npool-cli-v2'
 import { AppID } from 'src/const/const'
-import { defineAsyncComponent, ref } from 'vue'
+import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useReCaptcha } from 'vue-recaptcha-v3'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const SignPage = defineAsyncComponent(() => import('src/components/user/SignPage.vue'))
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
+
+const route = useRoute()
+interface MyQuery {
+  target: string
+}
+const query = computed(() => route.query as unknown as MyQuery)
+const target = computed(() => query.value?.target)
 
 const accountError = ref(false)
 const account = ref('')
@@ -219,6 +226,13 @@ const onSubmit = () => {
           }
         }
       })
+      if (target.value?.length) {
+        void router.push({
+          path: target.value,
+          query: route.query
+        })
+        return
+      }
       verify()
     })
   })

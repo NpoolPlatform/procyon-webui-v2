@@ -58,7 +58,7 @@
             <form action='javascript:void(0)' @submit='onSubmit' id='purchase'>
               <h4>{{ $t('MSG_PURCHASE_AMOUNT') }} ({{ good?.Good?.Good?.Unit }}s)</h4>
               <Input
-                v-model:value='purchaseAmount'
+                v-model:value='myPurchaseAmount'
                 type='number'
                 id='amount'
                 required
@@ -115,7 +115,8 @@ import {
   NotificationType,
   useCurrencyStore,
   useOrderStore,
-  useStockStore
+  useStockStore,
+  useLoginedUserStore
 } from 'npool-cli-v2'
 import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -135,6 +136,7 @@ interface Props {
   projectClass: string
   bgImg: string
   customizeInfo?: boolean
+  purchaseAmount?: number
 }
 
 const props = defineProps<Props>()
@@ -142,6 +144,7 @@ const goodId = toRef(props, 'goodId')
 const projectClass = toRef(props, 'projectClass')
 const bgImg = toRef(props, 'bgImg')
 const customizeInfo = toRef(props, 'customizeInfo')
+const purchaseAmount = toRef(props, 'purchaseAmount')
 
 const coin = useCoinStore()
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV))
@@ -257,21 +260,34 @@ onMounted(() => {
   }
 })
 
-const purchaseAmount = ref(1)
+const myPurchaseAmount = ref(purchaseAmount.value ? purchaseAmount.value : 1)
 const purchaseAmountError = ref(false)
 const onPurchaseAmountFocusIn = () => {
   purchaseAmountError.value = false
 }
 const onPurchaseAmountFocusOut = () => {
-  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > total.value
+  purchaseAmountError.value = myPurchaseAmount.value <= 0 || myPurchaseAmount.value > total.value
 }
 
 const submitting = ref(false)
 
 const order = useOrderStore()
 const router = useRouter()
+const logined = useLoginedUserStore()
 
 const onSubmit = throttle(() => {
+  if (!logined.getLogined) {
+    void router.push({
+      path: '/signin',
+      query: {
+        target: '/product/aleo',
+        goodId: good.value.Good.Good.ID as string,
+        purchaseAmount: myPurchaseAmount.value
+      }
+    })
+    return
+  }
+
   onPurchaseAmountFocusOut()
   if (purchaseAmountError.value) {
     return
@@ -281,7 +297,7 @@ const onSubmit = throttle(() => {
 
   order.submitOrder({
     GoodID: goodId.value,
-    Units: purchaseAmount.value,
+    Units: myPurchaseAmount.value,
     Message: {
       Error: {
         Title: t('MSG_CREATE_ORDER'),

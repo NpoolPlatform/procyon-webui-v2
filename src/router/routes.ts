@@ -353,7 +353,7 @@ const routes: RouteRecordRaw[] = [
           ShowFooterTop: true,
           ShowSignHelper: true,
           ShowTopTip: false,
-          NeedLogined: true,
+          NeedLogined: false,
           ShowSideMenu: false
         }
       }, {
@@ -366,7 +366,7 @@ const routes: RouteRecordRaw[] = [
           ShowFooterTop: true,
           ShowSignHelper: true,
           ShowTopTip: false,
-          NeedLogined: true,
+          NeedLogined: false,
           ShowSideMenu: false
         }
       }

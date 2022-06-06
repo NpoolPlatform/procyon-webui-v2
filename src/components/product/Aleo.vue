@@ -1,6 +1,7 @@
 <template>
   <ProductPage
     :good-id='goodId'
+    :purchase-amount='purchaseAmount'
     project-class='project-aleo'
     bg-img='product/aleo/aleo-banner.jpg'
     :customize-info='true'
@@ -170,11 +171,13 @@ const { t } = useI18n({ useScope: 'global' })
 
 interface Query {
   goodId: string
+  purchaseAmount: number
 }
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodId = computed(() => query.value.goodId)
+const goodId = computed(() => query.value.goodId?.length ? query.value.goodId : 'de420061-e878-4a8b-986a-805cadd59233')
+const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 
