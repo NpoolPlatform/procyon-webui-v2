@@ -69,15 +69,25 @@
       <h3>{{ $t('MSG_VC_INVESTMENT') }}</h3>
       <p v-html='$t("MSG_VC_INVESTMENT_CAPTION")' />
       <div class='logo-display'>
-        <div><img src='vc-logos/a16z.png'></div>
-        <div><img src='vc-logos/coinbase.png'></div>
-        <div><img src='vc-logos/kora.png'></div>
-        <div><img src='vc-logos/polychain-capital.png'></div>
-        <div><img src='vc-logos/samsung-next.png'></div>
-        <div><img src='vc-logos/sea-capital.png'></div>
-        <div><img src='vc-logos/slow-ventures.png'></div>
         <div><img src='vc-logos/softbank-vision-fund.png'></div>
+        <div><img src='vc-logos/a16z.png'></div>
+        <div><img src='vc-logos/polychain-capital.png'></div>
+        <div><img src='vc-logos/coinbase.png'></div>
+        <div><img src='vc-logos/samsung-next.png'></div>
+        <div><img src='vc-logos/slow-ventures.png'></div>
+        <div><img src='vc-logos/dekrypt-capital.png'></div>
+        <div><img src='vc-logos/kora.png'></div>
+        <div><img src='vc-logos/sea-capital.png'></div>
         <div><img src='vc-logos/tiger-global.png'></div>
+        <div><img src='vc-logos/zkv.png'></div>
+        <div><img src='vc-logos/placeholder.png'></div>
+        <div><img src='vc-logos/scalar-capital.png'></div>
+        <div><img src='vc-logos/galaxy-digital.png'></div>
+        <div><img src='vc-logos/variant.png'></div>
+        <div><img src='vc-logos/ethereal-ventures.png'></div>
+        <div><img src='vc-logos/a_capital.png'></div>
+        <div><img src='vc-logos/david-namdar.png'></div>
+        <div><img src='vc-logos/balaji-srinivasan.png'></div>
       </div>
       <h3>{{ $t('MSG_WHY_ALEO_IMPORTANT_TO_WEB3') }}</h3>
       <p v-html='$t("MSG_WHY_ALEO_IMPORTANT_TO_WEB3_CAPTION")' />
