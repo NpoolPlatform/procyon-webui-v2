@@ -62,7 +62,7 @@ const table = computed(() => [
     name: 'Total',
     label: t('MSG_AMOUNT'),
     align: 'center',
-    field: (row: OrderModel) => row.Units.toString() + good.getGoodByID(row.GoodID)?.Good?.Good?.Unit
+    field: (row: OrderModel) => t(row.Units.toString() + good.getGoodByID(row.GoodID)?.Good?.Good?.Unit)
   },
   {
     name: 'Price',

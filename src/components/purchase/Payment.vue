@@ -9,7 +9,7 @@
           <div class='three-section'>
             <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}:</h4>
             <span class='number'>{{ order?.Order?.Order?.Units }}</span>
-            <span class='unit'>{{ order?.Good?.Good?.Good?.Unit }}</span>
+            <span class='unit'>{{ $t(order?.Good?.Good?.Good?.Unit) }}</span>
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_AMOUNT_DUE') }}:</h4>
