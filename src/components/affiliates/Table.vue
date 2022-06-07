@@ -17,7 +17,7 @@
           <div v-for='summary in myProps.row.Summaries' :key='summary.CoinTypeID'>
             <span>{{ summary.CoinName }}: </span>
             <span class='sales-number'>{{ summary.Units }}</span>
-            <span> {{ summary.Unit }} / </span>
+            <span> {{ $t(summary.Unit) }} / </span>
             <span class='sales-number'>{{ Math.floor(summary.Amount) }}</span>
             <span> {{ PriceCoinName }}</span>
           </div>
