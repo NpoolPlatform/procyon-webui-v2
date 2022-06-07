@@ -8,7 +8,7 @@
       <div class='full-section'>
         <h4>{{ $t('MSG_AMOUNT') }}:</h4>
         <span class='number'>{{ order?.Order.Order.Units }}</span>
-        <span class='unit'>{{ $t(order?.Good.Good.Good.Unit) }}</span>
+        <span class='unit'>{{ order?.Good?.Good?.Good?.Unit?.length ? $t(order?.Good.Good.Good.Unit) : '' }}</span>
       </div>
       <div class='full-section'>
         <h4>{{ $t('MSG_PAYMENT') }}:</h4>
