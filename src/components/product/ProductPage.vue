@@ -56,7 +56,7 @@
               {{ $t('MSG_MINING_PURCHASE') }}
             </h3>
             <form action='javascript:void(0)' @submit='onSubmit' id='purchase'>
-              <h4>{{ $t('MSG_PURCHASE_AMOUNT') }} {{ $t(good?.Good?.Good?.Unit) }}</h4>
+              <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
               <Input
                 v-model:value='myPurchaseAmount'
                 type='number'
