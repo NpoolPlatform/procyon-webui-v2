@@ -164,6 +164,31 @@
           </li>
         </ul>
       </div>
+      <div id='help' class='product-sidebar-section'>
+        <h3 class='form-title'>
+          {{ $t('MSG_PRODUCT_FAQ') }}
+        </h3>
+        <ul class='product-links'>
+          <li>
+            <a href='https://www.youtube.com/watch?v=xHIXUVhCLMY' target='_blank'>
+              <img class='link-icon' :src='lightbulb'>
+              <span>{{ $t('MSG_PURCHASE_ALEO_METHOD') }}</span>
+            </a>
+          </li>
+          <li>
+            <a href='https://www.youtube.com/watch?v=CW2ndiAvYD0' target='_blank'>
+              <img class='link-icon' :src='lightbulb'>
+              <span>{{ $t('MSG_MOBILE_PURCHASE_ALEO_METHOD') }}</span>
+            </a>
+          </li>
+          <li>
+            <a href='https://procyon-public.s3.ap-northeast-1.amazonaws.com/【Procyon_vip】Aleoマイニング製品の購入方法マニュアル_20220606.pdf'>
+              <img class='link-icon' :src='lightbulb'>
+              <span>{{ $t('MSG_PDF_MANUAL') }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </template>
   </ProductPage>
 </template>
@@ -175,6 +200,7 @@ import { CoinDescriptionUsedFor, useGoodStore, NotificationType, useCoinStore, P
 import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
+import lightbulb from '../../assets/lightbulb.svg'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
