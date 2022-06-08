@@ -47,7 +47,7 @@
           :error='invCodeError'
           message='MSG_INVITATION_CODE_TIP'
           placeholder='MSG_INVITATION_CODE_PLACEHOLDER'
-          :disabled='originInvitationCode?.length > 0 && validateVerificationCode(originInvitationCode)'
+          :disabled='originInvitationCode?.length > 0'
         />
         <div class='row'>
           <div class='agreement-check'>

@@ -1,19 +1,22 @@
 <template>
   <h2>{{ $t('MSG_REFERRAL_CODE') }}</h2>
-  <div class='content-glass invitation-code row'>
-    <span class='content-glass code'>
-      https://procyon.vip/#/invitation?code={{ inspire.InvitationCode?.InvitationCode }}
-    </span>
-    <div class='column justify-center'>
-      <button class='small' @click='onCopyCodeClick'>
-        {{ $t('MSG_COPY_CODE') }}
-      </button>
+  <div class='row'>
+    <div class='content-glass invitation-code row'>
+      <span class='code'>
+        {{ inviteLink }}
+      </span>
+      <div class='column justify-center'>
+        <button class='small' @click='onCopyCodeClick'>
+          {{ $t('MSG_COPY_CODE') }}
+        </button>
+      </div>
     </div>
+    <q-space />
   </div>
 </template>
 
 <script setup lang='ts'>
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { NotificationType, useInspireStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import copy from 'copy-to-clipboard'
@@ -22,6 +25,7 @@ import copy from 'copy-to-clipboard'
 const { t } = useI18n({ useScope: 'global' })
 
 const inspire = useInspireStore()
+const inviteLink = computed(() => 'https://procyon.vip/#/invitation?code=' + (inspire.InvitationCode?.InvitationCode as string))
 
 onMounted(() => {
   if (!inspire.InvitationCode?.InvitationCode?.length) {
@@ -38,7 +42,7 @@ onMounted(() => {
 })
 
 function onCopyCodeClick () {
-  copy(inspire.InvitationCode.InvitationCode as string)
+  copy(inviteLink.value)
 }
 
 </script>
@@ -46,7 +50,6 @@ function onCopyCodeClick () {
 <stype lang='sass' scoped>
 .invitation-code
   margin: 0 auto 0 0 !important
-  max-width: 500px
   font-size: 24px
   font-weight: bold
 
