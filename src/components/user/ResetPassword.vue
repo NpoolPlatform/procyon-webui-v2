@@ -186,8 +186,8 @@ const onSubmit = () => {
     PasswordHash: encryptPassword(password.value),
     Message: {
       Error: {
-        Title: t('MSG_SET_WITHDRAW_ADDRESS'),
-        Message: t('MSG_SET_WITHDRAW_ADDRESS_FAIL'),
+        Title: t('MSG_RESET_PASSWORD'),
+        Message: t('MSG_RESET_PASSWORD_FAIL'),
         Popup: true,
         Type: NotificationType.Error
       }
