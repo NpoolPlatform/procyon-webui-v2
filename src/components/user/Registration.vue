@@ -47,6 +47,7 @@
           :error='invCodeError'
           message='MSG_INVITATION_CODE_TIP'
           placeholder='MSG_INVITATION_CODE_PLACEHOLDER'
+          :disabled='originInvitationCode?.length > 0 && validateVerificationCode(originInvitationCode)'
         />
         <div class='row'>
           <div class='agreement-check'>
@@ -109,9 +110,17 @@ import {
   encryptPassword,
   AccountType
 } from 'npool-cli-v2'
-import { defineAsyncComponent, ref } from 'vue'
+import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+
+interface Query {
+  code: string
+}
+
+const route = useRoute()
+const query = computed(() => route.query as unknown as Query)
+const originInvitationCode = computed(() => query.value.code)
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -145,7 +154,7 @@ const onConfirmPasswordFocusOut = () => {
                              password.value !== confirmPassword.value
 }
 
-const invitationCode = ref('')
+const invitationCode = ref(originInvitationCode.value)
 const invCodeError = ref(false)
 
 const agree = ref(false)

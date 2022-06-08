@@ -18,6 +18,7 @@
     v-model='myValue'
     @focus='onFocus'
     @blur='onBlur'
+    :disabled='disabled'
   >
   <div class='error-message'>
     <span>{{ error ? $t(message) : '' }}</span>
@@ -41,6 +42,7 @@ interface Props {
   max?: number
   min?: number
   autocomplete?: boolean
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -49,7 +51,8 @@ const props = withDefaults(defineProps<Props>(), {
   name: undefined,
   caption: undefined,
   max: undefined,
-  min: undefined
+  min: undefined,
+  disabled: false
 })
 const label = toRef(props, 'label')
 const type = toRef(props, 'type')

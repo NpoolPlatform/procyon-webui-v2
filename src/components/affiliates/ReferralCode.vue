@@ -1,7 +1,9 @@
 <template>
   <h2>{{ $t('MSG_REFERRAL_CODE') }}</h2>
   <div class='content-glass invitation-code row'>
-    <span class='content-glass code'>{{ inspire.InvitationCode?.InvitationCode }}</span>
+    <span class='content-glass code'>
+      https://procyon.vip/#/invitation?code={{ inspire.InvitationCode?.InvitationCode }}
+    </span>
     <div class='column justify-center'>
       <button class='small' @click='onCopyCodeClick'>
         {{ $t('MSG_COPY_CODE') }}
@@ -36,7 +38,7 @@ onMounted(() => {
 })
 
 function onCopyCodeClick () {
-  copy(inspire.InvitationCode.InvitationCode)
+  copy(inspire.InvitationCode.InvitationCode as string)
 }
 
 </script>

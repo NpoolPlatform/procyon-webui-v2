@@ -61,6 +61,18 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        path: 'invitation',
+        component: () => import('pages/Registration.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false
+        }
+      }, {
         path: 'signin',
         component: () => import('pages/Signin.vue'),
         meta: {
