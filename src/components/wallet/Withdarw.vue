@@ -142,7 +142,7 @@ const selectedAccount = ref(undefined as unknown as WithdrawAccount)
 
 const earning = ref(0)
 const withdrawedEarning = ref(0)
-const balance = computed(() => Math.floor((earning.value - withdrawedEarning.value) * 10000 / 10000))
+const balance = computed(() => Math.floor((earning.value - withdrawedEarning.value) * 10000) / 10000)
 
 const benefit = useBenefitStore()
 
