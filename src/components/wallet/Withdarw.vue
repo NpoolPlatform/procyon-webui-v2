@@ -14,7 +14,7 @@
             <div class='info-flex'>
               <div class='three-section'>
                 <h4>{{ $t('MSG_AVAILABLE_FOR_WITHDRAWAL') }}:</h4>
-                <span class='number'>{{ (earning - withdrawedEarning).toFixed(4) }}</span>
+                <span class='number'>{{ balance }}</span>
                 <span class='unit'>{{ coin.Unit }}</span>
               </div>
               <div class='three-section'>
@@ -33,7 +33,7 @@
                   message='MSG_AMOUNT_TIP'
                   placeholder='MSG_AMOUNT_PLACEHOLDER'
                   :min='0'
-                  :max='earning - withdrawedEarning'
+                  :max='balance'
                   @focus='onAmountFocusIn'
                   @blur='onAmountFocusOut'
                 />
@@ -142,6 +142,7 @@ const selectedAccount = ref(undefined as unknown as WithdrawAccount)
 
 const earning = ref(0)
 const withdrawedEarning = ref(0)
+const balance = computed(() => Math.floor((earning.value - withdrawedEarning.value) * 10000 / 10000))
 
 const benefit = useBenefitStore()
 
