@@ -49,6 +49,7 @@ onMounted(() => {
 <style lang='sass' scoped>
 .main
   min-height: 400px
+  width: 100%
 
 .special
   font-family: 'Noto Sans JP'
