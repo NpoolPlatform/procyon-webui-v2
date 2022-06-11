@@ -118,7 +118,7 @@ const onAmountFocusIn = () => {
   amountError.value = false
 }
 const onAmountFocusOut = () => {
-  amountError.value = !amount.value || amount.value + feeAmount.value >= (earning.value - withdrawedEarning.value)
+  amountError.value = !amount.value || amount.value >= (earning.value - withdrawedEarning.value)
 }
 
 const withdrawType = ref(WithdrawType.Commission)
@@ -151,7 +151,7 @@ const onSubmit = () => {
     return
   }
 
-  amountError.value = !amount.value || amount.value + feeAmount.value >= (earning.value - withdrawedEarning.value)
+  amountError.value = !amount.value || amount.value > (earning.value - withdrawedEarning.value)
   if (amountError.value) {
     return
   }
