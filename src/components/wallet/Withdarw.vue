@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ verifing ? "blur" : "" ]'>
+  <div :class='[ verifing || showReviewing || showWaiting ? "blur" : "" ]'>
     <BackPage>
       <div class='content order-page'>
         <div class='product-container content-glass'>
@@ -82,6 +82,52 @@
       />
     </div>
   </q-dialog>
+  <q-dialog
+    v-model='showReviewing'
+    seamless
+    maximized
+  >
+    <div class='product-container content-glass'>
+      <div class='popup'>
+        <div class='form-container content-glass'>
+          <div class='confirmation'>
+            <h3>{{ $t('MSG_WITHDRAW_UNDER_REVIEW_TITLE') }}</h3>
+            <p v-html='$t("MSG_WITHDRAW_UNDER_REVIEW_CONTENT_1")' />
+            <div class='warning'>
+              <img :src='warning'>
+              <span v-html='$t("MSG_WITHDRAW_UNDER_REVIEW_CONTENT_2")' />
+            </div>
+            <button @click='onStateTipBtnClick'>
+              {{ $t('MSG_I_UNDERSTAND') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </q-dialog>
+  <q-dialog
+    v-model='showWaiting'
+    seamless
+    maximized
+  >
+    <div class='product-container content-glass'>
+      <div class='popup'>
+        <div class='form-container content-glass'>
+          <div class='confirmation'>
+            <h3>{{ $t('MSG_WITHDRAW_WAITING_TITLE') }}</h3>
+            <p v-html='$t("MSG_WITHDRAW_WAITING_CONTENT_1")' />
+            <div class='warning'>
+              <img :src='warning'>
+              <span v-html='$t("MSG_WITHDRAW_WAITING_CONTENT_2")' />
+            </div>
+            <button @click='onStateTipBtnClick'>
+              {{ $t('MSG_I_UNDERSTAND') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
@@ -96,13 +142,16 @@ import {
   NotificationType,
   useTransactionStore,
   WithdrawType,
-  useBenefitStore
+  useBenefitStore,
+  UserWithdrawState,
+  ReviewState
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
+import warning from 'src/assets/warning.svg'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -112,6 +161,9 @@ const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'
 const { t } = useI18n({ useScope: 'global' })
 
 const verifing = ref(false)
+const showReviewing = ref(false)
+const showWaiting = ref(true)
+
 const amount = ref(0)
 const amountError = ref(false)
 const onAmountFocusIn = () => {
@@ -185,12 +237,19 @@ const onCodeVerify = (code: string) => {
         Type: NotificationType.Error
       }
     }
-  }, (error: boolean) => {
+  }, (error: boolean, withdraw: UserWithdrawState) => {
     if (!error) {
-      void router.back()
+      showReviewing.value = withdraw.State === ReviewState.Wait
+      showWaiting.value = withdraw.State === ReviewState.Approved
     }
   })
   verifing.value = false
+}
+
+const onStateTipBtnClick = () => {
+  void router.back()
+  showWaiting.value = false
+  showReviewing.value = false
 }
 
 onMounted(() => {

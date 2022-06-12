@@ -121,7 +121,7 @@ const getBenefits = () => {
     })
   })
 
-  if (!commissionIncluded && commissionCoin.value) {
+  if (!commissionIncluded && commissionCoin.value && commission.value.Balance > 0) {
     const myBenefit = {
       CoinTypeID: commissionCoin.value.CoinTypeID,
       Balance: commission.value.Balance,
