@@ -136,9 +136,7 @@ import {
   NotificationType,
   useTransactionStore,
   WithdrawType,
-  useBenefitStore,
-  UserWithdrawState,
-  ReviewState
+  useBenefitStore
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -230,17 +228,15 @@ const onCodeVerify = (code: string) => {
         Type: NotificationType.Error
       }
     }
-  }, (error: boolean, withdraw: UserWithdrawState) => {
+  }, (error: boolean) => {
     if (!error) {
-      showReviewing.value = withdraw.State === ReviewState.Wait
-      showWaiting.value = withdraw.State === ReviewState.Approved
+      void router.back()
     }
   })
   verifing.value = false
 }
 
 const onStateTipBtnClick = () => {
-  void router.back()
   showWaiting.value = false
   showReviewing.value = false
 }
