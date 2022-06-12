@@ -93,10 +93,7 @@
           <div class='confirmation'>
             <h3>{{ $t('MSG_WITHDRAW_UNDER_REVIEW_TITLE') }}</h3>
             <p v-html='$t("MSG_WITHDRAW_UNDER_REVIEW_CONTENT_1")' />
-            <div class='warning'>
-              <img :src='warning'>
-              <span v-html='$t("MSG_WITHDRAW_UNDER_REVIEW_CONTENT_2")' />
-            </div>
+            <p v-html='$t("MSG_WITHDRAW_UNDER_REVIEW_CONTENT_2")' />
             <button @click='onStateTipBtnClick'>
               {{ $t('MSG_I_UNDERSTAND') }}
             </button>
@@ -116,10 +113,7 @@
           <div class='confirmation'>
             <h3>{{ $t('MSG_WITHDRAW_WAITING_TITLE') }}</h3>
             <p v-html='$t("MSG_WITHDRAW_WAITING_CONTENT_1")' />
-            <div class='warning'>
-              <img :src='warning'>
-              <span v-html='$t("MSG_WITHDRAW_WAITING_CONTENT_2")' />
-            </div>
+            <p v-html='$t("MSG_WITHDRAW_WAITING_CONTENT_2")' />
             <button @click='onStateTipBtnClick'>
               {{ $t('MSG_I_UNDERSTAND') }}
             </button>
@@ -151,7 +145,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
-import warning from 'src/assets/warning.svg'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -162,7 +155,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const verifing = ref(false)
 const showReviewing = ref(false)
-const showWaiting = ref(false)
+const showWaiting = ref(true)
 
 const amount = ref(0)
 const amountError = ref(false)
