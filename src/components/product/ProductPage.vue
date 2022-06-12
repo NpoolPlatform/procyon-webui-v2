@@ -95,6 +95,10 @@
                   :waiting='submitting'
                 />
               </div>
+              <div class='warning' v-if='paymentCoin?.Unit?.length && !paymentCoin?.Unit?.includes(PriceCoinName) && !paymentCoin?.Name?.includes(PriceCoinName)'>
+                <img :src='warning'>
+                <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
+              </div>
             </form>
           </div>
           <slot name='sidebar' />
@@ -123,6 +127,8 @@ import { useI18n } from 'vue-i18n'
 import { throttle } from 'quasar'
 import { ThrottleSeconds } from 'src/const/const'
 import { useRouter } from 'vue-router'
+
+import warning from 'src/assets/warning.svg'
 
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
