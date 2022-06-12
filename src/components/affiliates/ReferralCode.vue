@@ -54,6 +54,7 @@ function onCopyCodeClick () {
   font-weight: bold
 
 .code
+  word-break: break-all
   margin: 0 32px 0 0 !important
   line-height: 32px
   padding: 4px 32px 4px 32px !important
