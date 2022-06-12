@@ -162,7 +162,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const verifing = ref(false)
 const showReviewing = ref(false)
-const showWaiting = ref(true)
+const showWaiting = ref(false)
 
 const amount = ref(0)
 const amountError = ref(false)

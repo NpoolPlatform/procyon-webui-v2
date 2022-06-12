@@ -26,7 +26,7 @@
           {{ myProps.row.JPYValue.toFixed(4) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps'>
-          <button class='small' @click='onWithdrawClick(myProps.row)'>
+          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Total <= 0.0001'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
         </q-td>
