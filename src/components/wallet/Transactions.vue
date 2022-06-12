@@ -23,7 +23,7 @@
           {{ myProps.row.State }}
         </q-td>
         <q-td key='Type' :props='myProps'>
-          Withdrawal
+          {{ $t('MSG_WITHDRAWAL') }}
         </q-td>
       </q-tr>
     </template>
