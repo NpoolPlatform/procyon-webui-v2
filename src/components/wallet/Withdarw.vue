@@ -136,7 +136,8 @@ import {
   NotificationType,
   useTransactionStore,
   WithdrawType,
-  useBenefitStore
+  useBenefitStore,
+  ReviewState
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -180,7 +181,9 @@ const feeAmount = ref(0)
 const transaction = useTransactionStore()
 
 const accounts = useAccountStore()
-const withdraws = computed(() => accounts.Accounts.filter((account) => account.Account?.CoinTypeID === coinTypeId.value))
+const withdraws = computed(() => accounts.Accounts.filter((account) => {
+  return account.Account?.CoinTypeID === coinTypeId.value && account.State === ReviewState.Approved
+}))
 const selectedAccount = ref(undefined as unknown as WithdrawAccount)
 
 const earning = ref(0)
