@@ -25,7 +25,7 @@
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
-        <span class='value'>{{ totalUnits }} {{ goodUnit }}</span>
+        <span class='value'>{{ totalUnits }} {{ $t(goodUnit) }}</span>
       </div>
     </div>
     <q-slide-transition>
