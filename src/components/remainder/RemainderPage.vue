@@ -4,7 +4,7 @@
       <div class='form-container'>
         <div class='confirmation'>
           <h3>{{ $t(label) }}</h3>
-          <p> {{ $t(caption) }}</p>
+          <p v-html='$t(caption)' />
           <div class='hr' />
           <button @click='onSubmit'>
             {{ $t(submitText) }}
