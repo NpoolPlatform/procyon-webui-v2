@@ -6,7 +6,7 @@
         {{ order?.PayWithCoin.Name }} | <strong>{{ order?.Order.Order.ID }}</strong>
       </h3>
       <div class='full-section'>
-        <h4>{{ $t('MSG_AMOUNT') }}:</h4>
+        <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}:</h4>
         <span class='number'>{{ order?.Order.Order.Units }}</span>
         <span class='unit'>{{ order?.Good?.Good?.Good?.Unit?.length ? $t(order?.Good.Good.Good.Unit) : '' }}</span>
       </div>
