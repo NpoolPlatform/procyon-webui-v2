@@ -48,7 +48,8 @@ import {
   BenefitModel,
   totalWithdrawedEarningCoin,
   useKYCStore,
-  CommissionCoinSetting
+  CommissionCoinSetting,
+  ReviewState
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -272,7 +273,7 @@ const onWithdrawClick = (asset: BenefitModel) => {
       void router.push({ path: '/kyc' })
       return
     }
-    if (!kyc.KYC.Kyc) {
+    if (!kyc.KYC.Kyc || kyc.KYC.State !== ReviewState.Approved) {
       void router.push({ path: '/kyc' })
       return
     }
