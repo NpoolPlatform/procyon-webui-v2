@@ -61,7 +61,7 @@ const table = computed(() => [
   },
   {
     name: 'Amount',
-    label: t('MSG_WITHDRAW_AMOUNT'),
+    label: t('MSG_TRANSACTION_AMOUNT'),
     align: 'center',
     field: 'Amount'
   },
