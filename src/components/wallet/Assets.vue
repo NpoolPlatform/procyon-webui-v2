@@ -228,19 +228,17 @@ onMounted(() => {
     })
   }
 
-  if (benefit.Commission.Total === 0) {
-    benefit.getCommission({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COMMISSION_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+  benefit.getCommission({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COMMISSION_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
       }
-    }, () => {
-      getBenefits()
-    })
-  }
+    }
+  }, () => {
+    getBenefits()
+  })
 
   if (!commissionCoin.value) {
     benefit.getCommissionCoinSettings({
