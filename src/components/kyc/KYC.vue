@@ -327,7 +327,7 @@ const stateText = computed(() => {
 const logined = useLoginedUserStore()
 const rejectedReason = computed(() => kyc.KYC?.Message)
 const updatable = computed(() => {
-  return (state.value === ReviewState.Rejected || !state.value) &&
+  const u = (state.value === ReviewState.Rejected || !state.value) &&
         logined.LoginedUser?.Extra?.FirstName?.length &&
         logined.LoginedUser?.Extra?.LastName?.length &&
         logined.LoginedUser?.Extra?.Gender?.length &&
@@ -340,6 +340,7 @@ const updatable = computed(() => {
         logined.LoginedUser?.Extra?.AddressFields[3].length &&
         logined.LoginedUser?.Extra?.AddressFields[4].length &&
         logined.LoginedUser?.Extra?.AddressFields[5].length
+  return u !== undefined ? u as unknown as boolean : false
 })
 
 onMounted(() => {
