@@ -333,13 +333,11 @@ const updatable = computed(() => {
         logined.LoginedUser?.Extra?.Gender?.length &&
         logined.LoginedUser?.Extra?.Username?.length &&
         logined.LoginedUser?.Extra?.PostalCode?.length &&
-        logined.LoginedUser?.Extra?.AddressFields?.length === 6 &&
+        logined.LoginedUser?.Extra?.AddressFields?.length === 5 &&
         logined.LoginedUser?.Extra?.AddressFields[0].length &&
         logined.LoginedUser?.Extra?.AddressFields[1].length &&
         logined.LoginedUser?.Extra?.AddressFields[2].length &&
-        logined.LoginedUser?.Extra?.AddressFields[3].length &&
-        logined.LoginedUser?.Extra?.AddressFields[4].length &&
-        logined.LoginedUser?.Extra?.AddressFields[5].length
+        logined.LoginedUser?.Extra?.AddressFields[3].length
   return u !== undefined ? u as unknown as boolean : false
 })
 

@@ -112,7 +112,7 @@
             label='MSG_STREET2'
             type='text'
             id='street2'
-            required
+            :required='false'
             :error='street2Error'
             message='MSG_STREET2_TIP'
             placeholder='MSG_STREET2_PLACEHOLDER'
