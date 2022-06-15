@@ -346,11 +346,13 @@ const updatable = computed(() => {
 onMounted(() => {
   kyc.getKYC({
     Message: {
+      /*
       Error: {
         Title: t('MSG_GET_KYC_FAIL'),
         Popup: true,
         Type: NotificationType.Error
       }
+      */
     }
   }, () => {
     if (kyc.KYC?.Kyc?.CardType?.length) {
