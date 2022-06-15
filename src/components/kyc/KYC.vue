@@ -352,7 +352,11 @@ onMounted(() => {
       }
       */
     }
-  }, () => {
+  }, (error: boolean) => {
+    if (error) {
+      return
+    }
+
     if (kyc.KYC?.Kyc?.CardType?.length) {
       types.value.forEach((t) => {
         if (t.value === kyc.KYC?.Kyc?.CardType) {

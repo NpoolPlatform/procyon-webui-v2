@@ -260,11 +260,13 @@ const router = useRouter()
 const onWithdrawClick = (asset: BenefitModel) => {
   kyc.getKYC({
     Message: {
+      /*
       Error: {
         Title: t('MSG_GET_KYCS_FAIL'),
         Popup: true,
         Type: NotificationType.Error
       }
+      */
     }
   }, (error: boolean) => {
     if (error) {

@@ -108,11 +108,13 @@ const remainder = () => {
 
   kyc.getKYC({
     Message: {
+      /*
       Error: {
         Title: t('MSG_GET_KYC_FAIL'),
         Popup: true,
         Type: NotificationType.Error
       }
+      */
     }
   }, (error: boolean) => {
     if (error || !kyc.KYC?.Kyc || kyc.KYC.State === ReviewState.Rejected) {
