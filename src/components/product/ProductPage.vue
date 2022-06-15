@@ -95,7 +95,7 @@
                   :waiting='submitting'
                 />
               </div>
-              <div class='warning' v-if='paymentCoin?.Unit?.length && !paymentCoin?.Unit?.includes(PriceCoinName) && !paymentCoin?.Name?.includes(PriceCoinName)'>
+              <div class='warning' v-if='showRateTip'>
                 <img :src='warning'>
                 <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
               </div>
@@ -151,6 +151,13 @@ const projectClass = toRef(props, 'projectClass')
 const bgImg = toRef(props, 'bgImg')
 const customizeInfo = toRef(props, 'customizeInfo')
 const purchaseAmount = toRef(props, 'purchaseAmount')
+
+const showRateTip = computed(() => {
+  return paymentCoin.value?.Unit?.length &&
+        !paymentCoin.value?.Unit?.includes(PriceCoinName) &&
+        !paymentCoin.value?.Name?.includes(PriceCoinName) &&
+        !paymentCoin.value?.Unit?.includes('BUSD')
+})
 
 const coin = useCoinStore()
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV))
