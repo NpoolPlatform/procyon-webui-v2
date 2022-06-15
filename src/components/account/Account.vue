@@ -188,7 +188,7 @@ const onFirstNameFocusIn = () => {
   firstNameError.value = false
 }
 const onFirstNameFocusOut = () => {
-  firstNameError.value = firstName.value.length === 0
+  firstNameError.value = !firstName.value?.length
 }
 
 const lastName = ref(logined.LoginedUser?.Extra?.LastName as string)
@@ -197,7 +197,7 @@ const onLastNameFocusIn = () => {
   lastNameError.value = false
 }
 const onLastNameFocusOut = () => {
-  lastNameError.value = lastName.value.length === 0
+  lastNameError.value = !lastName.value?.length
 }
 
 const postalCode = ref(logined.LoginedUser?.Extra?.PostalCode as string)
@@ -251,9 +251,9 @@ const street2Error = ref(false)
 const user = useUserStore()
 
 const onSubmit = () => {
-  usernameError.value = !username.value.length
-  firstNameError.value = !firstName.value.length
-  lastNameError.value = !lastName.value.length
+  usernameError.value = !username.value?.length
+  firstNameError.value = !firstName.value?.length
+  lastNameError.value = !lastName.value?.length
 
   if (usernameError.value || firstNameError.value || lastNameError.value) {
     return
