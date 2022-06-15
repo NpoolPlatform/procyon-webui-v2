@@ -276,6 +276,12 @@ const onSubmit = () => {
           Message: t('MSG_CREATE_EXTRA_FAIL'),
           Popup: true,
           Type: NotificationType.Error
+        },
+        Info: {
+          Title: t('MSG_CREATE_EXTRA'),
+          Message: t('MSG_CREATE_EXTRA_SUCCESS'),
+          Popup: true,
+          Type: NotificationType.Info
         }
       }
     }, () => {
@@ -299,6 +305,12 @@ const onSubmit = () => {
         Message: t('MSG_UPDATE_EXTRA_FAIL'),
         Popup: true,
         Type: NotificationType.Error
+      },
+      Info: {
+        Title: t('MSG_UPDATE_EXTRA'),
+        Message: t('MSG_UPDATE_EXTRA_SUCCESS'),
+        Popup: true,
+        Type: NotificationType.Info
       }
     }
   }, () => {
