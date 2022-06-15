@@ -281,7 +281,7 @@ const onSubmit = () => {
           Title: t('MSG_CREATE_EXTRA'),
           Message: t('MSG_CREATE_EXTRA_SUCCESS'),
           Popup: true,
-          Type: NotificationType.Info
+          Type: NotificationType.Success
         }
       }
     }, () => {
@@ -310,7 +310,7 @@ const onSubmit = () => {
         Title: t('MSG_UPDATE_EXTRA'),
         Message: t('MSG_UPDATE_EXTRA_SUCCESS'),
         Popup: true,
-        Type: NotificationType.Info
+        Type: NotificationType.Success
       }
     }
   }, () => {
