@@ -72,7 +72,7 @@
             label='MSG_POSTAL_CODE'
             type='text'
             id='postal-code'
-            :required='false'
+            required
             :error='postalCodeError'
             message='MSG_POSTAL_CODE_TIP'
             placeholder='MSG_POSTAL_CODE_PLACEHOLDER'
@@ -85,7 +85,7 @@
             label='MSG_PROVINCE'
             type='text'
             id='province'
-            :required='false'
+            required
             :error='provinceError'
             message='MSG_PROVINCE_TIP'
             placeholder='MSG_PROVINCE_PLACEHOLDER'
@@ -99,7 +99,7 @@
             label='MSG_STREET1'
             type='text'
             id='street1'
-            :required='false'
+            required
             :error='street1Error'
             message='MSG_STREET1_TIP'
             placeholder='MSG_STREE1_PLACEHOLDER'
@@ -112,7 +112,7 @@
             label='MSG_STREET2'
             type='text'
             id='street2'
-            :required='false'
+            required
             :error='street2Error'
             message='MSG_STREET2_TIP'
             placeholder='MSG_STREET2_PLACEHOLDER'
@@ -126,7 +126,7 @@
             label='MSG_CITY'
             type='text'
             id='city'
-            :required='false'
+            required
             :error='cityError'
             message='MSG_CITY'
             placeholder='MSG_CITY_PLACEHOLDER'
@@ -139,7 +139,7 @@
             label='MSG_COUNTRY'
             type='text'
             id='country'
-            :required='false'
+            required
             :error='countryError'
             message='MSG_COUNTRY_TIP'
             placeholder='MSG_COUNTRY_PLACEHOLDER'

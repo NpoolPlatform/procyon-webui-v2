@@ -1,4 +1,5 @@
 <template>
+  <Account />
   <div class='content'>
     <h2>{{ $t('MSG_KYC_VERIFICATION_STATUS') }}</h2>
     <div class='content-glass kyc-status'>
@@ -97,7 +98,7 @@
 <script setup lang='ts'>
 import { onMounted, computed, ref, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NotificationType, useKYCStore, ReviewState, DocumentType, ImageType, KYCImage, Message } from 'npool-cli-v2'
+import { NotificationType, useKYCStore, ReviewState, DocumentType, ImageType, KYCImage, Message, useLoginedUserStore } from 'npool-cli-v2'
 import { uid } from 'quasar'
 
 import kycNotVerified from 'src/assets/kyc-not-verified.svg'
@@ -110,6 +111,7 @@ import kycSelfieID from 'src/assets/kyc-selfie-id.svg'
 
 const DragableImg = defineAsyncComponent(() => import('src/components/image/DragableImg.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
+const Account = defineAsyncComponent(() => import('src/components/account/Account.vue'))
 
 const kyc = useKYCStore()
 
@@ -321,8 +323,24 @@ const stateText = computed(() => {
   }
   return 'MSG_NOT_VERIFIED'
 })
+
+const logined = useLoginedUserStore()
 const rejectedReason = computed(() => kyc.KYC?.Message)
-const updatable = computed(() => (state.value === ReviewState.Rejected || !state.value))
+const updatable = computed(() => {
+  return (state.value === ReviewState.Rejected || !state.value) &&
+        logined.LoginedUser?.Extra?.FirstName?.length &&
+        logined.LoginedUser?.Extra?.LastName?.length &&
+        logined.LoginedUser?.Extra?.Gender?.length &&
+        logined.LoginedUser?.Extra?.Username?.length &&
+        logined.LoginedUser?.Extra?.PostalCode?.length &&
+        logined.LoginedUser?.Extra?.AddressFields?.length === 6 &&
+        logined.LoginedUser?.Extra?.AddressFields[0].length &&
+        logined.LoginedUser?.Extra?.AddressFields[1].length &&
+        logined.LoginedUser?.Extra?.AddressFields[2].length &&
+        logined.LoginedUser?.Extra?.AddressFields[3].length &&
+        logined.LoginedUser?.Extra?.AddressFields[4].length &&
+        logined.LoginedUser?.Extra?.AddressFields[5].length
+})
 
 onMounted(() => {
   kyc.getKYC({
@@ -383,4 +401,12 @@ onMounted(() => {
 <style lang='sass' scoped>
 .kyc-confirmation
   background: none
+
+.form-container
+  max-width: 100%
+  min-width: 80%
+  margin: 0
+  padding: 48px
+  max-height: 80%
+  overflow: scroll
 </style>

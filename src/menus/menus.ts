@@ -16,7 +16,7 @@ import dashboard from '../assets/icon-mining.svg'
 import wallet from '../assets/icon-wallet.svg'
 import affiliates from '../assets/icon-affiliates.svg'
 import security from '../assets/icon-security.svg'
-import account from '../assets/icon-account.svg'
+// import account from '../assets/icon-account.svg'
 import kyc from '../assets/icon-kyc.svg'
 
 const BaseMenu = {
@@ -59,7 +59,7 @@ const BaseMenu = {
       target: '/security',
       level: 0,
       children: []
-    }, {
+    }, /* {
       menuId: uid(),
       label: 'MSG_ACCOUNT',
       caption: '',
@@ -67,9 +67,9 @@ const BaseMenu = {
       target: '/account',
       level: 0,
       children: []
-    }, {
+    }, */ {
       menuId: uid(),
-      label: 'MSG_KYC',
+      label: 'MSG_PERSONAL_INFO',
       caption: '',
       icon: 'img:' + kyc,
       target: '/kyc',

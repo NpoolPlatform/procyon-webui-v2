@@ -87,7 +87,7 @@
     seamless
     maximized
   >
-    <div class='product-container content-glass'>
+    <div class='product-container content-glass popup-container'>
       <div class='popup'>
         <div class='form-container content-glass'>
           <div class='confirmation'>
@@ -107,7 +107,7 @@
     seamless
     maximized
   >
-    <div class='product-container content-glass'>
+    <div class='product-container content-glass popup-container'>
       <div class='popup'>
         <div class='form-container content-glass'>
           <div class='confirmation'>

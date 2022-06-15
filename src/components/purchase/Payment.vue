@@ -84,7 +84,7 @@
     seamless
     maximized
   >
-    <div class='product-container'>
+    <div class='product-container content-glass popup-container'>
       <div class='popup'>
         <PaymentState
           :order-id='query.orderId'
@@ -103,7 +103,7 @@
     seamless
     maximized
   >
-    <div class='product-container content-glass'>
+    <div class='product-container content-glass popup-container'>
       <div class='popup'>
         <div class='form-container content-glass'>
           <div class='confirmation'>
@@ -127,7 +127,7 @@
     seamless
     maximized
   >
-    <div class='product-container content-glass'>
+    <div class='product-container content-glass popup-container'>
       <div class='popup'>
         <div class='form-container content-glass'>
           <div class='confirmation'>
