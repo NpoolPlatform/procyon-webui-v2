@@ -1,15 +1,13 @@
 <template>
   <h2>{{ $t('MSG_REFERRAL_CODE') }}</h2>
-  <div class='row'>
-    <div class='content-glass invitation-code row'>
-      <span class='code'>
+  <div class='ref-box content-glass'>
+    <div class='ref-box-inner'>
+      <span class='referral-code'>
         {{ inviteLink }}
       </span>
-      <div class='column justify-center'>
-        <button class='small' @click='onCopyCodeClick'>
-          {{ $t('MSG_COPY_CODE') }}
-        </button>
-      </div>
+      <button @click='onCopyCodeClick'>
+        {{ $t('MSG_COPY_CODE') }}
+      </button>
     </div>
     <q-space />
   </div>

@@ -2291,6 +2291,8 @@ h3.mining-title
 
 .detailed-summary
   font-size: 16px
+  margin: 0 0 24px 0
+  width: 100%
 
 
 .detailed-summary .line
@@ -2330,28 +2332,31 @@ h3.mining-title
   @media (max-width: $breakpoint-sm-max)
     justify-content: space-between
 
-.mining-summary .buttons button
+.mining-summary .buttons button,
+.mining-summary .buttons button.alt
+  margin: 18px 0 0 0
+  width: 100%
   @media (max-width: $breakpoint-sm-max)
     margin: 24px 12px
 
-.mining-summary .buttons button:first-of-type
+.buttons button:first-of-type
   margin-left: 0
 
-.mining-summary .buttons button:last-of-type
+.buttons button:last-of-type
   margin-right: 0
 
-.mining-summary .buttons button.show-more
+.buttons button.show-more
   border: 1px solid #a1d0d0
   margin: auto auto auto 0
   opacity: .7
 
-.mining-summary .buttons button.show-more img
+.buttons button.show-more img
   filter: invert(89%) sepia(25%) saturate(304%) hue-rotate(126deg) brightness(87%) contrast(89%)
   height: 18px
   width: 18px
   transition: all ease-in-out .2s
 
-.mining-summary .buttons button.open img
+.buttons button.open img
   transform: rotate(-180deg)
 
 .add-mining
@@ -2374,7 +2379,257 @@ h3.mining-title
   box-shadow: 8px 8px 20px 0 #23292b
   opacity: .8
 
+/* AFFILIATES PAGE */
+.ref-box
+  display: inline-block
+  margin-top: 0
 
+
+.ref-box-inner
+  align-items: center
+  display: flex
+  flex-wrap: wrap
+
+
+.ref-box .referral-code
+  background: #ffffff22
+  border-radius: 18px
+  display: inline-block
+  font-size: 18px
+  font-weight: 700
+  height: 48px
+  margin: 0 18px 0 0
+  padding: 12px
+  text-align: center
+
+
+.ref-box button
+  margin: 0
+
+
+.aff-tree
+  display: flex
+  flex-wrap: wrap
+
+
+.affiliate
+  align-items: center
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+  margin: 0
+  position: relative
+  width: 100%
+  z-index: 10
+
+
+.child
+  margin-top: 60px
+  margin-left: 40px
+  position: relative
+  width: calc(100% - 40px)
+  z-index: 1
+
+
+.first-child::before
+  height: calc(100% + 120px) !important
+  top: -60px !important
+
+
+.last-child::before
+  height: 40px !important
+
+
+.child::before
+  background: #1ec498
+  content: ""
+  display: block
+  position: absolute
+  top: 0
+  left: -20px
+  height: calc(100% + 60px)
+  width: 1px
+  z-index: -1
+
+
+.child::after
+  background: #1ec498
+  content: ""
+  display: block
+  position: absolute
+  top: 40px
+  left: -20px
+  height: 1px
+  width: 20px
+  z-index: -1
+
+
+.aff-top
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+  padding: 0 0 12px 0
+  position: relative
+  width: 100%
+
+
+.aff-top::after
+  background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
+  display: block
+  content: ""
+  position: absolute
+  left: 0
+  bottom: 0
+  height: 1px
+  width: 100%
+
+
+.aff-name
+  color: #1ec498 !important
+  filter: contrast(2)
+  font-size: 24px !important
+  margin: 0
+  width: 100%
+
+
+.aff-email
+  font-size: 18px
+  @media (max-width: $breakpoint-sm-max)
+    font-size: 16px
+
+#commission-table th:nth-child(3),
+#commission-table td:nth-child(3),
+#commission-table th:nth-child(4),
+#commission-table td:nth-child(4),
+#direct-ref-table th:nth-child(2),
+#direct-ref-table td:nth-child(2)
+  @media (max-width: $breakpoint-sm-max)
+    display: none
+
+.aff-table
+  overflow: visible
+  margin: 0 0 8px 0
+  padding: 0 0 8px 0
+  width: 100%
+
+
+.aff-table table
+  border-spacing: 0
+  width: 100%
+
+
+.aff-table th
+  border-bottom: 1px solid #a1d0d044
+  font-size: 14px
+  font-weight: 400
+  height: 48px
+  padding: 8px 16px
+
+
+.aff-table th .tooltip
+  justify-content: center
+
+
+.aff-table th:first-child .tooltip
+  justify-content: flex-start
+
+
+.aff-table th:last-child .tooltip
+  justify-content: flex-end
+
+
+.aff-table th .tooltip span
+  font-size: 14px
+  margin: 0 4px 0 0
+  text-transform: capitalize
+  white-space: nowrap
+
+
+.aff-table td
+  border-bottom: 1px dashed #a1d0d077
+  font-size: 14px
+  height: 48px
+  padding: 8px 16px
+  text-align: center
+  white-space: nowrap
+
+
+.aff-table th:first-child,
+.aff-table td:first-child
+  text-align: left
+
+
+.aff-table th:last-child,
+.aff-table td:last-child
+  text-align: right
+
+
+.aff-info .unit
+  color: #e4f4f0
+  font-size: 12px
+
+
+.aff-product
+  font-size: 16px
+  font-weight: 700
+
+
+.aff-number
+  color: #1ec498
+  filter: contrast(2)
+  font-size: 16px
+  font-weight: 700
+  margin: 0 0 0 4px
+
+
+.aff-table .edit-button
+  filter: opacity(.8)
+  cursor: pointer
+  margin: 0 0 0 4px
+  width: 18px
+  transition: all ease-in-out .3s
+  vertical-align: bottom
+
+
+.aff-table .edit-button:hover
+  filter: opacity(1)
+
+
+.aff-table button
+  border-radius: 8px
+  font-size: 14px
+  height: auto
+  margin: 0 4px
+  min-width: 56px
+  padding: 4px 8px
+
+
+.aff-table button:hover
+  border-radius: 4px
+
+
+.aff-info input
+  border-radius: 8px
+  font-size: 14px
+  height: auto
+  margin: 0
+  padding: 4px 8px
+  max-width: 56px
+  width: auto
+
+.direct-ref
+  position: relative
+
+.direct-ref #search-box
+  margin: 0
+
+.direct-ref #search-box #search-field,
+.direct-ref #search-box #search-button
+  height: auto
+  padding: 8px 16px
+
+.aff-registration .aff-email
+  margin: 0 0 18px 0
 
 /* SECURITY PAGE */
 
