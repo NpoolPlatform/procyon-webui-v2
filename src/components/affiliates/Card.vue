@@ -59,7 +59,7 @@
               <span class='aff-number'>{{ goodPercent(_good.Good.Good.ID as string) }}<span class='unit'>%</span></span>
               <button
                 :class='[ "alt", goodOnline(_good.Good.Good.ID as string) ? "" : "in-active" ]'
-                :disabled='goodOnline(_good.Good.Good.ID as string)'
+                :disabled='!goodOnline(_good.Good.Good.ID as string)'
                 @click='onSetCommissionClick'
               >
                 {{ $t('MSG_SET') }}
@@ -75,31 +75,21 @@
 
     <q-slide-transition>
       <div class='detailed-summary' v-show='showDetailSummary'>
-        <h4>Commission History</h4>
+        <h4>{{ $t('MSG_COMMISSION_HISTORY') }}</h4>
         <div class='aff-table'>
           <table id='history-table'>
             <thead>
               <tr>
-                <th>Product</th>
-                <th>Effective Date</th>
-                <th>Commmission</th>
+                <th>{{ $t('MSG_PRODUCT') }}</th>
+                <th>{{ $t('MSG_EFFECTIVE_DATE') }}</th>
+                <th>{{ $t('MSG_COMMISSION_RATE') }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr class='aff-info'>
-                <td><span class='aff-product'>Aleo</span></td>
-                <td><span class='aff-number'>2022-06-04<span class='unit'>16:34:05</span></span></td>
-                <td><span class='aff-number'>15<span class='unit'>%</span></span></td>
-              </tr>
-              <tr class='aff-info'>
-                <td><span class='aff-product'>Aleo</span></td>
-                <td><span class='aff-number'>2022-06-01<span class='unit'>16:34:05</span></span></td>
-                <td><span class='aff-number'>10<span class='unit'>%</span></span></td>
-              </tr>
-              <tr class='aff-info'>
-                <td><span class='aff-product'>Spacemesh</span></td>
-                <td><span class='aff-number'>2022-06-01<span class='unit'>16:34:05</span></span></td>
-                <td><span class='aff-number'>10<span class='unit'>%</span></span></td>
+              <tr class='aff-info' v-for='setting in inspire.PurchaseAmountSettings' :key='setting.ID'>
+                <td><span class='aff-product'>{{ goodNameWithDefault(setting.GoodID) }}</span></td>
+                <td><span class='aff-number'>{{ settingDate(setting) }}<span class='unit'>{{ settingTime(setting) }}</span></span></td>
+                <td><span class='aff-number'>{{ setting.Percent }}<span class='unit'>%</span></span></td>
               </tr>
             </tbody>
           </table>
@@ -115,7 +105,8 @@
 </template>
 
 <script setup lang='ts'>
-import { Referral, PriceCoinName, NotificationType, useInspireStore, useGoodStore, GoodSummary } from 'npool-cli-v2'
+import { Referral, PriceCoinName, NotificationType, useInspireStore, useGoodStore, GoodSummary, PurchaseAmountSetting, formatTime } from 'npool-cli-v2'
+import { DefaultGoodID } from 'src/const/const'
 import { ref, toRef, defineProps, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -183,8 +174,8 @@ const goodCommission = (goodID: string) => {
 }
 
 const goodSummary = (goodID: string) => {
-  const index = referral.value.GoodSummaries.findIndex((el) => el.GoodID === goodID)
-  return index < 0 ? {} as unknown as GoodSummary : referral.value.GoodSummaries[index]
+  const index = referral.value?.GoodSummaries.findIndex((el) => el.GoodID === goodID)
+  return index === undefined || index < 0 ? {} as unknown as GoodSummary : referral.value?.GoodSummaries[index]
 }
 
 const good = useGoodStore()
@@ -207,6 +198,22 @@ const goodOnline = (goodID: string) => {
   return index < 0 ? false : good.AppGoods[index].Online
 }
 
+const goodNameWithDefault = (goodID: string) => {
+  let g = good.getGoodByID(goodID)
+  if (!g) {
+    g = good.getGoodByID(DefaultGoodID)
+  }
+  return g?.Main?.Name
+}
+
+const settingDate = (setting: PurchaseAmountSetting) => {
+  return formatTime(setting.Start, true)
+}
+
+const settingTime = (setting: PurchaseAmountSetting) => {
+  return formatTime(setting.Start, false).split(' ')[1]
+}
+
 const onSetCommissionClick = () => {
   // TODO
 }
@@ -217,6 +224,20 @@ onMounted(() => {
       Message: {
         Error: {
           Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+
+  if (inspire.PurchaseAmountSettings.length === 0) {
+    inspire.getPurchaseAmountSettings({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }

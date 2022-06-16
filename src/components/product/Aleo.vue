@@ -201,6 +201,7 @@ import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
 import lightbulb from '../../assets/lightbulb.svg'
+import { DefaultGoodID } from 'src/const/const'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -212,7 +213,7 @@ interface Query {
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodId = computed(() => query.value.goodId?.length ? query.value.goodId : 'de420061-e878-4a8b-986a-805cadd59233')
+const goodId = computed(() => query.value.goodId?.length ? query.value.goodId : DefaultGoodID)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
