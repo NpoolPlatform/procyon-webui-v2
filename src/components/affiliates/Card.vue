@@ -5,7 +5,7 @@
         {{ username }}
       </h3>
       <span class='aff-email'>{{ subusername }}</span>
-      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ referral.InvitedCount }}</span></span>
+      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ referral?.InvitedCount }}</span></span>
     </div>
     <div class='aff-table'>
       <table id='commission-table'>
@@ -53,12 +53,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='summary in referral.GoodSummaries' :key='summary.GoodID'>
+          <tr class='aff-info' v-for='summary in referral?.GoodSummaries' :key='summary.GoodID'>
             <td><span class='aff-product'>{{ summary.CoinName }}</span></td>
             <td><span class='aff-number'>{{ summary.Percent ? summary.Percent : 0 }}<span class='unit'>%</span></span></td>
             <td><span class='aff-number'>{{ summary.Units }}<span class='unit'>{{ summary.Unit }}</span></span></td>
             <td><span class='aff-number'>{{ summary.Amount?.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ commission.Total.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ goodCommission(summary.GoodID).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -106,15 +106,15 @@
 </template>
 
 <script setup lang='ts'>
-import { Referral, PriceCoinName, useBenefitStore, NotificationType } from 'npool-cli-v2'
+import { Referral, PriceCoinName, NotificationType, useInspireStore } from 'npool-cli-v2'
 import { ref, toRef, defineProps, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
 import chevrons from '../../assets/chevrons.svg'
 import question from '../../assets/question.svg'
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
   child: boolean
@@ -167,15 +167,18 @@ const subusername = computed(() => {
   return name
 })
 
-const benefit = useBenefitStore()
-const commission = computed(() => benefit.Commission)
+const inspire = useInspireStore()
+const goodCommission = (goodID: string) => {
+  const index = inspire.GoodCommissions.findIndex((el) => el.GoodID === goodID)
+  return index < 0 ? 0 : inspire.GoodCommissions[index].Amount
+}
 
 onMounted(() => {
-  if (benefit.Commission.Total === 0) {
-    benefit.getCommission({
+  if (inspire.GoodCommissions.length === 0) {
+    inspire.getGoodCommissions({
       Message: {
         Error: {
-          Title: t('MSG_GET_COMMISSION_FAIL'),
+          Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }
