@@ -53,12 +53,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='summary in referral?.GoodSummaries' :key='summary.GoodID'>
-            <td><span class='aff-product'>{{ summary.CoinName }}</span></td>
-            <td><span class='aff-number'>{{ summary.Percent ? summary.Percent : 0 }}<span class='unit'>%</span></span></td>
-            <td><span class='aff-number'>{{ summary.Units }}<span class='unit'>{{ summary.Unit }}</span></span></td>
-            <td><span class='aff-number'>{{ summary.Amount?.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ goodCommission(summary.GoodID).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+          <tr class='aff-info' v-for='_good in goods' :key='_good.Good.Good.ID'>
+            <td><span class='aff-product'>{{ _good.Main?.Name }}</span></td>
+            <td>
+              <span class='aff-number'>{{ goodPercent(_good.Good.Good.ID as string) }}<span class='unit'>%</span></span>
+              <button
+                :class='[ "alt", goodOnline(_good.Good.Good.ID as string) ? "" : "in-active" ]'
+                :disabled='goodOnline(_good.Good.Good.ID as string)'
+                @click='onSetCommissionClick'
+              >
+                {{ $t('MSG_SET') }}
+              </button>
+            </td>
+            <td><span class='aff-number'>{{ goodUnits(_good.Good.Good.ID as string) }}<span class='unit'>{{ $t(_good.Good.Good.Unit) }}</span></span></td>
+            <td><span class='aff-number'>{{ goodAmount(_good.Good.Good.ID as string).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ goodCommission(_good.Good.Good.ID as string).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -106,7 +115,7 @@
 </template>
 
 <script setup lang='ts'>
-import { Referral, PriceCoinName, NotificationType, useInspireStore } from 'npool-cli-v2'
+import { Referral, PriceCoinName, NotificationType, useInspireStore, useGoodStore, GoodSummary } from 'npool-cli-v2'
 import { ref, toRef, defineProps, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -173,12 +182,67 @@ const goodCommission = (goodID: string) => {
   return index < 0 ? 0 : inspire.GoodCommissions[index].Amount
 }
 
+const goodSummary = (goodID: string) => {
+  const index = referral.value.GoodSummaries.findIndex((el) => el.GoodID === goodID)
+  return index < 0 ? {} as unknown as GoodSummary : referral.value.GoodSummaries[index]
+}
+
+const good = useGoodStore()
+const goods = computed(() => good.Goods)
+
+const goodPercent = (goodID: string) => {
+  return goodSummary(goodID).Percent ? goodSummary(goodID).Percent : 0
+}
+
+const goodUnits = (goodID: string) => {
+  return goodSummary(goodID).Units ? goodSummary(goodID).Units : 0
+}
+
+const goodAmount = (goodID: string) => {
+  return goodSummary(goodID).Amount ? goodSummary(goodID).Amount : 0
+}
+
+const goodOnline = (goodID: string) => {
+  const index = good.AppGoods.findIndex((el) => el.GoodID === goodID)
+  return index < 0 ? false : good.AppGoods[index].Online
+}
+
+const onSetCommissionClick = () => {
+  // TODO
+}
+
 onMounted(() => {
   if (inspire.GoodCommissions.length === 0) {
     inspire.getGoodCommissions({
       Message: {
         Error: {
           Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+
+  if (good.Goods.length === 0) {
+    good.getGoods({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_GOODS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+
+    good.getAppGoods({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_APP_GOODS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }
