@@ -152,6 +152,9 @@ const initialize = () => {
         for (let i = 0; i < 5 && i < user.LoginHistories.length; i++) {
           lastLogin = user.LoginHistories[i].CreateAt
         }
+        if (!inspire.InvitationCode.CreateAt) {
+          inspire.InvitationCode.CreateAt = Date.now()
+        }
         if (lastLogin > inspire.InvitationCode.CreateAt && Date.now() / 1000 > inspire.InvitationCode.CreateAt + 48 * 60 * 60) {
           notification.Notifications.push({
             Title: t('MSG_KOL_INVITATION'),
