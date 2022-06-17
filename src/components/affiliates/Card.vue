@@ -2,7 +2,7 @@
   <div :class='[ "affiliate content-glass", child ? "child" : "", firstChild ? "first-child" : "", lastChild ? "last-child" : "" ]'>
     <div class='aff-top'>
       <h3 class='aff-name'>
-        {{ username }}
+        {{ username }} {{ referral.User.ID }}
       </h3>
       <span class='aff-email'>{{ subusername }}</span>
       <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ referral?.InvitedCount }}</span></span>
@@ -55,12 +55,19 @@
         <tbody>
           <tr class='aff-info' v-for='_good in goods' :key='_good.Good.Good.ID'>
             <td><span class='aff-product'>{{ _good.Main?.Name }}</span></td>
-            <td>
+            <td v-if='_good.Editing'>
+              <input type='number' :v-model='_good.Percent'>
+              <button @click='onSaveCommissionClick(_good)'>
+                {{ $t('MSG_SAVE') }}
+              </button>
+            </td>
+            <td v-else>
               <span class='aff-number'>{{ goodPercent(_good.Good.Good.ID as string) }}<span class='unit'>%</span></span>
               <button
+                v-if='child'
                 :class='[ "alt", goodOnline(_good.Good.Good.ID as string) ? "" : "in-active" ]'
                 :disabled='!goodOnline(_good.Good.Good.ID as string)'
-                @click='onSetCommissionClick'
+                @click='onSetCommissionClick(_good)'
               >
                 {{ $t('MSG_SET') }}
               </button>
@@ -86,7 +93,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr class='aff-info' v-for='setting in inspire.PurchaseAmountSettings' :key='setting.ID'>
+              <tr class='aff-info' v-for='setting in settings' :key='setting.ID'>
                 <td><span class='aff-product'>{{ goodNameWithDefault(setting.GoodID) }}</span></td>
                 <td><span class='aff-number'>{{ settingDate(setting) }}<span class='unit'>{{ settingTime(setting) }}</span></span></td>
                 <td><span class='aff-number'>{{ setting.Percent }}<span class='unit'>%</span></span></td>
@@ -105,7 +112,21 @@
 </template>
 
 <script setup lang='ts'>
-import { Referral, PriceCoinName, NotificationType, useInspireStore, useGoodStore, GoodSummary, PurchaseAmountSetting, formatTime } from 'npool-cli-v2'
+import {
+  Referral,
+  PriceCoinName,
+  NotificationType,
+  useInspireStore,
+  useGoodStore,
+  GoodSummary,
+  PurchaseAmountSetting,
+  formatTime,
+  Good,
+  useLoginedUserStore,
+  username as Username,
+  AppUser,
+  AppUserExtra
+} from 'npool-cli-v2'
 import { DefaultGoodID } from 'src/const/const'
 import { ref, toRef, defineProps, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -114,7 +135,7 @@ import chevrons from '../../assets/chevrons.svg'
 import question from '../../assets/question.svg'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+const { locale, t } = useI18n({ useScope: 'global' })
 
 interface Props {
   child: boolean
@@ -179,7 +200,16 @@ const goodSummary = (goodID: string) => {
 }
 
 const good = useGoodStore()
-const goods = computed(() => good.Goods)
+interface MyGood extends Good {
+  Editing: boolean
+  Percent: number
+}
+const goods = computed(() => Array.from(good.Goods).map((el) => {
+  const g = el as MyGood
+  g.Editing = false
+  g.Percent = goodPercent(el.Good.Good.ID as string)
+  return g
+}))
 
 const goodPercent = (goodID: string) => {
   return goodSummary(goodID).Percent ? goodSummary(goodID).Percent : 0
@@ -214,8 +244,36 @@ const settingTime = (setting: PurchaseAmountSetting) => {
   return formatTime(setting.Start, false).split(' ')[1]
 }
 
-const onSetCommissionClick = () => {
-  // TODO
+const onSetCommissionClick = (good: MyGood) => {
+  good.Editing = true
+}
+
+const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => el.UserID === referral.value.User.ID))
+
+const logined = useLoginedUserStore()
+
+const onSaveCommissionClick = (good: MyGood) => {
+  good.Editing = false
+  inspire.createPurchaseAmountSetting({
+    TargetUserID: referral.value.User.ID as string,
+    InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
+    InviteeName: Username(referral.value.User, referral.value.Extra, locale.value) as string,
+    Info: {
+      GoodID: good.Good.Good.ID as string,
+      Percent: good.Percent,
+      Start: Math.ceil(Date.now() / 1000),
+      End: 0
+    },
+    Message: {
+      Error: {
+        Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
 }
 
 onMounted(() => {

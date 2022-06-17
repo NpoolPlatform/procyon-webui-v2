@@ -2,6 +2,7 @@
   <h2>{{ $t('MSG_AFFILIATE_TREE') }}</h2>
   <div class='aff-tree'>
     <Card
+      v-if='inviter'
       :child='false'
       :first-child='false'
       :last-child='false'
