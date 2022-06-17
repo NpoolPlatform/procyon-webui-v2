@@ -55,13 +55,13 @@
         <tbody>
           <tr class='aff-info' v-for='_good in goods' :key='_good.Good.Good.Good.ID'>
             <td><span class='aff-product'>{{ _good.Good.Main?.Name }}</span></td>
-            <td v-show='_good.Editing'>
+            <td v-if='_good.Editing'>
               <input type='number' v-model='_good.Percent' :max='inviterGoodPercent(_good.Good.Good.Good.ID as string)'>
               <button @click='onSaveCommissionClick(_good)'>
                 {{ $t('MSG_SAVE') }}
               </button>
             </td>
-            <td v-show='!_good.Editing'>
+            <td v-else>
               <span class='aff-number'>{{ _good.Percent }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
