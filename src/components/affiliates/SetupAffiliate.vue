@@ -8,7 +8,7 @@
         {{ subusername }}
       </p>
       <div v-for='_good in goods' :key='_good.GoodID'>
-        <label>{{ good.getGoodByID(_good.GoodID)?.Main?.Name }} {{ $t('MSG_COMMISSION_RATE') }}:</label>
+        <label>{{ good.getGoodByID(_good.GoodID)?.Main?.Name }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
         <input type='number' v-model='_good.Percent'>
       </div>
     </template>
