@@ -48,7 +48,6 @@ import {
   useUserStore,
   encryptPassword,
   GoogleTokenType,
-  useInspireStore,
   useApplicationStore,
   useLoginedUserStore,
   AccountType,
@@ -86,7 +85,6 @@ const verifyAccountType = ref(accountType)
 const user = useUserStore()
 const coderepo = useCodeRepoStore()
 const recaptcha = useReCaptcha()
-const inspire = useInspireStore()
 const application = useApplicationStore()
 const logined = useLoginedUserStore()
 const kyc = useKYCStore()
@@ -219,15 +217,6 @@ const onSubmit = () => {
         }
       }
     }, () => {
-      inspire.getInvitationCode({
-        Message: {
-          Error: {
-            Title: t('MSG_GET_INVITATION_CODE_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      })
       if (target.value?.length) {
         void router.push({
           path: target.value,

@@ -55,8 +55,8 @@
 </template>
 
 <script setup lang='ts'>
-import { useInspireStore, useLoginedUserStore, NotificationType, useUserStore } from 'npool-cli-v2'
-import { defineAsyncComponent, computed } from 'vue'
+import { useInspireStore, useLoginedUserStore, NotificationType, useUserStore, useNotificationStore } from 'npool-cli-v2'
+import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
 
@@ -112,6 +112,74 @@ const menu = computed(() => {
 const onLogoClick = () => {
   void router.push({ path: '/' })
 }
+
+const userLogined = computed(() => logined.getLogined)
+const notification = useNotificationStore()
+
+watch(userLogined, () => {
+  if (!userLogined.value) {
+    return
+  }
+  initialize()
+})
+
+const initialize = () => {
+  inspire.getInvitationCode({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_INVITATION_CODE_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    if (inspire.InvitationCode?.InvitationCode?.length) {
+      if (!inspire.InvitationCode.CreateAt) {
+        inspire.InvitationCode.CreateAt = Date.now() / 1000
+      }
+      if (Date.now() / 1000 < inspire.InvitationCode.CreateAt + 48 * 60 * 60) {
+        notification.Notifications.push({
+          Title: t('MSG_KOL_INVITATION'),
+          Message: t('MSG_INVITED_TO_BE_KOL'),
+          Popup: true,
+          Type: NotificationType.Success
+        })
+      }
+      user.getLoginHistories({
+        Message: {}
+      }, () => {
+        let lastLogin = Date.now() / 1000
+        for (let i = 0; i < 5 && i < user.LoginHistories.length; i++) {
+          lastLogin = user.LoginHistories[i].CreateAt
+        }
+        if (lastLogin > inspire.InvitationCode.CreateAt && Date.now() / 1000 > inspire.InvitationCode.CreateAt + 48 * 60 * 60) {
+          notification.Notifications.push({
+            Title: t('MSG_KOL_INVITATION'),
+            Message: t('MSG_INVITED_TO_BE_KOL'),
+            Popup: true,
+            Type: NotificationType.Success
+          })
+        }
+      })
+      inspire.getReferrals({
+        Message: {}
+      }, () => {
+        // TODO
+      })
+      inspire.getPurchaseAmountSettings({
+        Message: {}
+      }, () => {
+        // TODO
+      })
+    }
+  })
+}
+
+onMounted(() => {
+  if (userLogined.value) {
+    initialize()
+  }
+})
 
 </script>
 
