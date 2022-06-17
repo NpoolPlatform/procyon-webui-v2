@@ -140,7 +140,7 @@ const onSubmit = () => {
         window.clearTimeout(backTimer.value)
       }
       backTimer.value = window.setTimeout(() => {
-        void router.back()
+        void router.push({ path: '/affiliates' })
       }, 1000)
     })
   })
