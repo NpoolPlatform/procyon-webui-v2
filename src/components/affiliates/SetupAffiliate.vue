@@ -118,9 +118,6 @@ const onSubmit = () => {
   })
 
   goods.value.forEach((good) => {
-    if (backTimer.value >= 0) {
-      window.clearTimeout(backTimer.value)
-    }
     inspire.createPurchaseAmountSetting({
       TargetUserID: referral.value.User.ID as string,
       InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
@@ -139,6 +136,9 @@ const onSubmit = () => {
         }
       }
     }, () => {
+      if (backTimer.value >= 0) {
+        window.clearTimeout(backTimer.value)
+      }
       backTimer.value = window.setTimeout(() => {
         void router.back()
       }, 1000)
