@@ -94,7 +94,7 @@
             </thead>
             <tbody>
               <tr class='aff-info' v-for='setting in settings' :key='setting.ID'>
-                <td><span class='aff-product'>{{ goodNameWithDefault(setting.GoodID) }}</span></td>
+                <td><span class='aff-product'>{{ good.getGoodByID(setting.GoodID)?.Good?.Good?.Title }}</span></td>
                 <td><span class='aff-number'>{{ settingDate(setting) }}<span class='unit'>{{ settingTime(setting) }}</span></span></td>
                 <td><span class='aff-number'>{{ setting.Percent }}<span class='unit'>%</span></span></td>
               </tr>
@@ -126,7 +126,6 @@ import {
   AppUser,
   AppUserExtra
 } from 'npool-cli-v2'
-import { DefaultGoodID } from 'src/const/const'
 import { ref, toRef, defineProps, computed, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useLocalGoodStore, GoodItem } from '../../localstore'
@@ -239,14 +238,6 @@ const goodAmount = (goodID: string) => {
 const goodOnline = (goodID: string) => {
   const index = good.AppGoods.findIndex((el) => el.GoodID === goodID)
   return index < 0 ? false : good.AppGoods[index].Online
-}
-
-const goodNameWithDefault = (goodID: string) => {
-  let g = good.getGoodByID(goodID)
-  if (!g) {
-    g = good.getGoodByID(DefaultGoodID)
-  }
-  return g?.Main?.Name
 }
 
 const settingDate = (setting: PurchaseAmountSetting) => {
