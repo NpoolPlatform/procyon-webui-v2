@@ -265,6 +265,11 @@ const onSetCommissionClick = async (good: GoodItem) => {
 const logined = useLoginedUserStore()
 
 const onSaveCommissionClick = (good: GoodItem) => {
+  if (good.Percent > inviterGoodPercent(good.GoodID)) {
+    good.Percent = inviterGoodPercent(good.GoodID)
+    return
+  }
+
   good.Editing = false
   inspire.createPurchaseAmountSetting({
     TargetUserID: referral.value.User.ID as string,
