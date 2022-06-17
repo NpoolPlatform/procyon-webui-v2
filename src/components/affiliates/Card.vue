@@ -56,7 +56,7 @@
           <tr class='aff-info' v-for='_good in lgoods' :key='_good.GoodID'>
             <td><span class='aff-product'>{{ good.getGoodByID(_good.GoodID)?.Good?.Good?.Title }}</span></td>
             <td v-if='_good.Editing'>
-              <input type='number' v-model='_good.Percent' :max='inviterGoodPercent(_good.GoodID)'>
+              <input type='number' v-model='_good.Percent' :min='0' :max='inviterGoodPercent(_good.GoodID)'>
               <button @click='onSaveCommissionClick(_good)'>
                 {{ $t('MSG_SAVE') }}
               </button>
