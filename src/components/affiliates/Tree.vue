@@ -65,35 +65,48 @@ onMounted(() => {
           }
         }
       }, () => {
-        lgood.Goods = []
-        good.Goods.forEach((el) => {
-          inspire.Referrals.forEach((rel) => {
-            lgood.Goods.push({
-              UserID: rel.User.ID as string,
-              GoodID: el.Good.Good.ID as string,
-              Editing: false,
-              Percent: 0
-            })
-          })
-        })
-
-        inspire.getPurchaseAmountSettings({
+        good.getAppGoods({
           Message: {
             Error: {
-              Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
+              Title: t('MSG_GET_APP_GOODS_FAIL'),
               Popup: true,
               Type: NotificationType.Error
             }
           }
         }, () => {
-          inspire.PurchaseAmountSettings.forEach((pel) => {
-            if (pel.End !== 0) {
-              return
+          lgood.Goods = []
+          good.Goods.filter((el) => {
+            const index = good.AppGoods.findIndex((gel) => gel.GoodID === el.Good.Good.ID && gel.Visible)
+            return index >= 0
+          }).forEach((el) => {
+            inspire.Referrals.forEach((rel) => {
+              lgood.Goods.push({
+                UserID: rel.User.ID as string,
+                GoodID: el.Good.Good.ID as string,
+                Editing: false,
+                Percent: 0
+              })
+            })
+          })
+
+          inspire.getPurchaseAmountSettings({
+            Message: {
+              Error: {
+                Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
+                Popup: true,
+                Type: NotificationType.Error
+              }
             }
-            const index = lgood.Goods.findIndex((el) => el.GoodID === pel.GoodID && el.UserID === pel.UserID)
-            if (index >= 0) {
-              lgood.Goods[index].Percent = pel.Percent
-            }
+          }, () => {
+            inspire.PurchaseAmountSettings.forEach((pel) => {
+              if (pel.End !== 0) {
+                return
+              }
+              const index = lgood.Goods.findIndex((el) => el.GoodID === pel.GoodID && el.UserID === pel.UserID)
+              if (index >= 0) {
+                lgood.Goods[index].Percent = pel.Percent
+              }
+            })
           })
         })
       })
@@ -113,18 +126,6 @@ onMounted(() => {
       // TODO
     })
   }
-
-  good.getAppGoods({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_APP_GOODS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
 })
 
 </script>

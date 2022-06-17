@@ -7,7 +7,7 @@
       <p class='aff-email'>
         {{ subusername }}
       </p>
-      <div v-for='_good in lgood.Goods' :key='_good.GoodID'>
+      <div v-for='_good in goods' :key='_good.GoodID'>
         <label>{{ good.getGoodByID(_good.GoodID)?.Main?.Name }} {{ $t('MSG_COMMISSION_RATE') }}:</label>
         <input type='number' v-model='_good.Percent'>
       </div>
@@ -30,7 +30,7 @@ import {
   NotificationType,
   useGoodStore
 } from 'npool-cli-v2'
-import { useLocalGoodStore } from 'src/localstore'
+import { GoodItem } from 'src/localstore'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -117,7 +117,7 @@ const onSubmit = () => {
     })
   })
 
-  lgood.Goods.forEach((good) => {
+  goods.value.forEach((good) => {
     if (backTimer.value >= 0) {
       window.clearTimeout(backTimer.value)
     }
@@ -147,7 +147,7 @@ const onSubmit = () => {
 }
 
 const good = useGoodStore()
-const lgood = useLocalGoodStore()
+const goods = ref([] as Array<GoodItem>)
 
 onMounted(() => {
   if (inspire.Referrals.length === 0) {
@@ -164,31 +164,15 @@ onMounted(() => {
     })
   }
 
-  if (lgood.Goods.length === 0) {
-    good.getGoods({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOODS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+  good.getGoods({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GOODS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
       }
-    }, () => {
-      lgood.Goods = []
-      good.Goods.forEach((el) => {
-        const index = lgood.Goods.findIndex((lel) => lel.GoodID === el.Good.Good.ID)
-        if (index >= 0) {
-          return
-        }
-        lgood.Goods.push({
-          UserID: referral.value.User.ID as string,
-          GoodID: el.Good.Good.ID as string,
-          Editing: false,
-          Percent: 0
-        })
-      })
-    })
-
+    }
+  }, () => {
     good.getAppGoods({
       Message: {
         Error: {
@@ -198,9 +182,23 @@ onMounted(() => {
         }
       }
     }, () => {
-      // TODO
+      good.Goods.filter((el) => {
+        const index = good.AppGoods.findIndex((gel) => gel.GoodID === el.Good.Good.ID && gel.Visible && gel.Online)
+        return index >= 0
+      }).forEach((el) => {
+        const index = goods.value.findIndex((lel) => lel.GoodID === el.Good.Good.ID)
+        if (index >= 0) {
+          return
+        }
+        goods.value.push({
+          UserID: referral.value.User.ID as string,
+          GoodID: el.Good.Good.ID as string,
+          Editing: false,
+          Percent: 0
+        })
+      })
     })
-  }
+  })
 })
 
 </script>
