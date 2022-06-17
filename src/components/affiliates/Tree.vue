@@ -21,7 +21,8 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, ref, defineAsyncComponent } from 'vue'
-import { NotificationType, useInspireStore, useLoginedUserStore, Referral } from 'npool-cli-v2'
+import { NotificationType, useInspireStore, useLoginedUserStore, Referral, useGoodStore } from 'npool-cli-v2'
+import { useLocalGoodStore } from '../../localstore'
 import { useI18n } from 'vue-i18n'
 
 const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.vue'))
@@ -39,6 +40,9 @@ const inviter = computed(() => {
 const logined = useLoginedUserStore()
 const innerLoading = ref(false)
 
+const good = useGoodStore()
+const lgood = useLocalGoodStore()
+
 onMounted(() => {
   if (inspire.Referrals.length === 0) {
     innerLoading.value = true
@@ -52,8 +56,75 @@ onMounted(() => {
       }
     }, () => {
       innerLoading.value = false
+      good.getGoods({
+        Message: {
+          Error: {
+            Title: t('MSG_GET_GOODS_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      }, () => {
+        lgood.Goods = []
+        good.Goods.forEach((el) => {
+          inspire.Referrals.forEach((rel) => {
+            lgood.Goods.push({
+              UserID: rel.User.ID as string,
+              GoodID: el.Good.Good.ID as string,
+              Editing: false,
+              Percent: 0
+            })
+          })
+        })
+
+        inspire.getPurchaseAmountSettings({
+          Message: {
+            Error: {
+              Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
+              Popup: true,
+              Type: NotificationType.Error
+            }
+          }
+        }, () => {
+          inspire.PurchaseAmountSettings.forEach((pel) => {
+            if (pel.End !== 0) {
+              return
+            }
+            const index = lgood.Goods.findIndex((el) => el.GoodID === pel.GoodID && el.UserID === pel.UserID)
+            if (index >= 0) {
+              lgood.Goods[index].Percent = pel.Percent
+            }
+          })
+        })
+      })
     })
   }
+
+  if (inspire.GoodCommissions.length === 0) {
+    inspire.getGoodCommissions({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+
+  good.getAppGoods({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_APP_GOODS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
 })
 
 </script>

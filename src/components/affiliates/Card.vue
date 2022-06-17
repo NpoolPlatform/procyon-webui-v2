@@ -53,7 +53,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='_good in lgood.Goods' :key='_good.GoodID'>
+          <tr class='aff-info' v-for='_good in lgoods' :key='_good.GoodID'>
             <td><span class='aff-product'>{{ good.getGoodByID(_good.GoodID)?.Good?.Good?.Title }}</span></td>
             <td v-if='_good.Editing'>
               <input type='number' v-model='_good.Percent' :max='inviterGoodPercent(_good.GoodID)'>
@@ -127,7 +127,7 @@ import {
   AppUserExtra
 } from 'npool-cli-v2'
 import { DefaultGoodID } from 'src/const/const'
-import { ref, toRef, defineProps, computed, onMounted, watch, nextTick } from 'vue'
+import { ref, toRef, defineProps, computed, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useLocalGoodStore, GoodItem } from '../../localstore'
 
@@ -203,6 +203,7 @@ const goodSummary = (goodID: string) => {
 
 const good = useGoodStore()
 const lgood = useLocalGoodStore()
+const lgoods = computed(() => lgood.Goods.filter((el) => el.UserID === referral.value.User.ID))
 
 const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
   return el.UserID === referral.value.User.ID
@@ -226,19 +227,6 @@ const inviterGoodPercent = (goodID: string) => {
   }
   return percent
 }
-
-const goodPercent = (goodID: string) => {
-  return goodSummary(goodID).Percent ? goodSummary(goodID).Percent : 0
-}
-
-watch(settings, () => {
-  lgood.Goods.forEach((el) => {
-    const index = settings.value.findIndex((sel) => sel.GoodID === el.GoodID && sel.End === 0)
-    if (index >= 0) {
-      el.Percent = settings.value[index].Percent
-    }
-  })
-})
 
 const goodUnits = (goodID: string) => {
   return goodSummary(goodID).Units ? goodSummary(goodID).Units : 0
@@ -299,70 +287,5 @@ const onSaveCommissionClick = (good: GoodItem) => {
     // TODO
   })
 }
-
-onMounted(() => {
-  if (inspire.GoodCommissions.length === 0) {
-    inspire.getGoodCommissions({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-
-  if (lgood.Goods.length === 0) {
-    good.getGoods({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOODS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      lgood.Goods = []
-      good.Goods.forEach((el) => {
-        lgood.Goods.push({
-          GoodID: el.Good.Good.ID as string,
-          Editing: false,
-          Percent: goodPercent(el.Good.Good.ID as string)
-        })
-      })
-      inspire.getPurchaseAmountSettings({
-        Message: {
-          Error: {
-            Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      }, () => {
-        lgood.Goods.forEach((el) => {
-          const index = settings.value.findIndex((sel) => sel.GoodID === el.GoodID && sel.End === 0)
-          if (index >= 0) {
-            el.Percent = settings.value[index].Percent
-          }
-        })
-      })
-    })
-
-    good.getAppGoods({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_APP_GOODS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-})
 
 </script>

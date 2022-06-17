@@ -176,7 +176,12 @@ onMounted(() => {
     }, () => {
       lgood.Goods = []
       good.Goods.forEach((el) => {
+        const index = lgood.Goods.findIndex((lel) => lel.GoodID === el.Good.Good.ID)
+        if (index >= 0) {
+          return
+        }
         lgood.Goods.push({
+          UserID: referral.value.User.ID as string,
           GoodID: el.Good.Good.ID as string,
           Editing: false,
           Percent: 0

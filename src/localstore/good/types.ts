@@ -1,4 +1,5 @@
 interface GoodItem {
+  UserID: string
   GoodID: string
   Editing: boolean
   Percent: number
