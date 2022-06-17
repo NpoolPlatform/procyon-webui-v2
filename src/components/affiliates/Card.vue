@@ -331,9 +331,7 @@ onMounted(() => {
     })
   }
 
-  lgood.Goods = []
-
-  if (good.Goods.length === 0) {
+  if (lgood.Goods.length === 0) {
     good.getGoods({
       Message: {
         Error: {
@@ -362,14 +360,6 @@ onMounted(() => {
       }
     }, () => {
       // TODO
-    })
-  } else {
-    good.Goods.forEach((el) => {
-      lgood.Goods.push({
-        GoodID: el.Good.Good.ID as string,
-        Editing: false,
-        Percent: goodPercent(el.Good.Good.ID as string)
-      })
     })
   }
 })

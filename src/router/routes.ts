@@ -148,6 +148,19 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        path: 'setup/affiliate',
+        component: () => import('pages/SetupAffiliate.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
         path: 'account',
         component: () => import('pages/Account.vue'),
         meta: {

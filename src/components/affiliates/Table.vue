@@ -9,6 +9,7 @@
       <q-tr :props='myProps'>
         <q-td key='Name' :props='myProps'>
           {{ myProps.row.User.EmailAddress.length > 0 ? myProps.row.User.EmailAddress : myProps.row.User.PhoneNO }}
+          <img class='copy-button' :src='edit' @click='onSetKolClick(myProps.row)'>
         </q-td>
         <q-td key='JoinDate' :props='myProps'>
           {{ formatTime(myProps.row.User.CreateAt, true) }}
@@ -35,8 +36,17 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, formatTime, Referral, useInspireStore, PriceCoinName } from 'npool-cli-v2'
+import {
+  NotificationType,
+  formatTime,
+  Referral,
+  useInspireStore,
+  PriceCoinName
+} from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+
+import edit from '../../assets/edit.svg'
+import { useRouter } from 'vue-router'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 
@@ -78,6 +88,17 @@ const table = computed(() => [
     field: (row: Referral) => row
   }
 ])
+
+const router = useRouter()
+
+const onSetKolClick = (referral: Referral) => {
+  void router.push({
+    path: '/setup/affiliate',
+    query: {
+      userId: referral.User.ID
+    }
+  })
+}
 
 onMounted(() => {
   if (referrals.value.length === 0) {
