@@ -53,28 +53,30 @@
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='_good in goods' :key='_good.Good.Good.Good.ID'>
-            <td><span class='aff-product'>{{ _good.Good.Main?.Name }}</span></td>
-            <td v-if='_good.Editing'>
-              <input type='number' v-model='_good.Percent' :max='inviterGoodPercent(_good.Good.Good.Good.ID as string)'>
-              <button @click='onSaveCommissionClick(_good)'>
-                {{ $t('MSG_SAVE') }}
-              </button>
+          <tr class='aff-info' v-for='_good in lgood.Goods' :key='_good.GoodID'>
+            <td><span class='aff-product'>{{ good.getGoodByID(_good.GoodID)?.Main?.Name }}</span></td>
+            <td>
+              <div class='row' v-show='_good.Editing'>
+                <input type='number' v-model='_good.Percent' :max='inviterGoodPercent(_good.GoodID)'>
+                <button @click='onSaveCommissionClick(_good)'>
+                  {{ $t('MSG_SAVE') }}
+                </button>
+              </div>
+              <div class='row' v-show='!_good.Editing'>
+                <span class='aff-number'>{{ _good.Percent }}<span class='unit'>%</span></span>
+                <button
+                  v-if='child'
+                  :class='[ "alt", goodOnline(_good.GoodID) ? "" : "in-active" ]'
+                  :disabled='!goodOnline(_good.GoodID)'
+                  @click='onSetCommissionClick(_good)'
+                >
+                  {{ $t('MSG_SET') }}
+                </button>
+              </div>
             </td>
-            <td v-else>
-              <span class='aff-number'>{{ _good.Percent }}<span class='unit'>%</span></span>
-              <button
-                v-if='child'
-                :class='[ "alt", goodOnline(_good.Good.Good.Good.ID as string) ? "" : "in-active" ]'
-                :disabled='!goodOnline(_good.Good.Good.Good.ID as string)'
-                @click='onSetCommissionClick(_good)'
-              >
-                {{ $t('MSG_SET') }}
-              </button>
-            </td>
-            <td><span class='aff-number'>{{ goodUnits(_good.Good.Good.Good.ID as string) }}<span class='unit'>{{ $t(_good.Good.Good.Good.Unit) }}</span></span></td>
-            <td><span class='aff-number'>{{ goodAmount(_good.Good.Good.Good.ID as string).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ goodCommission(_good.Good.Good.Good.ID as string).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ goodUnits(_good.GoodID) }}<span class='unit'>{{ $t(good.getGoodByID(_good.GoodID)?.Good.Good.Unit) }}</span></span></td>
+            <td><span class='aff-number'>{{ goodAmount(_good.GoodID).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ goodCommission(_good.GoodID).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -121,15 +123,15 @@ import {
   GoodSummary,
   PurchaseAmountSetting,
   formatTime,
-  Good,
   useLoginedUserStore,
   username as Username,
   AppUser,
   AppUserExtra
 } from 'npool-cli-v2'
 import { DefaultGoodID } from 'src/const/const'
-import { ref, toRef, defineProps, computed, onMounted } from 'vue'
+import { ref, toRef, defineProps, computed, onMounted, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useLocalGoodStore, GoodItem } from '../../localstore'
 
 import chevrons from '../../assets/chevrons.svg'
 import question from '../../assets/question.svg'
@@ -202,11 +204,7 @@ const goodSummary = (goodID: string) => {
 }
 
 const good = useGoodStore()
-interface MyGood {
-  Editing: boolean
-  Percent: number
-  Good: Good
-}
+const lgood = useLocalGoodStore()
 
 const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
   return el.UserID === referral.value.User.ID
@@ -231,21 +229,18 @@ const inviterGoodPercent = (goodID: string) => {
   return percent
 }
 
-const goods = computed(() => Array.from(good.Goods).map((el) => {
-  const g = {} as unknown as MyGood
-  g.Editing = false
-  g.Percent = goodPercent(el.Good?.Good?.ID as string)
-  const index = settings.value.findIndex((sel) => sel.GoodID === el.Good?.Good?.ID && sel.End === 0)
-  if (index >= 0) {
-    g.Percent = settings.value[index].Percent
-  }
-  g.Good = el
-  return g
-}))
-
 const goodPercent = (goodID: string) => {
   return goodSummary(goodID).Percent ? goodSummary(goodID).Percent : 0
 }
+
+watch(settings, () => {
+  lgood.Goods.forEach((el) => {
+    const index = settings.value.findIndex((sel) => sel.GoodID === el.GoodID && sel.End === 0)
+    if (index >= 0) {
+      el.Percent = settings.value[index].Percent
+    }
+  })
+})
 
 const goodUnits = (goodID: string) => {
   return goodSummary(goodID).Units ? goodSummary(goodID).Units : 0
@@ -276,20 +271,21 @@ const settingTime = (setting: PurchaseAmountSetting) => {
   return formatTime(setting.Start, false).split(' ')[1]
 }
 
-const onSetCommissionClick = (good: MyGood) => {
+const onSetCommissionClick = async (good: GoodItem) => {
   good.Editing = true
+  await nextTick()
 }
 
 const logined = useLoginedUserStore()
 
-const onSaveCommissionClick = (good: MyGood) => {
+const onSaveCommissionClick = (good: GoodItem) => {
   good.Editing = false
   inspire.createPurchaseAmountSetting({
     TargetUserID: referral.value.User.ID as string,
     InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
     InviteeName: Username(referral.value.User, referral.value.Extra, locale.value) as string,
     Info: {
-      GoodID: good.Good.Good.Good.ID as string,
+      GoodID: good.GoodID,
       Percent: good.Percent,
       Start: Math.ceil(Date.now() / 1000),
       End: 0
@@ -335,6 +331,8 @@ onMounted(() => {
     })
   }
 
+  lgood.Goods = []
+
   if (good.Goods.length === 0) {
     good.getGoods({
       Message: {
@@ -345,7 +343,13 @@ onMounted(() => {
         }
       }
     }, () => {
-      // TODO
+      good.Goods.forEach((el) => {
+        lgood.Goods.push({
+          GoodID: el.Good.Good.ID as string,
+          Editing: false,
+          Percent: goodPercent(el.Good.Good.ID as string)
+        })
+      })
     })
 
     good.getAppGoods({
@@ -358,6 +362,14 @@ onMounted(() => {
       }
     }, () => {
       // TODO
+    })
+  } else {
+    good.Goods.forEach((el) => {
+      lgood.Goods.push({
+        GoodID: el.Good.Good.ID as string,
+        Editing: false,
+        Percent: goodPercent(el.Good.Good.ID as string)
+      })
     })
   }
 })
