@@ -174,6 +174,7 @@ onMounted(() => {
         }
       }
     }, () => {
+      lgood.Goods = []
       good.Goods.forEach((el) => {
         lgood.Goods.push({
           GoodID: el.Good.Good.ID as string,

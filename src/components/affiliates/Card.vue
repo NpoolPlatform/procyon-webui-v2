@@ -54,25 +54,23 @@
         </thead>
         <tbody>
           <tr class='aff-info' v-for='_good in lgood.Goods' :key='_good.GoodID'>
-            <td><span class='aff-product'>{{ good.getGoodByID(_good.GoodID)?.Main?.Name }}</span></td>
-            <td>
-              <div class='row' v-show='_good.Editing'>
-                <input type='number' v-model='_good.Percent' :max='inviterGoodPercent(_good.GoodID)'>
-                <button @click='onSaveCommissionClick(_good)'>
-                  {{ $t('MSG_SAVE') }}
-                </button>
-              </div>
-              <div class='row' v-show='!_good.Editing'>
-                <span class='aff-number'>{{ _good.Percent }}<span class='unit'>%</span></span>
-                <button
-                  v-if='child'
-                  :class='[ "alt", goodOnline(_good.GoodID) ? "" : "in-active" ]'
-                  :disabled='!goodOnline(_good.GoodID)'
-                  @click='onSetCommissionClick(_good)'
-                >
-                  {{ $t('MSG_SET') }}
-                </button>
-              </div>
+            <td><span class='aff-product'>{{ good.getGoodByID(_good.GoodID)?.Good?.Good?.Title }}</span></td>
+            <td v-if='_good.Editing'>
+              <input type='number' v-model='_good.Percent' :max='inviterGoodPercent(_good.GoodID)'>
+              <button @click='onSaveCommissionClick(_good)'>
+                {{ $t('MSG_SAVE') }}
+              </button>
+            </td>
+            <td v-else>
+              <span class='aff-number'>{{ _good.Percent }}<span class='unit'>%</span></span>
+              <button
+                v-if='child'
+                :class='[ "alt", goodOnline(_good.GoodID) ? "" : "in-active" ]'
+                :disabled='!goodOnline(_good.GoodID)'
+                @click='onSetCommissionClick(_good)'
+              >
+                {{ $t('MSG_SET') }}
+              </button>
             </td>
             <td><span class='aff-number'>{{ goodUnits(_good.GoodID) }}<span class='unit'>{{ $t(good.getGoodByID(_good.GoodID)?.Good.Good.Unit) }}</span></span></td>
             <td><span class='aff-number'>{{ goodAmount(_good.GoodID).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
@@ -341,6 +339,7 @@ onMounted(() => {
         }
       }
     }, () => {
+      lgood.Goods = []
       good.Goods.forEach((el) => {
         lgood.Goods.push({
           GoodID: el.Good.Good.ID as string,
