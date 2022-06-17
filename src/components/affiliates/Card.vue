@@ -2,7 +2,7 @@
   <div :class='[ "affiliate content-glass", child ? "child" : "", firstChild ? "first-child" : "", lastChild ? "last-child" : "" ]'>
     <div class='aff-top'>
       <h3 class='aff-name'>
-        {{ username }} {{ referral.User.ID }}
+        {{ username }}
       </h3>
       <span class='aff-email'>{{ subusername }}</span>
       <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ referral?.InvitedCount }}</span></span>
@@ -53,28 +53,28 @@
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='_good in goods' :key='_good.Good.Good.ID'>
-            <td><span class='aff-product'>{{ _good.Main?.Name }}</span></td>
+          <tr class='aff-info' v-for='_good in goods' :key='_good.Good.Good.Good.ID'>
+            <td><span class='aff-product'>{{ _good.Good.Main?.Name }}</span></td>
             <td v-if='_good.Editing'>
-              <input type='number' :v-model='_good.Percent'>
+              <input type='number' v-model='_good.Percent'>
               <button @click='onSaveCommissionClick(_good)'>
                 {{ $t('MSG_SAVE') }}
               </button>
             </td>
             <td v-else>
-              <span class='aff-number'>{{ goodPercent(_good.Good.Good.ID as string) }}<span class='unit'>%</span></span>
+              <span class='aff-number'>{{ _good.Percent }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
-                :class='[ "alt", goodOnline(_good.Good.Good.ID as string) ? "" : "in-active" ]'
-                :disabled='!goodOnline(_good.Good.Good.ID as string)'
+                :class='[ "alt", goodOnline(_good.Good.Good.Good.ID as string) ? "" : "in-active" ]'
+                :disabled='!goodOnline(_good.Good.Good.Good.ID as string)'
                 @click='onSetCommissionClick(_good)'
               >
                 {{ $t('MSG_SET') }}
               </button>
             </td>
-            <td><span class='aff-number'>{{ goodUnits(_good.Good.Good.ID as string) }}<span class='unit'>{{ $t(_good.Good.Good.Unit) }}</span></span></td>
-            <td><span class='aff-number'>{{ goodAmount(_good.Good.Good.ID as string).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ goodCommission(_good.Good.Good.ID as string).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ goodUnits(_good.Good.Good.Good.ID as string) }}<span class='unit'>{{ $t(_good.Good.Good.Good.Unit) }}</span></span></td>
+            <td><span class='aff-number'>{{ goodAmount(_good.Good.Good.Good.ID as string).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ goodCommission(_good.Good.Good.Good.ID as string).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -190,7 +190,9 @@ const subusername = computed(() => {
 
 const inspire = useInspireStore()
 const goodCommission = (goodID: string) => {
-  const index = inspire.GoodCommissions.findIndex((el) => el.GoodID === goodID)
+  const index = inspire.GoodCommissions.findIndex((el) => {
+    return el.GoodID === goodID && el.AppID === referral.value.User.AppID && el.UserID === referral.value.User.ID
+  })
   return index < 0 ? 0 : inspire.GoodCommissions[index].Amount
 }
 
@@ -200,14 +202,27 @@ const goodSummary = (goodID: string) => {
 }
 
 const good = useGoodStore()
-interface MyGood extends Good {
+interface MyGood {
   Editing: boolean
   Percent: number
+  Good: Good
 }
+
+const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
+  return el.UserID === referral.value.User.ID
+}).sort((a, b) => {
+  return a.Start < b.Start ? 1 : -1
+}))
+
 const goods = computed(() => Array.from(good.Goods).map((el) => {
-  const g = el as MyGood
+  const g = {} as unknown as MyGood
   g.Editing = false
-  g.Percent = goodPercent(el.Good.Good.ID as string)
+  g.Percent = goodPercent(el.Good?.Good?.ID as string)
+  const index = settings.value.findIndex((sel) => sel.GoodID === el.Good?.Good?.ID && sel.End === 0)
+  if (index >= 0) {
+    g.Percent = settings.value[index].Percent
+  }
+  g.Good = el
   return g
 }))
 
@@ -248,8 +263,6 @@ const onSetCommissionClick = (good: MyGood) => {
   good.Editing = true
 }
 
-const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => el.UserID === referral.value.User.ID))
-
 const logined = useLoginedUserStore()
 
 const onSaveCommissionClick = (good: MyGood) => {
@@ -259,7 +272,7 @@ const onSaveCommissionClick = (good: MyGood) => {
     InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
     InviteeName: Username(referral.value.User, referral.value.Extra, locale.value) as string,
     Info: {
-      GoodID: good.Good.Good.ID as string,
+      GoodID: good.Good.Good.Good.ID as string,
       Percent: good.Percent,
       Start: Math.ceil(Date.now() / 1000),
       End: 0
