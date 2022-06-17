@@ -55,13 +55,13 @@
         <tbody>
           <tr class='aff-info' v-for='_good in goods' :key='_good.Good.Good.Good.ID'>
             <td><span class='aff-product'>{{ _good.Good.Main?.Name }}</span></td>
-            <td v-if='_good.Editing'>
-              <input type='number' v-model='_good.Percent'>
+            <td v-show='_good.Editing'>
+              <input type='number' v-model='_good.Percent' :max='inviterGoodPercent(_good.Good.Good.Good.ID as string)'>
               <button @click='onSaveCommissionClick(_good)'>
                 {{ $t('MSG_SAVE') }}
               </button>
             </td>
-            <td v-else>
+            <td v-show='!_good.Editing'>
               <span class='aff-number'>{{ _good.Percent }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
@@ -213,6 +213,23 @@ const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
 }).sort((a, b) => {
   return a.Start < b.Start ? 1 : -1
 }))
+
+const inviter = computed(() => {
+  const index = inspire.Referrals.findIndex((el) => el.User.ID === logined.LoginedUser?.User.ID)
+  return index < 0 ? undefined as unknown as Referral : inspire.Referrals[index]
+})
+const inviterGoodPercent = (goodID: string) => {
+  let index = inviter.value.GoodSummaries.findIndex((el) => el.GoodID === goodID)
+  let percent = 0
+  if (index >= 0) {
+    percent = inviter.value.GoodSummaries[index].Percent
+  }
+  index = inspire.PurchaseAmountSettings.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID && el.GoodID === goodID && el.End === 0)
+  if (index >= 0) {
+    percent = inspire.PurchaseAmountSettings[index].Percent
+  }
+  return percent
+}
 
 const goods = computed(() => Array.from(good.Goods).map((el) => {
   const g = {} as unknown as MyGood
