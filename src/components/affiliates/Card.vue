@@ -315,20 +315,6 @@ onMounted(() => {
     })
   }
 
-  if (inspire.PurchaseAmountSettings.length === 0) {
-    inspire.getPurchaseAmountSettings({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-
   if (lgood.Goods.length === 0) {
     good.getGoods({
       Message: {
@@ -345,6 +331,22 @@ onMounted(() => {
           GoodID: el.Good.Good.ID as string,
           Editing: false,
           Percent: goodPercent(el.Good.Good.ID as string)
+        })
+      })
+      inspire.getPurchaseAmountSettings({
+        Message: {
+          Error: {
+            Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      }, () => {
+        lgood.Goods.forEach((el) => {
+          const index = settings.value.findIndex((sel) => sel.GoodID === el.GoodID && sel.End === 0)
+          if (index >= 0) {
+            el.Percent = settings.value[index].Percent
+          }
         })
       })
     })
