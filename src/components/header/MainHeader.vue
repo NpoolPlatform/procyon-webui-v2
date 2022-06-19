@@ -155,7 +155,7 @@ const initialize = () => {
         if (!inspire.InvitationCode.CreateAt) {
           inspire.InvitationCode.CreateAt = Date.now()
         }
-        if (lastLogin > inspire.InvitationCode.CreateAt && Date.now() / 1000 > inspire.InvitationCode.CreateAt + 48 * 60 * 60) {
+        if (lastLogin <= inspire.InvitationCode.CreateAt) {
           notification.Notifications.push({
             Title: t('MSG_KOL_INVITATION'),
             Message: t('MSG_INVITED_TO_BE_KOL'),

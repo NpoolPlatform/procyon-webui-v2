@@ -191,7 +191,7 @@ onMounted(() => {
           return
         }
         goods.value.push({
-          UserID: referral.value.User.ID as string,
+          UserID: referral.value?.User.ID as string,
           GoodID: el.Good.Good.ID as string,
           Editing: false,
           Percent: 0
