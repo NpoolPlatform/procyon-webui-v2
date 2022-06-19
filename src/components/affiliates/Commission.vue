@@ -6,7 +6,7 @@
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
-        {{ $t('MSG_TOTAL_COMMISSION') }} ({{ PriceCoinName }})
+        {{ $t('MSG_TOTAL_COMMISSION') }}
       </h4>
     </div>
     <div class='earnings-figure'>
@@ -14,7 +14,7 @@
       <span class='unit'>JPY</span>
       <div class='hr' />
       <h4 class='description'>
-        {{ $t('MSG_TOTAL_COMMISSION') }} (JPY)
+        {{ $t('MSG_TOTAL_COMMISSION') }}
       </h4>
     </div>
   </div>
