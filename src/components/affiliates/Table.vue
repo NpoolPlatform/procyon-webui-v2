@@ -118,7 +118,7 @@ onMounted(() => {
         }
       }
     }, () => {
-      // TODO
+      displayReferrals.value = inspire.Referrals
     })
   }
 })
