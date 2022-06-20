@@ -118,7 +118,7 @@ onMounted(() => {
         }
       }
     }, () => {
-      displayReferrals.value = inspire.Referrals
+      displayReferrals.value = inspire.Referrals.filter((referral) => !referral.Kol)
     })
   }
 })
