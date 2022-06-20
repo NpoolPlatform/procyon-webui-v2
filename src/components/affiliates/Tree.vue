@@ -16,6 +16,13 @@
       :last-child='idx === referrals.length - 1'
       :referral='referral'
     />
+    <q-ajax-bar
+      ref='progress'
+      position='top'
+      color='green-2'
+      size='6px'
+      skip-hijack
+    />
   </div>
 </template>
 
@@ -24,6 +31,7 @@ import { computed, onMounted, ref, defineAsyncComponent } from 'vue'
 import { NotificationType, useInspireStore, useLoginedUserStore, Referral, useGoodStore } from 'npool-cli-v2'
 import { useLocalGoodStore } from '../../localstore'
 import { useI18n } from 'vue-i18n'
+import { QAjaxBar } from 'quasar'
 
 const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.vue'))
 
@@ -38,82 +46,16 @@ const inviter = computed(() => {
 })
 
 const logined = useLoginedUserStore()
-const innerLoading = ref(false)
 
 const good = useGoodStore()
 const lgood = useLocalGoodStore()
 
+const progress = ref<QAjaxBar>()
+
 onMounted(() => {
-  if (inspire.Referrals.length === 0) {
-    innerLoading.value = true
-    inspire.getReferrals({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_REFERRALS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      innerLoading.value = false
-      good.getGoods({
-        Message: {
-          Error: {
-            Title: t('MSG_GET_GOODS_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      }, () => {
-        good.getAppGoods({
-          Message: {
-            Error: {
-              Title: t('MSG_GET_APP_GOODS_FAIL'),
-              Popup: true,
-              Type: NotificationType.Error
-            }
-          }
-        }, () => {
-          lgood.Goods = []
-          good.Goods.filter((el) => {
-            const index = good.AppGoods.findIndex((gel) => gel.GoodID === el.Good.Good.ID && gel.Visible)
-            return index >= 0
-          }).forEach((el) => {
-            inspire.Referrals.forEach((rel) => {
-              lgood.Goods.push({
-                UserID: rel.User.ID as string,
-                GoodID: el.Good.Good.ID as string,
-                Editing: false,
-                Percent: 0
-              })
-            })
-          })
-
-          inspire.getPurchaseAmountSettings({
-            Message: {
-              Error: {
-                Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
-                Popup: true,
-                Type: NotificationType.Error
-              }
-            }
-          }, () => {
-            inspire.PurchaseAmountSettings.forEach((pel) => {
-              if (pel.End !== 0) {
-                return
-              }
-              const index = lgood.Goods.findIndex((el) => el.GoodID === pel.GoodID && el.UserID === pel.UserID)
-              if (index >= 0) {
-                lgood.Goods[index].Percent = pel.Percent
-              }
-            })
-          })
-        })
-      })
-    })
-  }
-
   if (inspire.GoodCommissions.length === 0) {
+    progress.value?.start()
+
     inspire.getGoodCommissions({
       Message: {
         Error: {
@@ -123,7 +65,92 @@ onMounted(() => {
         }
       }
     }, () => {
-      // TODO
+      if (inspire.Referrals.length > 0) {
+        progress.value?.stop()
+        return
+      }
+
+      inspire.getReferrals({
+        Message: {
+          Error: {
+            Title: t('MSG_GET_REFERRALS_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      }, (error: boolean) => {
+        if (error) {
+          progress.value?.stop()
+          return
+        }
+
+        good.getGoods({
+          Message: {
+            Error: {
+              Title: t('MSG_GET_GOODS_FAIL'),
+              Popup: true,
+              Type: NotificationType.Error
+            }
+          }
+        }, (error: boolean) => {
+          if (error) {
+            progress.value?.stop()
+            return
+          }
+
+          good.getAppGoods({
+            Message: {
+              Error: {
+                Title: t('MSG_GET_APP_GOODS_FAIL'),
+                Popup: true,
+                Type: NotificationType.Error
+              }
+            }
+          }, (error: boolean) => {
+            if (error) {
+              progress.value?.stop()
+              return
+            }
+
+            lgood.Goods = []
+            good.Goods.filter((el) => {
+              const index = good.AppGoods.findIndex((gel) => gel.GoodID === el.Good.Good.ID && gel.Visible)
+              return index >= 0
+            }).forEach((el) => {
+              inspire.Referrals.forEach((rel) => {
+                lgood.Goods.push({
+                  UserID: rel.User.ID as string,
+                  GoodID: el.Good.Good.ID as string,
+                  Editing: false,
+                  Percent: 0
+                })
+              })
+            })
+
+            inspire.getPurchaseAmountSettings({
+              Message: {
+                Error: {
+                  Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
+                  Popup: true,
+                  Type: NotificationType.Error
+                }
+              }
+            }, () => {
+              progress.value?.stop()
+
+              inspire.PurchaseAmountSettings.forEach((pel) => {
+                if (pel.End !== 0) {
+                  return
+                }
+                const index = lgood.Goods.findIndex((el) => el.GoodID === pel.GoodID && el.UserID === pel.UserID)
+                if (index >= 0) {
+                  lgood.Goods[index].Percent = pel.Percent
+                }
+              })
+            })
+          })
+        })
+      })
     })
   }
 })
