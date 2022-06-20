@@ -330,6 +330,19 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        path: 'remainder/affiliate',
+        component: () => import('pages/RemainderAffiliate.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
         path: 'remainder/kyc',
         component: () => import('pages/RemainderKYC.vue'),
         meta: {

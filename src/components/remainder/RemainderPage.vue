@@ -6,10 +6,10 @@
           <h3>{{ $t(label) }}</h3>
           <p v-html='$t(caption)' />
           <div class='hr' />
-          <button @click='onSubmit'>
+          <button v-if='submitText.length > 0' @click='onSubmit'>
             {{ $t(submitText) }}
           </button>
-          <button class='alt' @click='onCancel'>
+          <button v-if='cancelText.length > 0' class='alt' @click='onCancel'>
             {{ $t(cancelText) }}
           </button>
         </div>

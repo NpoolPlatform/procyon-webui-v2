@@ -53,7 +53,8 @@ import {
   AccountType,
   MessageUsedFor,
   useKYCStore,
-  ReviewState
+  ReviewState,
+  useInspireStore
 } from 'npool-cli-v2'
 import { AppID } from 'src/const/const'
 import { defineAsyncComponent, ref, computed } from 'vue'
@@ -88,6 +89,7 @@ const recaptcha = useReCaptcha()
 const application = useApplicationStore()
 const logined = useLoginedUserStore()
 const kyc = useKYCStore()
+const inspire = useInspireStore()
 
 const router = useRouter()
 
@@ -119,11 +121,19 @@ const remainder = () => {
       void router.push({ path: '/remainder/kyc' })
       return
     }
-    if (!logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified) {
-      void router.push({ path: '/remainder/ga' })
-      return
-    }
-    void router.push({ path: '/' })
+    inspire.getInvitationCode({
+      Message: {}
+    }, () => {
+      if (!inspire.InvitationCode.Confirmed) {
+        void router.push({ path: '/remainder/affiliate' })
+        return
+      }
+      if (!logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified) {
+        void router.push({ path: '/remainder/ga' })
+        return
+      }
+      void router.push({ path: '/' })
+    })
   })
 }
 

@@ -17,37 +17,37 @@
             <th>
               <div class='tooltip'>
                 <span>{{ $t('MSG_COMMISSION_RATE') }}</span>
-                <img class='more-info' :src='question'>
+                <!-- img class='more-info' :src='question'>
                 <p class='tooltip-text'>
                   {{ $t('MSG_COMMISSION_RATE_TIP') }}
-                </p>
+                </p -->
               </div>
             </th>
             <th>
               <div class='tooltip'>
                 <span>{{ $t('MSG_REFERRAL_UNITS') }}</span>
-                <img class='more-info' :src='question'>
+                <!-- img class='more-info' :src='question'>
                 <p class='tooltip-text'>
                   {{ $t('MSG_REFERRAL_UNITS_TIP') }}
-                </p>
+                </p -->
               </div>
             </th>
             <th>
               <div class='tooltip'>
                 <span>{{ $t('MSG_TOTAL_SALES') }}</span>
-                <img class='more-info' :src='question'>
+                <!-- img class='more-info' :src='question'>
                 <p class='tooltip-text'>
                   {{ $t('MSG_TOTAL_SALES_TIP') }}
-                </p>
+                </p -->
               </div>
             </th>
             <th>
               <div class='tooltip'>
                 <span>{{ $t('MSG_REFERRAL_COMMISSION') }}</span>
-                <img class='more-info' :src='question'>
+                <!-- img class='more-info' :src='question'>
                 <p class='tooltip-text'>
                   {{ $t('MSG_REFERRAL_COMMISSION_TIP') }}
-                </p>
+                </p -->
               </div>
             </th>
           </tr>
@@ -131,7 +131,6 @@ import { useI18n } from 'vue-i18n'
 import { useLocalGoodStore, GoodItem } from '../../localstore'
 
 import chevrons from '../../assets/chevrons.svg'
-import question from '../../assets/question.svg'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
