@@ -164,6 +164,25 @@ onMounted(() => {
     })
   }
 
+  if (good.Goods.length > 0 && good.AppGoods.length > 0) {
+    good.Goods.filter((el) => {
+      const index = good.AppGoods.findIndex((gel) => gel.GoodID === el.Good.Good.ID && gel.Visible && gel.Online)
+      return index >= 0
+    }).forEach((el) => {
+      const index = goods.value.findIndex((lel) => lel.GoodID === el.Good.Good.ID)
+      if (index >= 0) {
+        return
+      }
+      goods.value.push({
+        UserID: referral.value?.User.ID as string,
+        GoodID: el.Good.Good.ID as string,
+        Editing: false,
+        Percent: 0
+      })
+    })
+    return
+  }
+
   good.getGoods({
     Message: {
       Error: {
