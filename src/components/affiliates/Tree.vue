@@ -65,10 +65,12 @@ onMounted(() => {
         }
       }
     }, () => {
+      progress.value?.stop()
       if (inspire.Referrals.length > 0) {
-        progress.value?.stop()
         return
       }
+
+      progress.value?.start()
 
       inspire.getReferrals({
         Message: {
@@ -79,10 +81,12 @@ onMounted(() => {
           }
         }
       }, (error: boolean) => {
+        progress.value?.stop()
         if (error) {
-          progress.value?.stop()
           return
         }
+
+        progress.value?.start()
 
         good.getGoods({
           Message: {
@@ -93,10 +97,12 @@ onMounted(() => {
             }
           }
         }, (error: boolean) => {
+          progress.value?.stop()
           if (error) {
-            progress.value?.stop()
             return
           }
+
+          progress.value?.start()
 
           good.getAppGoods({
             Message: {
@@ -107,8 +113,8 @@ onMounted(() => {
               }
             }
           }, (error: boolean) => {
+            progress.value?.stop()
             if (error) {
-              progress.value?.stop()
               return
             }
 
@@ -126,6 +132,8 @@ onMounted(() => {
                 })
               })
             })
+
+            progress.value?.start()
 
             inspire.getPurchaseAmountSettings({
               Message: {
