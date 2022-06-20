@@ -2314,6 +2314,10 @@ h3.mining-title
   filter: contrast(1.5)
   font-weight: 500
 
+.buttons
+  display: flex
+  justify-content: flex-end
+  flex-wrap: wrap
 
 .buttons button,
 .buttons button.alt
@@ -2328,19 +2332,14 @@ h3.mining-title
 .buttons button.alt:hover
   border-radius: 2px
 
-
-.mining-summary .buttons
-  display: flex
-  justify-content: flex-end
-  @media (max-width: $breakpoint-sm-max)
-    justify-content: space-between
-
 .mining-summary .buttons button,
 .mining-summary .buttons button.alt
-  margin: 18px 0 0 0
-  width: 100%
   @media (max-width: $breakpoint-sm-max)
-    margin: 24px 12px
+    margin: 18px 0 0 0
+    width: 100%
+
+.mining-summary .buttons button:first-of-type
+  margin-top: 0
 
 .buttons button:first-of-type
   margin-left: 0
@@ -2350,7 +2349,7 @@ h3.mining-title
 
 .buttons button.show-more
   border: 1px solid #a1d0d0
-  margin: auto auto auto 0
+  margin: 0 auto 0 0
   opacity: .7
 
 .buttons button.show-more img

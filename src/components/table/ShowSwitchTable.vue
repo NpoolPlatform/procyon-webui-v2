@@ -14,10 +14,12 @@
       <slot name='top-right' />
     </template>
     <template #bottom-left>
-      <div class='buttons'>
-        <button :class='[ "alt show-more", showMore ? "open" : "" ]' @click='onShowSwitchClick'>
-          <img :src='chevrons'>
-        </button>
+      <div class='column justify-center'>
+        <div class='buttons'>
+          <button :class='[ "alt show-more", showMore ? "open" : "" ]' @click='onShowSwitchClick'>
+            <img :src='chevrons'>
+          </button>
+        </div>
       </div>
     </template>
   </OpTable>

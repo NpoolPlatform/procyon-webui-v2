@@ -7,7 +7,7 @@
       <slot name='top-right' />
     </div>
   </div>
-  <div class='mining-summary content-glass'>
+  <div class='minning-summary content-glass'>
     <q-table
       flat
       :bordered='false'
