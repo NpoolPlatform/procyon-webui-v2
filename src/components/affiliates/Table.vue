@@ -70,11 +70,11 @@ const inspire = useInspireStore()
 const referrals = computed(() => inspire.Referrals.filter((referral) => !referral.Kol))
 
 const searchStr = ref('')
-const displayReferrals = computed(() => referrals.value.filter((el) => {
-  return el.User.EmailAddress?.includes(searchStr.value) || el.User.PhoneNO?.includes(searchStr.value)
-}))
+const displayReferrals = ref(referrals.value)
 const onSearchSubmit = () => {
-  // TODO
+  displayReferrals.value = referrals.value.filter((el) => {
+    return el.User.EmailAddress?.includes(searchStr.value) || el.User.PhoneNO?.includes(searchStr.value)
+  })
 }
 
 const accountName = (referral: Referral) => {
