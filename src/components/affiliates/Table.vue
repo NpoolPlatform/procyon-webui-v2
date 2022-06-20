@@ -1,44 +1,70 @@
 <template>
-  <ShowSwitchTable
-    label='MSG_DIRECT_AFFILIATES'
-    :rows='(referrals as Array<never>)'
-    :table='(table as never)'
-    :customize-body='true'
-  >
-    <template #table-body='myProps'>
-      <q-tr :props='myProps'>
-        <q-td key='Name' :props='myProps'>
-          {{ myProps.row.User.EmailAddress.length > 0 ? myProps.row.User.EmailAddress : myProps.row.User.PhoneNO }}
-        </q-td>
-        <q-td key='JoinDate' :props='myProps'>
-          {{ formatTime(myProps.row.User.CreateAt, true) }}
-        </q-td>
-        <q-td key='Purchased' :props='myProps'>
-          <div v-for='summary in myProps.row.Summaries' :key='summary.CoinTypeID'>
-            <span>{{ summary.CoinName }}: </span>
-            <span class='sales-number'>{{ summary.Units }}</span>
-            <span> {{ $t(summary.Unit) }} / </span>
-            <span class='sales-number'>{{ Math.floor(summary.Amount) }}</span>
-            <span> {{ PriceCoinName }}</span>
-          </div>
-        </q-td>
-        <q-td key='TotalPayment' :props='myProps'>
-          {{ myProps.row.USDAmount.toFixed(4) }} {{ PriceCoinName }}
-        </q-td>
-        <q-td key='ReferralValue' :props='myProps'>
-          {{ myProps.row.SubUSDAmount.toFixed(4) }} {{ PriceCoinName }}
-        </q-td>
-      </q-tr>
-    </template>
-  </ShowSwitchTable>
+  <h2>{{ $t('MSG_DIRECT_AFFILIATES') }}</h2>
+  <div class='direct-ref content-glass'>
+    <div id='search-box'>
+      <form action='javascript: void(0)' @submit='onSearchSubmit'>
+        <input id='search-field' type='text' v-model='searchStr'>
+        <button v-if='searchStr.length > 0' class='search-reset' type='reset' @click='onSearchResetClick'>
+          &times;
+        </button>
+        <input id='search-button' type='submit' :value='$t("MSG_SEARCH_RESULTS")'>
+      </form>
+    </div>
+    <!--<div id='product-filter'>
+      <form>
+        <select name='Filter Product'>
+          <option value='Aleo' selected>Aleo</option>
+          <option value='Spacemesh'>Spacemesh</option>
+        </select>
+      </form>
+    </div>-->
+    <div class='aff-table'>
+      <table id='direct-ref-table'>
+        <thead>
+          <tr>
+            <th><span>{{ $t('MSG_REFERRAL_ACCOUNT') }}</span></th>
+            <th><span>{{ $t('MSG_JOIN_DATE') }}</span></th>
+            <!-- th><span>Units</span></th>
+            <th><span>Total Payment</span></th>
+            <th><span>Commission</span></th -->
+          </tr>
+        </thead>
+        <tbody>
+          <!-- tr class='aff-info total-row'>
+            <td><span class='aff-product'>TOTAL</span></td>
+            <td><span class='aff-number'><span class='unit'>NA</span></span></td>
+            <td><span class='aff-number'>4<span class='unit'>Units</span></span></td>
+            <td><span class='aff-number'>2,000<span class='unit'>USDT</span></span></td>
+            <td><span class='aff-number'>400<span class='unit'>USDT</span></span></td>
+          </tr -->
+          <tr class='aff-info' v-for='referral in displayReferrals' :key='referral.User.ID'>
+            <td>
+              <span class='aff-product'>{{ accountName(referral) }}</span>
+              <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
+            </td>
+            <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
+            <!-- td><span class='aff-number'>2<span class='unit'>Units</span></span></td>
+            <td><span class='aff-number'>1,000<span class='unit'>USDT</span></span></td>
+            <td><span class='aff-number'>200<span class='unit'>USDT</span></span></td -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, formatTime, Referral, useInspireStore, PriceCoinName } from 'npool-cli-v2'
+import { computed, onMounted, ref } from 'vue'
+import {
+  NotificationType,
+  formatTime,
+  Referral,
+  useInspireStore
+} from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
-const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
+import edit from '../../assets/edit.svg'
+import { useRouter } from 'vue-router'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -46,38 +72,40 @@ const { t } = useI18n({ useScope: 'global' })
 const inspire = useInspireStore()
 const referrals = computed(() => inspire.Referrals.filter((referral) => !referral.Kol))
 
-const table = computed(() => [
-  {
-    name: 'Name',
-    label: t('MSG_USERNAME'),
-    align: 'left',
-    field: (row: Referral) => row
-  },
-  {
-    name: 'JoinDate',
-    label: t('MSG_JOIN_DATE'),
-    align: 'center',
-    field: (row: Referral) => row
-  },
-  {
-    name: 'Purchased',
-    label: t('MSG_PURCHASED'),
-    align: 'center',
-    field: (row: Referral) => row
-  },
-  {
-    name: 'TotalPayment',
-    label: t('MSG_TOTAL_PAYMENT'),
-    align: 'center',
-    field: (row: Referral) => row
-  },
-  {
-    name: 'ReferralValue',
-    label: t('MSG_REFERRAL_VALUE'),
-    align: 'center',
-    field: (row: Referral) => row
-  }
-])
+const searchStr = ref('')
+const displayReferrals = ref(referrals.value)
+const onSearchSubmit = () => {
+  displayReferrals.value = referrals.value.filter((el) => {
+    return el.User.EmailAddress?.includes(searchStr.value) || el.User.PhoneNO?.includes(searchStr.value)
+  })
+}
+const onSearchResetClick = () => {
+  searchStr.value = ''
+  displayReferrals.value = referrals.value
+}
+
+const accountName = (referral: Referral) => {
+  return referral.User?.EmailAddress?.length ? referral.User?.EmailAddress : referral.User?.PhoneNO
+}
+
+const joinDate = (referral: Referral) => {
+  return formatTime(referral.Invitation.CreateAt, true)
+}
+
+const joinTime = (referral: Referral) => {
+  return formatTime(referral.Invitation.CreateAt, false).split(' ')[1]
+}
+
+const router = useRouter()
+
+const onSetKolClick = (referral: Referral) => {
+  void router.push({
+    path: '/setup/affiliate',
+    query: {
+      userId: referral.User.ID
+    }
+  })
+}
 
 onMounted(() => {
   if (referrals.value.length === 0) {

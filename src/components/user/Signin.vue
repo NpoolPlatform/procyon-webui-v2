@@ -48,13 +48,13 @@ import {
   useUserStore,
   encryptPassword,
   GoogleTokenType,
-  useInspireStore,
   useApplicationStore,
   useLoginedUserStore,
   AccountType,
   MessageUsedFor,
   useKYCStore,
-  ReviewState
+  ReviewState,
+  useInspireStore
 } from 'npool-cli-v2'
 import { AppID } from 'src/const/const'
 import { defineAsyncComponent, ref, computed } from 'vue'
@@ -86,10 +86,10 @@ const verifyAccountType = ref(accountType)
 const user = useUserStore()
 const coderepo = useCodeRepoStore()
 const recaptcha = useReCaptcha()
-const inspire = useInspireStore()
 const application = useApplicationStore()
 const logined = useLoginedUserStore()
 const kyc = useKYCStore()
+const inspire = useInspireStore()
 
 const router = useRouter()
 
@@ -121,11 +121,19 @@ const remainder = () => {
       void router.push({ path: '/remainder/kyc' })
       return
     }
-    if (!logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified) {
-      void router.push({ path: '/remainder/ga' })
-      return
-    }
-    void router.push({ path: '/' })
+    inspire.getInvitationCode({
+      Message: {}
+    }, () => {
+      if (!inspire.InvitationCode.Confirmed) {
+        void router.push({ path: '/remainder/affiliate' })
+        return
+      }
+      if (!logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified) {
+        void router.push({ path: '/remainder/ga' })
+        return
+      }
+      void router.push({ path: '/' })
+    })
   })
 }
 
@@ -219,15 +227,6 @@ const onSubmit = () => {
         }
       }
     }, () => {
-      inspire.getInvitationCode({
-        Message: {
-          Error: {
-            Title: t('MSG_GET_INVITATION_CODE_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      })
       if (target.value?.length) {
         void router.push({
           path: target.value,

@@ -148,6 +148,19 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        path: 'setup/affiliate',
+        component: () => import('pages/SetupAffiliate.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
         path: 'account',
         component: () => import('pages/Account.vue'),
         meta: {
@@ -306,6 +319,19 @@ const routes: RouteRecordRaw[] = [
       }, {
         path: 'remainder/mobile',
         component: () => import('pages/RemainderMobile.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
+        path: 'remainder/affiliate',
+        component: () => import('pages/RemainderAffiliate.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
           ShowMainHeader: false,

@@ -15,8 +15,8 @@
     </template>
     <template #bottom-left>
       <div class='buttons'>
-        <button class='alt' @click='onShowSwitchClick'>
-          {{ showMore ? $t('MSG_SHOW_LESS') : $t('MSG_SHOW_MORE') }}
+        <button :class='[ "alt show-more", showMore ? "open" : "" ]' @click='onShowSwitchClick'>
+          <img :src='chevrons'>
         </button>
       </div>
     </template>
@@ -25,6 +25,8 @@
 
 <script setup lang='ts'>
 import { defineProps, toRef, ref, defineEmits, defineAsyncComponent, withDefaults } from 'vue'
+
+import chevrons from '../../assets/chevrons.svg'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 

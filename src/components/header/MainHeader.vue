@@ -56,7 +56,7 @@
 
 <script setup lang='ts'>
 import { useInspireStore, useLoginedUserStore, NotificationType, useUserStore } from 'npool-cli-v2'
-import { defineAsyncComponent, computed } from 'vue'
+import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
 
@@ -112,6 +112,45 @@ const menu = computed(() => {
 const onLogoClick = () => {
   void router.push({ path: '/' })
 }
+
+const userLogined = computed(() => logined.getLogined)
+
+watch(userLogined, () => {
+  if (!userLogined.value) {
+    return
+  }
+  initialize()
+})
+
+const initialize = () => {
+  inspire.getInvitationCode({
+    Message: {}
+  }, () => {
+    if (inspire.InvitationCode?.InvitationCode?.length) {
+      inspire.getReferrals({
+        Message: {}
+      }, () => {
+        // TODO
+      })
+      inspire.getPurchaseAmountSettings({
+        Message: {}
+      }, () => {
+        // TODO
+      })
+    }
+  })
+  user.getLoginHistories({
+    Message: {}
+  }, () => {
+    // TODO
+  })
+}
+
+onMounted(() => {
+  if (userLogined.value) {
+    initialize()
+  }
+})
 
 </script>
 
