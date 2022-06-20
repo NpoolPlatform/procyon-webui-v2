@@ -3,7 +3,7 @@
     <h2 class='title'>
       {{ $t(label) }}
     </h2>
-    <div>
+    <div class='column justify-center'>
       <slot name='top-right' />
     </div>
   </div>
