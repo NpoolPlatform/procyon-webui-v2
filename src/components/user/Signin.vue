@@ -124,7 +124,7 @@ const remainder = () => {
     inspire.getInvitationCode({
       Message: {}
     }, () => {
-      if (!inspire.InvitationCode.Confirmed) {
+      if (inspire.InvitationCode && !inspire.InvitationCode?.Confirmed) {
         void router.push({ path: '/remainder/affiliate' })
         return
       }
