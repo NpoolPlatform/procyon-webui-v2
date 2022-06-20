@@ -86,10 +86,10 @@
         <div class='row'>
           <q-space />
           <div class='buttons'>
-            <button @click='onAgreeClick'>
+            <button class='my-button' @click='onAgreeClick'>
               {{ $t('MSG_AGREE') }}
             </button>
-            <button class='alt' @click='onCancelClick'>
+            <button class='alt my-button' @click='onCancelClick'>
               {{ $t('MSG_CANCEL') }}
             </button>
           </div>
@@ -249,4 +249,7 @@ const onSubmit = () => {
 .popup
   background-color: transparent
   display: block !important
+
+.my-button
+  margin: 24px 24px 24px 0
 </style>
