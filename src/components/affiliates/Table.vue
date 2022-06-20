@@ -4,6 +4,9 @@
     <div id='search-box'>
       <form action='javascript: void(0)' @submit='onSearchSubmit'>
         <input id='search-field' type='text' v-model='searchStr'>
+        <button v-if='searchStr.length > 0' class='search-reset' type='reset' @click='onSearchResetClick'>
+          &times;
+        </button>
         <input id='search-button' type='submit' :value='$t("MSG_SEARCH_RESULTS")'>
       </form>
     </div>
@@ -75,6 +78,10 @@ const onSearchSubmit = () => {
   displayReferrals.value = referrals.value.filter((el) => {
     return el.User.EmailAddress?.includes(searchStr.value) || el.User.PhoneNO?.includes(searchStr.value)
   })
+}
+const onSearchResetClick = () => {
+  searchStr.value = ''
+  displayReferrals.value = referrals.value
 }
 
 const accountName = (referral: Referral) => {
