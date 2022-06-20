@@ -14,6 +14,13 @@
       </div>
     </template>
   </OpTable>
+  <q-ajax-bar
+    ref='progress'
+    position='top'
+    color='green-2'
+    size='6px'
+    skip-hijack
+  />
 </template>
 
 <script setup lang='ts'>
@@ -21,6 +28,7 @@ import { computed, onMounted, defineAsyncComponent, ref, onUnmounted } from 'vue
 import { useOrderStore, buildOrders, OrderGroup, OrderModel, useGoodStore, formatTime, NotificationType, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { QAjaxBar } from 'quasar'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
@@ -30,7 +38,6 @@ const { t } = useI18n({ useScope: 'global' })
 const order = useOrderStore()
 const orders = computed(() => buildOrders(order.Orders, OrderGroup.ALL))
 const myOrders = ref([] as Array<OrderModel>)
-const loading = ref(false)
 
 const good = useGoodStore()
 
@@ -100,6 +107,7 @@ const onRowClick = (myOrder: OrderModel) => {
 }
 
 const ticker = ref(-1)
+const progress = ref<QAjaxBar>()
 
 onMounted(() => {
   if (good.Goods.length === 0) {
@@ -137,7 +145,8 @@ onMounted(() => {
   }
 
   if (order.Orders.length === 0) {
-    loading.value = true
+    progress.value?.start()
+
     order.getOrders({
       Message: {
         Error: {
@@ -147,7 +156,7 @@ onMounted(() => {
         }
       }
     }, () => {
-      loading.value = false
+      progress.value?.stop()
     })
   }
 
