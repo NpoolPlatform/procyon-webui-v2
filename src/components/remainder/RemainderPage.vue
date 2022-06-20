@@ -1,5 +1,5 @@
 <template>
-  <BackPage>
+  <BackPage back-target='/dashboard'>
     <div class='content order-page'>
       <div class='form-container'>
         <div class='confirmation'>
