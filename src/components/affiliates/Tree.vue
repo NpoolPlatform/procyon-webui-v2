@@ -65,13 +65,6 @@ onMounted(() => {
         }
       }
     }, () => {
-      progress.value?.stop()
-      if (inspire.Referrals.length > 0) {
-        return
-      }
-
-      progress.value?.start()
-
       inspire.getReferrals({
         Message: {
           Error: {
