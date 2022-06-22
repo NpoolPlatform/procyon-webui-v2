@@ -2,14 +2,12 @@
   <div class='content'>
     <div class='columns-2 highlight'>
       <div class='column-2 order-1 with-frame'>
-        <h1>First-batch mining</h1>
-        <h2>The best mining rewards come to those who start first</h2>
-        <ul>
-          <li>First-to-market mining products</li>
-          <li>Globally proven success record</li>
-          <li>Expertly curated product selection</li>
-        </ul>
-        <button>Learn more</button>
+        <h1>{{ $t('MSG_FIRST_BATCH_MINING_TITLE') }}</h1>
+        <h2>{{ $t('MSG_FIRST_BATCH_MINING_SUBTITLE') }}</h2>
+        <p v-html='$t("MSG_FIRST_BATCH_MINING_CONTENT")' />
+        <button @click='onAleoClick'>
+          {{ $t('MSG_LEARN_MORE') }}
+        </button>
       </div>
       <div class='column-2 order-2'>
         <img src='product/aleo/procyon-product-aleo-homepage.png'>
@@ -18,14 +16,12 @@
         <img src='product/mixmob/procyon-ido-mixmob-homepage.png'>
       </div>
       <div class='column-2 order-3 with-frame'>
-        <h1>Exclusive IDO</h1>
-        <h2>VC-level opportunities for everyone</h2>
-        <ul>
-          <li>Top-tier projects backed by leading VCs</li>
-          <li>Highly-vetted by rigorous due diligence</li>
-          <li>Early access, limited supply</li>
-        </ul>
-        <button class='in-active'>Coming soon</button>
+        <h1>{{ $t('MSG_EXCLUSIVE_IDO_TITLE') }}</h1>
+        <h2>{{ $t('MSG_EXCLUSIVE_IDO_SUBTITLE') }}</h2>
+        <p v-html='$t("MSG_EXCLUSIVE_IDO_CONTENT")' />
+        <button class='in-active' disabled>
+          {{ $t('MSG_COMING_SOON') }}
+        </button>
       </div>
     </div>
   </div>
@@ -35,6 +31,7 @@
 import { computed, onMounted } from 'vue'
 import { useGoodStore, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -89,6 +86,12 @@ onMounted(() => {
     }
   })
 })
+
+const router = useRouter()
+
+const onAleoClick = () => {
+  void router.push({ path: '/product/aleo' })
+}
 
 </script>
 
