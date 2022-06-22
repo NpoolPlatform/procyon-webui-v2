@@ -1,20 +1,16 @@
 <template>
-  <div class='content'>
-    <Banner />
-    <Products />
-    <WhyMe />
-  </div>
+  <Banner />
+  <Products />
+  <WhyMe />
   <Feature />
-  <div class='content'>
-    <WhatIsMining />
-  </div>
+  <WhatIsMining />
 </template>
 
 <script setup lang='ts'>
 import { defineAsyncComponent } from 'vue'
 
 const Banner = defineAsyncComponent(() => import('src/components/index/Banner.vue'))
-const Products = defineAsyncComponent(() => import('src/components/index/AleoProducts.vue'))
+const Products = defineAsyncComponent(() => import('src/components/index/MixProducts.vue'))
 const WhyMe = defineAsyncComponent(() => import('src/components/index/WhyMe.vue'))
 const Feature = defineAsyncComponent(() => import('src/components/index/Feature.vue'))
 const WhatIsMining = defineAsyncComponent(() => import('src/components/index/WhatIsMining.vue'))
