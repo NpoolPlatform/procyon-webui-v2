@@ -158,9 +158,9 @@ onMounted(() => {
           return
         }
 
-        progress.value?.start()
-
         if (order.Orders.length === 0) {
+          progress.value?.start()
+
           order.getOrders({
             Message: {
               Error: {
