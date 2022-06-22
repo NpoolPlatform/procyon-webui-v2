@@ -1,7 +1,7 @@
 <template>
   <h2>{{ $t('MSG_SECURITY_SETTINGS') }}</h2>
   <div class='settings'>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='lock'>
         <h3 class='box-title'>
@@ -14,7 +14,7 @@
         {{ $t('MSG_CHANGE_PASSWORD') }}
       </button>
     </div>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='mail'>
         <h3 class='box-title'>
@@ -31,7 +31,7 @@
         {{ $t('MSG_UPDATE_EMAIL_ADDRESS') }}
       </button>
     </div>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='mobile'>
         <h3 class='box-title'>
@@ -48,7 +48,7 @@
         {{ $t('MSG_UPDATE_PHONE_NUMBER') }}
       </button>
     </div>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='shieldHalf'>
         <h3 class='box-title'>
@@ -65,7 +65,7 @@
         {{ $t('MSG_ENABLE_2FA_AUTH') }}
       </button>
     </div>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='shieldSolid'>
         <h3 class='box-title'>
@@ -89,7 +89,7 @@
         {{ $t('MSG_SUBMIT_CHANGE') }}
       </button>
     </div>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='id'>
         <h3 class='box-title'>
