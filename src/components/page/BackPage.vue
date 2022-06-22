@@ -1,5 +1,5 @@
 <template>
-  <div class='back-button' @click='onBackClick'>
+  <div class='back-button content-glass' @click='onBackClick'>
     ⭠
   </div>
   <slot />
