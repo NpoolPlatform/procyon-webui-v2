@@ -110,18 +110,23 @@ const ticker = ref(-1)
 const progress = ref<QAjaxBar>()
 
 onMounted(() => {
-  if (good.Goods.length === 0) {
-    good.getGoods({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOODS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+  progress.value?.start()
+
+  good.getGoods({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GOODS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
       }
-    }, () => {
-      // TODO
-    })
+    }
+  }, (error: boolean) => {
+    progress.value?.stop()
+    if (error) {
+      return
+    }
+
+    progress.value?.start()
 
     good.getPromotions({
       Message: {
@@ -131,34 +136,46 @@ onMounted(() => {
           Type: NotificationType.Error
         }
       }
-    })
-
-    good.getAppGoods({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_APP_GOODS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    })
-  }
-
-  if (order.Orders.length === 0) {
-    progress.value?.start()
-
-    order.getOrders({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_ORDERS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
+    }, (error: boolean) => {
       progress.value?.stop()
+      if (error) {
+        return
+      }
+
+      progress.value?.start()
+
+      good.getAppGoods({
+        Message: {
+          Error: {
+            Title: t('MSG_GET_APP_GOODS_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
+        }
+      }, (error: boolean) => {
+        progress.value?.stop()
+        if (error) {
+          return
+        }
+
+        progress.value?.start()
+
+        if (order.Orders.length === 0) {
+          order.getOrders({
+            Message: {
+              Error: {
+                Title: t('MSG_GET_ORDERS_FAIL'),
+                Popup: true,
+                Type: NotificationType.Error
+              }
+            }
+          }, () => {
+            progress.value?.stop()
+          })
+        }
+      })
     })
-  }
+  })
 
   ticker.value = window.setInterval(() => {
     myOrders.value = [] as Array<OrderModel>
