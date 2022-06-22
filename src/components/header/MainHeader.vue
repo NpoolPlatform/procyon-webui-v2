@@ -10,13 +10,14 @@
         <LangSwitcher />
         <SignHelper v-if='!logined.getLogined' />
         <q-btn
+          v-else
           size='1.1rem'
-          flat dense round v-else
+          flat dense round
           :icon='"img:" + userAvatar'
           class='user-icon'
         >
           <q-menu
-            self='top right' anchor='bottom left'
+            self='top left' anchor='bottom left'
             transition-show='jump-down'
             transition-hide='jump-up'
             :offset='[-28,0]'
@@ -44,17 +45,32 @@
     <div class='header-inner'>
       <LangSwitcher />
       <SignHelper v-if='!logined.getLogined' />
-      <AvatarDropdown class='avatar' v-else>
-        <ExpandList
-          :menu='menu'
-          :show-icon='true'
-          :show-icon-right='true'
-          :show-label='false'
-          :handle-router='false'
-          :margin='true'
-          @switch-menu='onSwitchMenu'
-        />
-      </AvatarDropdown>
+      <q-btn
+        v-else
+        size='1.1rem'
+        flat dense round
+        :icon='"img:" + userAvatar'
+        class='user-icon'
+      >
+        <q-menu
+          self='top left' anchor='bottom left'
+          transition-show='jump-down'
+          transition-hide='jump-up'
+          :offset='[-28,0]'
+        >
+          <q-list class='dropdown'>
+            <ExpandList
+              :menu='menu'
+              :show-icon='true'
+              :show-icon-right='true'
+              :show-label='false'
+              :handle-router='false'
+              :margin='true'
+              @switch-menu='onSwitchMenu'
+            />
+          </q-list>
+        </q-menu>
+      </q-btn>
     </div>
     <div class='hr' />
     <div class='nav'>
@@ -82,7 +98,6 @@ import userAvatar from '../../assets/icon-user.svg'
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
-const AvatarDropdown = defineAsyncComponent(() => import('src/components/avatar/AvatarDropdown.vue'))
 const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -169,4 +184,6 @@ onMounted(() => {
 </script>
 
 <style lang='sass' scoped>
+.dropdown
+  min-width: 200px
 </style>
