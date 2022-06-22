@@ -172,8 +172,8 @@ const onAgreementClick = () => {
 }
 const onAgreeClick = () => {
   showStatus.value = false
-  onAgreeFocusOut()
   agree.value = true
+  onAgreeFocusOut()
 }
 const onCancelClick = () => {
   showStatus.value = false
@@ -251,5 +251,5 @@ const onSubmit = () => {
   display: block !important
 
 .my-button
-  margin: 24px 24px 24px 0
+  margin: auto 0 auto 18px !important
 </style>
