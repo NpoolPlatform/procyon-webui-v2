@@ -88,7 +88,7 @@ const inspire = useInspireStore()
 const referrals = computed(() => inspire.Referrals.filter((referral) => !referral.Kol))
 
 const searchStr = ref('')
-const displayReferrals = ref(referrals.value)
+const displayReferrals = ref(referrals.value.sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1))
 const onSearchSubmit = () => {
   displayReferrals.value = referrals.value.filter((el) => {
     return el.User.EmailAddress?.includes(searchStr.value) || el.User.PhoneNO?.includes(searchStr.value)
