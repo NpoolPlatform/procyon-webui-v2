@@ -37,7 +37,7 @@
             <td><span class='aff-number'>2,000<span class='unit'>USDT</span></span></td>
             <td><span class='aff-number'>400<span class='unit'>USDT</span></span></td>
           </tr -->
-          <tr class='aff-info' v-for='referral in displayReferrals' :key='referral.User.ID'>
+          <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.User.ID'>
             <td>
               <span class='aff-product'>{{ accountName(referral) }}</span>
               <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
@@ -49,6 +49,21 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class='row'>
+      <q-space />
+      <div class='pagination'>
+        <q-pagination
+          dense
+          color='white'
+          active-color='orange-1'
+          v-model='page'
+          :max='pages'
+          :max-pages='5'
+          boundary-links
+          direction-links
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -123,7 +138,17 @@ onMounted(() => {
   }
 })
 
+const page = ref(1)
+const countPerPage = ref(10)
+const pages = computed(() => Math.ceil(displayReferrals.value.length / countPerPage.value))
+
+const pageReferrals = computed(() => displayReferrals.value.filter((el, index) => {
+  return index >= (page.value - 1) * countPerPage.value && index < page.value * countPerPage.value
+}))
+
 </script>
 
 <stype lang='sass' scoped>
+.pagination
+  max-width: 40%
 </stype>
