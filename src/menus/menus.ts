@@ -12,12 +12,12 @@ interface MenuItem {
   children: Array<MenuItem>
 }
 
-import dashboard from '../assets/icon-mining.svg'
+import dashboard from '../assets/chart-line.svg'
 import wallet from '../assets/icon-wallet.svg'
 import affiliates from '../assets/icon-affiliates.svg'
-import security from '../assets/icon-security.svg'
+import security from '../assets/shield-half.svg'
 // import account from '../assets/icon-account.svg'
-import kyc from '../assets/icon-kyc.svg'
+import kyc from '../assets/user.svg'
 
 const BaseMenu = {
   menuId: uid(),
@@ -31,31 +31,31 @@ const BaseMenu = {
       menuId: uid(),
       label: 'MSG_DASHBOARD',
       caption: '',
-      icon: 'img:' + dashboard,
+      icon: dashboard,
       target: '/dashboard',
-      level: 0,
-      children: []
-    }, {
-      menuId: uid(),
-      label: 'MSG_WALLET',
-      caption: '',
-      icon: 'img:' + wallet,
-      target: '/wallet',
       level: 0,
       children: []
     }, {
       menuId: uid(),
       label: 'MSG_REFERRAL',
       caption: '',
-      icon: 'img:' + affiliates,
+      icon: affiliates,
       target: '/affiliates',
+      level: 0,
+      children: []
+    }, {
+      menuId: uid(),
+      label: 'MSG_WALLET',
+      caption: '',
+      icon: wallet,
+      target: '/wallet',
       level: 0,
       children: []
     }, {
       menuId: uid(),
       label: 'MSG_SECURITY',
       caption: '',
-      icon: 'img:' + security,
+      icon: security,
       target: '/security',
       level: 0,
       children: []
@@ -63,7 +63,7 @@ const BaseMenu = {
       menuId: uid(),
       label: 'MSG_ACCOUNT',
       caption: '',
-      icon: 'img:' + account,
+      icon: account,
       target: '/account',
       level: 0,
       children: []
@@ -71,7 +71,7 @@ const BaseMenu = {
       menuId: uid(),
       label: 'MSG_PERSONAL_INFO',
       caption: '',
-      icon: 'img:' + kyc,
+      icon: kyc,
       target: '/kyc',
       level: 0,
       children: []
