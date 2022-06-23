@@ -41,7 +41,7 @@
       <div class='hr' />
       <div class='columns-1'>
         <div class='sub-feature'>
-          {{ $t('MSG_WHYME_SUB_FEATURES') }}
+          <span v-html='$t("MSG_WHYME_SUB_FEATURES")' />
         </div>
       </div>
     </div>
