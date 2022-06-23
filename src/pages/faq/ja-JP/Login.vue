@@ -52,11 +52,15 @@
           <p>
             <a
               href='https://drive.google.com/file/d/1aoNOumwbMMoB9KKEwvYMkVpMFBa_wjEt/view?usp=sharing'
-              target='_blank'>ログイン方法のユーザーガイドで確認
+              target='_blank'
+            >
+              ログイン方法のユーザーガイドで確認
             </a>
           </p>
 
-          <h3 id='初回ログインの方法'>初回ログインの方法</h3>
+          <h3 id='初回ログインの方法'>
+            初回ログインの方法
+          </h3>
 
           <div class='video-box'>
             <iframe
@@ -88,7 +92,9 @@
           <p>
             <a
               href='https://drive.google.com/file/d/1GahESamBwv7oCtFjizir8Q19F5lRSi6_/view?usp=sharing'
-              target='_blank'>初回ログインの方法をユーザーガイドで確認
+              target='_blank'
+            >
+              初回ログインの方法をユーザーガイドで確認
             </a>
           </p>
 
@@ -116,7 +122,9 @@
           <p>
             <a
               href='https://drive.google.com/file/d/1otpSmbJDje3Lt64XrUYt1jSZ0OhlZ4Sk/view?usp=sharing'
-              target='_blank'>パスワードを忘れた場合の対応方法をユーザーガイドで確認
+              target='_blank'
+            >
+              パスワードを忘れた場合の対応方法をユーザーガイドで確認
             </a>
           </p>
 
@@ -145,7 +153,9 @@
           <p>
             <a
               href='https://drive.google.com/file/d/1hDYVQStVh-Db5t-ezrRE2idsjgOkdTKk/view?usp=sharing'
-              target='_blank'>パスワードの変更方法をユーザーガイドで確認
+              target='_blank'
+            >
+              パスワードの変更方法をユーザーガイドで確認
             </a>
           </p>
 
