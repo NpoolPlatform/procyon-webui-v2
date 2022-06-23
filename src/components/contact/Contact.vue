@@ -4,7 +4,7 @@
       <h2>{{ $t('MSG_CONTACT_SUPPORT') }}</h2>
     </div>
     <div class='content contact-page'>
-      <div class='form-container'>
+      <div class='form-container content-glass'>
         <h3 class='form-title'>
           {{ $t('MSG_CONTACT_VIA_EMAIL') }}
         </h3>
@@ -38,7 +38,7 @@
           <input type='submit' :value='$t("MSG_SEND_MESSAGE")' class='register'>
         </form>
       </div>
-      <div class='form-container'>
+      <div class='form-container content-glass'>
         <h3 class='form-title'>
           {{ $t('MSG_CONTACT_VIA_LINE') }}
         </h3>
