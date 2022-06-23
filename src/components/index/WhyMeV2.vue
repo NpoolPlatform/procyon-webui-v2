@@ -40,9 +40,7 @@
       </div>
       <div class='hr' />
       <div class='columns-1'>
-        <div class='sub-feature'>
-          <span v-html='$t("MSG_WHYME_SUB_FEATURES")' />
-        </div>
+        <div class='sub-feature' v-html='$t("MSG_WHYME_SUB_FEATURES")' />
       </div>
     </div>
   </div>
