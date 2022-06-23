@@ -5,7 +5,7 @@
   <div class='content faq'>
     <div id='hero'>
       <h1>Support Center</h1>
-      <div id='search-box'>
+      <div v-show='false' id='search-box'>
         <form>
           <input id='search-field' type='text'>
           <input id='search-button' type='submit' value='Search'>
