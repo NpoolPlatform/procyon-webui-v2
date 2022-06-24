@@ -145,7 +145,7 @@
             <li>(1) Check your spam folder.</li>
             <li>(2) Search your inbox using the following subject and address:</li>
             <ul>
-              <li><strong>Subject:</strong>Procyon.vip - Email verification code</li>
+              <li><strong>Subject: </strong>Procyon.vip - Email verification code</li>
               <li><strong>Email Address: </strong>support@procyon.vip</li>
             </ul>
           </ul>
