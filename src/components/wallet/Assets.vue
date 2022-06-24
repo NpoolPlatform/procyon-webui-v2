@@ -210,6 +210,7 @@ onMounted(() => {
         }
       }
     }, () => {
+      getBenefits()
       progress.value?.stop()
     })
   }
