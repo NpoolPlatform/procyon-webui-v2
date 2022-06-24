@@ -67,7 +67,7 @@
             What should I do if the site crashes in the middle of submission?
           </h3>
 
-          <p>Please re-open the KYC page and follow the steps below based on the [KYC Verification Status].</p>
+          <p>Please re-open the KYC page and follow the steps below based on the <strong>[KYC Verification Status]</strong>.</p>
 
           <ul>
             <li>

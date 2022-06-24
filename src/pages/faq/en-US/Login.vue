@@ -64,7 +64,7 @@
           <ul>
             <li>(1) Open the <strong>[Login]</strong> page.</li>
             <li>(2) Click <strong>[Forgot password?]</strong> in green.</li>
-            <li>(3) Enter your email address (the one you submitted when you placed your order), and click [Send Code].</li>
+            <li>(3) Enter your email address (the one you submitted when you placed your order), and click <strong>[Send Code]</strong>.</li>
             <li>(4) Enter the verification code sent to your email.</li>
             <li>(5) Set your new password and click the <strong>[Confirm]</strong> button.</li>
           </ul>
@@ -90,7 +90,7 @@
           <ul>
             <li>(1) Open the <strong>[Login]</strong> page.</li>
             <li>(2) Click the <strong>[Forgot password?]</strong> link.</li>
-            <li>(3) Enter the email address you registered for this account and click [Send Code].</li>
+            <li>(3) Enter the email address you registered for this account and click <strong>[Send Code]</strong>.</li>
             <li>(4) Enter the verification code sent to your email.</li>
             <li>(5) Set your new password and click the <strong>[Confirm]</strong> button.</li>
           </ul>
