@@ -1,7 +1,7 @@
 <template>
   <BackPage>
     <div class='content'>
-      <div class='form-container'>
+      <div class='form-container content-glass'>
         <h3 class='form-title'>
           {{ $t('MSG_GOOGLE_AUTHENTICATOR') }}
         </h3>

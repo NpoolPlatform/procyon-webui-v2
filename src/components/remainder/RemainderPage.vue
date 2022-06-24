@@ -1,7 +1,7 @@
 <template>
   <BackPage back-target='/dashboard'>
     <div class='content order-page'>
-      <div class='form-container'>
+      <div class='form-container content-glass'>
         <div class='confirmation'>
           <h3>{{ $t(label) }}</h3>
           <p v-html='$t(caption)' />
