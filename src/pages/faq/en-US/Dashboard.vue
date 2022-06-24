@@ -21,7 +21,7 @@
             <li><a @click='scrollTo("What is the Technical Service Fee?")'>What is the Technical Service Fee?</a></li>
             <li><a @click='scrollTo("What is hashrate?")'>What is hashrate?</a></li>
             <li><a @click='scrollTo("What is Network Daily Output?")'>What is Network Daily Output?</a></li>
-            <li><a @click='scrollTo("If Procyons servers go down will the mining stop?")'>If Procyon's servers go down will themining stop?</a></li>
+            <li><a @click='scrollTo("If Procyons servers go down will the mining stop?")'>If Procyon's servers go down will the mining stop?</a></li>
           </ul>
 
           <div class='hr' />

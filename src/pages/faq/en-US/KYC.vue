@@ -77,7 +77,7 @@
             <li><strong>[Not Verified] </strong>Please re-submit your application.</li>
           </ul>
 
-          <div class='hr' />\
+          <div class='hr' />
         </div>
       </div>
     </template>
