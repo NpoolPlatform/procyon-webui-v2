@@ -51,12 +51,12 @@
           </div>
 
           <ul>
-            <li>(1) Open the [Security] page after logging in.</li>
-            <li>(2) Click the [Not Verified] button.</li>
+            <li>(1) Open the <strong>[Security]</strong> page after logging in.</li>
+            <li>(2) Click the <strong>[Not Verified]</strong> button.</li>
             <li>(3) Enter your phone number. *Do not enter the first '0'.</li>
-            <li>(4) Click [Send Code].</li>
+            <li>(4) Click <strong>[Send Code]</strong>.</li>
             <li>(5) Enter the verification code sent to your phone.</li>
-            <li>(6) Click the [Setup Mobile Number] button.</li>
+            <li>(6) Click the <strong>[Setup Mobile Number]</strong> button.</li>
           </ul>
 
           <h3 id='How to bind two-factor authentication'>
@@ -81,7 +81,7 @@
               <li><a href='https://apps.apple.com/jp/app/google-authenticator/id388497605' target='_blank'>For iOS (iPhone)</a></li>
               <li><a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=ja&gl=US' target='_blank'>For Android</a></li>
             </ul>
-            <li>(4) Click [Next Step] on Procyon.vip.</li>
+            <li>(4) Click <strong>[Next Step]</strong> on Procyon.vip.</li>
             <li>(5) Enter the authentication code from Google Authenticator on Procyon.vip to complete the two-factor setup.</li>
           </ul>
 
