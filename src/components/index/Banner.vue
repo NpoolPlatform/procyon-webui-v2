@@ -34,7 +34,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const onAvailableNowClick = () => {
-  void router.push({ path: '/registration' })
+  void router.push({ path: '/product/aleo' })
 }
 
 </script>
