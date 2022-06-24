@@ -1,5 +1,5 @@
 <template>
-  <div class='form-container'>
+  <div class='form-container content-glass'>
     <div class='confirmation'>
       <h3>{{ $t(title) }}</h3>
       <div>
@@ -171,15 +171,7 @@ onMounted(() => {
 </script>
 
 <style lang='sass' scoped>
-.form-title
-  white-space: nowrap
-  text-overflow: ellipsis
-
-.form-container
-  max-width: 400px
-
 .margin-top-0
-  margin-top: 0 !important
   margin-bottom: 36px !important
 
 .tip

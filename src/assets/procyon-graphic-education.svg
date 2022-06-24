@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Procyon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 468 468" style="enable-background:new 0 0 468 468;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#CCCCCC;stroke-miterlimit:10;}
+	.st1{fill:url(#SVGID_1_);}
+	.st2{fill:url(#SVGID_00000082344669132339972070000018364615525169989012_);}
+	.st3{fill:url(#SVGID_00000044883326137254941240000010502373239038623651_);}
+</style>
+<circle class="st0" cx="277.8" cy="277.8" r="122.8"/>
+<circle class="st0" cx="127.2" cy="127.2" r="90.2"/>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="762.1547" y1="504.7114" x2="625.7715" y2="622.2255" gradientTransform="matrix(0.9007 -0.4344 -0.4344 -0.9007 -15.6548 1173.6226)">
+	<stop  offset="2.237672e-07" style="stop-color:#2979C1"/>
+	<stop  offset="1" style="stop-color:#3DD1EA"/>
+</linearGradient>
+<circle class="st1" cx="364.6" cy="364.6" r="90"/>
+<linearGradient id="SVGID_00000172430306943022907540000011218022102360679351_" gradientUnits="userSpaceOnUse" x1="576.2491" y1="946.0476" x2="530.788" y2="985.219" gradientTransform="matrix(0.9007 -0.4344 -0.4344 -0.9007 -15.6548 1173.6226)">
+	<stop  offset="2.237672e-07" style="stop-color:#2979C1"/>
+	<stop  offset="1" style="stop-color:#3DD1EA"/>
+</linearGradient>
+<circle style="fill:url(#SVGID_00000172430306943022907540000011218022102360679351_);" cx="63.4" cy="63.4" r="30"/>
+<linearGradient id="SVGID_00000182498748568895072680000013825410875708535739_" gradientUnits="userSpaceOnUse" x1="650.789" y1="762.7847" x2="575.1055" y2="827.9971" gradientTransform="matrix(0.9007 -0.4344 -0.4344 -0.9007 -15.6548 1173.6226)">
+	<stop  offset="2.237672e-07" style="stop-color:#2979C1"/>
+	<stop  offset="1" style="stop-color:#3DD1EA"/>
+</linearGradient>
+<circle style="fill:url(#SVGID_00000182498748568895072680000013825410875708535739_);" cx="190.9" cy="190.9" r="50"/>
+</svg>

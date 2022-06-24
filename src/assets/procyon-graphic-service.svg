@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Procyon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 468 468" style="enable-background:new 0 0 468 468;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#CCCCCC;stroke-miterlimit:10;}
+	.st1{fill:url(#SVGID_1_);}
+	.st2{fill:url(#SVGID_00000008123065031523314550000000242288789447076789_);}
+</style>
+<ellipse transform="matrix(0.9007 -0.4344 0.4344 0.9007 -71.2538 123.2481)" class="st0" cx="234" cy="217.5" rx="244" ry="122"/>
+<ellipse transform="matrix(0.9007 -0.4344 0.4344 0.9007 -71.2538 123.2481)" class="st0" cx="234" cy="217.5" rx="227.6" ry="113.8"/>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="104.3469" y1="384.4595" x2="253.8398" y2="384.4595" gradientTransform="matrix(0.9441 0.3297 -0.3297 0.9441 90.2412 -64.0695)">
+	<stop  offset="0" style="stop-color:#54E280"/>
+	<stop  offset="1" style="stop-color:#1EC498"/>
+</linearGradient>
+<circle class="st1" cx="132.6" cy="357.9" r="74.7"/>
+<linearGradient id="SVGID_00000172435559864075658690000002143056218921393302_" gradientUnits="userSpaceOnUse" x1="236.2646" y1="52.394" x2="319.7925" y2="52.394" gradientTransform="matrix(0.9441 0.3297 -0.3297 0.9441 90.2412 -64.0695)">
+	<stop  offset="0" style="stop-color:#54E280"/>
+	<stop  offset="1" style="stop-color:#1EC498"/>
+</linearGradient>
+<circle style="fill:url(#SVGID_00000172435559864075658690000002143056218921393302_);" cx="335.4" cy="77.1" r="41.8"/>
+</svg>

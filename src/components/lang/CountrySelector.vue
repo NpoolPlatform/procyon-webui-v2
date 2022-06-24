@@ -10,8 +10,8 @@
     menu-self='bottom start'
   >
     <template #label>
-      <div class='row country'>
-        <div class='column justify-center country'>
+      <div class='row country country-label'>
+        <div class='column justify-center'>
           <q-img fit='contain' class='flag' :src='country?.Flag' />
         </div>
         <div class='column justify-center'>
@@ -97,6 +97,9 @@ onBeforeMount(() => {
   color: black
   line-height: 16px
 
+.country-label
+  margin: 10px auto auto auto
+
 .even
   background-color: #D2D2D2
 
@@ -106,10 +109,8 @@ onBeforeMount(() => {
 .selector
   color: black
   margin: 0
+  text-shadow: none
 
 .q-btn--dense
   line-height: 1rem
-
-.selector
-  text-shadow: none
 </style>

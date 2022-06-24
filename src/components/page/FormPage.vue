@@ -1,7 +1,7 @@
 <template>
   <BackPage>
     <div class='content'>
-      <div class='form-container'>
+      <div class='form-container content-glass'>
         <div class='row'>
           <h3 class='form-title'>
             {{ $t(label) }}

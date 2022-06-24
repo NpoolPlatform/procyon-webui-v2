@@ -13,7 +13,7 @@
     >
       <q-separator v-if='item.sectionBegin' />
       <div :class='[margin ? "menu-item-margin row" : "row"]'>
-        <q-icon class='icon' v-if='showIcon && item.icon && item.icon.length > 0' :name='item.icon' />
+        <q-icon class='icon' v-if='showIcon && item.icon && item.icon.length > 0' :name='item.icon === "logout" ? item.icon : "img:" + item.icon' />
         <q-item-label class='menu-item-label'>
           {{ $t(item.label) }}
         </q-item-label>

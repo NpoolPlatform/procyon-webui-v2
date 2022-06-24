@@ -1,13 +1,9 @@
 <template>
-  <div class='content'>
-    <Banner />
-    <Products />
-    <WhyMe />
-  </div>
+  <Banner />
+  <Products />
+  <WhyMe />
   <Feature />
-  <div class='content'>
-    <WhatIsMining />
-  </div>
+  <WhatIsMining />
 </template>
 
 <script setup lang='ts'>

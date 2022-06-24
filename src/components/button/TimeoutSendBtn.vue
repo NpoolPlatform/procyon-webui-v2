@@ -1,7 +1,7 @@
 <template>
-  <q-btn class='send-code alt' @click='onClick' :disabled='disabled'>
+  <button class='send-code alt' @click='onClick' :disabled='disabled'>
     {{ disabled ? timeout.toString() + 'S' : $t('MSG_SEND_CODE') }}
-  </q-btn>
+  </button>
 </template>
 
 <script setup lang='ts'>

@@ -98,7 +98,19 @@ const routes: RouteRecordRaw[] = [
         }
       }, {
         path: 'faq',
-        component: () => import('pages/FAQ.vue'),
+        component: () => import('pages/faq/FAQ.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false
+        }
+      }, {
+        path: 'faqs',
+        component: () => import('pages/faq/FAQMenu.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
           ShowMainHeader: false,

@@ -1,7 +1,7 @@
 <template>
   <h2>{{ $t('MSG_SECURITY_SETTINGS') }}</h2>
   <div class='settings'>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='lock'>
         <h3 class='box-title'>
@@ -14,7 +14,7 @@
         {{ $t('MSG_CHANGE_PASSWORD') }}
       </button>
     </div>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='mail'>
         <h3 class='box-title'>
@@ -24,14 +24,16 @@
       <p>{{ $t('MSG_UPDATE_EMAIL_TIP') }}</p>
       <div class='verification'>
         <img :src='squareCheck' :class='[ logined.LoginedUser?.User?.EmailAddress?.length ? "verified" : "" ]'>
-        <span>{{ logined.LoginedUser?.User?.EmailAddress?.length ? $t('MSG_VERIFIED') : $t('MSG_NOT_VERIFIED') }}</span>
+        <span>
+          {{ logined.LoginedUser?.User?.EmailAddress?.length ? $t('MSG_VERIFIED') + ': ' + logined.LoginedUser?.User?.EmailAddress : $t('MSG_NOT_VERIFIED') }}
+        </span>
       </div>
       <q-space />
       <button @click='onUpdateEmailClick'>
         {{ $t('MSG_UPDATE_EMAIL_ADDRESS') }}
       </button>
     </div>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='mobile'>
         <h3 class='box-title'>
@@ -41,14 +43,16 @@
       <p>{{ $t('MSG_MOBILE_AUTHENTICATION_TIP') }}</p>
       <div class='verification'>
         <img :src='squareCheck' :class='[ logined.LoginedUser?.User?.PhoneNO?.length ? "verified" : "" ]'>
-        <span>{{ logined.LoginedUser?.User?.PhoneNO?.length ? $t('MSG_VERIFIED') : $t('MSG_NOT_VERIFIED') }}</span>
+        <span>
+          {{ logined.LoginedUser?.User?.PhoneNO?.length ? $t('MSG_VERIFIED') + ': ' + logined.LoginedUser?.User?.PhoneNO : $t('MSG_NOT_VERIFIED') }}
+        </span>
       </div>
       <q-space />
       <button @click='onUpdateMobileClick'>
         {{ $t('MSG_UPDATE_PHONE_NUMBER') }}
       </button>
     </div>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='shieldHalf'>
         <h3 class='box-title'>
@@ -65,7 +69,7 @@
         {{ $t('MSG_ENABLE_2FA_AUTH') }}
       </button>
     </div>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='shieldSolid'>
         <h3 class='box-title'>
@@ -89,7 +93,7 @@
         {{ $t('MSG_SUBMIT_CHANGE') }}
       </button>
     </div>
-    <div class='setting-box column'>
+    <div class='setting-box column content-glass'>
       <div class='settings-box-heading'>
         <img :src='id'>
         <h3 class='box-title'>

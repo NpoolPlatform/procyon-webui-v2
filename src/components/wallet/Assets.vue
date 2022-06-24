@@ -33,6 +33,13 @@
       </q-tr>
     </template>
   </ShowSwitchTable>
+  <q-ajax-bar
+    ref='progress'
+    position='top'
+    color='green-2'
+    size='6px'
+    skip-hijack
+  />
 </template>
 
 <script setup lang='ts'>
@@ -53,6 +60,7 @@ import {
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { QAjaxBar } from 'quasar'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -81,6 +89,7 @@ interface MyBenefit extends BenefitModel {
   JPYValue: number
 }
 
+const progress = ref<QAjaxBar>()
 const exBenefits = ref([] as Array<MyBenefit>)
 
 const getBenefits = () => {
@@ -102,9 +111,11 @@ const getBenefits = () => {
       commissionIncluded = true
     }
 
+    progress.value?.start()
     currencies.getCoinCurrency(coin.getCoinByID(benefit.CoinTypeID), Currency.USD, (usdCurrency: number) => {
       currencies.getCoinCurrency(coin.getCoinByID(benefit.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
         totalWithdrawedEarningCoin(benefit.CoinTypeID, (amount: number) => {
+          progress.value?.stop()
           for (let i = 0; i < exBenefits.value.length; i++) {
             if (exBenefits.value[i].CoinTypeID === benefit.CoinTypeID) {
               exBenefits.value[i].Total = benefit.Total - amount
@@ -189,6 +200,7 @@ const table = computed(() => [
 
 onMounted(() => {
   if (order.Orders.length === 0) {
+    progress.value?.start()
     order.getOrders({
       Message: {
         Error: {
@@ -197,6 +209,8 @@ onMounted(() => {
           Type: NotificationType.Error
         }
       }
+    }, () => {
+      progress.value?.stop()
     })
   }
 

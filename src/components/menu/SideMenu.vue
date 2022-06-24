@@ -1,6 +1,5 @@
 <template>
   <div class='sidebar' v-if='setting.ShowSideMenu'>
-    <img :src='lightLogo' class='attachment-large size-large logo' @click='onLogoClick'>
     <ul>
       <div
         v-for='menu in BaseMenu.children'
@@ -9,9 +8,9 @@
         <li
           v-if='showMenu(menu)'
           @click='onMenuSwitch(menu)'
-          :class='[ menuId === menu.menuId ? "selected" : "" ]'
+          :class='[ menuId === menu.menuId ? "current-page" : "" ]'
         >
-          <q-icon :name='menu.icon' class='img' />
+          <img :src='menu.icon'>
           <span>{{ $t(menu.label) }}</span>
         </li>
       </div>
@@ -26,8 +25,6 @@ import { BaseMenu, MenuItem } from 'src/menus/menus'
 import { computed, watch, onMounted } from 'vue'
 import { useInspireStore, useLoginedUserStore, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-
-import lightLogo from '../../assets/procyon-light.svg'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -52,9 +49,6 @@ watch(user, () => {
 })
 
 const router = useRouter()
-const onLogoClick = () => {
-  void router.push({ path: '/' })
-}
 
 const showMenu = (menu: MenuItem) => {
   if (menu.label === 'MSG_REFERRAL' && !inspire.InvitationCode?.InvitationCode?.length) {
@@ -91,6 +85,4 @@ onMounted(() => {
 </script>
 
 <style lang='sass' scoped>
-.logo
-  cursor: pointer
 </style>
