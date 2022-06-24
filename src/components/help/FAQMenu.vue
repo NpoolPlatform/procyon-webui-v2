@@ -78,12 +78,12 @@ const faqs = computed(() => [
     topic: 'Dashboard',
     title: 'MSG_DASHBOARD_FAQ_MENU_TITLE',
     subtitle: 'MSG_DASHBOARD_FAQ_MENU_SUBTITLE'
-  }, {
+  }, /* {
     icon: 'font-awesome/bitcoin.svg',
     topic: 'Payments',
     title: 'MSG_PAYMENTS_FAQ_MENU_TITLE',
     subtitle: 'MSG_PAYMENTS_FAQ_MENU_SUBTITLE'
-  }, {
+  }, */ {
     icon: 'font-awesome/user-check.svg',
     topic: 'KYC',
     title: 'MSG_KYC_FAQ_MENU_TITLE',
