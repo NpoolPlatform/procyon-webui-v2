@@ -2,7 +2,7 @@
   <div class='content'>
     <div class='columns-2 highlight'>
       <div class='column-2 order-1 with-frame'>
-        <h1>{{ $t('MSG_FIRST_BATCH_MINING_TITLE') }}</h1>
+        <h1> <span v-html='$t("MSG_FIRST_BATCH_MINING_TITLE")' /> </h1>
         <h2>{{ $t('MSG_FIRST_BATCH_MINING_SUBTITLE') }}</h2>
         <p v-html='$t("MSG_FIRST_BATCH_MINING_CONTENT")' />
         <button @click='onAleoClick'>
