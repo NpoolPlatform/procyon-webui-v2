@@ -10,6 +10,56 @@
             <h1>{{ good?.Main?.Name }} {{ $t('MSG_MINING') }}</h1>
           </div>
         </div>
+        <div id='product-form' class='product-sidebar-section mobile'>
+          <h3 class='form-title'>
+            {{ $t('MSG_MINING_PURCHASE') }}
+          </h3>
+          <form action='javascript:void(0)' @submit='onSubmit' id='purchase'>
+            <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
+            <Input
+              v-model:value='myPurchaseAmount'
+              type='number'
+              id='amount'
+              required
+              :error='purchaseAmountError'
+              message='MSG_AMOUNT_TIP'
+              placeholder='MSG_AMOUNT_PLACEHOLDER'
+              :min='0'
+              :max='total'
+              @focus='onPurchaseAmountFocusIn'
+              @blur='onPurchaseAmountFocusOut'
+            />
+            <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
+            <div v-show='paymentCoin'>
+              <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
+                <option
+                  v-for='myCoin in coins'
+                  :key='myCoin?.ID'
+                  :value='myCoin'
+                  :selected='paymentCoin?.ID === myCoin?.ID'
+                >
+                  {{ myCoin?.Unit }} ({{ currency.formatCoinName(myCoin?.Name as string) }})
+                </option>
+              </select>
+            </div>
+            <!--<h4>Coupon Code</h4>
+            <input type='text'>
+            <div class='coupon-error'>Incorrect Coupon Code</div>-->
+            <div class='submit-container'>
+              <WaitingBtn
+                label='MSG_PURCHASE'
+                type='submit'
+                class='submit-btn'
+                :disabled='submitting'
+                :waiting='submitting'
+              />
+            </div>
+            <div class='warning' v-if='showRateTip'>
+              <img :src='warning'>
+              <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
+            </div>
+          </form>
+        </div>
         <div class='info'>
           <h3 class='form-title'>
             {{ $t('MSG_PRODUCT_DETAILS') }}
