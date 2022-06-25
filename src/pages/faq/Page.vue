@@ -4,7 +4,7 @@
   </div>
   <div class='content faq'>
     <div id='hero'>
-      <h1>Support Center</h1>
+      <h1>{{ $t('MSG_SUPPORT_CENTER') }}</h1>
       <div v-show='false' id='search-box'>
         <form>
           <input id='search-field' type='text'>
