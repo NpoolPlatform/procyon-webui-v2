@@ -76,6 +76,23 @@ const username = computed(() => {
   return name
 })
 
+const inviter = computed(() => {
+  const index = inspire.Referrals.findIndex((el) => el.User.ID === logined.LoginedUser?.User.ID)
+  return index < 0 ? undefined as unknown as Referral : inspire.Referrals[index]
+})
+const inviterGoodPercent = (goodID: string) => {
+  let index = inviter.value.GoodSummaries.findIndex((el) => el.GoodID === goodID)
+  let percent = 0
+  if (index >= 0) {
+    percent = inviter.value.GoodSummaries[index].Percent
+  }
+  index = inspire.PurchaseAmountSettings.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID && el.GoodID === goodID && el.End === 0)
+  if (index >= 0) {
+    percent = inspire.PurchaseAmountSettings[index].Percent
+  }
+  return percent
+}
+
 const subusername = computed(() => {
   let name = referral.value?.User?.EmailAddress
 
@@ -89,6 +106,18 @@ const subusername = computed(() => {
 const backTimer = ref(-1)
 
 const onSubmit = () => {
+  let overflow = false
+  for (const g of goods.value) {
+    if (g.Percent > inviterGoodPercent(g.GoodID)) {
+      g.Percent = inviterGoodPercent(g.GoodID)
+      overflow = true
+    }
+  }
+
+  if (overflow) {
+    return
+  }
+
   inspire.createInvitationCode({
     TargetUserID: referral.value.User.ID as string,
     InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
