@@ -95,6 +95,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const coins = useCoinStore()
 const coin = computed(() => coins.getCoinByID(coinTypeId.value))
+const productInfo = computed(() => coins.getCoinProductInfoByCoin(coinTypeId.value))
 
 const good = useGoodStore()
 
@@ -109,13 +110,7 @@ const goodUnit = computed(() => orders.value.length > 0 ? orders.value[0].Good.G
 const goodPeriod = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.DurationDays : '')
 const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
 
-const productPage = computed(() => {
-  const info = coins.ProductInfos.get(coinTypeId.value)
-  if (info) {
-    return info.ProductPage
-  }
-  return '/'
-})
+const productPage = computed(() => productInfo.value.ProductPage)
 
 const purchaseDisable = computed(() => {
   const index = good.Goods.findIndex((el) => {
@@ -126,7 +121,6 @@ const purchaseDisable = computed(() => {
     }
     return false
   })
-  console.log(coinTypeId.value, index)
   if (index >= 0) {
     return false
   }
@@ -179,6 +173,20 @@ const getCoins = () => {
 }
 
 onMounted(() => {
+  if (!productInfo.value) {
+    coins.getCoinProductInfos({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COIN_PRODUCT_INFOS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+
   if (coins.Coins.length === 0) {
     getCoins()
     return
