@@ -55,7 +55,7 @@
       <button class='alt' disabled>
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
-      <button @click='onPurchaseClick'>
+      <button @click='onPurchaseClick' :disabled='purchaseDisable'>
         {{ $t('MSG_PURCHASE_CAPACITY') }}
       </button>
     </div>
@@ -73,7 +73,8 @@ import {
   useOrderStore,
   PriceCoinName,
   NotificationType,
-  PaymentState
+  PaymentState,
+  useGoodStore
 } from 'npool-cli-v2'
 import { defineProps, toRef, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -95,6 +96,8 @@ const { t } = useI18n({ useScope: 'global' })
 const coins = useCoinStore()
 const coin = computed(() => coins.getCoinByID(coinTypeId.value))
 
+const good = useGoodStore()
+
 const order = useOrderStore()
 const orders = computed(() => order.Orders.filter((myOrder) => {
   return myOrder?.Good?.Main?.ID === coin.value.ID &&
@@ -105,6 +108,30 @@ const orders = computed(() => order.Orders.filter((myOrder) => {
 const goodUnit = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.Unit : '')
 const goodPeriod = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.DurationDays : '')
 const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
+
+const productPage = computed(() => {
+  const info = coins.ProductInfos.get(coinTypeId.value)
+  if (info) {
+    return info.ProductPage
+  }
+  return '/'
+})
+
+const purchaseDisable = computed(() => {
+  const index = good.Goods.findIndex((el) => {
+    for (const g of good.AppGoods) {
+      if (g.GoodID === el.Good.Good.ID && el.Main?.ID === coinTypeId.value && g.Visible && g.Online) {
+        return true
+      }
+    }
+    return false
+  })
+  console.log(coinTypeId.value, index)
+  if (index >= 0) {
+    return false
+  }
+  return true
+})
 
 const currency = useCurrencyStore()
 
@@ -161,7 +188,7 @@ onMounted(() => {
 
 const router = useRouter()
 const onPurchaseClick = () => {
-  void router.push({ path: '/' })
+  void router.push({ path: productPage.value })
 }
 
 const onExpandClick = () => {

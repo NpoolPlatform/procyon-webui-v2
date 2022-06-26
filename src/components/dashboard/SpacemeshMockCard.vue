@@ -59,7 +59,7 @@
       <button class='alt' disabled>
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
-      <button @click='onPurchaseClick'>
+      <button @click='onPurchaseClick' disabled>
         {{ $t('MSG_PURCHASE_CAPACITY') }}
       </button>
     </div>
