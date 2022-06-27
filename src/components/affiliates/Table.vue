@@ -3,10 +3,12 @@
   <div class='direct-ref content-glass'>
     <div id='search-box'>
       <form action='javascript: void(0)' @submit='onSearchSubmit'>
-        <input id='search-field' type='text' v-model='searchStr'>
-        <button v-if='searchStr.length > 0' class='search-reset' type='reset' @click='onSearchResetClick'>
-          &times;
-        </button>
+        <div class='sub-form'>
+          <input id='search-field' type='text' v-model='searchStr' placeholder='MSG_AFFILIATES_SEARCH_PLACEHOLDER'>
+          <button v-if='searchStr.length > 0' class='search-reset' type='reset' @click='onSearchResetClick'>
+            &times;
+          </button>
+        </div>
         <input id='search-button' type='submit' :value='$t("MSG_SEARCH_RESULTS")'>
       </form>
     </div>

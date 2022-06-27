@@ -3,7 +3,6 @@
   -moz-box-sizing: border-box
   box-sizing: border-box
 
-
 ::selection
   background: #1ec498
   color: #27424c
@@ -26,7 +25,6 @@ body
   min-height: 100vh
   width: 100%
 
-
 body
   background: linear-gradient(to bottom right, #1f293a 0, #2a3943 50%, #092023 100%)
   color: #e1eeef
@@ -38,7 +36,6 @@ body
   padding: 0
   position: relative
   transition: all ease-in-out .1s
-
 
 body::before
   background-color: #101417
@@ -55,18 +52,13 @@ body::before
   width: 100%
   z-index: -1
 
-
 body.jp
   font-family: 'Noto Sans JP', sans-serif
-
 
 .mobile
   display: none
 
-
-
 /* HEADINGS */
-
 
 h1
   background: linear-gradient(to left, #54e280 0, #1ec498 50%)
@@ -80,7 +72,6 @@ h1
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
   line-height: 1.3
-
 
 h2
   background: linear-gradient(to left, #54e280 0, #1ec498 50%)
@@ -97,10 +88,8 @@ h2
   -webkit-text-fill-color: transparent
   line-height: 1.2
 
-
 h2:first-child
   margin-top: 12px
-
 
 h2::after
   background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 30%)
@@ -111,7 +100,6 @@ h2::after
   bottom: -4px
   height: 1px
   width: 100%
-
 
 h3:not([class])
   background: linear-gradient(to left, #54e280 0, #1ec498 100%)
@@ -127,7 +115,6 @@ h3:not([class])
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 h3:not([class])::after
   background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
   display: block
@@ -138,17 +125,13 @@ h3:not([class])::after
   height: 1px
   width: 100%
 
-
 h4
   font-size: 18px
   font-weight: 600
   margin: 12px 0
   text-transform: uppercase
 
-
-
 /* LINKS & BUTTONS */
-
 
 a,
 a:active,
@@ -158,22 +141,18 @@ a:visited
   text-decoration: none
   transition: all ease-in-out .3s
 
-
 a:not([class])
   color: #1ec498
   filter: contrast(1.5)
   transition: all ease-in-out .3s
-
 
 a:not([class]):hover
   color: #1ec498
   filter: contrast(1.5)
   text-decoration: underline 1px solid #11afaf
 
-
 a:hover
   color: #11afaf
-
 
 button,
 input[type="submit"]
@@ -191,7 +170,6 @@ input[type="submit"]
   text-shadow: 1px 1px 1px #ce5417
   transition: all ease-in-out .1s
 
-
 button.alt,
 input[type="submit"].send-code
   background: none
@@ -207,30 +185,23 @@ input[type="submit"]:hover
   border-radius: 4px
   filter: contrast(1.5)
 
-
 .nav button
   font-size: 14px
   height: auto
   margin: 0 0 0 12px
   padding: 8px 16px
 
-
 button.in-active
   cursor: not-allowed
   filter: saturate(0) contrast(.7)
 
-
 button.in-active:hover
   border-radius: 18px
 
-
-
 /* HEADER & NAVIGATION */
-
 
 header.mobile
   display: none
-
 
 header
   background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
@@ -241,32 +212,26 @@ header
   padding: 24px
   width: 100%
 
-
 .logo
   width: 150px
 
-
 .nav
   font-size: 14px
-
 
 .nav ul
   align-items: center
   display: flex
   margin: 0
 
-
 .nav li
   display: inline
   list-style: none
   padding: 0 12px
 
-
 .nav li a.nav-link
   color: #e1eeef
   position: relative
   text-transform: uppercase
-
 
 .nav li a.nav-link::after
   background: linear-gradient(to right, transparent 0, #54E280 50%, transparent 100%)
@@ -280,10 +245,8 @@ header
   transition: all ease-in-out .1s
   transform: scaleX(0)
 
-
 .nav li:hover a::after
   transform: scaleX(1)
-
 
 .user-icon
   cursor: pointer
@@ -292,19 +255,14 @@ header
   width: 32px
   transition: all ease-in-out .5s
 
-
 .user-icon:hover
   filter: hue-rotate(20deg) contrast(2)
 
-
-
 /* LANGUAGE PICKER */
-
 
 ul.language-picker
   display: inline
   padding: 0
-
 
 ul.language-picker li
   background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.2) 100%)
@@ -314,33 +272,25 @@ ul.language-picker li
   margin: 0 8px 8px 0
   padding: 8px
 
-
 ul.language-picker li:hover
   background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.6) 100%)
-
 
 ul.language-picker li:hover a
   color: #11afaf
 
-
 ul.language-picker li.selected
   background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.9) 100%)
 
-
-
 /* MAIN CONTENT */
-
 
 #main:not([class])
   flex: 1 0 auto
   width: 100%
 
-
 .content
   max-width: 1280px
   margin: 0 auto
   padding: 24px
-
 
 .content-glass
   background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
@@ -348,14 +298,12 @@ ul.language-picker li.selected
   border-radius: 12px
   color: #e1eeef
   padding: 24px
-  margin: 24px 0 
-
+  margin: 24px 0
 
 .content p:not([class])
   font-size: 18px
   font-weight: 300
   line-height: 36px
-
 
 .content p:not([class]) em
   background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
@@ -365,7 +313,6 @@ ul.language-picker li.selected
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .content p:not([class]) strong
   background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
   background-clip: border-box
@@ -374,13 +321,11 @@ ul.language-picker li.selected
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .content ul
   font-size: 18px
   font-weight: 300
   line-height: 36px
   list-style: none
-
 
 .content ul li::before
   color: #1ec498
@@ -391,10 +336,8 @@ ul.language-picker li.selected
   margin-left: -32px
   width: 32px
 
-
 .content ul strong
   font-weight: 700
-
 
 div.hr
   background: linear-gradient(to right, transparent 10%, #e85f1a 40%, #ffe91d 50%, #1ec498 60%, transparent 90%)
@@ -403,7 +346,6 @@ div.hr
   opacity: .7
   height: 2px
   width: 100%
-
 
 div.back-button
   box-shadow: 8px 8px 20px 0 #05131966
@@ -416,7 +358,6 @@ div.back-button
   padding: 16px 24px
   text-transform: uppercase
   transition: all ease-in-out .2s
-
 
 div.up-button
   box-shadow: 8px 8px 20px 0 #05131966
@@ -434,35 +375,29 @@ div.up-button
   transition: all ease-in-out .2s
   z-index: 10
 
-
 div.up-button a
   opacity: .7
   padding: 0 12px
-
 
 div.up-button a img
   filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
   height: 32px
   width: 32px
 
-
 div.up-button a:hover
   color: #e1eeef
   text-decoration: none
 
-
 div.back-button:hover,
 div.up-button:hover
   opacity: 1
-
 
 img.content-image
   border-radius: 24px
   box-shadow: 4px 4px 20px 0 #1f293a
   width: 100%
 
-
-.video-box 
+.video-box
   border-radius: 20px
   box-shadow: 16px 16px 20px 0 #05131966
   margin: 36px 0
@@ -470,7 +405,6 @@ img.content-image
   padding-top: 56.25%
   position: relative
   width: 100%
-
 
 .video-box iframe
   position: absolute
@@ -481,10 +415,7 @@ img.content-image
   width: 100%
   height: 100%
 
-
-
 /* HERO & HIGHLIGHTS */
-
 
 .hero
   margin: 0 0 48px 0
@@ -492,11 +423,9 @@ img.content-image
   position: relative
   width: 100%
 
-
 #home-hero .content
   padding: 0 24px
   position: relative
-
 
 .hero::after
   background: linear-gradient(to right, transparent -10%, #e85f1a 30%, #ffe91d 50%, #1ec498 80%, transparent 110%)
@@ -510,10 +439,8 @@ img.content-image
   opacity: .7
   width: 100%
 
-
 .hero h1
   font-size: 48px
-
 
 .hero h2
   background: none
@@ -524,16 +451,13 @@ img.content-image
   -webkit-background-clip: unset
   -webkit-text-fill-color: unset
 
-
 .hero h2::after
   display: none
-
 
 #home-hero
   background: linear-gradient(to bottom right, #051319 0, #1f293a 100%)
   box-shadow: 0 48px 48px 32px #05131966
   position: relative
-
 
 #home-hero::before
   background-color: #101417
@@ -550,20 +474,16 @@ img.content-image
   width: 100%
   z-index: 0
 
-
 #home-hero h1
   font-size: 84px
-
 
 #home-hero h2
   font-size: 48px
 
-
 .hero-left
-  max-width: 60%      
+  max-width: 60%
   position: relative
   z-index: 2
-
 
 .hero-image
   max-height: 120%
@@ -574,7 +494,6 @@ img.content-image
   transform: translate(0, -50%)
   z-index: 1
 
-
 .logo-feature
   align-items: center
   display: flex
@@ -583,7 +502,6 @@ img.content-image
   margin: 36px 0 0 0
   position: relative
   z-index: 2
-
 
 .logo-feature-title
   border-bottom: 1px solid #e1eeef33
@@ -596,25 +514,21 @@ img.content-image
   text-transform: uppercase
   line-height: 1.2
 
-
 .logo-feature img
   filter: invert(100%) opacity(.8)
   height: 100%
   margin: 0 5%
   max-width: 10%
 
-
 .highlight
   align-items: center
   display: flex
   margin: 36px 0
 
-
 .highlight .column-2
   margin: 48px 0
   min-width: 45%
   position: relative
-
 
 .highlight .with-frame::before
   border: 2px solid #e1eeef
@@ -631,10 +545,8 @@ img.content-image
   -webkit-mask-image: linear-gradient(to bottom right, black 0, transparent 60%)
   z-index: -1
 
-
 .highlight h1
   font-size: 50px
-
 
 .highlight h2
   background: linear-gradient(to left, #54e280 0, #1ec498 100%)
@@ -649,32 +561,24 @@ img.content-image
   -webkit-background-clip: unset
   -webkit-text-fill-color: unset
 
-
 .highlight h2::after
   display: none
 
-
 .highlight ul
   margin: 24px 0
-
 
 .highlight li
   font-size: 28px
   padding: 12px 0
 
-
 .highlight button
   margin: 0 0 60px 0
-
 
 .highlight img
   border-radius: 20px
   width: 100%
 
-
-
 /* FEATURE SECTION */
-
 
 .feature
   background: linear-gradient(to bottom right, #2a3943 0, #092023 100%)
@@ -684,7 +588,6 @@ img.content-image
   padding: 24px 0
   position: relative
   width: 100%
-
 
 .feature::before,
 .feature::after
@@ -697,16 +600,13 @@ img.content-image
   height: 1px
   width: 100%
 
-
 .feature::before
   left: 0
   top: 0
 
-
 .feature::after
   left: 0
   bottom: 0
-
 
 h2.feature-title
   font-size: 48px
@@ -716,10 +616,8 @@ h2.feature-title
   position: relative
   text-transform: uppercase
 
-
 h2.feature-title::after
   display: none
-
 
 h3.feature-title
   font-size: 32px
@@ -728,7 +626,6 @@ h3.feature-title
   padding: 0 0 20px 0
   position: relative
   text-transform: uppercase
-
 
 h3.feature-title::after
   background: linear-gradient(to right, transparent 10%, #e85f1a 40%, #ffe91d 50%, #1ec498 60%, transparent 90%)
@@ -740,21 +637,17 @@ h3.feature-title::after
   height: 1px
   width: 100%
 
-
 .feature .icon
   height: 180px
   margin: 0
-
 
 .feature .column-3
   background: linear-gradient(160deg, rgba(225, 238, 239, 0.2) 0, transparent 90%)
   border-radius: 48px
   padding: 24px
 
-
 .feature .column-3 p
   text-align: center
-
 
 .sub-feature
   background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
@@ -764,12 +657,10 @@ h3.feature-title::after
   padding: 24px
   justify-content: space-around
 
-
 .sub-feature > span
   font-size: 18px
   font-weight: 200
   margin: 0 24px
-
 
 .sub-feature span .bold
   display: block
@@ -781,17 +672,13 @@ h3.feature-title::after
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
-
 /* PRODUCTS */
-
 
 .products
   display: flex
   flex-wrap: wrap
   justify-content: flex-start
   margin: 0 0 96px 0
-
 
 .product
   padding: 36px
@@ -801,15 +688,12 @@ h3.feature-title::after
   min-width: 320px
   width: 30%
 
-
 .product:last-of-type
   margin-right: 0
-
 
 .product:hover
   transition: all ease-in-out .5s
   box-shadow: 8px 8px 20px 0 #051319
-
 
 .product-heading
   align-items: center
@@ -818,7 +702,6 @@ h3.feature-title::after
   padding: 0 0 12px 0
   position: relative
   width: 100%
-
 
 .product-heading::after
   background: linear-gradient(to right, transparent 0, #e85f1a 30%, #ffe91d 50%, #1ec498 80%, transparent 100%)
@@ -830,13 +713,11 @@ h3.feature-title::after
   height: 1px
   width: 100%
 
-
 .product .icon
   filter: opacity(.9)
   margin: 0 8px 0 0
   max-width: 32px
   max-height: 32px
-
 
 h3.product-title
   color: #e1eeef
@@ -844,7 +725,6 @@ h3.product-title
   font-weight: 200
   margin: 0
   text-transform: uppercase
-
 
 .product .price
   color: #1ec498
@@ -855,12 +735,10 @@ h3.product-title
   margin: 0
   padding: 8px 0
 
-
 .product .price span
   color: #e1eeef
   font-weight: 700
   font-size: 200%
-
 
 .product .line
   border-bottom: 1px dashed #a1d0d0
@@ -869,15 +747,12 @@ h3.product-title
   flex-wrap: nowrap
   padding: 8px 0
 
-
 .product .label
   font-weight: 400
-
 
 .product .value
   color: #e4f4f0
   font-weight: 700
-
 
 .product button
   font-size: 16px
@@ -885,46 +760,35 @@ h3.product-title
   height: auto
   width: 100%
 
-
-
 /* COLUMNS */
-
 
 .columns-1
   padding: 0 36px
 
-
-
 .columns-1 img
   max-width: 100%
   padding: 18px 60px
-
-
 
 .columns-2
   display: flex
   justify-content: space-between
   flex-wrap: wrap
 
-
 .column-2
   margin: 0 0 24px 0
   max-width: 400px
   min-width: 48%
-
 
 .columns-3
   display: flex
   justify-content: center
   flex-wrap: wrap
 
-
 .column-3
   margin: 24px 1.5% 24px 1.5%
   max-width: 360px
   text-align: center
   width: 30%
-
 
 .column-3 p
   font-size: 18px
@@ -933,19 +797,15 @@ h3.product-title
   margin: 12px 0
   text-align: left
 
-
 .columns-4
   display: flex
   justify-content: flex-start
   flex-wrap: wrap
 
-
 .column-4
   margin: 24px 5% 24px 0
   max-width: 20%
   min-width: 240px
-
-
 
 /* SIDEBAR */
 
@@ -953,33 +813,27 @@ h3.product-title
   margin: 0 0 0 240px
   width: calc(100% - 240px)
 
-
 header.with-sidebar
   justify-content: flex-end
-
 
 .sidebar
   position: absolute
   top: 100px
   width: 240px
 
-
 .sidebar .logo
   margin: 36px 0 12px 40px
   position: relative
 
-
 .sidebar .hr
   height: 1px
   margin: 0 0 16px 0
-
 
 .sidebar ul
   list-style: none
   margin: 0
   padding: 0
   text-align: left
-
 
 .sidebar ul li
   border-radius: 0 50px 50px 0
@@ -993,7 +847,6 @@ header.with-sidebar
   width: 100%
   z-index: 1
 
-
 .sidebar ul li::before
   background: linear-gradient(to right, transparent 0, #e1eeef 30%, transparent 90%)
   content: ""
@@ -1004,7 +857,6 @@ header.with-sidebar
   left: 0
   height: 1px
   width: 100%
-
 
 .sidebar ul li::after
   background: linear-gradient(to bottom right, #1ec498 0, #11afaf 100%)
@@ -1021,40 +873,33 @@ header.with-sidebar
   transition: all ease-in-out .3s
   z-index: -1
 
-
 .sidebar ul li:hover,
 .sidebar ul li.current-page
   color: #092023
-
 
 .sidebar ul li:hover::after,
 .sidebar ul li.current-page::after
   filter: opacity(1)
   transform: translateX(0)
 
-
 .sidebar ul li a
   color: inherit
   filter: none
   transition: all ease-in-out .3s
-
 
 .sidebar ul li a:hover
   color: inherit
   filter: none
   text-decoration: none
 
-
 .sidebar ul li img,
 .sidebar ul li span
   vertical-align: middle
-
 
 .sidebar ul li img
   filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
   margin: 0 8px 0 0
   width: 24px
-
 
 /* FORMS */
 
@@ -1063,10 +908,8 @@ header.with-sidebar
 #search-box
   margin: 32px 0
 
-
 #search-box form
   display: flex
-
 
 input#search-field
   border-radius: 12px 0 0 12px
@@ -1075,17 +918,14 @@ input#search-field
   min-width: 320px
   width: auto
 
-
 input#search-button
   border-radius: 0 12px 12px 0
   box-shadow: -1px 0 4px #23292b55
   margin: 0
 
-
 input#search-button:hover
   border-radius: 0 4px 4px 0
   margin: 0
-
 
 /* REGISTER */
 
@@ -1095,7 +935,6 @@ input#search-button:hover
   min-width: 360px
   max-width: 480px
 
-
 h3.form-title
   color: #e1eeef
   font-size: 24px
@@ -1103,7 +942,6 @@ h3.form-title
   position: relative
   margin: 0 0 24px 0
   padding: 0 0 24px 0
-
 
 h3.form-title::after
   background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
@@ -1115,11 +953,9 @@ h3.form-title::after
   height: 1px
   width: 100%
 
-
 label
   font-size: 16px
   font-weight: 100
-
 
 input[type="email"],
 input[type="password"],
@@ -1136,18 +972,15 @@ select
   padding: 12px
   width: 100%
 
-
 input[type="checkbox"]
   cursor: pointer
   width: 16px
   height: 16px
 
-
 .form-container label[for="agreement"]
   font-size: 16px
   font-weight: 400
   opacity: .7
-
 
 input[type="email"]:active,
 input[type="email"]:focus,
@@ -1163,21 +996,17 @@ select:active,
 select:focus
   outline: 2px solid #1ec498
 
-
 input.error
   outline: 2px solid #e85f1a
-
 
 .register
   margin: 36px 0 0 0
   width: 100%
 
-
 input[type="submit"].send-code
   font-size: 16px
   margin: 0 0 24px 0
   width: 100%
-
 
 p.skip-registration
   font-size: 14px
@@ -1185,33 +1014,26 @@ p.skip-registration
   opacity: .7
   text-align: center
 
-
 .confirmation h3
   margin-top: 0
-
 
 .confirmation h3.form-title
   font-size: 18px
   padding: 0
 
-
 .confirmation h3.form-title::after
   display: none
 
-
 .confirmation button
   margin: 0 0 24px 0
   width: 100%
 
-
 .confirmation button
   margin: 0 0 24px 0
   width: 100%
-
 
 .confirmation button:last-child
   margin: 0
-
 
 /* CONTACT FORM */
 
@@ -1219,10 +1041,8 @@ p.skip-registration
   display: flex
   flex-wrap: wrap
 
-
 .contact-page .form-container
   width: 35%
-
 
 textarea#message
   background: #e1eeef
@@ -1236,11 +1056,9 @@ textarea#message
   padding: 12px
   width: 100%
 
-
 h4#signature
   color: #1ec498
   font-weight: 400
-
 
 /* QR Code Box */
 
@@ -1248,37 +1066,30 @@ h4#signature
   font-size: 16px
   line-height: 28px
 
-
 .qr-code-text strong
   color: #1ec498
-
 
 .qr-code-text:first-of-type
   background: #ffffff22
   border-radius: 12px
   padding: 12px
 
-
 .qr-code-container
   margin: 24px 0
   text-align: center
   width: 100%
 
-
 .qr-code-container img
   border-radius: 12px
   width: 100%
-
 
 .order-form .qr-code-container img
   border-radius: 0 0 12px 12px
   width: 100%
 
-
 .form-container .hr
   height: 1px
   margin: 24px 0
-
 
 .qr-code-container h5
   background: #fc4468
@@ -1289,10 +1100,7 @@ h4#signature
   padding: 4px
   text-transform: uppercase
 
-
-
 /* PRODUCT, IDO, ORDER, WITHDRAW */
-
 
 .product-container
   display: flex
@@ -1303,83 +1111,66 @@ h4#signature
   overflow: hidden
   position: relative
 
-
 .product-page-icon
   display: inline-block
   margin: 0 8px 0 0
   text-align: center
-
 
 .product-page-icon img
   vertical-align: middle
   height: 48px
   width: 48px
 
-
 .product-container h1
   display: inline-block
   margin: 0
   vertical-align: middle
 
-
 .product-title-section
   margin: 0 0 24px 0
   width: 100%
-
 
 .product-container .info
   padding: 0 5% 0 0
   width: 75%
 
-
 .product-container .withdraw
   padding: 0 5% 0 0
   width: 100%
-
 
 .product-container .withdraw .submit,
 .product-container .withdraw input
   width: 200px
 
-
 .product-container .info-flex
   display: flex
   flex-wrap: wrap
 
-
 .product-container .info-no-flex
   margin: 0 0 36px 0
-
 
 .product-container .info-no-flex .full-section
   margin: 24px 0
 
-
 .product-container .info-no-flex .number
   font-size: 22px
 
-
 .product-container .info-no-flex .unit
   font-size: 14px
-
 
 .product-container .three-section
   margin: 0 5% 12px 0
   width: 30%
 
-
 .product-container .three-section:nth-child(3n)
   margin-right: 0
-
 
 .product-container .three-section input
   margin: 0
 
-
 .product-container .full-section
   margin: 12px 0
   width: 100%
-
 
 .product-container .address-option
   border-radius: 18px
@@ -1388,55 +1179,43 @@ h4#signature
   margin: 12px 0 24px 0
   transition: all ease-in-out .1s
 
-
 .product-container .address-option .number
   filter: contrast(.5)
-
 
 .product-container .checkmark
   opacity: 0
 
-
 .product-container .address-option:hover .number
   filter: contrast(1.5)
-
 
 .product-container .address-option:hover .checkmark
   display: inline
   opacity: .8
 
-
 .product-container .address-selected .number
   filter: contrast(1.5)
-
 
 .product-container .address-selected .checkmark
   display: inline
   opacity: .8
   transition: all ease-in-out .3s
 
-
 .order-form,
 .product-sidebar
   width: 25%
-
 
 .product-sidebar-section
   margin: 0 0 24px 0
   width: 100%
 
-
 .product-detail-text
   margin: 30px 0
-
 
 .product-detail-text h3
   margin: 48px 0 24px 0
 
-
 .product-detail-text h3::after
   width: 60%
-
 
 .product-container h4
   font-size: 18px
@@ -1444,20 +1223,16 @@ h4#signature
   margin: 12px 0 4px 0
   text-transform: unset
 
-
 .content .product-container p:not([class])
   font-size: 16px
   line-height: 28px
   margin: 16px 0
 
-
 .content .product-container ul
   font-size: 16px
 
-
 .product-container span
   font-size: 28px
-
 
 .product-container .number
   background: linear-gradient(to bottom right, #ffe91d -50%, #ce5417 150%)
@@ -1468,7 +1243,6 @@ h4#signature
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .product-container .unit,
 .product-container .wallet-type
   color: #e4f4f0
@@ -1476,22 +1250,18 @@ h4#signature
   font-size: 16px
   font-weight: 700
 
-
 .product-container .hr
   background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
   height: 1px
   margin: 24px 0
 
-
 .product-container button
   margin: 0 0 24px 0
   width: 100%
 
-
 .product-container > button
   margin: 0 auto 24px auto
   width: 320px
-
 
 img.copy-button,
 img.checkmark,
@@ -1502,11 +1272,9 @@ img.more-info
   width: 16px
   transition: all ease-in-out .3s
 
-
 img.copy-button:hover,
 img.more-info:hover
   filter: opacity(1)
-
 
 .tooltip
   align-items: center
@@ -1514,21 +1282,17 @@ img.more-info:hover
   margin: 4px 0 0 0
   position: relative
 
-
 .tooltip span
   cursor: pointer
   font-size: 10px
   text-transform: uppercase
 
-
 .tooltip img.more-info
   margin: 0 4px 0 0
   width: 12px
 
-
 .tooltip:hover img.more-info
   filter: opacity(1)
-
 
 .tooltip p.tooltip-text
   background: #23292b
@@ -1548,16 +1312,13 @@ img.more-info:hover
   visibility: hidden
   z-index: 1
 
-
 .tooltip:hover p.tooltip-text
   opacity: 1
   visibility: visible
 
-
 .submit
   margin: 36px 0 0 0
   width: 100%
-
 
 .product-container .coupon-error
   background: #fc4468
@@ -1567,35 +1328,28 @@ img.more-info:hover
   margin-top: -18px
   padding: 4px
 
-
 .content ul.product-links
   margin: 0 0 36px 0
   padding: 0
 
-
 .content ul.product-links li
   padding: 4px 0
 
-
 .content ul.product-links li::before
   display: none
-
 
 .product-links a
   align-items: center
   display: flex
 
-
 .product-links span
   font-size: 18px
-
 
 .link-icon
   filter: opacity(.8)
   margin: 0 8px 0 0
   height: 24px
   width: 24px
-
 
 .warning
   align-items: center
@@ -1606,18 +1360,15 @@ img.more-info:hover
   font-weight: 600
   padding: 8px
 
-
 .warning img
   filter: opacity(.8)
   margin: 0 8px 0 0
   height: 24px
   width: 24px
 
-
 .warning span
   font-size: 12px
   font-weight: 600
-
 
 .red-warning
   background: #fc4468
@@ -1626,10 +1377,8 @@ img.more-info:hover
   padding: 12px
   margin: 24px 0
 
-
 .blur > div:not(.popup)
   filter: blur(12px) brightness(80%)
-
 
 .popup
   border-radius: 12px
@@ -1643,35 +1392,27 @@ img.more-info:hover
   left: 0
   z-index: 10
 
-
 .popup .form-container
   background: linear-gradient(to bottom right, #2a3943 0, #092023 100%)
   box-shadow: 16px 16px 20px 0 #101417ee
 
-
 .popup .form-container button
   margin: 18px 0 0 0
 
-
-
 /* PROJECT BRANDED & IDO PRODUCTS */
-
 
 .project
   background: linear-gradient(to bottom right, #23292b 0, #101417 100%)
-
 
 img.project-promo-content
   border-radius: 20px
   margin: 12px 0
   max-width: 100%
 
-
 img.product-banner
   border-radius: 16px 16px 0 0
   margin: -48px -48px 32px -48px
   width: calc(100% + 96px)
-
 
 .project-title-section
   background-size: auto calc(100% + 16px)
@@ -1685,7 +1426,6 @@ img.product-banner
   height: 300px
   width: calc(100% + 96px)
 
-
 .product-title-container
   background: #23292b
   border-radius: 12px 12px 0 0
@@ -1693,7 +1433,6 @@ img.product-banner
   position: absolute
   bottom: 0
   left: 32px
-
 
 .product-title-container::before
   background-color: transparent
@@ -1706,7 +1445,6 @@ img.product-banner
   height: 40px
   width: 20px
 
-
 .product-title-container::after
   background-color: transparent
   border-bottom-left-radius: 20px
@@ -1718,12 +1456,10 @@ img.product-banner
   height: 40px
   width: 20px
 
-
 .logo-display
   display: flex
   justify-content: flex-start
   flex-wrap: wrap
-
 
 .logo-display div
   align-items: center
@@ -1733,49 +1469,40 @@ img.product-banner
   max-height: 40px
   width: 20%
 
-
 .logo-display img
   filter: invert(100%) opacity(.9)
   max-height: 100%
   max-width: 100%
-
 
 .project-team
   display: flex
   flex-wrap: wrap
   justify-content: flex-start
 
-
 .team-member
   margin: 0 5% 40px 0
   width: 30%
 
-
 .team-member:nth-child(3n)
   margin-right: 0
-
 
 .team-member img
   border-radius: 18px
   width: 100%
-
 
 .team-member h4.name
   font-size: 20px
   margin: 8px 0
   text-transform: uppercase
 
-
 .team-member h5.title
   font-size: 16px
   margin: 4px 0
-
 
 .team-member .bio
   font-size: 14px
   line-height: 1.5
   margin: 0
-
 
 .ido-progress-bar
   background: #3d4c52
@@ -1784,14 +1511,10 @@ img.product-banner
   height: 12px
   width: 100%
 
-
 .ido-progress
   background: linear-gradient(to bottom right, #ffe91d -50%, #ce5417 150%)
   border-radius: 8px
   height: 100%
-
-
-
 
 /* SPACEMESH BRAND COLORS */
 
@@ -1805,7 +1528,6 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-spacemesh h3:not(.form-title)
   background: #3affa7
   background-clip: text
@@ -1814,16 +1536,13 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-spacemesh a:not([class])
   color: #cdabfe
   transition: all ease-in-out .3s
 
-
 .project-spacemesh a:not([class]):hover
   filter: contrast(1.5)
   text-decoration: underline 1px solid #a971d1
-
 
 .project-spacemesh button,
 .project-spacemesh input[type="submit"]
@@ -1831,18 +1550,15 @@ img.product-banner
   color: #111111
   text-shadow: none
 
-
 .project-spacemesh button:hover,
 .project-spacemesh input[type="submit"]:hover
   background: #a971d1
   filter: none
 
-
 .project-spacemesh button.alt
   background: none
   border-color: #3affa7
   color: #3affa7
-
 
 .project-spacemesh .number
   background: #a971d1
@@ -1852,31 +1568,23 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-spacemesh .warning
   border: 1px solid #3affa7
 
-
 .content .project-spacemesh ul li::before
   color: #3affa7
-
 
 .content .project-spacemesh p:not([class]) strong
   background: none
   color: #3affa7
   -webkit-text-fill-color: unset
 
-
 .project-spacemesh .ido-progress
   background: #3affa7
   filter: saturate(1.5)
 
-
 .project-spacemesh .team-member h5.title
   color: #3affa7
-
-
-
 
 /* ALEO BRAND COLORS */
 
@@ -1890,7 +1598,6 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-aleo h3:not(.form-title)
   background: #00c0f9
   background-clip: text
@@ -1899,16 +1606,13 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-aleo a:not([class])
   color: #ff6f5f
   transition: all ease-in-out .3s
 
-
 .project-aleo a:not([class]):hover
   filter: contrast(1.5)
   text-decoration: underline 1px solid #00c0f9
-
 
 .project-aleo button,
 .project-aleo input[type="submit"]
@@ -1916,18 +1620,15 @@ img.product-banner
   color: #111111
   text-shadow: none
 
-
 .project-aleo button:hover,
 .project-aleo input[type="submit"]:hover
   background: #154bf9
   filter: none
 
-
 .project-aleo button.alt
   background: none
   border-color: #154bf9
   color: #ea5bc5
-
 
 .project-aleo .number
   background: #ff6f5f
@@ -1937,31 +1638,23 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-aleo .warning
   border: 1px solid #00c0f9
 
-
 .content .project-aleo ul li::before
   color: #00c0f9
-
 
 .content .project-aleo p:not([class]) strong
   background: none
   color: #ff6f5f
   -webkit-text-fill-color: unset
 
-
 .project-aleo .ido-progress
   background: #00c0f9
   filter: saturate(1.5)
 
-
 .project-aleo .team-member h5.title
   color: #00c0f9
-
-
-
 
 /* MIXMOB BRAND COLORS */
 
@@ -1975,7 +1668,6 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-mixmob h3:not(.form-title)
   background: #d3fc51
   background-clip: text
@@ -1984,17 +1676,14 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-mixmob a:not([class])
   color: #ea5bc5
   filter: brightness(1.5)
   transition: all ease-in-out .3s
 
-
 .project-mixmob a:not([class]):hover
   filter: contrast(1.5)
   text-decoration: underline 1px solid #d3fc51
-
 
 .project-mixmob button,
 .project-mixmob input[type="submit"]
@@ -2002,18 +1691,15 @@ img.product-banner
   color: #111111
   text-shadow: none
 
-
 .project-mixmob button:hover,
 .project-mixmob input[type="submit"]:hover
   background: #ea5bc5
   filter: none
 
-
 .project-mixmob button.alt
   background: none
   border-color: #ea5bc5
   color: #ea5bc5
-
 
 .project-mixmob .number
   background: #ea5bc5
@@ -2023,31 +1709,23 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-mixmob .warning
   border: 1px solid #d3fc51
 
-
 .content .project-mixmob ul li::before
   color: #d3fc51
-
 
 .content .project-mixmob p:not([class]) strong
   background: none
   color: #d3fc51
   -webkit-text-fill-color: unset
 
-
 .project-mixmob .ido-progress
   background: #d3fc51
   filter: saturate(1.5)
 
-
 .project-mixmob .team-member h5.title
   color: #d3fc51
-
-
-
 
 /* AFFYN BRAND COLORS */
 
@@ -2061,7 +1739,6 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-affyn h3:not(.form-title)
   background: linear-gradient(to bottom right, transparent 0, #ff3e51 0, #1636d3 100%)
   background-clip: text
@@ -2070,22 +1747,18 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-affyn a:not([class])
   color: #ff3e51
   filter: brightness(1.5)
   transition: all ease-in-out .3s
 
-
 .project-affyn a:not([class]):hover
   filter: contrast(1.5)
   text-decoration: underline 1px solid #ff3e51
 
-
 .project-affyn button,
 .project-affyn input[type="submit"]
   background: linear-gradient(to bottom right, #ff3e51 0, #1636d3 100%)
-
 
 .project-affyn .number
   background: linear-gradient(to right, transparent 0, #ff3e51 0, #1636d3 150%)
@@ -2095,18 +1768,13 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .project-affyn .warning
   border: 1px solid #ff3e51
-
 
 .content .project-affyn ul li::before
   color: #ff3e51
 
-
-
 /* FAQ */
-
 
 .faq-menu-cointainer
   display: grid
@@ -2114,7 +1782,6 @@ img.product-banner
   grid-row-gap: 20px
   grid-template-columns: 1fr 1fr
   overflow: hidden
-
 
 .faq-menu-item
   align-items: center
@@ -2126,11 +1793,9 @@ img.product-banner
   padding: 24px
   transition: all ease-in-out .1s
 
-
 .faq-menu-item:hover
   background: #e1eeef44
   color: #e1eeef
-
 
 .faq-menu-item img
   filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
@@ -2139,66 +1804,53 @@ img.product-banner
   margin-right: 2%
   width: 18%
 
-
 .faq-menu-item-info
   width: 80%
-
 
 .faq a.faq-menu-item h2:not(.hero h2)
   margin: 0 0 8px 0
   padding: 0
 
-
 .faq a.faq-menu-item h2:not(.hero h2)::after
   background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
-
 
 .faq-content
   display: flex
   flex-wrap: wrap
   justify-content: flex-start
 
-
 .faq-content-main
   width: 75%
-
 
 .faq-content-nav
   margin: 0 5% 0 0
   width: 20%
 
-
 .faq-content-nav ul
   margin: 0
   padding: 0 0 0 24px
-
 
 .faq-content-nav ul li
   line-height: 1.2
   margin: 0 0 12px 0
 
-
 .faq-content-nav ul li:before
   margin-left: -20px
   width: 20px
-
 
 .faq-content-nav a
   color: #e1eeef
   font-weight: 500
 
-
 .faq h2:not(.hero h2)
   margin: 96px 0 36px 0
-
 
 .faq h2:not(.hero h2):first-of-type,
 .faq h3:first-of-type
   margin: 0 0 36px 0
 
-
 .faq h3
-  background: linear-gradient(to right, #e1eeef  0, #e4f4f0 100%)
+  background: linear-gradient(to right, #e1eeef 0, #e4f4f0 100%)
   background-clip: border-box
   font-size: 24px
   font-weight: 600
@@ -2210,14 +1862,11 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
 .faq h3:not([class])::after
   opacity: .5
 
-
 .faq h4
   margin: 36px 0 12px 0
-
 
 .faq-content p:not([class]) strong
   background: none
@@ -2226,22 +1875,19 @@ img.product-banner
   -webkit-box-decoration-break: unset
   -webkit-text-fill-color: unset
 
-
 .line-account img
   filter: hue-rotate(30deg) contrast(1.2)
   margin: 0 0 0 8px
   opacity: .9
   vertical-align: top
 
-
 /* LEGAL */
 
 .legal h2:not(.hero h2)
   text-transform: unset
 
-
 .legal h3
-  background: linear-gradient(to right, #e1eeef  0, #e4f4f0 100%)
+  background: linear-gradient(to right, #e1eeef 0, #e4f4f0 100%)
   background-clip: border-box
   font-size: 24px
   font-weight: 400
@@ -2252,17 +1898,13 @@ img.product-banner
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
 
-
-
 /* SECURITY PAGE */
-
 
 .settings
   align-items: flex-start
   display: flex
   flex-wrap: wrap
   justify-content: flex-start
-
 
 .setting-box
   display: flex
@@ -2272,14 +1914,12 @@ img.product-banner
   max-width: 600px
   width: 45%
 
-
 .settings-box-heading
   align-items: center
   display: flex
   padding: 0 0 16px 0
   position: relative
   width: 100%
-
 
 .settings-box-heading::after
   background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
@@ -2291,7 +1931,6 @@ img.product-banner
   height: 1px
   width: 100%
 
-
 .settings-box-heading img
   filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
   margin: 0 12px 0 0
@@ -2299,26 +1938,22 @@ img.product-banner
   max-height: 32px
   max-width: 32px
 
-
 .settings-box-heading h3.box-title
   color: #e4f4f0
   font-size: 28px
   font-weight: 700
   margin: 0
 
-
 .setting-box p:not([class])
   font-size: 16px
   line-height: 24px
   margin: 16px 0
-
 
 .setting-box .verification
   align-items: center
   display: flex
   margin: 0 0 16px 0
   width: 100%
-
 
 .setting-box .verification img
   filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
@@ -2327,79 +1962,61 @@ img.product-banner
   max-height: 24px
   max-width: 24px
 
-
 .setting-box .verification img.verified
   filter: invert(35%) sepia(45%) saturate(600%) hue-rotate(114deg) brightness(100%) contrast(95%)
   opacity: 1
-
 
 .setting-box .verification span
   font-size: 18px
   font-weight: 700
 
-
 .setting-box button
   margin: 0
   width: 100%
 
-
-
-
 /* KYC PAGE */
-
 
 .kyc-status
   align-items: center
   flex-wrap: wrap
   display: flex
 
-
 .status
   font-size: 24px
   font-weight: 600
   text-transform: uppercase
 
-
 .rejection-note
   margin: 12px 0 0 0
   width: 100%
 
-
 .kyc-status img
   height: 32px
   margin: 0 8px 0 0
-
 
 .kyc-documents
   display: flex
   flex-wrap: wrap
   justify-content: flex-start
 
-
 .document-select
   width: 100%
-
 
 .document-select select
   max-width: 240px
 
-
-
 .kyc-upload
   margin: 0 3% 0 0
   width: 30%
-
 
 .kyc-note
   font-size: 18px
   font-weight: 300
   line-height: 28px
 
-
 .kyc-documents strong
   color: #1ec498
   filter: contrast(1.5)
-
 
 .kyc-image
   border: 1px dashed #11afaf
@@ -2409,27 +2026,22 @@ img.product-banner
   padding: 24px 24px 0 24px
   text-align: center
 
-
 .kyc-image span
   line-height: 2
   opacity: .7
   text-transform: uppercase
-
 
 .kyc-image img
   opacity: .5
   transition: all ease-in-out .1s
   width: 100%
 
-
 .kyc-image:hover img,
 .kyc-image:hover span
   opacity: 1
 
-
 .kyc-submit
   width: 100%
-
 
 .kyc-submit p
   background: #ffffff22
@@ -2440,15 +2052,12 @@ img.product-banner
   padding: 8px 16px
   width: 70%
 
-
 .kyc-submit button
   margin: 16px 16px 16px 0
   min-width: 220px
 
-
 .kyc-documents .hr
   margin: 24px 0
-
 
 .kyc-verified .kyc-image span,
 .kyc-verified .kyc-note,
@@ -2456,30 +2065,23 @@ img.product-banner
 .kyc-verified .kyc-submit ul
   display: none
 
-
 .kyc-verified .kyc-image
   cursor: unset
   padding: 24px
 
-
 .kyc-verified .kyc-image img
   opacity: 1
-
 
 .kyc-verified .kyc-instructions h4
   margin: 0
   text-align: center
 
-
-
 /* MINING PAGE - EARNINGS SUMMARY */
-
 
 .earnings-summary
   display: flex
   flex-wrap: wrap
   justify-content: center
-
 
 .earnings-figure
   margin: 0 5% 0 0
@@ -2488,16 +2090,13 @@ img.product-banner
   min-width: 240px
   width: 30%
 
-
 .earnings-figure:last-of-type
   margin-right: 0
-
 
 .amount
   font-size: 36px
   font-weight: 700
   text-transform: uppercase
-
 
 .unit
   color: #1ec498
@@ -2506,37 +2105,29 @@ img.product-banner
   margin: 0 0 0 2px
   text-transform: uppercase
 
-
 .earnings-summary .hr
   background: linear-gradient(to right, transparent 0, #1ec498 50%, transparent 100%)
   margin: 12px 0
-
 
 h4.description
   font-size: 18px
   text-transform: uppercase
 
-
-
 /* MINING PAGE - MINING SUMMARY */
-
 
 .mining-summary
   padding: 24px
   margin: 24px 0 48px 0
-
 
 .mining-heading
   display: flex
   justify-content: flex-start
   align-items: center
 
-
 .mining-icon
   margin: 0 8px 0 0
   max-width: 36px
   max-height: 36px
-
 
 h3.mining-title
   color: #e1eeef
@@ -2545,7 +2136,6 @@ h3.mining-title
   margin: 0
   text-transform: uppercase
 
-
 .mining-summary .warning
   background: #fc4468
   border: 0
@@ -2553,11 +2143,9 @@ h3.mining-title
   padding: 12px
   margin: 24px 0
 
-
 .mining-summary .warning span
   font-size: 16px
   line-height: 24px
-
 
 .top-line-summary
   display: flex
@@ -2565,7 +2153,6 @@ h3.mining-title
   justify-content: space-between
   margin: 16px 0
   position: relative
-
 
 .top-line-summary::after
   background: linear-gradient(to right, transparent -10%, #e1eeef 50%, transparent 110%)
@@ -2577,19 +2164,15 @@ h3.mining-title
   height: 1px
   width: 100%
 
-
 .top-line-item
   font-size: 24px
   margin: 0 16px 16px 0
 
-
 .top-line-item:last-of-type
   margin-right: 0
 
-
 .top-line-item .label
   font-weight: 200
-
 
 .top-line-item .value
   color: #1ec498
@@ -2597,51 +2180,46 @@ h3.mining-title
   font-weight: 700
   margin: 0 0 0 2px
 
-
 .top-line-item .sub-value
   font-size: 16px
   font-weight: 600
   margin: 0 0 0 2px
-
 
 .detailed-summary
   font-size: 16px
   margin: 0 0 24px 0
   width: 100%
 
-
 .detailed-summary .line
   border-bottom: 1px dashed #a1d0d0
   display: flex
   justify-content: space-between
-  flex-wrap: nowrap
+  flex-wrap: wrap
   padding: 8px 0
-
 
 .detailed-summary .label
   font-weight: 200
-
 
 .detailed-summary .value
   color: #1ec498
   filter: contrast(1.5)
   font-weight: 500
 
+.detailed-summary .label,
+.detailed-summary .value
+  width: 100%
 
 
 /* AFFILIATES PAGE */
-
 
 .ref-box
   display: inline-block
   margin-top: 0
 
-
 .ref-box-inner
   align-items: center
   display: flex
   flex-wrap: wrap
-
 
 .ref-box .referral-code
   background: #ffffff22
@@ -2654,15 +2232,12 @@ h3.mining-title
   padding: 12px
   text-align: center
 
-
 .ref-box button
   margin: 0
-
 
 .aff-tree
   display: flex
   flex-wrap: wrap
-
 
 .affiliate
   align-items: center
@@ -2674,7 +2249,6 @@ h3.mining-title
   width: 100%
   z-index: 10
 
-
 .child
   margin-top: 60px
   margin-left: 40px
@@ -2682,15 +2256,12 @@ h3.mining-title
   width: calc(100% - 40px)
   z-index: 1
 
-
 .first-child::before
   height: calc(100% + 120px) !important
   top: -60px !important
 
-
 .last-child::before
   height: 40px !important
-
 
 .child::before
   background: #1ec498
@@ -2703,7 +2274,6 @@ h3.mining-title
   width: 1px
   z-index: -1
 
-
 .child::after
   background: #1ec498
   content: ""
@@ -2715,7 +2285,6 @@ h3.mining-title
   width: 20px
   z-index: -1
 
-
 .aff-top
   display: flex
   flex-wrap: wrap
@@ -2723,7 +2292,6 @@ h3.mining-title
   padding: 0 0 12px 0
   position: relative
   width: 100%
-
 
 .aff-top::after
   background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
@@ -2735,7 +2303,6 @@ h3.mining-title
   height: 1px
   width: 100%
 
-
 .aff-name
   color: #1ec498
   filter: contrast(2)
@@ -2743,10 +2310,8 @@ h3.mining-title
   margin: 0
   width: 100%
 
-
 .aff-email
   font-size: 18px
-
 
 .aff-table
   overflow: auto
@@ -2754,11 +2319,9 @@ h3.mining-title
   padding: 0 0 8px 0
   width: 100%
 
-
 .aff-table table
   border-spacing: 0
   width: 100%
-
 
 .aff-table th
   border-bottom: 1px solid #a1d0d044
@@ -2766,26 +2329,22 @@ h3.mining-title
   font-weight: 400
   height: 48px
   padding: 8px 16px
-
+  white-space: nowrap
 
 .aff-table th .tooltip
   justify-content: center
 
-
 .aff-table th:first-child .tooltip
   justify-content: flex-start
 
-
 .aff-table th:last-child .tooltip
   justify-content: flex-end
-
 
 .aff-table th .tooltip span
   font-size: 14px
   margin: 0 4px 0 0
   text-transform: capitalize
   white-space: nowrap
-
 
 .aff-table td
   border-bottom: 1px dashed #a1d0d077
@@ -2795,26 +2354,21 @@ h3.mining-title
   text-align: center
   white-space: nowrap
 
-
 .aff-table th:first-child,
 .aff-table td:first-child
   text-align: left
-
 
 .aff-table th:last-child,
 .aff-table td:last-child
   text-align: right
 
-
 .aff-info .unit
   color: #e4f4f0
   font-size: 12px
 
-
 .aff-product
   font-size: 16px
   font-weight: 700
-
 
 .aff-number
   color: #1ec498
@@ -2822,7 +2376,6 @@ h3.mining-title
   font-size: 16px
   font-weight: 700
   margin: 0 0 0 4px
-
 
 .aff-table .edit-button
   filter: opacity(.8)
@@ -2832,10 +2385,8 @@ h3.mining-title
   transition: all ease-in-out .3s
   vertical-align: bottom
 
-
 .aff-table .edit-button:hover
   filter: opacity(1)
-
 
 .aff-table button
   border-radius: 8px
@@ -2845,10 +2396,8 @@ h3.mining-title
   min-width: 56px
   padding: 4px 8px
 
-
 .aff-table button:hover
   border-radius: 4px
-
 
 .aff-info input
   border-radius: 8px
@@ -2859,31 +2408,32 @@ h3.mining-title
   max-width: 56px
   width: auto
 
-
 .direct-ref
   position: relative
-
 
 .direct-ref #search-box,
 .direct-ref #product-filter,
 .direct-ref #product-filter select
   margin: 0
 
-
 .direct-ref #search-box form,
 .direct-ref #product-filter form
   max-width: 420px
 
+.direct-ref #search-box .sub-form
+  position: relative
+  width: 320px
 
 .direct-ref #search-box input#search-field
   min-width: auto
+  height: 100%
   width: 100%
-
 
 .direct-ref #search-box #search-field,
 .direct-ref #search-box #search-button
   height: auto
   padding: 8px 16px
+  z-index: 1
 
 .direct-ref #search-field+.search-reset
   background: none
@@ -2894,10 +2444,10 @@ h3.mining-title
   margin: 0
   opacity: .7
   padding: 0
-  position: relative
+  position: absolute
   top: 0
+  left: calc(100% - 20px)
   bottom: 0
-  margin: auto 10px auto -24px
   text-shadow: none
   transition: all ease-in-out .3s
 
@@ -2907,22 +2457,18 @@ h3.mining-title
 .direct-ref .total-row
   background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
 
-
 .aff-registration .aff-email
   margin: 0 0 18px 0
-
 
 /* DRAWER EFFCT & BUTTONS */
 
 .hidden
   display: none
 
-
 .buttons
   display: flex
   justify-content: flex-end
   flex-wrap: wrap
-
 
 .buttons button,
 .buttons button.alt
@@ -2932,17 +2478,15 @@ h3.mining-title
   margin: 0 0 0 12px
   padding: 8px 20px
 
-
 .buttons button:hover,
 .buttons button.alt:hover
   border-radius: 2px
-
 
 .buttons button.show-more
   border: 1px solid #a1d0d0
   margin: 0 auto 0 0
   opacity: .7
-
+  line-height: 1
 
 .buttons button.show-more img
   filter: invert(89%) sepia(25%) saturate(304%) hue-rotate(126deg) brightness(87%) contrast(89%)
@@ -2950,14 +2494,10 @@ h3.mining-title
   width: 18px
   transition: all ease-in-out .2s
 
-
 .buttons button.open img
   transform: rotate(-180deg)
 
-
-
 /* FOOTER */
-
 
 footer
   background: linear-gradient(to bottom right, #27424c 0, #051319 100%)
@@ -2969,8 +2509,6 @@ footer
   width: 100%
   z-index: 1
 
-
-
 footer::before
   background: linear-gradient(to left, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
   display: block
@@ -2981,7 +2519,6 @@ footer::before
   left: 0
   height: 1px
   width: 100%
-
 
 footer::after
   background-image: url(../assets/procyon-logo.svg)
@@ -2999,10 +2536,8 @@ footer::after
   max-width: 1280px
   z-index: -1
 
-
 footer .logo
   width: 200px
-
 
 footer h1
   font-size: 24px
@@ -3010,7 +2545,6 @@ footer h1
   margin: 0
   padding: 0
   line-height: 2
-
 
 footer h1::after
   background: linear-gradient(to left, #e85f1a 0, #ffe91d 50%, #1ec498 100%)
@@ -3022,308 +2556,246 @@ footer h1::after
   height: 1px
   width: 100%
 
-
 footer h4
   margin: 12px 0
   line-height: 1.5
 
-
 footer h4.tagline
   font-size: 16px
   font-weight: 300
-
 
 footer .content ul
   margin: 0 0 12px 0
   padding: 0
   font-size: 16px
 
-
 footer .content ul li::before
   display: none
-
 
 footer .copyright
   font-size: 14px
   line-height: 14px
   margin: 8px 0
 
-
 @media (max-width: $breakpoint-sm-max)
   html,
   body
+    min-width: 380px
     width: 100%
 
   .desktop1
     display: none
-    
-    
+
   .mobile
     display: block
-  
-  
+
   button,
   input[type="submit"]
     margin: 20px 0
-  
-  
+
   header.desktop1
     display: none
-  
-  
+
   header.mobile
     display: flex
     flex-wrap: wrap
     justify-content: space-between
     padding: 12px
     width: 100%
-  
-  
+
   header.mobile .header-inner
     display: flex
     justify-content: flex-end
-  
-  
+
   header.mobile .logo
     width: 40px
-  
-  
+
   header.mobile .hr
     height: 1px
     margin: 12px 0
-  
-  
+
   header.mobile .nav
     font-size: 12px
     width: 100%
-  
-  
+
   header.mobile .nav ul
     display: flex
     justify-content: flex-end
     padding: 0
     text-align: center
     width: 100%
-  
-  
+
   header.mobile .nav ul li
     padding: 0 0 0 12px
-  
-  
+
   header.mobile button
     font-size: 12px
     margin: 0 0 0 12px
     padding: 8px 12px
-  
-  
+
   #home-hero h1
     font-size: 32px
-  
-  
+
   #home-hero h2
     font-size: 24px
-  
-  
+
   h2:not(.hero h2)::after
     background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 90%)
-  
-  
+
   .logo-feature-title
     font-size: 12px
     margin: 0 0 24px 0
-  
-  
+
   .logo-feature img
     margin: 0 1%
     max-width: 18%
-  
-  
+
   .highlight .column-2
     margin: 12px 0
-  
-  
+
   .highlight .with-frame::after
     top: 0
     left: 0
     width: 100%
-  
-  
+
   .highlight h1
     font-size: 40px
-  
-  
+
   .highlight h2
     border-radius: 0 20px 20px 0
     font-size: 24px
-  
-  
+
   .highlight li
     font-size: 24px
     padding: 8px 0 0 0
-  
-  
+
   .order-1
     order: 1
-  
-  
+
   .order-2
     order: 2
-  
-  
+
   .order-3
     order: 3
-  
-  
+
   .order-4
     order: 4
-  
-  
+
   .sub-feature > span
     margin: 8px 0
     text-align: center
     width: 100%
-  
-  
+
   div.back-button
     padding: 8px 12px
-  
-  
+
   div.hr
     margin: 24px 0
-  
-  
+
   .content
     padding: 0 12px
-  
-  
+
   .content ul
     line-height: 24px
-  
-  
+
   .content ul li
     margin: 0 0 8px 0
-  
-  
+
   .products
     margin: 0 0 48px 0
-  
-  
+
   .product
     margin: 0 0 36px 0
     width: 100%
-  
-  
+
   .product:last-of-type
     margin: 0
-  
-  
+
   .product-container > button
     width: 100%
-  
-  
+
   h2.feature-title
     font-size: 32px
-  
-  
+
   h3.feature-title
     font-size: 24px
-  
-  
+
   .columns-1
     padding: 0
-  
-  
+
   .columns-1 img
     padding: 0
-  
 
   .column-2
     max-width: 100%
     padding: 0
     width: 100%
-  
 
   .column-3
     margin: 0 0 72px 0
     max-width: 100%
     padding: 0
     width: 100%
-  
 
   .columns-4
     display: block
-  
 
   .column-4
     margin: 0 0 24px 0
     padding: 0
     max-width: 100%
     width: 100%
-  
-  
+
   /* SIDEBAR */
-  
+
   .with-sidebar
     margin: 0
     width: 100%
 
-
   header.with-sidebar
     justify-content: flex-end
-  
 
   .sidebar
     display: none
-  
-  
+
   /* PRODUCT & IDO */
-  
+
   .product-container
     display: flex
     padding: 12px
-  
-  
+
   .product-container h1
     font-size: 28px
-  
-  
+
   .product-container .three-section,
   .product-container .full-section
-    margin: 0 
+    margin: 0
     width: 100%
-  
-  
+
   .product-container .product-title-section
     order: 1
-  
-  
+
   .product-container .product-sidebar
     margin-top: 16px
     order: 2
     width: 100%
-  
-  
+
   .product-container .info
     margin-top: 16px
     order: 3
     padding: 0
     width: 100%
-  
-  
+
   .product-container .order-form
     margin-top: 16px
     order: 4
     width: 100%
-  
-  
+
   .product-detail-text
     margin: 0
-  
-  
-  
+
   /* PROJECT BRANDING */
-  
-  
+
   .project .product-sidebar
     display: flex
     justify-content: flex-start
@@ -3331,41 +2803,33 @@ footer .copyright
     margin-top: 16px
     order: 5
     width: 100%
-  
-  
+
   #project-links
     order: 1
     width: 100%
-  
-  
+
   #project-links .product-links
     display: flex
     flex-wrap: wrap
     justify-content: flex-start
-  
-  
+
   #project-links .product-links li
     margin: 0
     padding: 0 18px 18px 0
-  
-  
+
   #project-links .product-links span
     display: none
-  
-  
-  #product-form 
+
+  #product-form
     order: 2
     width: 100%
-  
-  
+
   #deal-terms
     order: 3
-  
-  
+
   #help
     order: 4
-  
-  
+
   .project-title-section
     order: 1
     background-size: auto calc(100% + 32px)
@@ -3373,123 +2837,97 @@ footer .copyright
     margin: -12px -12px 24px -12px
     padding: 0
     width: calc(100% + 48px)
-  
-  
+
   .project .product-title-container
     border-radius: 12px
     top: 12px
     left: 12px
     bottom: unset
     padding: 12px
-  
-  
+
   .project .product-title-container::before,
   .project .product-title-container::after
     display: none
-  
-  
+
   .project h1
     font-size: 24px
-  
-  
+
   .team-member,
   .team-member:nth-child(3n)
     margin-right: 4%
     width: 48%
-  
-  
+
   .team-member:nth-child(2n)
     margin-right: 0
-  
-  
-  
+
   /* MINING DASHBOARD */
-  
-  
+
   .earnings-figure
     margin: 0 0 24px 0
     width: 100%
-  
-  
+
   .top-line-item
     font-size: 18px
     width: 100%
-  
-  
+
   .mining-summary .buttons button,
   .mining-summary .buttons button.alt
     margin: 18px 0 0 0
     width: 100%
-  
-  
+
   .mining-summary .buttons button:first-of-type
     margin-top: 0
-  
-  
+
   .settings
     justify-content: center
-  
-  
+
   .setting-box
     margin: 12px 0
     width: 100%
-  
-  
-  
+
   /* AFFILIATES PAGE */
-  
+
   .ref-box,
   .referral-code,
   .ref-box-inner button
     width: 100%
-  
-  
+
   .ref-box .referral-code
     font-size: 14px
     height: auto
     margin: 0 0 18px 0
-  
-  
+
   .affiliate
     margin-right: 0
-  
 
   .child-1
     margin-left: 40px
     width: calc(100% - 40px)
-  
 
   .child-1::before
     left: -20px
-  
 
   .child-1::after
     left: -20px
     width: 20px
-  
 
   .child-2
     margin-left: 60px
     width: calc(100% - 60px)
-  
 
   .child-2::before
     left: -40px
-  
 
   .child-2::after
     left: -40px
     width: 40px
-  
-  
+
   .aff-name
     font-size: 20px
-  
-  
+
   .aff-email
     font-size: 16px
-  
-  
+
   #commission-table th:nth-child(3),
   #commission-table td:nth-child(3),
   #commission-table th:nth-child(4),
@@ -3497,30 +2935,28 @@ footer .copyright
   #direct-ref-table th:nth-child(2),
   #direct-ref-table td:nth-child(2)
     display: none
-  
-  
+
   /* FAQ */
-  
+
   .faq-menu-cointainer
     grid-template-columns: 1fr
-  
-  
+
   .faq-content-nav,
   .faq-content-main
     width: 100%
-  
-  
+
   /* FOOTER */
-  
+
   footer .content ul.language-picker
     line-height: 2
-  
-  
+
   footer .content ul.language-picker li
     font-size: 20px
     margin: 0 12px 12px 0
-    
-  
+
+  .kyc-upload
+    margin: 0 0 24px 0
+    width: 100%
 
 // SPECIAL SPECIAL SPECIAL SPECIAL SPECIAL SPECIAL SPECIAL
 // SPECIAL SPECIAL SPECIAL SPECIAL SPECIAL SPECIAL SPECIAL

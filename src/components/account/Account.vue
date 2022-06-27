@@ -1,154 +1,152 @@
 <template>
-  <div class='content'>
-    <h2>{{ $t('MSG_ACCOUNT_TITLE') }}</h2>
-    <form class='content-glass alignment' action='javascript:void(0)' @submit='onSubmit'>
-      <h3>{{ $t('MSG_PERSON_DETAILS_FOR_KYC') }}</h3>
-      <div class='row'>
-        <div class='account-field'>
-          <Input
-            v-model:value='username'
-            label='MSG_USERNAME'
-            type='text'
-            id='username'
-            required
-            :error='usernameError'
-            message='MSG_USERNAME_TIP'
-            placeholder='MSG_USERNAME_PLACEHOLDER'
-            @focus='onUsernameFocusIn'
-            @blur='onUsernameFocusOut'
-          />
-        </div>
-        <q-space />
-        <div class='account-field'>
-          <label for='gender'>{{ $t('MSG_GENDER') }}</label>
-          <select id='gender' :name='$t("MSG_GENDER")' v-model='gender' required>
-            <option
-              v-for='myGender in genders'
-              :key='myGender'
-              :value='myGender'
-              :selected='myGender === gender'
-            >
-              {{ $t(myGender) }}
-            </option>
-          </select>
-        </div>
+  <h2>{{ $t('MSG_ACCOUNT_TITLE') }}</h2>
+  <form class='content-glass alignment' action='javascript:void(0)' @submit='onSubmit'>
+    <h3>{{ $t('MSG_PERSON_DETAILS_FOR_KYC') }}</h3>
+    <div class='row'>
+      <div class='account-field'>
+        <Input
+          v-model:value='username'
+          label='MSG_USERNAME'
+          type='text'
+          id='username'
+          required
+          :error='usernameError'
+          message='MSG_USERNAME_TIP'
+          placeholder='MSG_USERNAME_PLACEHOLDER'
+          @focus='onUsernameFocusIn'
+          @blur='onUsernameFocusOut'
+        />
       </div>
-      <div class='row'>
-        <div class='account-field'>
-          <Input
-            v-model:value='firstName'
-            label='MSG_FIRST_NAME'
-            type='text'
-            id='first-name'
-            required
-            :error='firstNameError'
-            message='MSG_FIRST_NAME_TIP'
-            placeholder='MSG_FIRST_NAME_PLACEHOLDER'
-            @focus='onFirstNameFocusIn'
-            @blur='onFirstNameFocusOut'
-          />
-        </div>
-        <q-space />
-        <div class='account-field'>
-          <Input
-            v-model:value='lastName'
-            label='MSG_LAST_NAME'
-            type='text'
-            id='last-name'
-            required
-            :error='lastNameError'
-            message='MSG_LAST_NAME_TIP'
-            placeholder='MSG_LAST_NAME_PLACEHOLDER'
-            @focus='onLastNameFocusIn'
-            @blur='onLastNameFocusOut'
-          />
-        </div>
+      <q-space />
+      <div class='account-field'>
+        <label for='gender'>{{ $t('MSG_GENDER') }}</label>
+        <select id='gender' :name='$t("MSG_GENDER")' v-model='gender' required>
+          <option
+            v-for='myGender in genders'
+            :key='myGender'
+            :value='myGender'
+            :selected='myGender === gender'
+          >
+            {{ $t(myGender) }}
+          </option>
+        </select>
       </div>
-      <h3>{{ $t('MSG_ADDRESS') }}</h3>
-      <div class='row'>
-        <div class='account-field'>
-          <Input
-            v-model:value='postalCode'
-            label='MSG_POSTAL_CODE'
-            type='text'
-            id='postal-code'
-            required
-            :error='postalCodeError'
-            message='MSG_POSTAL_CODE_TIP'
-            placeholder='MSG_POSTAL_CODE_PLACEHOLDER'
-          />
-        </div>
-        <q-space />
-        <div class='account-field'>
-          <Input
-            v-model:value='province'
-            label='MSG_PROVINCE'
-            type='text'
-            id='province'
-            required
-            :error='provinceError'
-            message='MSG_PROVINCE_TIP'
-            placeholder='MSG_PROVINCE_PLACEHOLDER'
-          />
-        </div>
+    </div>
+    <div class='row'>
+      <div class='account-field'>
+        <Input
+          v-model:value='firstName'
+          label='MSG_FIRST_NAME'
+          type='text'
+          id='first-name'
+          required
+          :error='firstNameError'
+          message='MSG_FIRST_NAME_TIP'
+          placeholder='MSG_FIRST_NAME_PLACEHOLDER'
+          @focus='onFirstNameFocusIn'
+          @blur='onFirstNameFocusOut'
+        />
       </div>
-      <div class='row'>
-        <div class='account-field'>
-          <Input
-            v-model:value='street1'
-            label='MSG_STREET1'
-            type='text'
-            id='street1'
-            required
-            :error='street1Error'
-            message='MSG_STREET1_TIP'
-            placeholder='MSG_STREE1_PLACEHOLDER'
-          />
-        </div>
-        <q-space />
-        <div class='account-field'>
-          <Input
-            v-model:value='street2'
-            label='MSG_STREET2'
-            type='text'
-            id='street2'
-            :required='false'
-            :error='street2Error'
-            message='MSG_STREET2_TIP'
-            placeholder='MSG_STREET2_PLACEHOLDER'
-          />
-        </div>
+      <q-space />
+      <div class='account-field'>
+        <Input
+          v-model:value='lastName'
+          label='MSG_LAST_NAME'
+          type='text'
+          id='last-name'
+          required
+          :error='lastNameError'
+          message='MSG_LAST_NAME_TIP'
+          placeholder='MSG_LAST_NAME_PLACEHOLDER'
+          @focus='onLastNameFocusIn'
+          @blur='onLastNameFocusOut'
+        />
       </div>
-      <div class='row'>
-        <div class='account-field'>
-          <Input
-            v-model:value='city'
-            label='MSG_CITY'
-            type='text'
-            id='city'
-            required
-            :error='cityError'
-            message='MSG_CITY'
-            placeholder='MSG_CITY_PLACEHOLDER'
-          />
-        </div>
-        <q-space />
-        <div class='account-field'>
-          <Input
-            v-model:value='country'
-            label='MSG_COUNTRY'
-            type='text'
-            id='country'
-            required
-            :error='countryError'
-            message='MSG_COUNTRY_TIP'
-            placeholder='MSG_COUNTRY_PLACEHOLDER'
-          />
-        </div>
+    </div>
+    <h3>{{ $t('MSG_ADDRESS') }}</h3>
+    <div class='row'>
+      <div class='account-field'>
+        <Input
+          v-model:value='postalCode'
+          label='MSG_POSTAL_CODE'
+          type='text'
+          id='postal-code'
+          required
+          :error='postalCodeError'
+          message='MSG_POSTAL_CODE_TIP'
+          placeholder='MSG_POSTAL_CODE_PLACEHOLDER'
+        />
       </div>
-      <input type='submit' :value='$t("MSG_SAVE_CHANGES")' class='account-field'>
-    </form>
-  </div>
+      <q-space />
+      <div class='account-field'>
+        <Input
+          v-model:value='province'
+          label='MSG_PROVINCE'
+          type='text'
+          id='province'
+          required
+          :error='provinceError'
+          message='MSG_PROVINCE_TIP'
+          placeholder='MSG_PROVINCE_PLACEHOLDER'
+        />
+      </div>
+    </div>
+    <div class='row'>
+      <div class='account-field'>
+        <Input
+          v-model:value='street1'
+          label='MSG_STREET1'
+          type='text'
+          id='street1'
+          required
+          :error='street1Error'
+          message='MSG_STREET1_TIP'
+          placeholder='MSG_STREE1_PLACEHOLDER'
+        />
+      </div>
+      <q-space />
+      <div class='account-field'>
+        <Input
+          v-model:value='street2'
+          label='MSG_STREET2'
+          type='text'
+          id='street2'
+          :required='false'
+          :error='street2Error'
+          message='MSG_STREET2_TIP'
+          placeholder='MSG_STREET2_PLACEHOLDER'
+        />
+      </div>
+    </div>
+    <div class='row'>
+      <div class='account-field'>
+        <Input
+          v-model:value='city'
+          label='MSG_CITY'
+          type='text'
+          id='city'
+          required
+          :error='cityError'
+          message='MSG_CITY'
+          placeholder='MSG_CITY_PLACEHOLDER'
+        />
+      </div>
+      <q-space />
+      <div class='account-field'>
+        <Input
+          v-model:value='country'
+          label='MSG_COUNTRY'
+          type='text'
+          id='country'
+          required
+          :error='countryError'
+          message='MSG_COUNTRY_TIP'
+          placeholder='MSG_COUNTRY_PLACEHOLDER'
+        />
+      </div>
+    </div>
+    <input type='submit' :value='$t("MSG_SAVE_CHANGES")' class='account-field'>
+  </form>
 </template>
 
 <script setup lang='ts'>

@@ -1,6 +1,7 @@
 <template>
-  <Account />
   <div class='content'>
+    <Account />
+    <div class='hr' />
     <h2>{{ $t('MSG_KYC_VERIFICATION_STATUS') }}</h2>
     <div class='content-glass kyc-status'>
       <img :src='stateImg'>

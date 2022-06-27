@@ -29,6 +29,15 @@ const BaseMenu = {
   children: [
     {
       menuId: uid(),
+      label: 'MSG_ALEO_PURCHASE',
+      caption: '',
+      icon: 'https://procyon-public.s3.ap-northeast-1.amazonaws.com/product-aleo.png',
+      target: '/product/aleo',
+      level: 0,
+      children: []
+    },
+    {
+      menuId: uid(),
       label: 'MSG_DASHBOARD',
       caption: '',
       icon: dashboard,

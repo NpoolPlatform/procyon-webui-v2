@@ -54,6 +54,9 @@ const showMenu = (menu: MenuItem) => {
   if (menu.label === 'MSG_REFERRAL' && !inspire.InvitationCode?.InvitationCode?.length) {
     return false
   }
+  if (menu.label === 'MSG_ALEO_PURCHASE') {
+    return false
+  }
   return true
 }
 

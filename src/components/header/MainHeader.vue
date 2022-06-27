@@ -17,10 +17,10 @@
           class='user-icon'
         >
           <q-menu
-            self='top left' anchor='bottom left'
+            self='top right'
+            anchor='bottom right'
             transition-show='jump-down'
             transition-hide='jump-up'
-            :offset='[-28,0]'
           >
             <q-list class='dropdown'>
               <ExpandList
@@ -53,10 +53,10 @@
         class='user-icon'
       >
         <q-menu
-          self='top left' anchor='bottom left'
+          self='top right'
+          anchor='bottom right'
           transition-show='jump-down'
           transition-hide='jump-up'
-          :offset='[-28,0]'
         >
           <q-list class='dropdown'>
             <ExpandList
