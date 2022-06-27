@@ -148,7 +148,9 @@ watch(userLogined, () => {
   if (!userLogined.value) {
     return
   }
-  initialize()
+  setTimeout(() => {
+    initialize()
+  }, 2000)
 })
 
 const initialize = () => {
@@ -177,7 +179,9 @@ const initialize = () => {
 
 onMounted(() => {
   if (userLogined.value) {
-    initialize()
+    setTimeout(() => {
+      initialize()
+    }, 2000)
   }
 })
 
