@@ -2194,7 +2194,7 @@ h3.mining-title
   border-bottom: 1px dashed #a1d0d0
   display: flex
   justify-content: space-between
-  flex-wrap: wrap
+  flex-wrap: nowrap
   padding: 8px 0
 
 .detailed-summary .label
@@ -2204,11 +2204,6 @@ h3.mining-title
   color: #1ec498
   filter: contrast(1.5)
   font-weight: 500
-
-.detailed-summary .label,
-.detailed-summary .value
-  width: 100%
-
 
 /* AFFILIATES PAGE */
 
@@ -2956,6 +2951,13 @@ footer .copyright
 
   .kyc-upload
     margin: 0 0 24px 0
+    width: 100%
+
+  .detailed-summary .line
+    flex-wrap: wrap
+
+  .detailed-summary .label,
+  .detailed-summary .value
     width: 100%
 
 // SPECIAL SPECIAL SPECIAL SPECIAL SPECIAL SPECIAL SPECIAL
