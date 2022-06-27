@@ -19,11 +19,19 @@ export default {
   MSG_ALEO_BACKER: 'Aleoの出資企業',
   MSG_FIRST_BATCH_MINING_TITLE: 'ファーストバッチ<br>マイニング',
   MSG_FIRST_BATCH_MINING_SUBTITLE: '最高のマイニング報酬は、最初に始めた人にもたらされる',
-  MSG_FIRST_BATCH_MINING_CONTENT: '<ul><li>マーケットに登場したばかりのマイニング製品</li><li>世界的に認められた実績</li><li>暗号資産の専門家により厳選された製品</li></ul>',
+  MSG_FIRST_BATCH_MINING_CONTENT: '<ul>' +
+                                    '<li>マーケットに登場したばかりのマイニング製品</li>' +
+                                    '<li>世界的に認められた実績</li>' +
+                                    '<li>暗号資産の専門家により厳選された製品</li>' +
+                                  '</ul>',
   MSG_LEARN_MORE: '詳細はこちらへ',
   MSG_EXCLUSIVE_IDO_TITLE: 'エクスクルーシブなIDO',
   MSG_EXCLUSIVE_IDO_SUBTITLE: 'VCレベルの機会をすべての人に',
-  MSG_EXCLUSIVE_IDO_CONTENT: '<ul><li>大手VCも投資しているトップクラスのプロジェクト</li><li>厳格なデューデリジェンスによる高度な精査</li><li>アーリーステージにアクセス、限定販売</li></ul>',
+  MSG_EXCLUSIVE_IDO_CONTENT: '<ul>' +
+                               '<li>大手VCも投資しているトップクラスのプロジェクト</li>' +
+                               '<li>厳格なデューデリジェンスによる高度な精査</li>' +
+                               '<li>アーリーステージにアクセス、限定販売</li>' +
+                             '</ul>',
   MSG_COMING_SOON: '近日公開',
   MSG_WHYME_TITLE_1: 'サービス',
   MSG_WHYME_SUBTITLE_1: 'お客様ファーストのサポート',
@@ -34,16 +42,15 @@ export default {
   MSG_WHYME_TITLE_3: 'コミュニティ',
   MSG_WHYME_SUBTITLE_3: '私たちはお客様と共に未来を築きます。',
   MSG_WHYME_CONTENT_3: 'コミュニティの声に耳を傾け、製品やサービスを改善します。',
-  MSG_WHYME_SUB_FEATURES: '<span><span class="bold">2000人</span>以上のユーザー</span>                         <span><span class="bold">50以上の</span>グローバル企業とパートナーシップ</span>                         <span><span class="bold">1000に1つ</span>の割合で厳選されたプロジェクト</span>',
+  MSG_WHYME_SUB_FEATURES: '<span><span class="bold">2000人</span>以上のユーザー</span>' +
+                          '<span><span class="bold">50以上の</span>グローバル企業とパートナーシップ</span>' +
+                          '<span><span class="bold">1000に1つ</span>の割合で厳選されたプロジェクト</span>',
   MSG_SHOOT_FOT_THE_STARS: 'Shoot for the Stars',
   MSG_YOUR_GLOBAL_CONSTELLATION: '暗号資産のグローバルマーケットプレイス',
   MSG_LANGUAGE: '言語',
   MSG_LINKS: 'Links',
-  MSG_HOME: 'ホームページ',
   MSG_PRODUCTS: '商品',
-  MSG_BLOG: 'ブログ',
   MSG_HELP: 'Help',
   MSG_FAQ: 'FAQ & サポート',
-  MSG_CONTACT: 'お問い合わせ',
   MSG_LEGAL: '規約'
 }
