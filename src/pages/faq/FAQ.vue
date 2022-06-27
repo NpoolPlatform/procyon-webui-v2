@@ -1,5 +1,7 @@
 <template>
-  <FAQ />
+  <div v-show='FAQ'>
+    <FAQ />
+  </div>
 </template>
 
 <script setup lang='ts'>
