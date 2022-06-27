@@ -12,7 +12,7 @@
         <q-btn
           v-else
           size='1.1rem'
-          flat dense round
+          flat dense round rounded
           :icon='"img:" + userAvatar'
           class='user-icon'
         >
@@ -48,7 +48,7 @@
       <q-btn
         v-else
         size='1.1rem'
-        flat dense round
+        flat dense round rounded
         :icon='"img:" + userAvatar'
         class='user-icon'
       >
