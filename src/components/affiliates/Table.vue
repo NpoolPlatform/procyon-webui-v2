@@ -12,42 +12,48 @@
         <input id='search-button' type='submit' :value='$t("MSG_SEARCH_RESULTS")'>
       </form>
     </div>
-    <!--<div id='product-filter'>
+    <div id='product-filter'>
       <form>
         <select name='Filter Product'>
-          <option value='Aleo' selected>Aleo</option>
-          <option value='Spacemesh'>Spacemesh</option>
+          <option
+            v-for='_coin in coins'
+            :key='_coin.value.ID'
+            :value='selectedCoin'
+            :selected='_coin.value.ID === selectedCoin?.value.ID'
+          >
+            {{ _coin.label }}
+          </option>
         </select>
       </form>
-    </div>-->
+    </div>
     <div class='aff-table'>
       <table id='direct-ref-table'>
         <thead>
           <tr>
             <th><span>{{ $t('MSG_REFERRAL_ACCOUNT') }}</span></th>
             <th><span>{{ $t('MSG_JOIN_DATE') }}</span></th>
-            <!-- th><span>Units</span></th>
-            <th><span>Total Payment</span></th>
-            <th><span>Commission</span></th -->
+            <th><span>{{ $t('MSG_PURCHASE_AMOUNT') }}</span></th>
+            <th><span>{{ $t('MSG_TOTAL_PAYMENT') }}</span></th>
+            <th><span>{{ $t('MSG_COMMISSION') }}</span></th>
           </tr>
         </thead>
         <tbody>
-          <!-- tr class='aff-info total-row'>
-            <td><span class='aff-product'>TOTAL</span></td>
-            <td><span class='aff-number'><span class='unit'>NA</span></span></td>
-            <td><span class='aff-number'>4<span class='unit'>Units</span></span></td>
-            <td><span class='aff-number'>2,000<span class='unit'>USDT</span></span></td>
-            <td><span class='aff-number'>400<span class='unit'>USDT</span></span></td>
-          </tr -->
+          <tr class='aff-info total-row'>
+            <td><span class='aff-product'>{{ $t('MSG_TOTAL') }}</span></td>
+            <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
+            <td><span class='aff-number'>{{ totalUnits }}<span class='unit'>{{ goodUnit }}</span></span></td>
+            <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>400<span class='unit'>{{ PriceCoinName }}</span></span></td>
+          </tr>
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.User.ID'>
             <td>
               <span class='aff-product'>{{ accountName(referral) }}</span>
               <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
-            <!-- td><span class='aff-number'>2<span class='unit'>Units</span></span></td>
-            <td><span class='aff-number'>1,000<span class='unit'>USDT</span></span></td>
-            <td><span class='aff-number'>200<span class='unit'>USDT</span></span></td -->
+            <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ goodUnit }}</span></span></td>
+            <td><span class='aff-number'>{{ referralAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>200<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -76,7 +82,10 @@ import {
   NotificationType,
   formatTime,
   Referral,
-  useInspireStore
+  useInspireStore,
+  PriceCoinName,
+  useCoinStore,
+  Coin
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
@@ -86,8 +95,67 @@ import { useRouter } from 'vue-router'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
+interface MyCoin {
+  label: string
+  value: Coin
+}
+
 const inspire = useInspireStore()
 const referrals = computed(() => inspire.Referrals.filter((referral) => !referral.Kol))
+
+const coin = useCoinStore()
+const coins = computed(() => Array.from(coin.Coins.filter((el) => {
+  const rfs = referrals.value.filter((rel) => {
+    for (const sum of rel.GoodSummaries) {
+      if (sum.CoinTypeID === el.ID) {
+        return true
+      }
+    }
+    return false
+  })
+  return rfs.length > 0
+}).map((el) => {
+  return {
+    label: el.Name,
+    value: el
+  } as MyCoin
+})))
+const selectedCoin = ref(coins.value.length ? coins.value[0] : undefined as unknown as MyCoin)
+
+const totalUnits = computed(() => {
+  let units = 0
+  referrals.value.forEach((el) => {
+    const index = el.GoodSummaries.findIndex((gel) => gel.CoinTypeID === selectedCoin.value?.value.ID)
+    if (index < 0) {
+      el.GoodSummaries.forEach((gel) => { units += gel.Units })
+      return
+    }
+    units += el.GoodSummaries[index].Units
+  })
+  return units
+})
+const totalAmount = computed(() => {
+  let amount = 0
+  referrals.value.forEach((el) => {
+    const index = el.GoodSummaries.findIndex((gel) => gel.CoinTypeID === selectedCoin.value?.value.ID)
+    if (index < 0) {
+      el.GoodSummaries.forEach((gel) => { amount += gel.Amount })
+      return
+    }
+    amount += el.GoodSummaries[index].Amount
+  })
+  return amount
+})
+const goodUnit = computed(() => {
+  for (const rf of referrals.value) {
+    for (const sum of rf.GoodSummaries) {
+      if (sum.CoinTypeID === selectedCoin.value?.value.ID) {
+        return sum.Unit
+      }
+    }
+  }
+  return ''
+})
 
 const searchStr = ref('')
 const displayReferrals = ref(referrals.value.sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1))
@@ -98,7 +166,7 @@ const onSearchSubmit = () => {
 }
 const onSearchResetClick = () => {
   searchStr.value = ''
-  displayReferrals.value = referrals.value
+  displayReferrals.value = referrals.value.sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1)
 }
 
 const accountName = (referral: Referral) => {
@@ -111,6 +179,20 @@ const joinDate = (referral: Referral) => {
 
 const joinTime = (referral: Referral) => {
   return formatTime(referral.Invitation.CreateAt, false).split(' ')[1]
+}
+
+const referralUnits = (referral: Referral) => {
+  const rfs = referral.GoodSummaries.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
+  let units = 0
+  rfs.forEach((el) => { units += el.Units })
+  return units
+}
+
+const referralAmount = (referral: Referral) => {
+  const rfs = referral.GoodSummaries.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
+  let amount = 0
+  rfs.forEach((el) => { amount += el.Amount })
+  return amount
 }
 
 const router = useRouter()
