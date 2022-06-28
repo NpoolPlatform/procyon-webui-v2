@@ -148,7 +148,13 @@ const totalAmount = computed(() => {
 })
 const totalContribution = computed(() => {
   let amount = 0
-  const comms = inspire.GoodCommissions.filter((gel) => gel.CoinTypeID === selectedCoin.value?.value.ID)
+  const comms = inspire.GoodCommissions.filter((gel) => {
+    const index = referrals.value.findIndex((el) => gel.UserID === el.User.ID)
+    if (index < 0) {
+      return false
+    }
+    return gel.CoinTypeID === selectedCoin.value?.value.ID
+  })
   comms.forEach((gel) => {
     if (gel.Contribution) {
       amount += gel.Contribution
@@ -249,6 +255,20 @@ onMounted(() => {
       Message: {
         Error: {
           Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+
+  if (coins.value.length === 0) {
+    coin.getCoins({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COINS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }
