@@ -43,7 +43,7 @@
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
             <td><span class='aff-number'>{{ totalUnits }}<span class='unit'>{{ goodUnit }}</span></span></td>
             <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>400<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ totalContribution.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.User.ID'>
             <td>
@@ -53,7 +53,7 @@
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
             <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ goodUnit }}</span></span></td>
             <td><span class='aff-number'>{{ referralAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>200<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ referralContribution(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -146,6 +146,16 @@ const totalAmount = computed(() => {
   })
   return amount
 })
+const totalContribution = computed(() => {
+  let amount = 0
+  const comms = inspire.GoodCommissions.filter((gel) => gel.CoinTypeID === selectedCoin.value?.value.ID)
+  comms.forEach((gel) => {
+    if (gel.Contribution) {
+      amount += gel.Contribution
+    }
+  })
+  return amount
+})
 const goodUnit = computed(() => {
   for (const rf of referrals.value) {
     for (const sum of rf.GoodSummaries) {
@@ -195,6 +205,19 @@ const referralAmount = (referral: Referral) => {
   return amount
 }
 
+const referralContribution = (referral: Referral) => {
+  let amount = 0
+  const comms = inspire.GoodCommissions.filter((gel) => {
+    return gel.CoinTypeID === selectedCoin.value?.value.ID && gel.UserID === referral.User.ID
+  })
+  comms.forEach((gel) => {
+    if (gel.Contribution) {
+      amount += gel.Contribution
+    }
+  })
+  return amount
+}
+
 const router = useRouter()
 
 const onSetKolClick = (referral: Referral) => {
@@ -218,6 +241,20 @@ onMounted(() => {
       }
     }, () => {
       displayReferrals.value = inspire.Referrals.filter((referral) => !referral.Kol)
+    })
+  }
+
+  if (inspire.GoodCommissions.length === 0) {
+    inspire.getGoodCommissions({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
     })
   }
 })
