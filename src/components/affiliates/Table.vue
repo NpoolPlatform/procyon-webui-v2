@@ -120,7 +120,7 @@ const coins = computed(() => Array.from(coin.Coins.filter((el) => {
     value: el
   } as MyCoin
 })))
-const selectedCoin = ref(coins.value.length ? coins.value[0] : undefined as unknown as MyCoin)
+const selectedCoin = computed(() => coins.value.length ? coins.value[0] : undefined as unknown as MyCoin)
 
 const totalUnits = computed(() => {
   let units = 0
@@ -247,20 +247,19 @@ onMounted(() => {
       }
     }, () => {
       displayReferrals.value = inspire.Referrals.filter((referral) => !referral.Kol)
-    })
-  }
-
-  if (inspire.GoodCommissions.length === 0) {
-    inspire.getGoodCommissions({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+      if (inspire.GoodCommissions.length === 0) {
+        inspire.getGoodCommissions({
+          Message: {
+            Error: {
+              Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
+              Popup: true,
+              Type: NotificationType.Error
+            }
+          }
+        }, () => {
+          // TODO
+        })
       }
-    }, () => {
-      // TODO
     })
   }
 
