@@ -11,7 +11,7 @@
             {{ $t('MSG_WHYME_TITLE_1') }}
           </h2>
           <h3 class='feature-title'>
-            {{ $t('MSG_WHYME_SUBTITLE_1') }}
+            <span v-html='$t("MSG_WHYME_SUBTITLE_1")' />
           </h3>
           <p v-html='$t("MSG_WHYME_CONTENT_1")' />
         </div>
@@ -33,7 +33,7 @@
             {{ $t('MSG_WHYME_TITLE_3') }}
           </h2>
           <h3 class='feature-title'>
-            {{ $t('MSG_WHYME_SUBTITLE_3') }}
+            <span v-html='$t("MSG_WHYME_SUBTITLE_3")' />
           </h3>
           <p v-html='$t("MSG_WHYME_CONTENT_3")' />
         </div>

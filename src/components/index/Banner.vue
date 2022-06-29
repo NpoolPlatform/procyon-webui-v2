@@ -3,10 +3,10 @@
     <div class='content'>
       <div class='hero-left'>
         <h1>
-          {{ $t('MSG_SLOGAN') }}
+          <span v-html='$t("MSG_SLOGAN")' />
         </h1>
         <h2>
-          {{ $t('MSG_SUB_SLOGAN') }}
+          <span v-html='$t("MSG_SUB_SLOGAN")' />
         </h2>
         <button @click='onAvailableNowClick'>
           {{ $t('MSG_AVAILABLE_NOW') }}
