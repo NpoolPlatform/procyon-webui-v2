@@ -4,9 +4,11 @@
       <div class='columns-4'>
         <div class='column-4'>
           <img class='logo' :src='lightLogo'>
-          <h1>{{ $t('MSG_SHOOT_FOT_THE_STARS') }}</h1>
+          <h1>
+            <span v-html='$t("MSG_SHOOT_FOT_THE_STARS")' />
+          </h1>
           <h4 class='tagline'>
-            {{ $t('MSG_YOUR_GLOBAL_CONSTELLATION') }}
+            <span v-html='$t("MSG_YOUR_GLOBAL_CONSTELLATION")' />
           </h4>
         </div>
         <div class='column-4'>

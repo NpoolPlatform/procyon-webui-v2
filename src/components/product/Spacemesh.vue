@@ -10,7 +10,9 @@
         <h3>{{ description ? $t(description?.Title) : '' }}</h3>
         <p v-html='description ? $t(description?.Message) : ""' />
       </div>
-      <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
+      <h3>
+        <span v-html='$t("MSG_WHY_TITLE")' />
+      </h3>
       <p v-html='$t("MSG_WHY_CONTENT")' />
       <div v-show='good?.Main?.Specs'>
         <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>

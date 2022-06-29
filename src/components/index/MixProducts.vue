@@ -3,7 +3,9 @@
     <div class='columns-2 highlight'>
       <div class='column-2 order-1 with-frame'>
         <h1> <span v-html='$t("MSG_FIRST_BATCH_MINING_TITLE")' /> </h1>
-        <h2>{{ $t('MSG_FIRST_BATCH_MINING_SUBTITLE') }}</h2>
+        <h2>
+          <span v-html='$t("MSG_FIRST_BATCH_MINING_SUBTITLE")' />
+        </h2>
         <p v-html='$t("MSG_FIRST_BATCH_MINING_CONTENT")' />
         <button @click='onAleoClick'>
           {{ $t('MSG_LEARN_MORE') }}
@@ -16,8 +18,12 @@
         <img src='product/mixmob/procyon-ido-mixmob-homepage.png'>
       </div>
       <div class='column-2 order-3 with-frame'>
-        <h1>{{ $t('MSG_EXCLUSIVE_IDO_TITLE') }}</h1>
-        <h2>{{ $t('MSG_EXCLUSIVE_IDO_SUBTITLE') }}</h2>
+        <h1>
+          <span v-html='$t("MSG_EXCLUSIVE_IDO_TITLE")' />
+        </h1>
+        <h2>
+          <span v-html='$t("MSG_EXCLUSIVE_IDO_SUBTITLE")' />
+        </h2>
         <p v-html='$t("MSG_EXCLUSIVE_IDO_CONTENT")' />
         <button class='in-active' disabled>
           {{ $t('MSG_COMING_SOON') }}
