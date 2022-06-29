@@ -41,7 +41,7 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore, useCurrencyStore } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore, useCurrencyStore, ReviewState } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
@@ -54,7 +54,7 @@ const { t } = useI18n({ useScope: 'global' })
 const coin = useCoinStore()
 const currency = useCurrencyStore()
 const account = useAccountStore()
-const accounts = computed(() => account.Accounts)
+const accounts = computed(() => account.Accounts.filter((el) => el.State === ReviewState.Approved))
 
 const table = computed(() => [
   {
