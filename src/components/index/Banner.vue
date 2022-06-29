@@ -9,7 +9,7 @@
           <span v-html='$t("MSG_SUB_SLOGAN")' />
         </h2>
         <button @click='onAvailableNowClick'>
-          {{ $t('MSG_AVAILABLE_NOW') }}
+          <span v-html='$t("MSG_AVAILABLE_NOW")' />
         </button>
       </div>
       <img class='hero-image' src='product/aleo/aleo-design.png'>
@@ -17,7 +17,7 @@
     <div class='content'>
       <div class='logo-feature'>
         <h3 class='logo-feature-title'>
-          {{ $t('MSG_ALEO_BACKER') }}
+          <span v-html='$t("MSG_ALEO_BACKER")' />
         </h3>
         <img src='vc-logos/softbank.png'>
         <img src='vc-logos/a16z.png'>

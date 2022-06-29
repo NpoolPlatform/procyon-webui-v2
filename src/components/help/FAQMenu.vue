@@ -1,7 +1,9 @@
 <template>
   <div class='content faq'>
     <div id='hero'>
-      <h1>{{ $t('MSG_SUPPORT_CENTER') }}</h1>
+      <h1>
+        <span v-html='$t("MSG_SUPPORT_CENTER")' />
+      </h1>
       <div v-show='false' id='search-box'>
         <form>
           <input id='search-field' type='text'>
@@ -10,7 +12,9 @@
       </div>
     </div>
 
-    <h2>{{ $t('MSG_PROCYON_PLATFORM') }}</h2>
+    <h2>
+      <span v-html='$t("MSG_PROCYON_PLATFORM")' />
+    </h2>
     <div class='faq-menu-cointainer'>
       <a v-for='faq in faqs' :key='faq.topic' class='faq-menu-item' @click='onItemClick(faq)'>
         <img :src='faq.icon'>
