@@ -62,7 +62,7 @@
       <p>{{ $t('MSG_GOOGLE_AUTHENTICATE_TIP') }}</p>
       <div class='verification'>
         <img :src='squareCheck' :class='[ logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified ? "verified" : "" ]'>
-        <span>{{ $t('MSG_VERIFIED') }}</span>
+        <span>{{ logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified ? $t('MSG_VERIFIED') : $t('MSG_NOT_VERIFIED') }}</span>
       </div>
       <q-space />
       <button @click='onEnableGoogleClick' :disabled='logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified'>
@@ -103,7 +103,7 @@
       <p>{{ $t('MSG_ID_VERIFICATION_TIP') }}</p>
       <div class='verification'>
         <img :src='squareCheck' :class='[ kycVerified ? "verified" : "" ]'>
-        <span>{{ $t('MSG_VERIFIED') }}</span>
+        <span>{{ kycVerified ? $t('MSG_VERIFIED') : $t('MSG_NOT_VERIFIED') }}</span>
       </div>
       <q-space />
       <button @click='onKYCClick'>

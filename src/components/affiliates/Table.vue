@@ -1,53 +1,64 @@
 <template>
   <h2>{{ $t('MSG_DIRECT_AFFILIATES') }}</h2>
   <div class='direct-ref content-glass'>
-    <div id='search-box'>
-      <form action='javascript: void(0)' @submit='onSearchSubmit'>
-        <div class='sub-form'>
-          <input id='search-field' type='text' v-model='searchStr' :placeholder='$t("MSG_AFFILIATES_SEARCH_PLACEHOLDER")'>
-          <button v-if='searchStr.length > 0' class='search-reset' type='reset' @click='onSearchResetClick'>
-            &times;
-          </button>
-        </div>
-        <input id='search-button' type='submit' :value='$t("MSG_SEARCH_RESULTS")'>
-      </form>
+    <div class='row'>
+      <div id='search-box'>
+        <h4>{{ $t('MSG_SEARCH_ACCOUNTS') }}</h4>
+        <form action='javascript: void(0)' @submit='onSearchSubmit'>
+          <div class='sub-form'>
+            <input id='search-field' type='text' v-model='searchStr' :placeholder='$t("MSG_AFFILIATES_SEARCH_PLACEHOLDER")'>
+            <button v-if='searchStr.length > 0' class='search-reset' type='reset' @click='onSearchResetClick'>
+              &times;
+            </button>
+          </div>
+          <!-- input id='search-button' type='submit' :value='$t("MSG_SEARCH_RESULTS")' -->
+        </form>
+      </div>
+      <q-space />
+      <div v-show='coins.length >= 1' id='product-filter'>
+        <h4>{{ $t('MSG_PRODUCT_FILTER') }}</h4>
+        <form>
+          <select v-model='selectedCoin'>
+            <option
+              v-for='_coin in coins'
+              :key='_coin.value.ID'
+              :value='_coin'
+              :selected='_coin.value.ID === selectedCoin?.value.ID'
+            >
+              {{ _coin.label }}
+            </option>
+          </select>
+        </form>
+      </div>
     </div>
-    <!--<div id='product-filter'>
-      <form>
-        <select name='Filter Product'>
-          <option value='Aleo' selected>Aleo</option>
-          <option value='Spacemesh'>Spacemesh</option>
-        </select>
-      </form>
-    </div>-->
     <div class='aff-table'>
       <table id='direct-ref-table'>
         <thead>
           <tr>
             <th><span>{{ $t('MSG_REFERRAL_ACCOUNT') }}</span></th>
             <th><span>{{ $t('MSG_JOIN_DATE') }}</span></th>
-            <!-- th><span>Units</span></th>
-            <th><span>Total Payment</span></th>
-            <th><span>Commission</span></th -->
+            <th><span>{{ $t('MSG_PURCHASE_AMOUNT') }}</span></th>
+            <th><span>{{ $t('MSG_TOTAL_PAYMENT') }}</span></th>
+            <th><span>{{ $t('MSG_COMMISSION') }}</span></th>
           </tr>
         </thead>
         <tbody>
-          <!-- tr class='aff-info total-row'>
-            <td><span class='aff-product'>TOTAL</span></td>
-            <td><span class='aff-number'><span class='unit'>NA</span></span></td>
-            <td><span class='aff-number'>4<span class='unit'>Units</span></span></td>
-            <td><span class='aff-number'>2,000<span class='unit'>USDT</span></span></td>
-            <td><span class='aff-number'>400<span class='unit'>USDT</span></span></td>
-          </tr -->
+          <tr class='aff-info total-row'>
+            <td><span class='aff-product'>{{ $t('MSG_TOTAL') }}</span></td>
+            <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
+            <td><span class='aff-number'>{{ totalUnits }}<span class='unit'>{{ $t(goodUnit) }}</span></span></td>
+            <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ totalContribution.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+          </tr>
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.User.ID'>
             <td>
               <span class='aff-product'>{{ accountName(referral) }}</span>
               <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
-            <!-- td><span class='aff-number'>2<span class='unit'>Units</span></span></td>
-            <td><span class='aff-number'>1,000<span class='unit'>USDT</span></span></td>
-            <td><span class='aff-number'>200<span class='unit'>USDT</span></span></td -->
+            <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ $t(goodUnit) }}</span></span></td>
+            <td><span class='aff-number'>{{ referralAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ referralContribution(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -71,12 +82,15 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import {
   NotificationType,
   formatTime,
   Referral,
-  useInspireStore
+  useInspireStore,
+  PriceCoinName,
+  useCoinStore,
+  Coin
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
@@ -86,19 +100,93 @@ import { useRouter } from 'vue-router'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
+interface MyCoin {
+  label: string
+  value: Coin
+}
+
 const inspire = useInspireStore()
 const referrals = computed(() => inspire.Referrals.filter((referral) => !referral.Kol))
 
-const searchStr = ref('')
+const coin = useCoinStore()
+const coins = computed(() => Array.from(coin.Coins.filter((el) => {
+  const rfs = referrals.value.filter((rel) => {
+    for (const sum of rel.GoodSummaries) {
+      if (sum.CoinTypeID === el.ID) {
+        return true
+      }
+    }
+    return false
+  })
+  return rfs.length > 0
+}).map((el) => {
+  return {
+    label: el.Name,
+    value: el
+  } as MyCoin
+})))
+const selectedCoin = ref(coins.value.length ? coins.value[0] : undefined as unknown as MyCoin)
+watch(coins, () => {
+  selectedCoin.value = coins.value.length ? coins.value[0] : undefined as unknown as MyCoin
+})
+
+const totalUnits = computed(() => {
+  let units = 0
+  referrals.value.forEach((el) => {
+    const sums = el.GoodSummaries.filter((sel) => sel.CoinTypeID === selectedCoin.value?.value.ID)
+    sums.forEach((sum) => { units += sum.Units })
+  })
+  return units
+})
+const totalAmount = computed(() => {
+  let amount = 0
+  referrals.value.forEach((el) => {
+    const sums = el.GoodSummaries.filter((sel) => sel.CoinTypeID === selectedCoin.value?.value.ID)
+    sums.forEach((sum) => { amount += sum.Amount })
+  })
+  return amount
+})
+const totalContribution = computed(() => {
+  let amount = 0
+  const comms = inspire.GoodCommissions.filter((gel) => {
+    const index = referrals.value.findIndex((el) => gel.UserID === el.User.ID)
+    if (index < 0) {
+      return false
+    }
+    return gel.CoinTypeID === selectedCoin.value?.value.ID
+  })
+  comms.forEach((gel) => {
+    if (gel.Contribution) {
+      amount += gel.Contribution
+    }
+  })
+  return amount
+})
+const goodUnit = computed(() => {
+  for (const rf of referrals.value) {
+    for (const sum of rf.GoodSummaries) {
+      if (sum.CoinTypeID === selectedCoin.value?.value.ID) {
+        return sum.Unit
+      }
+    }
+  }
+  return ''
+})
+
 const displayReferrals = ref(referrals.value.sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1))
-const onSearchSubmit = () => {
+const searchStr = ref('')
+watch(searchStr, () => {
   displayReferrals.value = referrals.value.filter((el) => {
     return el.User.EmailAddress?.includes(searchStr.value) || el.User.PhoneNO?.includes(searchStr.value)
-  })
+  }).sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1)
+})
+
+const onSearchSubmit = () => {
+  // DO NOTHING
 }
 const onSearchResetClick = () => {
   searchStr.value = ''
-  displayReferrals.value = referrals.value
+  displayReferrals.value = referrals.value.sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1)
 }
 
 const accountName = (referral: Referral) => {
@@ -111,6 +199,33 @@ const joinDate = (referral: Referral) => {
 
 const joinTime = (referral: Referral) => {
   return formatTime(referral.Invitation.CreateAt, false).split(' ')[1]
+}
+
+const referralUnits = (referral: Referral) => {
+  const rfs = referral.GoodSummaries.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
+  let units = 0
+  rfs.forEach((el) => { units += el.Units })
+  return units
+}
+
+const referralAmount = (referral: Referral) => {
+  const rfs = referral.GoodSummaries.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
+  let amount = 0
+  rfs.forEach((el) => { amount += el.Amount })
+  return amount
+}
+
+const referralContribution = (referral: Referral) => {
+  let amount = 0
+  const comms = inspire.GoodCommissions.filter((gel) => {
+    return gel.CoinTypeID === selectedCoin.value?.value.ID && gel.UserID === referral.User.ID
+  })
+  comms.forEach((gel) => {
+    if (gel.Contribution) {
+      amount += gel.Contribution
+    }
+  })
+  return amount
 }
 
 const router = useRouter()
@@ -136,6 +251,33 @@ onMounted(() => {
       }
     }, () => {
       displayReferrals.value = inspire.Referrals.filter((referral) => !referral.Kol)
+      if (inspire.GoodCommissions.length === 0) {
+        inspire.getGoodCommissions({
+          Message: {
+            Error: {
+              Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
+              Popup: true,
+              Type: NotificationType.Error
+            }
+          }
+        }, () => {
+          // TODO
+        })
+      }
+    })
+  }
+
+  if (coins.value.length === 0) {
+    coin.getCoins({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COINS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
     })
   }
 })
