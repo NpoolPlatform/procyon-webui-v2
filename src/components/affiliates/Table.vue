@@ -18,11 +18,11 @@
       <div v-show='coins.length >= 1' id='product-filter'>
         <h4>{{ $t('MSG_PRODUCT_FILTER') }}</h4>
         <form>
-          <select>
+          <select v-model='selectedCoin'>
             <option
               v-for='_coin in coins'
               :key='_coin.value.ID'
-              :value='selectedCoin'
+              :value='_coin'
               :selected='_coin.value.ID === selectedCoin?.value.ID'
             >
               {{ _coin.label }}
@@ -125,7 +125,7 @@ const coins = computed(() => Array.from(coin.Coins.filter((el) => {
     value: el
   } as MyCoin
 })))
-const selectedCoin = computed(() => coins.value.length ? coins.value[0] : undefined as unknown as MyCoin)
+const selectedCoin = ref(coins.value.length ? coins.value[0] : undefined as unknown as MyCoin)
 
 const totalUnits = computed(() => {
   let units = 0
