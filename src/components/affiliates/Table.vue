@@ -46,7 +46,7 @@
           <tr class='aff-info total-row'>
             <td><span class='aff-product'>{{ $t('MSG_TOTAL') }}</span></td>
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
-            <td><span class='aff-number'>{{ totalUnits }}<span class='unit'>{{ goodUnit }}</span></span></td>
+            <td><span class='aff-number'>{{ totalUnits }}<span class='unit'>{{ $t(goodUnit) }}</span></span></td>
             <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
             <td><span class='aff-number'>{{ totalContribution.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
@@ -56,7 +56,7 @@
               <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
-            <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ goodUnit }}</span></span></td>
+            <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ $t(goodUnit) }}</span></span></td>
             <td><span class='aff-number'>{{ referralAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
             <td><span class='aff-number'>{{ referralContribution(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
