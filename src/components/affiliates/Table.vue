@@ -126,6 +126,9 @@ const coins = computed(() => Array.from(coin.Coins.filter((el) => {
   } as MyCoin
 })))
 const selectedCoin = ref(coins.value.length ? coins.value[0] : undefined as unknown as MyCoin)
+watch(coins, () => {
+  selectedCoin.value = coins.value.length ? coins.value[0] : undefined as unknown as MyCoin
+})
 
 const totalUnits = computed(() => {
   let units = 0
