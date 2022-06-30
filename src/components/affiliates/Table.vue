@@ -15,7 +15,7 @@
         </form>
       </div>
       <q-space />
-      <div v-show='coins.length > 1' id='product-filter'>
+      <div v-show='coins.length >= 1' id='product-filter'>
         <h4>{{ $t('MSG_PRODUCT_FILTER') }}</h4>
         <form>
           <select>
@@ -130,24 +130,16 @@ const selectedCoin = computed(() => coins.value.length ? coins.value[0] : undefi
 const totalUnits = computed(() => {
   let units = 0
   referrals.value.forEach((el) => {
-    const index = el.GoodSummaries.findIndex((gel) => gel.CoinTypeID === selectedCoin.value?.value.ID)
-    if (index < 0) {
-      el.GoodSummaries.forEach((gel) => { units += gel.Units })
-      return
-    }
-    units += el.GoodSummaries[index].Units
+    const sums = el.GoodSummaries.filter((sel) => sel.CoinTypeID === selectedCoin.value?.value.ID)
+    sums.forEach((sum) => { units += sum.Units })
   })
   return units
 })
 const totalAmount = computed(() => {
   let amount = 0
   referrals.value.forEach((el) => {
-    const index = el.GoodSummaries.findIndex((gel) => gel.CoinTypeID === selectedCoin.value?.value.ID)
-    if (index < 0) {
-      el.GoodSummaries.forEach((gel) => { amount += gel.Amount })
-      return
-    }
-    amount += el.GoodSummaries[index].Amount
+    const sums = el.GoodSummaries.filter((sel) => sel.CoinTypeID === selectedCoin.value?.value.ID)
+    sums.forEach((sum) => { amount += sum.Amount })
   })
   return amount
 })
