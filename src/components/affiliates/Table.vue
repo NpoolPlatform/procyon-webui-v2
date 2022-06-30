@@ -1,30 +1,35 @@
 <template>
   <h2>{{ $t('MSG_DIRECT_AFFILIATES') }}</h2>
   <div class='direct-ref content-glass'>
-    <div id='search-box'>
-      <form action='javascript: void(0)' @submit='onSearchSubmit'>
-        <div class='sub-form'>
-          <input id='search-field' type='text' v-model='searchStr' :placeholder='$t("MSG_AFFILIATES_SEARCH_PLACEHOLDER")'>
-          <button v-if='searchStr.length > 0' class='search-reset' type='reset' @click='onSearchResetClick'>
-            &times;
-          </button>
-        </div>
-        <input id='search-button' type='submit' :value='$t("MSG_SEARCH_RESULTS")'>
-      </form>
-    </div>
-    <div id='product-filter'>
-      <form>
-        <select name='Filter Product'>
-          <option
-            v-for='_coin in coins'
-            :key='_coin.value.ID'
-            :value='selectedCoin'
-            :selected='_coin.value.ID === selectedCoin?.value.ID'
-          >
-            {{ _coin.label }}
-          </option>
-        </select>
-      </form>
+    <div class='row'>
+      <div id='search-box'>
+        <h4>{{ $t('MSG_SEARCH_ACCOUNTS') }}</h4>
+        <form action='javascript: void(0)' @submit='onSearchSubmit'>
+          <div class='sub-form'>
+            <input id='search-field' type='text' v-model='searchStr' :placeholder='$t("MSG_AFFILIATES_SEARCH_PLACEHOLDER")'>
+            <button v-if='searchStr.length > 0' class='search-reset' type='reset' @click='onSearchResetClick'>
+              &times;
+            </button>
+          </div>
+          <!-- input id='search-button' type='submit' :value='$t("MSG_SEARCH_RESULTS")' -->
+        </form>
+      </div>
+      <q-space />
+      <div v-show='coins.length > 1' id='product-filter'>
+        <h4>{{ $t('MSG_PRODUCT_FILTER') }}</h4>
+        <form>
+          <select>
+            <option
+              v-for='_coin in coins'
+              :key='_coin.value.ID'
+              :value='selectedCoin'
+              :selected='_coin.value.ID === selectedCoin?.value.ID'
+            >
+              {{ _coin.label }}
+            </option>
+          </select>
+        </form>
+      </div>
     </div>
     <div class='aff-table'>
       <table id='direct-ref-table'>
@@ -77,7 +82,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import {
   NotificationType,
   formatTime,
@@ -173,12 +178,16 @@ const goodUnit = computed(() => {
   return ''
 })
 
-const searchStr = ref('')
 const displayReferrals = ref(referrals.value.sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1))
-const onSearchSubmit = () => {
+const searchStr = ref('')
+watch(searchStr, () => {
   displayReferrals.value = referrals.value.filter((el) => {
     return el.User.EmailAddress?.includes(searchStr.value) || el.User.PhoneNO?.includes(searchStr.value)
-  })
+  }).sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1)
+})
+
+const onSearchSubmit = () => {
+  // DO NOTHING
 }
 const onSearchResetClick = () => {
   searchStr.value = ''
