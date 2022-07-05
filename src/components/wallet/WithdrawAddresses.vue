@@ -65,7 +65,7 @@
             </div>
 
             <button class='alt' @click='onCancelClick'>
-              {{ $t('MSG_CANCEL') }}
+              {{ $t('MSG_CANCEL1') }}
             </button>
             <button @click='onDeleteClick'>
               {{ $t('MSG_DELETE_ADDRESS') }}
