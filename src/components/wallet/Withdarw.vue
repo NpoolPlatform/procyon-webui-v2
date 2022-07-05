@@ -59,7 +59,7 @@
                 </span>
               </div>
             </div>
-            <input type='submit' value='Withdraw' class='submit' @click='onSubmit'>
+            <input type='submit' :value='$t("MSG_WITHDRAW")' class='submit' @click='onSubmit'>
             <h3>{{ $t('MSG_GUIDE_AND_FAQ') }}</h3>
             <p v-html='$t("MSG_WITHDRAW_GUIDE_AND_FAQ_CONTENT")' />
           </div>
