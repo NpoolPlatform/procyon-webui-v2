@@ -1,7 +1,7 @@
 <template>
   <Page>
     <template #body>
-      <h2>Spacemesh概要</h2>
+      <h2>Aleo プロジェクト概要</h2>
 
       <div class='faq-content'>
         <div class='faq-content-nav'>
