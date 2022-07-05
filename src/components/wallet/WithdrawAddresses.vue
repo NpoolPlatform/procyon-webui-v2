@@ -58,7 +58,7 @@
             </div>
 
             <div class='full-section'>
-              <h4>{{ $t('MSG_ADDRESS') }}:</h4>
+              <h4>{{ $t('MSG_WITHDRAW_ADDRESS') }}:</h4>
               <span class='wallet-type'>{{ deleteCoinType }}</span><br>
               <span class='number'>{{ deleteAddress }}</span>
               <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyAddressClick'>
