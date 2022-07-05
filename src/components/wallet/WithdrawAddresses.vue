@@ -53,15 +53,15 @@
             <p v-html='$t("MSG_DELETE_WITHDRAW_ADDRESS_CAPTION")' />
 
             <div class='full-section'>
-              <h4>{{ $t('MSG_DELETE_LABEL') }}</h4>
+              <h4>{{ $t('MSG_DELETE_LABEL') }}:</h4>
               <span class='number'>{{ deleteLabels }}</span>
             </div>
 
             <div class='full-section'>
-              <h4>{{ $t('MSG_ADDRESS') }}</h4>
+              <h4>{{ $t('MSG_ADDRESS') }}:</h4>
               <span class='wallet-type'>{{ deleteCoinType }}</span><br>
               <span class='number'>{{ deleteAddress }}</span>
-              <img class='copy-button' src='font-awesome/copy.svg'>
+              <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyAddressClick'>
             </div>
 
             <button class='alt' @click='onCancelClick'>
@@ -79,9 +79,10 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent, ref } from 'vue'
-import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore, useCurrencyStore, ReviewState } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore, useCurrencyStore, ReviewState, useNotificationStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import copy from 'copy-to-clipboard'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -202,7 +203,18 @@ const deleteCoinType = computed(() => {
   return dcoin.Name
 })
 
+const notification = useNotificationStore()
+
 const deleteAddress = computed(() => deleteAccount.value?.Account?.Address)
+const onCopyAddressClick = () => {
+  copy(deleteAddress.value)
+  notification.Notifications.push({
+    Title: t('MSG_ADDRESS_COPIED'),
+    Message: t('MSG_COPY_ADDRESS_SUCCESS'),
+    Popup: true,
+    Type: NotificationType.Success
+  })
+}
 
 const onMenuHide = () => {
   deleting.value = false
