@@ -10,7 +10,7 @@
           <ul class='faq-nav-links'>
             <li><a @click='scrollTo("Aleo マイニング製品")'>Aleo マイニング製品</a></li>
             <li><a @click='scrollTo("Aleo とは")'>Aleo とは</a></li>
-            <li><a @click='scrollTo("Aleoのテクノロジー概要")'>Aleoのテクノロジー概要</a></li>
+            <li><a @click='scrollTo("Aleoの技術概要")'>Aleoの技術概要</a></li>
             <li><a @click='scrollTo("なぜProcyonはAleoを選定したか？")'>なぜProcyonはAleoを選定したか？</a></li>
           </ul>
 
@@ -88,11 +88,9 @@
 
           <p>アクセンチュアで7年間シニアマネージャーを務める。数々のIT/金融系スタートアップでCOO/CIOを歴任。</p>
 
-          <h3 id='Aleoのテクノロジー概要'>
-            Aleoのテクノロジー概要
+          <h3 id='Aleoの技術概要'>
+            Aleoの技術概要
           </h3>
-
-          <h4>Aleo is the first platform to offer fully private applications.</h4>
 
           <p>Aleoは、完全なプライベートアプリケーションを提供する史上初のレイヤー1 プラットフォームです。</p>
           <p>分散型システムとゼロ知識暗号技術を活用し、ウェブ上のユーザーデータを保護することで、プライバシーを実現します。</p>
