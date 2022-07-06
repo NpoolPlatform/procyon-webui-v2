@@ -1395,6 +1395,7 @@ img.more-info:hover
 .popup .form-container
   background: linear-gradient(to bottom right, #2a3943 0, #092023 100%)
   box-shadow: 16px 16px 20px 0 #101417ee
+  border-radius: 12px
 
 .popup .form-container button
   margin: 18px 0 0 0
@@ -1904,18 +1905,19 @@ img.faq-product
 /* SECURITY PAGE */
 
 .settings
-  align-items: flex-start
-  display: flex
-  flex-wrap: wrap
-  justify-content: flex-start
+  display: grid
+  column-gap: 48px
+  grid-row-gap: 48px
+  grid-template-columns: 1fr 1fr
 
 .setting-box
   display: flex
+  flex-direction: column
   flex-wrap: wrap
+  height: 100%
+  margin: 0
   padding: 24px
-  margin: 0 5% 5% 0
   max-width: 600px
-  width: 45%
 
 .settings-box-heading
   align-items: center
@@ -2882,7 +2884,7 @@ footer .copyright
     margin-top: 0
 
   .settings
-    justify-content: center
+    grid-template-columns: 1fr
 
   .setting-box
     margin: 12px 0
