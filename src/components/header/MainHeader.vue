@@ -1,6 +1,6 @@
 <template>
   <header class='desktop1'>
-    <img :src='lightLogo' class='attachment-large size-large logo' @click='onLogoClick'>
+    <img :src='lightLogo' class='attachment-large size-large logo cursor-pointer' @click='onLogoClick'>
     <div class='nav'>
       <ul>
         <li><a class='nav-link' href='#'>{{ $t('MSG_HOME') }}</a></li>
