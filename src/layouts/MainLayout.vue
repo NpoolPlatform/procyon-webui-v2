@@ -17,9 +17,10 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, onMounted, computed } from 'vue'
-import { useNotificationStore, notify, useLocaleStore } from 'npool-cli-v2'
+import { defineAsyncComponent, onMounted, computed, watch } from 'vue'
+import { useNotificationStore, notify, useLocaleStore, useErrorSwitcherStore, SwitchTarget, ErrorTarget, useLoginedUserStore, UserInfo } from 'npool-cli-v2'
 import { useSettingStore } from 'src/localstore'
+import { useRouter } from 'vue-router'
 
 const MainHeader = defineAsyncComponent(() => import('src/components/header/MainHeader.vue'))
 const Footer = defineAsyncComponent(() => import('src/components/footer/Footer.vue'))
@@ -32,6 +33,23 @@ const special = computed(() => locale.CurLang?.Lang === 'ja-JP')
 
 const notification = useNotificationStore()
 const setting = useSettingStore()
+const errorswitcher = useErrorSwitcherStore()
+const trigger = computed(() => errorswitcher.ErrorTrigger)
+const logined = useLoginedUserStore()
+
+const router = useRouter()
+
+watch(trigger, () => {
+  if (!trigger.value) {
+    return
+  }
+  switch (trigger.value.Target) {
+    case SwitchTarget.LOGIN:
+      void router.push('/signin')
+      errorswitcher.ErrorTrigger = undefined as unknown as ErrorTarget
+      logined.LoginedUser = undefined as unknown as UserInfo
+  }
+})
 
 onMounted(() => {
   notification.$subscribe((_, state) => {
