@@ -139,7 +139,10 @@ import {
   useBenefitStore,
   ReviewState,
   useBillingStore,
-  totalPaymentBalanceUSD
+  totalPaymentBalanceUSD,
+  useOrderStore,
+  useCurrencyStore,
+  Currency
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -248,6 +251,73 @@ const onStateTipBtnClick = () => {
   showReviewing.value = false
 }
 
+const getPaymentBalances = () => {
+  billing.getPaymentBalances({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_PAYMENT_BALANCES'),
+        Message: t('MSG_GET_PAYMENT_BALANCES_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    totalPaymentBalanceUSD((usdAmount: number) => {
+      _totalPaymentBalanceUSD.value = usdAmount
+    })
+  })
+}
+
+const order = useOrderStore()
+
+const getOrders = () => {
+  order.getOrders({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_ORDERS'),
+        Message: t('MSG_GET_ORDERS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    getPaymentBalances()
+  })
+}
+
+const currency = useCurrencyStore()
+
+const getCurrencies = () => {
+  currency.getAllCoinCurrencies({
+    Currencies: [Currency.USD],
+    Message: {
+      Error: {
+        Title: t('MSG_GET_CURRENCIES'),
+        Message: t('MSG_GET_CURRENCIES_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    getOrders()
+  })
+}
+
+const getCoins = () => {
+  coins.getCoins({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COINS'),
+        Message: t('MSG_GET_COINS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    getCurrencies()
+  })
+}
+
 onMounted(() => {
   accounts.getWithdrawAccounts({
     Message: {
@@ -312,6 +382,8 @@ onMounted(() => {
       }
     })
   })
+
+  getCoins()
 })
 
 const onAddressSelected = (account: WithdrawAccount) => {

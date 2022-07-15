@@ -114,8 +114,8 @@ const getBenefits = () => {
     } as MyBenefit
 
     if (commissionCoin.value?.CoinTypeID === benefit.CoinTypeID) {
-      myBenefit.Total += commission.value.Total
-      myBenefit.Balance += commission.value.Balance
+      myBenefit.Total += commission.value.Total + _totalPaymentBalanceUSD.value
+      myBenefit.Balance += commission.value.Balance + _totalPaymentBalanceUSD.value
       commissionIncluded = true
     }
 
@@ -144,8 +144,8 @@ const getBenefits = () => {
   if (!commissionIncluded && commissionCoin.value && commission.value.Balance > 0) {
     const myBenefit = {
       CoinTypeID: commissionCoin.value.CoinTypeID,
-      Balance: commission.value.Balance,
-      Total: commission.value.Balance,
+      Balance: commission.value.Balance + _totalPaymentBalanceUSD.value,
+      Total: commission.value.Balance + _totalPaymentBalanceUSD.value,
       Units: 0,
       Last24Hours: 0
     } as MyBenefit
@@ -155,13 +155,13 @@ const getBenefits = () => {
         for (let i = 0; i < exBenefits.value.length; i++) {
           if (exBenefits.value[i].CoinTypeID === commissionCoin.value.CoinTypeID) {
             exBenefits.value[i].Total = commission.value.Balance
-            exBenefits.value[i].USDValue = commission.value.Balance * usdCurrency + _totalPaymentBalanceUSD.value
-            exBenefits.value[i].JPYValue = commission.value.Balance * jpyCurrency + totalPaymentBalanceJPY.value
+            exBenefits.value[i].USDValue = commission.value.Balance * usdCurrency
+            exBenefits.value[i].JPYValue = commission.value.Balance * jpyCurrency
             return
           }
         }
-        myBenefit.USDValue = myBenefit.Total * usdCurrency + _totalPaymentBalanceUSD.value
-        myBenefit.JPYValue = myBenefit.Total * jpyCurrency + totalPaymentBalanceJPY.value
+        myBenefit.USDValue = myBenefit.Total * usdCurrency
+        myBenefit.JPYValue = myBenefit.Total * jpyCurrency
         exBenefits.value.push(myBenefit)
       })
     })
@@ -206,51 +206,76 @@ const table = computed(() => [
   }
 ])
 
-onMounted(() => {
-  if (order.Orders.length === 0) {
-    progress.value?.start()
-    order.getOrders({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_ORDERS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      getBenefits()
-      progress.value?.stop()
-    })
-  }
+const benefitTimeout = ref(-1)
 
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+const getPaymentBalances = () => {
+  progress.value?.start()
+  billing.getPaymentBalances({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_PAYMENT_BALANCES'),
+        Message: t('MSG_GET_PAYMENT_BALANCES_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
       }
-    }, () => {
-      getBenefits()
-    })
-  }
-
-  if (benefit.Benefits.length === 0) {
-    benefit.getBenefits({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_BENEFITS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+    }
+  }, () => {
+    progress.value?.stop()
+    totalPaymentBalanceUSD((usdAmount: number) => {
+      _totalPaymentBalanceUSD.value = usdAmount
+      if (benefitTimeout.value >= 0) {
+        window.clearTimeout(benefitTimeout.value)
       }
-    }, () => {
-      getBenefits()
+      benefitTimeout.value = window.setTimeout(() => {
+        getBenefits()
+      }, 1000)
     })
-  }
+    totalPaymentBalanceCurrency(Currency.JPY, (amount: number) => {
+      totalPaymentBalanceJPY.value = amount
+      if (benefitTimeout.value >= 0) {
+        window.clearTimeout(benefitTimeout.value)
+      }
+      benefitTimeout.value = window.setTimeout(() => {
+        getBenefits()
+      }, 1000)
+    })
+  })
+}
 
+const getCommissionSettings = () => {
+  progress.value?.start()
+  benefit.getCommissionCoinSettings({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COMMISSION_COIN_SETTINGS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    progress.value?.stop()
+    getPaymentBalances()
+  })
+}
+
+const fetchBenefits = () => {
+  progress.value?.start()
+  benefit.getBenefits({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_BENEFITS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    progress.value?.stop()
+    getCommissionSettings()
+  })
+}
+
+const getCommission = () => {
+  progress.value?.start()
   benefit.getCommission({
     Message: {
       Error: {
@@ -260,37 +285,67 @@ onMounted(() => {
       }
     }
   }, () => {
-    getBenefits()
+    progress.value?.stop()
+    fetchBenefits()
   })
+}
 
-  if (!commissionCoin.value) {
-    benefit.getCommissionCoinSettings({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COMMISSION_COIN_SETTINGS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+const getOrders = () => {
+  progress.value?.start()
+  order.getOrders({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_ORDERS'),
+        Message: t('MSG_GET_ORDERS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
       }
-    }, () => {
-      getBenefits()
-    })
-  }
+    }
+  }, () => {
+    progress.value?.stop()
+    getCommission()
+  })
+}
 
-  if (billing.PaymentBalances.length === 0) {
-    billing.getPaymentBalances({
-      Message: {}
-    }, () => {
-      totalPaymentBalanceUSD((usdAmount: number) => {
-        _totalPaymentBalanceUSD.value = usdAmount
-        getBenefits()
-      })
-      totalPaymentBalanceCurrency(Currency.JPY, (amount: number) => {
-        totalPaymentBalanceJPY.value = amount
-        getBenefits()
-      })
-    })
-  }
+const currency = useCurrencyStore()
+
+const getCurrencies = () => {
+  progress.value?.start()
+  currency.getAllCoinCurrencies({
+    Currencies: [Currency.USD],
+    Message: {
+      Error: {
+        Title: t('MSG_GET_CURRENCIES'),
+        Message: t('MSG_GET_CURRENCIES_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    progress.value?.stop()
+    getOrders()
+  })
+}
+
+const getCoins = () => {
+  progress.value?.start()
+  coin.getCoins({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COINS'),
+        Message: t('MSG_GET_COINS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    progress.value?.stop()
+    getCurrencies()
+  })
+}
+
+onMounted(() => {
+  getCoins()
 })
 
 const router = useRouter()
