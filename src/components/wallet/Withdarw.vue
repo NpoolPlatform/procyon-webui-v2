@@ -137,7 +137,9 @@ import {
   useTransactionStore,
   WithdrawType,
   useBenefitStore,
-  ReviewState
+  ReviewState,
+  useBillingStore,
+  totalPaymentBalanceUSD
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -187,10 +189,12 @@ const withdraws = computed(() => accounts.Accounts.filter((account) => {
 const selectedAccount = ref(undefined as unknown as WithdrawAccount)
 
 const earning = ref(0)
+const _totalPaymentBalanceUSD = ref(0)
 const withdrawedEarning = ref(0)
-const balance = computed(() => Math.floor((earning.value - withdrawedEarning.value) * 10000) / 10000)
+const balance = computed(() => Math.floor((earning.value + _totalPaymentBalanceUSD.value - withdrawedEarning.value) * 10000) / 10000)
 
 const benefit = useBenefitStore()
+const billing = useBillingStore()
 
 const onSubmit = () => {
   if (!selectedAccount.value) {
@@ -297,6 +301,13 @@ onMounted(() => {
           }
         }, () => {
           earning.value += benefit.Commission.Balance
+          billing.getPaymentBalances({
+            Message: {}
+          }, () => {
+            totalPaymentBalanceUSD((usdAmount: number) => {
+              _totalPaymentBalanceUSD.value = usdAmount
+            })
+          })
         })
       }
     })

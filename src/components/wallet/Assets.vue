@@ -56,7 +56,10 @@ import {
   totalWithdrawedEarningCoin,
   useKYCStore,
   CommissionCoinSetting,
-  ReviewState
+  ReviewState,
+  useBillingStore,
+  totalPaymentBalanceUSD,
+  totalPaymentBalanceCurrency
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -72,6 +75,8 @@ const order = useOrderStore()
 const coin = useCoinStore()
 const currencies = useCurrencyStore()
 const benefit = useBenefitStore()
+const billing = useBillingStore()
+
 const benefits = computed(() => buildBenefits(order.Orders, benefit.Benefits))
 const commission = computed(() => benefit.Commission)
 const commissionCoin = computed(() => {
@@ -81,6 +86,9 @@ const commissionCoin = computed(() => {
   }
   return undefined as unknown as CommissionCoinSetting
 })
+
+const _totalPaymentBalanceUSD = ref(0)
+const totalPaymentBalanceJPY = ref(0)
 
 const kyc = useKYCStore()
 
@@ -147,13 +155,13 @@ const getBenefits = () => {
         for (let i = 0; i < exBenefits.value.length; i++) {
           if (exBenefits.value[i].CoinTypeID === commissionCoin.value.CoinTypeID) {
             exBenefits.value[i].Total = commission.value.Balance
-            exBenefits.value[i].USDValue = commission.value.Balance * usdCurrency
-            exBenefits.value[i].JPYValue = commission.value.Balance * jpyCurrency
+            exBenefits.value[i].USDValue = commission.value.Balance * usdCurrency + _totalPaymentBalanceUSD.value
+            exBenefits.value[i].JPYValue = commission.value.Balance * jpyCurrency + totalPaymentBalanceJPY.value
             return
           }
         }
-        myBenefit.USDValue = myBenefit.Total * usdCurrency
-        myBenefit.JPYValue = myBenefit.Total * jpyCurrency
+        myBenefit.USDValue = myBenefit.Total * usdCurrency + _totalPaymentBalanceUSD.value
+        myBenefit.JPYValue = myBenefit.Total * jpyCurrency + totalPaymentBalanceJPY.value
         exBenefits.value.push(myBenefit)
       })
     })
@@ -266,6 +274,21 @@ onMounted(() => {
       }
     }, () => {
       getBenefits()
+    })
+  }
+
+  if (billing.PaymentBalances.length === 0) {
+    billing.getPaymentBalances({
+      Message: {}
+    }, () => {
+      totalPaymentBalanceUSD((usdAmount: number) => {
+        _totalPaymentBalanceUSD.value = usdAmount
+        getBenefits()
+      })
+      totalPaymentBalanceCurrency(Currency.JPY, (amount: number) => {
+        totalPaymentBalanceJPY.value = amount
+        getBenefits()
+      })
     })
   }
 })
