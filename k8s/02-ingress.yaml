@@ -20,10 +20,6 @@ spec:
         - '*.procyon.vip'
         - procyon.vip
       secretName: procyon-vip-tls
-    - hosts:
-        - www.npool.top
-        - npool.top
-      secretName: npool-top-tls
   rules:
     - host: www.procyon.vip
       http:
@@ -33,13 +29,6 @@ spec:
               serviceName: procyon-webui-v2
               servicePort: 80
     - host: procyon.vip
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: procyon-webui-v2
-              servicePort: 80
-    - host: www.npool.top
       http:
         paths:
           - path: /
