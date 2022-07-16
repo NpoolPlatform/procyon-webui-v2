@@ -204,7 +204,7 @@ const onSubmit = () => {
     return
   }
 
-  amountError.value = !amount.value || amount.value > (earning.value - withdrawedEarning.value)
+  amountError.value = !amount.value || amount.value > (earning.value + _totalPaymentBalanceUSD.value - withdrawedEarning.value)
   if (amountError.value) {
     return
   }
