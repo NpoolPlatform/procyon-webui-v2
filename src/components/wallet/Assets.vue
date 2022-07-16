@@ -59,7 +59,10 @@ import {
   ReviewState,
   useBillingStore,
   totalPaymentBalanceUSD,
-  totalPaymentBalanceCurrency
+  totalPaymentBalanceCurrency,
+  useTransactionStore,
+  TransactionState,
+  WithdrawType
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -89,6 +92,10 @@ const commissionCoin = computed(() => {
 
 const _totalPaymentBalanceUSD = ref(0)
 const totalPaymentBalanceJPY = ref(0)
+const _totalWithdrawPaymentBalanceUSD = ref(0)
+const totalWithdrawPaymentBalanceJPY = ref(0)
+
+const transaction = useTransactionStore()
 
 const kyc = useKYCStore()
 
@@ -114,8 +121,8 @@ const getBenefits = () => {
     } as MyBenefit
 
     if (commissionCoin.value?.CoinTypeID === benefit.CoinTypeID) {
-      myBenefit.Total += commission.value.Total + _totalPaymentBalanceUSD.value
-      myBenefit.Balance += commission.value.Balance + _totalPaymentBalanceUSD.value
+      myBenefit.Total += commission.value.Total + _totalPaymentBalanceUSD.value - _totalWithdrawPaymentBalanceUSD.value
+      myBenefit.Balance += commission.value.Balance + _totalPaymentBalanceUSD.value - totalWithdrawPaymentBalanceJPY.value
       commissionIncluded = true
     }
 
@@ -144,8 +151,8 @@ const getBenefits = () => {
   if (!commissionIncluded && commissionCoin.value && commission.value.Balance > 0) {
     const myBenefit = {
       CoinTypeID: commissionCoin.value.CoinTypeID,
-      Balance: commission.value.Balance + _totalPaymentBalanceUSD.value,
-      Total: commission.value.Balance + _totalPaymentBalanceUSD.value,
+      Balance: commission.value.Balance + _totalPaymentBalanceUSD.value - _totalWithdrawPaymentBalanceUSD.value,
+      Total: commission.value.Balance + _totalPaymentBalanceUSD.value - totalWithdrawPaymentBalanceJPY.value,
       Units: 0,
       Last24Hours: 0
     } as MyBenefit
@@ -227,6 +234,12 @@ const getPaymentBalances = () => {
         window.clearTimeout(benefitTimeout.value)
       }
       benefitTimeout.value = window.setTimeout(() => {
+        transaction.Withdraws.filter((el) => (el.State === ReviewState.Approved || el.State === ReviewState.Wait) && el.Withdraw.WithdrawType === WithdrawType.PaymentBalance).forEach((el) => {
+          const index = transaction.Transactions.findIndex((tel) => tel.ID === el.Withdraw.PlatformTransactionID && tel.State !== TransactionState.Fail && tel.State !== TransactionState.Rejected)
+          if (index >= 0) {
+            _totalWithdrawPaymentBalanceUSD.value += transaction.Transactions[index].Amount
+          }
+        })
         getBenefits()
       }, 1000)
     })
@@ -236,9 +249,38 @@ const getPaymentBalances = () => {
         window.clearTimeout(benefitTimeout.value)
       }
       benefitTimeout.value = window.setTimeout(() => {
-        getBenefits()
+        transaction.Withdraws.filter((el) => (el.State === ReviewState.Approved || el.State === ReviewState.Wait) && el.Withdraw.WithdrawType === WithdrawType.PaymentBalance).forEach((el) => {
+          const index = transaction.Transactions.findIndex((tel) => tel.ID === el.Withdraw.PlatformTransactionID && tel.State !== TransactionState.Fail && tel.State !== TransactionState.Rejected)
+          if (index >= 0) {
+            totalWithdrawPaymentBalanceJPY.value += transaction.Transactions[index].Amount
+          }
+        })
+        currencies.getUSDTCurrency(Currency.JPY, (amount: number) => {
+          totalWithdrawPaymentBalanceJPY.value = totalWithdrawPaymentBalanceJPY.value * amount
+          getBenefits()
+        })
       }, 1000)
     })
+  })
+}
+
+const getTransactions = () => {
+  progress.value?.start()
+  transaction.getWithdraws({
+    Message: {}
+  }, () => {
+    progress.value?.stop()
+    getPaymentBalances()
+  })
+}
+
+const getWithdraws = () => {
+  progress.value?.start()
+  transaction.getTransactions({
+    Message: {}
+  }, () => {
+    progress.value?.stop()
+    getTransactions()
   })
 }
 
@@ -254,7 +296,7 @@ const getCommissionSettings = () => {
     }
   }, () => {
     progress.value?.stop()
-    getPaymentBalances()
+    getWithdraws()
   })
 }
 
