@@ -62,7 +62,8 @@ import {
   totalPaymentBalanceCurrency,
   useTransactionStore,
   TransactionState,
-  WithdrawType
+  WithdrawType,
+  InvalidID
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -122,7 +123,7 @@ const getBenefits = () => {
 
     if (commissionCoin.value?.CoinTypeID === benefit.CoinTypeID) {
       myBenefit.Total += commission.value.Total + _totalPaymentBalanceUSD.value - _totalWithdrawPaymentBalanceUSD.value
-      myBenefit.Balance += commission.value.Balance + _totalPaymentBalanceUSD.value - totalWithdrawPaymentBalanceJPY.value
+      myBenefit.Balance += commission.value.Balance + _totalPaymentBalanceUSD.value - _totalWithdrawPaymentBalanceUSD.value
       commissionIncluded = true
     }
 
@@ -152,7 +153,7 @@ const getBenefits = () => {
     const myBenefit = {
       CoinTypeID: commissionCoin.value.CoinTypeID,
       Balance: commission.value.Balance + _totalPaymentBalanceUSD.value - _totalWithdrawPaymentBalanceUSD.value,
-      Total: commission.value.Balance + _totalPaymentBalanceUSD.value - totalWithdrawPaymentBalanceJPY.value,
+      Total: commission.value.Balance + _totalPaymentBalanceUSD.value - _totalWithdrawPaymentBalanceUSD.value,
       Units: 0,
       Last24Hours: 0
     } as MyBenefit
@@ -234,13 +235,24 @@ const getPaymentBalances = () => {
         window.clearTimeout(benefitTimeout.value)
       }
       benefitTimeout.value = window.setTimeout(() => {
+        totalWithdrawPaymentBalanceJPY.value = 0
+        _totalWithdrawPaymentBalanceUSD.value = 0
         transaction.Withdraws.filter((el) => (el.State === ReviewState.Approved || el.State === ReviewState.Wait) && el.Withdraw.WithdrawType === WithdrawType.PaymentBalance).forEach((el) => {
+          if (el.Withdraw.PlatformTransactionID === InvalidID && el.State === ReviewState.Wait) {
+            totalWithdrawPaymentBalanceJPY.value += el.Withdraw.Amount
+            _totalWithdrawPaymentBalanceUSD.value += el.Withdraw.Amount
+            return
+          }
           const index = transaction.Transactions.findIndex((tel) => tel.ID === el.Withdraw.PlatformTransactionID && tel.State !== TransactionState.Fail && tel.State !== TransactionState.Rejected)
           if (index >= 0) {
+            totalWithdrawPaymentBalanceJPY.value += transaction.Transactions[index].Amount
             _totalWithdrawPaymentBalanceUSD.value += transaction.Transactions[index].Amount
           }
         })
-        getBenefits()
+        currencies.getUSDTCurrency(Currency.JPY, (amount: number) => {
+          totalWithdrawPaymentBalanceJPY.value = totalWithdrawPaymentBalanceJPY.value * amount
+          getBenefits()
+        })
       }, 1000)
     })
     totalPaymentBalanceCurrency(Currency.JPY, (amount: number) => {
@@ -250,9 +262,15 @@ const getPaymentBalances = () => {
       }
       benefitTimeout.value = window.setTimeout(() => {
         transaction.Withdraws.filter((el) => (el.State === ReviewState.Approved || el.State === ReviewState.Wait) && el.Withdraw.WithdrawType === WithdrawType.PaymentBalance).forEach((el) => {
+          if (el.Withdraw.PlatformTransactionID === InvalidID && el.State === ReviewState.Wait) {
+            totalWithdrawPaymentBalanceJPY.value += el.Withdraw.Amount
+            _totalWithdrawPaymentBalanceUSD.value += el.Withdraw.Amount
+            return
+          }
           const index = transaction.Transactions.findIndex((tel) => tel.ID === el.Withdraw.PlatformTransactionID && tel.State !== TransactionState.Fail && tel.State !== TransactionState.Rejected)
           if (index >= 0) {
             totalWithdrawPaymentBalanceJPY.value += transaction.Transactions[index].Amount
+            _totalWithdrawPaymentBalanceUSD.value += transaction.Transactions[index].Amount
           }
         })
         currencies.getUSDTCurrency(Currency.JPY, (amount: number) => {
