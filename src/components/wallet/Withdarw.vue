@@ -167,7 +167,7 @@ const onAmountFocusIn = () => {
   amountError.value = false
 }
 const onAmountFocusOut = () => {
-  amountError.value = !amount.value || amount.value >= (earning.value - withdrawedEarning.value)
+  amountError.value = !amount.value || amount.value >= (earning.value + _totalPaymentBalanceUSD.value - withdrawedEarning.value)
 }
 
 const withdrawType = ref(WithdrawType.Commission)
