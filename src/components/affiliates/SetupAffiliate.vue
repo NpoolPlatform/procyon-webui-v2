@@ -9,7 +9,11 @@
       </p>
       <div v-for='_good in goods' :key='_good.GoodID'>
         <label>{{ good.getGoodByID(_good.GoodID)?.Main?.Name }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
-        <input type='number' v-model='_good.Percent' :min='0' :max='inviterGoodPercent(_good.GoodID)'>
+        <select v-model='_good.Percent'>
+          <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
+            {{ kol }}
+          </option>
+        </select>
       </div>
     </template>
     <template #append-submit>
@@ -79,6 +83,12 @@ const username = computed(() => {
 const inviter = computed(() => {
   const index = inspire.Referrals.findIndex((el) => el.User.ID === logined.LoginedUser?.User.ID)
   return index < 0 ? undefined as unknown as Referral : inspire.Referrals[index]
+})
+
+const userKOLOptions = computed(() => (maxKOL: number) => {
+  const kolList = [30, 25, 15, 10, 5, 0]
+  let index = kolList.findIndex(kol => kol <= maxKOL)
+  return index === -1 ? [] : kolList.splice(++index)
 })
 const inviterGoodPercent = (goodID: string) => {
   let index = inviter.value.GoodSummaries.findIndex((el) => el.GoodID === goodID)
