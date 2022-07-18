@@ -57,7 +57,7 @@
             <td><span class='aff-product'>{{ good.getGoodByID(_good.GoodID)?.Good?.Good?.Title }}</span></td>
             <td v-if='_good.Editing'>
               <!-- <input type='number' v-model='_good.Percent' :min='0' :max='inviterGoodPercent(_good.GoodID)'> -->
-              <select v-model='_good.Percent' class='kolDropdown'>
+              <select v-model='_good.Percent' class='kol-dropdown'>
                 <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
                   {{ kol }}
                 </option>
@@ -295,9 +295,10 @@ const onSaveCommissionClick = (good: GoodItem) => {
 
 </script>
 <style>
-  .kolDropdown {
+  .kol-dropdown {
     padding: 4px 8px;
     margin: 0;
+    width: 48px;
   }
 
 </style>
