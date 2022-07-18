@@ -221,7 +221,7 @@ const inviter = computed(() => {
 const userKOLOptions = computed(() => (maxKOL: number) => {
   const kolList = [30, 25, 15, 10, 5, 0]
   let index = kolList.findIndex(kol => kol <= maxKOL)
-  return index === -1 ? [] : kolList.splice(++index)
+  return index === -1 || index === kolList.length - 1 ? [0] : kolList.splice(++index)
 })
 const inviterGoodPercent = (goodID: string) => {
   let index = inviter.value.GoodSummaries.findIndex((el) => el.GoodID === goodID)
