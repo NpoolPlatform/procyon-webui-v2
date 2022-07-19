@@ -219,10 +219,9 @@ const inviter = computed(() => {
   return index < 0 ? undefined as unknown as Referral : inspire.Referrals[index]
 })
 const userKOLOptions = computed(() => (maxKOL: number) => {
-  return [30, 25, 15, 10, 5, 0, maxKOL]
-  // const kolList = [30, 25, 15, 10, 5, 0]
-  // let index = kolList.findIndex(kol => kol <= maxKOL)
-  // return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
+  const kolList = [30, 25, 15, 10, 5, 0]
+  let index = kolList.findIndex(kol => kol <= maxKOL)
+  return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
 })
 const inviterGoodPercent = (goodID: string) => {
   let index = inviter.value.GoodSummaries.findIndex((el) => el.GoodID === goodID)
