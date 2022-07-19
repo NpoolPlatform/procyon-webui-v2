@@ -56,7 +56,12 @@
           <tr class='aff-info' v-for='_good in lgoods' :key='_good.GoodID'>
             <td><span class='aff-product'>{{ good.getGoodByID(_good.GoodID)?.Good?.Good?.Title }}</span></td>
             <td v-if='_good.Editing'>
-              <input type='number' v-model='_good.Percent' :min='0' :max='inviterGoodPercent(_good.GoodID)'>
+              <!-- <input type='number' v-model='_good.Percent' :min='0' :max='inviterGoodPercent(_good.GoodID)'> -->
+              <select v-model='_good.Percent' class='kol-dropdown'>
+                <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
+                  {{ kol }}
+                </option>
+              </select>
               <button @click='onSaveCommissionClick(_good)'>
                 {{ $t('MSG_SAVE') }}
               </button>
@@ -213,6 +218,11 @@ const inviter = computed(() => {
   const index = inspire.Referrals.findIndex((el) => el.User.ID === logined.LoginedUser?.User.ID)
   return index < 0 ? undefined as unknown as Referral : inspire.Referrals[index]
 })
+const userKOLOptions = computed(() => (maxKOL: number) => {
+  const kolList = [30, 25, 15, 10, 5, 0]
+  let index = kolList.findIndex(kol => kol <= maxKOL)
+  return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
+})
 const inviterGoodPercent = (goodID: string) => {
   let index = inviter.value.GoodSummaries.findIndex((el) => el.GoodID === goodID)
   let percent = 0
@@ -284,3 +294,11 @@ const onSaveCommissionClick = (good: GoodItem) => {
 }
 
 </script>
+<style>
+  .kol-dropdown {
+    padding: 4px 8px;
+    margin: 0;
+    width: 52px;
+  }
+
+</style>
