@@ -15,7 +15,10 @@ declare module '@vue/runtime-core' {
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-let baseURL = window.location.origin.replace('www', 'api') + '/api'
+let baseURL = window.location.protocol + '//api.' + window.location.hostname + '/api'
+if (window.location.hostname.startsWith('www.')) {
+  baseURL = window.location.origin.replace('www', 'api') + '/api'
+}
 if (window.location.hostname.includes('.npool.top')) {
   baseURL = window.location.protocol + '//api.npool.top' + (window.location.port.length ? ':' + window.location.port : '') + '/api'
 }
