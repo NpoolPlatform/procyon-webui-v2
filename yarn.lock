@@ -7638,10 +7638,10 @@ npm-run-path@^4.0.0, npm-run-path@^4.0.1:
   dependencies:
     path-key "^3.0.0"
 
-npool-cli-v2@^0.2.271:
-  version "0.2.271"
-  resolved "https://registry.yarnpkg.com/npool-cli-v2/-/npool-cli-v2-0.2.271.tgz#461be8a9924be9c44f2d39c5b859410dee1f0c74"
-  integrity sha512-rjhuMzPvLFfqjI09ZoC9mSCz0bPTmez+snCnc9pBu5QX7i6VWCUUxq4twLp345HakEmx1kwAqCSdG9VEEkhI4A==
+npool-cli-v2@^0.2.273:
+  version "0.2.273"
+  resolved "https://registry.yarnpkg.com/npool-cli-v2/-/npool-cli-v2-0.2.273.tgz#48b5feecc30cc069ffa059e2ddab345fd6cf4a6b"
+  integrity sha512-eLnbqX302PqXUrYU4SHFBVubUCnd9GTl9owssPRZqq2LzbkMF5bXwDQi5v0LKNfa5ya9JjE8fNYuYYsKzCQpow==
   dependencies:
     "@quasar/extras" "^1.0.0"
     "@typescript-eslint/eslint-plugin" "^5.17.0"
