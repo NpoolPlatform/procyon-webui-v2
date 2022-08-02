@@ -10,7 +10,7 @@
     />
     <Card
       v-for='(referral, idx) in referrals'
-      :key='referral.User.ID'
+      :key='referral.UserID'
       :child='true'
       :first-child='idx === 0'
       :last-child='idx === referrals.length - 1'
@@ -28,10 +28,12 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, ref, defineAsyncComponent } from 'vue'
-import { NotificationType, useInspireStore, useLoginedUserStore, Referral, useGoodStore } from 'npool-cli-v2'
+import { NotificationType, useInspireStore, useLoginedUserStore, useGoodStore } from 'npool-cli-v2'
 import { useLocalGoodStore } from '../../localstore'
 import { useI18n } from 'vue-i18n'
 import { QAjaxBar } from 'quasar'
+import { LocalUserProductArchivement } from 'src/localstore/affiliates/types'
+import { useLocalArchivementStore } from 'src/localstore/affiliates'
 
 const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.vue'))
 
@@ -39,13 +41,14 @@ const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.v
 const { t } = useI18n({ useScope: 'global' })
 
 const inspire = useInspireStore()
-const referrals = computed(() => inspire.Referrals.filter((el) => el.Kol && logined.LoginedUser?.User.ID !== el.User.ID))
-const inviter = computed(() => {
-  const index = inspire.Referrals.findIndex((el) => el.User.ID === logined.LoginedUser?.User.ID)
-  return index < 0 ? undefined as unknown as Referral : inspire.Referrals[index]
-})
-
 const logined = useLoginedUserStore()
+const localArchivements = useLocalArchivementStore()
+
+const referrals = computed(() => localArchivements.Archivements.filter((el) => el.Kol && logined.LoginedUser?.User.ID !== el.UserID))
+const inviter = computed(() => {
+  const index = localArchivements.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
+  return index < 0 ? undefined as unknown as LocalUserProductArchivement : localArchivements.Archivements[index]
+})
 
 const good = useGoodStore()
 const lgood = useLocalGoodStore()
@@ -155,8 +158,4 @@ onMounted(() => {
     })
   }
 })
-
 </script>
-
-<stype lang='sass' scoped>
-</stype>
