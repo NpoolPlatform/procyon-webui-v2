@@ -46,18 +46,18 @@ onMounted(() => {
         }
       }
     })
-    // localOrder.getOrders({
-    //   Message: {
-    //     Error: {
-    //       Title: t('MSG_GET_ORDERS'),
-    //       Message: t('MSG_GET_ORDERS_FAIL'),
-    //       Popup: true,
-    //       Type: NotificationType.Error
-    //     }
-    //   }
-    // }, () => {
-    //   // TODO
-    // })
+    localOrder.getOrders({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_ORDERS'),
+          Message: t('MSG_GET_ORDERS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
   }
 })
 

@@ -26,7 +26,7 @@
     :rows='(localOrders as Array<never>)'
     :table='(table as never)'
     :count-per-page='10'
-    @row-click='(row) => onRowClick(row as OrderModel)'
+    @row-click='(row) => onRowClick(row as LocalOrder)'
   >
     <template #top-right>
       <div class='buttons'>

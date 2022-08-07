@@ -11,8 +11,8 @@ export interface Detail {
   IOExtra: string
 }
 export interface GetDetailRequest extends BaseRequest {
-  StartAt: number
-  EndAt: number
+  StartAt?: number
+  EndAt?: number
   Offset: number
   Limit: number
 }

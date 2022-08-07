@@ -1,5 +1,5 @@
 enum API {
-  GET_ORDERS = '/cloud-hashing-order/v1/get/orders'
+  GET_ORDERS = '/order/v1/get/orders'
 }
 // declare const OrderTimeoutSeconds: number
 // enum PaymentState {

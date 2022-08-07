@@ -10,41 +10,41 @@
 </template>
 
 <script setup lang='ts'>
-// import { useProfitStore } from 'src/teststore/mock/profit'
+import { useProfitStore } from 'src/teststore/mock/profit'
 import { useLocalOrderStore } from 'src/teststore/mock/order'
 import { defineAsyncComponent, onMounted } from 'vue'
-// import { NotificationType } from 'npool-cli-v2'
-// import { useI18n } from 'vue-i18n'
+import { NotificationType } from 'npool-cli-v2'
+import { useI18n } from 'vue-i18n'
 
 const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
 const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/MiningCards.vue'))
 const Orders = defineAsyncComponent(() => import('src/components/dashboard/Orders.vue'))
 const localOrder = useLocalOrderStore()
 // eslint-disable-next-line @typescript-eslint/unbound-method
-// const { t } = useI18n({ useScope: 'global' })
-// const profit = useProfitStore()
-// const getProfits = (offset: number, limit: number) => {
-//   profit.getProfits({
-//     Offset: offset,
-//     Limit: limit,
-//     Message: {
-//       Error: {
-//         Title: t('MSG_GET_GOODS_FAIL'),
-//         Popup: true,
-//         Type: NotificationType.Error
-//       }
-//     }
-//   }, () => {
-//     // TODO
-//     if (offset + limit >= profit.Total) {
-//       return
-//     }
-//     getProfits(offset + limit, limit)
-//   })
-// }
+const { t } = useI18n({ useScope: 'global' })
+const profit = useProfitStore()
+const getProfits = (offset: number, limit: number) => {
+  profit.getProfits({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GOODS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    // TODO
+    if (offset + limit >= profit.Total) {
+      return
+    }
+    getProfits(offset + limit, limit)
+  })
+}
 
 onMounted(() => {
-  // getProfits(0, 100)
+  getProfits(0, 100)
   localOrder.Orders = [
     {
       ID: '1e936fd0-5e4c-4326-8b77-3ab7420722b8',
