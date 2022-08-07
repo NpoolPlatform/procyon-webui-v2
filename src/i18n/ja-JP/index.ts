@@ -58,7 +58,7 @@ export default {
   MSG_LOGIN_FAQ_MENU_TITLE: 'ログイン',
   MSG_LOGIN_FAQ_MENU_SUBTITLE: 'Procyon.vipのログインに関する詳細を確認',
   MSG_ACCOUNT_SETTINGS_FAQ_MENU_TITLE: 'アカウント情報',
-  MSG_ACCOUNT_SETTINGS_FAQ_MENU_SUBTITLE: 'Procyon.vipのアカウント情報に関する設定方法を確認',
+  MSG_ACCOUNT_SETTINGS_FAQ_MENU_SUBTITLE: '法人でご購入されている場合、代表者様の個人情報をご記入ください',
   MSG_DASHBOARD_FAQ_MENU_TITLE: 'ダッシュボード',
   MSG_DASHBOARD_FAQ_MENU_SUBTITLE: 'Procyon.vipのマイニングダッシュボードに関する詳細を確認',
   MSG_PAYMENTS_FAQ_MENU_TITLE: '入出金',
