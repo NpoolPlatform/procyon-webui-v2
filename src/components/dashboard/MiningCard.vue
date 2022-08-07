@@ -76,6 +76,7 @@ import {
   PaymentState,
   useGoodStore
 } from 'npool-cli-v2'
+// import { useLocalOrderStore } from 'src/teststore/mock/order'
 import { defineProps, toRef, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -156,7 +157,31 @@ const getEarning = () => {
     })
   })
 }
-
+// const localOrder = useLocalOrderStore()
+// const coinProfit = computed(() => (coinTypeID: string, start?: number | undefined, end?: number | undefined) => {
+//   let total = 0
+//   localOrder.Orders.forEach((el) => {
+//     if ((start && el.CreatedAt < start) || (end && el.CreatedAt > end)) {
+//       return
+//     }
+//     // FIXME:返回值中的CoinTypeID和PaymentCoinTypeID是啥区别
+//     if (el.CoinTypeID !== coinTypeID) {
+//       return
+//     }
+//     // FIXME:需要判断该订单是否已支付完成
+//     // FIXME:CreatedAt,Start, End分别是何含义
+//     // FIXME:同时使用余额和币支付时,计算币种收益是否需要减去余额
+//     total += Number(el.PaymentAmount)
+//   })
+//   return total
+// })
+// const purchasedAmount = computed(() => (coinTypeID: string) => {
+//   let total = 0
+//   localOrder.Orders.forEach((el) => {
+//     total += el.CoinTypeID === coinTypeID ? 0 : el.Units
+//   })
+//   return total
+// })
 const getCoins = () => {
   coins.getCoins({
     Message: {

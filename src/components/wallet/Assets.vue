@@ -68,6 +68,7 @@ import {
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { QAjaxBar } from 'quasar'
+import { useGeneralStore } from 'src/teststore/mock/ledger'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -104,7 +105,16 @@ interface MyBenefit extends BenefitModel {
   USDValue: number
   JPYValue: number
 }
-
+interface BalanceGeneral{
+  CoinTypeID: string
+  CoinName: string
+  CoinLogo: string
+  CoinUnit: string
+  Balance: number
+  Last24Hours: number
+  USDValue: number
+  JPYValue: number
+}
 const progress = ref<QAjaxBar>()
 const exBenefits = ref([] as Array<MyBenefit>)
 
@@ -176,6 +186,46 @@ const getBenefits = () => {
   }
 }
 
+const general = useGeneralStore()
+const balanceGeneral = ref([] as Array<BalanceGeneral>)
+const getAssets = () => {
+  balanceGeneral.value = [] as Array<BalanceGeneral>
+  general.Generals.forEach((el) => {
+    const balance = {
+      CoinTypeID: el.CoinTypeID,
+      CoinName: el.CoinName,
+      CoinLogo: el.CoinLogo,
+      CoinUnit: el.CoinUnit,
+      Balance: 0,
+      Last24Hours: 0,
+      USDValue: 0,
+      JPYValue: 0
+    } as BalanceGeneral
+    progress.value?.start()
+    currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (usdCurrency: number) => {
+      currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
+        const usdProfit = Number(el.Incoming) * usdCurrency
+        const jpProfit = Number(el.Incoming) * jpyCurrency
+        const existItem = balanceGeneral.value.find((ex) => ex.CoinTypeID === el.CoinTypeID, false)
+        if (existItem) {
+          existItem.USDValue += usdProfit
+          existItem.JPYValue += jpProfit
+          existItem.Balance += Number(el.Spendable)
+        } else {
+          balance.USDValue = usdProfit
+          balance.JPYValue = usdProfit
+          balance.Balance = Number(el.Spendable)
+          balanceGeneral.value.push(balance)
+        }
+      })
+    })
+  })
+  // last24Hours balance
+  balanceGeneral.value.forEach((el) => {
+    general.IntervalGenerals.filter((elem) => elem.CoinTypeID === el.CoinTypeID).forEach((grl) => { el.Last24Hours += Number(grl.Spendable) })
+  })
+  progress.value?.stop()
+}
 const table = computed(() => [
   {
     name: 'Name',
@@ -406,6 +456,7 @@ const getCoins = () => {
 
 onMounted(() => {
   getCoins()
+  getAssets()
 })
 
 const router = useRouter()

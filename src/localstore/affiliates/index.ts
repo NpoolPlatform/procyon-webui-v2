@@ -31,6 +31,7 @@ export const useLocalArchivementStore = defineStore('localarchivement', {
             CurPercent: el.CurPercent,
             CurGoodID: el.CurGoodID,
             CurGoodName: el.CurGoodName,
+            CurGoodUnit: el.CurGoodUnit,
             Editing: false
           })
         })

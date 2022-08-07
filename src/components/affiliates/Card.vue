@@ -2,9 +2,9 @@
   <div :class='[ "affiliate content-glass", child ? "child" : "", firstChild ? "first-child" : "", lastChild ? "last-child" : "" ]'>
     <div class='aff-top'>
       <h3 class='aff-name'>
-        {{ referral.Username }}
+        {{ username }}
       </h3>
-      <span class='aff-email'>{{ referral.EmailAddress }}</span>
+      <span class='aff-email'>{{ subusername }}</span>
       <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ referral.TotalInvitees }}</span></span>
     </div>
     <div class='aff-table'>
@@ -61,8 +61,8 @@
               </button>
             </td>
             <td><span class='aff-number'>{{ _good.TotalUnits }}<span class='unit'>{{ $t(_good.CoinUnit) }}</span></span></td>
-            <td><span class='aff-number'>{{ _good.TotalAmount }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ _good.TotalCommission }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ Number(_good.TotalAmount).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ Number(_good.TotalCommission).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -116,7 +116,7 @@ import { ref, toRef, defineProps, computed, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import chevrons from '../../assets/chevrons.svg'
 import { LocalArchivement, LocalUserProductArchivement } from 'src/localstore/affiliates/types'
-import { useArchivementStore, UserProductArchivement } from 'src/teststore/mock/archivement'
+import { useLocalArchivementStore } from 'src/localstore/affiliates'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
@@ -134,6 +134,36 @@ const firstChild = toRef(props, 'firstChild')
 const lastChild = toRef(props, 'lastChild')
 const referral = toRef(props, 'referral')
 
+const username = computed(() => {
+  let name = referral.value.Username
+
+  if (referral.value?.LastName?.length && referral.value?.FirstName?.length) {
+    name = referral.value.LastName + ' ' + referral.value.FirstName
+  }
+
+  if (!name?.length) {
+    name = referral.value?.Username
+  }
+
+  if (!name?.length) {
+    name = referral.value?.EmailAddress
+  }
+
+  if (!name?.length) {
+    name = referral.value?.PhoneNO
+  }
+
+  return name
+})
+const subusername = computed(() => {
+  let name = referral.value.EmailAddress
+
+  if (!name?.length) {
+    name = referral.value?.PhoneNO
+  }
+
+  return name
+})
 const showDetailSummary = ref(false)
 
 const onShowMoreClick = () => {
@@ -149,12 +179,12 @@ const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
 }).sort((a, b) => {
   return a.Start < b.Start ? 1 : -1
 }))
-const archivement = useArchivementStore()
+const localArchivement = useLocalArchivementStore()
 
 // get parent
 const inviter = computed(() => {
-  const index = archivement.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
-  return index < 0 ? undefined as unknown as UserProductArchivement : archivement.Archivements[index]
+  const index = localArchivement.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
+  return index < 0 ? undefined as unknown as LocalUserProductArchivement : localArchivement.Archivements[index]
 })
 
 const userKOLOptions = computed(() => (maxKOL: number) => {
@@ -198,6 +228,7 @@ const onSaveCommissionClick = (elem: LocalUserProductArchivement, idx:number) =>
   inspire.createPurchaseAmountSetting({
     TargetUserID: referral.value.UserID,
     InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
+    // FIXME: what is IDNumber
     InviteeName: Username(referral.value, { IDNumber: referral.value.UserID }, locale.value) as string,
     Info: {
       GoodID: elem.Archivements[idx].CurGoodID,

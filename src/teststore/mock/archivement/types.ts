@@ -14,6 +14,7 @@ interface Archivement {
   CurPercent: number
   CurGoodID: string
   CurGoodName: string
+  CurGoodUnit: string
 }
 
 interface UserProductArchivement {
@@ -23,6 +24,7 @@ interface UserProductArchivement {
   PhoneNO: string
   FirstName: string
   LastName: string
+  CreateAt: number
   Kol: boolean
   TotalInvitees: number
   Archivements: Array<Archivement>

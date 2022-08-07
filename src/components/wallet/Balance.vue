@@ -3,7 +3,8 @@
     <h2>{{ $t('MSG_ACCOUNT_BALANCE') }}</h2>
     <div class='earnings-summary'>
       <div class='earnings-figure'>
-        <span class='amount'>{{ (_totalEarningUSD - totalWithdrawedUSD + _totalPaymentBalanceUSD + commissionUSD).toFixed(4) }}</span>
+        <!-- <span class='amount'>{{ (_totalEarningUSD - totalWithdrawedUSD + _totalPaymentBalanceUSD + commissionUSD).toFixed(4) }}</span> -->
+        <span class='amount'>{{ totalBalance(Currency.USD).toFixed(4) }}</span>
         <span class='unit'>{{ PriceCoinName }}</span>
         <div class='hr' />
         <h4 class='description'>
@@ -11,7 +12,8 @@
         </h4>
       </div>
       <div class='earnings-figure'>
-        <span class='amount'>{{ (totalEarningJPY - totalWithdrawedJPY + totalPaymentBalanceJPY + commissionJPY).toFixed(4) }}</span>
+        <!-- <span class='amount'>{{ (totalEarningJPY - totalWithdrawedJPY + totalPaymentBalanceJPY + commissionJPY).toFixed(4) }}</span> -->
+        <span class='amount'>{{ totalBalance(Currency.JPY).toFixed(4) }}</span>
         <span class='unit'>JPY</span>
         <div class='hr' />
         <h4 class='description'>
@@ -42,6 +44,7 @@ import {
   useOrderStore,
   CoinType
 } from 'npool-cli-v2'
+import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { onMounted, ref, defineProps, toRef, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -70,10 +73,20 @@ const good = useGoodStore()
 const benefit = useBenefitStore()
 const billing = useBillingStore()
 const order = useOrderStore()
-
-const commissionUSD = computed(() => benefit.Commission.Balance)
+const ledger = useGeneralStore()
+// const commissionUSD = computed(() => benefit.Commission.Balance)
 const commissionJPY = ref(0)
-
+const totalBalance = computed(() => (coinCurrency: Currency) => {
+  let total = 0
+  ledger.Generals.forEach((el) => {
+    if (Number(el.Spendable) > 0) {
+      currency.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), coinCurrency, (currency: number) => {
+        total += Number(el.Spendable) * currency
+      })
+    }
+  })
+  return total
+})
 const getPaymentBalances = () => {
   billing.getPaymentBalances({
     Message: {
@@ -207,7 +220,25 @@ const getCoins = () => {
     getCurrencies()
   })
 }
-
+const getGeneralsRecursive = (offset: number, limit: number) => {
+  ledger.getGenerals({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GENERAL_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    // TODO
+    if (limit + offset >= ledger.Total) {
+      return
+    }
+    getGeneralsRecursive(limit + offset, limit)
+  })
+}
 onMounted(() => {
   benefit.getCommission({
     Message: {
@@ -246,6 +277,9 @@ onMounted(() => {
   totalPaymentBalanceCurrency(Currency.JPY, (amount: number) => {
     totalPaymentBalanceJPY.value = amount
   })
+  if (ledger.Generals.length === 0) {
+    getGeneralsRecursive(0, 100)
+  }
 })
 
 </script>

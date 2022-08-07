@@ -6,9 +6,9 @@
 
 <script setup lang='ts'>
 import { useCoinStore, useOrderStore, NotificationType } from 'npool-cli-v2'
-import { defineAsyncComponent, computed, onMounted } from 'vue'
+import { computed, defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-
+import { useLocalOrderStore } from 'src/teststore/mock/order'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
@@ -17,16 +17,8 @@ const SpacemeshMockCard = defineAsyncComponent(() => import('src/components/dash
 
 const coin = useCoinStore()
 const orders = useOrderStore()
-
-const coins = computed(() => coin.Coins.filter((coin) => {
-  for (const order of orders.Orders) {
-    if (coin.ID === order.Good.Main?.ID) {
-      return true
-    }
-  }
-  return false
-}))
-
+const localOrder = useLocalOrderStore()
+const coins = computed(() => coin.Coins.filter((coin) => localOrder.Orders.find((order) => order.CoinTypeID === coin.ID)))
 onMounted(() => {
   if (coin.Coins.length === 0) {
     coin.getCoins({
@@ -54,6 +46,18 @@ onMounted(() => {
         }
       }
     })
+    // localOrder.getOrders({
+    //   Message: {
+    //     Error: {
+    //       Title: t('MSG_GET_ORDERS'),
+    //       Message: t('MSG_GET_ORDERS_FAIL'),
+    //       Popup: true,
+    //       Type: NotificationType.Error
+    //     }
+    //   }
+    // }, () => {
+    //   // TODO
+    // })
   }
 })
 
