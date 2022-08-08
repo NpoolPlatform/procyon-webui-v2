@@ -11,7 +11,8 @@ export interface LocalUserProductArchivement {
   FirstName: string
   LastName: string
   Kol: boolean
-  CreateAt: number
+  CreatedAt: number
   TotalInvitees: number
+  InvitedAt: number
   Archivements: Array<LocalArchivement>
 }

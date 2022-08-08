@@ -98,8 +98,6 @@ import { useI18n } from 'vue-i18n'
 
 import edit from '../../assets/edit.svg'
 import { useRouter } from 'vue-router'
-// import { LocalArchivement, LocalUserProductArchivement } from 'src/localstore/affiliates/types'
-// import { useArchivementStore, UserProductArchivement } from 'src/teststore/mock/archivement'
 import { LocalArchivement, LocalUserProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -109,8 +107,6 @@ interface MyCoin {
   value: Coin
 }
 
-// const inspire = useInspireStore()
-// const referrals = computed(() => inspire.Referrals.filter((referral) => !referral.Kol))
 const localArchivements = useLocalArchivementStore()
 const referrals = computed(() => localArchivements.Archivements.filter((referral) => !referral.Kol))
 
@@ -136,39 +132,6 @@ watch(coins, () => {
   selectedCoin.value = coins.value.length ? coins.value[0] : undefined as unknown as MyCoin
 })
 
-// const totalUnits = computed(() => {
-//   let units = 0
-//   console.log('selectedCoin: ', selectedCoin.value?.value.ID)
-//   referrals.value.forEach((el) => {
-//     const sums = el.Archivements.filter((sel) => sel.CoinTypeID === selectedCoin.value?.value.ID)
-//     sums.forEach((sum) => { units += Number(sum.CoinUnit) })
-//   })
-//   return units
-// })
-// const totalAmount = computed(() => {
-//   let amount = 0
-//   referrals.value.forEach((el) => {
-//     const sums = el.Archivements.filter((sel) => sel.CoinTypeID === selectedCoin.value?.value.ID)
-//     sums.forEach((sum) => { amount += Number(sum.TotalAmount) })
-//   })
-//   return amount
-// })
-// const totalContribution = computed(() => {
-//   let amount = 0
-//   const comms = inspire.GoodCommissions.filter((gel) => {
-//     const index = referrals.value.findIndex((el) => gel.UserID === el.UserID)
-//     if (index < 0) {
-//       return false
-//     }
-//     return gel.CoinTypeID === selectedCoin.value?.value.ID
-//   })
-//   comms.forEach((gel) => {
-//     if (gel.Contribution) {
-//       amount += gel.Contribution
-//     }
-//   })
-//   return amount
-// })
 const goodUnit = computed(() => {
   for (const rf of referrals.value) {
     for (const sum of rf.Archivements) {
@@ -180,12 +143,12 @@ const goodUnit = computed(() => {
   return ''
 })
 
-const displayReferrals = ref(referrals.value.sort((a, b) => a.CreateAt > b.CreateAt ? -1 : 1))
+const displayReferrals = ref(referrals.value.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
 const searchStr = ref('')
 watch(searchStr, () => {
   displayReferrals.value = referrals.value.filter((el) => {
     return el.EmailAddress?.includes(searchStr.value) || el.PhoneNO?.includes(searchStr.value)
-  }).sort((a, b) => a.CreateAt > b.CreateAt ? -1 : 1)
+  }).sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
 })
 
 const onSearchSubmit = () => {
@@ -193,7 +156,7 @@ const onSearchSubmit = () => {
 }
 const onSearchResetClick = () => {
   searchStr.value = ''
-  displayReferrals.value = referrals.value.sort((a, b) => a.CreateAt > b.CreateAt ? -1 : 1)
+  displayReferrals.value = referrals.value.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
 }
 
 const accountName = (referral: LocalUserProductArchivement) => {
@@ -201,33 +164,12 @@ const accountName = (referral: LocalUserProductArchivement) => {
 }
 
 const joinDate = (referral: LocalUserProductArchivement) => {
-  return formatTime(referral.CreateAt, true)
+  return formatTime(referral.InvitedAt, true)
 }
 
 const joinTime = (referral: LocalUserProductArchivement) => {
-  return formatTime(referral.CreateAt, false).split(' ')[1]
+  return formatTime(referral.CreatedAt, false).split(' ')[1]
 }
-
-// const referralUnits = (referral: LocalUserProductArchivement) => {
-//   const rfs = referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
-//   let units = 0
-//   rfs.forEach((el) => { units += el.TotalUnits })
-//   return units
-// }
-
-// const referralAmount = (referral: LocalUserProductArchivement) => {
-//   const rfs = referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
-//   let amount = 0
-//   rfs.forEach((el) => { amount += Number(el.TotalAmount) })
-//   return amount
-// }
-
-// const referralContribution = (referral: LocalUserProductArchivement) => {
-//   let commission = 0
-//   const rfs = referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
-//   rfs.forEach((el) => { commission += Number(el.TotalCommission) })
-//   return commission
-// }
 
 // dynamic get object attribute in typescript
 function prop<T extends object, K extends keyof T> (obj: T, key: K) {
@@ -267,33 +209,6 @@ const onSetKolClick = (referral: LocalUserProductArchivement) => {
 }
 
 onMounted(() => {
-  // if (referrals.value.length === 0) {
-  //   inspire.getReferrals({
-  //     Message: {
-  //       Error: {
-  //         Title: t('MSG_GET_REFERRALS_FAIL'),
-  //         Popup: true,
-  //         Type: NotificationType.Error
-  //       }
-  //     }
-  //   }, () => {
-  //     displayReferrals.value = localArchivements.Archivements.filter((referral) => !referral.Kol)
-  //     if (inspire.GoodCommissions.length === 0) {
-  //       inspire.getGoodCommissions({
-  //         Message: {
-  //           Error: {
-  //             Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
-  //             Popup: true,
-  //             Type: NotificationType.Error
-  //           }
-  //         }
-  //       }, () => {
-  //         // TODO
-  //       })
-  //     }
-  //   })
-  // }
-
   if (coins.value.length === 0) {
     coin.getCoins({
       Message: {
@@ -305,6 +220,7 @@ onMounted(() => {
       }
     }, () => {
       // TODO
+      displayReferrals.value = localArchivements.Archivements.filter((referral) => !referral.Kol)
     })
   }
 })
