@@ -16,7 +16,15 @@ export const useGeneralStore = defineStore('general', {
     IntervalGenerals: [] as Array<General>,
     IntervalGeneralsTotal: 0
   }),
-  getters: {},
+  getters: {
+    getCoinBalance (): (coinTypeID: string) => number {
+      return (coinTypeID: string) => {
+        let total = 0
+        this.Generals.filter((el) => el.CoinTypeID === coinTypeID).forEach((sl) => { total += Number(sl.Spendable) })
+        return total
+      }
+    }
+  },
   actions: {
     getGenerals (req: GetGeneralRequest, done: (error: boolean) => void) {
       doActionWithError<GetGeneralRequest, GetGeneralResponse>(
