@@ -47,6 +47,16 @@ interface GetGoodProfitResponse {
   Infos: GoodProfit[]
   Total: number
 }
+interface GetIntervalGoodProfitRequest extends BaseRequest {
+  StartAt?: number
+  EndAt?: number
+  Offset?: number
+  Limit?: number
+}
+interface GetIntervalGoodProfitResponse {
+  Infos: GoodProfit[]
+  Total: number
+}
 export {
   Profit,
   GetProfitRequest,
@@ -55,5 +65,7 @@ export {
   GetIntervalProfitResponse,
   GoodProfit,
   GetGoodProfitRequest,
-  GetGoodProfitResponse
+  GetGoodProfitResponse,
+  GetIntervalGoodProfitRequest,
+  GetIntervalGoodProfitResponse
 }

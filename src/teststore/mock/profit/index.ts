@@ -9,7 +9,9 @@ import {
   GetIntervalProfitRequest,
   GetIntervalProfitResponse,
   GetGoodProfitRequest,
-  GetGoodProfitResponse
+  GetGoodProfitResponse,
+  GetIntervalGoodProfitRequest,
+  GetIntervalGoodProfitResponse
 } from './types'
 
 export const useProfitStore = defineStore('profit', {
@@ -17,9 +19,11 @@ export const useProfitStore = defineStore('profit', {
     Profits: [] as Array<Profit>,
     IntervalProfits: [] as Array<Profit>,
     GoodProfits: [] as Array<GoodProfit>,
+    IntervalGoodProfits: [] as Array<GoodProfit>,
     Total: 0,
     IntervalTotal: 0,
-    GoodProfitTotal: 0
+    GoodProfitTotal: 0,
+    IntervalGoodProfitTotal: 0
   }),
   getters: {},
   actions: {
@@ -61,6 +65,21 @@ export const useProfitStore = defineStore('profit', {
         (resp: GetGoodProfitResponse): void => {
           this.GoodProfits.push(...resp.Infos)
           this.GoodProfitTotal = resp.Total
+          done(false)
+        },
+        () => {
+          done(true)
+        }
+      )
+    },
+    getIntervalGoodProfits (req: GetIntervalGoodProfitRequest, done: (error:boolean) => void) {
+      doActionWithError<GetIntervalGoodProfitRequest, GetIntervalGoodProfitResponse>(
+        API.GET_GOOD_PROFITS,
+        req,
+        req.Message,
+        (resp: GetGoodProfitResponse): void => {
+          this.IntervalGoodProfits.push(...resp.Infos)
+          this.IntervalGoodProfitTotal = resp.Total
           done(false)
         },
         () => {

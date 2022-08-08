@@ -13,18 +13,20 @@
         <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
         <!-- <span class='value'>{{ coin?.PreSale ? '*' : _totalEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span> -->
         <span class='value'>{{ coin?.PreSale ? '*' : Number(goodGeneral.Incoming).toFixed(2) }} {{ coin?.Unit }}</span>
-        <span class='sub-value'>({{ totalEarningUSD.toFixed(2) }} {{ PriceCoinName }})</span>
+        <!-- <span class='sub-value'>({{ totalEarningUSD.toFixed(2) }} {{ PriceCoinName }})</span> -->
+        <span class='sub-value'>({{ totalUSDTIncoming.toFixed(2) }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
         <!-- <span class='value'>{{ coin?.PreSale ? '*' : _last24HoursEarningCoin.toFixed(2) }} {{ coin.Unit }}</span> -->
         <span class='value'>{{ coin?.PreSale ? '*' : Number(goodGeneral.Last24Hours).toFixed(2) }} {{ coin.Unit }}</span>
-        <span class='sub-value'>({{ last24HoursEarningUSD.toFixed(2) }} {{ PriceCoinName }})</span>
+        <!-- <span class='sub-value'>({{ last24HoursEarningUSD.toFixed(2) }} {{ PriceCoinName }})</span> -->
+        <span class='sub-value'>({{ last24HoursTotalUSDTIncoming.toFixed(2) }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
         <!-- <span class='value'>{{ totalUnits }} {{ $t(goodUnit) }}</span> -->
-        <span class='value'>{{ goodGeneral.Units }} {{ $t(goodUnit) }}</span>
+        <span class='value'>{{ goodGeneral.Units }} {{ $t(goodGeneral.GoodUnit) }}</span>
       </div>
     </div>
     <q-slide-transition>
@@ -96,7 +98,20 @@ const props = defineProps<Props>()
 const coinTypeId = toRef(props, 'coinTypeId')
 const goodGeneral = toRef(props, 'goodGeneral')
 const short = ref(true)
-
+const totalUSDTIncoming = computed(() => {
+  let totalUSDT = 0
+  currency.getCoinCurrency(coin.value, Currency.USD, (currency) => {
+    totalUSDT = Number(goodGeneral.value.Incoming) * currency
+  })
+  return totalUSDT
+})
+const last24HoursTotalUSDTIncoming = computed(() => {
+  let totalUSDT = 0
+  currency.getCoinCurrency(coin.value, Currency.USD, (currency) => {
+    totalUSDT = Number(goodGeneral.value.Last24Hours) * currency
+  })
+  return totalUSDT
+})
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
@@ -113,9 +128,8 @@ const orders = computed(() => order.Orders.filter((myOrder) => {
       myOrder.Order.Payment &&
       myOrder.Order.Payment.State === PaymentState.DONE
 }))
-const goodUnit = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.Unit : '')
+// const goodUnit = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.Unit : '')
 const goodPeriod = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.DurationDays : '')
-// const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
 
 const productPage = computed(() => productInfo.value.ProductPage)
 
@@ -163,32 +177,6 @@ const getEarning = () => {
     })
   })
 }
-
-// const localOrder = useLocalOrderStore()
-// const coinProfit = computed(() => (coinTypeID: string, start?: number | undefined, end?: number | undefined) => {
-//   let total = 0
-//   localOrder.Orders.forEach((el) => {
-//     if ((start && el.CreatedAt < start) || (end && el.CreatedAt > end)) {
-//       return
-//     }
-//     // FIXME:返回值中的CoinTypeID和PaymentCoinTypeID是啥区别
-//     if (el.CoinTypeID !== coinTypeID) {
-//       return
-//     }
-//     // FIXME:需要判断该订单是否已支付完成
-//     // FIXME:CreatedAt,Start, End分别是何含义
-//     // FIXME:同时使用余额和币支付时,计算币种收益是否需要减去余额
-//     total += Number(el.PaymentAmount)
-//   })
-//   return total
-// })
-// const purchasedAmount = computed(() => (coinTypeID: string) => {
-//   let total = 0
-//   localOrder.Orders.forEach((el) => {
-//     total += el.CoinTypeID === coinTypeID ? 0 : el.Units
-//   })
-//   return total
-// })
 const getCoins = () => {
   coins.getCoins({
     Message: {
