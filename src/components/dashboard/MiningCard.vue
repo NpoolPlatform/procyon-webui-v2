@@ -11,17 +11,20 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
-        <span class='value'>{{ coin?.PreSale ? '*' : _totalEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
+        <!-- <span class='value'>{{ coin?.PreSale ? '*' : _totalEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span> -->
+        <span class='value'>{{ coin?.PreSale ? '*' : Number(goodGeneral.Incoming).toFixed(2) }} {{ coin?.Unit }}</span>
         <span class='sub-value'>({{ totalEarningUSD.toFixed(2) }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
-        <span class='value'>{{ coin?.PreSale ? '*' : _last24HoursEarningCoin.toFixed(2) }} {{ coin.Unit }}</span>
+        <!-- <span class='value'>{{ coin?.PreSale ? '*' : _last24HoursEarningCoin.toFixed(2) }} {{ coin.Unit }}</span> -->
+        <span class='value'>{{ coin?.PreSale ? '*' : Number(goodGeneral.Last24Hours).toFixed(2) }} {{ coin.Unit }}</span>
         <span class='sub-value'>({{ last24HoursEarningUSD.toFixed(2) }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
-        <span class='value'>{{ totalUnits }} {{ $t(goodUnit) }}</span>
+        <!-- <span class='value'>{{ totalUnits }} {{ $t(goodUnit) }}</span> -->
+        <span class='value'>{{ goodGeneral.Units }} {{ $t(goodUnit) }}</span>
       </div>
     </div>
     <q-slide-transition>
@@ -76,6 +79,7 @@ import {
   PaymentState,
   useGoodStore
 } from 'npool-cli-v2'
+import { GoodGeneral } from 'src/localstore/good'
 // import { useLocalOrderStore } from 'src/teststore/mock/order'
 import { defineProps, toRef, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -85,10 +89,12 @@ import chevrons from '../../assets/chevrons.svg'
 
 interface Props {
   coinTypeId: string
+  goodGeneral: GoodGeneral
 }
 
 const props = defineProps<Props>()
 const coinTypeId = toRef(props, 'coinTypeId')
+const goodGeneral = toRef(props, 'goodGeneral')
 const short = ref(true)
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -109,7 +115,7 @@ const orders = computed(() => order.Orders.filter((myOrder) => {
 }))
 const goodUnit = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.Unit : '')
 const goodPeriod = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.DurationDays : '')
-const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
+// const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
 
 const productPage = computed(() => productInfo.value.ProductPage)
 
@@ -157,6 +163,7 @@ const getEarning = () => {
     })
   })
 }
+
 // const localOrder = useLocalOrderStore()
 // const coinProfit = computed(() => (coinTypeID: string, start?: number | undefined, end?: number | undefined) => {
 //   let total = 0

@@ -6,10 +6,7 @@ import {
   GetGeneralRequest,
   GetGeneralResponse,
   GetIntervalGeneralRequest,
-  GetIntervalGeneralResponse,
-  Detail,
-  GetDetailRequest,
-  GetDetailResponse
+  GetIntervalGeneralResponse
 } from './types'
 
 export const useGeneralStore = defineStore('general', {
@@ -17,9 +14,7 @@ export const useGeneralStore = defineStore('general', {
     Generals: [] as Array<General>,
     Total: 0,
     IntervalGenerals: [] as Array<General>,
-    IntervalGeneralsTotal: 0,
-    Details: [] as Array<Detail>,
-    DetailTotal: 0
+    IntervalGeneralsTotal: 0
   }),
   getters: {},
   actions: {
@@ -29,9 +24,7 @@ export const useGeneralStore = defineStore('general', {
         req,
         req.Message,
         (resp: GetGeneralResponse): void => {
-          resp.Infos.forEach((el) => {
-            this.Generals.push(el)
-          })
+          this.Generals.push(...resp.Infos)
           this.Total = resp.Total
           done(false)
         },
@@ -50,23 +43,6 @@ export const useGeneralStore = defineStore('general', {
             this.IntervalGenerals.push(el)
           })
           this.IntervalGeneralsTotal = resp.Total
-          done(false)
-        },
-        () => {
-          done(true)
-        }
-      )
-    },
-    getDetails (req: GetDetailRequest, done: (error: boolean) => void) {
-      doActionWithError<GetDetailRequest, GetDetailResponse>(
-        API.GET_DETAILS,
-        req,
-        req.Message,
-        (resp: GetDetailResponse): void => {
-          resp.Infos.forEach((el) => {
-            this.Details.push(el)
-          })
-          this.DetailTotal = resp.Total
           done(false)
         },
         () => {

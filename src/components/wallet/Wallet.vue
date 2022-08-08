@@ -6,6 +6,8 @@
     <div class='hr' />
     <Transactions />
     <div class='hr' />
+    <WithdrawRecords />
+    <div class='hr' />
     <WithdrawAddresses />
     <div class='hr' />
   </div>
@@ -18,5 +20,6 @@ const Balance = defineAsyncComponent(() => import('src/components/wallet/Balance
 const Assets = defineAsyncComponent(() => import('src/components/wallet/Assets.vue'))
 const Transactions = defineAsyncComponent(() => import('src/components/wallet/Transactions.vue'))
 const WithdrawAddresses = defineAsyncComponent(() => import('src/components/wallet/WithdrawAddresses.vue'))
+const WithdrawRecords = defineAsyncComponent(() => import('src/components/wallet/WithdrawRecords.vue'))
 
 </script>

@@ -86,7 +86,7 @@ export const useLocalOrderStore = defineStore('localorder', {
     },
     addOrder (req: CreateOrderRequest, done: (error: boolean) => void) {
       doActionWithError<CreateOrderRequest, CreateOrderResponse>(
-        API.GET_ORDERS,
+        API.CREATE_ORDERS,
         req,
         req.Message,
         (resp: CreateOrderResponse): void => {

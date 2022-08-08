@@ -143,17 +143,17 @@ const onSubmit = () => {
       }
     }
   }, () => {
-    inspire.getReferrals({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_REFERRALS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+    // inspire.getReferrals({
+    //   Message: {
+    //     Error: {
+    //       Title: t('MSG_GET_REFERRALS_FAIL'),
+    //       Popup: true,
+    //       Type: NotificationType.Error
+    //     }
+    //   }
+    // }, () => {
+    //   // TODO
+    // })
   })
 
   goods.value.forEach((good) => {
@@ -190,17 +190,17 @@ const goods = ref([] as Array<GoodItem>)
 
 onMounted(() => {
   if (inspire.Referrals.length === 0) {
-    inspire.getReferrals({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_REFERRALS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+    // inspire.getReferrals({
+    //   Message: {
+    //     Error: {
+    //       Title: t('MSG_GET_REFERRALS_FAIL'),
+    //       Popup: true,
+    //       Type: NotificationType.Error
+    //     }
+    //   }
+    // }, () => {
+    //   // TODO
+    // })
   }
 
   if (good.Goods.length > 0 && good.AppGoods.length > 0) {

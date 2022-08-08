@@ -29,9 +29,7 @@ export const useProfitStore = defineStore('profit', {
         req,
         req.Message,
         (resp: GetProfitResponse): void => {
-          resp.Infos.forEach((el) => {
-            this.Profits.push(el)
-          })
+          this.Profits.push(...resp.Infos)
           this.Total = resp.Total
           done(false)
         },
@@ -42,11 +40,11 @@ export const useProfitStore = defineStore('profit', {
     },
     getIntervalProfits (req: GetIntervalProfitRequest, done: (error: boolean) => void) {
       doActionWithError<GetIntervalProfitRequest, GetIntervalProfitResponse>(
-        API.GET_PROFITS,
+        API.GET_INTERVAL_PROFITS,
         req,
         req.Message,
         (resp: GetIntervalProfitResponse): void => {
-          this.IntervalProfits = resp.Infos
+          this.IntervalProfits.push(...resp.Infos)
           this.IntervalTotal = resp.Total
           done(false)
         },
@@ -57,13 +55,11 @@ export const useProfitStore = defineStore('profit', {
     },
     getGoodProfits (req: GetGoodProfitRequest, done: (error:boolean) => void) {
       doActionWithError<GetGoodProfitRequest, GetGoodProfitResponse>(
-        API.GET_PROFITS,
+        API.GET_GOOD_PROFITS,
         req,
         req.Message,
         (resp: GetGoodProfitResponse): void => {
-          resp.Infos.forEach((el) => {
-            this.GoodProfits.push(el)
-          })
+          this.GoodProfits.push(...resp.Infos)
           this.GoodProfitTotal = resp.Total
           done(false)
         },
