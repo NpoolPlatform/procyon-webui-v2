@@ -12,7 +12,7 @@
     </div>
     <div class='earnings-figure'>
       <!-- <span class='amount'>{{ last24HoursEarning.toFixed(4) }}</span> -->
-      <span class='amount'>{{ last24HoursProfit.toFixed(4) }}</span>
+      <span class='amount'>{{ last24HoursEarning.toFixed(4) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -35,16 +35,10 @@
 <script setup lang="ts">
 import {
   Currency,
-  totalEarningUSD,
   useCurrencyStore,
   NotificationType,
   useCoinStore,
-  last24HoursEarningUSD,
-  useTransactionStore,
-  totalWithdrawedEarningUSD,
   PriceCoinName,
-  useBenefitStore,
-  useGoodStore,
   SecondsEachDay
 } from 'npool-cli-v2'
 import { useProfitStore } from 'src/teststore/mock/profit'
@@ -56,135 +50,20 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ useScope: 'global' })
 
 const totalEarning = ref(0)
-const last24HoursEarning = ref(0)
 const totalWithdrawed = ref(0)
 
 const currency = useCurrencyStore()
 const coin = useCoinStore()
-const transaction = useTransactionStore()
-const benefit = useBenefitStore()
-const good = useGoodStore()
-const getEarning = () => {
-  benefit.getBenefits(
-    {
-      Message: {
-        Error: {
-          Title: t('MSG_GET_BENEFITS'),
-          Message: t('MSG_GET_BENEFITS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    },
-    () => {
-      totalEarningUSD((usdAmount: number) => {
-        totalEarning.value = usdAmount
-      })
-      last24HoursEarningUSD((usdAmount: number) => {
-        last24HoursEarning.value = usdAmount
-      })
-    }
-  )
-}
 
-const getWithdrawed = () => {
-  transaction.getTransactions(
-    {
-      Message: {
-        Error: {
-          Title: t('MSG_GET_TRANSACTIONS'),
-          Message: t('MSG_GET_TRANSACTIONS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    },
-    () => {
-      transaction.getWithdraws(
-        {
-          Message: {
-            Error: {
-              Title: t('MSG_GET_WITHDRAWS'),
-              Message: t('MSG_GET_WITHDRAWS_FAIL'),
-              Popup: true,
-              Type: NotificationType.Error
-            }
-          }
-        },
-        () => {
-          totalWithdrawedEarningUSD((usdAmount: number) => {
-            totalWithdrawed.value = usdAmount
-          })
-        }
-      )
-    }
-  )
-}
-
-const getGoods = () => {
-  good.getGoods(
-    {
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOODS'),
-          Message: t('MSG_GET_GOODS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    },
-    () => {
-      getEarning()
-      getWithdrawed()
-    }
-  )
-}
-const getCurrencies = () => {
-  currency.getAllCoinCurrencies(
-    {
-      Currencies: [Currency.USD],
-      Message: {
-        Error: {
-          Title: t('MSG_GET_CURRENCIES'),
-          Message: t('MSG_GET_CURRENCIES_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    },
-    () => {
-      getGoods()
-    }
-  )
-}
-
-const getCoins = () => {
-  coin.getCoins(
-    {
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS'),
-          Message: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    },
-    () => {
-      getCurrencies()
-    }
-  )
-}
 const profit = useProfitStore()
 
 const totalProfit = computed(() => {
   let total = 0
-  profit.Profits.forEach((el) => {
+  profit.Profits.Profits.forEach((el) => {
     currency.getCoinCurrency(
       coin.getCoinByID(el.CoinTypeID),
       Currency.USD,
       (currency) => {
-        console.log('incoming: ', Number(el.Incoming))
         total += currency * Number(el.Incoming)
       }
     )
@@ -192,7 +71,13 @@ const totalProfit = computed(() => {
   return total
 })
 
-const getIntervalProfits = (startAt: number, endAt: number, offset:number, limit: number) => {
+enum IntervalKey {
+  All = 'All',
+  LastDay = 'LastDay',
+  LastMonth = 'LastMonty'
+}
+
+const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
   profit.getIntervalProfits({
     StartAt: startAt,
     EndAt: endAt,
@@ -205,17 +90,36 @@ const getIntervalProfits = (startAt: number, endAt: number, offset:number, limit
         Type: NotificationType.Error
       }
     }
-  }, () => {
-    if (limit + offset >= profit.IntervalTotal) {
+  }, key, () => {
+    if (profit.CoinProfits.get(key)?.Profits?.length === profit.CoinProfits.get(key)?.Total) {
       return
     }
-    getIntervalProfits(startAt, endAt, limit + offset, limit)
+    getIntervalProfits(key, startAt, endAt, limit + offset, limit)
   })
 }
 
-const last24HoursProfit = computed(() => {
+const getProfits = (offset:number, limit: number) => {
+  profit.getProfits({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_INTERVAL_PROFIT_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    if (profit.Profits.Total === profit.Profits.Profits.length) {
+      return
+    }
+    getProfits(limit + offset, limit)
+  })
+}
+
+const last24HoursEarning = computed(() => {
   let total = 0
-  profit.IntervalProfits.forEach((el) => {
+  profit.GoodProfits.get(IntervalKey.LastDay)?.Profits?.forEach((el) => {
     currency.getCoinCurrency(
       coin.getCoinByID(el.CoinTypeID),
       Currency.USD,
@@ -228,22 +132,14 @@ const last24HoursProfit = computed(() => {
 })
 
 onMounted(() => {
-  getCoins()
-  if (benefit.Benefits.length === 0) {
-    getCoins()
-    return
+  if (profit.CoinProfits.size === 0) {
+    getProfits(0, 100)
+    getIntervalProfits(
+      IntervalKey.LastDay,
+      Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
+      Math.ceil(new Date().getTime() / 1000),
+      0, 100)
   }
-
-  totalEarningUSD((usdAmount: number) => {
-    totalEarning.value = usdAmount
-  })
-  last24HoursEarningUSD((usdAmount: number) => {
-    last24HoursEarning.value = usdAmount
-  })
-  totalWithdrawedEarningUSD((usdAmount: number) => {
-    totalWithdrawed.value = usdAmount
-  })
-  getIntervalProfits(new Date().getTime() / 1000 - SecondsEachDay, new Date().getTime() / 1000, 0, 100)
 })
 
 </script>
