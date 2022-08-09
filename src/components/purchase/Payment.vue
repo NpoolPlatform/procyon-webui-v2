@@ -233,7 +233,6 @@ const launchTicker = () => {
       return
     }
 
-    // let start = order.value?.Order.Payment ? order.value?.Order.Payment.CreateAt : 0
     let start = order.value ? order.value?.CreatedAt : 0
     start += OrderTimeoutSeconds
     remainTime.value = remain(start)
@@ -298,25 +297,6 @@ const onPaymentCanceled = () => {
 
 const onCancelOrderClick = () => {
   showCancelling.value = false
-
-  // const payment = order.value?.PaymentAmount
-  // payment.UserSetCanceled = true
-  // orders.updatePayment({
-  // orders.updatePayment({
-  //   Info: payment,
-  //   Message: {
-  //     Error: {
-  //       Title: t('MSG_UPDATE_PAYMENT'),
-  //       Message: t('MSG_UPDATE_PAYMENT_FAIL'),
-  //       Popup: true,
-  //       Type: NotificationType.Error
-  //     }
-  //   }
-  // }, () => {
-  //   void router.push({
-  //     path: '/dashboard'
-  //   })
-  // })
   localOrder.updateOrder({
     ID: order.value?.ID as string,
     PaymentID: order.value?.PaymentID as string,
