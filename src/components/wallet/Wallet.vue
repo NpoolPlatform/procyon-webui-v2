@@ -14,7 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import { NotificationType } from 'npool-cli-v2'
+import { NotificationType, SecondsEachDay } from 'npool-cli-v2'
+import { IntervalKey } from 'src/const/const'
+import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -56,8 +58,51 @@ const getWithdraws = (offset: number, limit: number) => {
     getWithdraws(limit + offset, limit)
   })
 }
+const getUserGenerals = (offset:number, limit: number) => {
+  general.getGenerals({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_PROFIT_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    if (general.Generals.Total === general.Generals.Generals.length) {
+      return
+    }
+    getUserGenerals(limit + offset, limit)
+  })
+}
+const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
+  general.getIntervalGenerals({
+    StartAt: startAt,
+    EndAt: endAt,
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_PROFIT_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, key, () => {
+    if (general.IntervalGenerals.get(key)?.Generals?.length === general.IntervalGenerals.get(key)?.Total) {
+      return
+    }
+    getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
+  })
+}
+const general = useGeneralStore()
 onMounted(() => {
   locationTrans.$reset()
   getWithdraws(0, 100)
+  if (general.Generals.Total === 0) {
+    getUserGenerals(0, 100)
+    getIntervalGenerals(IntervalKey.LastDay, Math.ceil(new Date().getTime() / 1000) - SecondsEachDay, Math.ceil(new Date().getTime() / 1000), 0, 100)
+  }
 })
 </script>

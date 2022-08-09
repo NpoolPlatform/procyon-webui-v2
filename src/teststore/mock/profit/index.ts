@@ -64,8 +64,7 @@ export const useProfitStore = defineStore('profit', {
 
           this.CoinProfits.set(intervalKey, profits)
           done(false)
-        },
-        () => {
+        }, () => {
           done(true)
         }
       )

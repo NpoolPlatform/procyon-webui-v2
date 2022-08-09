@@ -28,3 +28,7 @@ export interface GetIntervalGeneralResponse {
   Infos: General[];
   Total: number;
 }
+export interface IntervalGeneral {
+  Generals: Array<General>,
+  Total: number
+}
