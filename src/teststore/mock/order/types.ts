@@ -44,26 +44,49 @@ interface LocalOrder {
   End: number;
 }
 interface GetOrderRequest extends BaseRequest {
-  Offset?: number
-  Limit?: number
+  Offset?: number;
+  Limit?: number;
 }
 interface GetOrderResponse {
-  Infos: LocalOrder[]
-  Total: number
+  Infos: LocalOrder[];
+  Total: number;
 }
-
 interface CreateOrderRequest extends BaseRequest {
   GoodID: string;
   Units: number;
   PaymentCoinID: string;
-  ParentOrderID: string;
-  PayWithBalanceAmount: string;
-  FixAmountID: string;
-  DiscountID: string;
-  SpecialOfferID: string;
-  OrderType: string;
+  ParentOrderID?: string;
+  PayWithBalanceAmount?: string;
+  FixAmountID?: string;
+  DiscountID?: string;
+  SpecialOfferID?: string;
+  OrderType?: string;
 }
 interface CreateOrderResponse {
-  Infos: LocalOrder
+  Info: LocalOrder;
 }
-export { LocalOrder, GetOrderRequest, GetOrderResponse, CreateOrderRequest, CreateOrderResponse }
+interface UpdateOrderRequest extends BaseRequest {
+  ID: string;
+  PaymentID: string;
+  Canceled: boolean;
+}
+interface UpdateOrderResponse {
+  Info: LocalOrder;
+}
+interface GetSingleOrderRequest extends BaseRequest {
+  ID: string;
+}
+interface GetSingleOrderResponse {
+  Info: LocalOrder;
+}
+export {
+  LocalOrder,
+  GetOrderRequest,
+  GetOrderResponse,
+  CreateOrderRequest,
+  CreateOrderResponse,
+  UpdateOrderRequest,
+  UpdateOrderResponse,
+  GetSingleOrderRequest,
+  GetSingleOrderResponse
+}

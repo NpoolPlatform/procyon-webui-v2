@@ -99,33 +99,6 @@
             :waiting='submitting'
           />
         </div>
-        <q-dialog
-          v-model='showBalanceDialog'
-          seamless
-          maximized
-        >
-          <div class='product-container content-glass popup-container'>
-            <div class='popup'>
-              <div class='form-container content-glass'>
-                <div class='confirmation'>
-                  <h3>You Have Unspent Funds</h3>
-                  <div class='full-section'>
-                    <h4>Wallet Balance:</h4>
-                    <span class='number'>{{ getUserBalance }}</span>
-                    <span class='unit'>{{ paymentCoin?.Unit }}</span>
-                  </div>
-                  <p>You have unspent funds in your wallet. Would you like to credit your wallet balance to this order?</p>
-                  <button>
-                    Yes
-                  </button>
-                  <button class='alt'>
-                    No
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </q-dialog>
       </form>
     </div>
   </PurchasePage>
@@ -148,7 +121,6 @@ import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ThrottleSeconds } from 'src/const/const'
-import { useGeneralStore } from 'src/teststore/mock/ledger'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
@@ -283,9 +255,6 @@ onMounted(() => {
     })
   }
 })
-const showBalanceDialog = ref(false)
-const general = useGeneralStore()
-const getUserBalance = computed(() => general.getCoinBalance(paymentCoin.value?.ID as string))
 const onSubmit = throttle(() => {
   onPurchaseAmountFocusOut()
   if (purchaseAmountError.value) {

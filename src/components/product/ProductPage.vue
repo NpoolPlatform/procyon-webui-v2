@@ -42,9 +42,6 @@
                 </option>
               </select>
             </div>
-            <!--<h4>Coupon Code</h4>
-            <input type='text'>
-            <div class='coupon-error'>Incorrect Coupon Code</div>-->
             <div class='submit-container'>
               <WaitingBtn
                 label='MSG_PURCHASE'
@@ -105,7 +102,7 @@
             <h3 class='form-title'>
               {{ $t('MSG_MINING_PURCHASE') }}
             </h3>
-            <form action='javascript:void(0)' @submit='onSubmit' id='purchase'>
+            <form action='javascript:void(0)' @submit='displayBalanceDialog' id='purchase'>
               <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
               <Input
                 v-model:value='myPurchaseAmount'
@@ -133,9 +130,6 @@
                   </option>
                 </select>
               </div>
-              <!--<h4>Coupon Code</h4>
-              <input type='text'>
-              <div class='coupon-error'>Incorrect Coupon Code</div>-->
               <div class='submit-container'>
                 <WaitingBtn
                   label='MSG_PURCHASE'
@@ -149,6 +143,43 @@
                 <img :src='warning'>
                 <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
               </div>
+              <q-dialog
+                v-model='showBalanceDialog'
+                maximized
+              >
+                <div class='product-container content-glass popup-container'>
+                  <div class='popup'>
+                    <div class='form-container content-glass'>
+                      <div class='confirmation'>
+                        <h3>{{ t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
+                        <div class='full-section'>
+                          <h4>{{ t('MSG_WALLET_BALANCE') }}:</h4>
+                          <span class='number'>{{ getUserBalance }}</span>
+                          <span class='unit'>{{ paymentCoin?.Unit }}</span>
+                        </div>
+                        <Input
+                          v-model:value='inputBalance'
+                          type='number'
+                          id='amount'
+                          required
+                          :error='balanceAmountError'
+                          message='MSG_BALANCE_TIP'
+                          placeholder='MSG_BALANCE_PLACEHOLDER'
+                          :min='0'
+                          :max='getUserBalance'
+                        />
+                        <p>{{ t('MSG_CREDIT_ORDER_TIP') }}</p>
+                        <button @click='onSubmit'>
+                          Yes
+                        </button>
+                        <button class='alt' @click='onSubmit'>
+                          No
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </q-dialog>
             </form>
           </div>
           <slot name='sidebar' />
@@ -168,7 +199,6 @@ import {
   useGoodStore,
   NotificationType,
   useCurrencyStore,
-  useOrderStore,
   useStockStore,
   useLoginedUserStore
 } from 'npool-cli-v2'
@@ -179,6 +209,8 @@ import { ThrottleSeconds } from 'src/const/const'
 import { useRouter } from 'vue-router'
 
 import warning from 'src/assets/warning.svg'
+import { useGeneralStore } from 'src/teststore/mock/ledger'
+import { useLocalOrderStore } from 'src/teststore/mock/order'
 
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -194,7 +226,9 @@ interface Props {
   customizeInfo?: boolean
   purchaseAmount?: number
 }
-
+const showBalanceDialog = ref(false)
+const general = useGeneralStore()
+const getUserBalance = computed(() => general.getCoinBalance(paymentCoin.value?.ID as string))
 const props = defineProps<Props>()
 const goodId = toRef(props, 'goodId')
 const projectClass = toRef(props, 'projectClass')
@@ -251,7 +285,7 @@ const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 
 const currency = useCurrencyStore()
-
+const inputBalance = ref(0)
 onMounted(() => {
   if (!good.value) {
     goods.getAppGoods({
@@ -325,6 +359,7 @@ onMounted(() => {
 
 const myPurchaseAmount = ref(purchaseAmount.value ? purchaseAmount.value : 1)
 const purchaseAmountError = ref(false)
+const balanceAmountError = ref(false)
 const onPurchaseAmountFocusIn = () => {
   purchaseAmountError.value = false
 }
@@ -334,10 +369,23 @@ const onPurchaseAmountFocusOut = () => {
 
 const submitting = ref(false)
 
-const order = useOrderStore()
 const router = useRouter()
 const logined = useLoginedUserStore()
-
+const displayBalanceDialog = () => {
+  if (!logined.getLogined) {
+    void router.push({
+      path: '/signin',
+      query: {
+        target: '/product/aleo',
+        goodId: good.value.Good.Good.ID as string,
+        purchaseAmount: myPurchaseAmount.value
+      }
+    })
+    return
+  }
+  showBalanceDialog.value = !showBalanceDialog.value
+}
+const localOrder = useLocalOrderStore()
 const onSubmit = throttle(() => {
   if (!logined.getLogined) {
     void router.push({
@@ -355,12 +403,13 @@ const onSubmit = throttle(() => {
   if (purchaseAmountError.value) {
     return
   }
-
+  showBalanceDialog.value = false
   submitting.value = true
-
-  order.submitOrder({
+  localOrder.createOrder({
     GoodID: goodId.value,
     Units: myPurchaseAmount.value,
+    PaymentCoinID: paymentCoin.value?.ID as string,
+    PayWithBalanceAmount: `${inputBalance.value}`,
     Message: {
       Error: {
         Title: t('MSG_CREATE_ORDER'),
@@ -369,36 +418,18 @@ const onSubmit = throttle(() => {
         Type: NotificationType.Error
       }
     }
-  }, (orderId: string, error: boolean) => {
+  }, (orderId: string, paymentId: string, error: boolean) => {
+    // TODO
     if (error) {
+      console.log('error: ', error)
       submitting.value = false
       return
     }
-
-    order.createPayment({
-      OrderID: orderId,
-      PaymentCoinTypeID: paymentCoin.value?.ID as string,
-      Message: {
-        Error: {
-          Title: t('MSG_CREATE_PAYMENT'),
-          Message: t('MSG_CREATE_PAYMENT_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+    void router.push({
+      path: '/payment',
+      query: {
+        orderId: orderId
       }
-    }, (paymentId: string, error: boolean) => {
-      submitting.value = false
-      if (error) {
-        return
-      }
-
-      void router.push({
-        path: '/payment',
-        query: {
-          paymentId: paymentId,
-          orderId: orderId
-        }
-      })
     })
   })
 }, ThrottleSeconds * 1000)

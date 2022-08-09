@@ -13,9 +13,10 @@ import {
   GetIntervalGoodProfitRequest,
   GetIntervalGoodProfitResponse
 } from './types'
-
+// 'last24hours'| 'all' | 'last30days')
 export const useProfitStore = defineStore('profit', {
   state: () => ({
+    // Profits: new Map<string, Array<Profit>>(),
     Profits: [] as Array<Profit>,
     IntervalProfits: [] as Array<Profit>,
     GoodProfits: [] as Array<GoodProfit>,
@@ -80,6 +81,7 @@ export const useProfitStore = defineStore('profit', {
         (resp: GetGoodProfitResponse): void => {
           this.IntervalGoodProfits.push(...resp.Infos)
           this.IntervalGoodProfitTotal = resp.Total
+          // this.Profits.set(req.Key, resp.Infos)
           done(false)
         },
         () => {

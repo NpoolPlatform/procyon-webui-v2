@@ -9,6 +9,7 @@ interface Profit {
 interface GetProfitRequest extends BaseRequest {
   Offset?: number
   Limit?: number
+  Key?: string
 }
 interface GetProfitResponse {
   Infos: Profit[]
@@ -42,6 +43,7 @@ interface GetGoodProfitRequest extends BaseRequest {
   EndAt?: number
   Offset?: number
   Limit?: number
+  Key?: string
 }
 interface GetGoodProfitResponse {
   Infos: GoodProfit[]
