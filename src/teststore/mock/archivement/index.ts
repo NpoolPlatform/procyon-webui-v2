@@ -22,7 +22,12 @@ export const useArchivementStore = defineStore('archivement', {
         req,
         req.Message,
         (resp: GetArchivementResponse): void => {
-          this.Archivements.Archivements.push(...resp.Archivements)
+          resp.Archivements.forEach((el) => {
+            const existItem = this.Archivements.Archivements.find((al) => al.UserID === el.UserID)
+            if (!existItem) {
+              this.Archivements.Archivements.push(el)
+            }
+          })
           this.Archivements.Total = resp.Total
           done(false)
         },

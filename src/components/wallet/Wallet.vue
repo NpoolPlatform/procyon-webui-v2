@@ -14,8 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import { NotificationType, SecondsEachDay } from 'npool-cli-v2'
+import { Currency, NotificationType, SecondsEachDay, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
 import { IntervalKey } from 'src/const/const'
+import { useLocalLedgerStore } from 'src/localstore/ledger'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { defineAsyncComponent, onMounted } from 'vue'
@@ -37,7 +38,9 @@ const WithdrawRecords = defineAsyncComponent(
 )
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
+
 const locationTrans = useLocalTransactionStore()
+const localledger = useLocalLedgerStore()
 
 const getWithdraws = (offset: number, limit: number) => {
   locationTrans.getWithdraws({
@@ -71,6 +74,7 @@ const getUserGenerals = (offset:number, limit: number) => {
     }
   }, () => {
     if (general.Generals.Total === general.Generals.Generals.length) {
+      localledger.initialize(general.Generals.Generals)
       return
     }
     getUserGenerals(limit + offset, limit)
@@ -97,6 +101,40 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
   })
 }
 
+const coin = useCoinStore()
+const currency = useCurrencyStore()
+
+const getCurrencies = () => {
+  currency.getAllCoinCurrencies({
+    Currencies: [Currency.USD],
+    Message: {
+      Error: {
+        Title: t('MSG_GET_CURRENCIES'),
+        Message: t('MSG_GET_CURRENCIES_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
+}
+
+const getCoins = () => {
+  coin.getCoins({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COINS'),
+        Message: t('MSG_GET_COINS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    getCurrencies()
+  })
+}
+
 const general = useGeneralStore()
 
 onMounted(() => {
@@ -109,6 +147,9 @@ onMounted(() => {
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
+  }
+  if (coin.Coins.length === 0) {
+    getCoins()
   }
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
   <ShowSwitchTable
     label='MSG_WITHDRAWS'
-    :rows='(withdraws as Array<never>)'
+    :rows='(withdraws.Withdraws as Array<never>)'
     :table='(table as never)'
     :customize-body='true'
   >

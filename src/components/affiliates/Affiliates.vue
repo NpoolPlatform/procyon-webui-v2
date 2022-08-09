@@ -48,7 +48,7 @@ const getArchivements = (offset: number, limit: number) => {
       larchivement.Total = archivement.Archivements.Total
       return
     }
-    getArchivements(offset + limit, limit) // recursive get archivement
+    getArchivements(offset + limit, limit)
   })
 }
 

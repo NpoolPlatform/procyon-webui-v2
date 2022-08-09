@@ -70,7 +70,7 @@ const loading = toRef(props, 'loading')
 const page = ref(1)
 const pages = computed(() => Math.ceil(rows.value.length / countPerPage.value))
 
-const displayRows = computed(() => rows.value.filter((_, index) => {
+const displayRows = computed(() => rows.value?.filter((_, index) => {
   return index >= countPerPage.value * (page.value - 1) && index < countPerPage.value * page.value
 }))
 
