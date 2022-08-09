@@ -6,21 +6,23 @@ import {
   GetGeneralRequest,
   GetGeneralResponse,
   GetIntervalGeneralRequest,
-  GetIntervalGeneralResponse
+  GetIntervalGeneralResponse,
+  IntervalGeneral
 } from './types'
 
 export const useGeneralStore = defineStore('general', {
   state: () => ({
-    Generals: [] as Array<General>,
-    Total: 0,
-    IntervalGenerals: [] as Array<General>,
-    IntervalGeneralsTotal: 0
+    Generals: {
+      Generals: [] as Array<General>,
+      Total: 0
+    } as IntervalGeneral,
+    IntervalGenerals: new Map<string, IntervalGeneral>()
   }),
   getters: {
     getCoinBalance (): (coinTypeID: string) => number {
       return (coinTypeID: string) => {
         let total = 0
-        this.Generals.filter((el) => el.CoinTypeID === coinTypeID).forEach((sl) => { total += Number(sl.Spendable) })
+        this.Generals.Generals.filter((el) => el.CoinTypeID === coinTypeID).forEach((sl) => { total += Number(sl.Spendable) })
         return total
       }
     }
@@ -32,8 +34,8 @@ export const useGeneralStore = defineStore('general', {
         req,
         req.Message,
         (resp: GetGeneralResponse): void => {
-          this.Generals.push(...resp.Infos)
-          this.Total = resp.Total
+          this.Generals.Generals.push(...resp.Infos)
+          this.Generals.Total = resp.Total
           done(false)
         },
         () => {
@@ -41,16 +43,28 @@ export const useGeneralStore = defineStore('general', {
         }
       )
     },
-    getIntervalGenerals (req: GetIntervalGeneralRequest, done: (error: boolean) => void) {
+    getIntervalGenerals (req: GetIntervalGeneralRequest, intervalKey: string, done: (error: boolean) => void) {
       doActionWithError<GetIntervalGeneralRequest, GetIntervalGeneralResponse>(
         API.GET_INTERVAL_GENERALS,
         req,
         req.Message,
         (resp: GetIntervalGeneralResponse): void => {
-          resp.Infos.forEach((el) => {
-            this.IntervalGenerals.push(el)
-          })
-          this.IntervalGeneralsTotal = resp.Total
+          if (resp.Infos.length === 0) {
+            done(false)
+            return
+          }
+
+          let generals = this.IntervalGenerals.get(intervalKey)
+          if (!generals) {
+            generals = {
+              Generals: [] as Array<General>,
+              Total: 0
+            } as IntervalGeneral
+          }
+          generals.Generals.push(...resp.Infos)
+          generals.Total = resp.Total
+
+          this.IntervalGenerals.set(intervalKey, generals)
           done(false)
         },
         () => {
