@@ -234,7 +234,7 @@ const launchTicker = () => {
     }
 
     // let start = order.value?.Order.Payment ? order.value?.Order.Payment.CreateAt : 0
-    let start = order.value?.PaidAt ? order.value?.CreatedAt : 0
+    let start = order.value ? order.value?.CreatedAt : 0
     start += OrderTimeoutSeconds
     remainTime.value = remain(start)
     if (remainTime.value === RemainZero) {

@@ -34,27 +34,24 @@ export const useLocalOrderStore = defineStore('localorder', {
         if (!order) {
           return 'MSG_ERROR'
         }
-        const now = new Date().getTime() / 1000
-        if (order.ID === InvalidID) {
+
+        if (order.PaymentID === InvalidID) {
           return 'MSG_INVALID_PAYMENT'
         }
         if (order.State === PaymentState.PAYMENT_TIMEOUT) {
           return 'MSG_CANCELED_BY_TIMEOUT'
         }
-        if (order.State === PaymentState.WAIT_PAYMENT && now < order.CreatedAt + OrderTimeoutSeconds) {
+        if (order.State === PaymentState.WAIT_PAYMENT) {
           return remain(order.CreatedAt + OrderTimeoutSeconds)
         }
         if (order.State === PaymentState.EXPIRED) {
-          return 'MSG_PAYMENT_FAIL'
+          return 'MSG_DONE'
         }
         if (order.State === PaymentState.CANCELED) {
           return 'MSG_PAYMENT_CANCELED'
         }
         if (order.State === PaymentState.PAID) {
           return 'MSG_WAIT_FOR_START'
-        }
-        if (order.End < now) {
-          return 'MSG_DONE'
         }
         return 'MSG_IN_SERVICE'
       }
@@ -69,17 +66,19 @@ export const useLocalOrderStore = defineStore('localorder', {
         if (!order) {
           return false
         }
-        const now = new Date().getTime() / 1000
-        if (!order.PaidAt) {
+        if (order.PaymentID === InvalidID) {
           return false
         }
         if (order.State === PaymentState.PAYMENT_TIMEOUT) {
           return false
         }
-        if (order.State === PaymentState.PAID && now < order.CreatedAt + OrderTimeoutSeconds) {
-          return true
-        }
         if (order.State === PaymentState.EXPIRED) {
+          return false
+        }
+        if (order.State === PaymentState.CANCELED) {
+          return false
+        }
+        if (order.State === PaymentState.USER_CANCELED) {
           return false
         }
         return true
