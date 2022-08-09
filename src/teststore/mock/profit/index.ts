@@ -46,6 +46,11 @@ export const useProfitStore = defineStore('profit', {
         req,
         req.Message,
         (resp: GetIntervalProfitResponse): void => {
+          if (resp.Infos.length === 0) {
+            done(false)
+            return
+          }
+
           let profits = this.CoinProfits.get(intervalKey)
           if (!profits) {
             profits = {
@@ -71,6 +76,11 @@ export const useProfitStore = defineStore('profit', {
         req,
         req.Message,
         (resp: GetGoodProfitResponse): void => {
+          if (resp.Infos.length === 0) {
+            done(false)
+            return
+          }
+
           let profits = this.GoodProfits.get(intervalKey)
           if (!profits) {
             profits = {
