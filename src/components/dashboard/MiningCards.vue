@@ -35,10 +35,6 @@ const goodGenerals = computed(() => {
       existItem.Incoming += Number(el.Incoming)
     }
   })
-  // const start = new Date().getTime() / 1000 - SecondsEachDay
-  // const end = new Date().getTime() / 1000
-  // last24hours
-  // not finished
   return result
 })
 

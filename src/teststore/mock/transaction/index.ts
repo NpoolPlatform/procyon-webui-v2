@@ -42,9 +42,7 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
         req,
         req.Message,
         (resp: GetWithdrawResponse): void => {
-          resp.Infos.forEach((el) => {
-            this.Withdraws.push(el)
-          })
+          this.Withdraws.push(...resp.Infos)
           this.WithdrawTotal = resp.Total
           done(false)
         },

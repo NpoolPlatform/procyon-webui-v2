@@ -25,17 +25,14 @@
         <q-td key='Status' :props='myProps'>
           {{ myProps.row.State }}
         </q-td>
-        <q-td key='Type' :props='myProps'>
-          {{ $t('MSG_WITHDRAWAL') }}
-        </q-td>
       </q-tr>
     </template>
   </ShowSwitchTable>
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, formatTime, useCurrencyStore } from 'npool-cli-v2'
+import { computed, defineAsyncComponent } from 'vue'
+import { formatTime, useCurrencyStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useLocalTransactionStore, Withdraw } from 'src/teststore/mock/transaction'
 
@@ -45,7 +42,6 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const coin = useCoinStore()
 const locationTrans = useLocalTransactionStore()
 const currency = useCurrencyStore()
 const withdraws = computed(() => locationTrans.Withdraws)
@@ -80,44 +76,8 @@ const table = computed(() => [
     label: t('MSG_STATUS'),
     align: 'center',
     field: 'State'
-  },
-  {
-    name: 'Type',
-    label: t('MSG_TYPE'),
-    align: 'center',
-    field: () => 'Withdrawal'
   }
 ])
-
-onMounted(() => {
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-
-  if (withdraws.value.length === 0) {
-    // locationTrans.getWithdraws({
-    //   Message: {
-    //     Error: {
-    //       Title: t('MSG_GET_WITHDRAWS_FAIL'),
-    //       Popup: true,
-    //       Type: NotificationType.Error
-    //     }
-    //   }
-    // }, () => {
-    //   // TODO
-    // })
-  }
-})
 
 </script>
 
