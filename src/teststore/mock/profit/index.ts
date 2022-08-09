@@ -2,29 +2,26 @@ import { defineStore } from 'pinia'
 import { doActionWithError } from 'npool-cli-v2'
 import { API } from './const'
 import {
-  Profit,
-  GoodProfit,
   GetProfitRequest,
   GetProfitResponse,
   GetIntervalProfitRequest,
   GetIntervalProfitResponse,
   GetGoodProfitRequest,
   GetGoodProfitResponse,
-  GetIntervalGoodProfitRequest,
-  GetIntervalGoodProfitResponse
+  IntervalGoodProfits,
+  IntervalProfits,
+  Profit,
+  GoodProfit
 } from './types'
 // 'last24hours'| 'all' | 'last30days')
 export const useProfitStore = defineStore('profit', {
   state: () => ({
-    // Profits: new Map<string, Array<Profit>>(),
-    Profits: [] as Array<Profit>,
-    IntervalProfits: [] as Array<Profit>,
-    GoodProfits: [] as Array<GoodProfit>,
-    IntervalGoodProfits: [] as Array<GoodProfit>,
-    Total: 0,
-    IntervalTotal: 0,
-    GoodProfitTotal: 0,
-    IntervalGoodProfitTotal: 0
+    Profits: {
+      Profits: [] as Array<Profit>,
+      Total: 0
+    } as IntervalProfits,
+    CoinProfits: new Map<string, IntervalProfits>(),
+    GoodProfits: new Map<string, IntervalGoodProfits>()
   }),
   getters: {},
   actions: {
@@ -34,8 +31,8 @@ export const useProfitStore = defineStore('profit', {
         req,
         req.Message,
         (resp: GetProfitResponse): void => {
-          this.Profits.push(...resp.Infos)
-          this.Total = resp.Total
+          this.Profits.Profits.push(...resp.Infos)
+          this.Profits.Total = resp.Total
           done(false)
         },
         () => {
@@ -43,14 +40,24 @@ export const useProfitStore = defineStore('profit', {
         }
       )
     },
-    getIntervalProfits (req: GetIntervalProfitRequest, done: (error: boolean) => void) {
+    getIntervalProfits (req: GetIntervalProfitRequest, intervalKey: string, done: (error: boolean) => void) {
       doActionWithError<GetIntervalProfitRequest, GetIntervalProfitResponse>(
         API.GET_INTERVAL_PROFITS,
         req,
         req.Message,
         (resp: GetIntervalProfitResponse): void => {
-          this.IntervalProfits.push(...resp.Infos)
-          this.IntervalTotal = resp.Total
+          let profits = this.CoinProfits.get(intervalKey)
+          if (!profits) {
+            profits = {
+              Profits: [] as Array<Profit>,
+              Total: 0
+            } as IntervalProfits
+          }
+
+          profits.Profits.push(...resp.Infos)
+          profits.Total = resp.Total
+
+          this.CoinProfits.set(intervalKey, profits)
           done(false)
         },
         () => {
@@ -58,30 +65,24 @@ export const useProfitStore = defineStore('profit', {
         }
       )
     },
-    getGoodProfits (req: GetGoodProfitRequest, done: (error:boolean) => void) {
+    getGoodProfits (req: GetGoodProfitRequest, intervalKey: string, done: (error:boolean) => void) {
       doActionWithError<GetGoodProfitRequest, GetGoodProfitResponse>(
         API.GET_GOOD_PROFITS,
         req,
         req.Message,
         (resp: GetGoodProfitResponse): void => {
-          this.GoodProfits.push(...resp.Infos)
-          this.GoodProfitTotal = resp.Total
-          done(false)
-        },
-        () => {
-          done(true)
-        }
-      )
-    },
-    getIntervalGoodProfits (req: GetIntervalGoodProfitRequest, done: (error:boolean) => void) {
-      doActionWithError<GetIntervalGoodProfitRequest, GetIntervalGoodProfitResponse>(
-        API.GET_GOOD_PROFITS,
-        req,
-        req.Message,
-        (resp: GetGoodProfitResponse): void => {
-          this.IntervalGoodProfits.push(...resp.Infos)
-          this.IntervalGoodProfitTotal = resp.Total
-          // this.Profits.set(req.Key, resp.Infos)
+          let profits = this.GoodProfits.get(intervalKey)
+          if (!profits) {
+            profits = {
+              Profits: [] as Array<GoodProfit>,
+              Total: 0
+            } as IntervalGoodProfits
+          }
+
+          profits.Profits.push(...resp.Infos)
+          profits.Total = resp.Total
+
+          this.GoodProfits.set(intervalKey, profits)
           done(false)
         },
         () => {

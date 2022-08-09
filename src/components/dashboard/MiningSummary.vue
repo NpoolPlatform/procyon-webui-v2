@@ -12,7 +12,7 @@
     </div>
     <div class='earnings-figure'>
       <!-- <span class='amount'>{{ last24HoursEarning.toFixed(4) }}</span> -->
-      <span class='amount'>{{ last24HoursProfit.toFixed(4) }}</span>
+      <span class='amount'>{{ last24HoursEarning.toFixed(4) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -36,68 +36,24 @@
 import {
   Currency,
   useCurrencyStore,
-  NotificationType,
   useCoinStore,
-  PriceCoinName,
-  SecondsEachDay
+  PriceCoinName
 } from 'npool-cli-v2'
+import { IntervalKey } from 'src/const/const'
 import { useProfitStore } from 'src/teststore/mock/profit'
-// import { onMounted, ref, computed } from 'vue'
-import { computed, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 const currency = useCurrencyStore()
 const coin = useCoinStore()
-const getCurrencies = () => {
-  currency.getAllCoinCurrencies(
-    {
-      Currencies: [Currency.USD],
-      Message: {
-        Error: {
-          Title: t('MSG_GET_CURRENCIES'),
-          Message: t('MSG_GET_CURRENCIES_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    },
-    () => {
-      // TODO NOTHING
-      profit.IntervalProfits = []
-      getIntervalProfits(~~(new Date().getTime() / 1000 - SecondsEachDay), ~~(new Date().getTime() / 1000), 0, 100)
-    }
-  )
-}
-
-const getCoins = () => {
-  coin.getCoins(
-    {
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS'),
-          Message: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    },
-    () => {
-      getCurrencies()
-    }
-  )
-}
 const profit = useProfitStore()
 
 const totalProfit = computed(() => {
   let total = 0
-  profit.Profits.forEach((el) => {
+  profit.Profits.Profits.forEach((el) => {
     currency.getCoinCurrency(
       coin.getCoinByID(el.CoinTypeID),
       Currency.USD,
       (currency) => {
-        console.log('incoming: ', Number(el.Incoming))
         total += currency * Number(el.Incoming)
       }
     )
@@ -105,30 +61,9 @@ const totalProfit = computed(() => {
   return total
 })
 
-const getIntervalProfits = (startAt: number, endAt: number, offset:number, limit: number) => {
-  profit.getIntervalProfits({
-    StartAt: startAt,
-    EndAt: endAt,
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_INTERVAL_PROFIT_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    if (limit + offset >= profit.IntervalTotal) {
-      return
-    }
-    getIntervalProfits(startAt, endAt, limit + offset, limit)
-  })
-}
-
-const last24HoursProfit = computed(() => {
+const last24HoursEarning = computed(() => {
   let total = 0
-  profit.IntervalProfits.forEach((el) => {
+  profit.GoodProfits.get(IntervalKey.LastDay)?.Profits?.forEach((el) => {
     currency.getCoinCurrency(
       coin.getCoinByID(el.CoinTypeID),
       Currency.USD,
@@ -138,10 +73,6 @@ const last24HoursProfit = computed(() => {
     )
   })
   return total
-})
-
-onMounted(() => {
-  getCoins()
 })
 
 </script>
