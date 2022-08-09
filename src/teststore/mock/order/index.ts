@@ -1,14 +1,26 @@
 import { defineStore } from 'pinia'
-import { doActionWithError, InvalidID, remain } from 'npool-cli-v2'
 import {
-  LocalOrder, GetOrderRequest, GetOrderResponse, CreateOrderRequest, CreateOrderResponse, UpdateOrderRequest, UpdateOrderResponse, GetSingleOrderRequest, GetSingleOrderResponse
+  doActionWithError,
+  InvalidID,
+  remain
+} from 'npool-cli-v2'
+import {
+  Order,
+  GetOrderRequest,
+  GetOrderResponse,
+  GetOrdersRequest,
+  GetOrdersResponse,
+  CreateOrderRequest,
+  CreateOrderResponse,
+  UpdateOrderRequest,
+  UpdateOrderResponse
 } from './types'
 import { API, OrderTimeoutSeconds, PaymentState } from './const'
 
 export const useLocalOrderStore = defineStore('localorder', {
   state: () => ({
-    Orders: [] as Array<LocalOrder>,
-    CurrentOrder: {} as LocalOrder,
+    Orders: [] as Array<Order>,
+    CurrentOrder: {} as Order,
     Total: 0
   }),
   getters: {
@@ -18,7 +30,7 @@ export const useLocalOrderStore = defineStore('localorder', {
       }
     },
     getOrderState () {
-      return (order: LocalOrder) => {
+      return (order: Order) => {
         if (!order) {
           return 'MSG_ERROR'
         }
@@ -47,13 +59,13 @@ export const useLocalOrderStore = defineStore('localorder', {
         return 'MSG_IN_SERVICE'
       }
     },
-    orderPaid (): (order: LocalOrder) => boolean {
-      return (order: LocalOrder) => {
+    orderPaid (): (order: Order) => boolean {
+      return (order: Order) => {
         return order.State === PaymentState.PAID
       }
     },
     validateOrder () {
-      return (order: LocalOrder) => {
+      return (order: Order) => {
         if (!order) {
           return false
         }
@@ -75,12 +87,12 @@ export const useLocalOrderStore = defineStore('localorder', {
     }
   },
   actions: {
-    getOrders (req: GetOrderRequest, done: (error: boolean) => void) {
-      doActionWithError<GetOrderRequest, GetOrderResponse>(
+    getOrders (req: GetOrdersRequest, done: (error: boolean) => void) {
+      doActionWithError<GetOrdersRequest, GetOrdersResponse>(
         API.GET_ORDERS,
         req,
         req.Message,
-        (resp: GetOrderResponse): void => {
+        (resp: GetOrdersResponse): void => {
           this.Orders.push(...resp.Infos)
           this.Total = resp.Total
           done(false)
@@ -118,18 +130,14 @@ export const useLocalOrderStore = defineStore('localorder', {
         }
       )
     },
-    getOrder (req: GetSingleOrderRequest, done: (error: boolean) => void) {
-      doActionWithError<GetSingleOrderRequest, GetSingleOrderResponse>(
+    getOrder (req: GetOrderRequest, done: (error: boolean) => void) {
+      doActionWithError<GetOrderRequest, GetOrderResponse>(
         API.GET_ORDER,
         req,
         req.Message,
-        (resp: GetSingleOrderResponse): void => {
-          let existItem = this.Orders.find((el) => el.ID === resp.Info.ID)
-          if (!existItem) {
-            this.Orders.push(resp.Info)
-          } else {
-            existItem = { ...resp.Info }
-          }
+        (resp: GetOrderResponse): void => {
+          const index = this.Orders.findIndex((el) => el.ID === resp.Info.ID)
+          this.Orders.splice(index < 0 ? 0 : index, index < 0 ? 0 : 1, resp.Info)
           done(false)
         },
         () => {

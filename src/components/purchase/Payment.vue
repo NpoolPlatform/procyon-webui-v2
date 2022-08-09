@@ -1,6 +1,6 @@
 <template>
   <div :class='[ showStatus || showWarning ? "blur" : "" ]'>
-    <PurchasePage :order='(order as LocalOrder)'>
+    <PurchasePage :order='(order as Order)'>
       <div class='info'>
         <h3 class='form-title'>
           {{ order?.PaymentCoinName }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
@@ -160,7 +160,7 @@ import copy from 'copy-to-clipboard'
 import copyIcon from 'src/assets/icon-copy.svg'
 import question from 'src/assets/question.svg'
 import warning from 'src/assets/warning.svg'
-import { LocalOrder, useLocalOrderStore } from 'src/teststore/mock/order'
+import { Order, useLocalOrderStore } from 'src/teststore/mock/order'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
@@ -182,7 +182,7 @@ const order = computed(() => localOrder.getOrderByID(orderId.value))
 
 const notification = useNotificationStore()
 
-const remainSeconds = ref(localOrder.getOrderState(order.value as LocalOrder))
+const remainSeconds = ref(localOrder.getOrderState(order.value as Order))
 const ticker = ref(-1)
 const counter = ref(0)
 
@@ -218,9 +218,9 @@ watch(counter, () => {
 
 const launchTicker = () => {
   ticker.value = window.setInterval(() => {
-    remainSeconds.value = localOrder.getOrderState(order.value as LocalOrder)
+    remainSeconds.value = localOrder.getOrderState(order.value as Order)
 
-    if (localOrder.orderPaid(order.value as LocalOrder)) {
+    if (localOrder.orderPaid(order.value as Order)) {
       showStatus.value = true
       popupTitle.value = 'MSG_ORDER_COMPLETE'
       tipMessage.value = 'MSG_REVIEW_ORDER'
@@ -271,7 +271,7 @@ onMounted(() => {
     }
   }, () => {
     // TODO
-    if (!localOrder.validateOrder(order.value as LocalOrder)) {
+    if (!localOrder.validateOrder(order.value as Order)) {
       return
     }
     launchTicker()

@@ -115,7 +115,10 @@ onMounted(() => {
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
-    getGoodProfits(IntervalKey.All, 0, 0, 0, 100)
+    getGoodProfits(IntervalKey.All,
+      0,
+      Math.ceil(new Date().getTime() / 1000),
+      0, 100)
     getGoodProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,

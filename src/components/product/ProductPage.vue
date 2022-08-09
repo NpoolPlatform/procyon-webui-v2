@@ -226,6 +226,7 @@ interface Props {
   customizeInfo?: boolean
   purchaseAmount?: number
 }
+
 const showBalanceDialog = ref(false)
 const general = useGeneralStore()
 const getUserBalance = computed(() => general.getCoinBalance(paymentCoin.value?.ID as string))

@@ -1,6 +1,6 @@
 import { BaseRequest } from 'npool-cli-v2'
 
-interface LocalOrder {
+interface Order {
   ID: string;
   ParentOrderID: string;
   ParentOrderGoodID: string;
@@ -43,14 +43,17 @@ interface LocalOrder {
   Start: number;
   End: number;
 }
-interface GetOrderRequest extends BaseRequest {
+
+interface GetOrdersRequest extends BaseRequest {
   Offset?: number;
   Limit?: number;
 }
-interface GetOrderResponse {
-  Infos: LocalOrder[];
+
+interface GetOrdersResponse {
+  Infos: Array<Order>;
   Total: number;
 }
+
 interface CreateOrderRequest extends BaseRequest {
   GoodID: string;
   Units: number;
@@ -62,31 +65,37 @@ interface CreateOrderRequest extends BaseRequest {
   SpecialOfferID?: string;
   OrderType?: string;
 }
+
 interface CreateOrderResponse {
-  Info: LocalOrder;
+  Info: Order;
 }
+
 interface UpdateOrderRequest extends BaseRequest {
   ID: string;
   PaymentID: string;
   Canceled: boolean;
 }
+
 interface UpdateOrderResponse {
-  Info: LocalOrder;
+  Info: Order;
 }
-interface GetSingleOrderRequest extends BaseRequest {
+
+interface GetOrderRequest extends BaseRequest {
   ID: string;
 }
-interface GetSingleOrderResponse {
-  Info: LocalOrder;
+
+interface GetOrderResponse {
+  Info: Order;
 }
+
 export {
-  LocalOrder,
+  Order,
   GetOrderRequest,
   GetOrderResponse,
+  GetOrdersRequest,
+  GetOrdersResponse,
   CreateOrderRequest,
   CreateOrderResponse,
   UpdateOrderRequest,
-  UpdateOrderResponse,
-  GetSingleOrderRequest,
-  GetSingleOrderResponse
+  UpdateOrderResponse
 }
