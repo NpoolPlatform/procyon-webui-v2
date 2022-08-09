@@ -3,7 +3,7 @@
     <h2>{{ $t('MSG_ACCOUNT_BALANCE') }}</h2>
     <div class='earnings-summary'>
       <div class='earnings-figure'>
-        <span class='amount'>{{ totalBalance(Currency.USD).toFixed(4) }}</span>
+        <span class='amount'>{{ totalUSDTBalance.toFixed(4) }}</span>
         <span class='unit'>{{ PriceCoinName }}</span>
         <div class='hr' />
         <h4 class='description'>
@@ -11,7 +11,7 @@
         </h4>
       </div>
       <div class='earnings-figure'>
-        <span class='amount'>{{ totalBalance(Currency.JPY).toFixed(4) }}</span>
+        <span class='amount'>{{ balanceJPY.toFixed(4) }}</span>
         <span class='unit'>JPY</span>
         <div class='hr' />
         <h4 class='description'>
@@ -31,7 +31,7 @@ import {
 
 } from 'npool-cli-v2'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
-import { defineProps, toRef, computed } from 'vue'
+import { defineProps, toRef, computed, watch, ref } from 'vue'
 
 interface Props {
   hidden?: boolean
@@ -43,16 +43,21 @@ const hidden = toRef(props, 'hidden')
 const currency = useCurrencyStore()
 const coin = useCoinStore()
 const general = useGeneralStore()
-const totalBalance = computed(() => (coinCurrency: Currency) => {
+const totalUSDTBalance = computed(() => {
   let total = 0
   general.Generals.Generals.forEach((el) => {
     if (Number(el.Spendable) > 0) {
-      currency.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), coinCurrency, (currency: number) => {
+      currency.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (currency: number) => {
         total += Number(el.Spendable) * currency
       })
     }
   })
   return total
 })
-
+const balanceJPY = ref(0)
+watch(totalUSDTBalance, () => {
+  currency.getUSDTCurrency(Currency.JPY, (currency: number) => {
+    balanceJPY.value = totalUSDTBalance.value * currency
+  })
+})
 </script>
