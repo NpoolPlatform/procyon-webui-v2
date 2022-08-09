@@ -137,7 +137,11 @@ onMounted(() => {
 
 const router = useRouter()
 const onPurchaseClick = () => {
-  void router.push({ path: productPage.value })
+  let target = '/#'
+  if (productPage.value) {
+    target = productPage.value
+  }
+  void router.push({ path: target })
 }
 
 const onExpandClick = () => {
