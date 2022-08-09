@@ -1,26 +1,4 @@
 <template>
-  <!-- <OpTable
-    label='MSG_ORDER_HISTORY'
-    :rows='(myOrders as Array<never>)'
-    :table='(table as never)'
-    :count-per-page='10'
-    @row-click='(row) => onRowClick(row as OrderModel)'
-  >
-    <template #top-right>
-      <div class='buttons'>
-        <button disabled class='alt last'>
-          {{ $t('MSG_EXPORT_ORDER_CSV') }}
-        </button>
-      </div>
-    </template>
-  </OpTable>
-  <q-ajax-bar
-    ref='progress'
-    position='top'
-    color='green-2'
-    size='6px'
-    skip-hijack
-  /> -->
   <OpTable
     label='MSG_ORDER_HISTORY'
     :rows='(localOrders as Array<never>)'
@@ -36,13 +14,6 @@
       </div>
     </template>
   </OpTable>
-  <q-ajax-bar
-    ref='progress'
-    position='top'
-    color='green-2'
-    size='6px'
-    skip-hijack
-  />
 </template>
 
 <script setup lang='ts'>
@@ -50,7 +21,6 @@ import { computed, onMounted, defineAsyncComponent, ref, onUnmounted } from 'vue
 import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { QAjaxBar } from 'quasar'
 import { Order, useLocalOrderStore } from 'src/teststore/mock/order'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
@@ -126,7 +96,6 @@ const onRowClick = (myOrder: Order) => {
 }
 
 const ticker = ref(-1)
-const progress = ref<QAjaxBar>()
 
 onMounted(() => {
   ticker.value = window.setInterval(() => {

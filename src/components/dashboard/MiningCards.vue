@@ -1,6 +1,5 @@
 <template>
   <h2>{{ $t('MSG_MINING_DASHBOARD') }}</h2>
-  <div>{{ goodGenerals }}</div>
   <MiningCard
     v-for='general in goodGenerals'
     :key='general.CoinTypeID'

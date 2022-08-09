@@ -115,7 +115,7 @@ import {
 import { ref, toRef, defineProps, computed, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import chevrons from '../../assets/chevrons.svg'
-import { LocalArchivement, LocalUserProductArchivement } from 'src/localstore/affiliates/types'
+import { LocalArchivement, LocalProductArchivement } from 'src/localstore/affiliates/types'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -125,7 +125,7 @@ interface Props {
   child: boolean
   firstChild: boolean
   lastChild: boolean
-  referral: LocalUserProductArchivement
+  referral: LocalProductArchivement
 }
 
 const props = defineProps<Props>()
@@ -184,7 +184,7 @@ const localArchivement = useLocalArchivementStore()
 // get parent
 const inviter = computed(() => {
   const index = localArchivement.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
-  return index < 0 ? undefined as unknown as LocalUserProductArchivement : localArchivement.Archivements[index]
+  return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
 })
 
 const userKOLOptions = computed(() => (maxKOL: number) => {
@@ -218,7 +218,7 @@ const onSetCommissionClick = async (good: LocalArchivement) => {
 
 const logined = useLoginedUserStore()
 
-const onSaveCommissionClick = (elem: LocalUserProductArchivement, idx:number) => {
+const onSaveCommissionClick = (elem: LocalProductArchivement, idx:number) => {
   if (elem.Archivements[idx].CurPercent > inviterGoodPercent(elem.Archivements[idx].CurGoodID)) {
     elem.Archivements[idx].CurPercent = inviterGoodPercent(elem.Archivements[idx].CurGoodID)
     return

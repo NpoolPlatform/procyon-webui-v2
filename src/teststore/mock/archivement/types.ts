@@ -17,7 +17,7 @@ interface Archivement {
   CurGoodUnit: string
 }
 
-interface UserProductArchivement {
+interface ProductArchivement {
   UserID: string
   Username: string
   EmailAddress: string
@@ -35,7 +35,7 @@ interface GetArchivementRequest extends BaseRequest {
   Limit?: number
 }
 interface GetArchivementResponse {
-  Archivements: UserProductArchivement[]
+  Archivements: ProductArchivement[]
   Total: number
 }
 
@@ -43,5 +43,5 @@ export {
   Archivement,
   GetArchivementRequest,
   GetArchivementResponse,
-  UserProductArchivement
+  ProductArchivement
 }

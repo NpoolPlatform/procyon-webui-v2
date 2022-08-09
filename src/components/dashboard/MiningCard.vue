@@ -44,7 +44,7 @@
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
-          <span class='value'>{{ general?.CoinPresale ? '*' : 100000 }} {{ general?.CoinUnit }}</span>
+          <span class='value'>{{ general?.CoinPresale ? '*' : 1000 }} {{ general?.CoinUnit }}</span>
         </div>
       </div>
     </q-slide-transition>

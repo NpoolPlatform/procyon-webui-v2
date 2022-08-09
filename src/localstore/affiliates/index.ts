@@ -1,19 +1,19 @@
 import { defineStore } from 'pinia'
-import { UserProductArchivement } from 'src/teststore'
-import { LocalArchivement, LocalUserProductArchivement } from './types'
+import { ProductArchivement } from 'src/teststore'
+import { LocalArchivement, LocalProductArchivement } from './types'
 
 export const useLocalArchivementStore = defineStore('localarchivement', {
   state: () => ({
-    Archivements: [] as Array<LocalUserProductArchivement>,
+    Archivements: [] as Array<LocalProductArchivement>,
     Total: 0
   }),
   getters: {},
   actions: {
     /**
      * reconstruct archivement
-     * @param elems UserProductArchivement[]
+     * @param elems ProductArchivement[]
      */
-    addArchivement (elems: UserProductArchivement[]) {
+    addArchivement (elems: ProductArchivement[]) {
       elems.forEach((item) => {
         const localArchivements = [] as Array<LocalArchivement>
         item.Archivements.forEach((el) => {
@@ -45,7 +45,7 @@ export const useLocalArchivementStore = defineStore('localarchivement', {
           Kol: item.Kol,
           TotalInvitees: item.TotalInvitees,
           Archivements: localArchivements
-        } as LocalUserProductArchivement)
+        } as LocalProductArchivement)
       })
     }
   }

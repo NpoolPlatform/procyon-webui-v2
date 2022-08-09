@@ -31,7 +31,7 @@ import { computed, onMounted, ref, defineAsyncComponent } from 'vue'
 import { NotificationType, useInspireStore, useLoginedUserStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { QAjaxBar } from 'quasar'
-import { LocalUserProductArchivement } from 'src/localstore/affiliates/types'
+import { LocalProductArchivement } from 'src/localstore/affiliates/types'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
 
 const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.vue'))
@@ -46,7 +46,7 @@ const localArchivements = useLocalArchivementStore()
 const referrals = computed(() => localArchivements.Archivements.filter((el) => el.Kol && logined.LoginedUser?.User.ID !== el.UserID))
 const inviter = computed(() => {
   const index = localArchivements.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
-  return index < 0 ? undefined as unknown as LocalUserProductArchivement : localArchivements.Archivements[index]
+  return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivements.Archivements[index]
 })
 
 const progress = ref<QAjaxBar>()

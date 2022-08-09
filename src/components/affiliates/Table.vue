@@ -98,7 +98,7 @@ import { useI18n } from 'vue-i18n'
 
 import edit from '../../assets/edit.svg'
 import { useRouter } from 'vue-router'
-import { LocalArchivement, LocalUserProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
+import { LocalArchivement, LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
@@ -159,15 +159,15 @@ const onSearchResetClick = () => {
   displayReferrals.value = referrals.value.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
 }
 
-const accountName = (referral: LocalUserProductArchivement) => {
+const accountName = (referral: LocalProductArchivement) => {
   return referral.EmailAddress?.length ? referral.EmailAddress : referral.PhoneNO
 }
 
-const joinDate = (referral: LocalUserProductArchivement) => {
+const joinDate = (referral: LocalProductArchivement) => {
   return formatTime(referral.InvitedAt, true)
 }
 
-const joinTime = (referral: LocalUserProductArchivement) => {
+const joinTime = (referral: LocalProductArchivement) => {
   return formatTime(referral.CreatedAt, false).split(' ')[1]
 }
 
@@ -175,7 +175,7 @@ const joinTime = (referral: LocalUserProductArchivement) => {
 function prop<T extends object, K extends keyof T> (obj: T, key: K) {
   return obj[key]
 }
-const getTotal = computed(() => (referral: LocalUserProductArchivement, attr: keyof LocalArchivement) => {
+const getTotal = computed(() => (referral: LocalProductArchivement, attr: keyof LocalArchivement) => {
   let total = 0
   const rfs = referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
   rfs.forEach((el) => {
@@ -199,7 +199,7 @@ const getCoinTotalSummary = computed(() => (attr: keyof LocalArchivement) => {
 })
 const router = useRouter()
 
-const onSetKolClick = (referral: LocalUserProductArchivement) => {
+const onSetKolClick = (referral: LocalProductArchivement) => {
   void router.push({
     path: '/setup/affiliate',
     query: {

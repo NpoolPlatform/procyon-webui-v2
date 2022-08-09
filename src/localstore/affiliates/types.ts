@@ -3,7 +3,7 @@ import { Archivement } from 'src/teststore/mock/archivement/types'
 export interface LocalArchivement extends Archivement{
   Editing: boolean
 }
-export interface LocalUserProductArchivement {
+export interface LocalProductArchivement {
   UserID: string
   Username: string
   EmailAddress: string

@@ -2,14 +2,14 @@ import { defineStore } from 'pinia'
 import { doActionWithError } from 'npool-cli-v2'
 import { API } from './const'
 import {
-  UserProductArchivement,
+  ProductArchivement,
   GetArchivementRequest,
   GetArchivementResponse
 } from './types'
 
 export const useArchivementStore = defineStore('archivement', {
   state: (): GetArchivementResponse => ({
-    Archivements: [] as Array<UserProductArchivement>,
+    Archivements: [] as Array<ProductArchivement>,
     Total: 0
   }),
   getters: {},
