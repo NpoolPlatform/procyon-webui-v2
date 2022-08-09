@@ -52,7 +52,7 @@ const getWithdraws = (offset: number, limit: number) => {
     }
   }, () => {
     // TODO
-    if (locationTrans.Withdraws.length === locationTrans.Total) {
+    if (locationTrans.Withdraws.Withdraws.length === locationTrans.Withdraws.Total) {
       return
     }
     getWithdraws(limit + offset, limit)
@@ -64,7 +64,7 @@ const getUserGenerals = (offset:number, limit: number) => {
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_PROFIT_FAIL'),
+        Title: t('MSG_GET_GENERAL_FAIL'),
         Popup: true,
         Type: NotificationType.Error
       }
@@ -84,7 +84,7 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_PROFIT_FAIL'),
+        Title: t('MSG_GET_GENERAL_FAIL'),
         Popup: true,
         Type: NotificationType.Error
       }
@@ -96,13 +96,19 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
     getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
   })
 }
+
 const general = useGeneralStore()
+
 onMounted(() => {
   locationTrans.$reset()
   getWithdraws(0, 100)
   if (general.Generals.Total === 0) {
     getUserGenerals(0, 100)
-    getIntervalGenerals(IntervalKey.LastDay, Math.ceil(new Date().getTime() / 1000) - SecondsEachDay, Math.ceil(new Date().getTime() / 1000), 0, 100)
+    getIntervalGenerals(
+      IntervalKey.LastDay,
+      Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
+      Math.ceil(new Date().getTime() / 1000),
+      0, 100)
   }
 })
 </script>

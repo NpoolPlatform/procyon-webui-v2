@@ -12,10 +12,14 @@ import {
 
 export const useLocalTransactionStore = defineStore('localtransaction', {
   state: () => ({
-    Details: [] as Array<Detail>,
-    Total: 0,
-    Withdraws: [] as Array<Withdraw>,
-    WithdrawTotal: 0
+    Details: {
+      Details: [] as Array<Detail>,
+      Total: 0
+    },
+    Withdraws: {
+      Withdraws: [] as Array<Withdraw>,
+      Total: 0
+    }
   }),
   getters: {},
   actions: {
@@ -26,9 +30,9 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
         req.Message,
         (resp: GetDetailResponse): void => {
           resp.Infos.forEach((el) => {
-            this.Details.push(el)
+            this.Details.Details.push(el)
           })
-          this.Total = resp.Total
+          this.Details.Total = resp.Total
           done(false)
         },
         () => {
@@ -42,8 +46,8 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
         req,
         req.Message,
         (resp: GetWithdrawResponse): void => {
-          this.Withdraws.push(...resp.Infos)
-          this.WithdrawTotal = resp.Total
+          this.Withdraws.Withdraws.push(...resp.Infos)
+          this.Withdraws.Total = resp.Total
           done(false)
         },
         () => {

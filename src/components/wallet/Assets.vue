@@ -120,7 +120,7 @@ const getAssets = () => {
   // lastDayBalance
   balanceGeneral.value.forEach((el) => {
     const generals = general.IntervalGenerals.get(IntervalKey.LastDay)
-    generals?.Generals.filter((elem) => elem.CoinTypeID === el.CoinTypeID).forEach((grl) => { el.Last24Hours += Number(grl.Spendable) })
+    generals?.Generals.filter((elem) => elem.CoinTypeID === el.CoinTypeID).forEach((grl) => { el.Last24HoursBalance += Number(grl.Spendable) })
   })
   progress.value?.stop()
 }

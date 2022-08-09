@@ -10,24 +10,29 @@ export interface General {
   Outcoming: string
   Spendable: string
 }
+
 export interface GetGeneralRequest extends BaseRequest {
   Offset: number
   Limit: number
 }
+
 export interface GetGeneralResponse {
   Infos: General[]
   Total: number
 }
+
 export interface GetIntervalGeneralRequest extends BaseRequest {
   StartAt: number
   EndAt: number
   Offset: number
   Limit: number
 }
+
 export interface GetIntervalGeneralResponse {
   Infos: General[];
   Total: number;
 }
+
 export interface IntervalGeneral {
   Generals: Array<General>,
   Total: number
