@@ -195,12 +195,12 @@ const getCoins = () => {
   }, () => {
     progress.value?.stop()
     getCurrencies()
+    getAssets()
   })
 }
 
 onMounted(() => {
   getCoins()
-  getAssets()
 })
 
 const router = useRouter()

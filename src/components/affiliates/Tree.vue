@@ -16,30 +16,17 @@
       :last-child='idx === referrals.length - 1'
       :referral='referral'
     />
-    <q-ajax-bar
-      ref='progress'
-      position='top'
-      color='green-2'
-      size='6px'
-      skip-hijack
-    />
   </div>
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, ref, defineAsyncComponent } from 'vue'
-import { NotificationType, useInspireStore, useLoginedUserStore } from 'npool-cli-v2'
-import { useI18n } from 'vue-i18n'
-import { QAjaxBar } from 'quasar'
+import { computed, defineAsyncComponent } from 'vue'
+import { useLoginedUserStore } from 'npool-cli-v2'
 import { LocalProductArchivement } from 'src/localstore/affiliates/types'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
 
 const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.vue'))
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
-const inspire = useInspireStore()
 const logined = useLoginedUserStore()
 const localArchivements = useLocalArchivementStore()
 
@@ -49,19 +36,4 @@ const inviter = computed(() => {
   return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivements.Archivements[index]
 })
 
-const progress = ref<QAjaxBar>()
-
-onMounted(() => {
-  inspire.getPurchaseAmountSettings({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
-})
 </script>
