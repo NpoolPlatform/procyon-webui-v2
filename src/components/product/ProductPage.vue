@@ -163,13 +163,13 @@
           <div class='confirmation'>
             <h3>{{ t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
             <div class='full-section'>
-              <h4>{{ t('MSG_AVAILABLE_BALANCE') }}:</h4>
+              <h4>{{ t('MSG_AVAILABLE_BALANCE') }}</h4>
               <span class='number'>{{ getUserBalance }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
             <div class='hr' />
             <div class='full-section'>
-              <h4>{{ t('MSG_ORDER_DUE_AMOUNT') }}:</h4>
+              <h4>{{ t('MSG_ORDER_DUE_AMOUNT') }}</h4>
               <span class='number'>{{ (Math.ceil(totalAmount * 10000) / 10000).toFixed(4) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
@@ -184,7 +184,7 @@
               >
             </div>
             <div class='full-section'>
-              <h4>{{ t('MSG_REMAINING_DUE_AMOUNT') }}:</h4>
+              <h4>{{ t('MSG_REMAINING_DUE_AMOUNT') }}</h4>
               <span class='number'>{{ (Math.ceil(remainOrderAmount * 10000) / 10000).toFixed(4) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
