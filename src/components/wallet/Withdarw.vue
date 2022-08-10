@@ -143,6 +143,7 @@ import { useI18n } from 'vue-i18n'
 import checkmark from 'src/assets/icon-checkmark.svg'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore, AccountType as LocalAccountType } from 'src/teststore/mock/transaction'
+import { useLocalLedgerStore } from 'src/localstore/ledger'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -182,6 +183,9 @@ const withdraws = computed(() => accounts.Accounts.filter((account) => {
 const selectedAccount = ref(undefined as unknown as WithdrawAccount)
 
 const general = useGeneralStore()
+const localledger = useLocalLedgerStore()
+const ltransation = useLocalTransactionStore()
+
 const balance = computed(() => general.getCoinBalance(coin.value.ID as string))
 
 const onSubmit = () => {
@@ -204,7 +208,27 @@ const account = ref('')
 const accountType = ref(AccountType.Email)
 
 const router = useRouter()
-const ltransation = useLocalTransactionStore()
+
+const getUserGenerals = (offset:number, limit: number) => {
+  general.getGenerals({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GENERAL_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    if (general.Generals.Total === general.Generals.Generals.length) {
+      localledger.initialize(general.Generals.Generals)
+      return
+    }
+    getUserGenerals(limit + offset, limit)
+  })
+}
+
 const onCodeVerify = (code: string) => {
   let accType = LocalAccountType.EMAIL
 
@@ -237,7 +261,8 @@ const onCodeVerify = (code: string) => {
   }, (error: boolean) => {
     // TODO
     if (!error) {
-      void router.back()
+      getUserGenerals(0, 100)
+      void router.push({ path: '/wallet' })
     }
   })
   verifing.value = false
@@ -296,6 +321,18 @@ onMounted(() => {
   })
 
   getCoins()
+
+  if (localledger.Generals.length === 0) {
+    getUserGenerals(0, 100)
+  }
+
+  if (accounts.Accounts.filter((el) => {
+    return el.Account.CoinTypeID === coinTypeId.value && el.State === ReviewState.Approved
+  }).length === 0) {
+    accounts.getWithdrawAccounts({
+      Message: {}
+    })
+  }
 })
 
 const onAddressSelected = (account: WithdrawAccount) => {

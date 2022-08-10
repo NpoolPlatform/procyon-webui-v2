@@ -137,7 +137,7 @@ const onCodeVerify = (code: string) => {
       void router.push({
         path: '/withdraw',
         query: {
-          coinTypeID: selectedCoinTypeID.value
+          coinTypeId: selectedCoinTypeID.value
         }
       })
       return
@@ -148,11 +148,13 @@ const onCodeVerify = (code: string) => {
 }
 
 onMounted(() => {
-  coin.getCoins({
-    Message: {}
-  }, () => {
-    // TODO
-  })
+  if (coin.Coins.length === 0) {
+    coin.getCoins({
+      Message: {}
+    }, () => {
+      // TODO
+    })
+  }
 })
 
 </script>
