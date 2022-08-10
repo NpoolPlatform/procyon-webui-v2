@@ -7,14 +7,22 @@
     <Orders />
     <div class='hr' />
   </div>
+  <q-ajax-bar
+    ref='progress'
+    position='top'
+    color='green-2'
+    size='6px'
+    skip-hijack
+  />
 </template>
 
 <script setup lang='ts'>
 import { useProfitStore } from 'src/teststore/mock/profit'
-import { defineAsyncComponent, onMounted } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { NotificationType, SecondsEachDay, useCoinStore, useStockStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { IntervalKey } from 'src/const/const'
+import { QAjaxBar } from 'quasar'
 import { useLocalOrderStore } from 'src/teststore/mock/order'
 
 const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
@@ -28,6 +36,8 @@ const profit = useProfitStore()
 const order = useLocalOrderStore()
 const coin = useCoinStore()
 const stock = useStockStore()
+
+const progress = ref<QAjaxBar>()
 
 const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
   profit.getIntervalProfits({
@@ -84,6 +94,7 @@ const getGoodProfits = (key: IntervalKey, startAt: number, endAt: number, offset
     }
   }, key, () => {
     if (profit.CoinProfits.get(key)?.Profits?.length === profit.CoinProfits.get(key)?.Total) {
+      progress.value?.stop()
       return
     }
     getIntervalProfits(key, startAt, endAt, limit + offset, limit)
@@ -91,6 +102,7 @@ const getGoodProfits = (key: IntervalKey, startAt: number, endAt: number, offset
 }
 
 const getOrders = (offset:number, limit: number) => {
+  progress.value?.start()
   order.getOrders({
     Offset: offset,
     Limit: limit,
@@ -103,6 +115,7 @@ const getOrders = (offset:number, limit: number) => {
     }
   }, () => {
     if (order.Orders.length === order.Total) {
+      progress.value?.stop()
       return
     }
     getOrders(offset + limit, limit)
@@ -111,6 +124,7 @@ const getOrders = (offset:number, limit: number) => {
 
 onMounted(() => {
   if (profit.Profits.Total === 0) {
+    progress.value?.start()
     getProfits(0, 100)
     getIntervalProfits(
       IntervalKey.LastDay,

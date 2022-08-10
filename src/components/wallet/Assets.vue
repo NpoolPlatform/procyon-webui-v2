@@ -33,13 +33,6 @@
       </q-tr>
     </template>
   </ShowSwitchTable>
-  <q-ajax-bar
-    ref='progress'
-    position='top'
-    color='green-2'
-    size='6px'
-    skip-hijack
-  />
 </template>
 
 <script setup lang='ts'>
@@ -53,7 +46,6 @@ import {
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { QAjaxBar } from 'quasar'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
