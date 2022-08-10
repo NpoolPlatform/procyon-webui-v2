@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { Currency, NotificationType, SecondsEachDay, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
+import { Currency, NotificationType, SecondsEachDay, useAccountStore, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
 import { IntervalKey } from 'src/const/const'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
@@ -103,7 +103,7 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
 
 const coin = useCoinStore()
 const currency = useCurrencyStore()
-
+const account = useAccountStore()
 const getCurrencies = () => {
   currency.getAllCoinCurrencies({
     Currencies: [Currency.USD],
@@ -117,6 +117,15 @@ const getCurrencies = () => {
     }
   }, () => {
     // TODO
+    account.getWithdrawAccounts({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    })
   })
 }
 

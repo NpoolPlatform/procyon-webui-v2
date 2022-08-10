@@ -127,20 +127,11 @@
 <script setup lang='ts'>
 import {
   MessageUsedFor,
-  AccountType,
   useCoinStore,
-  totalWithdrawedEarningCoin,
-  totalEarningCoin,
   useAccountStore,
   WithdrawAccount,
   NotificationType,
-  useTransactionStore,
-  WithdrawType,
-  useBenefitStore,
   ReviewState,
-  useBillingStore,
-  totalPaymentBalanceUSD,
-  useOrderStore,
   useCurrencyStore,
   Currency
 } from 'npool-cli-v2'
@@ -149,6 +140,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
+import { useGeneralStore } from 'src/teststore/mock/ledger'
+import { AccountType, useLocalTransactionStore } from 'src/teststore/mock/transaction'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -167,10 +160,8 @@ const onAmountFocusIn = () => {
   amountError.value = false
 }
 const onAmountFocusOut = () => {
-  amountError.value = !amount.value || amount.value >= (earning.value + _totalPaymentBalanceUSD.value - withdrawedEarning.value)
+  amountError.value = !amount.value || amount.value >= balance.value
 }
-
-const withdrawType = ref(WithdrawType.Commission)
 
 interface Query {
   coinTypeId: string
@@ -183,28 +174,21 @@ const coinTypeId = computed(() => query.value.coinTypeId)
 const coin = computed(() => coins.getCoinByID(coinTypeId.value))
 const feeAmount = ref(0)
 
-const transaction = useTransactionStore()
-
 const accounts = useAccountStore()
 const withdraws = computed(() => accounts.Accounts.filter((account) => {
   return account.Account?.CoinTypeID === coinTypeId.value && account.State === ReviewState.Approved
 }))
 const selectedAccount = ref(undefined as unknown as WithdrawAccount)
 
-const earning = ref(0)
-const _totalPaymentBalanceUSD = ref(0)
-const withdrawedEarning = ref(0)
-const balance = computed(() => Math.floor((earning.value + _totalPaymentBalanceUSD.value - withdrawedEarning.value) * 10000) / 10000)
-
-const benefit = useBenefitStore()
-const billing = useBillingStore()
+const general = useGeneralStore()
+const balance = computed(() => general.getCoinBalance(coin.value.ID as string))
 
 const onSubmit = () => {
   if (!selectedAccount.value) {
     return
   }
 
-  amountError.value = !amount.value || amount.value > (earning.value + _totalPaymentBalanceUSD.value - withdrawedEarning.value)
+  amountError.value = !amount.value || amount.value > balance.value
   if (amountError.value) {
     return
   }
@@ -216,21 +200,18 @@ const onMenuHide = () => {
 }
 
 const account = ref('')
-const accountType = ref(AccountType.Email)
+const accountType = ref(AccountType.EMAIL)
 
 const router = useRouter()
-
+const ltransation = useLocalTransactionStore()
 const onCodeVerify = (code: string) => {
-  transaction.submitWithdraw({
-    Info: {
-      CoinTypeID: coinTypeId.value,
-      WithdrawToAccountID: selectedAccount.value.Account.ID as string,
-      Amount: amount.value,
-      WithdrawType: withdrawType.value
-    },
-    Account: account.value,
-    AccountType: accountType.value,
+  ltransation.createWithdraw({
+    CoinTypeID: coinTypeId.value,
+    Amount: `${amount.value}`,
+    AccountID: selectedAccount.value.Account.ID as string,
     VerificationCode: code,
+    Account: account.value,
+    AccountType: account.value,
     Message: {
       Error: {
         Title: t('MSG_SUBMIT_WITHDRAW_FAIL'),
@@ -239,6 +220,7 @@ const onCodeVerify = (code: string) => {
       }
     }
   }, (error: boolean) => {
+    // TODO
     if (!error) {
       void router.back()
     }
@@ -249,40 +231,6 @@ const onCodeVerify = (code: string) => {
 const onStateTipBtnClick = () => {
   showWaiting.value = false
   showReviewing.value = false
-}
-
-const getPaymentBalances = () => {
-  billing.getPaymentBalances({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_PAYMENT_BALANCES'),
-        Message: t('MSG_GET_PAYMENT_BALANCES_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    totalPaymentBalanceUSD((usdAmount: number) => {
-      _totalPaymentBalanceUSD.value = usdAmount
-    })
-  })
-}
-
-const order = useOrderStore()
-
-const getOrders = () => {
-  order.getOrders({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_ORDERS'),
-        Message: t('MSG_GET_ORDERS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    getPaymentBalances()
-  })
 }
 
 const currency = useCurrencyStore()
@@ -299,7 +247,7 @@ const getCurrencies = () => {
       }
     }
   }, () => {
-    getOrders()
+    // TODO
   })
 }
 
@@ -319,16 +267,6 @@ const getCoins = () => {
 }
 
 onMounted(() => {
-  accounts.getWithdrawAccounts({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  })
-
   coins.getCurrentFee({
     CoinTypeID: coinTypeId.value,
     Message: {
@@ -340,47 +278,6 @@ onMounted(() => {
     }
   }, (amount: number) => {
     feeAmount.value = Math.ceil(amount * 1000000) / 1000000
-  })
-
-  totalEarningCoin(coinTypeId.value, (amount: number) => {
-    earning.value = amount
-    totalWithdrawedEarningCoin(coinTypeId.value, (amount: number) => {
-      withdrawedEarning.value = amount
-    })
-    benefit.getCommissionCoinSettings({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COMMISSION_COIN_SETTINGS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      const index = benefit.CommissionCoinSettings.findIndex((el) => el.Using)
-      if (index < 0) {
-        return
-      }
-      if (coinTypeId.value === benefit.CommissionCoinSettings[index].CoinTypeID) {
-        benefit.getCommission({
-          Message: {
-            Error: {
-              Title: t('MSG_GET_COMMISSION_FAIL'),
-              Popup: true,
-              Type: NotificationType.Error
-            }
-          }
-        }, () => {
-          earning.value += benefit.Commission.Balance
-          billing.getPaymentBalances({
-            Message: {}
-          }, () => {
-            totalPaymentBalanceUSD((usdAmount: number) => {
-              _totalPaymentBalanceUSD.value = usdAmount
-            })
-          })
-        })
-      }
-    })
   })
 
   getCoins()
