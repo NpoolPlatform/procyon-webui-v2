@@ -31,7 +31,7 @@ import {
 
 } from 'npool-cli-v2'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
-import { defineProps, toRef, computed, watch, ref } from 'vue'
+import { defineProps, toRef, computed, watch, ref, onMounted } from 'vue'
 
 interface Props {
   hidden?: boolean
@@ -56,6 +56,11 @@ const totalUSDTBalance = computed(() => {
 })
 const balanceJPY = ref(0)
 watch(totalUSDTBalance, () => {
+  currency.getUSDTCurrency(Currency.JPY, (currency: number) => {
+    balanceJPY.value = totalUSDTBalance.value * currency
+  })
+})
+onMounted(() => {
   currency.getUSDTCurrency(Currency.JPY, (currency: number) => {
     balanceJPY.value = totalUSDTBalance.value * currency
   })
