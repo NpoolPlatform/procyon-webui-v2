@@ -36,7 +36,7 @@ export const useLocalLedgerStore = defineStore('localledger', {
           })
         })
       })
-      // last24hours balance
+      // last24hours incoming
       const general = useGeneralStore()
       const igenerals = general.IntervalGenerals.get(IntervalKey.LastDay)
       this.Generals.forEach((el) => {
