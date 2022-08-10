@@ -32,7 +32,7 @@
                   :error='amountError'
                   message='MSG_AMOUNT_TIP'
                   placeholder='MSG_AMOUNT_PLACEHOLDER'
-                  :min='0'
+                  :min='feeAmount'
                   :max='balance'
                   @focus='onAmountFocusIn'
                   @blur='onAmountFocusOut'
@@ -162,7 +162,7 @@ const onAmountFocusIn = () => {
   amountError.value = false
 }
 const onAmountFocusOut = () => {
-  amountError.value = !amount.value || amount.value >= balance.value
+  amountError.value = !amount.value || amount.value > balance.value || amount.value <= feeAmount.value
 }
 
 interface Query {
@@ -193,7 +193,7 @@ const onSubmit = () => {
     return
   }
 
-  amountError.value = !amount.value || amount.value > balance.value
+  amountError.value = !amount.value || amount.value > balance.value || amount.value <= feeAmount.value
   if (amountError.value) {
     return
   }
@@ -221,7 +221,7 @@ const getUserGenerals = (offset:number, limit: number) => {
       }
     }
   }, () => {
-    if (general.Generals.Total === general.Generals.Generals.length) {
+    if (general.Generals.Total <= general.Generals.Generals.length) {
       localledger.initialize(general.Generals.Generals)
       return
     }

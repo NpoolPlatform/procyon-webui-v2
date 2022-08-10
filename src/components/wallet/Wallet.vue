@@ -92,7 +92,7 @@ const getUserGenerals = (offset:number, limit: number) => {
       }
     }
   }, () => {
-    if (general.Generals.Total === general.Generals.Generals.length) {
+    if (general.Generals.Total <= general.Generals.Generals.length) {
       progress.value?.stop()
       return
     }
