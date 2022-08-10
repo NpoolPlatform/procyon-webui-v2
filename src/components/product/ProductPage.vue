@@ -397,6 +397,7 @@ const submitting = ref(false)
 const router = useRouter()
 const logined = useLoginedUserStore()
 const displayBalanceDialog = () => {
+  console.log('balance: ', getUserBalance.value)
   if (!logined.getLogined) {
     void router.push({
       path: '/signin',
@@ -408,6 +409,7 @@ const displayBalanceDialog = () => {
     })
     return
   }
+  console.log('balance: ', getUserBalance.value)
   if (getUserBalance.value <= 0) {
     onSubmit()
   } else {
@@ -452,7 +454,6 @@ const onSubmit = throttle(() => {
   }, (orderId: string, paymentId: string, error: boolean) => {
     // TODO
     if (error) {
-      console.log('error: ', error)
       submitting.value = false
       return
     }

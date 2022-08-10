@@ -1,6 +1,6 @@
 <template>
   <div v-if='label?.length'>
-    <label :for='id'>{{ $t(label) }}</label>
+    <label :for='id'> <span v-html='$t(label)' /></label>
   </div>
   <div v-if='caption?.length'>
     <span class='caption'>({{ $t(caption) }})</span>
