@@ -130,21 +130,26 @@ const onWithdrawClick = (asset: BenefitModel) => {
       return
     }
 
+    const exist = accounts.value.find((account) => {
+      return account.Account.CoinTypeID === asset.CoinTypeID && account.State === ReviewState.Approved
+    })
+    if (!exist) {
+      void router.push({
+        path: '/add/address',
+        query: {
+          coinTypeId: asset.CoinTypeID,
+          gotoWithdraw: 'true'
+        }
+      })
+      return
+    }
+
     void router.push({
       path: '/withdraw',
       query: {
         coinTypeId: asset.CoinTypeID
       }
     })
-    const exist = accounts.value.find((account) => account.Account.CoinTypeID === asset.CoinTypeID && account.State === ReviewState.Approved)
-    if (!exist) {
-      void router.push({
-        path: '/add/address',
-        query: {
-          coinTypeId: asset.CoinTypeID
-        }
-      })
-    }
   })
 }
 

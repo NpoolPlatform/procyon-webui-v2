@@ -147,8 +147,42 @@
                 v-model='showBalanceDialog'
                 maximized
               >
-                <div class='product-container content-glass popup-container'>
+                <div class='product-container content-glass popup-container plur'>
                   <div class='popup'>
+                    <div class='form-container content-glass'>
+                      <div class='confirmation'>
+                        <h3>{{ t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
+                        <div class='full-section'>
+                          <h4>Available Balance:</h4>
+                          <span class='number'>{{ getUserBalance }}</span>
+                          <span class='unit'>{{ paymentCoin?.Unit }}</span>
+                        </div>
+                        <div class='hr' />
+                        <div class='full-section'>
+                          <h4>Order Due Amount:</h4>
+                          <span class='number'>{{ good?.Good?.Good?.Price * myPurchaseAmount }}</span>
+                          <span class='unit'>USDT</span>
+                        </div>
+                        <div class='hr' />
+                        <div class='full-section'>
+                          <h4>Use Wallet Balance:</h4>
+                          <input
+                            type='number' :min='0' :max='getUserBalance'
+                            v-model='inputBalance'
+                          >
+                        </div>
+                        <div class='full-section'>
+                          <h4>Remaining Due Amount:</h4>
+                          <span class='number'>{{ remainOrderAmount }}</span>
+                          <span class='unit'>{{ paymentCoin?.Unit }}</span>
+                        </div>
+                        <button @click='onSubmit'>
+                          Continue
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class='popup'>
                     <div class='form-container content-glass'>
                       <div class='confirmation'>
                         <h3>{{ t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
@@ -177,7 +211,7 @@
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </q-dialog>
             </form>
@@ -218,7 +252,9 @@ const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
-
+const remainOrderAmount = computed(() => {
+  return good?.value.Good?.Good?.Price * myPurchaseAmount.value - inputBalance.value
+})
 interface Props {
   goodId: string
   projectClass: string
@@ -360,7 +396,7 @@ onMounted(() => {
 
 const myPurchaseAmount = ref(purchaseAmount.value ? purchaseAmount.value : 1)
 const purchaseAmountError = ref(false)
-const balanceAmountError = ref(false)
+// const balanceAmountError = ref(false)
 const onPurchaseAmountFocusIn = () => {
   purchaseAmountError.value = false
 }

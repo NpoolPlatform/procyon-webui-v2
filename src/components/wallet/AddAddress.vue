@@ -51,10 +51,10 @@
 </template>
 
 <script setup lang='ts'>
-import { Coin, useAccountStore, MessageUsedFor, AccountType, NotificationType } from 'npool-cli-v2'
-import { ref, defineAsyncComponent } from 'vue'
+import { Coin, useAccountStore, MessageUsedFor, AccountType, NotificationType, useCoinStore } from 'npool-cli-v2'
+import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
@@ -64,7 +64,26 @@ const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const selectedCoin = ref(undefined as unknown as Coin)
+interface Query {
+  coinTypeId: string
+  gotoWithdraw: boolean
+}
+
+const route = useRoute()
+const query = computed(() => route.query as unknown as Query)
+const coinTypeID = computed(() => query.value.coinTypeId)
+const gotoWithdraw = computed(() => query.value.gotoWithdraw)
+
+const coin = useCoinStore()
+
+const selectedCoinTypeID = ref(coinTypeID.value)
+
+const selectedCoin = computed({
+  get: () => coin.getCoinByID(coinTypeID.value),
+  set: (val: Coin) => {
+    selectedCoinTypeID.value = val.ID as string
+  }
+})
 
 const accounts = useAccountStore()
 
@@ -114,10 +133,27 @@ const onCodeVerify = (code: string) => {
       }
     }
   }, () => {
+    if (gotoWithdraw.value) {
+      void router.push({
+        path: '/withdraw',
+        query: {
+          coinTypeID: selectedCoinTypeID.value
+        }
+      })
+      return
+    }
     void router.back()
   })
   verifing.value = false
 }
+
+onMounted(() => {
+  coin.getCoins({
+    Message: {}
+  }, () => {
+    // TODO
+  })
+})
 
 </script>
 
