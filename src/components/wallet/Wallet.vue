@@ -80,6 +80,7 @@ const getWithdraws = (offset: number, limit: number) => {
 }
 
 const getUserGenerals = (offset:number, limit: number) => {
+  progress.value?.start()
   general.getGenerals({
     Offset: offset,
     Limit: limit,
@@ -92,6 +93,7 @@ const getUserGenerals = (offset:number, limit: number) => {
     }
   }, () => {
     if (general.Generals.Total === general.Generals.Generals.length) {
+      progress.value?.stop()
       return
     }
     getUserGenerals(limit + offset, limit)
@@ -165,6 +167,7 @@ const getUserDetails = (offset: number, limit: number) => {
   localtrans.getDetails({
     Offset: offset,
     Limit: limit,
+    EndAt: Math.ceil(Date.now() / 1000),
     Message: {
       Error: {
         Title: t('MSG_GET_WITHDRAWS_FAIL'),

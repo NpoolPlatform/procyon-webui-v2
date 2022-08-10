@@ -17,7 +17,7 @@
           {{ formatTime(myProps.row.CreatedAt) }}
         </q-td>
         <q-td key='Amount' :props='myProps'>
-          {{ myProps.row.Amount }}
+          {{ myProps.row.Amount }}{{ myProps.row.CoinUnit }}
         </q-td>
         <q-td key='Status' :props='myProps'>
           {{ myProps.row.State }}
