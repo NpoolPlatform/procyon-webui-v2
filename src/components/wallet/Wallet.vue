@@ -11,15 +11,23 @@
     <WithdrawAddresses />
     <div class='hr' />
   </div>
+  <q-ajax-bar
+    ref='progress'
+    position='top'
+    color='green-2'
+    size='6px'
+    skip-hijack
+  />
 </template>
 
 <script setup lang="ts">
 import { Currency, NotificationType, SecondsEachDay, useAccountStore, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
+import { QAjaxBar } from 'quasar'
 import { IntervalKey } from 'src/const/const'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
-import { defineAsyncComponent, onMounted } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 const Balance = defineAsyncComponent(
   () => import('src/components/wallet/Balance.vue')
@@ -39,11 +47,16 @@ const WithdrawRecords = defineAsyncComponent(
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const locationTrans = useLocalTransactionStore()
+const localtrans = useLocalTransactionStore()
 const localledger = useLocalLedgerStore()
+const coin = useCoinStore()
+const currency = useCurrencyStore()
+const account = useAccountStore()
+
+const progress = ref<QAjaxBar>()
 
 const getWithdraws = (offset: number, limit: number) => {
-  locationTrans.getWithdraws({
+  localtrans.getWithdraws({
     Offset: offset,
     Limit: limit,
     Message: {
@@ -55,12 +68,13 @@ const getWithdraws = (offset: number, limit: number) => {
     }
   }, () => {
     // TODO
-    if (locationTrans.Withdraws.Withdraws.length === locationTrans.Withdraws.Total) {
+    if (localtrans.Withdraws.Withdraws.length === localtrans.Withdraws.Total) {
       return
     }
     getWithdraws(limit + offset, limit)
   })
 }
+
 const getUserGenerals = (offset:number, limit: number) => {
   general.getGenerals({
     Offset: offset,
@@ -81,6 +95,7 @@ const getUserGenerals = (offset:number, limit: number) => {
   })
 }
 const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
+  progress.value?.start()
   general.getIntervalGenerals({
     StartAt: startAt,
     EndAt: endAt,
@@ -95,15 +110,13 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
     }
   }, key, () => {
     if (general.IntervalGenerals.get(key)?.Generals?.length === general.IntervalGenerals.get(key)?.Total) {
+      progress.value?.stop()
       return
     }
     getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
   })
 }
 
-const coin = useCoinStore()
-const currency = useCurrencyStore()
-const account = useAccountStore()
 const getCurrencies = () => {
   currency.getAllCoinCurrencies({
     Currencies: [Currency.USD],
@@ -147,8 +160,9 @@ const getCoins = () => {
 const general = useGeneralStore()
 
 onMounted(() => {
-  locationTrans.$reset()
-  getWithdraws(0, 100)
+  if (localtrans.Withdraws.Withdraws.length === 0) {
+    getWithdraws(0, 100)
+  }
   if (general.Generals.Total === 0) {
     getUserGenerals(0, 100)
     getIntervalGenerals(

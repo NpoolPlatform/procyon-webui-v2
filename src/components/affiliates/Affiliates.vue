@@ -9,13 +9,21 @@
     <Table />
     <div class='hr' />
   </div>
+  <q-ajax-bar
+    ref='progress'
+    position='top'
+    color='green-2'
+    size='6px'
+    skip-hijack
+  />
 </template>
 
 <script setup lang='ts'>
 import { NotificationType, useGoodStore, useInspireStore } from 'npool-cli-v2'
+import { QAjaxBar } from 'quasar'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
 import { useArchivementStore } from 'src/teststore/mock/archivement'
-import { defineAsyncComponent, onMounted } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -29,7 +37,10 @@ const Table = defineAsyncComponent(() => import('src/components/affiliates/Table
 const archivement = useArchivementStore()
 const larchivement = useLocalArchivementStore()
 
+const progress = ref<QAjaxBar>()
+
 const getArchivements = (offset: number, limit: number) => {
+  progress.value?.start()
   archivement.getCoinArchivements({
     Offset: offset,
     Limit: limit,
@@ -41,8 +52,8 @@ const getArchivements = (offset: number, limit: number) => {
       }
     }
   }, () => {
-    console.log(archivement.Archivements)
     if (archivement.Archivements.Total <= archivement.Archivements.Archivements.length) {
+      progress.value?.stop()
       larchivement.$reset()
       larchivement.addArchivement(archivement.Archivements.Archivements)
       larchivement.Total = archivement.Archivements.Total
