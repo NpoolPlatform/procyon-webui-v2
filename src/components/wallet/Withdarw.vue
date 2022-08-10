@@ -127,7 +127,6 @@
 <script setup lang='ts'>
 import {
   MessageUsedFor,
-  AccountType,
   useCoinStore,
   useAccountStore,
   WithdrawAccount,
@@ -142,7 +141,7 @@ import { useI18n } from 'vue-i18n'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
-import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
+import { AccountType, useLocalTransactionStore } from 'src/teststore/mock/transaction'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -201,7 +200,7 @@ const onMenuHide = () => {
 }
 
 const account = ref('')
-const accountType = ref(AccountType.Email)
+const accountType = ref(AccountType.EMAIL)
 
 const router = useRouter()
 const ltransation = useLocalTransactionStore()
@@ -211,6 +210,8 @@ const onCodeVerify = (code: string) => {
     Amount: `${amount.value}`,
     AccountID: selectedAccount.value.Account.ID as string,
     VerificationCode: code,
+    Account: account.value,
+    AccountType: account.value,
     Message: {
       Error: {
         Title: t('MSG_SUBMIT_WITHDRAW_FAIL'),

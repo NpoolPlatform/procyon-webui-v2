@@ -59,7 +59,7 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
     },
     createWithdraw (req: CreateWithdrawRequest, done: (error: boolean) => void) {
       doActionWithError<CreateWithdrawRequest, CreateWithdrawResponse>(
-        API.GET_WITHDRAWS,
+        API.CREATE_WITHDRAW,
         req,
         req.Message,
         (resp: CreateWithdrawResponse): void => {
