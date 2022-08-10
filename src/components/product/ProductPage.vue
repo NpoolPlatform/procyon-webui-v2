@@ -188,6 +188,10 @@
               <span class='number'>{{ (Math.ceil(remainOrderAmount * 10000) / 10000).toFixed(4) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
+            <div class='warning'>
+              <img src='font-awesome/warning.svg'>
+              <span>{{ t('MSG_PAY_THE_REMAINDER') }}</span>
+            </div>
             <button @click='onSubmit' :disabled='inputBalance < 0 || inputBalance > getUserBalance || inputBalance > (Math.ceil(totalAmount * 10000) / 10000)'>
               {{ t('MSG_CONTINUE') }}
             </button>
