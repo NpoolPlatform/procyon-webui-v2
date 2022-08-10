@@ -93,7 +93,9 @@ const { t } = useI18n({ useScope: 'global' })
 const coin = useCoinStore()
 const currency = useCurrencyStore()
 const account = useAccountStore()
-const accounts = computed(() => account.Accounts.filter((el) => el.State === ReviewState.Approved))
+const accounts = computed(() => account.Accounts.filter((el) => el.State === ReviewState.Approved).sort((a, b) => {
+  return b.Account.CreateAt - a.Account.CreateAt
+}))
 
 const table = computed(() => [
   {

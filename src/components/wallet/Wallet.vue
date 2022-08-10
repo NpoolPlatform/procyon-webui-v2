@@ -70,6 +70,9 @@ const getWithdraws = (offset: number, limit: number) => {
   }, () => {
     // TODO
     if (localtrans.Withdraws.Withdraws.length === localtrans.Withdraws.Total) {
+      localtrans.Withdraws.Withdraws = localtrans.Withdraws.Withdraws.sort((a, b) => {
+        return b.CreatedAt - a.CreatedAt
+      })
       return
     }
     getWithdraws(limit + offset, limit)

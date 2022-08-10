@@ -7,6 +7,7 @@ export interface Detail {
   CoinUnit: string
   IOType: string
   IOSubType: string
+  CreatedAt: number
   Amount: string
   IOExtra: string
 }
