@@ -1,6 +1,7 @@
 import { Currency, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
 import { defineStore } from 'pinia'
-import { General } from 'src/teststore/mock/ledger'
+import { IntervalKey } from 'src/const/const'
+import { General, useGeneralStore } from 'src/teststore/mock/ledger'
 import { BalanceGeneral } from './types'
 
 export const useLocalLedgerStore = defineStore('localledger', {
@@ -33,8 +34,15 @@ export const useLocalLedgerStore = defineStore('localledger', {
             g.Balance += Number(el.Spendable)
           })
         })
-
         this.Generals.push(g)
+      })
+      // last24hours balance
+      const general = useGeneralStore()
+      const igenerals = general.IntervalGenerals.get(IntervalKey.LastDay)
+      this.Generals.forEach((el) => {
+        igenerals?.Generals.filter((il) => il.CoinTypeID === el.CoinTypeID).forEach((il) => {
+          el.Last24HoursBalance += Number(il.Spendable)
+        })
       })
     }
   }
