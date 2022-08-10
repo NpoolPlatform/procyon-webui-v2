@@ -1,7 +1,7 @@
 <template>
   <OpTable
     label='MSG_ORDER_HISTORY'
-    :rows='(localOrders as Array<never>)'
+    :rows='(orders as Array<never>)'
     :table='(table as never)'
     :count-per-page='10'
     @row-click='(row) => onRowClick(row as Order)'
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineAsyncComponent, ref, onUnmounted } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -28,8 +28,8 @@ const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const localOrder = useLocalOrderStore()
-const localOrders = computed(() => localOrder.Orders)
+const order = useLocalOrderStore()
+const orders = computed(() => order.Orders)
 
 const table = computed(() => [
   {
@@ -80,34 +80,20 @@ const table = computed(() => [
 const router = useRouter()
 
 const onRowClick = (myOrder: Order) => {
-  // if (!order.validateOrder(order.getOrderByID(myOrder.OrderID))) {
-  //   return
-  // }
-  if (!localOrder.validateOrder(localOrder.getOrderByID(myOrder.ID) as Order)) {
+  if (!order.validateOrder(order.getOrderByID(myOrder.ID) as Order)) {
+    return
+  }
+  if (!order.validateOrder(order.getOrderByID(myOrder.ID) as Order)) {
     return
   }
   void router.push({
     path: '/payment',
     query: {
-      paymentId: localOrder.getOrderByID(myOrder.ID)?.PaymentID,
+      paymentId: order.getOrderByID(myOrder.ID)?.PaymentID,
       orderId: myOrder.ID
     }
   })
 }
-
-const ticker = ref(-1)
-
-onMounted(() => {
-  ticker.value = window.setInterval(() => {
-    // TODO: update order state
-  }, 1000)
-})
-
-onUnmounted(() => {
-  if (ticker.value >= 0) {
-    window.clearInterval(ticker.value)
-  }
-})
 
 </script>
 

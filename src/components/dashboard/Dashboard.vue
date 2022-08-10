@@ -12,7 +12,7 @@
 <script setup lang='ts'>
 import { useProfitStore } from 'src/teststore/mock/profit'
 import { defineAsyncComponent, onMounted } from 'vue'
-import { NotificationType, SecondsEachDay } from 'npool-cli-v2'
+import { NotificationType, SecondsEachDay, useCoinStore, useStockStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { IntervalKey } from 'src/const/const'
 import { useLocalOrderStore } from 'src/teststore/mock/order'
@@ -26,6 +26,8 @@ const { t } = useI18n({ useScope: 'global' })
 
 const profit = useProfitStore()
 const order = useLocalOrderStore()
+const coin = useCoinStore()
+const stock = useStockStore()
 
 const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
   profit.getIntervalProfits({
@@ -128,6 +130,34 @@ onMounted(() => {
 
   if (order.Orders.length === 0) {
     getOrders(0, 100)
+  }
+  if (coin.ProductInfos.size === 0) {
+    coin.getCoinProductInfos({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COIN_PRODUCT_INFOS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+
+  if (stock.Stocks.length === 0) {
+    stock.getStocks({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_GOOD_STOCKS'),
+          Message: t('MSG_GET_GOOD_STOCKS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
   }
 })
 </script>

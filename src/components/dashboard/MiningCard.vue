@@ -65,15 +65,12 @@
 <script setup lang='ts'>
 import {
   useCoinStore,
-  // useCurrencyStore,
   PriceCoinName,
-  NotificationType,
   useGoodStore
 } from 'npool-cli-v2'
 import { GoodGeneral } from 'src/localstore/good'
 // import { useLocalOrderStore } from 'src/teststore/mock/order'
-import { defineProps, toRef, computed, onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import chevrons from '../../assets/chevrons.svg'
@@ -85,9 +82,6 @@ interface Props {
 const props = defineProps<Props>()
 const general = toRef(props, 'general')
 const short = ref(true)
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 
 const coins = useCoinStore()
 const productInfo = computed(() => coins.getCoinProductInfoByCoin(general.value?.CoinTypeID))
@@ -110,30 +104,10 @@ const purchaseDisable = computed(() => {
   return true
 })
 
-// const currency = useCurrencyStore()
-
 const totalEarningUSD = ref(0)
-
 const _last24HoursEarningCoin = ref(0)
 const last24HoursEarningUSD = ref(0)
-
 const _last30DaysEarningCoin = ref(0)
-
-onMounted(() => {
-  if (!productInfo.value) {
-    coins.getCoinProductInfos({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COIN_PRODUCT_INFOS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-})
 
 const router = useRouter()
 const onPurchaseClick = () => {
