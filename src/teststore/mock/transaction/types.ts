@@ -37,21 +37,12 @@ export interface GetWithdrawRequest extends BaseRequest {
   Offset: number
   Limit: number
 }
+
 export interface GetWithdrawResponse {
   Infos: Withdraw[]
   Total: number
 }
-export enum AccountType {
-DEFAULT_SIGN_METHOD_TYPE = 'DefaultSignMethodType',
-MOBILE = 'Mobile',
-EMAIL = 'Email',
-TWITTER = 'Twitter',
-GITHUB = 'Github',
-FACEBOOK = 'Facebook',
-LINKEDIN = 'Linkedin',
-WECHAT = 'Wechat',
-GOOGLE = 'Google',
-}
+
 export interface CreateWithdrawRequest extends BaseRequest{
   CoinTypeID: string
   AccountID: string
@@ -60,6 +51,7 @@ export interface CreateWithdrawRequest extends BaseRequest{
   Account: string
   VerificationCode: string
 }
+
 export interface CreateWithdrawResponse {
   Info: Withdraw
 }

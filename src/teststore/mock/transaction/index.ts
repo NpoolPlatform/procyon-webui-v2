@@ -75,3 +75,4 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
 })
 
 export * from './types'
+export { AccountType } from './const'
