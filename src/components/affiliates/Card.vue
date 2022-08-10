@@ -60,7 +60,7 @@
                 {{ $t('MSG_SET') }}
               </button>
             </td>
-            <td><span class='aff-number'>{{ _good.TotalUnits }}<span class='unit'>{{ $t(_good.CoinUnit) }}</span></span></td>
+            <td><span class='aff-number'>{{ _good.TotalUnits }}<span class='unit'>{{ $t(_good.CurGoodUnit) }}</span></span></td>
             <td><span class='aff-number'>{{ Number(_good.TotalAmount).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
             <td><span class='aff-number'>{{ Number(_good.TotalCommission).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
