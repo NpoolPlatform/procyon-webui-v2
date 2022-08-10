@@ -153,65 +153,35 @@
                       <div class='confirmation'>
                         <h3>{{ t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
                         <div class='full-section'>
-                          <h4>Available Balance:</h4>
+                          <h4>{{ t('MSG_AVAILABLE_BALANCE') }}:</h4>
                           <span class='number'>{{ getUserBalance }}</span>
                           <span class='unit'>{{ paymentCoin?.Unit }}</span>
                         </div>
                         <div class='hr' />
                         <div class='full-section'>
-                          <h4>Order Due Amount:</h4>
+                          <h4>{{ t('MSG_ORDER_DUE_AMOUNT') }}:</h4>
                           <span class='number'>{{ good?.Good?.Good?.Price * myPurchaseAmount }}</span>
-                          <span class='unit'>USDT</span>
+                          <span class='unit'>{{ PriceCoinName }}</span>
                         </div>
                         <div class='hr' />
                         <div class='full-section'>
-                          <h4>Use Wallet Balance:</h4>
+                          <h4>{{ t('MSG_USE_WALLET_BALANCE') }}</h4>
                           <input
                             type='number' :min='0' :max='getUserBalance'
                             v-model='inputBalance'
                           >
                         </div>
                         <div class='full-section'>
-                          <h4>Remaining Due Amount:</h4>
+                          <h4>{{ t('REMAINING_DUE_AMOUNT') }}:</h4>
                           <span class='number'>{{ remainOrderAmount }}</span>
                           <span class='unit'>{{ paymentCoin?.Unit }}</span>
                         </div>
                         <button @click='onSubmit'>
-                          Continue
+                          {{ t('MSG_CONTINUE') }}
                         </button>
                       </div>
                     </div>
                   </div>
-                  <!-- <div class='popup'>
-                    <div class='form-container content-glass'>
-                      <div class='confirmation'>
-                        <h3>{{ t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
-                        <div class='full-section'>
-                          <h4>{{ t('MSG_WALLET_BALANCE') }}:</h4>
-                          <span class='number'>{{ getUserBalance }}</span>
-                          <span class='unit'>{{ paymentCoin?.Unit }}</span>
-                        </div>
-                        <Input
-                          v-model:value='inputBalance'
-                          type='number'
-                          id='amount'
-                          required
-                          :error='balanceAmountError'
-                          message='MSG_BALANCE_TIP'
-                          placeholder='MSG_BALANCE_PLACEHOLDER'
-                          :min='0'
-                          :max='getUserBalance'
-                        />
-                        <p>{{ t('MSG_CREDIT_ORDER_TIP') }}</p>
-                        <button @click='onSubmit'>
-                          Yes
-                        </button>
-                        <button class='alt' @click='onSubmit'>
-                          No
-                        </button>
-                      </div>
-                    </div>
-                  </div> -->
                 </div>
               </q-dialog>
             </form>
