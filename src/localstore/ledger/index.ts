@@ -29,19 +29,19 @@ export const useLocalLedgerStore = defineStore('localledger', {
 
         currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (usdCurrency: number) => {
           currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
-            g.USDValue += Number(el.Incoming) * usdCurrency
-            g.JPYValue += Number(el.Incoming) * jpyCurrency
+            g.USDValue += Number(el.Spendable) * usdCurrency
+            g.JPYValue += Number(el.Spendable) * jpyCurrency
             g.Balance += Number(el.Spendable)
+            this.Generals.push(g)
           })
         })
-        this.Generals.push(g)
       })
       // last24hours balance
       const general = useGeneralStore()
       const igenerals = general.IntervalGenerals.get(IntervalKey.LastDay)
       this.Generals.forEach((el) => {
         igenerals?.Generals.filter((il) => il.CoinTypeID === el.CoinTypeID).forEach((il) => {
-          el.Last24HoursBalance += Number(il.Spendable)
+          el.Last24HoursBalance += Number(il.Incoming)
         })
       })
     }
