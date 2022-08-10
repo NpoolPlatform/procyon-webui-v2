@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { doActionWithError } from 'npool-cli-v2'
 import { API } from './const'
 import {
+  CreateWithdrawRequest,
+  CreateWithdrawResponse,
   Detail,
   GetDetailRequest,
   GetDetailResponse,
@@ -48,6 +50,20 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
         (resp: GetWithdrawResponse): void => {
           this.Withdraws.Withdraws.push(...resp.Infos)
           this.Withdraws.Total = resp.Total
+          done(false)
+        },
+        () => {
+          done(true)
+        }
+      )
+    },
+    createWithdraw (req: CreateWithdrawRequest, done: (error: boolean) => void) {
+      doActionWithError<CreateWithdrawRequest, CreateWithdrawResponse>(
+        API.GET_WITHDRAWS,
+        req,
+        req.Message,
+        (resp: CreateWithdrawResponse): void => {
+          console.log(resp.Info)
           done(false)
         },
         () => {

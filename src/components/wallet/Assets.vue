@@ -48,8 +48,8 @@ import {
   useCurrencyStore,
   BenefitModel,
   useKYCStore,
-  ReviewState
-
+  ReviewState,
+  useAccountStore
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -106,6 +106,8 @@ const table = computed(() => [
 ])
 
 const router = useRouter()
+const account = useAccountStore()
+const accounts = computed(() => account.Accounts.filter((el) => el.State === ReviewState.Approved))
 
 const onWithdrawClick = (asset: BenefitModel) => {
   kyc.getKYC({
@@ -127,12 +129,22 @@ const onWithdrawClick = (asset: BenefitModel) => {
       void router.push({ path: '/kyc' })
       return
     }
+
     void router.push({
       path: '/withdraw',
       query: {
         coinTypeId: asset.CoinTypeID
       }
     })
+    const exist = accounts.value.find((account) => account.Account.CoinTypeID === asset.CoinTypeID && account.State === ReviewState.Approved)
+    if (!exist) {
+      void router.push({
+        path: '/add/address',
+        query: {
+          coinTypeId: asset.CoinTypeID
+        }
+      })
+    }
   })
 }
 

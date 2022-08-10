@@ -32,6 +32,7 @@ export interface Withdraw {
   State: string
   Message: string
 }
+
 export interface GetWithdrawRequest extends BaseRequest {
   Offset: number
   Limit: number
@@ -39,4 +40,13 @@ export interface GetWithdrawRequest extends BaseRequest {
 export interface GetWithdrawResponse {
   Infos: Withdraw[]
   Total: number
+}
+export interface CreateWithdrawRequest extends BaseRequest{
+  CoinTypeID: string
+  AccountID: string
+  Amount: string
+  VerificationCode: string
+}
+export interface CreateWithdrawResponse {
+  Info: Withdraw
 }
