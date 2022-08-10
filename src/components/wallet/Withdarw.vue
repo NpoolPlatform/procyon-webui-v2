@@ -133,7 +133,8 @@ import {
   NotificationType,
   ReviewState,
   useCurrencyStore,
-  Currency
+  Currency,
+  AccountType
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -141,7 +142,7 @@ import { useI18n } from 'vue-i18n'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
-import { AccountType, useLocalTransactionStore } from 'src/teststore/mock/transaction'
+import { useLocalTransactionStore, AccountType as LocalAccountType } from 'src/teststore/mock/transaction'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -200,18 +201,32 @@ const onMenuHide = () => {
 }
 
 const account = ref('')
-const accountType = ref(AccountType.EMAIL)
+const accountType = ref(AccountType.Email)
 
 const router = useRouter()
 const ltransation = useLocalTransactionStore()
 const onCodeVerify = (code: string) => {
+  let accType = LocalAccountType.EMAIL
+
+  switch (accountType.value) {
+    case AccountType.Email:
+      accType = LocalAccountType.EMAIL
+      break
+    case AccountType.Mobile:
+      accType = LocalAccountType.MOBILE
+      break
+    case AccountType.Google:
+      accType = LocalAccountType.GOOGLE
+      break
+  }
+
   ltransation.createWithdraw({
     CoinTypeID: coinTypeId.value,
     Amount: `${amount.value}`,
     AccountID: selectedAccount.value.Account.ID as string,
     VerificationCode: code,
     Account: account.value,
-    AccountType: account.value,
+    AccountType: accType,
     Message: {
       Error: {
         Title: t('MSG_SUBMIT_WITHDRAW_FAIL'),
