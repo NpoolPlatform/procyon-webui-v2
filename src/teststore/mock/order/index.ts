@@ -121,7 +121,12 @@ export const useLocalOrderStore = defineStore('localorder', {
         req,
         req.Message,
         (resp: UpdateOrderResponse): void => {
-          console.log(resp.Info)
+          this.Orders.forEach((el) => {
+            if (el.ID === resp.Info.ID) {
+              el = { ...resp.Info }
+            }
+          })
+
           done(false)
         },
         () => {

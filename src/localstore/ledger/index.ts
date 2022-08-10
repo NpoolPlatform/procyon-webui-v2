@@ -44,6 +44,7 @@ export const useLocalLedgerStore = defineStore('localledger', {
           el.Last24HoursBalance += Number(il.Incoming)
         })
       })
+      console.log(this.Generals)
     }
   }
 })

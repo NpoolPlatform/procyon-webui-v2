@@ -52,6 +52,7 @@ const localledger = useLocalLedgerStore()
 const coin = useCoinStore()
 const currency = useCurrencyStore()
 const account = useAccountStore()
+const general = useGeneralStore()
 
 const progress = ref<QAjaxBar>()
 
@@ -88,7 +89,6 @@ const getUserGenerals = (offset:number, limit: number) => {
     }
   }, () => {
     if (general.Generals.Total === general.Generals.Generals.length) {
-      localledger.initialize(general.Generals.Generals)
       return
     }
     getUserGenerals(limit + offset, limit)
@@ -110,6 +110,7 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
     }
   }, key, () => {
     if (general.IntervalGenerals.get(key)?.Generals?.length === general.IntervalGenerals.get(key)?.Total) {
+      localledger.initialize(general.Generals.Generals)
       progress.value?.stop()
       return
     }
@@ -157,8 +158,24 @@ const getCoins = () => {
   })
 }
 
-const general = useGeneralStore()
-
+const getUserDetails = (offset: number, limit: number) => {
+  localtrans.getDetails({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_WITHDRAWS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    if (localtrans.Details.Details.length === localtrans.Details.Total) {
+      return
+    }
+    getUserDetails(limit + offset, limit)
+  })
+}
 onMounted(() => {
   if (localtrans.Withdraws.Withdraws.length === 0) {
     getWithdraws(0, 100)
@@ -173,6 +190,9 @@ onMounted(() => {
   }
   if (coin.Coins.length === 0) {
     getCoins()
+  }
+  if (localtrans.Details.Details.length === 0) {
+    getUserDetails(0, 100)
   }
 })
 </script>

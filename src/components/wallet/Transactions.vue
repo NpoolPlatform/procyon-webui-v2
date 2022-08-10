@@ -32,8 +32,9 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, useTransactionStore, Transaction, formatTime, useCurrencyStore } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, Transaction, formatTime, useCurrencyStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -42,9 +43,9 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
-const transaction = useTransactionStore()
+const localtrans = useLocalTransactionStore()
 const currency = useCurrencyStore()
-const transactions = computed(() => transaction.Transactions)
+const transactions = computed(() => localtrans.Details.Details)
 
 const table = computed(() => [
   {
@@ -85,20 +86,6 @@ onMounted(() => {
       Message: {
         Error: {
           Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-
-  if (transactions.value.length === 0) {
-    transaction.getTransactions({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_TRANSACTIONS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }
