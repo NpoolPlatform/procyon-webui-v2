@@ -47,16 +47,26 @@ const general = useGeneralStore()
 const length = computed(() => general.Generals.Generals.length)
 const totalUSDTBalance = ref(0)
 
+const coinUSDTAmount = ref(new Map<string, number>())
+const coinCount = computed(() => coinUSDTAmount.value.size)
+
 const calculate = () => {
-  totalUSDTBalance.value = 0
+  coinUSDTAmount.value = new Map<string, number>()
   general.Generals.Generals.forEach((el) => {
     if (Number(el.Spendable) > 0) {
       currency.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (currency: number) => {
-        totalUSDTBalance.value += Number(el.Spendable) * currency
+        coinUSDTAmount.value.set(el.CoinTypeID, Number(el.Spendable) * currency)
       })
     }
   })
 }
+
+watch(coinCount, () => {
+  totalUSDTBalance.value = 0
+  coinUSDTAmount.value.forEach((amount) => {
+    totalUSDTBalance.value += amount
+  })
+})
 
 watch(length, () => {
   calculate()
