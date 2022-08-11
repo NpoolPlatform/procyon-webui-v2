@@ -254,16 +254,16 @@ const remainOrderAmount = computed(() => {
 const logined = useLoginedUserStore()
 
 const createOrder = () => {
-  console.log('balance: ', getUserBalance.value)
   if (getUserBalance.value <= 0) {
     onSubmit()
   } else {
-    inputBalance.value = 0 // reset value
+    inputBalance.value = 0
     showBalanceDialog.value = true
   }
 }
 
 const getUserGenerals = (offset:number, limit: number) => {
+  submitting.value = true
   general.getGenerals({
     Offset: offset,
     Limit: limit,
@@ -275,6 +275,7 @@ const getUserGenerals = (offset:number, limit: number) => {
       }
     }
   }, (error: boolean, count?: number) => {
+    submitting.value = false
     if (error) {
       return
     }
@@ -300,6 +301,10 @@ const onPurchaseClick = throttle(() => {
         purchaseAmount: purchaseAmount.value
       }
     })
+    return
+  }
+  onPurchaseAmountFocusOut()
+  if (purchaseAmountError.value) {
     return
   }
   if (general.Generals.Generals.length === 0) {
@@ -381,24 +386,9 @@ onMounted(() => {
 })
 const localOrder = useLocalOrderStore()
 const onSubmit = throttle(() => {
-  if (!logined.getLogined) {
-    void router.push({
-      path: '/signin',
-      query: {
-        target: '/product/aleo',
-        goodId: good.value.Good.Good.ID as string,
-        purchaseAmount: purchaseAmount.value
-      }
-    })
-    return
-  }
-
-  onPurchaseAmountFocusOut()
-  if (purchaseAmountError.value) {
-    return
-  }
   showBalanceDialog.value = false
   submitting.value = true
+
   localOrder.createOrder({
     GoodID: goodId.value,
     Units: purchaseAmount.value,
@@ -413,9 +403,8 @@ const onSubmit = throttle(() => {
       }
     }
   }, (orderId: string, paymentId: string, error: boolean) => {
-    // TODO
+    submitting.value = false
     if (error) {
-      submitting.value = false
       return
     }
     void router.push({
