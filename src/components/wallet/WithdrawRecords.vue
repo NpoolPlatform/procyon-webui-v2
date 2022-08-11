@@ -20,7 +20,7 @@
           {{ myProps.row.Amount }}{{ myProps.row.CoinUnit }}
         </q-td>
         <q-td key='Address' :props='myProps'>
-          {{ myProps.row.Address }}
+          {{ myProps.row.AddressLabels }} ({{ myProps.row.Address }})
         </q-td>
         <q-td key='Status' :props='myProps'>
           {{ myProps.row.State }}
