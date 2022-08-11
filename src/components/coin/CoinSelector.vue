@@ -1,12 +1,14 @@
 <template>
   <label for='coin'>{{ $t('MSG_BLOCKCHAIN') }}</label>
-  <select id='coin' :name='$t(label)' v-model='myCoin' required>
+  <select
+    id='coin' :name='$t(label)' v-model='myCoin'
+    required :disabled='disabled'
+  >
     <option
       v-for='_myCoin in coins'
       :key='_myCoin.ID'
       :value='_myCoin'
       :selected='myCoin?.ID === _myCoin.ID'
-      :disabled='isFromWithdrawPage'
     >
       {{ _myCoin.Unit }} ({{ currency.formatCoinName(_myCoin.Name as string) }})
     </option>
@@ -17,12 +19,11 @@
 import { computed, defineEmits, ref, watch, defineProps, toRef, onMounted } from 'vue'
 import { useCoinStore, Coin, NotificationType, useCurrencyStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
 
 interface Props {
   selectedCoin: Coin;
   label: string;
-  gotoWithdraw?: boolean;
+  disabled?: boolean;
 }
 
 const props = defineProps<Props>()
@@ -33,9 +34,6 @@ const coin = useCoinStore()
 const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale))
 const myCoin = ref(selectedCoin.value)
 const currency = useCurrencyStore()
-const route = useRoute()
-const query = computed(() => route.query as unknown as Props)
-const isFromWithdrawPage = computed(() => query.value.gotoWithdraw)
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })

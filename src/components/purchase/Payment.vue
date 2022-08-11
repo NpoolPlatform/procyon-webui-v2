@@ -1,6 +1,6 @@
 <template>
   <div :class='[ showStatus || showWarning ? "blur" : "" ]'>
-    <PurchasePage :order='(order as Order)'>
+    <PurchasePage :good='good'>
       <div class='info'>
         <h3 class='form-title'>
           {{ order?.PaymentCoinName }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
@@ -151,7 +151,7 @@
 </template>
 
 <script setup lang='ts'>
-import { NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds, useNotificationStore } from 'npool-cli-v2'
+import { NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds, useNotificationStore, useGoodStore } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -179,6 +179,9 @@ const orderId = computed(() => query.value.orderId)
 
 const localOrder = useLocalOrderStore()
 const order = computed(() => localOrder.getOrderByID(orderId.value))
+
+const goods = useGoodStore()
+const good = computed(() => goods.getGoodByID(order.value?.GoodID as string))
 
 const notification = useNotificationStore()
 
@@ -269,7 +272,6 @@ onMounted(() => {
       }
     }
   }, () => {
-    // TODO
     if (!localOrder.validateOrder(order.value as Order)) {
       return
     }
