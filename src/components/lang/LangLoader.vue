@@ -10,6 +10,9 @@ const lang = useLangStore()
 const locale = useLocaleStore()
 const langID = computed(() => locale.CurLang?.ID)
 watch(langID, () => {
+  if (locale.LangMessages.has(langID.value as string)) {
+    return
+  }
   lang.getLangMessages({
     LangID: langID.value as string,
     Message: {
