@@ -166,7 +166,7 @@ const onAmountFocusOut = () => {
 }
 
 interface Query {
-  coinTypeId: string
+  coinTypeId: string;
 }
 
 const route = useRoute()

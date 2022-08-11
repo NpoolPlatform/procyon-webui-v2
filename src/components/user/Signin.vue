@@ -70,7 +70,7 @@ const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/
 
 const route = useRoute()
 interface MyQuery {
-  target: string
+  target: string;
 }
 const query = computed(() => route.query as unknown as MyQuery)
 const target = computed(() => query.value?.target)

@@ -122,10 +122,10 @@ import { useLocalArchivementStore } from 'src/localstore/affiliates'
 const { locale, t } = useI18n({ useScope: 'global' })
 
 interface Props {
-  child: boolean
-  firstChild: boolean
-  lastChild: boolean
-  referral: LocalProductArchivement
+  child: boolean;
+  firstChild: boolean;
+  lastChild: boolean;
+  referral: LocalProductArchivement;
 }
 
 const props = defineProps<Props>()

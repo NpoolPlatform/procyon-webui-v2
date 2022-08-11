@@ -99,8 +99,8 @@ import { useRouter } from 'vue-router'
 import { LocalArchivement, LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
 
 interface MyCoin {
-  label: string
-  value: Coin
+  label: string;
+  value: Coin;
 }
 
 const localArchivements = useLocalArchivementStore()

@@ -67,10 +67,10 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 interface FaqItem {
-  icon: string
-  topic: string
-  title: string
-  subtitle: string
+  icon: string;
+  topic: string;
+  title: string;
+  subtitle: string;
 }
 
 const faqs = computed(() => [

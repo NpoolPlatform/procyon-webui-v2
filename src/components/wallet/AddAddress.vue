@@ -65,8 +65,8 @@ const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/
 const { t } = useI18n({ useScope: 'global' })
 
 interface Query {
-  coinTypeId: string
-  gotoWithdraw: boolean
+  coinTypeId: string;
+  gotoWithdraw: boolean;
 }
 
 const route = useRoute()

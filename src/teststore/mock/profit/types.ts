@@ -1,71 +1,71 @@
 import { BaseRequest } from 'npool-cli-v2'
 
 interface Profit {
-  CoinTypeID: string
-  CoinName: string
-  CoinLogo: string
-  CoinUnit: string
-  Incoming: string
+  CoinTypeID: string;
+  CoinName: string;
+  CoinLogo: string;
+  CoinUnit: string;
+  Incoming: string;
 }
 
 interface IntervalProfits {
-  Profits: Array<Profit>
-  Total: number
+  Profits: Array<Profit>;
+  Total: number;
 }
 
 interface GetProfitRequest extends BaseRequest {
-  Offset?: number
-  Limit?: number
-  Key?: string
+  Offset?: number;
+  Limit?: number;
+  Key?: string;
 }
 
 interface GetProfitResponse {
-  Infos: Profit[]
-  Total: number
+  Infos: Profit[];
+  Total: number;
 }
 
 interface GetIntervalProfitRequest extends BaseRequest {
-  StartAt: number
-  EndAt: number
-  Offset?: number
-  Limit?: number
+  StartAt: number;
+  EndAt: number;
+  Offset?: number;
+  Limit?: number;
 }
 
 interface GetIntervalProfitResponse {
-  Infos: Profit[]
-  Total: number
+  Infos: Profit[];
+  Total: number;
 }
 
 interface GoodProfit {
-  GoodID: string
-  GoodName: string
-  GoodUnit: string
-  GoodServicePeriodDays: number
-  Units: number
-  CoinTypeID: string
-  CoinName: string
-  CoinLogo: string
-  CoinUnit: string
-  CoinPresale: boolean
-  Incoming: string
+  GoodID: string;
+  GoodName: string;
+  GoodUnit: string;
+  GoodServicePeriodDays: number;
+  Units: number;
+  CoinTypeID: string;
+  CoinName: string;
+  CoinLogo: string;
+  CoinUnit: string;
+  CoinPresale: boolean;
+  Incoming: string;
 }
 
 interface IntervalGoodProfits {
-  Profits: Array<GoodProfit>
-  Total: number
+  Profits: Array<GoodProfit>;
+  Total: number;
 }
 
 interface GetGoodProfitRequest extends BaseRequest {
-  StartAt?: number
-  EndAt?: number
-  Offset?: number
-  Limit?: number
-  Key?: string
+  StartAt?: number;
+  EndAt?: number;
+  Offset?: number;
+  Limit?: number;
+  Key?: string;
 }
 
 interface GetGoodProfitResponse {
-  Infos: GoodProfit[]
-  Total: number
+  Infos: GoodProfit[];
+  Total: number;
 }
 
 export {

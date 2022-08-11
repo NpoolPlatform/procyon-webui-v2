@@ -47,7 +47,7 @@ import { useLangStore, NotificationType, Country } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
 interface Props {
-  country: Country
+  country: Country;
 }
 
 const props = defineProps<Props>()

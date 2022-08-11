@@ -18,8 +18,8 @@ import { useCoinStore, Coin, NotificationType, useCurrencyStore } from 'npool-cl
 import { useI18n } from 'vue-i18n'
 
 interface Props {
-  selectedCoin: Coin
-  label: string
+  selectedCoin: Coin;
+  label: string;
 }
 
 const props = defineProps<Props>()

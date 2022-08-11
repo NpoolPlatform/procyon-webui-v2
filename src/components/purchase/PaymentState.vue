@@ -48,12 +48,12 @@ import warning from 'src/assets/warning.svg'
 import { useLocalOrderStore } from 'src/teststore/mock/order'
 
 interface Props {
-  orderId: string
-  title: string
-  tipMessage: string
-  state: string
-  showType: string
-  remainTime: string
+  orderId: string;
+  title: string;
+  tipMessage: string;
+  state: string;
+  showType: string;
+  remainTime: string;
 }
 
 const props = defineProps<Props>()

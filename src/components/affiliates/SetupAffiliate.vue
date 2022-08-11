@@ -44,7 +44,7 @@ const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage
 const { locale, t } = useI18n({ useScope: 'global' })
 
 interface Query {
-  userId: string
+  userId: string;
 }
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)

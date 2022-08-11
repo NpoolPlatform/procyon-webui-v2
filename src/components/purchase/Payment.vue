@@ -167,7 +167,7 @@ const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 const PaymentState = defineAsyncComponent(() => import('src/components/purchase/PaymentState.vue'))
 
 interface Query {
-  orderId: string
+  orderId: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/unbound-method

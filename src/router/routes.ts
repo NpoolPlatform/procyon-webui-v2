@@ -3,7 +3,7 @@ import { RouteMetaImpl } from 'npool-cli-v2/utils'
 
 declare module 'vue-router' {
   interface RouteMeta extends RouteMetaImpl {
-    ShowSideMenu?: boolean
+    ShowSideMenu?: boolean;
   }
 }
 

@@ -107,10 +107,10 @@ import question from '../../assets/question.svg'
 const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
-  good: Good
-  projectClass: string
-  bgImg: string
-  purchaseCaption: string
+  good: Good;
+  projectClass: string;
+  bgImg: string;
+  purchaseCaption: string;
 }
 
 const props = defineProps<Props>()

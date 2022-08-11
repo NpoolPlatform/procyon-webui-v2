@@ -1,43 +1,43 @@
 import { BaseRequest } from 'npool-cli-v2'
 
 interface Archivement {
-  CoinTypeID: string
-  CoinName: string
-  CoinLogo: string
-  CoinUnit: string
-  TotalUnits: number
-  SelfUnits: number
-  TotalAmount: string
-  SelfAmount: string
-  TotalCommission: string
-  SelfCommission: string
-  CurPercent: number
-  CurGoodID: string
-  CurGoodName: string
-  CurGoodUnit: string
+  CoinTypeID: string;
+  CoinName: string;
+  CoinLogo: string;
+  CoinUnit: string;
+  TotalUnits: number;
+  SelfUnits: number;
+  TotalAmount: string;
+  SelfAmount: string;
+  TotalCommission: string;
+  SelfCommission: string;
+  CurPercent: number;
+  CurGoodID: string;
+  CurGoodName: string;
+  CurGoodUnit: string;
 }
 
 interface ProductArchivement {
-  UserID: string
-  Username: string
-  EmailAddress: string
-  PhoneNO: string
-  FirstName: string
-  LastName: string
-  CreatedAt: number
-  InvitedAt: number
-  Kol: boolean
-  TotalInvitees: number
-  Archivements: Array<Archivement>
+  UserID: string;
+  Username: string;
+  EmailAddress: string;
+  PhoneNO: string;
+  FirstName: string;
+  LastName: string;
+  CreatedAt: number;
+  InvitedAt: number;
+  Kol: boolean;
+  TotalInvitees: number;
+  Archivements: Array<Archivement>;
 }
 
 interface GetArchivementRequest extends BaseRequest {
-  Offset?: number
-  Limit?: number
+  Offset?: number;
+  Limit?: number;
 }
 interface GetArchivementResponse {
-  Archivements: ProductArchivement[]
-  Total: number
+  Archivements: ProductArchivement[];
+  Total: number;
 }
 
 export {
