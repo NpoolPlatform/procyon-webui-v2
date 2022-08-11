@@ -66,7 +66,7 @@ const table = computed(() => [
     align: 'center',
     // FIXME: 商品周期需要返回
     // field: (row: LocalOrder) => row.DurationDays.toString() + t('MSG_DAY')
-    field: (row: Order) => row.Units.toString() + t('MSG_DAY')
+    field: (row: Order) => row.GoodServicePeriodDays.toString() + t('MSG_DAY')
   },
   {
     name: 'State',
