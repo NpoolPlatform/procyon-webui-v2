@@ -17,7 +17,7 @@
           {{ formatTime(myProps.row.CreatedAt) }}
         </q-td>
         <q-td key='Amount' :props='myProps'>
-          {{ transactionSign(myProps.row) }} {{ myProps.row.Amount }}{{ myProps.row.CoinUnit }}
+          {{ transactionSign(myProps.row) }} {{ myProps.row.Amount }} {{ myProps.row.CoinUnit }}
         </q-td>
         <q-td key='IOType' :props='myProps'>
           {{ $t(transactionType(myProps.row)) }}
