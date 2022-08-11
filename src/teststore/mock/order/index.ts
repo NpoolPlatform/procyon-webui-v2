@@ -47,7 +47,7 @@ export const useLocalOrderStore = defineStore('localorder', {
         if (order.State === PaymentState.EXPIRED) {
           return 'MSG_DONE'
         }
-        if (order.State === PaymentState.CANCELED) {
+        if (order.State === PaymentState.CANCELED || order.State === PaymentState.USER_CANCELED) {
           return 'MSG_PAYMENT_CANCELED'
         }
         if (order.State === PaymentState.PAID) {
@@ -146,7 +146,6 @@ export const useLocalOrderStore = defineStore('localorder', {
       )
     }
   }
-
 })
 
 export * from './types'
