@@ -129,7 +129,7 @@
               <input
                 type='number'
                 :min='0'
-                :max='getUserBalance'
+                :max='Math.min(getUserBalance, totalAmount)'
                 v-model='inputBalance'
               >
             </div>
