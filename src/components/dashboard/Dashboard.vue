@@ -56,8 +56,13 @@ const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, of
     }
   }, key, () => {
     if (profit.CoinProfits.get(key)?.Profits?.length === profit.CoinProfits.get(key)?.Total) {
-      if (key === IntervalKey.LastDay) {
-        localledger.initLastDayProfit(profit.Profits.Profits)
+      switch (key) {
+        case IntervalKey.LastDay:
+          localledger.initLastDayProfit(profit.Profits.Profits)
+          break
+        case IntervalKey.LastMonth:
+          localledger.initLastMonthProfit(profit.Profits.Profits)
+          break
       }
       return
     }
