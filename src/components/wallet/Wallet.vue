@@ -71,7 +71,7 @@ const getWithdraws = (offset: number, limit: number) => {
     // TODO
     if (localtrans.Withdraws.Withdraws.length === localtrans.Withdraws.Total) {
       localtrans.Withdraws.Withdraws = localtrans.Withdraws.Withdraws.sort((a, b) => {
-        return b.CreatedAt - a.CreatedAt
+        return b.CreatedAt > a.CreatedAt ? -1 : 1
       })
       return
     }
@@ -92,6 +92,8 @@ const getUserGenerals = (offset:number, limit: number) => {
     }
   }, () => {
     if (general.Generals.Total <= general.Generals.Generals.length) {
+      localledger.initGeneral(general.Generals.Generals)
+      progress.value?.stop()
       return
     }
     getUserGenerals(limit + offset, limit)
@@ -113,8 +115,6 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
     }
   }, key, () => {
     if (general.IntervalGenerals.get(key)?.Generals?.length === general.IntervalGenerals.get(key)?.Total) {
-      localledger.initGeneral(general.Generals.Generals)
-      progress.value?.stop()
       return
     }
     getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
@@ -182,13 +182,15 @@ const getUserDetails = (offset: number, limit: number) => {
 }
 onMounted(() => {
   if (localtrans.Withdraws.Withdraws.length === 0) {
+    getWithdraws(0, 100)
+  }
+  if (general.Generals.Generals.length === 0 || localledger.Generals.length === 0) {
     getUserGenerals(0, 100)
     getIntervalGenerals(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
-    getWithdraws(0, 100)
   }
   if (coin.Coins.length === 0) {
     getCoins()
