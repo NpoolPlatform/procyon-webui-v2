@@ -39,7 +39,19 @@ import { computed } from 'vue'
 
 const localledger = useLocalLedgerStore()
 
-const totalProfit = computed(() => localledger.Profit.USDAmount)
-const last24HoursEarning = computed(() => localledger.Profit.Last24HourUSDAmount)
+const totalProfit = computed(() => {
+  let total = 0
+  localledger.CoinProfits.forEach((el) => {
+    total += el.USDAmount
+  })
+  return total
+})
+const last24HoursEarning = computed(() => {
+  let total = 0
+  localledger.CoinProfits.forEach((el) => {
+    total += el.Last24HourUSDAmount
+  })
+  return total
+})
 
 </script>

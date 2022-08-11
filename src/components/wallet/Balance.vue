@@ -43,26 +43,33 @@ const hidden = toRef(props, 'hidden')
 const currency = useCurrencyStore()
 const coin = useCoinStore()
 const general = useGeneralStore()
-const totalUSDTBalance = computed(() => {
-  let total = 0
-  general.Generals.Generals.forEach((el) => {
+
+const generals = computed(() => general.Generals.Generals)
+const totalUSDTBalance = ref(0)
+
+const calculate = () => {
+  totalUSDTBalance.value = 0
+  generals.value.forEach((el) => {
     if (Number(el.Spendable) > 0) {
       currency.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (currency: number) => {
-        total += Number(el.Spendable) * currency
+        totalUSDTBalance.value += Number(el.Spendable) * currency
       })
     }
   })
-  return total
+}
+
+watch(generals, () => {
+  calculate()
 })
+
 const balanceJPY = ref(0)
 watch(totalUSDTBalance, () => {
   currency.getUSDTCurrency(Currency.JPY, (currency: number) => {
     balanceJPY.value = totalUSDTBalance.value * currency
   })
 })
+
 onMounted(() => {
-  currency.getUSDTCurrency(Currency.JPY, (currency: number) => {
-    balanceJPY.value = totalUSDTBalance.value * currency
-  })
+  calculate()
 })
 </script>

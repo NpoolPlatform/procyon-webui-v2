@@ -48,14 +48,17 @@ const totalCommission = computed(() => {
   })
   return total
 })
+
 watch(totalCommission, () => {
   currency.getUSDTCurrency(Currency.JPY, (currency: number) => {
     commissionJPY.value = totalCommission.value * currency
   })
 })
+
 onMounted(() => {
   currency.getUSDTCurrency(Currency.JPY, (currency: number) => {
     commissionJPY.value = totalCommission.value * currency
   })
 })
+
 </script>

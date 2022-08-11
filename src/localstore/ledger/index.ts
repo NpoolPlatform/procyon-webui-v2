@@ -2,12 +2,11 @@ import { Currency, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
 import { defineStore } from 'pinia'
 import { General } from 'src/teststore/mock/ledger'
 import { Profit } from 'src/teststore/mock/profit'
-import { BalanceGeneral, TotalProfit, CoinProfit } from './types'
+import { BalanceGeneral, CoinProfit } from './types'
 
 export const useLocalLedgerStore = defineStore('localledger', {
   state: () => ({
     Generals: new Map<string, BalanceGeneral>(),
-    Profit: {} as TotalProfit,
     CoinProfits: new Map<string, CoinProfit>()
   }),
   getters: {},
@@ -57,24 +56,16 @@ export const useLocalLedgerStore = defineStore('localledger', {
       const currencies = useCurrencyStore()
       const coin = useCoinStore()
 
-      this.Profit.USDAmount = 0
-      this.Profit.JPYAmount = 0
-
       profits.forEach((el) => {
         currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (usdCurrency: number) => {
           currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
-            let pel = this.CoinProfits.get(el.CoinTypeID)
-            if (!pel) {
-              this.Profit.USDAmount += Number(el.Incoming) * usdCurrency
-              this.Profit.JPYAmount += Number(el.Incoming) * jpyCurrency
-              pel = {
-                Amount: 0,
-                USDAmount: 0
-              } as CoinProfit
+            if (!this.CoinProfits.get(el.CoinTypeID)) {
+              this.CoinProfits.set(el.CoinTypeID, {
+                Amount: Number(el.Incoming),
+                USDAmount: Number(el.Incoming) * usdCurrency,
+                JPYAmount: Number(el.Incoming) * jpyCurrency
+              } as CoinProfit)
             }
-            pel.Amount = Number(el.Incoming)
-            pel.USDAmount = Number(el.Incoming) * usdCurrency
-            this.CoinProfits.set(el.CoinTypeID, pel)
           })
         })
       })
@@ -84,24 +75,16 @@ export const useLocalLedgerStore = defineStore('localledger', {
       const currencies = useCurrencyStore()
       const coin = useCoinStore()
 
-      this.Profit.Last24HourJPYAmount = 0
-      this.Profit.Last24HourUSDAmount = 0
-
       profits.forEach((el) => {
         currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (usdCurrency: number) => {
           currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
-            let pel = this.CoinProfits.get(el.CoinTypeID)
-            if (!pel) {
-              this.Profit.Last24HourUSDAmount += Number(el.Incoming) * usdCurrency
-              this.Profit.Last24HourJPYAmount += Number(el.Incoming) * jpyCurrency
-              pel = {
-                Last24HourAmount: 0,
-                Last24HourUSDAmount: 0
-              } as CoinProfit
+            if (!this.CoinProfits.get(el.CoinTypeID)) {
+              this.CoinProfits.set(el.CoinTypeID, {
+                Last24HourAmount: Number(el.Incoming),
+                Last24HourUSDAmount: Number(el.Incoming) * usdCurrency,
+                Last24HourJPYAmount: Number(el.Incoming) * jpyCurrency
+              } as CoinProfit)
             }
-            pel.Last24HourAmount = Number(el.Incoming)
-            pel.Last24HourUSDAmount = Number(el.Incoming) * usdCurrency
-            this.CoinProfits.set(el.CoinTypeID, pel)
           })
         })
       })
@@ -111,24 +94,16 @@ export const useLocalLedgerStore = defineStore('localledger', {
       const currencies = useCurrencyStore()
       const coin = useCoinStore()
 
-      this.Profit.Last30DayJPYAmount = 0
-      this.Profit.Last30DayUSDAmount = 0
-
       profits.forEach((el) => {
         currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (usdCurrency: number) => {
           currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
-            let pel = this.CoinProfits.get(el.CoinTypeID)
-            if (!pel) {
-              this.Profit.Last30DayUSDAmount += Number(el.Incoming) * usdCurrency
-              this.Profit.Last30DayJPYAmount += Number(el.Incoming) * jpyCurrency
-              pel = {
-                Last30DayAmount: 0,
-                Last30DayUSDAmount: 0
-              } as CoinProfit
+            if (!this.CoinProfits.get(el.CoinTypeID)) {
+              this.CoinProfits.set(el.CoinTypeID, {
+                Last30DayAmount: Number(el.Incoming),
+                Last30DayUSDAmount: Number(el.Incoming) * usdCurrency,
+                Last30DayJPYAmount: Number(el.Incoming) * jpyCurrency
+              } as CoinProfit)
             }
-            pel.Last30DayAmount = Number(el.Incoming)
-            pel.Last30DayUSDAmount = Number(el.Incoming) * usdCurrency
-            this.CoinProfits.set(el.CoinTypeID, pel)
           })
         })
       })

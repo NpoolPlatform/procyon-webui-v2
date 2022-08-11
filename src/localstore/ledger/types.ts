@@ -22,10 +22,13 @@ interface CoinProfit {
   CoinTypeID: string;
   Amount: number;
   USDAmount: number;
+  JPYAmount: number;
   Last24HourAmount: number;
   Last24HourUSDAmount: number;
+  Last24HourJPYAmount: number;
   Last30DayAmount: number;
   Last30DayUSDAmount: number;
+  Last30DayJPYAmount: number;
 }
 
 export {
