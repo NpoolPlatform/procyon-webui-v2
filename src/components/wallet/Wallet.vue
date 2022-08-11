@@ -16,7 +16,6 @@
     position='top'
     color='green-2'
     size='6px'
-    skip-hijack
   />
 </template>
 
@@ -27,7 +26,7 @@ import { IntervalKey } from 'src/const/const'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 const Balance = defineAsyncComponent(
   () => import('src/components/wallet/Balance.vue')
@@ -53,8 +52,6 @@ const coin = useCoinStore()
 const currency = useCurrencyStore()
 const account = useAccountStore()
 const general = useGeneralStore()
-
-const progress = ref<QAjaxBar>()
 
 const getWithdraws = (offset: number, limit: number) => {
   localtrans.getWithdraws({
@@ -98,14 +95,13 @@ const getUserGenerals = (offset:number, limit: number) => {
     }
     if (count === 0) {
       localledger.initGeneral(general.Generals.Generals)
-      progress.value?.stop()
       return
     }
     getUserGenerals(limit + offset, limit)
   })
 }
+
 const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
-  progress.value?.start()
   general.getIntervalGenerals({
     StartAt: startAt,
     EndAt: endAt,
@@ -119,10 +115,7 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
       }
     }
   }, key, (error: boolean, count?: number) => {
-    if (error) {
-      return
-    }
-    if (count === 0) {
+    if (error || count === 0) {
       return
     }
     getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
@@ -141,7 +134,6 @@ const getCurrencies = () => {
       }
     }
   }, () => {
-    // TODO
     account.getWithdrawAccounts({
       Message: {
         Error: {

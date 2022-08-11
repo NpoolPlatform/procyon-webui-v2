@@ -220,8 +220,11 @@ const getUserGenerals = (offset:number, limit: number) => {
         Type: NotificationType.Error
       }
     }
-  }, () => {
-    if (general.Generals.Total <= general.Generals.Generals.length) {
+  }, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
       localledger.initGeneral(general.Generals.Generals)
       return
     }

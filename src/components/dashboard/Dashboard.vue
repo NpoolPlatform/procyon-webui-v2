@@ -12,13 +12,12 @@
     position='top'
     color='green-2'
     size='6px'
-    skip-hijack
   />
 </template>
 
 <script setup lang='ts'>
 import { useProfitStore } from 'src/teststore/mock/profit'
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
 import { NotificationType, SecondsEachDay, useCoinStore, useStockStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { IntervalKey } from 'src/const/const'
@@ -39,8 +38,6 @@ const coin = useCoinStore()
 const stock = useStockStore()
 const localledger = useLocalLedgerStore()
 
-const progress = ref<QAjaxBar>()
-
 const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
   profit.getIntervalProfits({
     StartAt: startAt,
@@ -59,7 +56,6 @@ const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, of
       return
     }
     if (count === 0) {
-      progress.value?.stop()
       switch (key) {
         case IntervalKey.LastDay:
           localledger.initLastDayProfit(profit.Profits.Profits)
@@ -115,7 +111,6 @@ const getGoodProfits = (key: IntervalKey, startAt: number, endAt: number, offset
       return
     }
     if (count === 0) {
-      progress.value?.stop()
       return
     }
     getIntervalProfits(key, startAt, endAt, limit + offset, limit)
@@ -123,7 +118,6 @@ const getGoodProfits = (key: IntervalKey, startAt: number, endAt: number, offset
 }
 
 const getOrders = (offset:number, limit: number) => {
-  progress.value?.start()
   order.getOrders({
     Offset: offset,
     Limit: limit,
@@ -135,11 +129,7 @@ const getOrders = (offset:number, limit: number) => {
       }
     }
   }, (error: boolean, count?: number) => {
-    if (error) {
-      return
-    }
-    if (count === 0) {
-      progress.value?.stop()
+    if (error || count === 0) {
       return
     }
     getOrders(offset + limit, limit)
@@ -151,7 +141,6 @@ onMounted(() => {
     getProfits(0, 100)
   }
   if (!profit.CoinProfits.get(IntervalKey.LastDay)) {
-    progress.value?.start()
     getIntervalProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
