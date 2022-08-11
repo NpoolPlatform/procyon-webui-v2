@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang='ts'>
-import { NotificationType, useGoodStore, useInspireStore } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, useGoodStore, useInspireStore } from 'npool-cli-v2'
 import { QAjaxBar } from 'quasar'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
 import { useArchivementStore } from 'src/teststore/mock/archivement'
@@ -36,6 +36,7 @@ const Table = defineAsyncComponent(() => import('src/components/affiliates/Table
 
 const archivement = useArchivementStore()
 const larchivement = useLocalArchivementStore()
+const coin = useCoinStore()
 
 const progress = ref<QAjaxBar>()
 
@@ -99,6 +100,20 @@ onMounted(() => {
       Message: {
         Error: {
           Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
+    })
+  }
+
+  if (coin.Coins.length === 0) {
+    coin.getCoins({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COINS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }

@@ -86,21 +86,17 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import {
-  NotificationType,
   formatTime,
   PriceCoinName,
   useCoinStore,
   Coin
 } from 'npool-cli-v2'
-import { useI18n } from 'vue-i18n'
 
 import edit from '../../assets/edit.svg'
 import { useRouter } from 'vue-router'
 import { LocalArchivement, LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 
 interface MyCoin {
   label: string
@@ -108,7 +104,7 @@ interface MyCoin {
 }
 
 const localArchivements = useLocalArchivementStore()
-const referrals = computed(() => localArchivements.Archivements.filter((referral) => !referral.Kol))
+const referrals = computed(() => localArchivements.Archivements.filter((referral) => !referral.Kol).sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
 
 const coin = useCoinStore()
 const coins = computed(() => Array.from(coin.Coins.filter((el) => {
@@ -143,20 +139,16 @@ const goodUnit = computed(() => {
   return ''
 })
 
-const displayReferrals = ref(referrals.value.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
 const searchStr = ref('')
-watch(searchStr, () => {
-  displayReferrals.value = referrals.value.filter((el) => {
-    return el.EmailAddress?.includes(searchStr.value) || el.PhoneNO?.includes(searchStr.value)
-  }).sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
-})
+const displayReferrals = computed(() => referrals.value.filter((el) => {
+  return el.EmailAddress?.includes(searchStr.value) || el.PhoneNO?.includes(searchStr.value)
+}))
 
 const onSearchSubmit = () => {
   // DO NOTHING
 }
 const onSearchResetClick = () => {
   searchStr.value = ''
-  displayReferrals.value = referrals.value.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
 }
 
 const accountName = (referral: LocalProductArchivement) => {
@@ -207,23 +199,6 @@ const onSetKolClick = (referral: LocalProductArchivement) => {
     }
   })
 }
-
-onMounted(() => {
-  if (coins.value.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-      displayReferrals.value = localArchivements.Archivements.filter((referral) => !referral.Kol)
-    })
-  }
-})
 
 const page = ref(1)
 const countPerPage = ref(10)
