@@ -79,7 +79,7 @@ const coin = useCoinStore()
 const selectedCoinTypeID = ref(coinTypeID.value)
 
 const selectedCoin = computed({
-  get: () => coin.getCoinByID(coinTypeID.value),
+  get: () => coin.getCoinByID(selectedCoinTypeID.value),
   set: (val: Coin) => {
     selectedCoinTypeID.value = val.ID as string
   }
@@ -106,6 +106,9 @@ const onSubmit = () => {
 }
 
 const onMenuHide = () => {
+  if (selectedCoinTypeID.value.length === 0) {
+    return
+  }
   verifing.value = false
 }
 
@@ -116,7 +119,7 @@ const router = useRouter()
 
 const onCodeVerify = (code: string) => {
   accounts.setWithdrawAddress({
-    CoinTypeID: selectedCoin.value?.ID as string,
+    CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
     Name: '',
     Message: '',
