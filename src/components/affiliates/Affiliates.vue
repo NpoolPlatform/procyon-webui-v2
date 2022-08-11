@@ -78,8 +78,10 @@ onMounted(() => {
       }
     })
   }
-  archivement.$reset()
-  getArchivements(0, 100)
+
+  if (larchivement.Archivements.length === 0) {
+    getArchivements(0, 100)
+  }
 
   if (good.AppGoods.length === 0) {
     good.getAppGoods({

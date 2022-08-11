@@ -182,15 +182,14 @@ const getUserDetails = (offset: number, limit: number) => {
 }
 onMounted(() => {
   if (localtrans.Withdraws.Withdraws.length === 0) {
+    getUserGenerals(0, 100)
+    getIntervalGenerals(
+      IntervalKey.LastDay,
+      Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
+      Math.ceil(new Date().getTime() / 1000),
+      0, 100)
     getWithdraws(0, 100)
   }
-  general.$reset()
-  getUserGenerals(0, 100)
-  getIntervalGenerals(
-    IntervalKey.LastDay,
-    Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
-    Math.ceil(new Date().getTime() / 1000),
-    0, 100)
   if (coin.Coins.length === 0) {
     getCoins()
   }
