@@ -121,12 +121,8 @@ export const useLocalOrderStore = defineStore('localorder', {
         req,
         req.Message,
         (resp: UpdateOrderResponse): void => {
-          this.Orders.forEach((el) => {
-            if (el.ID === resp.Info.ID) {
-              el = { ...resp.Info }
-            }
-          })
-
+          const index = this.Orders.findIndex((el) => el.ID === req.ID)
+          this.Orders.splice(index < 0 ? 0 : index, index < 0 ? 0 : 1, resp.Info)
           done(false)
         },
         () => {
