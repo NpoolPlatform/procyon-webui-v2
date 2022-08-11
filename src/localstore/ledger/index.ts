@@ -1,15 +1,14 @@
 import { Currency, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
 import { defineStore } from 'pinia'
-import { IntervalKey } from 'src/const/const'
-import { General, useGeneralStore } from 'src/teststore/mock/ledger'
+import { General } from 'src/teststore/mock/ledger'
 import { Profit } from 'src/teststore/mock/profit'
 import { BalanceGeneral, TotalProfit, CoinProfit } from './types'
 
 export const useLocalLedgerStore = defineStore('localledger', {
   state: () => ({
-    Generals: [] as Array<BalanceGeneral>,
+    Generals: new Map<string, BalanceGeneral>(),
     Profit: {} as TotalProfit,
-    CoinProfits: [] as Array<CoinProfit>
+    CoinProfits: new Map<string, CoinProfit>()
   }),
   getters: {},
   actions: {
@@ -17,7 +16,7 @@ export const useLocalLedgerStore = defineStore('localledger', {
       const currencies = useCurrencyStore()
       const coin = useCoinStore()
 
-      this.Generals = [] as Array<BalanceGeneral>
+      this.Generals = new Map<string, BalanceGeneral>()
       generals.forEach((el) => {
         const g = {
           CoinTypeID: el.CoinTypeID,
@@ -35,16 +34,8 @@ export const useLocalLedgerStore = defineStore('localledger', {
             g.USDValue += Number(el.Spendable) * usdCurrency
             g.JPYValue += Number(el.Spendable) * jpyCurrency
             g.Balance += Number(el.Spendable)
-            this.Generals.push(g)
+            this.Generals.set(el.CoinTypeID, g)
           })
-        })
-      })
-      // last24hours incoming
-      const general = useGeneralStore()
-      const igenerals = general.IntervalGenerals.get(IntervalKey.LastDay)
-      this.Generals.forEach((el) => {
-        igenerals?.Generals.filter((il) => il.CoinTypeID === el.CoinTypeID).forEach((il) => {
-          el.Last24HoursBalance += Number(il.Incoming)
         })
       })
     },
@@ -54,7 +45,7 @@ export const useLocalLedgerStore = defineStore('localledger', {
         return
       }
       generals.forEach((el) => {
-        const g = this.Generals.find((gel) => gel.CoinTypeID === el.CoinTypeID)
+        const g = this.Generals.get(el.CoinTypeID)
         if (!g) {
           return
         }
@@ -75,9 +66,8 @@ export const useLocalLedgerStore = defineStore('localledger', {
             this.Profit.USDAmount += Number(el.Incoming) * usdCurrency
             this.Profit.JPYAmount += Number(el.Incoming) * jpyCurrency
 
-            const index = this.CoinProfits.findIndex((pel) => pel.CoinTypeID === el.CoinTypeID)
-            let pel = this.CoinProfits[index]
-            if (index < 0) {
+            let pel = this.CoinProfits.get(el.CoinTypeID)
+            if (!pel) {
               pel = {
                 Amount: 0,
                 USDAmount: 0
@@ -85,7 +75,7 @@ export const useLocalLedgerStore = defineStore('localledger', {
             }
             pel.Amount += Number(el.Incoming)
             pel.USDAmount += Number(el.Incoming) * usdCurrency
-            this.CoinProfits.splice(index < 0 ? 0 : index, index < 0 ? 0 : 1, pel)
+            this.CoinProfits.set(el.CoinTypeID, pel)
           })
         })
       })
@@ -104,9 +94,8 @@ export const useLocalLedgerStore = defineStore('localledger', {
             this.Profit.Last24HourUSDAmount += Number(el.Incoming) * usdCurrency
             this.Profit.Last24HourJPYAmount += Number(el.Incoming) * jpyCurrency
 
-            const index = this.CoinProfits.findIndex((pel) => pel.CoinTypeID === el.CoinTypeID)
-            let pel = this.CoinProfits[index]
-            if (index < 0) {
+            let pel = this.CoinProfits.get(el.CoinTypeID)
+            if (!pel) {
               pel = {
                 Last24HourAmount: 0,
                 Last24HourUSDAmount: 0
@@ -114,7 +103,7 @@ export const useLocalLedgerStore = defineStore('localledger', {
             }
             pel.Last24HourAmount += Number(el.Incoming)
             pel.Last24HourUSDAmount += Number(el.Incoming) * usdCurrency
-            this.CoinProfits.splice(index < 0 ? 0 : index, index < 0 ? 0 : 1, pel)
+            this.CoinProfits.set(el.CoinTypeID, pel)
           })
         })
       })
@@ -133,9 +122,8 @@ export const useLocalLedgerStore = defineStore('localledger', {
             this.Profit.Last30DayUSDAmount += Number(el.Incoming) * usdCurrency
             this.Profit.Last30DayJPYAmount += Number(el.Incoming) * jpyCurrency
 
-            const index = this.CoinProfits.findIndex((pel) => pel.CoinTypeID === el.CoinTypeID)
-            let pel = this.CoinProfits[index]
-            if (index < 0) {
+            let pel = this.CoinProfits.get(el.CoinTypeID)
+            if (!pel) {
               pel = {
                 Last30DayAmount: 0,
                 Last30DayUSDAmount: 0
@@ -143,7 +131,7 @@ export const useLocalLedgerStore = defineStore('localledger', {
             }
             pel.Last30DayAmount += Number(el.Incoming)
             pel.Last30DayUSDAmount += Number(el.Incoming) * usdCurrency
-            this.CoinProfits.splice(index < 0 ? 0 : index, index < 0 ? 0 : 1, pel)
+            this.CoinProfits.set(el.CoinTypeID, pel)
           })
         })
       })

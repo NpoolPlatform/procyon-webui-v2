@@ -196,7 +196,7 @@ onMounted(() => {
   if (localtrans.Withdraws.Withdraws.length === 0) {
     getWithdraws(0, 100)
   }
-  if (general.Generals.Generals.length === 0 || localledger.Generals.length === 0) {
+  if (general.Generals.Generals.length === 0 || localledger.Generals.size === 0) {
     getUserGenerals(0, 100)
   }
   if (coin.Coins.length === 0) {
