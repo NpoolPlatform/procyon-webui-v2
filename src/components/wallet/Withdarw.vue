@@ -134,16 +134,18 @@ import {
   ReviewState,
   useCurrencyStore,
   Currency,
-  AccountType
+  AccountType,
+  SecondsEachDay
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-
-import checkmark from 'src/assets/icon-checkmark.svg'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore, AccountType as LocalAccountType } from 'src/teststore/mock/transaction'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
+import { IntervalKey } from 'src/const/const'
+
+import checkmark from 'src/assets/icon-checkmark.svg'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -209,7 +211,33 @@ const accountType = ref(AccountType.Email)
 
 const router = useRouter()
 
+const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
+  general.getIntervalGenerals({
+    StartAt: startAt,
+    EndAt: endAt,
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GENERAL_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, key, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
+      localledger.setLastDayGeneral(general.IntervalGenerals.get(key)?.Generals)
+      return
+    }
+    getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
+  })
+}
+
 const getUserGenerals = (offset:number, limit: number) => {
+  general.$reset()
   general.getGenerals({
     Offset: offset,
     Limit: limit,
@@ -226,6 +254,11 @@ const getUserGenerals = (offset:number, limit: number) => {
     }
     if (count === 0) {
       localledger.initGeneral(general.Generals.Generals)
+      getIntervalGenerals(
+        IntervalKey.LastDay,
+        Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
+        Math.ceil(new Date().getTime() / 1000),
+        0, 100)
       return
     }
     getUserGenerals(limit + offset, limit)
