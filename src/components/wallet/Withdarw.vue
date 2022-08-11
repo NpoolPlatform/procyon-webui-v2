@@ -132,8 +132,6 @@ import {
   WithdrawAccount,
   NotificationType,
   ReviewState,
-  useCurrencyStore,
-  Currency,
   AccountType,
   SecondsEachDay
 } from 'npool-cli-v2'
@@ -310,39 +308,6 @@ const onStateTipBtnClick = () => {
   showReviewing.value = false
 }
 
-const currency = useCurrencyStore()
-
-const getCurrencies = () => {
-  currency.getAllCoinCurrencies({
-    Currencies: [Currency.USD],
-    Message: {
-      Error: {
-        Title: t('MSG_GET_CURRENCIES'),
-        Message: t('MSG_GET_CURRENCIES_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
-}
-
-const getCoins = () => {
-  coins.getCoins({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_COINS'),
-        Message: t('MSG_GET_COINS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    getCurrencies()
-  })
-}
-
 onMounted(() => {
   coins.getCurrentFee({
     CoinTypeID: coinTypeId.value,
@@ -357,9 +322,7 @@ onMounted(() => {
     feeAmount.value = Math.ceil(amount * 1000000) / 1000000
   })
 
-  getCoins()
-
-  if (localledger.Generals.length === 0) {
+  if (localledger.Generals.size === 0) {
     getUserGenerals(0, 100)
   }
 

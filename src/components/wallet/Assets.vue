@@ -58,7 +58,7 @@ const currencies = useCurrencyStore()
 const kyc = useKYCStore()
 const localledger = useLocalLedgerStore()
 
-const balanceGenerals = computed(() => localledger.Generals)
+const balanceGenerals = computed(() => Array.from(localledger.Generals.values()))
 const table = computed(() => [
   {
     name: 'CoinName',
