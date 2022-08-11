@@ -222,7 +222,7 @@ const getUserGenerals = (offset:number, limit: number) => {
     }
   }, () => {
     if (general.Generals.Total <= general.Generals.Generals.length) {
-      localledger.initialize(general.Generals.Generals)
+      localledger.initGeneral(general.Generals.Generals)
       return
     }
     getUserGenerals(limit + offset, limit)

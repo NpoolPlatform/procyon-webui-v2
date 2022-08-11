@@ -2,15 +2,17 @@ import { Currency, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
 import { defineStore } from 'pinia'
 import { IntervalKey } from 'src/const/const'
 import { General, useGeneralStore } from 'src/teststore/mock/ledger'
-import { BalanceGeneral } from './types'
+import { Profit } from 'src/teststore/mock/profit'
+import { BalanceGeneral, TotalProfit } from './types'
 
 export const useLocalLedgerStore = defineStore('localledger', {
   state: () => ({
-    Generals: [] as Array<BalanceGeneral>
+    Generals: [] as Array<BalanceGeneral>,
+    Profit: {} as TotalProfit
   }),
   getters: {},
   actions: {
-    initialize (generals: Array<General>) {
+    initGeneral (generals: Array<General>) {
       const currencies = useCurrencyStore()
       const coin = useCoinStore()
 
@@ -44,7 +46,40 @@ export const useLocalLedgerStore = defineStore('localledger', {
           el.Last24HoursBalance += Number(il.Incoming)
         })
       })
-      console.log(this.Generals)
+    },
+
+    initProfit (profits: Array<Profit>) {
+      const currencies = useCurrencyStore()
+      const coin = useCoinStore()
+
+      this.Profit.USDAmount = 0
+      this.Profit.JPYAmount = 0
+
+      profits.forEach((el) => {
+        currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (usdCurrency: number) => {
+          currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
+            this.Profit.USDAmount += Number(el.Incoming) * usdCurrency
+            this.Profit.JPYAmount += Number(el.Incoming) * jpyCurrency
+          })
+        })
+      })
+    },
+
+    initLastDayProfit (profits: Array<Profit>) {
+      const currencies = useCurrencyStore()
+      const coin = useCoinStore()
+
+      this.Profit.Last24HourJPYAmount = 0
+      this.Profit.Last24HourUSDAmount = 0
+
+      profits.forEach((el) => {
+        currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (usdCurrency: number) => {
+          currencies.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.JPY, (jpyCurrency: number) => {
+            this.Profit.Last24HourUSDAmount += Number(el.Incoming) * usdCurrency
+            this.Profit.Last24HourJPYAmount += Number(el.Incoming) * jpyCurrency
+          })
+        })
+      })
     }
   }
 })

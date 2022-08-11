@@ -113,7 +113,7 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
     }
   }, key, () => {
     if (general.IntervalGenerals.get(key)?.Generals?.length === general.IntervalGenerals.get(key)?.Total) {
-      localledger.initialize(general.Generals.Generals)
+      localledger.initGeneral(general.Generals.Generals)
       progress.value?.stop()
       return
     }

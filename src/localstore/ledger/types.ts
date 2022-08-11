@@ -9,6 +9,14 @@ interface BalanceGeneral{
   JPYValue: number
 }
 
+interface TotalProfit {
+  USDAmount: number
+  JPYAmount: number
+  Last24HourUSDAmount: number
+  Last24HourJPYAmount: number
+}
+
 export {
-  BalanceGeneral
+  BalanceGeneral,
+  TotalProfit
 }

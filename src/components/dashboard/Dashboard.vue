@@ -24,6 +24,7 @@ import { useI18n } from 'vue-i18n'
 import { IntervalKey } from 'src/const/const'
 import { QAjaxBar } from 'quasar'
 import { useLocalOrderStore } from 'src/teststore/mock/order'
+import { useLocalLedgerStore } from 'src/localstore/ledger'
 
 const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
 const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/MiningCards.vue'))
@@ -36,6 +37,7 @@ const profit = useProfitStore()
 const order = useLocalOrderStore()
 const coin = useCoinStore()
 const stock = useStockStore()
+const localledger = useLocalLedgerStore()
 
 const progress = ref<QAjaxBar>()
 
@@ -54,6 +56,9 @@ const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, of
     }
   }, key, () => {
     if (profit.CoinProfits.get(key)?.Profits?.length === profit.CoinProfits.get(key)?.Total) {
+      if (key === IntervalKey.LastDay) {
+        localledger.initLastDayProfit(profit.Profits.Profits)
+      }
       return
     }
     getIntervalProfits(key, startAt, endAt, limit + offset, limit)
@@ -73,6 +78,7 @@ const getProfits = (offset:number, limit: number) => {
     }
   }, () => {
     if (profit.Profits.Total === profit.Profits.Profits.length) {
+      localledger.initProfit(profit.Profits.Profits)
       return
     }
     getProfits(limit + offset, limit)
