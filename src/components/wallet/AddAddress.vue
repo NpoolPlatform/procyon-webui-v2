@@ -2,7 +2,9 @@
   <div :class='[ verifing ? "blur" : "" ]'>
     <FormPage @submit='onSubmit' label='MSG_NEW_WALLET_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
       <template #form-body>
-        <CoinSelector v-model:selected-coin='selectedCoin' label='MSG_BLOCKCHAIN' :from-withdraw='gotoWithdraw' />
+        <CoinSelector
+          v-model:selected-coin='selectedCoin' label='MSG_BLOCKCHAIN' :disabled='gotoWithdraw'
+        />
         <Input
           v-model:value='address'
           label='MSG_WALLET_ADDRESS'
