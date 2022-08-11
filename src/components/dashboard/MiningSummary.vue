@@ -42,14 +42,18 @@ const localledger = useLocalLedgerStore()
 const totalProfit = computed(() => {
   let total = 0
   localledger.CoinProfits.forEach((el) => {
-    total += el.USDAmount
+    if (el.USDAmount) {
+      total += el.USDAmount
+    }
   })
   return total
 })
 const last24HoursEarning = computed(() => {
   let total = 0
   localledger.CoinProfits.forEach((el) => {
-    total += el.Last24HourUSDAmount
+    if (el.Last24HourUSDAmount) {
+      total += el.Last24HourUSDAmount
+    }
   })
   return total
 })
