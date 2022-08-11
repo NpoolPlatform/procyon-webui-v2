@@ -297,6 +297,7 @@ const onCodeVerify = (code: string) => {
   }, (error: boolean) => {
     // TODO
     if (!error) {
+      general.$reset()
       getUserGenerals(0, 100)
       void router.push({ path: '/wallet' })
     }

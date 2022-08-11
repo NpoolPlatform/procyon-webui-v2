@@ -4,9 +4,9 @@
       <div class='product-container content-glass'>
         <div class='product-title-section fallback-title'>
           <div class='product-page-icon'>
-            <img :src='order?.CoinLogo'>
+            <img :src='good?.Main?.Logo'>
           </div>
-          <h1>{{ order?.CoinName }} {{ $t('MSG_MINING') }}</h1>
+          <h1>{{ good?.Main?.Name }} {{ $t('MSG_MINING') }}</h1>
         </div>
         <slot />
       </div>
@@ -16,15 +16,15 @@
 </template>
 
 <script setup lang='ts'>
-import { LocalOrder } from 'src/teststore/mock/order'
+import { Good } from 'npool-cli-v2'
 import { defineAsyncComponent, defineProps, toRef } from 'vue'
 
 interface Props {
-  order: LocalOrder;
+  good: Good;
 }
 
 const props = defineProps<Props>()
-const order = toRef(props, 'order')
+const good = toRef(props, 'good')
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 

@@ -59,7 +59,7 @@
       <h3 class='form-title'>
         {{ $t('MSG_MINING_PURCHASE') }}
       </h3>
-      <form action='javascript:void(0)' @submit='onSubmit' id='purchase'>
+      <form action='javascript:void(0)' @submit='displayBalanceDialog' id='purchase'>
         <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
         <Input
           v-model:value='purchaseAmount'
@@ -87,9 +87,6 @@
             </option>
           </select>
         </div>
-        <!--<h4>Coupon Code</h4>
-        <input type='text'>
-        <div class='coupon-error'>Incorrect Coupon Code</div>-->
         <div class='submit-container'>
           <WaitingBtn
             label='MSG_PURCHASE'
@@ -97,11 +94,59 @@
             class='submit-btn'
             :disabled='submitting'
             :waiting='submitting'
+            @click='onPurchaseClick'
           />
         </div>
       </form>
     </div>
   </PurchasePage>
+  <q-dialog
+    v-model='showBalanceDialog'
+    maximized
+  >
+    <div class='product-container content-glass popup-container plur'>
+      <div class='popup'>
+        <div class='form-container content-glass'>
+          <div class='confirmation'>
+            <h3>{{ $t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
+            <div class='full-section'>
+              <h4>{{ $t('MSG_AVAILABLE_BALANCE') }}</h4>
+              <span class='number'>{{ getUserBalance }}</span>
+              <span class='unit'>{{ paymentCoin?.Unit }}</span>
+            </div>
+            <div class='hr' />
+            <div class='full-section'>
+              <h4>{{ $t('MSG_ORDER_DUE_AMOUNT') }}</h4>
+              <span class='number'>{{ (Math.ceil(totalAmount * 10000) / 10000).toFixed(4) }}</span>
+              <span class='unit'>{{ paymentCoin?.Unit }}</span>
+            </div>
+            <div class='hr' />
+            <div class='full-section'>
+              <h4>{{ $t('MSG_USE_WALLET_BALANCE') }}</h4>
+              <input
+                type='number'
+                :min='0'
+                :max='getUserBalance'
+                v-model='inputBalance'
+              >
+            </div>
+            <div class='full-section'>
+              <h4>{{ $t('MSG_REMAINING_DUE_AMOUNT') }}</h4>
+              <span class='number'>{{ (Math.ceil(remainOrderAmount * 10000) / 10000).toFixed(4) }}</span>
+              <span class='unit'>{{ paymentCoin?.Unit }}</span>
+            </div>
+            <div class='warning'>
+              <img src='font-awesome/warning.svg'>
+              <span>{{ $t('MSG_PAY_THE_REMAINDER') }}</span>
+            </div>
+            <button @click='onSubmit' :disabled='inputBalance < 0 || inputBalance > getUserBalance || inputBalance > (Math.ceil(totalAmount * 10000) / 10000)'>
+              {{ $t('MSG_CONTINUE') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
@@ -110,17 +155,19 @@ import {
   NotificationType,
   formatTime,
   useCoinStore,
-  useOrderStore,
   PriceCoinName,
   useStockStore,
   CoinDescriptionUsedFor,
-  useCurrencyStore
+  useCurrencyStore,
+  useLoginedUserStore
 } from 'npool-cli-v2'
 import { throttle } from 'quasar'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ThrottleSeconds } from 'src/const/const'
+import { useGeneralStore } from 'src/teststore/mock/ledger'
+import { useLocalOrderStore } from 'src/teststore/mock/order'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
@@ -182,8 +229,75 @@ const onPurchaseAmountFocusOut = () => {
 
 const submitting = ref(false)
 
-const order = useOrderStore()
 const router = useRouter()
+
+const showBalanceDialog = ref(false)
+const general = useGeneralStore()
+const getUserBalance = computed(() => {
+  return general.getCoinBalance(paymentCoin.value?.ID as string)
+})
+
+const selectedCoinCurrency = ref(1)
+const totalAmount = computed(() => good.value?.Good?.Good?.Price * purchaseAmount.value / selectedCoinCurrency.value)
+const inputBalance = ref(0)
+
+const remainOrderAmount = computed(() => {
+  return Math.ceil(totalAmount.value * 10000) / 10000 - inputBalance.value
+})
+const logined = useLoginedUserStore()
+
+const createOrder = () => {
+  console.log('balance: ', getUserBalance.value)
+  if (getUserBalance.value <= 0) {
+    onSubmit()
+  } else {
+    inputBalance.value = 0 // reset value
+    showBalanceDialog.value = !showBalanceDialog.value
+  }
+}
+const onPurchaseClick = () => {
+  showBalanceDialog.value = true
+}
+const getUserGenerals = (offset:number, limit: number) => {
+  general.getGenerals({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GENERAL_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
+      createOrder()
+      return
+    }
+    getUserGenerals(limit + offset, limit)
+  })
+}
+const displayBalanceDialog = throttle(() => {
+  if (!logined.getLogined) {
+    void router.push({
+      path: '/signin',
+      query: {
+        target: '/product/aleo',
+        goodId: good.value.Good.Good.ID as string,
+        purchaseAmount: purchaseAmount.value
+      }
+    })
+    return
+  }
+  if (general.Generals.Generals.length === 0) {
+    getUserGenerals(0, 100)
+    return
+  }
+  createOrder()
+}, ThrottleSeconds * 1000)
 
 onMounted(() => {
   if (!good.value) {
@@ -255,17 +369,31 @@ onMounted(() => {
     })
   }
 })
+const localOrder = useLocalOrderStore()
 const onSubmit = throttle(() => {
+  if (!logined.getLogined) {
+    void router.push({
+      path: '/signin',
+      query: {
+        target: '/product/aleo',
+        goodId: good.value.Good.Good.ID as string,
+        purchaseAmount: purchaseAmount.value
+      }
+    })
+    return
+  }
+
   onPurchaseAmountFocusOut()
   if (purchaseAmountError.value) {
     return
   }
-
+  showBalanceDialog.value = false
   submitting.value = true
-
-  order.submitOrder({
+  localOrder.createOrder({
     GoodID: goodId.value,
     Units: purchaseAmount.value,
+    PaymentCoinID: paymentCoin.value?.ID as string,
+    PayWithBalanceAmount: `${inputBalance.value}`,
     Message: {
       Error: {
         Title: t('MSG_CREATE_ORDER'),
@@ -274,37 +402,17 @@ const onSubmit = throttle(() => {
         Type: NotificationType.Error
       }
     }
-  }, (orderId: string, error: boolean) => {
+  }, (orderId: string, paymentId: string, error: boolean) => {
+    // TODO
     if (error) {
       submitting.value = false
       return
     }
-
-    order.createPayment({
-      OrderID: orderId,
-      PaymentCoinTypeID: paymentCoin.value?.ID as string,
-      Message: {
-        Error: {
-          Title: t('MSG_CREATE_PAYMENT'),
-          Message: t('MSG_CREATE_PAYMENT_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+    void router.push({
+      path: '/payment',
+      query: {
+        orderId: orderId
       }
-    }, (paymentId: string, error: boolean) => {
-      submitting.value = false
-      if (error) {
-        return
-      }
-
-      void router.push({
-        path: '/payment',
-        query: {
-          paymentId: paymentId,
-          orderId: orderId,
-          paymentCoinID: paymentCoin.value?.ID
-        }
-      })
     })
   })
 }, ThrottleSeconds * 1000)

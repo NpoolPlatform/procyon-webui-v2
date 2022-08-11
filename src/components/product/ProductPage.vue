@@ -138,6 +138,7 @@
                     class='submit-btn'
                     :disabled='submitting'
                     :waiting='submitting'
+                    @click='onPurchaseClick'
                   />
                 </div>
                 <div class='warning' v-if='showRateTip'>
@@ -244,7 +245,9 @@ interface Props {
 
 const showBalanceDialog = ref(false)
 const general = useGeneralStore()
-const getUserBalance = computed(() => general.getCoinBalance(paymentCoin.value?.ID as string))
+const getUserBalance = computed(() => {
+  return general.getCoinBalance(paymentCoin.value?.ID as string)
+})
 const props = defineProps<Props>()
 const goodId = toRef(props, 'goodId')
 const projectClass = toRef(props, 'projectClass')
@@ -396,42 +399,41 @@ const submitting = ref(false)
 
 const router = useRouter()
 const logined = useLoginedUserStore()
-const displayBalanceDialog = () => {
-  console.log('balance: ', getUserBalance.value)
-  if (!logined.getLogined) {
-    void router.push({
-      path: '/signin',
-      query: {
-        target: '/product/aleo',
-        goodId: good.value.Good.Good.ID as string,
-        purchaseAmount: myPurchaseAmount.value
+
+const getUserGenerals = (offset:number, limit: number) => {
+  general.getGenerals({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GENERAL_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
       }
-    })
-    return
-  }
+    }
+  }, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
+      createOrder()
+      return
+    }
+    getUserGenerals(limit + offset, limit)
+  })
+}
+const createOrder = () => {
   console.log('balance: ', getUserBalance.value)
   if (getUserBalance.value <= 0) {
     onSubmit()
   } else {
     inputBalance.value = 0 // reset value
-    showBalanceDialog.value = !showBalanceDialog.value
+    showBalanceDialog.value = true
   }
 }
 
 const localOrder = useLocalOrderStore()
-const onSubmit = throttle(() => {
-  if (!logined.getLogined) {
-    void router.push({
-      path: '/signin',
-      query: {
-        target: '/product/aleo',
-        goodId: good.value.Good.Good.ID as string,
-        purchaseAmount: myPurchaseAmount.value
-      }
-    })
-    return
-  }
-
+const onSubmit = () => {
   onPurchaseAmountFocusOut()
   if (purchaseAmountError.value) {
     return
@@ -464,6 +466,27 @@ const onSubmit = throttle(() => {
       }
     })
   })
+}
+const onPurchaseClick = () => {
+  showBalanceDialog.value = true
+}
+const displayBalanceDialog = throttle(() => {
+  if (!logined.getLogined) {
+    void router.push({
+      path: '/signin',
+      query: {
+        target: '/product/aleo',
+        goodId: good.value.Good.Good.ID as string,
+        purchaseAmount: myPurchaseAmount.value
+      }
+    })
+    return
+  }
+  if (general.Generals.Generals.length === 0) {
+    getUserGenerals(0, 100)
+    return
+  }
+  createOrder()
 }, ThrottleSeconds * 1000)
 
 onMounted(() => {
