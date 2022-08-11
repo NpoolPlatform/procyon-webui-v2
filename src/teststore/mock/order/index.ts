@@ -92,7 +92,7 @@ export const useLocalOrderStore = defineStore('localorder', {
         req,
         req.Message,
         (resp: GetOrdersResponse): void => {
-          this.Orders.push(...resp.Infos)
+          this.Orders.push(...resp.Infos.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
           this.Total = resp.Total
           done(false)
         },
