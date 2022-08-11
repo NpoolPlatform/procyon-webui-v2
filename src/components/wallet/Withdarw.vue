@@ -40,7 +40,7 @@
               </div>
               <div class='three-section'>
                 <h4>{{ $t('MSG_AMOUNT_WILL_RECEIVE') }}:</h4>
-                <span class='number'>{{ amount - feeAmount }}</span>
+                <span class='number'>{{ (amount - feeAmount).toFixed(4) }}</span>
                 <span class='unit'>{{ coin.Unit }}</span>
               </div>
 
