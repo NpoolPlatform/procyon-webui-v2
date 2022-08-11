@@ -67,13 +67,13 @@ const table = computed(() => [
     field: (row: Withdraw) => row.Amount + row.CoinUnit
   },
   {
-    name: 'Address',
+    name: 'Status',
     label: t('MSG_WITHDRAW_ADDRESS'),
     align: 'center',
     field: (row: Withdraw) => row.Address
   },
   {
-    name: 'Status',
+    name: 'Address',
     label: t('MSG_STATUS'),
     align: 'center',
     field: 'State'
