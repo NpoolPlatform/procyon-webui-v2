@@ -44,12 +44,12 @@ const currency = useCurrencyStore()
 const coin = useCoinStore()
 const general = useGeneralStore()
 
-const generals = computed(() => general.Generals.Generals)
+const length = computed(() => general.Generals.Generals.length)
 const totalUSDTBalance = ref(0)
 
 const calculate = () => {
   totalUSDTBalance.value = 0
-  generals.value.forEach((el) => {
+  general.Generals.Generals.forEach((el) => {
     if (Number(el.Spendable) > 0) {
       currency.getCoinCurrency(coin.getCoinByID(el.CoinTypeID), Currency.USD, (currency: number) => {
         totalUSDTBalance.value += Number(el.Spendable) * currency
@@ -58,7 +58,7 @@ const calculate = () => {
   })
 }
 
-watch(generals, () => {
+watch(length, () => {
   calculate()
 })
 
