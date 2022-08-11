@@ -24,7 +24,8 @@ interface ProductArchivement {
   PhoneNO: string
   FirstName: string
   LastName: string
-  CreateAt: number
+  CreatedAt: number
+  InvitedAt: number
   Kol: boolean
   TotalInvitees: number
   Archivements: Array<Archivement>

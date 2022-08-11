@@ -160,7 +160,7 @@ const joinDate = (referral: LocalProductArchivement) => {
 }
 
 const joinTime = (referral: LocalProductArchivement) => {
-  return formatTime(referral.CreatedAt, false).split(' ')[1]
+  return formatTime(referral.InvitedAt, false)?.split(' ')[1]
 }
 
 // dynamic get object attribute in typescript

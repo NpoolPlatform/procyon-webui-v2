@@ -44,6 +44,8 @@ export const useLocalArchivementStore = defineStore('localarchivement', {
           LastName: item.LastName,
           Kol: item.Kol,
           TotalInvitees: item.TotalInvitees,
+          CreatedAt: item.CreatedAt,
+          InvitedAt: item.InvitedAt,
           Archivements: localArchivements
         } as LocalProductArchivement)
       })
