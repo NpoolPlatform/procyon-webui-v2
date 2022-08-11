@@ -3,7 +3,7 @@
   <div class='earnings-summary'>
     <div class='earnings-figure'>
       <!-- <span class='amount'>{{ totalEarning.toFixed(4) }}</span> -->
-      <span class='amount'>{{ totalProfit.toFixed(4) }}</span>
+      <span class='amount'>{{ totalProfit?.toFixed(4) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -12,7 +12,7 @@
     </div>
     <div class='earnings-figure'>
       <!-- <span class='amount'>{{ last24HoursEarning.toFixed(4) }}</span> -->
-      <span class='amount'>{{ last24HoursEarning.toFixed(4) }}</span>
+      <span class='amount'>{{ last24HoursEarning?.toFixed(4) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
