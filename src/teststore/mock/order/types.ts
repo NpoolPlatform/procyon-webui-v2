@@ -15,6 +15,7 @@ interface Order {
   GoodID: string;
   GoodName: string;
   GoodUnit: string;
+  GoodServicePeriodDays: number,
   Units: number;
   PaymentID: string;
   PaymentCoinTypeID: string;

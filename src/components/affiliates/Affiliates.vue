@@ -47,7 +47,7 @@ const getArchivements = (offset: number, limit: number) => {
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_GOODS_FAIL'),
+        Title: t('MSG_GET_COIN_ARCHIVEMENT_FAIL'),
         Popup: true,
         Type: NotificationType.Error
       }
