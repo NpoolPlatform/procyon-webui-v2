@@ -19,11 +19,11 @@
         <q-td key='Amount' :props='myProps'>
           {{ myProps.row.Amount }}{{ myProps.row.CoinUnit }}
         </q-td>
-        <q-td key='Address' :props='myProps'>
-          {{ myProps.row.AddressLabels }} ({{ myProps.row.Address }})
-        </q-td>
         <q-td key='Status' :props='myProps'>
           {{ $t(withdrawStatus(myProps.row)) }}
+        </q-td>
+        <q-td key='Address' :props='myProps'>
+          {{ myProps.row.AddressLabels }} ({{ myProps.row.Address }})
         </q-td>
       </q-tr>
     </template>
