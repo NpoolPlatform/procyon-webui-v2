@@ -49,6 +49,7 @@ export const useLocalArchivementStore = defineStore('localarchivement', {
           Archivements: localArchivements
         } as LocalProductArchivement)
       })
+      this.Archivements.sort((a, b) => a.InvitedAt > b.InvitedAt ? -1 : 1)
     }
   }
 })
