@@ -67,9 +67,11 @@ const getWithdraws = (offset: number, limit: number) => {
         Type: NotificationType.Error
       }
     }
-  }, () => {
-    // TODO
-    if (localtrans.Withdraws.Withdraws.length === localtrans.Withdraws.Total) {
+  }, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
       localtrans.Withdraws.Withdraws = localtrans.Withdraws.Withdraws.sort((a, b) => {
         return b.CreatedAt > a.CreatedAt ? -1 : 1
       })
@@ -90,8 +92,11 @@ const getUserGenerals = (offset:number, limit: number) => {
         Type: NotificationType.Error
       }
     }
-  }, () => {
-    if (general.Generals.Total <= general.Generals.Generals.length) {
+  }, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
       localledger.initGeneral(general.Generals.Generals)
       progress.value?.stop()
       return
@@ -113,8 +118,11 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
         Type: NotificationType.Error
       }
     }
-  }, key, () => {
-    if (general.IntervalGenerals.get(key)?.Generals?.length === general.IntervalGenerals.get(key)?.Total) {
+  }, key, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
       return
     }
     getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
@@ -173,8 +181,11 @@ const getUserDetails = (offset: number, limit: number) => {
         Type: NotificationType.Error
       }
     }
-  }, () => {
-    if (localtrans.Details.Details.length === localtrans.Details.Total) {
+  }, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
       return
     }
     getUserDetails(limit + offset, limit)

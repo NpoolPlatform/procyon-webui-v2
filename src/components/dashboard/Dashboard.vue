@@ -54,8 +54,11 @@ const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, of
         Type: NotificationType.Error
       }
     }
-  }, key, () => {
-    if (profit.CoinProfits.get(key)?.Profits?.length === profit.CoinProfits.get(key)?.Total) {
+  }, key, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
       progress.value?.stop()
       switch (key) {
         case IntervalKey.LastDay:
@@ -82,8 +85,11 @@ const getProfits = (offset:number, limit: number) => {
         Type: NotificationType.Error
       }
     }
-  }, () => {
-    if (profit.Profits.Total === profit.Profits.Profits.length) {
+  }, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
       localledger.initProfit(profit.Profits.Profits)
       return
     }
@@ -104,8 +110,11 @@ const getGoodProfits = (key: IntervalKey, startAt: number, endAt: number, offset
         Type: NotificationType.Error
       }
     }
-  }, key, () => {
-    if (profit.CoinProfits.get(key)?.Profits?.length === profit.CoinProfits.get(key)?.Total) {
+  }, key, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
       progress.value?.stop()
       return
     }
@@ -125,8 +134,11 @@ const getOrders = (offset:number, limit: number) => {
         Type: NotificationType.Error
       }
     }
-  }, () => {
-    if (order.Orders.length === order.Total) {
+  }, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
       progress.value?.stop()
       return
     }

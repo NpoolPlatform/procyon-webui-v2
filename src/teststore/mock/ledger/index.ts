@@ -28,7 +28,7 @@ export const useGeneralStore = defineStore('general', {
     }
   },
   actions: {
-    getGenerals (req: GetGeneralRequest, done: (error: boolean) => void) {
+    getGenerals (req: GetGeneralRequest, done: (error: boolean, count?: number) => void) {
       doActionWithError<GetGeneralRequest, GetGeneralResponse>(
         API.GET_GENERALS,
         req,
@@ -36,21 +36,21 @@ export const useGeneralStore = defineStore('general', {
         (resp: GetGeneralResponse): void => {
           this.Generals.Generals.push(...resp.Infos)
           this.Generals.Total = resp.Total
-          done(false)
+          done(false, resp.Infos.length)
         },
         () => {
           done(true)
         }
       )
     },
-    getIntervalGenerals (req: GetIntervalGeneralRequest, intervalKey: string, done: (error: boolean) => void) {
+    getIntervalGenerals (req: GetIntervalGeneralRequest, intervalKey: string, done: (error: boolean, count?: number) => void) {
       doActionWithError<GetIntervalGeneralRequest, GetIntervalGeneralResponse>(
         API.GET_INTERVAL_GENERALS,
         req,
         req.Message,
         (resp: GetIntervalGeneralResponse): void => {
           if (resp.Infos.length === 0) {
-            done(false)
+            done(false, 0)
             return
           }
 
@@ -65,7 +65,7 @@ export const useGeneralStore = defineStore('general', {
           generals.Total = resp.Total
 
           this.IntervalGenerals.set(intervalKey, generals)
-          done(false)
+          done(false, resp.Infos.length)
         },
         () => {
           done(true)

@@ -25,7 +25,7 @@ export const useProfitStore = defineStore('profit', {
   }),
   getters: {},
   actions: {
-    getProfits (req: GetProfitRequest, done: (error: boolean) => void) {
+    getProfits (req: GetProfitRequest, done: (error: boolean, count?: number) => void) {
       doActionWithError<GetProfitRequest, GetProfitResponse>(
         API.GET_PROFITS,
         req,
@@ -33,21 +33,21 @@ export const useProfitStore = defineStore('profit', {
         (resp: GetProfitResponse): void => {
           this.Profits.Profits.push(...resp.Infos)
           this.Profits.Total = resp.Total
-          done(false)
+          done(false, resp.Infos.length)
         },
         () => {
           done(true)
         }
       )
     },
-    getIntervalProfits (req: GetIntervalProfitRequest, intervalKey: string, done: (error: boolean) => void) {
+    getIntervalProfits (req: GetIntervalProfitRequest, intervalKey: string, done: (error: boolean, count?: number) => void) {
       doActionWithError<GetIntervalProfitRequest, GetIntervalProfitResponse>(
         API.GET_INTERVAL_PROFITS,
         req,
         req.Message,
         (resp: GetIntervalProfitResponse): void => {
           if (resp.Infos.length === 0) {
-            done(false)
+            done(false, 0)
             return
           }
 
@@ -63,20 +63,20 @@ export const useProfitStore = defineStore('profit', {
           profits.Total = resp.Total
 
           this.CoinProfits.set(intervalKey, profits)
-          done(false)
+          done(false, resp.Infos.length)
         }, () => {
           done(true)
         }
       )
     },
-    getGoodProfits (req: GetGoodProfitRequest, intervalKey: string, done: (error:boolean) => void) {
+    getGoodProfits (req: GetGoodProfitRequest, intervalKey: string, done: (error:boolean, count?: number) => void) {
       doActionWithError<GetGoodProfitRequest, GetGoodProfitResponse>(
         API.GET_GOOD_PROFITS,
         req,
         req.Message,
         (resp: GetGoodProfitResponse): void => {
           if (resp.Infos.length === 0) {
-            done(false)
+            done(false, 0)
             return
           }
 
@@ -92,7 +92,7 @@ export const useProfitStore = defineStore('profit', {
           profits.Total = resp.Total
 
           this.GoodProfits.set(intervalKey, profits)
-          done(false)
+          done(false, resp.Infos.length)
         },
         () => {
           done(true)

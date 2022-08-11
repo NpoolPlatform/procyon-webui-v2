@@ -25,7 +25,7 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
   }),
   getters: {},
   actions: {
-    getDetails (req: GetDetailRequest, done: (error: boolean) => void) {
+    getDetails (req: GetDetailRequest, done: (error: boolean, count?: number) => void) {
       doActionWithError<GetDetailRequest, GetDetailResponse>(
         API.GET_DETAILS,
         req,
@@ -36,14 +36,14 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
           })
           this.Details.Details.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
           this.Details.Total = resp.Total
-          done(false)
+          done(false, resp.Infos.length)
         },
         () => {
           done(true)
         }
       )
     },
-    getWithdraws (req: GetWithdrawRequest, done: (error: boolean) => void) {
+    getWithdraws (req: GetWithdrawRequest, done: (error: boolean, count?: number) => void) {
       doActionWithError<GetWithdrawRequest, GetWithdrawResponse>(
         API.GET_WITHDRAWS,
         req,
@@ -52,7 +52,7 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
           this.Withdraws.Withdraws.push(...resp.Infos)
           this.Withdraws.Withdraws.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
           this.Withdraws.Total = resp.Total
-          done(false)
+          done(false, resp.Infos.length)
         },
         () => {
           done(true)

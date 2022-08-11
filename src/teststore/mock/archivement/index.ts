@@ -16,7 +16,7 @@ export const useArchivementStore = defineStore('archivement', {
   }),
   getters: {},
   actions: {
-    getCoinArchivements (req: GetArchivementRequest, done: (error: boolean) => void) {
+    getCoinArchivements (req: GetArchivementRequest, done: (error: boolean, count?: number) => void) {
       doActionWithError<GetArchivementRequest, GetArchivementResponse>(
         API.GET_COIN_ARCHIVEMENTS,
         req,
@@ -29,7 +29,7 @@ export const useArchivementStore = defineStore('archivement', {
             }
           })
           this.Archivements.Total = resp.Total
-          done(false)
+          done(false, resp.Archivements.length)
         },
         () => {
           done(true)

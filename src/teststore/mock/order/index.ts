@@ -86,7 +86,7 @@ export const useLocalOrderStore = defineStore('localorder', {
     }
   },
   actions: {
-    getOrders (req: GetOrdersRequest, done: (error: boolean) => void) {
+    getOrders (req: GetOrdersRequest, done: (error: boolean, count?: number) => void) {
       doActionWithError<GetOrdersRequest, GetOrdersResponse>(
         API.GET_ORDERS,
         req,
@@ -94,7 +94,7 @@ export const useLocalOrderStore = defineStore('localorder', {
         (resp: GetOrdersResponse): void => {
           this.Orders.push(...resp.Infos.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
           this.Total = resp.Total
-          done(false)
+          done(false, resp.Infos.length)
         },
         () => {
           done(true)
