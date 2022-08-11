@@ -95,6 +95,11 @@ const getUserGenerals = (offset:number, limit: number) => {
     }
     if (count === 0) {
       localledger.initGeneral(general.Generals.Generals)
+      getIntervalGenerals(
+        IntervalKey.LastDay,
+        Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
+        Math.ceil(new Date().getTime() / 1000),
+        0, 100)
       return
     }
     getUserGenerals(limit + offset, limit)
@@ -115,7 +120,11 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
       }
     }
   }, key, (error: boolean, count?: number) => {
-    if (error || count === 0) {
+    if (error) {
+      return
+    }
+    if (count === 0) {
+      localledger.setLastDayGeneral(general.IntervalGenerals.get(key)?.Generals)
       return
     }
     getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
@@ -189,11 +198,6 @@ onMounted(() => {
   }
   if (general.Generals.Generals.length === 0 || localledger.Generals.length === 0) {
     getUserGenerals(0, 100)
-    getIntervalGenerals(
-      IntervalKey.LastDay,
-      Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
-      Math.ceil(new Date().getTime() / 1000),
-      0, 100)
   }
   if (coin.Coins.length === 0) {
     getCoins()

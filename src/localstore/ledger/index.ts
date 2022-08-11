@@ -49,6 +49,19 @@ export const useLocalLedgerStore = defineStore('localledger', {
       })
     },
 
+    setLastDayGeneral (generals: Array<General> | undefined) {
+      if (!generals) {
+        return
+      }
+      generals.forEach((el) => {
+        const g = this.Generals.find((gel) => gel.CoinTypeID === el.CoinTypeID)
+        if (!g) {
+          return
+        }
+        g.Last24HoursBalance += Number(el.Incoming) - Number(el.Outcoming)
+      })
+    },
+
     initProfit (profits: Array<Profit>) {
       const currencies = useCurrencyStore()
       const coin = useCoinStore()
