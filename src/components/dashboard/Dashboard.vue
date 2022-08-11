@@ -56,6 +56,7 @@ const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, of
     }
   }, key, () => {
     if (profit.CoinProfits.get(key)?.Profits?.length === profit.CoinProfits.get(key)?.Total) {
+      progress.value?.stop()
       switch (key) {
         case IntervalKey.LastDay:
           localledger.initLastDayProfit(profit.Profits.Profits)
@@ -135,17 +136,23 @@ const getOrders = (offset:number, limit: number) => {
 
 onMounted(() => {
   if (profit.Profits.Total === 0) {
-    progress.value?.start()
     getProfits(0, 100)
+  }
+  if (!profit.CoinProfits.get(IntervalKey.LastDay)) {
+    progress.value?.start()
     getIntervalProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
+  }
+  if (!profit.GoodProfits.get(IntervalKey.All)) {
     getGoodProfits(IntervalKey.All,
       0,
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
+  }
+  if (!profit.GoodProfits.get(IntervalKey.LastDay)) {
     getGoodProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
