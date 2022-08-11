@@ -1,108 +1,111 @@
 <template>
-  <PurchasePage :good='good'>
-    <div class='info'>
-      <h3 class='form-title'>
-        {{ $t('MSG_PRODUCT_DETAILS') }}
-      </h3>
-      <div class='info-flex'>
-        <div class='three-section'>
-          <h4>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</h4>
-          <span class='number'>*</span>
-          <span class='unit'>{{ good?.Main?.Unit }} / {{ $t('MSG_DAY') }}</span>
-        </div>
-        <div class='three-section'>
-          <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
-          <span class='number'>{{ good?.Good?.Good?.DurationDays }}</span>
-          <span class='unit'>{{ $t('MSG_DAYS') }}</span>
-        </div>
-        <div class='three-section'>
-          <h4>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</h4>
-          <span class='number'>20</span>
-          <span class='unit'>%</span>
-        </div>
-        <div class='three-section'>
-          <h4>{{ $t('MSG_MAINTENANCE_FEE') }}:</h4>
-          <span class='number'>1.5</span>
-          <span class='unit'>{{ PriceCoinName }} / {{ $t('MSG_DAY') }}</span>
-        </div>
-        <div class='three-section'>
-          <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-          <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
-        </div>
-        <div class='three-section'>
-          <h4>{{ $t('MSG_PRICE') }}:</h4>
-          <span class='number'>{{ good?.Good?.Good?.Price }}</span>
-          <span class='unit'>{{ PriceCoinName }}</span>
-        </div>
-        <div class='product-detail-text'>
-          <div v-show='description'>
-            <h3>{{ description ? $t(description?.Title) : '' }}</h3>
-            <p v-html='description ? $t(description?.Message) : ""' />
+  <div :class='[ showBalanceDialog ? "blur" : "" ]'>
+    <PurchasePage :good='good'>
+      <div class='info'>
+        <h3 class='form-title'>
+          {{ $t('MSG_PRODUCT_DETAILS') }}
+        </h3>
+        <div class='info-flex'>
+          <div class='three-section'>
+            <h4>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</h4>
+            <span class='number'>*</span>
+            <span class='unit'>{{ good?.Main?.Unit }} / {{ $t('MSG_DAY') }}</span>
           </div>
-          <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
-          <p v-html='$t("MSG_WHY_CONTENT")' />
-          <div v-show='good?.Main?.Specs'>
-            <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
+          <div class='three-section'>
+            <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
+            <span class='number'>{{ good?.Good?.Good?.DurationDays }}</span>
+            <span class='unit'>{{ $t('MSG_DAYS') }}</span>
+          </div>
+          <div class='three-section'>
+            <h4>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</h4>
+            <span class='number'>20</span>
+            <span class='unit'>%</span>
+          </div>
+          <div class='three-section'>
+            <h4>{{ $t('MSG_MAINTENANCE_FEE') }}:</h4>
+            <span class='number'>1.5</span>
+            <span class='unit'>{{ PriceCoinName }} / {{ $t('MSG_DAY') }}</span>
+          </div>
+          <div class='three-section'>
+            <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
+            <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
+          </div>
+          <div class='three-section'>
+            <h4>{{ $t('MSG_PRICE') }}:</h4>
+            <span class='number'>{{ good?.Good?.Good?.Price }}</span>
+            <span class='unit'>{{ PriceCoinName }}</span>
+          </div>
+          <div class='product-detail-text'>
+            <div v-show='description'>
+              <h3>{{ description ? $t(description?.Title) : '' }}</h3>
+              <p v-html='description ? $t(description?.Message) : ""' />
+            </div>
+            <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
+            <p v-html='$t("MSG_WHY_CONTENT")' />
+            <div v-show='good?.Main?.Specs'>
+              <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
+              <p>
+                <img class='content-image' :src='good?.Main?.Specs'>
+              </p>
+            </div>
             <p>
-              <img class='content-image' :src='good?.Main?.Specs'>
+              <a :href='good?.Main?.HomePage'>
+                {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
+              </a>
             </p>
           </div>
-          <p>
-            <a :href='good?.Main?.HomePage'>
-              {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
-            </a>
-          </p>
         </div>
       </div>
-    </div>
-    <div class='product-sidebar'>
-      <h3 class='form-title'>
-        {{ $t('MSG_MINING_PURCHASE') }}
-      </h3>
-      <form action='javascript:void(0)' @submit='displayBalanceDialog' id='purchase'>
-        <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
-        <Input
-          v-model:value='purchaseAmount'
-          type='number'
-          id='amount'
-          required
-          :error='purchaseAmountError'
-          message='MSG_AMOUNT_TIP'
-          placeholder='MSG_AMOUNT_PLACEHOLDER'
-          :min='0'
-          :max='total'
-          @focus='onPurchaseAmountFocusIn'
-          @blur='onPurchaseAmountFocusOut'
-        />
-        <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
-        <div v-show='paymentCoin'>
-          <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
-            <option
-              v-for='myCoin in coins'
-              :key='myCoin?.ID'
-              :value='myCoin'
-              :selected='paymentCoin?.ID === myCoin?.ID'
-            >
-              {{ myCoin?.Unit }} ({{ currency.formatCoinName(myCoin?.Name as string) }})
-            </option>
-          </select>
-        </div>
-        <div class='submit-container'>
-          <WaitingBtn
-            label='MSG_PURCHASE'
-            type='submit'
-            class='submit-btn'
-            :disabled='submitting'
-            :waiting='submitting'
-            @click='onPurchaseClick'
+      <div class='product-sidebar'>
+        <h3 class='form-title'>
+          {{ $t('MSG_MINING_PURCHASE') }}
+        </h3>
+        <form action='javascript:void(0)' id='purchase'>
+          <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
+          <Input
+            v-model:value='purchaseAmount'
+            type='number'
+            id='amount'
+            required
+            :error='purchaseAmountError'
+            message='MSG_AMOUNT_TIP'
+            placeholder='MSG_AMOUNT_PLACEHOLDER'
+            :min='0'
+            :max='total'
+            @focus='onPurchaseAmountFocusIn'
+            @blur='onPurchaseAmountFocusOut'
           />
-        </div>
-      </form>
-    </div>
-  </PurchasePage>
+          <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
+          <div v-show='paymentCoin'>
+            <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
+              <option
+                v-for='myCoin in coins'
+                :key='myCoin?.ID'
+                :value='myCoin'
+                :selected='paymentCoin?.ID === myCoin?.ID'
+              >
+                {{ myCoin?.Unit }} ({{ currency.formatCoinName(myCoin?.Name as string) }})
+              </option>
+            </select>
+          </div>
+          <div class='submit-container'>
+            <WaitingBtn
+              label='MSG_PURCHASE'
+              type='submit'
+              class='submit-btn'
+              :disabled='submitting'
+              :waiting='submitting'
+              @click='onPurchaseClick'
+            />
+          </div>
+        </form>
+      </div>
+    </PurchasePage>
+  </div>
   <q-dialog
     v-model='showBalanceDialog'
     maximized
+    @hide='onMenuHide'
   >
     <div class='product-container content-glass popup-container plur'>
       <div class='popup'>
@@ -252,12 +255,10 @@ const createOrder = () => {
     onSubmit()
   } else {
     inputBalance.value = 0 // reset value
-    showBalanceDialog.value = !showBalanceDialog.value
+    showBalanceDialog.value = true
   }
 }
-const onPurchaseClick = () => {
-  showBalanceDialog.value = true
-}
+
 const getUserGenerals = (offset:number, limit: number) => {
   general.getGenerals({
     Offset: offset,
@@ -280,7 +281,12 @@ const getUserGenerals = (offset:number, limit: number) => {
     getUserGenerals(limit + offset, limit)
   })
 }
-const displayBalanceDialog = throttle(() => {
+
+const onMenuHide = () => {
+  showBalanceDialog.value = false
+}
+
+const onPurchaseClick = throttle(() => {
   if (!logined.getLogined) {
     void router.push({
       path: '/signin',

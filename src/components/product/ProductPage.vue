@@ -15,7 +15,7 @@
             <h3 class='form-title'>
               {{ $t('MSG_MINING_PURCHASE') }}
             </h3>
-            <form action='javascript:void(0)' @submit='displayBalanceDialog' id='purchase'>
+            <form action='javascript:void(0)' id='purchase'>
               <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
               <Input
                 v-model:value='myPurchaseAmount'
@@ -103,7 +103,7 @@
               <h3 class='form-title'>
                 {{ $t('MSG_MINING_PURCHASE') }}
               </h3>
-              <form action='javascript:void(0)' @submit='displayBalanceDialog' id='purchase'>
+              <form action='javascript:void(0)' id='purchase'>
                 <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
                 <Input
                   v-model:value='myPurchaseAmount'
@@ -157,6 +157,7 @@
   <q-dialog
     v-model='showBalanceDialog'
     maximized
+    @hide='onMenuHide'
   >
     <div class='product-container content-glass popup-container plur'>
       <div class='popup'>
@@ -467,10 +468,11 @@ const onSubmit = () => {
     })
   })
 }
-const onPurchaseClick = () => {
-  showBalanceDialog.value = true
+const onMenuHide = () => {
+  showBalanceDialog.value = false
 }
-const displayBalanceDialog = throttle(() => {
+
+const onPurchaseClick = throttle(() => {
   if (!logined.getLogined) {
     void router.push({
       path: '/signin',
