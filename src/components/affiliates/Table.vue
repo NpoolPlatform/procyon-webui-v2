@@ -230,6 +230,8 @@ const countPerPage = ref(10)
 const pages = computed(() => Math.ceil(displayReferrals.value.length / countPerPage.value))
 
 const pageReferrals = computed(() => displayReferrals.value.filter((el, index) => {
+  console.log('displayReferrals: ', displayReferrals.value)
+  console.log('pageReferrals: ', pageReferrals.value)
   return index >= (page.value - 1) * countPerPage.value && index < page.value * countPerPage.value
 }))
 

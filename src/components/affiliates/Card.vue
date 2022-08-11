@@ -227,8 +227,11 @@ const onSaveCommissionClick = (elem: LocalProductArchivement, idx:number) => {
   inspire.createPurchaseAmountSetting({
     TargetUserID: referral.value.UserID,
     InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
-    // FIXME: what is IDNumber
-    InviteeName: Username(referral.value, { IDNumber: referral.value.UserID }, locale.value) as string,
+    InviteeName: Username(referral.value, {
+      FirstName: referral.value.FirstName,
+      LastName: referral.value.LastName,
+      IDNumber: ''
+    }, locale.value) as string,
     Info: {
       GoodID: elem.Archivements[idx].CurGoodID,
       Percent: elem.Archivements[idx].CurPercent,
