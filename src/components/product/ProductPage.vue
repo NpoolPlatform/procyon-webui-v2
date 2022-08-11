@@ -235,11 +235,11 @@ const remainOrderAmount = computed(() => {
   return Math.ceil(totalAmount.value * 10000) / 10000 - inputBalance.value
 })
 interface Props {
-  goodId: string
-  projectClass: string
-  bgImg: string
-  customizeInfo?: boolean
-  purchaseAmount?: number
+  goodId: string;
+  projectClass: string;
+  bgImg: string;
+  customizeInfo?: boolean;
+  purchaseAmount?: number;
 }
 
 const showBalanceDialog = ref(false)

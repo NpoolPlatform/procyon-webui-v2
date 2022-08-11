@@ -48,12 +48,12 @@
 import { defineProps, toRef, ref, computed, defineEmits, withDefaults, watch } from 'vue'
 
 interface Props {
-  label: string
-  rows: Array<never>
-  table: never
-  countPerPage: number
-  customizeBody: boolean
-  loading?: boolean
+  label: string;
+  rows: Array<never>;
+  table: never;
+  countPerPage: number;
+  customizeBody: boolean;
+  loading?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {

@@ -29,20 +29,20 @@
 import { defineProps, toRef, defineEmits, watch, ref, withDefaults } from 'vue'
 
 interface Props {
-  value: string | number
-  label?: string
-  type: string
-  name?: string
-  id: string
-  required: boolean
-  error: boolean
-  message: string
-  placeholder: string
-  caption?: string
-  max?: number
-  min?: number
-  autocomplete?: boolean
-  disabled?: boolean
+  value: string | number;
+  label?: string;
+  type: string;
+  name?: string;
+  id: string;
+  required: boolean;
+  error: boolean;
+  message: string;
+  placeholder: string;
+  caption?: string;
+  max?: number;
+  min?: number;
+  autocomplete?: boolean;
+  disabled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -67,9 +67,9 @@ const caption = toRef(props, 'caption')
 
 const myValue = ref(value.value)
 
-const emit = defineEmits<{(e: 'update:value', value: string | number): void,
-  (e: 'focus'): void,
-  (e: 'blur'): void
+const emit = defineEmits<{(e: 'update:value', value: string | number): void;
+  (e: 'focus'): void;
+  (e: 'blur'): void;
 }>()
 watch(myValue, () => {
   emit('update:value', myValue.value)

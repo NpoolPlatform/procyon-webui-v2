@@ -19,10 +19,10 @@
 import { defineProps, toRef, defineEmits } from 'vue'
 
 interface Props {
-  waiting: boolean
-  label: string
-  type: 'button' | 'submit' | 'reset' | undefined
-  disabled: boolean
+  waiting: boolean;
+  label: string;
+  type: 'button' | 'submit' | 'reset' | undefined;
+  disabled: boolean;
 }
 
 const props = defineProps<Props>()

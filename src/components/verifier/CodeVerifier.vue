@@ -51,11 +51,11 @@ const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 interface Props {
-  verifyMethod?: AccountType
-  usedFor: MessageUsedFor
-  toUsername?: string
-  account: string
-  accountType: AccountType
+  verifyMethod?: AccountType;
+  usedFor: MessageUsedFor;
+  toUsername?: string;
+  account: string;
+  accountType: AccountType;
 }
 
 const props = defineProps<Props>()
@@ -132,10 +132,10 @@ const onCodeFocusOut = () => {
   codeError.value = !validateVerificationCode(myCode.value)
 }
 
-const emit = defineEmits<{(e: 'update:account', account: string): void,
-  (e: 'update:accountType', code: string): void,
-  (e: 'update:verifyMethod', method: string): void,
-  (e: 'verify', code: string): void
+const emit = defineEmits<{(e: 'update:account', account: string): void;
+  (e: 'update:accountType', code: string): void;
+  (e: 'update:verifyMethod', method: string): void;
+  (e: 'verify', code: string): void;
 }>()
 
 watch(myVerifyMethod, () => {

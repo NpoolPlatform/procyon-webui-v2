@@ -20,7 +20,7 @@ import { LocalOrder } from 'src/teststore/mock/order'
 import { defineAsyncComponent, defineProps, toRef } from 'vue'
 
 interface Props {
-  order: LocalOrder
+  order: LocalOrder;
 }
 
 const props = defineProps<Props>()

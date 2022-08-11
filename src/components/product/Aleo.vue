@@ -207,8 +207,8 @@ import { DefaultGoodID } from 'src/const/const'
 const { t } = useI18n({ useScope: 'global' })
 
 interface Query {
-  goodId: string
-  purchaseAmount: number
+  goodId: string;
+  purchaseAmount: number;
 }
 
 const route = useRoute()
@@ -226,9 +226,9 @@ const coin = useCoinStore()
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
 
 interface Member {
-  Name: string
-  Title: string
-  Background: string
+  Name: string;
+  Title: string;
+  Background: string;
 }
 
 const members = computed(() => [

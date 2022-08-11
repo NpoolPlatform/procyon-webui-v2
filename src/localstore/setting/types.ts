@@ -1,6 +1,6 @@
 interface SettingState {
-  ShowSideMenu: boolean
-  ActiveMenuTarget: string
+  ShowSideMenu: boolean;
+  ActiveMenuTarget: string;
 }
 
 export {

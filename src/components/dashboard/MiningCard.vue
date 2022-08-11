@@ -76,7 +76,7 @@ import { useRouter } from 'vue-router'
 import chevrons from '../../assets/chevrons.svg'
 
 interface Props {
-  general: GoodGeneral
+  general: GoodGeneral;
 }
 
 const props = defineProps<Props>()

@@ -30,8 +30,8 @@ import {
 } from 'vue'
 
 interface Props {
-  label: string
-  submitText: string
+  label: string;
+  submitText: string;
 }
 
 const props = defineProps<Props>()

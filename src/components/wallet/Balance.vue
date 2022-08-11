@@ -34,7 +34,7 @@ import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { defineProps, toRef, computed, watch, ref, onMounted } from 'vue'
 
 interface Props {
-  hidden?: boolean
+  hidden?: boolean;
 }
 
 const props = defineProps<Props>()
