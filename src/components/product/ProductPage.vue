@@ -234,7 +234,11 @@ const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 const remainOrderAmount = computed(() => {
-  return Math.ceil(totalAmount.value * 10000) / 10000 - inputBalance.value
+  const value = Math.ceil(totalAmount.value * 10000) / 10000 - inputBalance.value
+  if (value < 0) {
+    return 0
+  }
+  return value
 })
 interface Props {
   goodId: string;

@@ -245,7 +245,11 @@ const totalAmount = computed(() => good.value?.Good?.Good?.Price * purchaseAmoun
 const inputBalance = ref(0)
 
 const remainOrderAmount = computed(() => {
-  return Math.ceil(totalAmount.value * 10000) / 10000 - inputBalance.value
+  const value = Math.ceil(totalAmount.value * 10000) / 10000 - inputBalance.value
+  if (value < 0) {
+    return 0
+  }
+  return value
 })
 const logined = useLoginedUserStore()
 
