@@ -23,7 +23,7 @@
           {{ myProps.row.AddressLabels }} ({{ myProps.row.Address }})
         </q-td>
         <q-td key='Status' :props='myProps'>
-          {{ myProps.row.State }}
+          {{ $t(withdrawStatus(myProps.row)) }}
         </q-td>
       </q-tr>
     </template>
@@ -35,6 +35,7 @@ import { computed, defineAsyncComponent } from 'vue'
 import { formatTime, useCurrencyStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useLocalTransactionStore, Withdraw } from 'src/teststore/mock/transaction'
+import { WithdrawState } from 'src/teststore/mock/transaction/const'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -79,6 +80,22 @@ const table = computed(() => [
   }
 ])
 
+const withdrawStatus = (wd: Withdraw) => {
+  switch (wd.State) {
+    case WithdrawState.Reviewing:
+      return 'MSG_UNDER_REVIEW'
+    case WithdrawState.Transferring:
+      return 'MSG_IN_PROGRESS'
+    case WithdrawState.Rejected:
+      return 'MSG_FAILED'
+    case WithdrawState.TransactionFail:
+      return 'MSG_FAILED'
+    case WithdrawState.Successful:
+      return 'MSG_COMPLETED'
+    default:
+      return 'MSG_UNKNOWN'
+  }
+}
 </script>
 
 <stype lang='sass' scoped>

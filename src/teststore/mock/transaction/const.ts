@@ -15,3 +15,11 @@ export enum AccountType {
   WECHAT = 'Wechat',
   GOOGLE = 'Google',
 }
+export enum WithdrawState {
+  DefaultWithdrawState = 'DefaultWithdrawState',
+  Reviewing = 'Reviewing',
+  Transferring = 'Transferring',
+  Rejected = 'Rejected',
+  TransactionFail = 'TransactionFail',
+  Successful = 'Successful',
+}

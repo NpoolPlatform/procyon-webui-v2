@@ -161,21 +161,21 @@
       <div class='popup'>
         <div class='form-container content-glass'>
           <div class='confirmation'>
-            <h3>{{ t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
+            <h3>{{ $t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
             <div class='full-section'>
-              <h4>{{ t('MSG_AVAILABLE_BALANCE') }}</h4>
+              <h4>{{ $t('MSG_AVAILABLE_BALANCE') }}</h4>
               <span class='number'>{{ getUserBalance }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
             <div class='hr' />
             <div class='full-section'>
-              <h4>{{ t('MSG_ORDER_DUE_AMOUNT') }}</h4>
+              <h4>{{ $t('MSG_ORDER_DUE_AMOUNT') }}</h4>
               <span class='number'>{{ (Math.ceil(totalAmount * 10000) / 10000).toFixed(4) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
             <div class='hr' />
             <div class='full-section'>
-              <h4>{{ t('MSG_USE_WALLET_BALANCE') }}</h4>
+              <h4>{{ $t('MSG_USE_WALLET_BALANCE') }}</h4>
               <input
                 type='number'
                 :min='0'
@@ -184,16 +184,16 @@
               >
             </div>
             <div class='full-section'>
-              <h4>{{ t('MSG_REMAINING_DUE_AMOUNT') }}</h4>
+              <h4>{{ $t('MSG_REMAINING_DUE_AMOUNT') }}</h4>
               <span class='number'>{{ (Math.ceil(remainOrderAmount * 10000) / 10000).toFixed(4) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
             <div class='warning'>
               <img src='font-awesome/warning.svg'>
-              <span>{{ t('MSG_PAY_THE_REMAINDER') }}</span>
+              <span>{{ $t('MSG_PAY_THE_REMAINDER') }}</span>
             </div>
             <button @click='onSubmit' :disabled='inputBalance < 0 || inputBalance > getUserBalance || inputBalance > (Math.ceil(totalAmount * 10000) / 10000)'>
-              {{ t('MSG_CONTINUE') }}
+              {{ $t('MSG_CONTINUE') }}
             </button>
           </div>
         </div>
