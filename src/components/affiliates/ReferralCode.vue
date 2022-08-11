@@ -15,7 +15,7 @@
 
 <script setup lang='ts'>
 import { onMounted, computed } from 'vue'
-import { NotificationType, useInspireStore } from 'npool-cli-v2'
+import { NotificationType, useInspireStore, useNotificationStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import copy from 'copy-to-clipboard'
 
@@ -24,6 +24,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const inspire = useInspireStore()
 const inviteLink = computed(() => 'https://procyon.vip/#/invitation?code=' + (inspire.InvitationCode?.InvitationCode as string))
+const notification = useNotificationStore()
 
 onMounted(() => {
   if (!inspire.InvitationCode?.InvitationCode?.length) {
@@ -41,6 +42,12 @@ onMounted(() => {
 
 function onCopyCodeClick () {
   copy(inviteLink.value)
+  notification.Notifications.push({
+    Title: t('MSG_REFERRAL_CODE_COPIED'),
+    Message: t('MSG_COPY_REFERRAL_CODE_SUCCESS'),
+    Popup: true,
+    Type: NotificationType.Success
+  })
 }
 
 </script>
