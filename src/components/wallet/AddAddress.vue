@@ -2,7 +2,7 @@
   <div :class='[ verifing ? "blur" : "" ]'>
     <FormPage @submit='onSubmit' label='MSG_NEW_WALLET_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
       <template #form-body>
-        <CoinSelector v-model:selected-coin='selectedCoin' label='MSG_BLOCKCHAIN' />
+        <CoinSelector v-model:selected-coin='selectedCoin' label='MSG_BLOCKCHAIN' :from-withdraw='gotoWithdraw' />
         <Input
           v-model:value='address'
           label='MSG_WALLET_ADDRESS'
@@ -72,7 +72,7 @@ interface Query {
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const coinTypeID = computed(() => query.value.coinTypeId)
-const gotoWithdraw = computed(() => query.value.gotoWithdraw)
+const gotoWithdraw = computed(() => query.value.gotoWithdraw !== undefined)
 
 const coin = useCoinStore()
 
