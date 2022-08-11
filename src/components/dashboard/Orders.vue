@@ -73,7 +73,7 @@ const table = computed(() => [
     label: t('MSG_STATE'),
     align: 'center',
     // FIXME: 订单状态需要重写
-    field: (row: Order) => t(row.State)
+    field: (row: Order) => t(order.getOrderState(row))
   }
 ])
 
