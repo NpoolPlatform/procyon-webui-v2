@@ -41,7 +41,7 @@
             <td><span class='aff-product'>{{ _good.CoinName }}</span></td>
             <td v-if='_good.Editing'>
               <select v-model='_good.CurPercent' class='kol-dropdown'>
-                <option v-for='kol in userKOLOptions(_good.CurPercent)' :key='kol'>
+                <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.CurGoodID))' :key='kol'>
                   {{ kol }}
                 </option>
               </select>
@@ -186,17 +186,16 @@ const inviter = computed(() => {
   const index = localArchivement.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
   return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
 })
+const inviterGoodPercent = (goodID: string) => {
+  const good = inviter.value.Archivements.find((el) => el.CurGoodID === goodID)
+  return good === undefined ? 0 : good.CurPercent
+}
 
 const userKOLOptions = computed(() => (maxKOL: number) => {
   const kolList = [30, 25, 15, 10, 5, 0]
   let index = kolList.findIndex(kol => kol <= maxKOL)
   return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
 })
-
-const inviterGoodPercent = (goodID: string) => {
-  const index = inviter.value.Archivements.findIndex((el) => el.CurGoodID === goodID)
-  return inviter.value.Archivements[index].CurPercent
-}
 
 const goodOnline = (goodID: string) => {
   const index = good.AppGoods.findIndex((el) => el.GoodID === goodID)
