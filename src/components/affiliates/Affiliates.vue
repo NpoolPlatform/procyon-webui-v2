@@ -14,7 +14,6 @@
     position='top'
     color='green-2'
     size='6px'
-    skip-hijack
   />
 </template>
 
@@ -23,7 +22,7 @@ import { NotificationType, useCoinStore, useGoodStore, useInspireStore } from 'n
 import { QAjaxBar } from 'quasar'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
 import { useArchivementStore } from 'src/teststore/mock/archivement'
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -38,10 +37,7 @@ const archivement = useArchivementStore()
 const larchivement = useLocalArchivementStore()
 const coin = useCoinStore()
 
-const progress = ref<QAjaxBar>()
-
 const getArchivements = (offset: number, limit: number) => {
-  progress.value?.start()
   archivement.getCoinArchivements({
     Offset: offset,
     Limit: limit,
@@ -56,8 +52,7 @@ const getArchivements = (offset: number, limit: number) => {
     if (error) {
       return
     }
-    if (count === 0) {
-      progress.value?.stop()
+    if (!count || count <= 1) {
       larchivement.$reset()
       larchivement.addArchivement(archivement.Archivements.Archivements)
       larchivement.Total = archivement.Archivements.Total
