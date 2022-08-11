@@ -18,7 +18,7 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { formatTime } from 'npool-cli-v2'
+import { formatTime, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { Order, useLocalOrderStore } from 'src/teststore/mock/order'
@@ -48,31 +48,24 @@ const table = computed(() => [
     name: 'Total',
     label: t('MSG_PURCHASE_AMOUNT'),
     align: 'center',
-    // field: (row: LocalOrder) => row.Units.toString() + (good.getGoodByID(row.GoodID)?.Good?.Good?.Unit?.length ? t(good.getGoodByID(row.GoodID)?.Good?.Good?.Unit) : '')
-    // FIXME: 商品单位
     field: (row: Order) => row.Units.toString() + t(row.GoodUnit)
   },
   {
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    // FIXME: 商品价格,是否需要将其转为USDT
-    // field: (row: LocalOrder) => orderPrice(row.PaymentAmount)
-    field: (row: Order) => row.PaymentAmount
+    field: (row: Order) => row.PaymentAmount + PriceCoinName
   },
   {
     name: 'Period',
     label: t('MSG_PERIOD'),
     align: 'center',
-    // FIXME: 商品周期需要返回
-    // field: (row: LocalOrder) => row.DurationDays.toString() + t('MSG_DAY')
     field: (row: Order) => row.GoodServicePeriodDays.toString() + t('MSG_DAY')
   },
   {
     name: 'State',
     label: t('MSG_STATE'),
     align: 'center',
-    // FIXME: 订单状态需要重写
     field: (row: Order) => t(order.getOrderState(row))
   }
 ])
