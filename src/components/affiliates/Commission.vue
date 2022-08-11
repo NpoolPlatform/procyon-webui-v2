@@ -36,10 +36,7 @@ const currency = useCurrencyStore()
 const localArchivements = useLocalArchivementStore()
 const logined = useLoginedUserStore()
 
-const inviter = computed(() => {
-  const index = localArchivements.Archivements.findIndex((el) => logined.LoginedUser?.User.ID === el.UserID)
-  return index === -1 ? undefined : localArchivements.Archivements[index]
-})
+const inviter = computed(() => localArchivements.Archivements.find((el) => logined.LoginedUser?.User.ID === el.UserID))
 
 const totalCommission = computed(() => {
   let total = 0

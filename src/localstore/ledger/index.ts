@@ -65,6 +65,12 @@ export const useLocalLedgerStore = defineStore('localledger', {
                 USDAmount: Number(el.Incoming) * usdCurrency,
                 JPYAmount: Number(el.Incoming) * jpyCurrency
               } as CoinProfit)
+            } else {
+              const cp = this.CoinProfits.get(el.CoinTypeID) as CoinProfit
+              cp.USDAmount = Number(el.Incoming)
+              cp.USDAmount = Number(el.Incoming) * usdCurrency
+              cp.JPYAmount = Number(el.Incoming) * jpyCurrency
+              this.CoinProfits.set(el.CoinTypeID, cp)
             }
           })
         })
@@ -84,6 +90,12 @@ export const useLocalLedgerStore = defineStore('localledger', {
                 Last24HourUSDAmount: Number(el.Incoming) * usdCurrency,
                 Last24HourJPYAmount: Number(el.Incoming) * jpyCurrency
               } as CoinProfit)
+            } else {
+              const cp = this.CoinProfits.get(el.CoinTypeID) as CoinProfit
+              cp.Last24HourAmount = Number(el.Incoming)
+              cp.Last24HourUSDAmount = Number(el.Incoming) * usdCurrency
+              cp.Last24HourJPYAmount = Number(el.Incoming) * jpyCurrency
+              this.CoinProfits.set(el.CoinTypeID, cp)
             }
           })
         })
@@ -103,6 +115,12 @@ export const useLocalLedgerStore = defineStore('localledger', {
                 Last30DayUSDAmount: Number(el.Incoming) * usdCurrency,
                 Last30DayJPYAmount: Number(el.Incoming) * jpyCurrency
               } as CoinProfit)
+            } else {
+              const cp = this.CoinProfits.get(el.CoinTypeID) as CoinProfit
+              cp.Last30DayAmount = Number(el.Incoming)
+              cp.Last30DayUSDAmount = Number(el.Incoming) * usdCurrency
+              cp.Last30DayJPYAmount = Number(el.Incoming) * jpyCurrency
+              this.CoinProfits.set(el.CoinTypeID, cp)
             }
           })
         })
