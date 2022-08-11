@@ -54,9 +54,10 @@ const getArchivements = (offset: number, limit: number) => {
     }
   }, (error: boolean, count?: number) => {
     if (error) {
+      progress.value?.stop()
       return
     }
-    if (count === 0) {
+    if (!count || count <= 1) {
       progress.value?.stop()
       larchivement.$reset()
       larchivement.addArchivement(archivement.Archivements.Archivements)
