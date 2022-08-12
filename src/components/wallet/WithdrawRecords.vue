@@ -68,15 +68,15 @@ const table = computed(() => [
   },
   {
     name: 'Status',
-    label: t('MSG_WITHDRAW_ADDRESS'),
-    align: 'center',
-    field: (row: Withdraw) => row.Address
-  },
-  {
-    name: 'Address',
     label: t('MSG_STATUS'),
     align: 'center',
     field: 'State'
+  },
+  {
+    name: 'Address',
+    label: t('MSG_WITHDRAW_ADDRESS'),
+    align: 'center',
+    field: (row: Withdraw) => row.Address
   }
 ])
 
