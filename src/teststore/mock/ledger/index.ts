@@ -34,7 +34,14 @@ export const useGeneralStore = defineStore('general', {
         req,
         req.Message,
         (resp: GetGeneralResponse): void => {
-          this.Generals.Generals.push(...resp.Infos)
+          resp.Infos.forEach((el) => {
+            const index = this.Generals.Generals.findIndex((gel) => gel.CoinTypeID === el.CoinTypeID)
+            if (index >= 0) {
+              return
+            }
+            this.Generals.Generals.push(el)
+          })
+          this.Generals.Generals = this.Generals.Generals.sort((a, b) => a.Spendable > b.Spendable ? -1 : 1)
           this.Generals.Total = resp.Total
           done(false, resp.Infos.length)
         },

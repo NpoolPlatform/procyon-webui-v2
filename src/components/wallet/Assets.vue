@@ -26,7 +26,7 @@
           {{ myProps.row.JPYValue.toFixed(4) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps'>
-          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001'>
+          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
         </q-td>
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import {
   useCurrencyStore,
   BenefitModel,
@@ -57,6 +57,7 @@ const { t } = useI18n({ useScope: 'global' })
 const currencies = useCurrencyStore()
 const kyc = useKYCStore()
 const localledger = useLocalLedgerStore()
+const submitting = ref(false)
 
 const balanceGenerals = computed(() => Array.from(localledger.Generals.values()))
 const table = computed(() => [
@@ -102,6 +103,7 @@ const account = useAccountStore()
 const accounts = computed(() => account.Accounts.filter((el) => el.State === ReviewState.Approved))
 
 const onWithdrawClick = (asset: BenefitModel) => {
+  submitting.value = true
   kyc.getKYC({
     Message: {
       /*
@@ -113,6 +115,7 @@ const onWithdrawClick = (asset: BenefitModel) => {
       */
     }
   }, (error: boolean) => {
+    submitting.value = false
     if (error) {
       void router.push({ path: '/kyc' })
       return

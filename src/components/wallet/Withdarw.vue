@@ -59,7 +59,15 @@
                 </span>
               </div>
             </div>
-            <input type='submit' :value='$t("MSG_WITHDRAW")' class='submit' @click='onSubmit'>
+            <div class='submit'>
+              <WaitingBtn
+                label='MSG_WITHDRAW'
+                type='button'
+                :disabled='submitting'
+                :waiting='submitting'
+                @click='onSubmit'
+              />
+            </div>
             <h3>{{ $t('MSG_GUIDE_AND_FAQ') }}</h3>
             <p v-html='$t("MSG_WITHDRAW_GUIDE_AND_FAQ_CONTENT")' />
           </div>
@@ -149,6 +157,7 @@ import { throttle } from 'quasar'
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -176,6 +185,7 @@ const coins = useCoinStore()
 const coinTypeId = computed(() => query.value.coinTypeId)
 const coin = computed(() => coins.getCoinByID(coinTypeId.value))
 const feeAmount = ref(0)
+const submitting = ref(false)
 
 const accounts = useAccountStore()
 const withdraws = computed(() => accounts.Accounts.filter((account) => {
@@ -278,6 +288,8 @@ const onCodeVerify = (code: string) => {
       break
   }
 
+  submitting.value = true
+
   ltransation.createWithdraw({
     CoinTypeID: coinTypeId.value,
     Amount: `${amount.value}`,
@@ -293,12 +305,12 @@ const onCodeVerify = (code: string) => {
       }
     }
   }, (error: boolean) => {
+    submitting.value = false
     if (error) {
       return
     }
 
     general.$reset()
-    getUserGenerals(0, 100)
     void router.push({ path: '/wallet' })
   })
   verifing.value = false
@@ -323,8 +335,7 @@ onMounted(() => {
     feeAmount.value = Math.ceil(amount * 1000000) / 1000000
   })
 
-  if (localledger.Generals.size === 0) {
-    console.log('localledger: ', localledger.Generals)
+  if (general.Generals.Generals.length === 0) {
     getUserGenerals(0, 100)
   }
 
