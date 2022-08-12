@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useProfitStore } from 'src/teststore/mock/profit'
+import { Profit, useProfitStore } from 'src/teststore/mock/profit'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { NotificationType, SecondsEachDay, useCoinStore, useStockStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
@@ -58,10 +58,14 @@ const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, of
     if (count === 0) {
       switch (key) {
         case IntervalKey.LastDay:
-          localledger.initLastDayProfit(profit.Profits.Profits)
+          if (profit.CoinProfits.get(key)) {
+            localledger.initLastDayProfit(profit.CoinProfits.get(key)?.Profits as Array<Profit>)
+          }
           break
         case IntervalKey.LastMonth:
-          localledger.initLastMonthProfit(profit.Profits.Profits)
+          if (profit.CoinProfits.get(key)) {
+            localledger.initLastMonthProfit(profit.CoinProfits.get(key)?.Profits as Array<Profit>)
+          }
           break
       }
       return
