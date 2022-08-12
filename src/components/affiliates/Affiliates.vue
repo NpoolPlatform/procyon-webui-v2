@@ -36,6 +36,8 @@ const Table = defineAsyncComponent(() => import('src/components/affiliates/Table
 const archivement = useArchivementStore()
 const larchivement = useLocalArchivementStore()
 const coin = useCoinStore()
+const inspire = useInspireStore()
+const good = useGoodStore()
 
 const getArchivements = (offset: number, limit: number) => {
   archivement.getCoinArchivements({
@@ -62,8 +64,6 @@ const getArchivements = (offset: number, limit: number) => {
   })
 }
 
-const inspire = useInspireStore()
-const good = useGoodStore()
 onMounted(() => {
   if (!inspire.InvitationCode?.InvitationCode?.length) {
     inspire.getInvitationCode({

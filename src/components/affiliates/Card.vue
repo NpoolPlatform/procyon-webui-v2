@@ -155,6 +155,7 @@ const username = computed(() => {
 
   return name
 })
+
 const subusername = computed(() => {
   let name = referral.value.EmailAddress
 
@@ -164,6 +165,7 @@ const subusername = computed(() => {
 
   return name
 })
+
 const showDetailSummary = ref(false)
 
 const onShowMoreClick = () => {
