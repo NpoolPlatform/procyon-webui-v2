@@ -307,11 +307,7 @@ const onPurchaseClick = throttle(() => {
   if (purchaseAmountError.value) {
     return
   }
-  if (general.Generals.Generals.length === 0) {
-    getUserGenerals(0, 100)
-    return
-  }
-  createOrder()
+  getUserGenerals(0, 100)
 }, ThrottleSeconds * 1000)
 
 onMounted(() => {
