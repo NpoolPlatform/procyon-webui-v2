@@ -41,7 +41,7 @@ const inviter = computed(() => larchivements.Archivements.find((el) => logined.L
 const totalCommission = computed(() => {
   let total = 0
   inviter.value?.Archivements.forEach((el) => {
-    total += Number(el.TotalCommission)
+    total += Number(el.SuperiorCommission)
   })
   return total
 })

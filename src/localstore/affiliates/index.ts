@@ -28,6 +28,7 @@ export const useLocalArchivementStore = defineStore('localarchivement', {
             SelfAmount: el.SelfAmount,
             TotalCommission: el.TotalCommission,
             SelfCommission: el.SelfCommission,
+            SuperiorCommission: el.SuperiorCommission ? el.SuperiorCommission : '0',
             CommissionPercent: el.CommissionPercent,
             GoodID: el.GoodID,
             GoodName: el.GoodName,

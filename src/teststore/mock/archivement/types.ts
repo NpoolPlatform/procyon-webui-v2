@@ -5,16 +5,17 @@ interface Archivement {
   CoinName: string;
   CoinLogo: string;
   CoinUnit: string;
+  GoodID: string;
+  GoodName: string;
+  GoodUnit: string;
+  CommissionPercent: number;
   TotalUnits: number;
   SelfUnits: number;
   TotalAmount: string;
   SelfAmount: string;
   TotalCommission: string;
   SelfCommission: string;
-  CommissionPercent: number;
-  GoodID: string;
-  GoodName: string;
-  GoodUnit: string;
+  SuperiorCommission: string;
 }
 
 interface ProductArchivement {
