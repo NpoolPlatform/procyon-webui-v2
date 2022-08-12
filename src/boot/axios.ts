@@ -26,8 +26,8 @@ const api = createAPI(baseURL, AppID) as AxiosInstance
 
 // define common response handle
 interface CommonError {
-  code: number
-  message: string
+  code: number;
+  message: string;
 }
 
 const post = async <T, R>(url: string, data: T) => {

@@ -156,7 +156,8 @@ import {
   useUserStore,
   validateUsername
 } from 'npool-cli-v2'
-import { uid } from 'quasar'
+import { throttle, uid } from 'quasar'
+import { ThrottleSeconds } from 'src/const/const'
 import { defineAsyncComponent, ref, computed } from 'vue'
 
 import { useI18n } from 'vue-i18n'
@@ -247,8 +248,7 @@ const street2 = computed({
 const street2Error = ref(false)
 
 const user = useUserStore()
-
-const onSubmit = () => {
+const onSubmit = throttle(() => {
   usernameError.value = !username.value?.length
   firstNameError.value = !firstName.value?.length
   lastNameError.value = !lastName.value?.length
@@ -316,7 +316,7 @@ const onSubmit = () => {
   })
 
   return false
-}
+}, ThrottleSeconds * 1000)
 
 </script>
 

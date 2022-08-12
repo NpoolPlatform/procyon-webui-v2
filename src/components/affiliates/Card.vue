@@ -5,7 +5,7 @@
         {{ username }}
       </h3>
       <span class='aff-email'>{{ subusername }}</span>
-      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ referral?.InvitedCount }}</span></span>
+      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ referral.TotalInvitees }}</span></span>
     </div>
     <div class='aff-table'>
       <table id='commission-table'>
@@ -17,57 +17,40 @@
             <th>
               <div class='tooltip'>
                 <span>{{ $t('MSG_COMMISSION_RATE') }}</span>
-                <!-- img class='more-info' :src='question'>
-                <p class='tooltip-text'>
-                  {{ $t('MSG_COMMISSION_RATE_TIP') }}
-                </p -->
               </div>
             </th>
             <th>
               <div class='tooltip'>
                 <span>{{ $t('MSG_REFERRAL_UNITS') }}</span>
-                <!-- img class='more-info' :src='question'>
-                <p class='tooltip-text'>
-                  {{ $t('MSG_REFERRAL_UNITS_TIP') }}
-                </p -->
               </div>
             </th>
             <th>
               <div class='tooltip'>
                 <span>{{ $t('MSG_TOTAL_SALES') }}</span>
-                <!-- img class='more-info' :src='question'>
-                <p class='tooltip-text'>
-                  {{ $t('MSG_TOTAL_SALES_TIP') }}
-                </p -->
               </div>
             </th>
             <th>
               <div class='tooltip'>
                 <span>{{ $t('MSG_REFERRAL_COMMISSION') }}</span>
-                <!-- img class='more-info' :src='question'>
-                <p class='tooltip-text'>
-                  {{ $t('MSG_REFERRAL_COMMISSION_TIP') }}
-                </p -->
               </div>
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='_good in lgoods' :key='_good.GoodID'>
-            <td><span class='aff-product'>{{ good.getGoodByID(_good.GoodID)?.Good?.Good?.Title }}</span></td>
+          <tr class='aff-info' v-for='(_good, idx) in referral.Archivements' :key='idx'>
+            <td><span class='aff-product'>{{ _good.CoinName }}</span></td>
             <td v-if='_good.Editing'>
-              <!-- <input type='number' v-model='_good.Percent' :min='0' :max='inviterGoodPercent(_good.GoodID)'> -->
-              <select v-model='_good.Percent' class='kol-dropdown'>
+              <select v-model='_good.CommissionPercent' class='kol-dropdown'>
                 <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
                   {{ kol }}
                 </option>
               </select>
-              <button @click='onSaveCommissionClick(_good)'>
+              <button @click='onSaveCommissionClick(referral,idx)'>
                 {{ $t('MSG_SAVE') }}
               </button>
             </td>
             <td v-else>
-              <span class='aff-number'>{{ _good.Percent }}<span class='unit'>%</span></span>
+              <span class='aff-number'>{{ _good.CommissionPercent }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
                 :class='[ "alt", goodOnline(_good.GoodID) ? "" : "in-active" ]'
@@ -77,9 +60,14 @@
                 {{ $t('MSG_SET') }}
               </button>
             </td>
-            <td><span class='aff-number'>{{ goodUnits(_good.GoodID) }}<span class='unit'>{{ $t(good.getGoodByID(_good.GoodID)?.Good.Good.Unit) }}</span></span></td>
-            <td><span class='aff-number'>{{ goodAmount(_good.GoodID).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ goodCommission(_good.GoodID).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ _good.TotalUnits }}<span class='unit'>{{ _good.GoodUnit?.length ? $t(_good.GoodUnit) : '' }}</span></span></td>
+            <td><span class='aff-number'>{{ Number(_good.TotalAmount).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td>
+              <span class='aff-number'>
+                {{ child ? (_good.SuperiorCommission ? Number(_good.SuperiorCommission).toFixed(4) : 0.0000) : Number(_good.TotalCommission).toFixed(4) }}
+                <span class='unit'>{{ PriceCoinName }}</span>
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -118,12 +106,10 @@
 
 <script setup lang='ts'>
 import {
-  Referral,
   PriceCoinName,
   NotificationType,
   useInspireStore,
   useGoodStore,
-  GoodSummary,
   PurchaseAmountSetting,
   formatTime,
   useLoginedUserStore,
@@ -133,18 +119,18 @@ import {
 } from 'npool-cli-v2'
 import { ref, toRef, defineProps, computed, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useLocalGoodStore, GoodItem } from '../../localstore'
-
 import chevrons from '../../assets/chevrons.svg'
+import { LocalArchivement, LocalProductArchivement } from 'src/localstore/affiliates/types'
+import { useLocalArchivementStore } from 'src/localstore/affiliates'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
 
 interface Props {
-  child: boolean
-  firstChild: boolean
-  lastChild: boolean
-  referral: Referral
+  child: boolean;
+  firstChild: boolean;
+  lastChild: boolean;
+  referral: LocalProductArchivement;
 }
 
 const props = defineProps<Props>()
@@ -153,96 +139,70 @@ const firstChild = toRef(props, 'firstChild')
 const lastChild = toRef(props, 'lastChild')
 const referral = toRef(props, 'referral')
 
-const showDetailSummary = ref(false)
-
-const onShowMoreClick = () => {
-  showDetailSummary.value = !showDetailSummary.value
-}
-
 const username = computed(() => {
-  let name = referral.value?.Extra?.Username
+  let name = referral.value.Username
 
-  if (referral.value?.Extra?.LastName?.length && referral.value?.Extra?.FirstName?.length) {
-    name = referral.value?.Extra?.LastName + ' ' + referral.value?.Extra?.FirstName
+  if (referral.value?.LastName?.length && referral.value?.FirstName?.length) {
+    name = referral.value.LastName + ' ' + referral.value.FirstName
   }
 
   if (!name?.length) {
-    name = referral.value?.Extra?.Username
+    name = referral.value?.Username
   }
 
   if (!name?.length) {
-    name = referral.value?.User?.EmailAddress
+    name = referral.value?.EmailAddress
   }
 
   if (!name?.length) {
-    name = referral.value?.User?.PhoneNO
+    name = referral.value?.PhoneNO
   }
 
   return name
 })
 
 const subusername = computed(() => {
-  let name = referral.value?.User?.EmailAddress
+  let name = referral.value.EmailAddress
 
   if (!name?.length) {
-    name = referral.value?.User?.PhoneNO
+    name = referral.value?.PhoneNO
   }
 
   return name
 })
 
-const inspire = useInspireStore()
-const goodCommission = (goodID: string) => {
-  const index = inspire.GoodCommissions.findIndex((el) => {
-    return el.GoodID === goodID && el.AppID === referral.value.User.AppID && el.UserID === referral.value.User.ID
-  })
-  return index < 0 ? 0 : inspire.GoodCommissions[index].Amount
+const showDetailSummary = ref(false)
+
+const onShowMoreClick = () => {
+  showDetailSummary.value = !showDetailSummary.value
 }
 
-const goodSummary = (goodID: string) => {
-  const index = referral.value?.GoodSummaries.findIndex((el) => el.GoodID === goodID)
-  return index === undefined || index < 0 ? {} as unknown as GoodSummary : referral.value?.GoodSummaries[index]
-}
+const inspire = useInspireStore()
 
 const good = useGoodStore()
-const lgood = useLocalGoodStore()
-const lgoods = computed(() => lgood.Goods.filter((el) => el.UserID === referral.value.User.ID))
 
 const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
-  return el.UserID === referral.value.User.ID
+  return el.UserID === referral.value.UserID
 }).sort((a, b) => {
   return a.Start < b.Start ? 1 : -1
 }))
+const larchivement = useLocalArchivementStore()
 
+// get parent
 const inviter = computed(() => {
-  const index = inspire.Referrals.findIndex((el) => el.User.ID === logined.LoginedUser?.User.ID)
-  return index < 0 ? undefined as unknown as Referral : inspire.Referrals[index]
+  const index = larchivement.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
+  return index < 0 ? undefined as unknown as LocalProductArchivement : larchivement.Archivements[index]
 })
+const inviterGoodPercent = (goodID: string) => {
+  const good = inviter.value.Archivements.find((el) => el.GoodID === goodID)
+  return good === undefined ? 0 : good.CommissionPercent
+}
+
 const userKOLOptions = computed(() => (maxKOL: number) => {
   const kolList = [30, 25, 15, 10, 5, 0]
   let index = kolList.findIndex(kol => kol <= maxKOL)
   return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
 })
-const inviterGoodPercent = (goodID: string) => {
-  let index = inviter.value.GoodSummaries.findIndex((el) => el.GoodID === goodID)
-  let percent = 0
-  if (index >= 0) {
-    percent = inviter.value.GoodSummaries[index].Percent
-  }
-  index = inspire.PurchaseAmountSettings.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID && el.GoodID === goodID && el.End === 0)
-  if (index >= 0) {
-    percent = inspire.PurchaseAmountSettings[index].Percent
-  }
-  return percent
-}
-
-const goodUnits = (goodID: string) => {
-  return goodSummary(goodID).Units ? goodSummary(goodID).Units : 0
-}
-
-const goodAmount = (goodID: string) => {
-  return goodSummary(goodID).Amount ? goodSummary(goodID).Amount : 0
-}
 
 const goodOnline = (goodID: string) => {
   const index = good.AppGoods.findIndex((el) => el.GoodID === goodID)
@@ -257,27 +217,31 @@ const settingTime = (setting: PurchaseAmountSetting) => {
   return formatTime(setting.Start, false).split(' ')[1]
 }
 
-const onSetCommissionClick = async (good: GoodItem) => {
+const onSetCommissionClick = async (good: LocalArchivement) => {
   good.Editing = true
   await nextTick()
 }
 
 const logined = useLoginedUserStore()
 
-const onSaveCommissionClick = (good: GoodItem) => {
-  if (good.Percent > inviterGoodPercent(good.GoodID)) {
-    good.Percent = inviterGoodPercent(good.GoodID)
+const onSaveCommissionClick = (elem: LocalProductArchivement, idx:number) => {
+  if (elem.Archivements[idx].CommissionPercent > inviterGoodPercent(elem.Archivements[idx].GoodID)) {
+    elem.Archivements[idx].CommissionPercent = inviterGoodPercent(elem.Archivements[idx].GoodID)
     return
   }
 
-  good.Editing = false
+  elem.Archivements[idx].Editing = false
   inspire.createPurchaseAmountSetting({
-    TargetUserID: referral.value.User.ID as string,
+    TargetUserID: referral.value.UserID,
     InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
-    InviteeName: Username(referral.value.User, referral.value.Extra, locale.value) as string,
+    InviteeName: Username(referral.value, {
+      FirstName: referral.value.FirstName,
+      LastName: referral.value.LastName,
+      IDNumber: ''
+    }, locale.value) as string,
     Info: {
-      GoodID: good.GoodID,
-      Percent: good.Percent,
+      GoodID: elem.Archivements[idx].GoodID,
+      Percent: elem.Archivements[idx].CommissionPercent,
       Start: Math.ceil(Date.now() / 1000),
       End: 0
     },

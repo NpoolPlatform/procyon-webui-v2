@@ -7,9 +7,9 @@
       <p class='aff-email'>
         {{ subusername }}
       </p>
-      <div v-for='_good in goods' :key='_good.GoodID'>
-        <label>{{ good.getGoodByID(_good.GoodID)?.Main?.Name }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
-        <select v-model='_good.Percent'>
+      <div v-for='_good in referral.Archivements' :key='_good.GoodID'>
+        <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
+        <select v-model='_good.CommissionPercent'>
           <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
             {{ kol }}
           </option>
@@ -25,7 +25,6 @@
 
 <script setup lang='ts'>
 import {
-  Referral,
   useInspireStore,
   useLoginedUserStore,
   username as Username,
@@ -34,7 +33,7 @@ import {
   NotificationType,
   useGoodStore
 } from 'npool-cli-v2'
-import { GoodItem } from 'src/localstore'
+import { LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -45,44 +44,45 @@ const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage
 const { locale, t } = useI18n({ useScope: 'global' })
 
 interface Query {
-  userId: string
+  userId: string;
 }
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 
 const inspire = useInspireStore()
+const localArchivement = useLocalArchivementStore()
 const referral = computed(() => {
-  const index = inspire.Referrals.findIndex((el) => el.User.ID === query.value.userId)
-  return index < 0 ? undefined as unknown as Referral : inspire.Referrals[index]
+  const index = localArchivement.Archivements.findIndex((el) => el.UserID === query.value.userId)
+  return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
 })
 const logined = useLoginedUserStore()
 const router = useRouter()
 
 const username = computed(() => {
-  let name = referral.value?.Extra?.Username
+  let name = referral.value.Username
 
-  if (referral.value?.Extra?.LastName?.length && referral.value?.Extra?.FirstName?.length) {
-    name = referral.value?.Extra?.LastName + ' ' + referral.value?.Extra?.FirstName
+  if (referral.value?.LastName?.length && referral.value?.FirstName?.length) {
+    name = referral.value.LastName + ' ' + referral.value.FirstName
   }
 
   if (!name?.length) {
-    name = referral.value?.Extra?.Username
+    name = referral.value?.Username
   }
 
   if (!name?.length) {
-    name = referral.value?.User?.EmailAddress
+    name = referral.value?.EmailAddress
   }
 
   if (!name?.length) {
-    name = referral.value?.User?.PhoneNO
+    name = referral.value?.PhoneNO
   }
 
   return name
 })
 
 const inviter = computed(() => {
-  const index = inspire.Referrals.findIndex((el) => el.User.ID === logined.LoginedUser?.User.ID)
-  return index < 0 ? undefined as unknown as Referral : inspire.Referrals[index]
+  const index = localArchivement.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
+  return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
 })
 
 const userKOLOptions = computed(() => (maxKOL: number) => {
@@ -91,23 +91,15 @@ const userKOLOptions = computed(() => (maxKOL: number) => {
   return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
 })
 const inviterGoodPercent = (goodID: string) => {
-  let index = inviter.value.GoodSummaries.findIndex((el) => el.GoodID === goodID)
-  let percent = 0
-  if (index >= 0) {
-    percent = inviter.value.GoodSummaries[index].Percent
-  }
-  index = inspire.PurchaseAmountSettings.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID && el.GoodID === goodID && el.End === 0)
-  if (index >= 0) {
-    percent = inspire.PurchaseAmountSettings[index].Percent
-  }
-  return percent
+  const good = inviter.value.Archivements.find((el) => el.GoodID === goodID)
+  return good === undefined ? 0 : good.CommissionPercent
 }
 
 const subusername = computed(() => {
-  let name = referral.value?.User?.EmailAddress
+  let name = referral.value.EmailAddress
 
   if (!name?.length) {
-    name = referral.value?.User?.PhoneNO
+    name = referral.value?.PhoneNO
   }
 
   return name
@@ -117,9 +109,9 @@ const backTimer = ref(-1)
 
 const onSubmit = () => {
   let overflow = false
-  for (const g of goods.value) {
-    if (g.Percent > inviterGoodPercent(g.GoodID)) {
-      g.Percent = inviterGoodPercent(g.GoodID)
+  for (const g of referral.value.Archivements) {
+    if (g.CommissionPercent > inviterGoodPercent(g.GoodID)) {
+      g.CommissionPercent = inviterGoodPercent(g.GoodID)
       overflow = true
     }
   }
@@ -129,11 +121,16 @@ const onSubmit = () => {
   }
 
   inspire.createInvitationCode({
-    TargetUserID: referral.value.User.ID as string,
+    TargetUserID: referral.value.UserID,
     InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
-    InviteeName: Username(referral.value.User, referral.value.Extra, locale.value) as string,
+    InviteeName: Username(referral.value, {
+      FirstName: referral.value.FirstName,
+      LastName: referral.value.LastName,
+      IDNumber: ''
+    },
+    locale.value) as string,
     Info: {
-      UserID: referral.value.User.ID
+      UserID: referral.value.UserID
     },
     Message: {
       Error: {
@@ -143,27 +140,21 @@ const onSubmit = () => {
       }
     }
   }, () => {
-    inspire.getReferrals({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_REFERRALS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+    // TODO
   })
 
-  goods.value.forEach((good) => {
+  referral.value.Archivements.forEach((good) => {
     inspire.createPurchaseAmountSetting({
-      TargetUserID: referral.value.User.ID as string,
+      TargetUserID: referral.value.UserID,
       InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
-      InviteeName: Username(referral.value.User, referral.value.Extra, locale.value) as string,
+      InviteeName: Username(referral.value, {
+        FirstName: referral.value.FirstName,
+        LastName: referral.value.LastName,
+        IDNumber: ''
+      }, locale.value) as string,
       Info: {
         GoodID: good.GoodID,
-        Percent: good.Percent,
+        Percent: good.CommissionPercent,
         Start: Math.ceil(Date.now() / 1000),
         End: 0
       },
@@ -186,42 +177,8 @@ const onSubmit = () => {
 }
 
 const good = useGoodStore()
-const goods = ref([] as Array<GoodItem>)
 
 onMounted(() => {
-  if (inspire.Referrals.length === 0) {
-    inspire.getReferrals({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_REFERRALS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-
-  if (good.Goods.length > 0 && good.AppGoods.length > 0) {
-    good.Goods.filter((el) => {
-      const index = good.AppGoods.findIndex((gel) => gel.GoodID === el.Good.Good.ID && gel.Visible && gel.Online)
-      return index >= 0
-    }).forEach((el) => {
-      const index = goods.value.findIndex((lel) => lel.GoodID === el.Good.Good.ID)
-      if (index >= 0) {
-        return
-      }
-      goods.value.push({
-        UserID: referral.value?.User.ID as string,
-        GoodID: el.Good.Good.ID as string,
-        Editing: false,
-        Percent: 0
-      })
-    })
-    return
-  }
-
   good.getGoods({
     Message: {
       Error: {
@@ -240,21 +197,7 @@ onMounted(() => {
         }
       }
     }, () => {
-      good.Goods.filter((el) => {
-        const index = good.AppGoods.findIndex((gel) => gel.GoodID === el.Good.Good.ID && gel.Visible && gel.Online)
-        return index >= 0
-      }).forEach((el) => {
-        const index = goods.value.findIndex((lel) => lel.GoodID === el.Good.Good.ID)
-        if (index >= 0) {
-          return
-        }
-        goods.value.push({
-          UserID: referral.value?.User.ID as string,
-          GoodID: el.Good.Good.ID as string,
-          Editing: false,
-          Percent: 0
-        })
-      })
+      // TODO
     })
   })
 })

@@ -8,8 +8,8 @@
 import { defineEmits, ref, onMounted, onUnmounted, defineProps, toRef, watch } from 'vue'
 
 interface Props {
-  initialClicked: boolean
-  targetError: boolean
+  initialClicked: boolean;
+  targetError: boolean;
 }
 
 const props = defineProps<Props>()

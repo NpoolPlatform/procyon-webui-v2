@@ -67,12 +67,12 @@ import {
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted } from 'vue'
 
 interface Props {
-  label: string
-  accountType: string
-  account: string
-  accountError: boolean
-  password: string
-  submitText: string
+  label: string;
+  accountType: string;
+  account: string;
+  accountError: boolean;
+  password: string;
+  submitText: string;
 }
 
 const props = defineProps<Props>()
@@ -114,11 +114,11 @@ const onPasswordFocusOut = () => {
   pwdError.value = !validatePassword(myPassword.value)
 }
 
-const emit = defineEmits<{(e: 'update:accountType', type: string): void,
-  (e: 'update:account', type: string): void,
-  (e: 'update:accountError', error: boolean): void,
-  (e: 'update:password', type: string): void,
-  (e: 'submit'): void
+const emit = defineEmits<{(e: 'update:accountType', type: string): void;
+  (e: 'update:account', type: string): void;
+  (e: 'update:accountError', error: boolean): void;
+  (e: 'update:password', type: string): void;
+  (e: 'submit'): void;
 }>()
 
 const signupMethod = ref(AccountType.Email)

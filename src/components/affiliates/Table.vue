@@ -46,19 +46,19 @@
           <tr class='aff-info total-row'>
             <td><span class='aff-product'>{{ $t('MSG_TOTAL') }}</span></td>
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
-            <td><span class='aff-number'>{{ totalUnits }}<span class='unit'>{{ $t(goodUnit) }}</span></span></td>
+            <td><span class='aff-number'>{{ totalUnits.toFixed(0) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ totalContribution.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ totalCommission.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
-          <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.User.ID'>
+          <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
             <td>
               <span class='aff-product'>{{ accountName(referral) }}</span>
               <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
-            <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ $t(goodUnit) }}</span></span></td>
-            <td><span class='aff-number'>{{ referralAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ referralContribution(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ userTotalUnits(referral) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
+            <td><span class='aff-number'>{{ userTotalAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ userTotalCommission(referral).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -82,36 +82,30 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import {
-  NotificationType,
   formatTime,
-  Referral,
-  useInspireStore,
   PriceCoinName,
   useCoinStore,
   Coin
 } from 'npool-cli-v2'
-import { useI18n } from 'vue-i18n'
 
 import edit from '../../assets/edit.svg'
 import { useRouter } from 'vue-router'
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+import { LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
 
 interface MyCoin {
-  label: string
-  value: Coin
+  label: string;
+  value: Coin;
 }
 
-const inspire = useInspireStore()
-const referrals = computed(() => inspire.Referrals.filter((referral) => !referral.Kol))
+const larchivements = useLocalArchivementStore()
+const referrals = computed(() => larchivements.Archivements.filter((referral) => !referral.Kol).sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
 
 const coin = useCoinStore()
 const coins = computed(() => Array.from(coin.Coins.filter((el) => {
   const rfs = referrals.value.filter((rel) => {
-    for (const sum of rel.GoodSummaries) {
+    for (const sum of rel.Archivements) {
       if (sum.CoinTypeID === el.ID) {
         return true
       }
@@ -130,157 +124,105 @@ watch(coins, () => {
   selectedCoin.value = coins.value.length ? coins.value[0] : undefined as unknown as MyCoin
 })
 
-const totalUnits = computed(() => {
-  let units = 0
-  referrals.value.forEach((el) => {
-    const sums = el.GoodSummaries.filter((sel) => sel.CoinTypeID === selectedCoin.value?.value.ID)
-    sums.forEach((sum) => { units += sum.Units })
-  })
-  return units
-})
-const totalAmount = computed(() => {
-  let amount = 0
-  referrals.value.forEach((el) => {
-    const sums = el.GoodSummaries.filter((sel) => sel.CoinTypeID === selectedCoin.value?.value.ID)
-    sums.forEach((sum) => { amount += sum.Amount })
-  })
-  return amount
-})
-const totalContribution = computed(() => {
-  let amount = 0
-  const comms = inspire.GoodCommissions.filter((gel) => {
-    const index = referrals.value.findIndex((el) => gel.UserID === el.User.ID)
-    if (index < 0) {
-      return false
-    }
-    return gel.CoinTypeID === selectedCoin.value?.value.ID
-  })
-  comms.forEach((gel) => {
-    if (gel.Contribution) {
-      amount += gel.Contribution
-    }
-  })
-  return amount
-})
 const goodUnit = computed(() => {
   for (const rf of referrals.value) {
-    for (const sum of rf.GoodSummaries) {
+    for (const sum of rf.Archivements) {
       if (sum.CoinTypeID === selectedCoin.value?.value.ID) {
-        return sum.Unit
+        return sum.GoodUnit
       }
     }
   }
   return ''
 })
 
-const displayReferrals = ref(referrals.value.sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1))
 const searchStr = ref('')
-watch(searchStr, () => {
-  displayReferrals.value = referrals.value.filter((el) => {
-    return el.User.EmailAddress?.includes(searchStr.value) || el.User.PhoneNO?.includes(searchStr.value)
-  }).sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1)
-})
+const displayReferrals = computed(() => referrals.value.filter((el) => {
+  return el.EmailAddress?.includes(searchStr.value) || el.PhoneNO?.includes(searchStr.value)
+}))
 
 const onSearchSubmit = () => {
   // DO NOTHING
 }
 const onSearchResetClick = () => {
   searchStr.value = ''
-  displayReferrals.value = referrals.value.sort((a, b) => (a.User.CreateAt as number) > (b.User.CreateAt as number) ? -1 : 1)
 }
 
-const accountName = (referral: Referral) => {
-  return referral.User?.EmailAddress?.length ? referral.User?.EmailAddress : referral.User?.PhoneNO
+const accountName = (referral: LocalProductArchivement) => {
+  return referral.EmailAddress?.length ? referral.EmailAddress : referral.PhoneNO
 }
 
-const joinDate = (referral: Referral) => {
-  return formatTime(referral.Invitation.CreateAt, true)
+const joinDate = (referral: LocalProductArchivement) => {
+  return formatTime(referral.InvitedAt, true)
 }
 
-const joinTime = (referral: Referral) => {
-  return formatTime(referral.Invitation.CreateAt, false).split(' ')[1]
+const joinTime = (referral: LocalProductArchivement) => {
+  return formatTime(referral.InvitedAt, false)?.split(' ')[1]
 }
 
-const referralUnits = (referral: Referral) => {
-  const rfs = referral.GoodSummaries.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
-  let units = 0
-  rfs.forEach((el) => { units += el.Units })
-  return units
-}
-
-const referralAmount = (referral: Referral) => {
-  const rfs = referral.GoodSummaries.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
-  let amount = 0
-  rfs.forEach((el) => { amount += el.Amount })
-  return amount
-}
-
-const referralContribution = (referral: Referral) => {
-  let amount = 0
-  const comms = inspire.GoodCommissions.filter((gel) => {
-    return gel.CoinTypeID === selectedCoin.value?.value.ID && gel.UserID === referral.User.ID
+const totalUnits = computed(() => {
+  let total = 0
+  referrals.value.forEach((referral) => {
+    referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+      total += Number(el.TotalUnits)
+    })
   })
-  comms.forEach((gel) => {
-    if (gel.Contribution) {
-      amount += gel.Contribution
-    }
+  return total
+})
+
+const totalAmount = computed(() => {
+  let total = 0
+  referrals.value.forEach((referral) => {
+    referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+      total += Number(el.TotalAmount)
+    })
   })
-  return amount
+  return total
+})
+
+const totalCommission = computed(() => {
+  let total = 0
+  referrals.value.forEach((referral) => {
+    referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+      total += Number(el.SuperiorCommission)
+    })
+  })
+  return total
+})
+
+const userTotalUnits = (referral: LocalProductArchivement) => {
+  let total = 0
+  referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+    total += Number(el.TotalUnits)
+  })
+  return total
+}
+
+const userTotalAmount = (referral: LocalProductArchivement) => {
+  let total = 0
+  referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+    total += Number(el.TotalAmount)
+  })
+  return total
+}
+
+const userTotalCommission = (referral: LocalProductArchivement) => {
+  let total = 0
+  referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+    total += Number(el.SuperiorCommission)
+  })
+  return total
 }
 
 const router = useRouter()
 
-const onSetKolClick = (referral: Referral) => {
+const onSetKolClick = (referral: LocalProductArchivement) => {
   void router.push({
     path: '/setup/affiliate',
     query: {
-      userId: referral.User.ID
+      userId: referral.UserID
     }
   })
 }
-
-onMounted(() => {
-  if (referrals.value.length === 0) {
-    inspire.getReferrals({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_REFERRALS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      displayReferrals.value = inspire.Referrals.filter((referral) => !referral.Kol)
-      if (inspire.GoodCommissions.length === 0) {
-        inspire.getGoodCommissions({
-          Message: {
-            Error: {
-              Title: t('MSG_GET_GOOD_COMMISSIONS_FAIL'),
-              Popup: true,
-              Type: NotificationType.Error
-            }
-          }
-        }, () => {
-          // TODO
-        })
-      }
-    })
-  }
-
-  if (coins.value.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-})
 
 const page = ref(1)
 const countPerPage = ref(10)

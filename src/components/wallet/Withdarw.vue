@@ -7,7 +7,7 @@
             <div class='product-page-icon'>
               <img :src='coins.getCoinLogo(coin)'>
             </div>
-            <h1>{{ coin.Name }}</h1>
+            <h1>{{ coin?.Name }}</h1>
           </div>
           <div class='withdraw'>
             <h3>{{ $t('MSG_ASSET_WITHDRAWAL') }}</h3>
@@ -32,7 +32,7 @@
                   :error='amountError'
                   message='MSG_AMOUNT_TIP'
                   placeholder='MSG_AMOUNT_PLACEHOLDER'
-                  :min='0'
+                  :min='feeAmount'
                   :max='balance'
                   @focus='onAmountFocusIn'
                   @blur='onAmountFocusOut'
@@ -40,7 +40,7 @@
               </div>
               <div class='three-section'>
                 <h4>{{ $t('MSG_AMOUNT_WILL_RECEIVE') }}:</h4>
-                <span class='number'>{{ amount - feeAmount }}</span>
+                <span class='number'>{{ amount - feeAmount > 0 ? (amount - feeAmount).toFixed(4) : 0 }}</span>
                 <span class='unit'>{{ coin.Unit }}</span>
               </div>
 
@@ -59,7 +59,15 @@
                 </span>
               </div>
             </div>
-            <input type='submit' :value='$t("MSG_WITHDRAW")' class='submit' @click='onSubmit'>
+            <div class='submit'>
+              <WaitingBtn
+                label='MSG_WITHDRAW'
+                type='button'
+                :disabled='submitting'
+                :waiting='submitting'
+                @click='onSubmit'
+              />
+            </div>
             <h3>{{ $t('MSG_GUIDE_AND_FAQ') }}</h3>
             <p v-html='$t("MSG_WITHDRAW_GUIDE_AND_FAQ_CONTENT")' />
           </div>
@@ -127,32 +135,29 @@
 <script setup lang='ts'>
 import {
   MessageUsedFor,
-  AccountType,
   useCoinStore,
-  totalWithdrawedEarningCoin,
-  totalEarningCoin,
   useAccountStore,
   WithdrawAccount,
   NotificationType,
-  useTransactionStore,
-  WithdrawType,
-  useBenefitStore,
   ReviewState,
-  useBillingStore,
-  totalPaymentBalanceUSD,
-  useOrderStore,
-  useCurrencyStore,
-  Currency
+  AccountType,
+  SecondsEachDay
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useGeneralStore } from 'src/teststore/mock/ledger'
+import { useLocalTransactionStore, AccountType as LocalAccountType } from 'src/teststore/mock/transaction'
+import { useLocalLedgerStore } from 'src/localstore/ledger'
+import { IntervalKey, ThrottleSeconds } from 'src/const/const'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
+import { throttle } from 'quasar'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -167,13 +172,11 @@ const onAmountFocusIn = () => {
   amountError.value = false
 }
 const onAmountFocusOut = () => {
-  amountError.value = !amount.value || amount.value >= (earning.value + _totalPaymentBalanceUSD.value - withdrawedEarning.value)
+  amountError.value = !amount.value || amount.value > balance.value || amount.value <= feeAmount.value
 }
 
-const withdrawType = ref(WithdrawType.Commission)
-
 interface Query {
-  coinTypeId: string
+  coinTypeId: string;
 }
 
 const route = useRoute()
@@ -182,8 +185,7 @@ const coins = useCoinStore()
 const coinTypeId = computed(() => query.value.coinTypeId)
 const coin = computed(() => coins.getCoinByID(coinTypeId.value))
 const feeAmount = ref(0)
-
-const transaction = useTransactionStore()
+const submitting = ref(false)
 
 const accounts = useAccountStore()
 const withdraws = computed(() => accounts.Accounts.filter((account) => {
@@ -191,25 +193,23 @@ const withdraws = computed(() => accounts.Accounts.filter((account) => {
 }))
 const selectedAccount = ref(undefined as unknown as WithdrawAccount)
 
-const earning = ref(0)
-const _totalPaymentBalanceUSD = ref(0)
-const withdrawedEarning = ref(0)
-const balance = computed(() => Math.floor((earning.value + _totalPaymentBalanceUSD.value - withdrawedEarning.value) * 10000) / 10000)
+const general = useGeneralStore()
+const localledger = useLocalLedgerStore()
+const ltransation = useLocalTransactionStore()
 
-const benefit = useBenefitStore()
-const billing = useBillingStore()
+const balance = computed(() => general.getCoinBalance(coin?.value.ID as string))
 
-const onSubmit = () => {
+const onSubmit = throttle(() => {
   if (!selectedAccount.value) {
     return
   }
 
-  amountError.value = !amount.value || amount.value > (earning.value + _totalPaymentBalanceUSD.value - withdrawedEarning.value)
+  amountError.value = !amount.value || amount.value > balance.value || amount.value <= feeAmount.value
   if (amountError.value) {
     return
   }
   verifing.value = true
-}
+}, ThrottleSeconds * 1000)
 
 const onMenuHide = () => {
   verifing.value = false
@@ -220,17 +220,83 @@ const accountType = ref(AccountType.Email)
 
 const router = useRouter()
 
+const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
+  general.getIntervalGenerals({
+    StartAt: startAt,
+    EndAt: endAt,
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GENERAL_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, key, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
+      localledger.setLastDayGeneral(general.IntervalGenerals.get(key)?.Generals)
+      return
+    }
+    getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
+  })
+}
+
+const getUserGenerals = (offset:number, limit: number) => {
+  general.getGenerals({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GENERAL_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (error: boolean, count?: number) => {
+    if (error) {
+      return
+    }
+    if (count === 0) {
+      localledger.initGeneral(general.Generals.Generals)
+      getIntervalGenerals(
+        IntervalKey.LastDay,
+        Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
+        Math.ceil(new Date().getTime() / 1000),
+        0, 100)
+      return
+    }
+    getUserGenerals(limit + offset, limit)
+  })
+}
+
 const onCodeVerify = (code: string) => {
-  transaction.submitWithdraw({
-    Info: {
-      CoinTypeID: coinTypeId.value,
-      WithdrawToAccountID: selectedAccount.value.Account.ID as string,
-      Amount: amount.value,
-      WithdrawType: withdrawType.value
-    },
-    Account: account.value,
-    AccountType: accountType.value,
+  let accType = LocalAccountType.EMAIL
+
+  switch (accountType.value) {
+    case AccountType.Email:
+      accType = LocalAccountType.EMAIL
+      break
+    case AccountType.Mobile:
+      accType = LocalAccountType.MOBILE
+      break
+    case AccountType.Google:
+      accType = LocalAccountType.GOOGLE
+      break
+  }
+
+  submitting.value = true
+
+  ltransation.createWithdraw({
+    CoinTypeID: coinTypeId.value,
+    Amount: `${amount.value}`,
+    AccountID: selectedAccount.value.Account.ID as string,
     VerificationCode: code,
+    Account: account.value,
+    AccountType: accType,
     Message: {
       Error: {
         Title: t('MSG_SUBMIT_WITHDRAW_FAIL'),
@@ -239,9 +305,13 @@ const onCodeVerify = (code: string) => {
       }
     }
   }, (error: boolean) => {
-    if (!error) {
-      void router.back()
+    submitting.value = false
+    if (error) {
+      return
     }
+
+    general.$reset()
+    void router.push({ path: '/wallet' })
   })
   verifing.value = false
 }
@@ -251,84 +321,7 @@ const onStateTipBtnClick = () => {
   showReviewing.value = false
 }
 
-const getPaymentBalances = () => {
-  billing.getPaymentBalances({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_PAYMENT_BALANCES'),
-        Message: t('MSG_GET_PAYMENT_BALANCES_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    totalPaymentBalanceUSD((usdAmount: number) => {
-      _totalPaymentBalanceUSD.value = usdAmount
-    })
-  })
-}
-
-const order = useOrderStore()
-
-const getOrders = () => {
-  order.getOrders({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_ORDERS'),
-        Message: t('MSG_GET_ORDERS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    getPaymentBalances()
-  })
-}
-
-const currency = useCurrencyStore()
-
-const getCurrencies = () => {
-  currency.getAllCoinCurrencies({
-    Currencies: [Currency.USD],
-    Message: {
-      Error: {
-        Title: t('MSG_GET_CURRENCIES'),
-        Message: t('MSG_GET_CURRENCIES_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    getOrders()
-  })
-}
-
-const getCoins = () => {
-  coins.getCoins({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_COINS'),
-        Message: t('MSG_GET_COINS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    getCurrencies()
-  })
-}
-
 onMounted(() => {
-  accounts.getWithdrawAccounts({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  })
-
   coins.getCurrentFee({
     CoinTypeID: coinTypeId.value,
     Message: {
@@ -342,48 +335,17 @@ onMounted(() => {
     feeAmount.value = Math.ceil(amount * 1000000) / 1000000
   })
 
-  totalEarningCoin(coinTypeId.value, (amount: number) => {
-    earning.value = amount
-    totalWithdrawedEarningCoin(coinTypeId.value, (amount: number) => {
-      withdrawedEarning.value = amount
-    })
-    benefit.getCommissionCoinSettings({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COMMISSION_COIN_SETTINGS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      const index = benefit.CommissionCoinSettings.findIndex((el) => el.Using)
-      if (index < 0) {
-        return
-      }
-      if (coinTypeId.value === benefit.CommissionCoinSettings[index].CoinTypeID) {
-        benefit.getCommission({
-          Message: {
-            Error: {
-              Title: t('MSG_GET_COMMISSION_FAIL'),
-              Popup: true,
-              Type: NotificationType.Error
-            }
-          }
-        }, () => {
-          earning.value += benefit.Commission.Balance
-          billing.getPaymentBalances({
-            Message: {}
-          }, () => {
-            totalPaymentBalanceUSD((usdAmount: number) => {
-              _totalPaymentBalanceUSD.value = usdAmount
-            })
-          })
-        })
-      }
-    })
-  })
+  if (general.Generals.Generals.length === 0) {
+    getUserGenerals(0, 100)
+  }
 
-  getCoins()
+  if (accounts.Accounts.filter((el) => {
+    return el.Account.CoinTypeID === coinTypeId.value && el.State === ReviewState.Approved
+  }).length === 0) {
+    accounts.getWithdrawAccounts({
+      Message: {}
+    })
+  }
 })
 
 const onAddressSelected = (account: WithdrawAccount) => {

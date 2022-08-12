@@ -36,12 +36,12 @@ import {
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted, computed } from 'vue'
 
 interface Props {
-  label: string
-  accountType: string
-  account: string
-  verificationCode: string
-  verificationCodeError: boolean
-  submitText: string
+  label: string;
+  accountType: string;
+  account: string;
+  verificationCode: string;
+  verificationCodeError: boolean;
+  submitText: string;
 }
 
 const props = defineProps<Props>()
@@ -75,11 +75,11 @@ const logined = useLoginedUserStore()
 const myAccountType = computed(() => logined.LoginedUser?.User?.EmailAddress?.length ? AccountType.Email : AccountType.Mobile)
 const myAccount = computed(() => myAccountType.value === AccountType.Email ? logined.LoginedUser?.User.EmailAddress : logined.LoginedUser?.User.PhoneNO)
 
-const emit = defineEmits<{(e: 'update:accountType', type: string): void,
-  (e: 'update:account', type: string): void
-  (e: 'update:verificationCode', code: string): void
-  (e: 'update:verificationCodeError', error: boolean): void
-  (e: 'submit'): void
+const emit = defineEmits<{(e: 'update:accountType', type: string): void;
+  (e: 'update:account', type: string): void;
+  (e: 'update:verificationCode', code: string): void;
+  (e: 'update:verificationCodeError', error: boolean): void;
+  (e: 'submit'): void;
 }>()
 
 watch(myAccount, () => {

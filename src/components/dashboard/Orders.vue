@@ -1,10 +1,10 @@
 <template>
   <OpTable
     label='MSG_ORDER_HISTORY'
-    :rows='(myOrders as Array<never>)'
+    :rows='(orders as Array<never>)'
     :table='(table as never)'
     :count-per-page='10'
-    @row-click='(row) => onRowClick(row as OrderModel)'
+    @row-click='(row) => onRowClick(row as Order)'
   >
     <template #top-right>
       <div class='buttons'>
@@ -14,175 +14,92 @@
       </div>
     </template>
   </OpTable>
-  <q-ajax-bar
-    ref='progress'
-    position='top'
-    color='green-2'
-    size='6px'
-    skip-hijack
-  />
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineAsyncComponent, ref, onUnmounted } from 'vue'
-import { useOrderStore, buildOrders, OrderGroup, OrderModel, useGoodStore, formatTime, NotificationType, PriceCoinName } from 'npool-cli-v2'
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
+import { formatTime, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { QAjaxBar } from 'quasar'
+import { Order, useLocalOrderStore, OrderState } from 'src/teststore/mock/order'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const order = useOrderStore()
-const orders = computed(() => buildOrders(order.Orders, OrderGroup.ALL))
-const myOrders = ref([] as Array<OrderModel>)
-
-const good = useGoodStore()
-
-const orderPrice = (orderModel: OrderModel) => {
-  const myOrder = order.getOrderByID(orderModel.OrderID)
-  if (!myOrder || !myOrder.Order.Payment) {
-    return t('MSG_NOT_AVAILABLE')
-  }
-  const currency = myOrder.Order.Payment.CoinUSDCurrency ? myOrder.Order.Payment.CoinUSDCurrency : 1
-  const totalPay = currency * myOrder.Order.Payment.Amount
-  const price = totalPay / myOrder.Order.Order.Units
-  return price.toString() + ' ' + PriceCoinName
-}
+const order = useLocalOrderStore()
+const orders = computed(() => order.Orders)
 
 const table = computed(() => [
   {
     name: 'Date',
     label: t('MSG_DATE'),
     align: 'left',
-    field: (row: OrderModel) => formatTime(row.CreateAt)
+    field: (row: Order) => formatTime(row.CreatedAt)
   },
   {
     name: 'Product',
     label: t('MSG_PRODUCT'),
     align: 'center',
-    field: (row: OrderModel) => row.GoodTitle
+    field: (row: Order) => row.GoodName
   },
   {
     name: 'Total',
     label: t('MSG_PURCHASE_AMOUNT'),
     align: 'center',
-    field: (row: OrderModel) => row.Units.toString() + (good.getGoodByID(row.GoodID)?.Good?.Good?.Unit?.length ? t(good.getGoodByID(row.GoodID)?.Good?.Good?.Unit) : '')
+    field: (row: Order) => row.Units.toString() + t(row.GoodUnit)
   },
   {
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: OrderModel) => orderPrice(row)
+    field: (row: Order) => row.GoodUnitPrice + ' ' + PriceCoinName
   },
   {
     name: 'Period',
     label: t('MSG_PERIOD'),
     align: 'center',
-    field: (row: OrderModel) => row.DurationDays.toString() + t('MSG_DAY')
+    field: (row: Order) => row.GoodServicePeriodDays.toString() + t('MSG_DAY')
   },
   {
     name: 'State',
     label: t('MSG_STATE'),
     align: 'center',
-    field: (row: OrderModel) => t(row.State)
+    field: (row: Order) => stateMap?.value.get(row.ID)?.length ? t(stateMap?.value.get(row.ID) as string) : ''
   }
 ])
 
 const router = useRouter()
 
-const onRowClick = (myOrder: OrderModel) => {
-  if (!order.validateOrder(order.getOrderByID(myOrder.OrderID))) {
+const onRowClick = (myOrder: Order) => {
+  if (!order.validateOrder(order.getOrderByID(myOrder.ID) as Order)) {
     return
+  }
+  switch (myOrder.State) {
+    case OrderState.IN_SERVICE:
+    case OrderState.EXPIRED:
+      return
   }
   void router.push({
     path: '/payment',
     query: {
-      paymentId: order.getOrderByID(myOrder.OrderID)?.Order?.Payment?.ID,
-      orderId: myOrder.OrderID
+      paymentId: order.getOrderByID(myOrder.ID)?.PaymentID,
+      orderId: myOrder.ID
     }
   })
 }
 
+const stateMap = ref(new Map<string, string>())
+
 const ticker = ref(-1)
-const progress = ref<QAjaxBar>()
 
 onMounted(() => {
-  progress.value?.start()
-
-  good.getGoods({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GOODS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, (error: boolean) => {
-    progress.value?.stop()
-    if (error) {
-      return
-    }
-
-    progress.value?.start()
-
-    good.getPromotions({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_PROMOTIONS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, (error: boolean) => {
-      progress.value?.stop()
-      if (error) {
-        return
-      }
-
-      progress.value?.start()
-
-      good.getAppGoods({
-        Message: {
-          Error: {
-            Title: t('MSG_GET_APP_GOODS_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      }, (error: boolean) => {
-        progress.value?.stop()
-        if (error) {
-          return
-        }
-
-        if (order.Orders.length === 0) {
-          progress.value?.start()
-
-          order.getOrders({
-            Message: {
-              Error: {
-                Title: t('MSG_GET_ORDERS_FAIL'),
-                Popup: true,
-                Type: NotificationType.Error
-              }
-            }
-          }, () => {
-            progress.value?.stop()
-          })
-        }
-      })
-    })
-  })
-
   ticker.value = window.setInterval(() => {
-    myOrders.value = [] as Array<OrderModel>
-    orders.value.forEach((myOrder) => {
-      myOrder.State = order.getOrderState(order.getOrderByID(myOrder.OrderID))
-      myOrders.value.push(myOrder)
+    orders.value.forEach((el) => {
+      stateMap.value.set(el.ID, order.getOrderState(el))
     })
+    ticker.value += 1
   }, 1000)
 })
 

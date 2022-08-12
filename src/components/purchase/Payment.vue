@@ -1,20 +1,20 @@
 <template>
   <div :class='[ showStatus || showWarning ? "blur" : "" ]'>
-    <PurchasePage :good='order?.Good'>
+    <PurchasePage :good='good'>
       <div class='info'>
         <h3 class='form-title'>
-          {{ order?.PayWithCoin?.Name }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
+          {{ order?.PaymentCoinName }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
         </h3>
         <div class='info-flex'>
           <div class='three-section'>
             <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}:</h4>
-            <span class='number'>{{ order?.Order?.Order?.Units }}</span>
-            <span class='unit'>{{ order?.Good?.Good?.Good?.Unit?.length ? $t(order?.Good?.Good?.Good?.Unit) : '' }}</span>
+            <span class='number'>{{ order?.Units }}</span>
+            <span class='unit'>{{ order?.GoodUnit?.length ? $t(order?.GoodUnit) : '' }}</span>
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_AMOUNT_DUE') }}:</h4>
-            <span class='number'>{{ order?.Order?.Payment?.Amount }}</span>
-            <span class='unit'>{{ order?.PayWithCoin?.Unit }}</span>
+            <span class='number'>{{ order?.PaymentAmount }}</span>
+            <span class='unit'>{{ order?.PaymentCoinUnit }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAmountClick'>
             <div class='tooltip'>
               <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -35,8 +35,8 @@
           </div>
           <div class='full-section'>
             <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
-            <span class='wallet-type'>{{ order?.PayWithCoin?.Name }}</span>
-            <span class='number'>{{ order?.PayToAccount?.Address }}</span>
+            <span class='wallet-type'>{{ order?.PaymentCoinName }}</span>
+            <span class='number'>{{ order?.PaymentAddress }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAddressClick'>
             <div class='tooltip'>
               <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -48,7 +48,7 @@
         </div>
         <div class='hr' />
         <h4>{{ $t('MSG_IMPORTANT_INFORMATION') }}</h4>
-        <p v-html='$t("MSG_PAYMENT_NOTE", { COIN_NAME: order?.PayWithCoin?.Name })' />
+        <p v-html='$t("MSG_PAYMENT_NOTE", { COIN_NAME: order?.PaymentCoinName })' />
       </div>
       <div class='order-form'>
         <h3 class='form-title'>
@@ -56,9 +56,9 @@
         </h3>
         <div class='qr-code-container'>
           <div class='qr-code-container' ref='qrCodeContainer'>
-            <h5>{{ order?.PayWithCoin?.Name }} {{ $t('MSG_ADDRESS') }}</h5>
+            <h5>{{ order?.PaymentCoinName }} {{ $t('MSG_ADDRESS') }}</h5>
             <qrcode-vue
-              :value='order?.PayToAccount?.Address'
+              :value='order?.PaymentAddress'
               :size='qrCodeContainer?.clientWidth as number - 1'
               :margin='3'
               class='qr-code'
@@ -151,7 +151,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useOrderStore, NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds, useNotificationStore } from 'npool-cli-v2'
+import { NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds, useNotificationStore, useGoodStore } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -160,14 +160,14 @@ import copy from 'copy-to-clipboard'
 import copyIcon from 'src/assets/icon-copy.svg'
 import question from 'src/assets/question.svg'
 import warning from 'src/assets/warning.svg'
+import { Order, useLocalOrderStore } from 'src/teststore/mock/order'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 const PaymentState = defineAsyncComponent(() => import('src/components/purchase/PaymentState.vue'))
 
 interface Query {
-  paymentId: string
-  orderId: string
+  orderId: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -177,12 +177,15 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const orderId = computed(() => query.value.orderId)
 
-const orders = useOrderStore()
-const order = computed(() => orders.getOrderByID(orderId.value))
+const localOrder = useLocalOrderStore()
+const order = computed(() => localOrder.getOrderByID(orderId.value))
+
+const goods = useGoodStore()
+const good = computed(() => goods.getGoodByID(order.value?.GoodID as string))
 
 const notification = useNotificationStore()
 
-const remainSeconds = ref(orders.getOrderState(order.value))
+const remainSeconds = ref(localOrder.getOrderState(order.value as Order))
 const ticker = ref(-1)
 const counter = ref(0)
 
@@ -198,11 +201,10 @@ const showWarning = ref(true)
 const showCancelling = ref(false)
 
 const remainTicker = ref(-1)
-
 watch(counter, () => {
   if (counter.value % 30 === 0) {
-    orders.getOrder({
-      ID: orderId.value,
+    localOrder.getOrder({
+      ID: order.value?.ID as string,
       Message: {
         Error: {
           Title: t('MSG_GET_ORDER'),
@@ -212,16 +214,16 @@ watch(counter, () => {
         }
       }
     }, () => {
-      // TODO
+    // TODO
     })
   }
 })
 
 const launchTicker = () => {
   ticker.value = window.setInterval(() => {
-    remainSeconds.value = orders.getOrderState(order.value)
+    remainSeconds.value = localOrder.getOrderState(order.value as Order)
 
-    if (orders.orderPaid(order.value)) {
+    if (localOrder.orderPaid(order.value as Order)) {
       showStatus.value = true
       popupTitle.value = 'MSG_ORDER_COMPLETE'
       tipMessage.value = 'MSG_REVIEW_ORDER'
@@ -234,7 +236,7 @@ const launchTicker = () => {
       return
     }
 
-    let start = order.value?.Order.Payment ? order.value?.Order.Payment.CreateAt : 0
+    let start = order.value ? order.value?.CreatedAt : 0
     start += OrderTimeoutSeconds
     remainTime.value = remain(start)
     if (remainTime.value === RemainZero) {
@@ -252,15 +254,7 @@ const launchTicker = () => {
 }
 
 onMounted(() => {
-  if (order.value) {
-    if (!orders.validateOrder(order.value)) {
-      return
-    }
-    launchTicker()
-    return
-  }
-
-  orders.getOrder({
+  localOrder.getOrder({
     ID: orderId.value,
     Message: {
       Error: {
@@ -271,7 +265,7 @@ onMounted(() => {
       }
     }
   }, () => {
-    if (!orders.validateOrder(order.value)) {
+    if (!localOrder.validateOrder(order.value as Order)) {
       return
     }
     launchTicker()
@@ -298,11 +292,10 @@ const onPaymentCanceled = () => {
 
 const onCancelOrderClick = () => {
   showCancelling.value = false
-
-  const payment = order.value.Order.Payment
-  payment.UserSetCanceled = true
-  orders.updatePayment({
-    Info: payment,
+  localOrder.updateOrder({
+    ID: order.value?.ID as string,
+    PaymentID: order.value?.PaymentID as string,
+    Canceled: true,
     Message: {
       Error: {
         Title: t('MSG_UPDATE_PAYMENT'),
@@ -319,7 +312,7 @@ const onCancelOrderClick = () => {
 }
 
 const onCopyAmountClick = () => {
-  copy(order.value?.Order.Payment?.Amount.toString())
+  copy(order.value?.PaymentAmount as string)
   notification.Notifications.push({
     Title: t('MSG_AMOUNT_COPIED'),
     Message: t('MSG_COPY_AMOUNT_SUCCESS'),
@@ -329,7 +322,7 @@ const onCopyAmountClick = () => {
 }
 
 const onCopyAddressClick = () => {
-  copy(order.value?.PayToAccount?.Address)
+  copy(order.value?.PaymentAddress as string)
   notification.Notifications.push({
     Title: t('MSG_ADDRESS_COPIED'),
     Message: t('MSG_COPY_ADDRESS_SUCCESS'),

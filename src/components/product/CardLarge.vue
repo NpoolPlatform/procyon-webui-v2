@@ -75,10 +75,10 @@ import lightbulb from '../../assets/lightbulb.svg'
 const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
-  good: Good
-  projectClass: string
-  bgImg: string
-  purchaseCaption: string
+  good: Good;
+  projectClass: string;
+  bgImg: string;
+  purchaseCaption: string;
 }
 
 const props = defineProps<Props>()

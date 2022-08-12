@@ -24,9 +24,9 @@ import { defineProps, toRef, defineEmits, watch, ref, defineAsyncComponent } fro
 import { Country } from 'npool-cli-v2'
 
 interface Props {
-  value: string
-  error: boolean
-  required: boolean
+  value: string;
+  error: boolean;
+  required: boolean;
 }
 
 const CountrySelector = defineAsyncComponent(() => import('src/components/lang/CountrySelector.vue'))
@@ -39,9 +39,9 @@ const required = toRef(props, 'required')
 const myValue = ref(value.value)
 const country = ref(undefined as unknown as Country)
 
-const emit = defineEmits<{(e: 'update:value', value: string): void,
-  (e: 'focus'): void,
-  (e: 'blur'): void
+const emit = defineEmits<{(e: 'update:value', value: string): void;
+  (e: 'focus'): void;
+  (e: 'blur'): void;
 }>()
 watch(myValue, () => {
   emit('update:value', country.value?.Code?.replace(/ /g, '') + myValue.value?.replace(/ /g, ''))

@@ -30,12 +30,12 @@ import { MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
 
 interface Props {
-  menu: MenuItem
-  showIcon: boolean
-  showIconRight: boolean
-  showLabel: boolean
-  handleRouter: boolean
-  margin: boolean
+  menu: MenuItem;
+  showIcon: boolean;
+  showIconRight: boolean;
+  showLabel: boolean;
+  handleRouter: boolean;
+  margin: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {

@@ -1,6 +1,9 @@
 <template>
   <label for='coin'>{{ $t('MSG_BLOCKCHAIN') }}</label>
-  <select id='coin' :name='$t(label)' v-model='myCoin' required>
+  <select
+    id='coin' :name='$t(label)' v-model='myCoin'
+    required :disabled='disabled'
+  >
     <option
       v-for='_myCoin in coins'
       :key='_myCoin.ID'
@@ -18,8 +21,9 @@ import { useCoinStore, Coin, NotificationType, useCurrencyStore } from 'npool-cl
 import { useI18n } from 'vue-i18n'
 
 interface Props {
-  selectedCoin: Coin
-  label: string
+  selectedCoin: Coin;
+  label: string;
+  disabled?: boolean;
 }
 
 const props = defineProps<Props>()
@@ -29,7 +33,6 @@ const label = toRef(props, 'label')
 const coin = useCoinStore()
 const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale))
 const myCoin = ref(selectedCoin.value)
-
 const currency = useCurrencyStore()
 
 // eslint-disable-next-line @typescript-eslint/unbound-method

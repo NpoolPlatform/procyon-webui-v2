@@ -48,12 +48,12 @@
 import { defineProps, toRef, ref, computed, defineEmits, withDefaults, watch } from 'vue'
 
 interface Props {
-  label: string
-  rows: Array<never>
-  table: never
-  countPerPage: number
-  customizeBody: boolean
-  loading?: boolean
+  label: string;
+  rows: Array<never>;
+  table: never;
+  countPerPage: number;
+  customizeBody: boolean;
+  loading?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -70,7 +70,7 @@ const loading = toRef(props, 'loading')
 const page = ref(1)
 const pages = computed(() => Math.ceil(rows.value.length / countPerPage.value))
 
-const displayRows = computed(() => rows.value.filter((_, index) => {
+const displayRows = computed(() => rows.value?.filter((_, index) => {
   return index >= countPerPage.value * (page.value - 1) && index < countPerPage.value * page.value
 }))
 

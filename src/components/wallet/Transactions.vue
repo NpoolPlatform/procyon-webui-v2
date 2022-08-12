@@ -7,23 +7,20 @@
   >
     <template #table-body='myProps'>
       <q-tr :props='myProps'>
-        <q-td key='Name' :props='myProps'>
+        <q-td key='CoinName' :props='myProps'>
           <LogoName
             :logo='coin.getCoinByID(myProps.row.CoinTypeID)?.Logo'
-            :name='currency.formatCoinName(coin.getCoinByID(myProps.row.CoinTypeID)?.Name as string)'
+            :name='currency.formatCoinName(myProps.row.CoinName as string)'
           />
         </q-td>
-        <q-td key='Date' :props='myProps'>
-          {{ formatTime(myProps.row.CreateAt) }}
+        <q-td key='CreatedAt' :props='myProps'>
+          {{ formatTime(myProps.row.CreatedAt) }}
         </q-td>
         <q-td key='Amount' :props='myProps'>
-          {{ myProps.row.Amount }}
+          {{ transactionSign(myProps.row) }} {{ myProps.row.Amount }} {{ myProps.row.CoinUnit }}
         </q-td>
-        <q-td key='Status' :props='myProps'>
-          {{ myProps.row.State }}
-        </q-td>
-        <q-td key='Type' :props='myProps'>
-          {{ $t('MSG_WITHDRAWAL') }}
+        <q-td key='IOType' :props='myProps'>
+          {{ $t(transactionType(myProps.row)) }}
         </q-td>
       </q-tr>
     </template>
@@ -32,8 +29,9 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, useTransactionStore, Transaction, formatTime, useCurrencyStore } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, formatTime, useCurrencyStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { Detail, IOType, IOSubType, useLocalTransactionStore } from 'src/teststore/mock/transaction'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -42,22 +40,64 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
-const transaction = useTransactionStore()
+const localtrans = useLocalTransactionStore()
 const currency = useCurrencyStore()
-const transactions = computed(() => transaction.Transactions)
+const transactions = computed(() => localtrans.details)
+
+const transactionType = (tx: Detail) => {
+  switch (tx.IOType) {
+    case IOType.Incoming:
+      switch (tx.IOSubType) {
+        case IOSubType.Payment:
+          return 'MSG_DEPOSIT'
+        case IOSubType.MiningBenefit:
+          return 'MSG_MINING_REWARD'
+        case IOSubType.Commission:
+          return 'MSG_COMMISSION'
+        case IOSubType.TechniqueFeeCommission:
+          return 'MSG_TECHNIQUE_FEE_COMMISSION'
+        case IOSubType.Deposit:
+          return 'MSG_DEPOSIT'
+        default:
+          return 'MSG_UNKNOWN'
+      }
+    case IOType.Outcoming:
+      switch (tx.IOSubType) {
+        case IOSubType.Payment:
+          return 'MSG_ORDER_PAYMENT'
+        case IOSubType.Withdrawal:
+          return 'MSG_WITHDRAWAL'
+        default:
+          return 'MSG_UNKNOWN'
+      }
+    default:
+      return 'MSG_UNKNOWN'
+  }
+}
+
+const transactionSign = (tx: Detail) => {
+  switch (tx.IOType) {
+    case IOType.Incoming:
+      return '+'
+    case IOType.Outcoming:
+      return '-'
+    default:
+      return '*'
+  }
+}
 
 const table = computed(() => [
   {
-    name: 'Name',
+    name: 'CoinName',
     label: t('MSG_NAME'),
     align: 'left',
-    field: (row: Transaction) => coin.getCoinByID(row.CoinTypeID)?.Name
+    field: (row: Detail) => row.CoinName
   },
   {
-    name: 'Date',
+    name: 'CreatedAt',
     label: t('MSG_DATE'),
     align: 'center',
-    field: (row: Transaction) => formatTime(row.CreateAt)
+    field: (row: Detail) => formatTime(row.CreatedAt)
   },
   {
     name: 'Amount',
@@ -66,16 +106,10 @@ const table = computed(() => [
     field: 'Amount'
   },
   {
-    name: 'Status',
-    label: t('MSG_STATUS'),
-    align: 'center',
-    field: 'State'
-  },
-  {
-    name: 'Type',
+    name: 'IOType',
     label: t('MSG_TYPE'),
     align: 'center',
-    field: () => 'Withdrawal'
+    field: () => (row: Detail) => transactionType(row)
   }
 ])
 
@@ -85,20 +119,6 @@ onMounted(() => {
       Message: {
         Error: {
           Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-
-  if (transactions.value.length === 0) {
-    transaction.getTransactions({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_TRANSACTIONS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }

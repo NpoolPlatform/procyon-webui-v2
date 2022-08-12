@@ -1,5 +1,5 @@
 <template>
-  <div v-show='orders.length > 0' class='mining-summary content-glass'>
+  <div v-show='profits?.length' class='mining-summary content-glass'>
     <div class='mining-heading'>
       <div class='product-page-icon'>
         <img :src='coin?.Logo'>
@@ -10,7 +10,7 @@
     </div>
     <div class='warning'>
       <img :src='warning'>
-      <span>{{ $t('MSG_TESTNET_WARNING', { COIN_NAME: coin.Name, COIN_UNIT: coin.Unit }) }}</span>
+      <span>{{ $t('MSG_TESTNET_WARNING', { COIN_NAME: coin?.Name, COIN_UNIT: coin?.Unit }) }}</span>
     </div>
     <div class='top-line-summary'>
       <div class='top-line-item'>
@@ -20,7 +20,7 @@
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
-        <span class='value'>{{ _last24HoursEarningCoin.toFixed(2) }} {{ coin.Unit }}</span>
+        <span class='value'>{{ _last24HoursEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
         <span class='sub-value'>(* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
@@ -32,15 +32,15 @@
       <div class='detailed-summary' v-show='!short'>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
-          <span class='value'>{{ _last30DaysDailyEarningCoin.toFixed(2) }} {{ coin.Unit }}</span>
+          <span class='value'>{{ _last30DaysDailyEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
-          <span class='value'>{{ (_last24HoursEarningCoin * 0.2).toFixed(2) }} {{ coin.Unit }} (20%)</span>
+          <span class='value'>{{ (_last24HoursEarningCoin * 0.2).toFixed(2) }} {{ coin?.Unit }} (20%)</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-          <span class='value'>{{ (_last30DaysDailyEarningCoin * 0.8).toFixed(2) }} {{ coin.Unit }}</span>
+          <span class='value'>{{ (_last30DaysDailyEarningCoin * 0.8).toFixed(2) }} {{ coin?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
@@ -48,7 +48,7 @@
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
-          <span class='value'>{{ daily.toFixed(2) }} {{ coin.Unit }}</span>
+          <span class='value'>{{ daily.toFixed(2) }} {{ coin?.Unit }}</span>
         </div>
       </div>
     </q-slide-transition>
@@ -69,13 +69,14 @@
 <script setup lang='ts'>
 import {
   useCoinStore,
-  useOrderStore,
   PriceCoinName,
   NotificationType,
-  Coin,
-  useStockStore
+  useStockStore,
+  Coin
 } from 'npool-cli-v2'
+import { IntervalKey } from 'src/const/const'
 import { useMockSpacemeshStore } from 'src/teststore'
+import { useProfitStore } from 'src/teststore/mock/profit'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -100,16 +101,18 @@ const coin = computed(() => {
   return myCoin
 })
 
-const order = useOrderStore()
-const orders = computed(() => order.Orders.filter((myOrder) => {
-  return myOrder?.Good?.Main?.ID === coin.value.ID && order.validateOrder(myOrder)
+const profit = useProfitStore()
+const goodProfits = computed(() => profit.GoodProfits.get(IntervalKey.All))
+
+const profits = computed(() => goodProfits.value?.Profits.filter((p) => {
+  return p.CoinTypeID === coin.value?.ID
 }))
-const goodUnit = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.Unit : '')
-const goodPeriod = computed(() => orders.value.length > 0 ? orders.value[0].Good.Good.Good.DurationDays : '')
-const totalUnits = computed(() => orders.value.reduce((sum, b) => sum + b.Order.Order.Units, 0))
+const goodUnit = computed(() => profits.value?.length ? profits.value?.[0].GoodUnit : '')
+const goodPeriod = computed(() => profits.value?.length ? profits.value?.[0].GoodServicePeriodDays : '')
+const totalUnits = computed(() => profits.value?.length ? profits.value?.[0].Units : 0)
 const stock = useStockStore()
-const total = computed(() => stock.getStockByGoodID(orders.value[0]?.Good.Good.Good.ID as string)?.Total)
-const unitsRatio = computed(() => orders.value.length > 0 && total.value ? totalUnits.value / total.value : 0)
+const total = computed(() => profits.value?.length ? stock.getStockByGoodID(profits.value?.[0].GoodID)?.Total : 0)
+const unitsRatio = computed(() => profits.value?.length && total.value ? totalUnits.value / total.value : 0)
 const daily = computed(() => spacemesh.getNetworkDailyOutput)
 
 const spacemesh = useMockSpacemeshStore()
@@ -123,21 +126,6 @@ const _last30DaysDailyEarningCoin = computed(() => {
 const _totalEarningCoin = computed(() => {
   return spacemesh.getEarning(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3)
 })
-
-const getCoins = () => {
-  coins.getCoins({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_COINS'),
-        Message: t('MSG_GET_COINS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
-}
 
 const ticker = ref(-1)
 
@@ -172,23 +160,6 @@ onMounted(() => {
     updater()
   }, 30000)
   updater()
-
-  if (coins.Coins.length === 0) {
-    getCoins()
-  }
-
-  stock.getStocks({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GOOD_STOCKS'),
-        Message: t('MSG_GET_GOOD_STOCKS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
 })
 
 onUnmounted(() => {

@@ -24,10 +24,10 @@ import { useI18n } from 'vue-i18n'
 import addImage from 'src/assets/icon-plus.svg'
 
 interface Props {
-  src: string
-  placeholder: string
-  selected: boolean
-  updatable: boolean
+  src: string;
+  placeholder: string;
+  selected: boolean;
+  updatable: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -74,8 +74,8 @@ const toBase64 = (filename: File, onLoaded: Base64Handler) => {
   })
 }
 
-const emit = defineEmits<{(e: 'update:src', img: string): void,
-  (e: 'update:selected', selected: boolean): void
+const emit = defineEmits<{(e: 'update:src', img: string): void;
+  (e: 'update:selected', selected: boolean): void;
 }>()
 
 const onImgSelected = (evt: Event) => {

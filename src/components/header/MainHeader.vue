@@ -158,22 +158,12 @@ const initialize = () => {
     Message: {}
   }, () => {
     if (inspire.InvitationCode?.InvitationCode?.length) {
-      inspire.getReferrals({
-        Message: {}
-      }, () => {
-        // TODO
-      })
       inspire.getPurchaseAmountSettings({
         Message: {}
       }, () => {
         // TODO
       })
     }
-  })
-  user.getLoginHistories({
-    Message: {}
-  }, () => {
-    // TODO
   })
 }
 
