@@ -48,7 +48,7 @@
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
             <td><span class='aff-number'>{{ totalUnits.toFixed(0) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ totalCommission.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ totalCommission.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
             <td>
@@ -58,7 +58,7 @@
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
             <td><span class='aff-number'>{{ userTotalUnits(referral) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ userTotalAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ userTotalCommission(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ userTotalCommission(referral).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -183,7 +183,7 @@ const totalCommission = computed(() => {
   let total = 0
   referrals.value.forEach((referral) => {
     referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-      total += Number(el.TotalCommission)
+      total += Number(el.SuperiorCommission)
     })
   })
   return total
@@ -208,7 +208,7 @@ const userTotalAmount = (referral: LocalProductArchivement) => {
 const userTotalCommission = (referral: LocalProductArchivement) => {
   let total = 0
   referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-    total += Number(el.TotalCommission)
+    total += Number(el.SuperiorCommission)
   })
   return total
 }

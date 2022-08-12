@@ -62,7 +62,12 @@
             </td>
             <td><span class='aff-number'>{{ _good.TotalUnits }}<span class='unit'>{{ _good.GoodUnit?.length ? $t(_good.GoodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ Number(_good.TotalAmount).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ child ? Number(_good.SuperiorCommission).toFixed(4) : Number(_good.TotalCommission).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td>
+              <span class='aff-number'>
+                {{ child ? (_good.SuperiorCommission ? Number(_good.SuperiorCommission).toFixed(4) : 0.0000) : Number(_good.TotalCommission).toFixed(4) }}
+                <span class='unit'>{{ PriceCoinName }}</span>
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
