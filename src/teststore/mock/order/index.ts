@@ -20,7 +20,6 @@ import { API, OrderTimeoutSeconds, PaymentState } from './const'
 export const useLocalOrderStore = defineStore('localorder', {
   state: () => ({
     Orders: [] as Array<Order>,
-    CurrentOrder: {} as Order,
     Total: 0
   }),
   getters: {
@@ -107,7 +106,8 @@ export const useLocalOrderStore = defineStore('localorder', {
         req,
         req.Message,
         (resp: CreateOrderResponse): void => {
-          this.CurrentOrder = resp.Info
+          this.Orders.splice(0, 0, resp.Info)
+          this.Total += 1
           handler(resp.Info.ID, resp.Info.PaymentID, false)
         },
         () => {
