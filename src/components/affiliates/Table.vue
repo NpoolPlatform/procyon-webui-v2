@@ -46,9 +46,9 @@
           <tr class='aff-info total-row'>
             <td><span class='aff-product'>{{ $t('MSG_TOTAL') }}</span></td>
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
-            <td><span class='aff-number'>{{ getCoinTotalSummary('TotalUnits').toFixed(0) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ getCoinTotalSummary('TotalAmount').toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ getCoinTotalSummary('TotalCommission').toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ totalUnits.toFixed(0) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
+            <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ totalCommission.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
             <td>
@@ -58,11 +58,11 @@
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
             <!-- <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ $t('goodUnit') }}</span></span></td> -->
             <!-- <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ 0 }}</span></span></td> -->
-            <td><span class='aff-number'>{{ getTotal(referral, 'TotalUnits') }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ getTotal(referral, 'TotalAmount').toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ userTotalUnits(referral) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
+            <td><span class='aff-number'>{{ userTotalAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
             <!-- <td><span class='aff-number'>{{ referralAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td> -->
             <!-- <td><span class='aff-number'>{{ referralContribution(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td> -->
-            <td><span class='aff-number'>{{ getTotal(referral, 'TotalCommission').toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ userTotalCommission(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -96,7 +96,7 @@ import {
 
 import edit from '../../assets/edit.svg'
 import { useRouter } from 'vue-router'
-import { LocalArchivement, LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
+import { LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
 
 interface MyCoin {
   label: string;
@@ -163,32 +163,60 @@ const joinTime = (referral: LocalProductArchivement) => {
   return formatTime(referral.InvitedAt, false)?.split(' ')[1]
 }
 
-// dynamic get object attribute in typescript
-function prop<T extends object, K extends keyof T> (obj: T, key: K) {
-  return obj[key]
-}
-const getTotal = computed(() => (referral: LocalProductArchivement, attr: keyof LocalArchivement) => {
+const totalUnits = computed(() => {
   let total = 0
-  const rfs = referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID)
-  rfs.forEach((el) => {
-    const val = prop(el, attr)
-    console.log('val: ', val)
-    total += Number(val)
-  })
-  return total
-})
-
-const getCoinTotalSummary = computed(() => (attr: keyof LocalArchivement) => {
-  let total = 0
-  referrals.value.forEach((el) => {
-    const products = el.Archivements.filter((product) => product.CoinTypeID === selectedCoin.value?.value.ID)
-    products.forEach((product) => {
-      const val = prop(product, attr)
-      total += Number(val)
+  referrals.value.forEach((referral) => {
+    referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+      total += Number(el.TotalUnits)
     })
   })
   return total
 })
+
+const totalAmount = computed(() => {
+  let total = 0
+  referrals.value.forEach((referral) => {
+    referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+      total += Number(el.TotalAmount)
+    })
+  })
+  return total
+})
+
+const totalCommission = computed(() => {
+  let total = 0
+  referrals.value.forEach((referral) => {
+    referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+      total += Number(el.TotalCommission)
+    })
+  })
+  return total
+})
+
+const userTotalUnits = (referral: LocalProductArchivement) => {
+  let total = 0
+  referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+    total += Number(el.TotalUnits)
+  })
+  return total
+}
+
+const userTotalAmount = (referral: LocalProductArchivement) => {
+  let total = 0
+  referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+    total += Number(el.TotalAmount)
+  })
+  return total
+}
+
+const userTotalCommission = (referral: LocalProductArchivement) => {
+  let total = 0
+  referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
+    total += Number(el.TotalCommission)
+  })
+  return total
+}
+
 const router = useRouter()
 
 const onSetKolClick = (referral: LocalProductArchivement) => {
