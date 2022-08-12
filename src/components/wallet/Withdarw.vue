@@ -7,7 +7,7 @@
             <div class='product-page-icon'>
               <img :src='coins.getCoinLogo(coin)'>
             </div>
-            <h1>{{ coin.Name }}</h1>
+            <h1>{{ coin?.Name }}</h1>
           </div>
           <div class='withdraw'>
             <h3>{{ $t('MSG_ASSET_WITHDRAWAL') }}</h3>
@@ -40,7 +40,7 @@
               </div>
               <div class='three-section'>
                 <h4>{{ $t('MSG_AMOUNT_WILL_RECEIVE') }}:</h4>
-                <span class='number'>{{ (amount - feeAmount).toFixed(4) }}</span>
+                <span class='number'>{{ amount - feeAmount > 0 ? (amount - feeAmount).toFixed(4) : 0 }}</span>
                 <span class='unit'>{{ coin.Unit }}</span>
               </div>
 
@@ -141,9 +141,10 @@ import { useI18n } from 'vue-i18n'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore, AccountType as LocalAccountType } from 'src/teststore/mock/transaction'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
-import { IntervalKey } from 'src/const/const'
+import { IntervalKey, ThrottleSeconds } from 'src/const/const'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
+import { throttle } from 'quasar'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -186,9 +187,9 @@ const general = useGeneralStore()
 const localledger = useLocalLedgerStore()
 const ltransation = useLocalTransactionStore()
 
-const balance = computed(() => general.getCoinBalance(coin.value.ID as string))
+const balance = computed(() => general.getCoinBalance(coin?.value.ID as string))
 
-const onSubmit = () => {
+const onSubmit = throttle(() => {
   if (!selectedAccount.value) {
     return
   }
@@ -198,7 +199,7 @@ const onSubmit = () => {
     return
   }
   verifing.value = true
-}
+}, ThrottleSeconds * 1000)
 
 const onMenuHide = () => {
   verifing.value = false
@@ -235,7 +236,7 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
 }
 
 const getUserGenerals = (offset:number, limit: number) => {
-  general.$reset()
+  // general.$reset()
   general.getGenerals({
     Offset: offset,
     Limit: limit,
@@ -323,6 +324,7 @@ onMounted(() => {
   })
 
   if (localledger.Generals.size === 0) {
+    console.log('localledger: ', localledger.Generals)
     getUserGenerals(0, 100)
   }
 
