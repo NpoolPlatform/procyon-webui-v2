@@ -380,6 +380,26 @@ onMounted(() => {
     })
   }
 })
+
+const getOrders = (offset:number, limit: number) => {
+  localOrder.getOrders({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_ORDERS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (error: boolean, count?: number) => {
+    if (error || count === 0) {
+      return
+    }
+    getOrders(offset + limit, limit)
+  })
+}
+
 const localOrder = useLocalOrderStore()
 const onSubmit = throttle(() => {
   showBalanceDialog.value = false
@@ -403,6 +423,9 @@ const onSubmit = throttle(() => {
     if (error) {
       return
     }
+
+    getOrders(0, 100)
+
     void router.push({
       path: '/payment',
       query: {

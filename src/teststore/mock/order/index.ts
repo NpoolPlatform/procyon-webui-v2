@@ -91,7 +91,10 @@ export const useLocalOrderStore = defineStore('localorder', {
         req,
         req.Message,
         (resp: GetOrdersResponse): void => {
-          this.Orders.push(...resp.Infos.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
+          resp.Infos.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1).forEach((el) => {
+            const index = this.Orders.findIndex((oel) => oel.ID === el.ID)
+            this.Orders.splice(index < 0 ? 0 : index, index < 0 ? 0 : 1, el)
+          })
           this.Total = resp.Total
           done(false, resp.Infos.length)
         },

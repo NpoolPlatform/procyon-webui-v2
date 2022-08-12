@@ -404,6 +404,7 @@ const submitting = ref(false)
 
 const router = useRouter()
 const logined = useLoginedUserStore()
+const order = useLocalOrderStore()
 
 const getUserGenerals = (offset:number, limit: number) => {
   submitting.value = true
@@ -438,6 +439,25 @@ const createOrder = () => {
   }
 }
 
+const getOrders = (offset:number, limit: number) => {
+  order.getOrders({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_ORDERS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (error: boolean, count?: number) => {
+    if (error || count === 0) {
+      return
+    }
+    getOrders(offset + limit, limit)
+  })
+}
+
 const localOrder = useLocalOrderStore()
 const onSubmit = () => {
   showBalanceDialog.value = false
@@ -457,11 +477,13 @@ const onSubmit = () => {
       }
     }
   }, (orderId: string, paymentId: string, error: boolean) => {
-    // TODO
+    submitting.value = false
     if (error) {
-      submitting.value = false
       return
     }
+
+    getOrders(0, 100)
+
     void router.push({
       path: '/payment',
       query: {
