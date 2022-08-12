@@ -1,7 +1,7 @@
 <template>
   <ShowSwitchTable
     label='MSG_WITHDRAWS'
-    :rows='(withdraws.Withdraws as Array<never>)'
+    :rows='(withdraws as Array<never>)'
     :table='(table as never)'
     :customize-body='true'
   >
@@ -45,7 +45,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const locationTrans = useLocalTransactionStore()
 const currency = useCurrencyStore()
-const withdraws = computed(() => locationTrans.Withdraws)
+const withdraws = computed(() => locationTrans.withdraws)
 
 const table = computed(() => [
   {

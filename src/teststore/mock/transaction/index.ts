@@ -23,7 +23,14 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
       Total: 0
     }
   }),
-  getters: {},
+  getters: {
+    withdraws (): Array<Withdraw> {
+      return this.Withdraws.Withdraws.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
+    },
+    details (): Array<Detail> {
+      return this.Details.Details.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
+    }
+  },
   actions: {
     getDetails (req: GetDetailRequest, done: (error: boolean, count?: number) => void) {
       doActionWithError<GetDetailRequest, GetDetailResponse>(
@@ -34,7 +41,6 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
           resp.Infos.forEach((el) => {
             this.Details.Details.push(el)
           })
-          this.Details.Details.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
           this.Details.Total = resp.Total
           done(false, resp.Infos.length)
         },
@@ -50,7 +56,6 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
         req.Message,
         (resp: GetWithdrawResponse): void => {
           this.Withdraws.Withdraws.push(...resp.Infos)
-          this.Withdraws.Withdraws.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1)
           this.Withdraws.Total = resp.Total
           done(false, resp.Infos.length)
         },

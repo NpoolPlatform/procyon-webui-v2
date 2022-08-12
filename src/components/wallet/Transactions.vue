@@ -42,7 +42,7 @@ const { t } = useI18n({ useScope: 'global' })
 const coin = useCoinStore()
 const localtrans = useLocalTransactionStore()
 const currency = useCurrencyStore()
-const transactions = computed(() => localtrans.Details.Details)
+const transactions = computed(() => localtrans.details)
 
 const transactionType = (tx: Detail) => {
   switch (tx.IOType) {
