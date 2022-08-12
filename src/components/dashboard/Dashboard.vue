@@ -160,9 +160,9 @@ onMounted(() => {
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
   }
-
-  order.$reset()
-  getOrders(0, 100)
+  if (order.Orders.length === 0) {
+    getOrders(0, 100)
+  }
 
   if (coin.ProductInfos.size === 0) {
     coin.getCoinProductInfos({
