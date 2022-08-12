@@ -1,4 +1,4 @@
 enum API {
-  GET_COIN_ARCHIVEMENTS = '/inspire/v1/get/coinarchivements'
+  GET_GOOD_ARCHIVEMENTS = '/inspire/v1/get/goodarchivements'
 }
 export { API }

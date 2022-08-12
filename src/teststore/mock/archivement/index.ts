@@ -18,7 +18,7 @@ export const useArchivementStore = defineStore('archivement', {
   actions: {
     getCoinArchivements (req: GetArchivementRequest, done: (error: boolean, count?: number) => void) {
       doActionWithError<GetArchivementRequest, GetArchivementResponse>(
-        API.GET_COIN_ARCHIVEMENTS,
+        API.GET_GOOD_ARCHIVEMENTS,
         req,
         req.Message,
         (resp: GetArchivementResponse): void => {
