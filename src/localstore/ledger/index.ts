@@ -9,7 +9,11 @@ export const useLocalLedgerStore = defineStore('localledger', {
     Generals: new Map<string, BalanceGeneral>(),
     CoinProfits: new Map<string, CoinProfit>()
   }),
-  getters: {},
+  getters: {
+    generals (): Array<BalanceGeneral> {
+      return Array.from(this.Generals.values()).sort((a, b) => a.USDValue > b.USDValue ? -1 : 1)
+    }
+  },
   actions: {
     initGeneral (generals: Array<General>) {
       const currencies = useCurrencyStore()
