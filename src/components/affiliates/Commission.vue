@@ -33,10 +33,10 @@ import { useLocalArchivementStore } from 'src/localstore/affiliates'
 const commissionJPY = ref(0)
 
 const currency = useCurrencyStore()
-const localArchivements = useLocalArchivementStore()
+const larchivements = useLocalArchivementStore()
 const logined = useLoginedUserStore()
 
-const inviter = computed(() => localArchivements.Archivements.find((el) => logined.LoginedUser?.User.ID === el.UserID))
+const inviter = computed(() => larchivements.Archivements.find((el) => logined.LoginedUser?.User.ID === el.UserID))
 
 const totalCommission = computed(() => {
   let total = 0

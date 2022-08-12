@@ -179,12 +179,12 @@ const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
 }).sort((a, b) => {
   return a.Start < b.Start ? 1 : -1
 }))
-const localArchivement = useLocalArchivementStore()
+const larchivement = useLocalArchivementStore()
 
 // get parent
 const inviter = computed(() => {
-  const index = localArchivement.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
-  return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
+  const index = larchivement.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
+  return index < 0 ? undefined as unknown as LocalProductArchivement : larchivement.Archivements[index]
 })
 const inviterGoodPercent = (goodID: string) => {
   const good = inviter.value.Archivements.find((el) => el.GoodID === goodID)

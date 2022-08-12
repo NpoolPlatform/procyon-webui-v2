@@ -18,7 +18,7 @@ export const useLocalArchivementStore = defineStore('localarchivement', {
         const localArchivements = [] as Array<LocalArchivement>
         item.Archivements.forEach((el) => {
           localArchivements.push({
-            CoinTypeID: el.CoinName,
+            CoinTypeID: el.CoinTypeID,
             CoinName: el.CoinName,
             CoinLogo: el.CoinLogo,
             CoinUnit: el.CoinUnit,

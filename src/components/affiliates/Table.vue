@@ -56,12 +56,8 @@
               <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
-            <!-- <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ $t('goodUnit') }}</span></span></td> -->
-            <!-- <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ 0 }}</span></span></td> -->
             <td><span class='aff-number'>{{ userTotalUnits(referral) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ userTotalAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <!-- <td><span class='aff-number'>{{ referralAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td> -->
-            <!-- <td><span class='aff-number'>{{ referralContribution(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td> -->
             <td><span class='aff-number'>{{ userTotalCommission(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
@@ -103,8 +99,8 @@ interface MyCoin {
   value: Coin;
 }
 
-const localArchivements = useLocalArchivementStore()
-const referrals = computed(() => localArchivements.Archivements.filter((referral) => !referral.Kol).sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
+const larchivements = useLocalArchivementStore()
+const referrals = computed(() => larchivements.Archivements.filter((referral) => !referral.Kol).sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
 
 const coin = useCoinStore()
 const coins = computed(() => Array.from(coin.Coins.filter((el) => {
