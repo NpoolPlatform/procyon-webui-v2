@@ -1,11 +1,31 @@
 <template>
-  <Maintenance />
+  <Maintenance>
+    <template #top-right>
+      <header class='desktop1'>
+        <img :src='lightLogo' class='attachment-large size-large logo cursor-pointer'>
+        <div class='nav'>
+          <ul class='language-picker'>
+            <li :class='[ locale === "ja-JP" ? "selected" : "" ]'>
+              <a class='language' @click='locale = "ja-JP"'>
+                JP
+              </a>
+            </li>
+            <li :class='[ locale === "en-US" ? "selected" : "" ]'>
+              <a class='language' @click='locale = "en-US"'>
+                EN
+              </a>
+            </li>
+          </ul>
+        </div>
+      </header>
+    </template>
+  </Maintenance>
 </template>
 <script setup lang='ts'>
 import { defineAsyncComponent, watch, ref, Component, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 const { locale } = useI18n({ useScope: 'global' })
-
+import lightLogo from 'src/assets/procyon-light.svg'
 const Maintenance = ref<Component>()
 
 watch(locale, () => {
