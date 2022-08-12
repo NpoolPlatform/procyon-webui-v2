@@ -22,6 +22,22 @@ export const useLocalLedgerStore = defineStore('localledger', {
       let total = 0
       this.Generals.forEach((el) => { total += el.JPYValue })
       return total
+    },
+    toLastDayUsdtAmount (): number {
+      let total = 0
+      this.Generals.forEach((el) => { total += el.Last24HoursBalance })
+      return total
+    },
+
+    toUsdtProfit (): number {
+      let total = 0
+      this.CoinProfits.forEach((el) => { total += el.USDAmount })
+      return total
+    },
+    toLastDayUsdtProfit (): number {
+      let total = 0
+      this.CoinProfits.forEach((el) => { el.Last24HourUSDAmount ? total += el.Last24HourUSDAmount : total += 0 })
+      return total
     }
   },
   actions: {
