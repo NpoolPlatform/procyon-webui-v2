@@ -15,7 +15,7 @@ import {
   UpdateOrderRequest,
   UpdateOrderResponse
 } from './types'
-import { API, OrderTimeoutSeconds, PaymentState } from './const'
+import { API, OrderTimeoutSeconds, OrderState } from './const'
 
 export const useLocalOrderStore = defineStore('localorder', {
   state: () => ({
@@ -37,19 +37,19 @@ export const useLocalOrderStore = defineStore('localorder', {
         if (order.PaymentID === InvalidID) {
           return 'MSG_INVALID_PAYMENT'
         }
-        if (order.State === PaymentState.PAYMENT_TIMEOUT) {
+        if (order.State === OrderState.PAYMENT_TIMEOUT) {
           return 'MSG_CANCELED_BY_TIMEOUT'
         }
-        if (order.State === PaymentState.WAIT_PAYMENT) {
+        if (order.State === OrderState.WAIT_PAYMENT) {
           return remain(order.CreatedAt + OrderTimeoutSeconds)
         }
-        if (order.State === PaymentState.EXPIRED) {
+        if (order.State === OrderState.EXPIRED) {
           return 'MSG_DONE'
         }
-        if (order.State === PaymentState.CANCELED || order.State === PaymentState.USER_CANCELED) {
+        if (order.State === OrderState.CANCELED || order.State === OrderState.USER_CANCELED) {
           return 'MSG_PAYMENT_CANCELED'
         }
-        if (order.State === PaymentState.PAID) {
+        if (order.State === OrderState.PAID) {
           return 'MSG_WAIT_FOR_START'
         }
         return 'MSG_IN_SERVICE'
@@ -57,7 +57,7 @@ export const useLocalOrderStore = defineStore('localorder', {
     },
     orderPaid (): (order: Order) => boolean {
       return (order: Order) => {
-        return order.State === PaymentState.PAID
+        return order.State === OrderState.PAID || order.State === OrderState.IN_SERVICE || order.State === OrderState.EXPIRED
       }
     },
     validateOrder () {
@@ -68,16 +68,16 @@ export const useLocalOrderStore = defineStore('localorder', {
         if (order.PaymentID === InvalidID) {
           return false
         }
-        if (order.State === PaymentState.PAYMENT_TIMEOUT) {
+        if (order.State === OrderState.PAYMENT_TIMEOUT) {
           return false
         }
-        if (order.State === PaymentState.EXPIRED) {
+        if (order.State === OrderState.EXPIRED) {
           return false
         }
-        if (order.State === PaymentState.CANCELED) {
+        if (order.State === OrderState.CANCELED) {
           return false
         }
-        if (order.State === PaymentState.USER_CANCELED) {
+        if (order.State === OrderState.USER_CANCELED) {
           return false
         }
         return true
@@ -149,3 +149,4 @@ export const useLocalOrderStore = defineStore('localorder', {
 })
 
 export * from './types'
+export { OrderState } from './const'

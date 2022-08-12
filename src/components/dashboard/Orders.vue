@@ -21,7 +21,7 @@ import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue
 import { formatTime, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { Order, useLocalOrderStore } from 'src/teststore/mock/order'
+import { Order, useLocalOrderStore, OrderState } from 'src/teststore/mock/order'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
@@ -76,8 +76,10 @@ const onRowClick = (myOrder: Order) => {
   if (!order.validateOrder(order.getOrderByID(myOrder.ID) as Order)) {
     return
   }
-  if (!order.validateOrder(order.getOrderByID(myOrder.ID) as Order)) {
-    return
+  switch (myOrder.State) {
+    case OrderState.IN_SERVICE:
+    case OrderState.EXPIRED:
+      return
   }
   void router.push({
     path: '/payment',

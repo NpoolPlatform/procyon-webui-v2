@@ -1,4 +1,5 @@
 import { BaseRequest } from 'npool-cli-v2'
+import { OrderState } from './const'
 
 interface Order {
   ID: string;
@@ -41,7 +42,7 @@ interface Order {
   SpecialOfferAmount: string;
   CreatedAt: number;
   PaidAt: number;
-  State: string;
+  State: OrderState;
   OrderType: string;
   Start: number;
   End: number;

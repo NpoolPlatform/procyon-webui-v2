@@ -254,13 +254,6 @@ const launchTicker = () => {
 }
 
 onMounted(() => {
-  if (order.value) {
-    if (!localOrder.validateOrder(order.value)) {
-      return
-    }
-    launchTicker()
-    return
-  }
   localOrder.getOrder({
     ID: orderId.value,
     Message: {
