@@ -10,7 +10,7 @@
     </div>
     <div class='warning'>
       <img :src='warning'>
-      <span>{{ $t('MSG_TESTNET_WARNING', { COIN_NAME: coin.Name, COIN_UNIT: coin.Unit }) }}</span>
+      <span>{{ $t('MSG_TESTNET_WARNING', { COIN_NAME: coin?.Name, COIN_UNIT: coin?.Unit }) }}</span>
     </div>
     <div class='top-line-summary'>
       <div class='top-line-item'>
