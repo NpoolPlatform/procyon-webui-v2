@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
 import { formatTime, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -66,7 +66,7 @@ const table = computed(() => [
     name: 'State',
     label: t('MSG_STATE'),
     align: 'center',
-    field: (row: Order) => t(order.getOrderState(row))
+    field: (row: Order) => stateMap?.value.get(row.ID)?.length ? t(stateMap?.value.get(row.ID) as string) : ''
   }
 ])
 
@@ -87,6 +87,25 @@ const onRowClick = (myOrder: Order) => {
     }
   })
 }
+
+const stateMap = ref(new Map<string, string>())
+
+const ticker = ref(-1)
+
+onMounted(() => {
+  ticker.value = window.setInterval(() => {
+    orders.value.forEach((el) => {
+      stateMap.value.set(el.ID, order.getOrderState(el))
+    })
+    ticker.value += 1
+  }, 1000)
+})
+
+onUnmounted(() => {
+  if (ticker.value >= 0) {
+    window.clearInterval(ticker.value)
+  }
+})
 
 </script>
 
