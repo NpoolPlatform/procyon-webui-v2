@@ -25,6 +25,9 @@ export const useGeneralStore = defineStore('general', {
         this.Generals.Generals.filter((el) => el.CoinTypeID === coinTypeID).forEach((sl) => { total += Number(sl.Spendable) })
         return total
       }
+    },
+    getUSDTBalance (): number {
+      return 0
     }
   },
   actions: {

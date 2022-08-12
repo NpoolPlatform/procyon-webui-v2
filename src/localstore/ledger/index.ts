@@ -12,6 +12,16 @@ export const useLocalLedgerStore = defineStore('localledger', {
   getters: {
     generals (): Array<BalanceGeneral> {
       return Array.from(this.Generals.values()).sort((a, b) => a.USDValue > b.USDValue ? -1 : 1)
+    },
+    toUsdtAmount (): number {
+      let total = 0
+      this.Generals.forEach((el) => { total += el.USDValue })
+      return total
+    },
+    toJpyAmount (): number {
+      let total = 0
+      this.Generals.forEach((el) => { total += el.JPYValue })
+      return total
     }
   },
   actions: {
