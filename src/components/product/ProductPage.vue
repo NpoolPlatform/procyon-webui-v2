@@ -166,7 +166,7 @@
             <h3>{{ $t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
             <div class='full-section'>
               <h4>{{ $t('MSG_AVAILABLE_BALANCE') }}</h4>
-              <span class='number'>{{ getUserBalance }}</span>
+              <span class='number'>{{ getUserBalance.toFixed(4) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
             <div class='hr' />
@@ -406,6 +406,7 @@ const router = useRouter()
 const logined = useLoginedUserStore()
 
 const getUserGenerals = (offset:number, limit: number) => {
+  submitting.value = true
   general.getGenerals({
     Offset: offset,
     Limit: limit,
@@ -417,6 +418,7 @@ const getUserGenerals = (offset:number, limit: number) => {
       }
     }
   }, (error: boolean, count?: number) => {
+    submitting.value = false
     if (error) {
       return
     }
@@ -428,7 +430,6 @@ const getUserGenerals = (offset:number, limit: number) => {
   })
 }
 const createOrder = () => {
-  console.log('balance: ', getUserBalance.value)
   if (getUserBalance.value <= 0) {
     onSubmit()
   } else {
@@ -439,12 +440,9 @@ const createOrder = () => {
 
 const localOrder = useLocalOrderStore()
 const onSubmit = () => {
-  onPurchaseAmountFocusOut()
-  if (purchaseAmountError.value) {
-    return
-  }
   showBalanceDialog.value = false
   submitting.value = true
+
   localOrder.createOrder({
     GoodID: goodId.value,
     Units: myPurchaseAmount.value,
@@ -488,11 +486,11 @@ const onPurchaseClick = throttle(() => {
     })
     return
   }
-  if (general.Generals.Generals.length === 0) {
-    getUserGenerals(0, 100)
+  onPurchaseAmountFocusOut()
+  if (purchaseAmountError.value) {
     return
   }
-  createOrder()
+  getUserGenerals(0, 100)
 }, ThrottleSeconds * 1000)
 
 onMounted(() => {
