@@ -7,10 +7,10 @@
       <p class='aff-email'>
         {{ subusername }}
       </p>
-      <div v-for='_good in referral.Archivements' :key='_good.CurGoodID'>
-        <label>{{ _good.CurGoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
-        <select v-model='_good.CurPercent'>
-          <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.CurGoodID))' :key='kol'>
+      <div v-for='_good in referral.Archivements' :key='_good.GoodID'>
+        <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
+        <select v-model='_good.CommissionPercent'>
+          <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
             {{ kol }}
           </option>
         </select>
@@ -91,8 +91,8 @@ const userKOLOptions = computed(() => (maxKOL: number) => {
   return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
 })
 const inviterGoodPercent = (goodID: string) => {
-  const good = inviter.value.Archivements.find((el) => el.CurGoodID === goodID)
-  return good === undefined ? 0 : good.CurPercent
+  const good = inviter.value.Archivements.find((el) => el.GoodID === goodID)
+  return good === undefined ? 0 : good.CommissionPercent
 }
 
 const subusername = computed(() => {
@@ -110,8 +110,8 @@ const backTimer = ref(-1)
 const onSubmit = () => {
   let overflow = false
   for (const g of referral.value.Archivements) {
-    if (g.CurPercent > inviterGoodPercent(g.CurGoodID)) {
-      g.CurPercent = inviterGoodPercent(g.CurGoodID)
+    if (g.CommissionPercent > inviterGoodPercent(g.GoodID)) {
+      g.CommissionPercent = inviterGoodPercent(g.GoodID)
       overflow = true
     }
   }
@@ -153,8 +153,8 @@ const onSubmit = () => {
         IDNumber: ''
       }, locale.value) as string,
       Info: {
-        GoodID: good.CurGoodID,
-        Percent: good.CurPercent,
+        GoodID: good.GoodID,
+        Percent: good.CommissionPercent,
         Start: Math.ceil(Date.now() / 1000),
         End: 0
       },

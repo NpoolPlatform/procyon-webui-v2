@@ -11,10 +11,10 @@ interface Archivement {
   SelfAmount: string;
   TotalCommission: string;
   SelfCommission: string;
-  CurPercent: number;
-  CurGoodID: string;
-  CurGoodName: string;
-  CurGoodUnit: string;
+  CommissionPercent: number;
+  GoodID: string;
+  GoodName: string;
+  GoodUnit: string;
 }
 
 interface ProductArchivement {

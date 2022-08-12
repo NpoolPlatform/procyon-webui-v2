@@ -28,10 +28,10 @@ export const useLocalArchivementStore = defineStore('localarchivement', {
             SelfAmount: el.SelfAmount,
             TotalCommission: el.TotalCommission,
             SelfCommission: el.SelfCommission,
-            CurPercent: el.CurPercent,
-            CurGoodID: el.CurGoodID,
-            CurGoodName: el.CurGoodName,
-            CurGoodUnit: el.CurGoodUnit,
+            CommissionPercent: el.CommissionPercent,
+            GoodID: el.GoodID,
+            GoodName: el.GoodName,
+            GoodUnit: el.GoodUnit,
             Editing: false
           })
         })

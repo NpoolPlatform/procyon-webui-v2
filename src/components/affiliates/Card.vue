@@ -37,11 +37,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='(_good,idx) in referral.Archivements' :key='idx'>
+          <tr class='aff-info' v-for='(_good, idx) in referral.Archivements' :key='idx'>
             <td><span class='aff-product'>{{ _good.CoinName }}</span></td>
             <td v-if='_good.Editing'>
-              <select v-model='_good.CurPercent' class='kol-dropdown'>
-                <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.CurGoodID))' :key='kol'>
+              <select v-model='_good.CommissionPercent' class='kol-dropdown'>
+                <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
                   {{ kol }}
                 </option>
               </select>
@@ -50,17 +50,17 @@
               </button>
             </td>
             <td v-else>
-              <span class='aff-number'>{{ _good.CurPercent }}<span class='unit'>%</span></span>
+              <span class='aff-number'>{{ _good.CommissionPercent }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
-                :class='[ "alt", goodOnline(_good.CurGoodID) ? "" : "in-active" ]'
-                :disabled='!goodOnline(_good.CurGoodID)'
+                :class='[ "alt", goodOnline(_good.GoodID) ? "" : "in-active" ]'
+                :disabled='!goodOnline(_good.GoodID)'
                 @click='onSetCommissionClick(_good)'
               >
                 {{ $t('MSG_SET') }}
               </button>
             </td>
-            <td><span class='aff-number'>{{ _good.TotalUnits }}<span class='unit'>{{ $t(_good.CurGoodUnit) }}</span></span></td>
+            <td><span class='aff-number'>{{ _good.TotalUnits }}<span class='unit'>{{ _good.GoodUnit?.length ? $t(_good.GoodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ Number(_good.TotalAmount).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
             <td><span class='aff-number'>{{ Number(_good.TotalCommission).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
@@ -187,8 +187,8 @@ const inviter = computed(() => {
   return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
 })
 const inviterGoodPercent = (goodID: string) => {
-  const good = inviter.value.Archivements.find((el) => el.CurGoodID === goodID)
-  return good === undefined ? 0 : good.CurPercent
+  const good = inviter.value.Archivements.find((el) => el.GoodID === goodID)
+  return good === undefined ? 0 : good.CommissionPercent
 }
 
 const userKOLOptions = computed(() => (maxKOL: number) => {
@@ -218,8 +218,8 @@ const onSetCommissionClick = async (good: LocalArchivement) => {
 const logined = useLoginedUserStore()
 
 const onSaveCommissionClick = (elem: LocalProductArchivement, idx:number) => {
-  if (elem.Archivements[idx].CurPercent > inviterGoodPercent(elem.Archivements[idx].CurGoodID)) {
-    elem.Archivements[idx].CurPercent = inviterGoodPercent(elem.Archivements[idx].CurGoodID)
+  if (elem.Archivements[idx].CommissionPercent > inviterGoodPercent(elem.Archivements[idx].GoodID)) {
+    elem.Archivements[idx].CommissionPercent = inviterGoodPercent(elem.Archivements[idx].GoodID)
     return
   }
 
@@ -233,8 +233,8 @@ const onSaveCommissionClick = (elem: LocalProductArchivement, idx:number) => {
       IDNumber: ''
     }, locale.value) as string,
     Info: {
-      GoodID: elem.Archivements[idx].CurGoodID,
-      Percent: elem.Archivements[idx].CurPercent,
+      GoodID: elem.Archivements[idx].GoodID,
+      Percent: elem.Archivements[idx].CommissionPercent,
       Start: Math.ceil(Date.now() / 1000),
       End: 0
     },

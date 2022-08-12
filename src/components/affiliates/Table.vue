@@ -46,7 +46,7 @@
           <tr class='aff-info total-row'>
             <td><span class='aff-product'>{{ $t('MSG_TOTAL') }}</span></td>
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
-            <td><span class='aff-number'>{{ getCoinTotalSummary('TotalUnits').toFixed(0) }}<span class='unit'>{{ $t(goodUnit) }}</span></span></td>
+            <td><span class='aff-number'>{{ getCoinTotalSummary('TotalUnits').toFixed(0) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ getCoinTotalSummary('TotalAmount').toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
             <td><span class='aff-number'>{{ getCoinTotalSummary('TotalCommission').toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
@@ -58,7 +58,7 @@
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
             <!-- <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ $t('goodUnit') }}</span></span></td> -->
             <!-- <td><span class='aff-number'>{{ referralUnits(referral) }}<span class='unit'>{{ 0 }}</span></span></td> -->
-            <td><span class='aff-number'>{{ getTotal(referral, 'TotalUnits') }}<span class='unit'>{{ $t(goodUnit) }}</span></span></td>
+            <td><span class='aff-number'>{{ getTotal(referral, 'TotalUnits') }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ getTotal(referral, 'TotalAmount').toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
             <!-- <td><span class='aff-number'>{{ referralAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td> -->
             <!-- <td><span class='aff-number'>{{ referralContribution(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td> -->
@@ -132,7 +132,7 @@ const goodUnit = computed(() => {
   for (const rf of referrals.value) {
     for (const sum of rf.Archivements) {
       if (sum.CoinTypeID === selectedCoin.value?.value.ID) {
-        return sum.CurGoodUnit
+        return sum.GoodUnit
       }
     }
   }

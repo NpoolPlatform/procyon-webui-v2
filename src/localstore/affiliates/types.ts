@@ -1,6 +1,6 @@
 import { Archivement } from 'src/teststore/mock/archivement/types'
 
-export interface LocalArchivement extends Archivement{
+export interface LocalArchivement extends Archivement {
   Editing: boolean;
 }
 export interface LocalProductArchivement {
