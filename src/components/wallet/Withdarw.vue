@@ -236,7 +236,6 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
 }
 
 const getUserGenerals = (offset:number, limit: number) => {
-  // general.$reset()
   general.getGenerals({
     Offset: offset,
     Limit: limit,
@@ -294,12 +293,13 @@ const onCodeVerify = (code: string) => {
       }
     }
   }, (error: boolean) => {
-    // TODO
-    if (!error) {
-      general.$reset()
-      getUserGenerals(0, 100)
-      void router.push({ path: '/wallet' })
+    if (error) {
+      return
     }
+
+    general.$reset()
+    getUserGenerals(0, 100)
+    void router.push({ path: '/wallet' })
   })
   verifing.value = false
 }
