@@ -20,7 +20,7 @@
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
-        <span class='value'>{{ _last24HoursEarningCoin.toFixed(2) }} {{ coin.Unit }}</span>
+        <span class='value'>{{ _last24HoursEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
         <span class='sub-value'>(* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
@@ -32,15 +32,15 @@
       <div class='detailed-summary' v-show='!short'>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
-          <span class='value'>{{ _last30DaysDailyEarningCoin.toFixed(2) }} {{ coin.Unit }}</span>
+          <span class='value'>{{ _last30DaysDailyEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
-          <span class='value'>{{ (_last24HoursEarningCoin * 0.2).toFixed(2) }} {{ coin.Unit }} (20%)</span>
+          <span class='value'>{{ (_last24HoursEarningCoin * 0.2).toFixed(2) }} {{ coin?.Unit }} (20%)</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-          <span class='value'>{{ (_last30DaysDailyEarningCoin * 0.8).toFixed(2) }} {{ coin.Unit }}</span>
+          <span class='value'>{{ (_last30DaysDailyEarningCoin * 0.8).toFixed(2) }} {{ coin?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
@@ -48,7 +48,7 @@
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
-          <span class='value'>{{ daily.toFixed(2) }} {{ coin.Unit }}</span>
+          <span class='value'>{{ daily.toFixed(2) }} {{ coin?.Unit }}</span>
         </div>
       </div>
     </q-slide-transition>
@@ -105,7 +105,7 @@ const profit = useProfitStore()
 const goodProfits = computed(() => profit.GoodProfits.get(IntervalKey.All))
 
 const profits = computed(() => goodProfits.value?.Profits.filter((p) => {
-  return p.CoinTypeID === coin.value.ID
+  return p.CoinTypeID === coin.value?.ID
 }))
 const goodUnit = computed(() => profits.value?.length ? profits.value?.[0].GoodUnit : '')
 const goodPeriod = computed(() => profits.value?.length ? profits.value?.[0].GoodServicePeriodDays : '')
