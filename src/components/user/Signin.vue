@@ -56,12 +56,12 @@ import {
   ReviewState,
   useInspireStore
 } from 'npool-cli-v2'
-import { AppID } from 'src/const/const'
+import { AppID, ThrottleSeconds } from 'src/const/const'
 import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { useRoute, useRouter } from 'vue-router'
-
+import { throttle } from 'quasar'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
@@ -196,11 +196,7 @@ const verify = () => {
   _verify()
 }
 
-const onSubmit = () => {
-  if (accountError.value) {
-    return
-  }
-
+const onSubmit = throttle(() => {
   coderepo.getGoogleToken({
     Recaptcha: recaptcha,
     Req: GoogleTokenType.Login,
@@ -239,7 +235,7 @@ const onSubmit = () => {
   })
 
   return false
-}
+}, ThrottleSeconds * 1000)
 
 </script>
 
