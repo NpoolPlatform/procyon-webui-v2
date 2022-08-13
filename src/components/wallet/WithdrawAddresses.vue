@@ -31,7 +31,7 @@
             {{ formatTime(myProps.row.Address.CreateAt) }}
           </q-td>
           <q-td key='ActionButtons' :props='myProps'>
-            <button class='small' @click='onRemove(myProps.row)'>
+            <button class='small' @click='onRemove(myProps.row)' :disabled='deletable(myProps.row)'>
               {{ $t('MSG_REMOVE') }}
             </button>
           </q-td>
@@ -83,6 +83,7 @@ import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccount
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
+import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -96,6 +97,13 @@ const account = useAccountStore()
 const accounts = computed(() => account.Accounts.filter((el) => el.State === ReviewState.Approved).sort((a, b) => {
   return b.Account.CreateAt - a.Account.CreateAt
 }))
+
+const ltrans = useLocalTransactionStore()
+const withdraws = computed(() => ltrans.withdraws)
+
+const deletable = (account: WithdrawAccount) => {
+  return withdraws.value.findIndex((el) => el.Address === account.Account.Address) < 0
+}
 
 const table = computed(() => [
   {

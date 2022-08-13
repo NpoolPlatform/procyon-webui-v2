@@ -29,7 +29,7 @@ const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.
 const { t } = useI18n({ useScope: 'global' })
 
 const order = useLocalOrderStore()
-const orders = computed(() => order.Orders)
+const orders = computed(() => order.orders)
 
 const table = computed(() => [
   {
@@ -96,7 +96,7 @@ const ticker = ref(-1)
 
 onMounted(() => {
   ticker.value = window.setInterval(() => {
-    orders.value.forEach((el) => {
+    orders.value.forEach((el: Order) => {
       stateMap.value.set(el.ID, order.getOrderState(el))
     })
     ticker.value += 1
