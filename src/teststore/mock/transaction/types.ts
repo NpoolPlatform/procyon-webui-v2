@@ -1,4 +1,5 @@
 import { BaseRequest } from 'npool-cli-v2'
+import { WithdrawState } from './const'
 
 export enum IOType {
   Incoming = 'Incoming',
@@ -44,7 +45,7 @@ export interface Withdraw {
   CreatedAt: number;
   Address: string;
   AddressLabels: string;
-  State: string;
+  State: WithdrawState;
   Message: string;
 }
 

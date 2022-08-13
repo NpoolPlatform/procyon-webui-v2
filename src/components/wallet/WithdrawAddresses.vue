@@ -31,7 +31,7 @@
             {{ formatTime(myProps.row.Address.CreateAt) }}
           </q-td>
           <q-td key='ActionButtons' :props='myProps'>
-            <button class='small' @click='onRemove(myProps.row)' :disabled='deletable(myProps.row)'>
+            <button class='small' @click='onRemove(myProps.row)' :disabled='!deletable(myProps.row)'>
               {{ $t('MSG_REMOVE') }}
             </button>
           </q-td>
@@ -84,6 +84,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
+import { WithdrawState } from 'src/teststore/mock/transaction/const'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -102,7 +103,9 @@ const ltrans = useLocalTransactionStore()
 const withdraws = computed(() => ltrans.withdraws)
 
 const deletable = (account: WithdrawAccount) => {
-  return withdraws.value.findIndex((el) => el.Address === account.Account.Address) < 0
+  return withdraws.value.filter((el) => {
+    return el.State === WithdrawState.Reviewing || el.State === WithdrawState.Transferring
+  }).findIndex((el) => el.Address === account.Account.Address) < 0
 }
 
 const table = computed(() => [
