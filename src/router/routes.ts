@@ -10,15 +10,27 @@ declare module 'vue-router' {
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    // component: () => import('layouts/MainLayout.vue'),
-    component: () => import('pages/Maintenance.vue'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/AleoIndex.vue'),
+        component: () => import('pages/Maintenance.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
           ShowMainHeader: false,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false
+        }
+      },
+      {
+        path: 'aleoindex',
+        component: () => import('pages/AleoIndex.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -30,7 +42,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/AleoIndex.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -42,7 +54,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Contact.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -54,7 +66,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Registration.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -66,7 +78,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Registration.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -78,7 +90,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Signin.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -90,7 +102,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Legal.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -102,7 +114,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/faq/FAQ.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -114,7 +126,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/faq/FAQMenu.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -126,7 +138,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Dashboard.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -139,7 +151,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Wallet.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -152,7 +164,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Affiliates.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -165,7 +177,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/SetupAffiliate.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -178,7 +190,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Account.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -191,7 +203,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Security.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -204,7 +216,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/KYC.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -217,7 +229,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Purchase.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -230,7 +242,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Payment.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -243,7 +255,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/UpdatePassword.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -256,7 +268,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/UpdateEmail.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -269,7 +281,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/UpdateMobile.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -282,7 +294,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/EnableGoogle.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -295,7 +307,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/VerifyGoogle.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -308,7 +320,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/AddAddress.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -321,7 +333,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Withdraw.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -334,7 +346,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/RemainderMobile.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -347,7 +359,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/RemainderAffiliate.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -360,7 +372,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/RemainderKYC.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -373,7 +385,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/RemainderGA.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -386,7 +398,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/ResetPassword.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -399,7 +411,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/product/Aleo.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,
@@ -412,7 +424,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/product/Spacemesh.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
-          ShowMainHeader: false,
+          ShowMainHeader: true,
           ShowBigLogo: true,
           ShowFooterTop: true,
           ShowSignHelper: true,

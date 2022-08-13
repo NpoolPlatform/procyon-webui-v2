@@ -49,7 +49,9 @@ export default route(function (/* { store, ssrContext } */) {
 
   router.beforeEach((to, _, next) => {
     const setting = useSettingStore()
+
     setting.ShowSideMenu = to.meta.ShowSideMenu ? to.meta.ShowSideMenu : false
+    setting.ShowMainHeader = to.meta.ShowMainHeader ? to.meta.ShowMainHeader : false
 
     BaseMenu.children.forEach((menu) => {
       if (to.path.includes(menu.target)) {

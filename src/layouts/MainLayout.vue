@@ -1,6 +1,6 @@
 <template>
   <div class='page column'>
-    <MainHeader :class='[ special ? "special" : "" ]' />
+    <MainHeader v-if='setting.ShowMainHeader' :class='[ special ? "special" : "" ]' />
     <div :class='[ "main row", special ? "special" : "" ]'>
       <SideMenu />
       <div id='main'>
