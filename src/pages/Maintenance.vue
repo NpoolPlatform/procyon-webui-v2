@@ -1,26 +1,26 @@
 <template>
-  <Maintenance>
-    <template #top-right>
-      <header class='desktop1'>
-        <img :src='lightLogo' class='attachment-large size-large logo cursor-pointer'>
-        <div class='nav'>
-          <ul class='language-picker'>
-            <li :class='[ locale === "ja-JP" ? "selected" : "" ]'>
-              <a class='language' @click='locale = "ja-JP"'>
-                JP
-              </a>
-            </li>
-            <li :class='[ locale === "en-US" ? "selected" : "" ]'>
-              <a class='language' @click='locale = "en-US"'>
-                EN
-              </a>
-            </li>
-          </ul>
-        </div>
-      </header>
-    </template>
-  </Maintenance>
+  <header class='desktop1'>
+    <img :src='lightLogo' class='attachment-large size-large logo cursor-pointer'>
+    <div class='nav'>
+      <ul class='language-picker'>
+        <li :class='[ locale === "ja-JP" ? "selected" : "" ]'>
+          <a class='language' @click='locale = "ja-JP"'>
+            JP
+          </a>
+        </li>
+        <li :class='[ locale === "en-US" ? "selected" : "" ]'>
+          <a class='language' @click='locale = "en-US"'>
+            EN
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+  <div class='mm' v-if='Maintenance'>
+    <Maintenance />
+  </div>
 </template>
+
 <script setup lang='ts'>
 import { defineAsyncComponent, watch, ref, Component, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -39,3 +39,8 @@ onMounted(() => {
 })
 
 </script>
+
+<style lang='sass' scoped>
+.mm
+  margin-top: -96px
+</style>

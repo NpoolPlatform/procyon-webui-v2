@@ -1,5 +1,4 @@
 <template>
-  <slot name='top-right' />
   <div class='maintenance'>
     <div>
       <img :src='lightLogo'>

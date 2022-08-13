@@ -38,7 +38,7 @@ export const useLocalTransactionStore = defineStore('localtransaction', {
         req,
         req.Message,
         (resp: GetDetailResponse): void => {
-          resp.Infos.forEach((el) => {
+          resp.Infos.forEach((el: Detail) => {
             this.Details.Details.push(el)
           })
           this.Details.Total = resp.Total
