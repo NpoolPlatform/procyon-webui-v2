@@ -52,6 +52,7 @@ export default route(function (/* { store, ssrContext } */) {
 
     setting.ShowSideMenu = to.meta.ShowSideMenu ? to.meta.ShowSideMenu : false
     setting.ShowMainHeader = to.meta.ShowMainHeader ? to.meta.ShowMainHeader : false
+    setting.ShowFooterTop = to.meta.ShowMainHeader ? to.meta.ShowMainHeader : false
 
     BaseMenu.children.forEach((menu) => {
       if (to.path.includes(menu.target)) {

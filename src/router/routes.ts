@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
           ShowHeaderAnnouncement: true,
           ShowMainHeader: false,
           ShowBigLogo: true,
-          ShowFooterTop: true,
+          ShowFooterTop: false,
           ShowSignHelper: true,
           ShowTopTip: false,
           NeedLogined: false

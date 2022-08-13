@@ -10,7 +10,7 @@
       </div>
     </div>
     <q-space />
-    <Footer :class='[ special ? "special" : "" ]' />
+    <Footer v-if='setting.ShowFooterTop' :class='[ special ? "special" : "" ]' />
   </div>
   <LangLoader />
   <Prepare />
