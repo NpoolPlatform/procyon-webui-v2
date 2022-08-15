@@ -37,7 +37,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='(_good, idx) in referral.Archivements' :key='idx'>
+          <tr class='aff-info' v-for='(_good, idx) in visibleGoodsArchivements(referral.Archivements)' :key='idx'>
             <td><span class='aff-product'>{{ _good.CoinName }}</span></td>
             <td v-if='_good.Editing'>
               <select v-model='_good.CommissionPercent' class='kol-dropdown'>
@@ -207,6 +207,13 @@ const userKOLOptions = computed(() => (maxKOL: number) => {
 const goodOnline = (goodID: string) => {
   const index = good.AppGoods.findIndex((el) => el.GoodID === goodID)
   return index < 0 ? false : good.AppGoods[index].Online
+}
+const visibleGoodsArchivements = computed(() => (goodArchivements: Array<LocalArchivement>) => {
+  return goodArchivements.filter((el) => goodVisible(el.GoodID))
+})
+const goodVisible = (goodID: string) => {
+  const index = good.AppGoods.findIndex((el) => el.GoodID === goodID)
+  return index < 0 ? false : good.AppGoods[index].Visible
 }
 
 const settingDate = (setting: PurchaseAmountSetting) => {
