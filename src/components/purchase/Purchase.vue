@@ -143,7 +143,7 @@
               <span>{{ $t('MSG_PAY_THE_REMAINDER') }}</span>
             </div>
             <button @click='onSubmit' :disabled='inputBalance < 0 || inputBalance > getUserBalance || inputBalance > (Math.ceil(totalAmount * 10000) / 10000)'>
-              {{ $t('MSG_CONTINUE') }}
+              {{ $t('MSG_CONTINUE2') }}
             </button>
           </div>
         </div>
