@@ -50,6 +50,7 @@
                   class='submit-btn'
                   :disabled='submitting'
                   :waiting='submitting'
+                  @click='onPurchaseClick'
                 />
               </div>
               <div class='warning' v-if='showRateTip'>
