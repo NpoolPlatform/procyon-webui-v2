@@ -39,7 +39,8 @@
                     :value='myCoin'
                     :selected='paymentCoin?.ID === myCoin?.ID'
                   >
-                    {{ myCoin?.Unit }} ({{ currency.formatCoinName(myCoin?.Name as string) }})
+                    <!-- {{ myCoin?.Unit }} ({{ currency.formatCoinName(myCoin?.Name as string) }}) -->
+                    {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : currency.formatCoinName(myCoin?.Name as string) }})
                   </option>
                 </select>
               </div>
