@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ verifing || showReviewing || showWaiting ? "blur" : "" ]'>
+  <div :class='[ verifing || showReviewing || showWaiting || showDepositing ? "blur" : "" ]'>
     <BackPage>
       <div class='content order-page'>
         <div class='product-container content-glass'>
@@ -68,6 +68,15 @@
                 @click='onSubmit'
               />
             </div>
+            <div class='submit'>
+              <WaitingBtn
+                label='MSG_DEPOSIT'
+                type='button'
+                :disabled='false'
+                :waiting='false'
+                @click='onDepositClick'
+              />
+            </div>
             <h3>{{ $t('MSG_GUIDE_AND_FAQ') }}</h3>
             <p v-html='$t("MSG_WITHDRAW_GUIDE_AND_FAQ_CONTENT")' />
           </div>
@@ -110,6 +119,7 @@
       </div>
     </div>
   </q-dialog>
+
   <q-dialog
     v-model='showWaiting'
     seamless
@@ -126,6 +136,45 @@
               {{ $t('MSG_I_UNDERSTAND') }}
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+  </q-dialog>
+
+  <q-dialog
+    v-model='showDepositing'
+    maximized
+    @hide='onDepositDialogClick'
+  >
+    <div class='popup product-container'>
+      <div class='form-container content-glass'>
+        <div class='confirmation'>
+          <h3>Deposit Address</h3>
+
+          <div class='qr-code-container'>
+            <h5>ERC20 ADDRESS</h5>
+            <img :src='lineQr'>
+          </div>
+
+          <div class='hr' />
+
+          <div class='full-section'>
+            <h4>Your Address:</h4>
+            <span class='wallet-type'>ERC20</span>
+            <span class='number'>0x0b453543fe40357Dec0452Dc20dEb89C6258Df17</span>
+            <img class='copy-button' src='font-awesome/copy.svg'>
+          </div>
+
+          <div class='hr' />
+
+          <div class='warning'>
+            <img src='font-awesome/warning.svg'>
+            <span>Make sure to copy the address EXACTLY. Also, be sure to use the correct blockchain (e.g. ERC20 vs TRC20).</span>
+          </div>
+
+          <button @click='onReturnWallet'>
+            Return to Wallet
+          </button>
         </div>
       </div>
     </div>
@@ -150,6 +199,7 @@ import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore, AccountType as LocalAccountType } from 'src/teststore/mock/transaction'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
 import { IntervalKey, ThrottleSeconds } from 'src/const/const'
+import lineQr from '../../assets/line-qr.png'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
 import { throttle } from 'quasar'
@@ -213,6 +263,18 @@ const onSubmit = throttle(() => {
 
 const onMenuHide = () => {
   verifing.value = false
+}
+
+const showDepositing = ref(false)
+
+const onReturnWallet = () => {
+  onDepositDialogClick()
+}
+const onDepositClick = () => {
+  showDepositing.value = true
+}
+const onDepositDialogClick = () => {
+  showDepositing.value = false
 }
 
 const account = ref('')
