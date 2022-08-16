@@ -266,7 +266,8 @@ const showRateTip = computed(() => {
   return paymentCoin.value?.Unit?.length &&
         !paymentCoin.value?.Unit?.includes(PriceCoinName) &&
         !paymentCoin.value?.Name?.includes(PriceCoinName) &&
-        !paymentCoin.value?.Unit?.includes('BUSD')
+        !paymentCoin.value?.Unit?.includes('BUSD') &&
+        !paymentCoin.value?.Unit?.includes('USDC')
 })
 
 const coin = useCoinStore()
