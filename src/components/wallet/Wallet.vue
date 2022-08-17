@@ -226,8 +226,9 @@ onMounted(() => {
   if (localtrans.Details.Details.length === 0) {
     getUserDetails(0, 100)
   }
-  if (laccount.Accounts.Accounts.length === 0) {
-    getUserAccounts(0, 100)
+  if (laccount.Accounts.Accounts.length !== 0) { // error writing, just for test
+    laccount.$reset()
+    getUserAccounts(0, 100) // pull accounts every time
   }
 })
 </script>

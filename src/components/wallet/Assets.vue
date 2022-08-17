@@ -38,6 +38,46 @@
       </q-tr>
     </template>
   </ShowSwitchTable>
+  <q-dialog
+    v-model='showDepositing'
+    maximized
+    @hide='hideDepositDialog'
+  >
+    <div class='popup product-container'>
+      <div class='form-container content-glass'>
+        <div class='confirmation'>
+          <h3>{{ $t('MSG_DEPOSIT_ADDRESS') }}</h3>
+
+          <div class='qr-code-container'>
+            <h5>{{ ant.CoinName }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
+            <img :src='lineQr'>
+          </div>
+
+          <div class='hr' />
+
+          <div class='full-section'>
+            <h4>{{ $t('MSG_YOUR_ADDRESS') }}</h4>
+            <div class='wallet-type'>
+              {{ ant.CoinName }}
+            </div>
+            <span class='number'>{{ ant.Address }}</span>
+            <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyDepositAddress'>
+          </div>
+
+          <div class='hr' />
+
+          <div class='warning'>
+            <img src='font-awesome/warning.svg'>
+            <span>{{ $t('MSG_DEPOSIT_REMINDER') }}</span>
+          </div>
+
+          <button @click='onReturnWallet'>
+            {{ $t('MSG_RETURN_TO_WALLET') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
@@ -47,13 +87,18 @@ import {
   BenefitModel,
   useKYCStore,
   ReviewState,
-  useAccountStore
+  useAccountStore,
+  useNotificationStore,
+  NotificationType
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
+// import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
+import { BalanceGeneral } from 'src/localstore/ledger'
 import { Account, useLocalAccountStore } from 'src/teststore/mock/account'
 import { AccountUsedFor } from 'src/teststore/mock/account/state'
+import lineQr from '../../assets/line-qr.png'
+import copy from 'copy-to-clipboard'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -63,12 +108,11 @@ const { t } = useI18n({ useScope: 'global' })
 
 const currencies = useCurrencyStore()
 const kyc = useKYCStore()
-const localledger = useLocalLedgerStore()
+// const localledger = useLocalLedgerStore()
 const submitting = ref(false)
 
 // const balanceGenerals = computed(() => localledger.generals)
 const balanceGenerals = computed(() : Array<BalanceGeneral> => {
-  console.log(localledger.Generals)
   return [
     {
       CoinTypeID: '4db85c80-d0d7-4248-8511-b96ed53c9bc2',
@@ -176,8 +220,10 @@ const onWithdrawClick = (asset: BenefitModel) => {
   })
 }
 
-const laccount = useLocalAccountStore()
 const ant = ref({} as Account)
+const showDepositing = ref(false)
+
+const laccount = useLocalAccountStore()
 
 const createUserAccount = (row: BalanceGeneral) => {
   laccount.createAccount({
@@ -188,21 +234,55 @@ const createUserAccount = (row: BalanceGeneral) => {
     if (error) {
       return
     }
-    showDepositDialog(row.CoinTypeID)
+    hideDepositDialog()
   })
 }
 const onDepositClick = (row: BalanceGeneral) => {
   const existingItem = laccount.getUserAccountByCoinTypeID(row.CoinTypeID)
-  if (!existingItem) {
+  if (existingItem) { // error writing, just for test
     createUserAccount(row)
     return
   }
-  showDepositDialog(row.CoinTypeID)
+  console.log('row: ', row)
+  showDepositDialog(row)
 }
-const showDepositDialog = (coinTypeID: string) => {
-  ant.value = laccount.getUserAccountByCoinTypeID(coinTypeID) as Account
-  console.log('ant.value: ', ant.value)
-  // NOT FINISHED
+
+const onReturnWallet = () => {
+  hideDepositDialog()
+  ant.value = {} as Account
+}
+const showDepositDialog = (row: BalanceGeneral) => {
+  ant.value = laccount.getUserAccountByCoinTypeID(row.CoinTypeID) as Account
+  ant.value = {
+    ID: '',
+    AppID: '',
+    UserID: 'string',
+    CoinTypeID: '4db85c80-d0d7-4248-8511-b96ed53c9bc2',
+    CoinName: 'TTether ERC20',
+    CoinUnit: 'USD',
+    CoinEnv: 'string',
+    CoinLogo: 'https://img0.baidu.com/it/u=1761918113,2556123655&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+    AccountID: '918410e7-e784-4056-a079-4a39bfdf2d4b',
+    Address: '0x0b453543fe40357Dec0452Dc20dEb89C6258Df17',
+    UsedFor: AccountUsedFor.UserDeposit,
+    Labels: ['label1', 'label2'],
+    CreatedAt: 1660705554
+  }
+  showDepositing.value = true
+}
+const hideDepositDialog = () => {
+  console.log('ant: ', ant)
+  showDepositing.value = false
+}
+const notification = useNotificationStore()
+function onCopyDepositAddress () {
+  copy(ant.value.Address)
+  notification.Notifications.push({
+    Title: t('MSG_DEPOSIT_ADDRESS_COPIED'),
+    Message: t('MSG_COPY_DEPOSIT_ADDRESS_SUCCESS'),
+    Popup: true,
+    Type: NotificationType.Success
+  })
 }
 </script>
 
