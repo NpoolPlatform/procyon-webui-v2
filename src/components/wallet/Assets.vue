@@ -31,9 +31,14 @@
           </button>
         </q-td>
         <q-td key='DepositButtons' :props='myProps'>
-          <button class='small' @click='onDepositClick(myProps.row)' :disabled='false'>
-            {{ $t('MSG_DEPOSIT') }}
-          </button>
+          <WaitingBtn
+            label='MSG_DEPOSIT'
+            type='button'
+            class='small'
+            :disabled='beforeDepositLoading'
+            :waiting='beforeDepositLoading'
+            @click='onDepositClick(myProps.row)'
+          />
         </q-td>
       </q-tr>
     </template>
@@ -100,6 +105,7 @@ import { AccountUsedFor } from 'src/teststore/mock/account/state'
 import lineQr from '../../assets/line-qr.png'
 import copy from 'copy-to-clipboard'
 
+const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
@@ -221,9 +227,11 @@ const onWithdrawClick = (asset: BenefitModel) => {
 }
 
 const ant = ref({} as Account)
+const beforeDepositLoading = ref(false)
 const showDepositing = ref(false)
 const laccount = useLocalAccountStore()
 const onDepositClick = (row: BalanceGeneral) => {
+  beforeDepositLoading.value = true
   laccount.getDepositAccount({
     CoinTypeID: row.CoinTypeID,
     // UsedFor: AccountUsedFor.UserDeposit,
@@ -237,24 +245,29 @@ const onDepositClick = (row: BalanceGeneral) => {
   }, (error: boolean, act?: Account) => {
     if (error || act === undefined) {
       // error writing, just for test
-      act = {
-        ID: '',
-        AppID: '',
-        UserID: 'string',
-        CoinTypeID: '4db85c80-d0d7-4248-8511-b96ed53c9bc2',
-        CoinName: 'TTether ERC20',
-        CoinUnit: 'USD',
-        CoinEnv: 'string',
-        CoinLogo: 'https://img0.baidu.com/it/u=1761918113,2556123655&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
-        AccountID: '918410e7-e784-4056-a079-4a39bfdf2d4b',
-        Address: '0x0b453543fe40357Dec0452Dc20dEb89C6258Df17',
-        UsedFor: AccountUsedFor.UserDeposit,
-        Labels: ['label1', 'label2'],
-        CreatedAt: 1660705554
-      }
-      showDepositDialog(act)
+      // simulate a delay+
+      setTimeout(() => {
+        act = {
+          ID: '',
+          AppID: '',
+          UserID: 'string',
+          CoinTypeID: '4db85c80-d0d7-4248-8511-b96ed53c9bc2',
+          CoinName: 'TTether ERC20',
+          CoinUnit: 'USD',
+          CoinEnv: 'string',
+          CoinLogo: 'https://img0.baidu.com/it/u=1761918113,2556123655&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+          AccountID: '918410e7-e784-4056-a079-4a39bfdf2d4b',
+          Address: '0x0b453543fe40357Dec0452Dc20dEb89C6258Df17',
+          UsedFor: AccountUsedFor.UserDeposit,
+          Labels: ['label1', 'label2'],
+          CreatedAt: 1660705554
+        }
+        beforeDepositLoading.value = false
+        showDepositDialog(act)
+      }, 3000)
       return
     }
+    beforeDepositLoading.value = false
     showDepositDialog(act)
   })
 }
