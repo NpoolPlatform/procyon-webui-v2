@@ -24,8 +24,6 @@ import { Currency, NotificationType, SecondsEachDay, useAccountStore, useCoinSto
 import { QAjaxBar } from 'quasar'
 import { IntervalKey } from 'src/const/const'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
-import { useLocalAccountStore } from 'src/teststore/mock/account'
-import { AccountUsedFor } from 'src/teststore/mock/account/state'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { defineAsyncComponent, onMounted } from 'vue'
@@ -54,7 +52,6 @@ const coin = useCoinStore()
 const currency = useCurrencyStore()
 const account = useAccountStore()
 const general = useGeneralStore()
-const laccount = useLocalAccountStore()
 
 const getWithdraws = (offset: number, limit: number) => {
   localtrans.getWithdraws({
@@ -196,23 +193,6 @@ const getUserDetails = (offset: number, limit: number) => {
   })
 }
 
-const getUserAccounts = (offset: number, limit: number) => {
-  laccount.getUserAccounts({
-    Offset: offset,
-    Limit: limit,
-    UsedFor: AccountUsedFor.UserDeposit,
-    Message: {}
-  }, (error: boolean, count?: number) => {
-    if (error) {
-      return
-    }
-    if (count !== undefined && count < limit) {
-      return
-    }
-    getUserAccounts(limit + offset, limit)
-  })
-}
-
 onMounted(() => {
   if (localtrans.Withdraws.Withdraws.length === 0) {
     getWithdraws(0, 100)
@@ -225,10 +205,6 @@ onMounted(() => {
   }
   if (localtrans.Details.Details.length === 0) {
     getUserDetails(0, 100)
-  }
-  if (laccount.Accounts.Accounts.length !== 0) { // error writing, just for test
-    laccount.$reset()
-    getUserAccounts(0, 100) // pull accounts every time
   }
 })
 </script>
