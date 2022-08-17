@@ -34,10 +34,18 @@ interface GetUserAccountsResponse {
   Infos: Array<Account>;
   Total: number;
 }
+interface GetDepositAccountRequest extends BaseRequest{
+  CoinTypeID: string;
+}
+interface GetDepositAccountResponse {
+  Info: Account;
+}
 export {
   Account,
   CreateAccountRequest,
   CreateAccountResponse,
   GetUserAccountsRequest,
-  GetUserAccountsResponse
+  GetUserAccountsResponse,
+  GetDepositAccountRequest,
+  GetDepositAccountResponse
 }

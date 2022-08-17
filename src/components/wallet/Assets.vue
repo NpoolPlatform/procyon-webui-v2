@@ -222,56 +222,54 @@ const onWithdrawClick = (asset: BenefitModel) => {
 
 const ant = ref({} as Account)
 const showDepositing = ref(false)
-
 const laccount = useLocalAccountStore()
-
-const createUserAccount = (row: BalanceGeneral) => {
-  laccount.createAccount({
+const onDepositClick = (row: BalanceGeneral) => {
+  laccount.getDepositAccount({
     CoinTypeID: row.CoinTypeID,
-    UsedFor: AccountUsedFor.UserDeposit,
-    Message: {}
-  }, (error: boolean) => {
-    if (error) {
+    // UsedFor: AccountUsedFor.UserDeposit,
+    Message: {
+      Error: {
+        Title: t('MSG_FAIL_TO_GET_DEPOSIT_ACCOUNT'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (error: boolean, act?: Account) => {
+    if (error || act === undefined) {
+      // error writing, just for test
+      act = {
+        ID: '',
+        AppID: '',
+        UserID: 'string',
+        CoinTypeID: '4db85c80-d0d7-4248-8511-b96ed53c9bc2',
+        CoinName: 'TTether ERC20',
+        CoinUnit: 'USD',
+        CoinEnv: 'string',
+        CoinLogo: 'https://img0.baidu.com/it/u=1761918113,2556123655&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+        AccountID: '918410e7-e784-4056-a079-4a39bfdf2d4b',
+        Address: '0x0b453543fe40357Dec0452Dc20dEb89C6258Df17',
+        UsedFor: AccountUsedFor.UserDeposit,
+        Labels: ['label1', 'label2'],
+        CreatedAt: 1660705554
+      }
+      showDepositDialog(act)
       return
     }
-    hideDepositDialog()
+    showDepositDialog(act)
   })
 }
-const onDepositClick = (row: BalanceGeneral) => {
-  const existingItem = laccount.getUserAccountByCoinTypeID(row.CoinTypeID)
-  if (existingItem) { // error writing, just for test
-    createUserAccount(row)
-    return
-  }
-  showDepositDialog(row)
-}
-
 const onReturnWallet = () => {
   hideDepositDialog()
-  ant.value = {} as Account
 }
-const showDepositDialog = (row: BalanceGeneral) => {
-  ant.value = laccount.getUserAccountByCoinTypeID(row.CoinTypeID) as Account
-  ant.value = {
-    ID: '',
-    AppID: '',
-    UserID: 'string',
-    CoinTypeID: '4db85c80-d0d7-4248-8511-b96ed53c9bc2',
-    CoinName: 'TTether ERC20',
-    CoinUnit: 'USD',
-    CoinEnv: 'string',
-    CoinLogo: 'https://img0.baidu.com/it/u=1761918113,2556123655&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
-    AccountID: '918410e7-e784-4056-a079-4a39bfdf2d4b',
-    Address: '0x0b453543fe40357Dec0452Dc20dEb89C6258Df17',
-    UsedFor: AccountUsedFor.UserDeposit,
-    Labels: ['label1', 'label2'],
-    CreatedAt: 1660705554
-  }
+const showDepositDialog = (act: Account) => {
+  ant.value = act
   showDepositing.value = true
 }
 const hideDepositDialog = () => {
+  ant.value = {} as Account
   showDepositing.value = false
 }
+
 const notification = useNotificationStore()
 function onCopyDepositAddress () {
   copy(ant.value.Address)

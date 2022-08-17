@@ -6,7 +6,9 @@ import {
   CreateAccountRequest,
   CreateAccountResponse,
   GetUserAccountsRequest,
-  GetUserAccountsResponse
+  GetUserAccountsResponse,
+  GetDepositAccountRequest,
+  GetDepositAccountResponse
 } from './types'
 
 export const useLocalAccountStore = defineStore('localaccount', {
@@ -49,6 +51,19 @@ export const useLocalAccountStore = defineStore('localaccount', {
           const index = this.Accounts.Accounts.findIndex((ael) => ael.ID === resp.Info.ID)
           this.Accounts.Accounts.splice(index < 0 ? 0 : index, index < 0 ? 0 : 1, resp.Info)
           done(false)
+        },
+        () => {
+          done(true)
+        }
+      )
+    },
+    getDepositAccount (req: GetDepositAccountRequest, done: (error: boolean, resp?: Account) => void) {
+      doActionWithError<GetDepositAccountRequest, GetDepositAccountResponse>(
+        API.GET_DEPOSIT_ACCOUNT,
+        req,
+        req.Message,
+        (resp: GetDepositAccountResponse): void => {
+          done(false, resp.Info)
         },
         () => {
           done(true)
