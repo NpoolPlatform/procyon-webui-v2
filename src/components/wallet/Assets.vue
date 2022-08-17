@@ -243,7 +243,6 @@ const onDepositClick = (row: BalanceGeneral) => {
     createUserAccount(row)
     return
   }
-  console.log('row: ', row)
   showDepositDialog(row)
 }
 
@@ -271,7 +270,6 @@ const showDepositDialog = (row: BalanceGeneral) => {
   showDepositing.value = true
 }
 const hideDepositDialog = () => {
-  console.log('ant: ', ant)
   showDepositing.value = false
 }
 const notification = useNotificationStore()
