@@ -29,8 +29,7 @@
           <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
-        </q-td>
-        <q-td key='DepositButtons' :props='myProps'>
+          <span class='btn-gap' />
           <WaitingBtn
             label='MSG_DEPOSIT'
             type='button'
@@ -168,11 +167,6 @@ const table = computed(() => [
     name: 'ActionButtons',
     label: '',
     align: 'center'
-  },
-  {
-    name: 'DepositButtons',
-    label: '',
-    align: 'center'
   }
 ])
 
@@ -296,4 +290,6 @@ function onCopyDepositAddress () {
 </script>
 
 <stype lang='sass' scoped>
+.btn-gap
+  margin-right: 9px
 </stype>
