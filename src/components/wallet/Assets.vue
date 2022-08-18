@@ -97,10 +97,8 @@ import {
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-// import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
-import { BalanceGeneral } from 'src/localstore/ledger'
+import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
 import { Account, useLocalAccountStore } from 'src/teststore/mock/account'
-import { AccountUsedFor } from 'src/teststore/mock/account/state'
 import lineQr from '../../assets/line-qr.png'
 import copy from 'copy-to-clipboard'
 
@@ -113,24 +111,10 @@ const { t } = useI18n({ useScope: 'global' })
 
 const currencies = useCurrencyStore()
 const kyc = useKYCStore()
-// const localledger = useLocalLedgerStore()
+const localledger = useLocalLedgerStore()
 const submitting = ref(false)
 
-// const balanceGenerals = computed(() => localledger.generals)
-const balanceGenerals = computed(() : Array<BalanceGeneral> => {
-  return [
-    {
-      CoinTypeID: '4db85c80-d0d7-4248-8511-b96ed53c9bc2',
-      CoinName: 'TTether ERC20',
-      CoinLogo: 'https://img0.baidu.com/it/u=1761918113,2556123655&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
-      CoinUnit: 'USD',
-      Balance: 99.99,
-      Last24HoursBalance: 56.66,
-      USDValue: 99.99,
-      JPYValue: 124535.9897
-    }
-  ]
-})
+const balanceGenerals = computed(() => localledger.generals)
 
 const table = computed(() => [
   {
@@ -228,7 +212,6 @@ const onDepositClick = (row: BalanceGeneral) => {
   beforeDepositLoading.value = true
   laccount.getDepositAccount({
     CoinTypeID: row.CoinTypeID,
-    // UsedFor: AccountUsedFor.UserDeposit,
     Message: {
       Error: {
         Title: t('MSG_FAIL_TO_GET_DEPOSIT_ACCOUNT'),
@@ -238,27 +221,7 @@ const onDepositClick = (row: BalanceGeneral) => {
     }
   }, (error: boolean, act?: Account) => {
     if (error || act === undefined) {
-      // error writing, just for test
-      // simulate a delay+
-      setTimeout(() => {
-        act = {
-          ID: '',
-          AppID: '',
-          UserID: 'string',
-          CoinTypeID: '4db85c80-d0d7-4248-8511-b96ed53c9bc2',
-          CoinName: 'TTether ERC20',
-          CoinUnit: 'USD',
-          CoinEnv: 'string',
-          CoinLogo: 'https://img0.baidu.com/it/u=1761918113,2556123655&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
-          AccountID: '918410e7-e784-4056-a079-4a39bfdf2d4b',
-          Address: '0x0b453543fe40357Dec0452Dc20dEb89C6258Df17',
-          UsedFor: AccountUsedFor.UserDeposit,
-          Labels: ['label1', 'label2'],
-          CreatedAt: 1660705554
-        }
-        beforeDepositLoading.value = false
-        showDepositDialog(act)
-      }, 3000)
+      beforeDepositLoading.value = false
       return
     }
     beforeDepositLoading.value = false

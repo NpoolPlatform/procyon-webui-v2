@@ -73,5 +73,6 @@ export default {
   MSG_SPACEMESH_FAQ_MENU_TITLE: 'Spacemesh概要',
   MSG_SPACEMESH_FAQ_MENU_SUBTITLE: 'Procyon.vip のSpacemeshマイニング詳細はこちら',
   MSG_CANT_FIND_LOOKING_FOR: 'お求めの解答が見つからない場合',
-  MSG_CONTANT_SUPPORT: 'カスタマーサポートへ問い合わせ'
+  MSG_CONTANT_SUPPORT: 'カスタマーサポートへ問い合わせ',
+  MSG_DEPOSIT_REMINDER: '上記、表示されている入金先アドレスが正確にコピーされていることを必ずご確認ください。なお、正しいブロックチェーンの選択にもご注意ください（例: ERC20、TRC20 等）。'
 }
