@@ -231,7 +231,7 @@ const onReturnWallet = () => {
   hideDepositDialog()
 }
 const showDepositDialog = (act: Account) => {
-  ant.value = act
+  ant.value = { ...act }
   showDepositing.value = true
 }
 const hideDepositDialog = () => {
