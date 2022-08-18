@@ -220,11 +220,10 @@ const onDepositClick = (row: BalanceGeneral) => {
       }
     }
   }, (error: boolean, act?: Account) => {
+    beforeDepositLoading.value = false
     if (error || act === undefined) {
-      beforeDepositLoading.value = false
       return
     }
-    beforeDepositLoading.value = false
     showDepositDialog(act)
   })
 }
