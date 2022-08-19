@@ -204,7 +204,7 @@ const currencies = useCurrencyStore()
 const coinName = computed(() => {
   if (order.value?.PaymentCoinName.toLowerCase().includes('bitcoin')) {
     return 'BTC (Bitcoin)'
-  } else if (order.value?.PaymentCoinName.toLowerCase().includes('bianaceusd')) {
+  } else if (order.value?.PaymentCoinName.toLowerCase().includes('binanceusd')) {
     return 'BUSD (BEP20)'
   } else if (order.value?.PaymentCoinName.toLowerCase().includes('usdcerc20')) {
     return 'USDC (ERC20)'
