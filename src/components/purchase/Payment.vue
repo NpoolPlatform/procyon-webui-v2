@@ -3,7 +3,7 @@
     <PurchasePage :good='good'>
       <div class='info'>
         <h3 class='form-title'>
-          {{ order?.CoinName }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
+          {{ currencies.formatCoinName(order?.CoinName as string) }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
         </h3>
         <div class='info-flex'>
           <div class='three-section'>
