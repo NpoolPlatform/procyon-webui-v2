@@ -35,7 +35,7 @@
           </div>
           <div class='full-section'>
             <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
-            <span class='wallet-type'>{{ currencies.formatCoinName(order?.PaymentCoinName as string) }} &nbsp; </span>
+            <span class='wallet-type'>{{ coinName }} &nbsp; </span>
             <span class='number'>  {{ order?.PaymentAddress }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAddressClick'>
             <div class='tooltip'>
@@ -48,7 +48,7 @@
         </div>
         <div class='hr' />
         <h4>{{ $t('MSG_IMPORTANT_INFORMATION') }}</h4>
-        <p v-html='$t("MSG_PAYMENT_NOTE", { COIN_NAME: currencies.formatCoinName(order?.PaymentCoinName as string) })' />
+        <p v-html='$t("MSG_PAYMENT_NOTE", { COIN_NAME: coinName })' />
       </div>
       <div class='order-form'>
         <h3 class='form-title'>
@@ -56,7 +56,7 @@
         </h3>
         <div class='qr-code-container'>
           <div class='qr-code-container' ref='qrCodeContainer'>
-            <h5>{{ currencies.formatCoinName(order?.PaymentCoinName as string) }}  {{ $t('MSG_ADDRESS') }}</h5>
+            <h5>{{ coinName }}  {{ $t('MSG_ADDRESS') }}</h5>
             <qrcode-vue
               :value='order?.PaymentAddress'
               :size='qrCodeContainer?.clientWidth as number - 1'
@@ -200,6 +200,21 @@ const remainTime = ref(RemainMax)
 const showWarning = ref(true)
 const showCancelling = ref(false)
 const currencies = useCurrencyStore()
+
+const coinName = () => {
+  if (order.value?.PaymentCoinName.toLowerCase().includes('bitcoin')) {
+    return 'BTC (Bitcoin)'
+  } else if (order.value?.PaymentCoinName.toLowerCase().includes('bianaceusd')) {
+    return 'BUSD (BEP20)'
+  } else if (order.value?.PaymentCoinName.toLowerCase().includes('usdcerc20')) {
+    return 'USDC (ERC20)'
+  } else if (order.value?.PaymentCoinName.toLowerCase().includes('usdterc20')) {
+    return 'USDT (ERC20)'
+  } else if (order.value?.PaymentCoinName.toLowerCase().includes('usdttrc20')) {
+    return 'USDT (TRC20)'
+  }
+  return currencies.formatCoinName(order.value?.PaymentCoinName as string)
+}
 
 const remainTicker = ref(-1)
 watch(counter, () => {
