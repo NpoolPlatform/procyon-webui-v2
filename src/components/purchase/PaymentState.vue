@@ -3,7 +3,7 @@
     <div class='confirmation'>
       <h3>{{ $t(title) }}</h3>
       <h3 class='form-title'>
-        {{ order?.PaymentCoinName }} | <strong>{{ order?.ID }}</strong>
+        {{ currencies.formatCoinName(order?.PaymentCoinName as string) }} | <strong>{{ order?.ID }}</strong>
       </h3>
       <div class='full-section'>
         <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}:</h4>
@@ -46,6 +46,7 @@ import { date } from 'quasar'
 
 import warning from 'src/assets/warning.svg'
 import { useLocalOrderStore } from 'src/teststore/mock/order'
+import { useCurrencyStore } from 'npool-cli-v2'
 
 interface Props {
   orderId: string;
@@ -64,6 +65,7 @@ const title = toRef(props, 'title')
 const localOrder = useLocalOrderStore()
 const order = computed(() => localOrder.getOrderByID(orderId.value))
 
+const currencies = useCurrencyStore()
 const emit = defineEmits<{(e: 'proceed'): void}>()
 
 const onProceedClick = () => {

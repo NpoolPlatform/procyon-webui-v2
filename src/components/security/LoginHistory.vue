@@ -53,6 +53,7 @@ onMounted(() => {
       }
     }, () => {
       // TODO
+      user.LoginHistories = user.LoginHistories.sort((a, b) => a.CreateAt > b.CreateAt ? -1 : 1)
     })
   }
 })
