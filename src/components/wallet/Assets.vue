@@ -54,7 +54,12 @@
 
           <div class='qr-code-container'>
             <h5>{{ ant.CoinName }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
-            <img :src='lineQr'>
+            <qrcode-vue
+              :value='ant?.Address'
+              :size='qrCodeContainer?.clientWidth as number - 1'
+              :margin='3'
+              class='qr-code'
+            />
           </div>
 
           <div class='hr' />
@@ -99,7 +104,6 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
 import { Account, useLocalAccountStore } from 'src/teststore/mock/account'
-import lineQr from '../../assets/line-qr.png'
 import copy from 'copy-to-clipboard'
 
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
@@ -207,6 +211,8 @@ const onWithdrawClick = (asset: BenefitModel) => {
 const ant = ref({} as Account)
 const beforeDepositLoading = ref(false)
 const showDepositing = ref(false)
+const qrCodeContainer = ref<HTMLDivElement>()
+
 const laccount = useLocalAccountStore()
 const onDepositClick = (row: BalanceGeneral) => {
   beforeDepositLoading.value = true
