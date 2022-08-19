@@ -52,7 +52,7 @@
         <div class='confirmation'>
           <h3>{{ $t('MSG_DEPOSIT_ADDRESS') }}</h3>
 
-          <div class='qr-code-container'>
+          <div class='qr-code-container' ref='qrCodeContainer'>
             <h5>{{ ant.CoinName }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
             <qrcode-vue
               :value='ant?.Address'
@@ -105,6 +105,7 @@ import { useRouter } from 'vue-router'
 import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
 import { Account, useLocalAccountStore } from 'src/teststore/mock/account'
 import copy from 'copy-to-clipboard'
+const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
@@ -227,6 +228,22 @@ const onDepositClick = (row: BalanceGeneral) => {
     }
   }, (error: boolean, act?: Account) => {
     beforeDepositLoading.value = false
+    ant.value = {
+      ID: '',
+      AppID: '',
+      UserID: 'string',
+      CoinTypeID: '4db85c80-d0d7-4248-8511-b96ed53c9bc2',
+      CoinName: 'TTether ERC20',
+      CoinUnit: 'USD',
+      CoinEnv: 'string',
+      CoinLogo: 'https://img0.baidu.com/it/u=1761918113,2556123655&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+      AccountID: '918410e7-e784-4056-a079-4a39bfdf2d4b',
+      Address: '0x0b453543fe40357Dec0452Dc20dEb89C6258Df17',
+      UsedFor: 'UserDeposit',
+      Labels: ['label1', 'label2'],
+      CreatedAt: 1660705554
+    }
+    showDepositDialog(ant.value)
     if (error || act === undefined) {
       return
     }
