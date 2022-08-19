@@ -3,7 +3,7 @@
     <PurchasePage :good='good'>
       <div class='info'>
         <h3 class='form-title'>
-          {{ currencies.formatCoinName(order?.CoinName as string) }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
+          {{ order?.CoinName?.length ? currencies.formatCoinName(order?.CoinName as string) : '' }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
         </h3>
         <div class='info-flex'>
           <div class='three-section'>
@@ -202,6 +202,9 @@ const showCancelling = ref(false)
 const currencies = useCurrencyStore()
 
 const coinName = computed(() => {
+  if (!order.value?.PaymentCoinName?.length) {
+    return
+  }
   if (order.value?.PaymentCoinName?.toLowerCase()?.includes('bitcoin')) {
     return 'BTC (Bitcoin)'
   } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('binanceusd')) {
@@ -213,7 +216,7 @@ const coinName = computed(() => {
   } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('usdttrc20')) {
     return 'USDT (TRC20)'
   }
-  return currencies.formatCoinName(order.value?.PaymentCoinName as string)
+  return currencies.formatCoinName(order.value?.PaymentCoinName)
 })
 
 const remainTicker = ref(-1)
