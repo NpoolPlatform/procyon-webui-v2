@@ -202,15 +202,15 @@ const showCancelling = ref(false)
 const currencies = useCurrencyStore()
 
 const coinName = computed(() => {
-  if (order.value?.PaymentCoinName.toLowerCase().includes('bitcoin')) {
+  if (order.value?.PaymentCoinName?.toLowerCase()?.includes('bitcoin')) {
     return 'BTC (Bitcoin)'
-  } else if (order.value?.PaymentCoinName.toLowerCase().includes('binanceusd')) {
+  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('binanceusd')) {
     return 'BUSD (BEP20)'
-  } else if (order.value?.PaymentCoinName.toLowerCase().includes('usdcerc20')) {
+  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('usdcerc20')) {
     return 'USDC (ERC20)'
-  } else if (order.value?.PaymentCoinName.toLowerCase().includes('usdterc20')) {
+  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('usdterc20')) {
     return 'USDT (ERC20)'
-  } else if (order.value?.PaymentCoinName.toLowerCase().includes('usdttrc20')) {
+  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('usdttrc20')) {
     return 'USDT (TRC20)'
   }
   return currencies.formatCoinName(order.value?.PaymentCoinName as string)
