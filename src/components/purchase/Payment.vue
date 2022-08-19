@@ -3,7 +3,7 @@
     <PurchasePage :good='good'>
       <div class='info'>
         <h3 class='form-title'>
-          {{ currencies.formatCoinName(order?.PaymentCoinName as string) }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
+          {{ order?.CoinName }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
         </h3>
         <div class='info-flex'>
           <div class='three-section'>
@@ -201,7 +201,7 @@ const showWarning = ref(true)
 const showCancelling = ref(false)
 const currencies = useCurrencyStore()
 
-const coinName = () => {
+const coinName = computed(() => {
   if (order.value?.PaymentCoinName.toLowerCase().includes('bitcoin')) {
     return 'BTC (Bitcoin)'
   } else if (order.value?.PaymentCoinName.toLowerCase().includes('bianaceusd')) {
@@ -214,7 +214,7 @@ const coinName = () => {
     return 'USDT (TRC20)'
   }
   return currencies.formatCoinName(order.value?.PaymentCoinName as string)
-}
+})
 
 const remainTicker = ref(-1)
 watch(counter, () => {
