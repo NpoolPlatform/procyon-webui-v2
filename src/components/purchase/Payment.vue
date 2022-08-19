@@ -35,8 +35,8 @@
           </div>
           <div class='full-section'>
             <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
-            <span class='wallet-type'>{{ currencies.formatCoinName(order?.PaymentCoinName as string) }}</span>
-            <span class='number'>{{ order?.PaymentAddress }}</span>
+            <span class='wallet-type'>{{ currencies.formatCoinName(order?.PaymentCoinName as string) }} &nbsp; </span>
+            <span class='number'>  {{ order?.PaymentAddress }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAddressClick'>
             <div class='tooltip'>
               <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -56,7 +56,7 @@
         </h3>
         <div class='qr-code-container'>
           <div class='qr-code-container' ref='qrCodeContainer'>
-            <h5>{{ currencies.formatCoinName(order?.PaymentCoinName as string) }} {{ $t('MSG_ADDRESS') }}</h5>
+            <h5>{{ currencies.formatCoinName(order?.PaymentCoinName as string) }}  {{ $t('MSG_ADDRESS') }}</h5>
             <qrcode-vue
               :value='order?.PaymentAddress'
               :size='qrCodeContainer?.clientWidth as number - 1'

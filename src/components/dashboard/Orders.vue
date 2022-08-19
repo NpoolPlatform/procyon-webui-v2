@@ -54,7 +54,7 @@ const table = computed(() => [
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: Order) => row.PaymentAmount.toString() + ' ' + PriceCoinName
+    field: (row: Order) => (row.PaymentAmount + row.PayWithBalanceAmount) + ' ' + PriceCoinName
   },
   {
     name: 'Period',
