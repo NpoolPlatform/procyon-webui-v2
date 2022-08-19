@@ -34,6 +34,7 @@
           <ul>
             <li>(1) Open the <strong>[Account]</strong> page after logging in.</li>
             <li>(2) Click on the account details and edit the information.</li>
+            <li>*For corporate accounts, please provide the personal information of the representative.</li>
             <li>(3) After entering your new account information click <strong>[Save]</strong>.</li>
           </ul>
 
