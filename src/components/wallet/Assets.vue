@@ -114,7 +114,7 @@ const kyc = useKYCStore()
 const localledger = useLocalLedgerStore()
 const submitting = ref(false)
 
-const balanceGenerals = computed(() => localledger.generals)
+const balanceGenerals = computed(() => localledger.generals.filter((el) => !notPreSale(el.CoinTypeID)))
 
 const table = computed(() => [
   {
@@ -213,7 +213,13 @@ const payCoin = (coinTypeID: string) => {
   }
   return existingItem.ForPay
 }
-
+const notPreSale = (coinTypeID: string) => {
+  const existingItem = coin.Coins.find((el) => el.ID === coinTypeID)
+  if (!existingItem) {
+    return true
+  }
+  return existingItem.PreSale
+}
 const ant = ref({} as Account)
 const showDepositing = ref(false)
 const qrCodeContainer = ref<HTMLDivElement>()
