@@ -30,14 +30,9 @@
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
-          <WaitingBtn
-            label='MSG_DEPOSIT'
-            type='button'
-            class='small'
-            :disabled='depositClick'
-            :waiting='depositBtnMap.get(myProps.row.CoinTypeID) as boolean'
-            @click='onDepositClick(myProps.row)'
-          />
+          <button class='small' @click='onDepositClick(myProps.row)' :disabled='depositClick'>
+            {{ $t('MSG_DEPOSIT') }}
+          </button>
         </q-td>
       </q-tr>
     </template>
@@ -107,7 +102,6 @@ import { Account, useLocalAccountStore } from 'src/teststore/mock/account'
 import copy from 'copy-to-clipboard'
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 
-const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
@@ -119,10 +113,7 @@ const kyc = useKYCStore()
 const localledger = useLocalLedgerStore()
 const submitting = ref(false)
 
-const balanceGenerals = computed(() => {
-  localledger.generals.forEach((el) => depositBtnMap.value.set(el.CoinTypeID, false))
-  return localledger.generals
-})
+const balanceGenerals = computed(() => localledger.generals)
 
 const table = computed(() => [
   {
@@ -217,12 +208,9 @@ const ant = ref({} as Account)
 const showDepositing = ref(false)
 const qrCodeContainer = ref<HTMLDivElement>()
 const depositClick = ref(false)
-const depositBtnMap = ref(new Map<string, boolean>())
 
 const onDepositClick = (row: BalanceGeneral) => {
-  depositBtnMap.value.set(row.CoinTypeID, true)
   depositClick.value = true
-
   laccount.getDepositAccount({
     CoinTypeID: row.CoinTypeID,
     Message: {
@@ -233,7 +221,6 @@ const onDepositClick = (row: BalanceGeneral) => {
       }
     }
   }, (error: boolean, act?: Account) => {
-    depositBtnMap.value.set(row.CoinTypeID, false)
     depositClick.value = false
 
     if (error || act === undefined) {
