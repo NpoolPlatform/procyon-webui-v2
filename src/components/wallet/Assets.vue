@@ -26,13 +26,62 @@
           {{ myProps.row.JPYValue.toFixed(4) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps'>
-          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting'>
+          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick'>
             {{ $t('MSG_WITHDRAW') }}
+          </button>
+          <span class='btn-gap' />
+          <button class='small' @click='onDepositClick(myProps.row)' :disabled='depositClick'>
+            {{ $t('MSG_DEPOSIT') }}
           </button>
         </q-td>
       </q-tr>
     </template>
   </ShowSwitchTable>
+  <q-dialog
+    v-model='showDepositing'
+    maximized
+    @hide='hideDepositDialog'
+  >
+    <div class='popup product-container'>
+      <div class='form-container content-glass'>
+        <div class='confirmation'>
+          <h3>{{ $t('MSG_DEPOSIT_ADDRESS') }}</h3>
+
+          <div class='qr-code-container' ref='qrCodeContainer'>
+            <h5>{{ currencies.formatCoinName(ant.CoinName) }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
+            <qrcode-vue
+              :value='ant?.Address'
+              :size='qrCodeContainer?.clientWidth as number - 1'
+              :margin='3'
+              class='qr-code'
+            />
+          </div>
+
+          <div class='hr' />
+
+          <div class='full-section'>
+            <h4>{{ $t('MSG_YOUR_ADDRESS') }}</h4>
+            <div class='wallet-type'>
+              {{ currencies.formatCoinName(ant.CoinName) }}
+            </div>
+            <span class='number'>{{ ant.Address }}</span>
+            <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyDepositAddress'>
+          </div>
+
+          <div class='hr' />
+
+          <div class='warning'>
+            <img src='font-awesome/warning.svg'>
+            <span v-html='$t("MSG_DEPOSIT_REMINDER")' />
+          </div>
+
+          <button @click='onReturnWallet'>
+            {{ $t('MSG_RETURN_TO_WALLET') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
@@ -42,11 +91,16 @@ import {
   BenefitModel,
   useKYCStore,
   ReviewState,
-  useAccountStore
+  useAccountStore,
+  useNotificationStore,
+  NotificationType
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useLocalLedgerStore } from 'src/localstore/ledger'
+import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
+import { Account, useLocalAccountStore } from 'src/teststore/mock/account'
+import copy from 'copy-to-clipboard'
+const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -60,6 +114,7 @@ const localledger = useLocalLedgerStore()
 const submitting = ref(false)
 
 const balanceGenerals = computed(() => localledger.generals)
+
 const table = computed(() => [
   {
     name: 'CoinName',
@@ -147,8 +202,58 @@ const onWithdrawClick = (asset: BenefitModel) => {
     })
   })
 }
+const laccount = useLocalAccountStore()
 
+const ant = ref({} as Account)
+const showDepositing = ref(false)
+const qrCodeContainer = ref<HTMLDivElement>()
+const depositClick = ref(false)
+
+const onDepositClick = (row: BalanceGeneral) => {
+  depositClick.value = true
+  laccount.getDepositAccount({
+    CoinTypeID: row.CoinTypeID,
+    Message: {
+      Error: {
+        Title: t('MSG_FAIL_TO_GET_DEPOSIT_ACCOUNT'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, (error: boolean, act?: Account) => {
+    depositClick.value = false
+
+    if (error || act === undefined) {
+      return
+    }
+    showDepositDialog(act)
+  })
+}
+const onReturnWallet = () => {
+  hideDepositDialog()
+}
+const showDepositDialog = (act: Account) => {
+  ant.value = { ...act }
+  showDepositing.value = true
+}
+const hideDepositDialog = () => {
+  ant.value = {} as Account
+  showDepositing.value = false
+}
+
+const notification = useNotificationStore()
+function onCopyDepositAddress () {
+  copy(ant.value.Address)
+  notification.Notifications.push({
+    Title: t('MSG_DEPOSIT_ADDRESS_COPIED'),
+    Message: t('MSG_COPY_DEPOSIT_ADDRESS_SUCCESS'),
+    Popup: true,
+    Type: NotificationType.Success
+  })
+}
 </script>
 
-<stype lang='sass' scoped>
-</stype>
+<style lang='sass' scoped>
+.btn-gap
+  margin-right: 9px
+</style>

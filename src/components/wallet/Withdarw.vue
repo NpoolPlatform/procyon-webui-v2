@@ -110,6 +110,7 @@
       </div>
     </div>
   </q-dialog>
+
   <q-dialog
     v-model='showWaiting'
     seamless

@@ -192,6 +192,7 @@ const getUserDetails = (offset: number, limit: number) => {
     getUserDetails(limit + offset, limit)
   })
 }
+
 onMounted(() => {
   if (localtrans.Withdraws.Withdraws.length === 0) {
     getWithdraws(0, 100)
