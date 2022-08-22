@@ -8,5 +8,6 @@ enum API {
   LOGIN = '/user/v1/login',
   LOGIN_VERIFY = '/user/v1/loginverify',
   LOGOUT = '/user/v1/logout',
+  UPDATE_USER = '/user/v1/update/user',
 }
 export { API, AccountType }

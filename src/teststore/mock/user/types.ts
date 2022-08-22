@@ -82,6 +82,30 @@ interface LogoutRequest extends BaseRequest {
 interface LogoutResponse {
   Info: User;
 }
+
+interface UpdateUserRequest extends BaseRequest {
+  Account?: string;
+  AccountType?: string;
+  VerificationCode?: string;
+  EmailAddress?: string;
+  PhoneNO?: string;
+  Username: string;
+  AddressFields: string[];
+  Gender: string;
+  PostalCode: string;
+  Age?: number;
+  Birthday?: number;
+  Avatar?: string;
+  Organization?: string;
+  FirstName: string;
+  LastName: string;
+  IDNumber?: string;
+  SigninVerifyType?: string;
+  PasswordHash?: string;
+}
+interface UpdateUserResponse {
+  Info: User;
+}
 interface LoginHistory {
   ID: string;
   ClientIP: string;
@@ -108,5 +132,7 @@ export {
   LoginResponse,
   LoginVerifyResponse,
   LogoutRequest,
-  LogoutResponse
+  LogoutResponse,
+  UpdateUserRequest,
+  UpdateUserResponse
 }

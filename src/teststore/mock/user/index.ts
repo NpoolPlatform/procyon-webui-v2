@@ -1,4 +1,4 @@
-import { doAction } from 'npool-cli-v2'
+import { doAction, doActionWithError } from 'npool-cli-v2'
 import { defineStore } from 'pinia'
 import { API } from './const'
 import { Cookies } from 'quasar'
@@ -13,7 +13,9 @@ import {
   LoginResponse,
   LoginVerifyResponse,
   LogoutRequest,
-  LogoutResponse
+  LogoutResponse,
+  UpdateUserRequest,
+  UpdateUserResponse
 } from './types'
 
 export const useUserStore = defineStore('localuser', {
@@ -73,7 +75,20 @@ export const useUserStore = defineStore('localuser', {
           this.LoginedUser = undefined as unknown as User
           done?.()
         })
+    },
+    updateUser (req: UpdateUserRequest, done: (error: boolean) => void) {
+      doActionWithError<UpdateUserRequest, UpdateUserResponse>(
+        API.UPDATE_USER,
+        req,
+        req.Message,
+        (resp: UpdateUserResponse): void => {
+          this.LoginedUser = resp.Info
+          done(false)
+        }, () => {
+          done(true)
+        })
     }
+
   }
 })
 
