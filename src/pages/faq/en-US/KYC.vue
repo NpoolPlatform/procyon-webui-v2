@@ -21,8 +21,8 @@
         </div>
 
         <div class='faq-content-main'>
-          <h3 id='KYCの申請の方法'>
-            KYCの申請の方法
+          <h3 id='How to submit your KYC'>
+            How to submit your KYC
           </h3>
 
           <div class='video-box'>

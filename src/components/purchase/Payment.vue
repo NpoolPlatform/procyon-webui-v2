@@ -3,7 +3,7 @@
     <PurchasePage :good='good'>
       <div class='info'>
         <h3 class='form-title'>
-          {{ order?.PaymentCoinName }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
+          {{ order?.CoinName?.length ? currencies.formatCoinName(order?.CoinName as string) : '' }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
         </h3>
         <div class='info-flex'>
           <div class='three-section'>
@@ -35,8 +35,8 @@
           </div>
           <div class='full-section'>
             <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
-            <span class='wallet-type'>{{ order?.PaymentCoinName }}</span>
-            <span class='number'>{{ order?.PaymentAddress }}</span>
+            <span class='wallet-type'>{{ coinName }} &nbsp; </span>
+            <span class='number'>  {{ order?.PaymentAddress }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAddressClick'>
             <div class='tooltip'>
               <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -48,7 +48,7 @@
         </div>
         <div class='hr' />
         <h4>{{ $t('MSG_IMPORTANT_INFORMATION') }}</h4>
-        <p v-html='$t("MSG_PAYMENT_NOTE", { COIN_NAME: order?.PaymentCoinName })' />
+        <p v-html='$t("MSG_PAYMENT_NOTE", { COIN_NAME: coinName })' />
       </div>
       <div class='order-form'>
         <h3 class='form-title'>
@@ -56,7 +56,7 @@
         </h3>
         <div class='qr-code-container'>
           <div class='qr-code-container' ref='qrCodeContainer'>
-            <h5>{{ order?.PaymentCoinName }} {{ $t('MSG_ADDRESS') }}</h5>
+            <h5>{{ coinName }}  {{ $t('MSG_ADDRESS') }}</h5>
             <qrcode-vue
               :value='order?.PaymentAddress'
               :size='qrCodeContainer?.clientWidth as number - 1'
@@ -151,7 +151,7 @@
 </template>
 
 <script setup lang='ts'>
-import { NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds, useNotificationStore, useGoodStore } from 'npool-cli-v2'
+import { NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds, useNotificationStore, useGoodStore, useCurrencyStore } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -199,6 +199,25 @@ const showType = ref('')
 const remainTime = ref(RemainMax)
 const showWarning = ref(true)
 const showCancelling = ref(false)
+const currencies = useCurrencyStore()
+
+const coinName = computed(() => {
+  if (!order.value?.PaymentCoinName?.length) {
+    return
+  }
+  if (order.value?.PaymentCoinName?.toLowerCase()?.includes('bitcoin')) {
+    return 'BTC (Bitcoin)'
+  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('binanceusd')) {
+    return 'BUSD (BEP20)'
+  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('usdcerc20')) {
+    return 'USDC (ERC20)'
+  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('usdterc20')) {
+    return 'USDT (ERC20)'
+  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('usdttrc20')) {
+    return 'USDT (TRC20)'
+  }
+  return currencies.formatCoinName(order.value?.PaymentCoinName)
+})
 
 const remainTicker = ref(-1)
 watch(counter, () => {

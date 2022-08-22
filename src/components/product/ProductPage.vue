@@ -58,6 +58,10 @@
                 <img :src='warning'>
                 <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
               </div>
+              <div class='warning' v-if='showBUSDTip'>
+                <img :src='warning'>
+                <span>{{ $t('MSG_COIN_BUSD_PAYMENT_TIP') }}</span>
+              </div>
             </form>
           </div>
           <div class='info'>
@@ -146,6 +150,10 @@
                 <div class='warning' v-if='showRateTip'>
                   <img :src='warning'>
                   <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
+                </div>
+                <div class='warning' v-if='showBUSDTip'>
+                  <img :src='warning'>
+                  <span>{{ $t('MSG_COIN_BUSD_PAYMENT_TIP') }}</span>
                 </div>
               </form>
             </div>
@@ -268,6 +276,10 @@ const showRateTip = computed(() => {
         !paymentCoin.value?.Name?.includes(PriceCoinName) &&
         !paymentCoin.value?.Unit?.includes('BUSD') &&
         !paymentCoin.value?.Unit?.includes('USDC')
+})
+
+const showBUSDTip = computed(() => {
+  return paymentCoin.value?.Unit?.includes('BUSD')
 })
 
 const coin = useCoinStore()
