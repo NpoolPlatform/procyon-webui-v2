@@ -72,7 +72,7 @@
 
           <div class='warning'>
             <img src='font-awesome/warning.svg'>
-            <span>{{ $t('MSG_DEPOSIT_REMINDER') }}</span>
+            <span v-html='$t("MSG_DEPOSIT_REMINDER")' />
           </div>
 
           <button @click='onReturnWallet'>
