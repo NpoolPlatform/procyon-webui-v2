@@ -26,7 +26,7 @@
           {{ myProps.row.JPYValue.toFixed(4) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps'>
-          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting'>
+          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
@@ -34,8 +34,8 @@
             label='MSG_DEPOSIT'
             type='button'
             class='small'
-            :disabled='beforeDepositLoading'
-            :waiting='beforeDepositLoading'
+            :disabled='depositClick'
+            :waiting='depositBtnMap.get(myProps.row.CoinTypeID) as boolean'
             @click='onDepositClick(myProps.row)'
           />
         </q-td>
@@ -53,7 +53,7 @@
           <h3>{{ $t('MSG_DEPOSIT_ADDRESS') }}</h3>
 
           <div class='qr-code-container' ref='qrCodeContainer'>
-            <h5>{{ ant.CoinName }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
+            <h5>{{ currencies.formatCoinName(ant.CoinName) }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
             <qrcode-vue
               :value='ant?.Address'
               :size='qrCodeContainer?.clientWidth as number - 1'
@@ -67,7 +67,7 @@
           <div class='full-section'>
             <h4>{{ $t('MSG_YOUR_ADDRESS') }}</h4>
             <div class='wallet-type'>
-              {{ ant.CoinName }}
+              {{ currencies.formatCoinName(ant.CoinName) }}
             </div>
             <span class='number'>{{ ant.Address }}</span>
             <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyDepositAddress'>
@@ -119,7 +119,10 @@ const kyc = useKYCStore()
 const localledger = useLocalLedgerStore()
 const submitting = ref(false)
 
-const balanceGenerals = computed(() => localledger.generals)
+const balanceGenerals = computed(() => {
+  localledger.generals.forEach((el) => depositBtnMap.value.set(el.CoinTypeID, false))
+  return localledger.generals
+})
 
 const table = computed(() => [
   {
@@ -208,15 +211,18 @@ const onWithdrawClick = (asset: BenefitModel) => {
     })
   })
 }
+const laccount = useLocalAccountStore()
 
 const ant = ref({} as Account)
-const beforeDepositLoading = ref(false)
 const showDepositing = ref(false)
 const qrCodeContainer = ref<HTMLDivElement>()
+const depositClick = ref(false)
+const depositBtnMap = ref(new Map<string, boolean>())
 
-const laccount = useLocalAccountStore()
 const onDepositClick = (row: BalanceGeneral) => {
-  beforeDepositLoading.value = true
+  depositBtnMap.value.set(row.CoinTypeID, true)
+  depositClick.value = true
+
   laccount.getDepositAccount({
     CoinTypeID: row.CoinTypeID,
     Message: {
@@ -227,7 +233,9 @@ const onDepositClick = (row: BalanceGeneral) => {
       }
     }
   }, (error: boolean, act?: Account) => {
-    beforeDepositLoading.value = false
+    depositBtnMap.value.set(row.CoinTypeID, false)
+    depositClick.value = false
+
     if (error || act === undefined) {
       return
     }
