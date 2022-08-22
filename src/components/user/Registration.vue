@@ -106,10 +106,10 @@ import {
   NotificationType,
   validateVerificationCode,
   validatePassword,
-  useUserStore,
   encryptPassword,
   AccountType
 } from 'npool-cli-v2'
+import { useUserStore } from 'src/teststore/mock/user'
 import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
