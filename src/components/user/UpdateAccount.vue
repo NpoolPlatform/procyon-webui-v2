@@ -64,9 +64,9 @@ import {
   validateVerificationCode,
   useCodeRepoStore,
   MessageUsedFor,
-  NotificationType,
-  useUserStore
+  NotificationType
 } from 'npool-cli-v2'
+import { useUserStore } from 'src/teststore/mock/user'
 import { defineAsyncComponent, ref, toRef, watch, defineProps } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -140,12 +140,10 @@ const onSubmit = () => {
 
   switch (accountType.value) {
     case AccountType.Email:
-      user.updateEmail({
-        NewEmailAddress: account.value,
-        NewEmailVerificationCode: myVerificationCode.value,
-        OldAccount: oldAccount.value,
-        OldVerificationCode: oldVerificationCode.value,
-        OldAccountType: oldAccountType.value,
+      user.updateUser({
+        EmailAddress: account.value,
+        VerificationCode: myVerificationCode.value,
+        AccountType: oldAccountType.value,
         Message: {
           Error: {
             Title: t('MSG_UPDATE_EMAIL'),
@@ -155,16 +153,15 @@ const onSubmit = () => {
           }
         }
       }, () => {
+        // TODO
         void router.push({ path: '/dashboard' })
       })
       break
     case AccountType.Mobile:
-      user.updateMobile({
-        NewPhoneNO: account.value,
-        NewPhoneVerificationCode: myVerificationCode.value,
-        OldAccount: oldAccount.value,
-        OldVerificationCode: oldVerificationCode.value,
-        OldAccountType: oldAccountType.value,
+      user.updateUser({
+        PhoneNO: account.value,
+        VerificationCode: myVerificationCode.value,
+        AccountType: oldAccountType.value,
         Message: {
           Error: {
             Title: t('MSG_UPDATE_MOBILE'),
