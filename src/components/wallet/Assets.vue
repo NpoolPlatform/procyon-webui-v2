@@ -253,7 +253,7 @@ function onCopyDepositAddress () {
 }
 </script>
 
-<stype lang='sass' scoped>
+<style lang='sass' scoped>
 .btn-gap
   margin-right: 9px
-</stype>
+</style>
