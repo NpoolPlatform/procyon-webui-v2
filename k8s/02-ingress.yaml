@@ -16,7 +16,7 @@ metadata:
 spec:
   tls:
     - hosts:
-        - "*.procyon.vip"
+        - '*.procyon.vip'
         - procyon.vip
       secretName: procyon-vip-tls
   rules:
