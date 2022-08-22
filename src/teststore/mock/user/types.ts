@@ -42,7 +42,9 @@ interface User {
   LoginClientUserAgent: string;
   CreatedAt: number;
   InvitationCode: string;
+  InvitationCodeConfirmed: boolean;
   LoginVerified: boolean;
+
 }
 
 interface SignupRequest extends BaseRequest{
@@ -55,6 +57,31 @@ interface SignupRequest extends BaseRequest{
 
 export type SignupResponse = User
 
+interface LoginRequest extends BaseRequest {
+  Account: string;
+  PasswordHash: string;
+  AccountType: AccountType;
+  ManMachineSpec: string;
+  EnvironmentSpec?: string;
+}
+interface LoginResponse {
+  Info: User;
+}
+
+interface LoginVerifyRequest extends BaseRequest {
+  Token: string;
+  VerificationCode: string;
+}
+interface LoginVerifyResponse {
+  Info: User;
+}
+
+interface LogoutRequest extends BaseRequest {
+  Token: string;
+}
+interface LogoutResponse {
+  Info: User;
+}
 interface LoginHistory {
   ID: string;
   ClientIP: string;
@@ -67,11 +94,19 @@ interface UserState {
   LoginHistories: Array<LoginHistory>;
   GoogleOTPAuth: string;
   GoogleSecret: string;
+  LoginedUser: User;
 }
 
 export {
+  User,
   AccountType,
   SignupRequest,
   LoginHistory,
-  UserState
+  UserState,
+  LoginRequest,
+  LoginVerifyRequest,
+  LoginResponse,
+  LoginVerifyResponse,
+  LogoutRequest,
+  LogoutResponse
 }
