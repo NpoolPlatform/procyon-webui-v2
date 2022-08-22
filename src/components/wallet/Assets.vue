@@ -30,7 +30,7 @@
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
-          <button class='small' @click='onDepositClick(myProps.row)' :disabled='depositClick'>
+          <button class='small' @click='onDepositClick(myProps.row)' :disabled='!payCoin(myProps.row.CoinTypeID) || depositClick'>
             {{ $t('MSG_DEPOSIT') }}
           </button>
         </q-td>
@@ -93,7 +93,8 @@ import {
   ReviewState,
   useAccountStore,
   useNotificationStore,
-  NotificationType
+  NotificationType,
+  useCoinStore
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -203,6 +204,15 @@ const onWithdrawClick = (asset: BenefitModel) => {
   })
 }
 const laccount = useLocalAccountStore()
+
+const coin = useCoinStore()
+const payCoin = (coinTypeID: string) => {
+  const existingItem = coin.Coins.find((el) => el.ID === coinTypeID)
+  if (!existingItem) {
+    return false
+  }
+  return existingItem.ForPay
+}
 
 const ant = ref({} as Account)
 const showDepositing = ref(false)
