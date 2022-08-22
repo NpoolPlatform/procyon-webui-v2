@@ -152,12 +152,11 @@
 <script setup lang='ts'>
 import {
   NotificationType,
-  useLoginedUserStore,
-  useUserStore,
   validateUsername
 } from 'npool-cli-v2'
 import { throttle, uid } from 'quasar'
 import { ThrottleSeconds } from 'src/const/const'
+import { useUserStore } from 'src/teststore/mock/user'
 import { defineAsyncComponent, ref, computed } from 'vue'
 
 import { useI18n } from 'vue-i18n'
@@ -167,9 +166,9 @@ const { t } = useI18n({ useScope: 'global' })
 
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
-const logined = useLoginedUserStore()
+const user = useUserStore()
 
-const username = ref(logined.LoginedUser?.Extra?.Username as string)
+const username = ref(user.LoginedUser?.Username)
 const usernameError = ref(false)
 const onUsernameFocusIn = () => {
   usernameError.value = false
@@ -179,9 +178,9 @@ const onUsernameFocusOut = () => {
 }
 
 const genders = ref(['MSG_FAMALE', 'MSG_MALE', 'MSG_OTHER'])
-const gender = ref(logined.LoginedUser?.Extra?.Gender)
+const gender = ref(user.LoginedUser?.Gender)
 
-const firstName = ref(logined.LoginedUser?.Extra?.FirstName as string)
+const firstName = ref(user.LoginedUser?.FirstName)
 const firstNameError = ref(false)
 const onFirstNameFocusIn = () => {
   firstNameError.value = false
@@ -190,7 +189,7 @@ const onFirstNameFocusOut = () => {
   firstNameError.value = !firstName.value?.length
 }
 
-const lastName = ref(logined.LoginedUser?.Extra?.LastName as string)
+const lastName = ref(user.LoginedUser?.LastName)
 const lastNameError = ref(false)
 const onLastNameFocusIn = () => {
   lastNameError.value = false
@@ -199,10 +198,10 @@ const onLastNameFocusOut = () => {
   lastNameError.value = !lastName.value?.length
 }
 
-const postalCode = ref(logined.LoginedUser?.Extra?.PostalCode as string)
+const postalCode = ref(user.LoginedUser?.PostalCode)
 const postalCodeError = ref(false)
 
-const addressFields = ref(logined.LoginedUser?.Extra?.AddressFields ? logined.LoginedUser?.Extra?.AddressFields : [])
+const addressFields = ref(user.LoginedUser?.AddressFields ? user.LoginedUser?.AddressFields : [])
 const country = computed({
   get: () => addressFields.value.length > 0 ? addressFields.value[0] : '',
   set: (val) => {
@@ -247,7 +246,6 @@ const street2 = computed({
 
 const street2Error = ref(false)
 
-const user = useUserStore()
 const onSubmit = throttle(() => {
   usernameError.value = !username.value?.length
   firstNameError.value = !firstName.value?.length
@@ -257,64 +255,26 @@ const onSubmit = throttle(() => {
     return
   }
 
-  if (!logined.LoginedUser?.Extra) {
-    user.createExtra({
-      Info: {
-        IDNumber: 'NOT-USED' + uid(),
-        Username: username.value,
-        AddressFields: addressFields.value,
-        Gender: gender.value,
-        PostalCode: postalCode.value,
-        FirstName: firstName.value,
-        LastName: lastName.value
-      },
-      Message: {
-        Error: {
-          Title: t('MSG_CREATE_EXTRA'),
-          Message: t('MSG_CREATE_EXTRA_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        },
-        Info: {
-          Title: t('MSG_CREATE_EXTRA'),
-          Message: t('MSG_CREATE_EXTRA_SUCCESS'),
-          Popup: true,
-          Type: NotificationType.Success
-        }
-      }
-    }, () => {
-    // TODO
-    })
-    return false
-  }
-
-  logined.LoginedUser.Extra.AddressFields = addressFields.value
-  logined.LoginedUser.Extra.Username = username.value
-  logined.LoginedUser.Extra.Gender = gender.value
-  logined.LoginedUser.Extra.PostalCode = postalCode.value
-  logined.LoginedUser.Extra.FirstName = firstName.value
-  logined.LoginedUser.Extra.LastName = lastName.value
-
-  user.updateExtra({
-    Info: logined.LoginedUser.Extra,
+  user.updateUser({
+    IDNumber: 'NOT-USED' + uid(),
+    Username: username.value,
+    AddressFields: addressFields.value,
+    Gender: gender.value,
+    PostalCode: postalCode.value,
+    FirstName: firstName.value,
+    LastName: lastName.value,
     Message: {
       Error: {
         Title: t('MSG_UPDATE_EXTRA'),
         Message: t('MSG_UPDATE_EXTRA_FAIL'),
         Popup: true,
         Type: NotificationType.Error
-      },
-      Info: {
-        Title: t('MSG_UPDATE_EXTRA'),
-        Message: t('MSG_UPDATE_EXTRA_SUCCESS'),
-        Popup: true,
-        Type: NotificationType.Success
       }
     }
-  }, () => {
+  }, (error: boolean) => {
     // TODO
+    console.log(error)
   })
-
   return false
 }, ThrottleSeconds * 1000)
 
