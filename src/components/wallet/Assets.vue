@@ -10,7 +10,7 @@
         <q-td key='CoinName' :props='myProps'>
           <LogoName
             :logo='myProps.row.CoinLogo'
-            :name='currencies.formatCoinName(myProps.row.CoinName)'
+            :name='coinName(myProps.row.CoinTypeID)'
           />
         </q-td>
         <q-td key='Balance' :props='myProps'>
@@ -48,7 +48,7 @@
           <h3>{{ $t('MSG_DEPOSIT_ADDRESS') }}</h3>
 
           <div class='qr-code-container' ref='qrCodeContainer'>
-            <h5>{{ currencies.formatCoinName(ant.CoinName) }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
+            <h5>{{ coinName(ant?.CoinTypeID) }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
             <qrcode-vue
               :value='ant?.Address'
               :size='qrCodeContainer?.clientWidth as number - 1'
@@ -62,7 +62,7 @@
           <div class='full-section'>
             <h4>{{ $t('MSG_YOUR_ADDRESS') }}</h4>
             <div class='wallet-type'>
-              {{ currencies.formatCoinName(ant.CoinName) }}
+              {{ coinName(ant.CoinTypeID) }}
             </div>
             <span class='number'>{{ ant.Address }}</span>
             <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyDepositAddress'>
@@ -87,7 +87,6 @@
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, ref } from 'vue'
 import {
-  useCurrencyStore,
   BenefitModel,
   useKYCStore,
   ReviewState,
@@ -101,6 +100,7 @@ import { useRouter } from 'vue-router'
 import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
 import { Account, useLocalAccountStore } from 'src/teststore/mock/account'
 import copy from 'copy-to-clipboard'
+import { useLocalCoinStore } from 'src/localstore/coin'
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
@@ -109,12 +109,11 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const currencies = useCurrencyStore()
 const kyc = useKYCStore()
 const localledger = useLocalLedgerStore()
 const submitting = ref(false)
 
-const balanceGenerals = computed(() => localledger.generals.filter((el) => !notPreSale(el.CoinTypeID)))
+const balanceGenerals = computed(() => localledger.generals.filter((el) => !preSaleCoin(el.CoinTypeID) && !coinBlacklist(el.CoinTypeID)))
 
 const table = computed(() => [
   {
@@ -209,17 +208,35 @@ const coin = useCoinStore()
 const payCoin = (coinTypeID: string) => {
   const existingItem = coin.Coins.find((el) => el.ID === coinTypeID)
   if (!existingItem) {
-    return false
+    return true
   }
   return existingItem.ForPay
 }
-const notPreSale = (coinTypeID: string) => {
+const preSaleCoin = (coinTypeID: string) => {
   const existingItem = coin.Coins.find((el) => el.ID === coinTypeID)
   if (!existingItem) {
     return true
   }
   return existingItem.PreSale
 }
+const coinBlacklist = (coinTypeID: string) => {
+  const names = ['Ethereum', 'Tron', 'Solana']
+  const existingItem = coin.Coins.find((el) => el.ID === coinTypeID)
+  if (!existingItem) {
+    return true
+  }
+  let flag = false
+  names.forEach((el) => {
+    if (existingItem.Name?.toLowerCase().includes(el.toLowerCase())) {
+      flag = true
+    }
+  })
+  return flag
+}
+
+const localcoin = useLocalCoinStore()
+const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
+
 const ant = ref({} as Account)
 const showDepositing = ref(false)
 const qrCodeContainer = ref<HTMLDivElement>()
