@@ -23,6 +23,7 @@
       </div>
       <p>{{ $t('MSG_UPDATE_EMAIL_TIP') }}</p>
       <div class='verification'>
+        <!-- FIXME -->
         <img :src='squareCheck' :class='[ logined.LoginedUser?.User?.EmailAddress?.length ? "verified" : "" ]'>
         <span>
           {{ logined.LoginedUser?.User?.EmailAddress?.length ? $t('MSG_VERIFIED') + ': ' + logined.LoginedUser?.User?.EmailAddress : $t('MSG_NOT_VERIFIED') }}

@@ -65,7 +65,7 @@ const onSubmit = () => {
   if (verificationCodeError.value || oldVerificationCodeError.value) {
     return
   }
-
+  // FIXME
   user.updateAccount({
     Account: '',
     AccountType: AccountType.Google,
