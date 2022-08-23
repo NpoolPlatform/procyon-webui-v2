@@ -10,7 +10,7 @@
         <q-td key='CoinName' :props='myProps'>
           <LogoName
             :logo='coin.getCoinByID(myProps.row.CoinTypeID)?.Logo'
-            :name='currency.formatCoinName(myProps.row.CoinName as string)'
+            :name='coinName(myProps.row.CoinName as string)'
           />
         </q-td>
         <q-td key='CreatedAt' :props='myProps'>
@@ -29,9 +29,10 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, formatTime, useCurrencyStore } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { Detail, IOType, IOSubType, useLocalTransactionStore } from 'src/teststore/mock/transaction'
+import { useLocalCoinStore } from 'src/localstore/coin'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -41,7 +42,6 @@ const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
 const localtrans = useLocalTransactionStore()
-const currency = useCurrencyStore()
 const transactions = computed(() => localtrans.details)
 
 const transactionType = (tx: Detail) => {
@@ -112,6 +112,8 @@ const table = computed(() => [
     field: () => (row: Detail) => transactionType(row)
   }
 ])
+const localcoin = useLocalCoinStore()
+const coinName = computed(() => (name: string) => localcoin.formatCoinName(name))
 
 onMounted(() => {
   if (coin.Coins.length === 0) {

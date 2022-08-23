@@ -10,7 +10,7 @@
         <q-td key='Name' :props='myProps'>
           <LogoName
             :logo='myProps.row.CoinLogo'
-            :name='currency.formatCoinName(myProps.row.CoinName)'
+            :name='coinName(myProps.row.CoinName)'
           />
         </q-td>
         <q-td key='Date' :props='myProps'>
@@ -32,10 +32,11 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { formatTime, useCurrencyStore } from 'npool-cli-v2'
+import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useLocalTransactionStore, Withdraw } from 'src/teststore/mock/transaction'
 import { WithdrawState } from 'src/teststore/mock/transaction/const'
+import { useLocalCoinStore } from 'src/localstore/coin'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -44,7 +45,6 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 const { t } = useI18n({ useScope: 'global' })
 
 const locationTrans = useLocalTransactionStore()
-const currency = useCurrencyStore()
 const withdraws = computed(() => locationTrans.withdraws)
 
 const table = computed(() => [
@@ -79,6 +79,8 @@ const table = computed(() => [
     field: (row: Withdraw) => row.Address
   }
 ])
+const localcoin = useLocalCoinStore()
+const coinName = computed(() => (name: string) => localcoin.formatCoinName(name))
 
 const withdrawStatus = (wd: Withdraw) => {
   switch (wd.State) {

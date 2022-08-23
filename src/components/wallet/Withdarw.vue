@@ -7,7 +7,7 @@
             <div class='product-page-icon'>
               <img :src='coins.getCoinLogo(coin)'>
             </div>
-            <h1>{{ coin?.Name }}</h1>
+            <h1>{{ coinName(coin.Name as string) }}</h1>
           </div>
           <div class='withdraw'>
             <h3>{{ $t('MSG_ASSET_WITHDRAWAL') }}</h3>
@@ -53,7 +53,7 @@
                   @click='onAddressSelected(withdraw)'
                 >
                   <span class='wallet-type'>{{ withdraw.Address.Labels.join(',') }}</span>
-                  <span class='wallet-type coin-type'>{{ coin.Name }}</span>
+                  <span class='wallet-type coin-type'>{{ coinName(coin.Name as string) }}</span>
                   <span class='number'>{{ withdraw.Account.Address }}</span>
                   <img class='checkmark' :src='checkmark'>
                 </span>
@@ -154,6 +154,7 @@ import { IntervalKey, ThrottleSeconds } from 'src/const/const'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
 import { throttle } from 'quasar'
+import { useLocalCoinStore } from 'src/localstore/coin'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -179,6 +180,9 @@ const onAmountFocusOut = () => {
 interface Query {
   coinTypeId: string;
 }
+
+const localcoin = useLocalCoinStore()
+const coinName = computed(() => (name: string) => localcoin.formatCoinName(name))
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)

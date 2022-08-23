@@ -3,7 +3,10 @@ import { defineStore } from 'pinia'
 export const useLocalCoinStore = defineStore('localcoin', {
   state: () => ({}),
   getters: {
-    formatCoinName: () => (coinName:string) => {
+    formatCoinName: () => (coinName:string|undefined) => {
+      if (coinName === undefined) {
+        return ''
+      }
       const currencies = useCurrencyStore()
       if (coinName?.toLowerCase()?.includes('bitcoin')) {
         return 'BTC (Bitcoin)'

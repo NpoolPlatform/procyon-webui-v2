@@ -18,7 +18,7 @@
           <q-td key='Blockchain' :props='myProps'>
             <LogoName
               :logo='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Logo'
-              :name='currency.formatCoinName(coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name as string)'
+              :name='coinName(coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name as string)'
             />
           </q-td>
           <q-td key='Address' :props='myProps'>
@@ -79,12 +79,13 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent, ref } from 'vue'
-import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore, useCurrencyStore, ReviewState, useNotificationStore } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore, ReviewState, useNotificationStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { WithdrawState } from 'src/teststore/mock/transaction/const'
+import { useLocalCoinStore } from 'src/localstore/coin'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -93,7 +94,6 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
-const currency = useCurrencyStore()
 const account = useAccountStore()
 const accounts = computed(() => account.Accounts.filter((el) => el.State === ReviewState.Approved).sort((a, b) => {
   return b.Account.CreateAt - a.Account.CreateAt
@@ -101,6 +101,9 @@ const accounts = computed(() => account.Accounts.filter((el) => el.State === Rev
 
 const ltrans = useLocalTransactionStore()
 const withdraws = computed(() => ltrans.withdraws)
+
+const localcoin = useLocalCoinStore()
+const coinName = computed(() => (name: string) => localcoin.formatCoinName(name))
 
 const deletable = (account: WithdrawAccount) => {
   return withdraws.value.filter((el) => {
