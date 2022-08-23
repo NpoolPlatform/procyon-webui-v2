@@ -18,13 +18,16 @@ export const useLocalCoinStore = defineStore('localcoin', {
       }
       if (existingCoin.Name?.toLowerCase()?.includes('bitcoin')) {
         return 'BTC (Bitcoin)'
-      } else if (existingCoin.Name?.toLowerCase()?.includes('binanceusd')) {
+      } else if (existingCoin.Name?.toLowerCase()?.replace(' ', '')?.includes('binanceusd')) {
         return 'BUSD (BEP20)'
-      } else if (existingCoin.Name?.toLowerCase()?.includes('usdcerc20')) {
+      } else if (existingCoin.Name?.toLowerCase()?.includes('usdcerc20') ||
+      existingCoin.Name?.toLowerCase()?.includes('usd coin erc20')) {
         return 'USDC (ERC20)'
-      } else if (existingCoin.Name?.toLowerCase()?.includes('usdterc20')) {
+      } else if (existingCoin.Name?.toLowerCase()?.includes('usdterc20') ||
+      existingCoin.Name?.toLowerCase()?.includes('tether erc20')) {
         return 'USDT (ERC20)'
-      } else if (existingCoin.Name?.toLowerCase()?.includes('usdttrc20')) {
+      } else if (existingCoin.Name?.toLowerCase()?.includes('usdttrc20') ||
+      existingCoin.Name?.toLowerCase()?.includes('tether trc20')) {
         return 'USDT (TRC20)'
       }
       return currencies.formatCoinName(existingCoin.Name as string)
