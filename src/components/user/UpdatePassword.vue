@@ -53,10 +53,10 @@
 import {
   validatePassword,
   AccountType,
-  useUserStore,
   encryptPassword,
   NotificationType
 } from 'npool-cli-v2'
+import { useUserStore } from 'src/teststore/mock/user'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -111,11 +111,28 @@ const onSubmit = () => {
   if (newPwdError.value || pwdError.value || confirmPwdError.value || verificationCodeError.value) {
     return
   }
-
-  user.updatePassword({
+  // FIXME
+  // user.updatePassword({
+  //   Account: account.value,
+  //   AccountType: accountType.value,
+  //   OldPasswordHash: encryptPassword(oldPassword.value),
+  //   PasswordHash: encryptPassword(newPassword.value),
+  //   VerificationCode: verificationCode.value,
+  //   Message: {
+  //     Error: {
+  //       Title: t('MSG_UPDATE_PASSWORD'),
+  //       Message: t('MSG_UPDATE_PASSWORD_FAIL'),
+  //       Popup: true,
+  //       Type: NotificationType.Error
+  //     }
+  //   }
+  // }, () => {
+  //   void router.push({ path: '/dashboard' })
+  // })
+  user.updateUser({
     Account: account.value,
     AccountType: accountType.value,
-    OldPasswordHash: encryptPassword(oldPassword.value),
+    // OldPasswordHash: encryptPassword(oldPassword.value),
     PasswordHash: encryptPassword(newPassword.value),
     VerificationCode: verificationCode.value,
     Message: {
@@ -127,9 +144,9 @@ const onSubmit = () => {
       }
     }
   }, () => {
+    // TODO
     void router.push({ path: '/dashboard' })
   })
-
   return false
 }
 
