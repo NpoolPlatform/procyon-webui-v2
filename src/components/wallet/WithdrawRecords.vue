@@ -10,7 +10,7 @@
         <q-td key='Name' :props='myProps'>
           <LogoName
             :logo='myProps.row.CoinLogo'
-            :name='coinName(myProps.row.CoinName)'
+            :name='coinName(myProps.row.CoinTypeID)'
           />
         </q-td>
         <q-td key='Date' :props='myProps'>
@@ -80,7 +80,7 @@ const table = computed(() => [
   }
 ])
 const localcoin = useLocalCoinStore()
-const coinName = computed(() => (name: string) => localcoin.formatCoinName(name))
+const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
 const withdrawStatus = (wd: Withdraw) => {
   switch (wd.State) {

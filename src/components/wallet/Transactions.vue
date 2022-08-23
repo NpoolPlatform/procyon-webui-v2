@@ -10,7 +10,7 @@
         <q-td key='CoinName' :props='myProps'>
           <LogoName
             :logo='coin.getCoinByID(myProps.row.CoinTypeID)?.Logo'
-            :name='coinName(myProps.row.CoinName as string)'
+            :name='coinName(myProps.row.CoinTypeID)'
           />
         </q-td>
         <q-td key='CreatedAt' :props='myProps'>
@@ -113,7 +113,7 @@ const table = computed(() => [
   }
 ])
 const localcoin = useLocalCoinStore()
-const coinName = computed(() => (name: string) => localcoin.formatCoinName(name))
+const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
 onMounted(() => {
   if (coin.Coins.length === 0) {

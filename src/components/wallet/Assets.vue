@@ -10,7 +10,7 @@
         <q-td key='CoinName' :props='myProps'>
           <LogoName
             :logo='myProps.row.CoinLogo'
-            :name='coinName(myProps.row.CoinName)'
+            :name='coinName(myProps.row.CoinTypeID)'
           />
         </q-td>
         <q-td key='Balance' :props='myProps'>
@@ -48,7 +48,7 @@
           <h3>{{ $t('MSG_DEPOSIT_ADDRESS') }}</h3>
 
           <div class='qr-code-container' ref='qrCodeContainer'>
-            <h5>{{ coinName(ant.CoinName) }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
+            <h5>{{ coinName(ant?.CoinTypeID) }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
             <qrcode-vue
               :value='ant?.Address'
               :size='qrCodeContainer?.clientWidth as number - 1'
@@ -62,7 +62,7 @@
           <div class='full-section'>
             <h4>{{ $t('MSG_YOUR_ADDRESS') }}</h4>
             <div class='wallet-type'>
-              {{ coinName(ant.CoinName) }}
+              {{ coinName(ant.CoinTypeID) }}
             </div>
             <span class='number'>{{ ant.Address }}</span>
             <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyDepositAddress'>
@@ -225,11 +225,17 @@ const coinBlacklist = (coinTypeID: string) => {
   if (!existingItem) {
     return true
   }
-  return names.indexOf(existingItem.Name as string) > -1
+  let flag = false
+  names.forEach((el) => {
+    if (existingItem.Name?.toLowerCase().includes(el.toLowerCase())) {
+      flag = true
+    }
+  })
+  return flag
 }
 
 const localcoin = useLocalCoinStore()
-const coinName = computed(() => (name: string) => localcoin.formatCoinName(name))
+const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
 const ant = ref({} as Account)
 const showDepositing = ref(false)

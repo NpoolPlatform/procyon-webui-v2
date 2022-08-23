@@ -7,7 +7,7 @@
             <div class='product-page-icon'>
               <img :src='coins.getCoinLogo(coin)'>
             </div>
-            <h1>{{ coinName(coin.Name as string) }}</h1>
+            <h1>{{ coinName(coin.ID as string) }}</h1>
           </div>
           <div class='withdraw'>
             <h3>{{ $t('MSG_ASSET_WITHDRAWAL') }}</h3>
@@ -53,7 +53,7 @@
                   @click='onAddressSelected(withdraw)'
                 >
                   <span class='wallet-type'>{{ withdraw.Address.Labels.join(',') }}</span>
-                  <span class='wallet-type coin-type'>{{ coinName(coin.Name as string) }}</span>
+                  <span class='wallet-type coin-type'>{{ coinName(coin.ID as string) }}</span>
                   <span class='number'>{{ withdraw.Account.Address }}</span>
                   <img class='checkmark' :src='checkmark'>
                 </span>
@@ -182,7 +182,7 @@ interface Query {
 }
 
 const localcoin = useLocalCoinStore()
-const coinName = computed(() => (name: string) => localcoin.formatCoinName(name))
+const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)

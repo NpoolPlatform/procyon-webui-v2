@@ -18,7 +18,7 @@
           <q-td key='Blockchain' :props='myProps'>
             <LogoName
               :logo='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Logo'
-              :name='coinName(coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Name as string)'
+              :name='coinName(myProps.row.Address.CoinTypeID as string)'
             />
           </q-td>
           <q-td key='Address' :props='myProps'>
@@ -103,7 +103,7 @@ const ltrans = useLocalTransactionStore()
 const withdraws = computed(() => ltrans.withdraws)
 
 const localcoin = useLocalCoinStore()
-const coinName = computed(() => (name: string) => localcoin.formatCoinName(name))
+const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
 const deletable = (account: WithdrawAccount) => {
   return withdraws.value.filter((el) => {
