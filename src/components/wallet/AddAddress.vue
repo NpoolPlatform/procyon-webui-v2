@@ -17,6 +17,10 @@
           @focus='onAddressFocusIn'
           @blur='onAddressFocusOut'
         />
+        <div class='warning waring-gap'>
+          <img src='font-awesome/warning.svg'>
+          <span v-html='$t("MSG_WITHDRAW_ADDRESS_WARNING")' />
+        </div>
         <Input
           v-model:value='labels'
           label='MSG_WALLET_ADDRESS_LABELS'
@@ -165,4 +169,6 @@ onMounted(() => {
 </script>
 
 <style lang='sass' scoped>
+.waring-gap
+  margin: 24px 0
 </style>
