@@ -44,8 +44,9 @@ export const useUserStore = defineStore('localuser', {
         req,
         req.Message,
         (resp: LoginResponse): void => {
-          Cookies.set('X-User-ID', resp.Info.ID, { expires: '4h', secure: true })
-          Cookies.set('X-App-Login-Token', resp.Info.LoginToken, { expires: '4h', secure: true })
+          console.log(resp)
+          // Cookies.set('X-User-ID', resp.Info.ID, { expires: '4h', secure: true })
+          // Cookies.set('X-App-Login-Token', resp.Info.LoginToken, { expires: '4h', secure: true })
           done()
         })
     },
