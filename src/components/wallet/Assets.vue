@@ -42,7 +42,7 @@
     maximized
     @hide='hideDepositDialog'
   >
-    <div class='popup product-container'>
+    <div class='popup product-container word-wrapper'>
       <div class='form-container content-glass'>
         <div class='confirmation'>
           <h3>{{ $t('MSG_DEPOSIT_ADDRESS') }}</h3>
@@ -64,7 +64,7 @@
             <div class='wallet-type'>
               {{ coinName(ant.CoinTypeID) }}
             </div>
-            <span class='number'>{{ ant.Address }}</span>
+            <span class='number word-wrapper'>{{ ant.Address }}</span>
             <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyDepositAddress'>
           </div>
 
@@ -289,4 +289,6 @@ function onCopyDepositAddress () {
 <style lang='sass' scoped>
 .btn-gap
   margin-right: 9px
+.word-wrapper
+  word-wrap: break-word
 </style>
