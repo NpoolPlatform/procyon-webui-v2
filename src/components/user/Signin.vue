@@ -46,19 +46,20 @@ import {
   useCodeRepoStore,
   encryptPassword,
   GoogleTokenType,
-  useApplicationStore,
   MessageUsedFor,
   useKYCStore,
   ReviewState,
   NotificationType,
-  useInspireStore
+  useInspireStore,
+  AccountType
 } from 'npool-cli-v2'
 
 import {
   useFrontendUserStore,
   NotifyType,
   User,
-  AccountType
+  AccountType as MyAccountType,
+  useFrontendAppStore
 } from 'npool-cli-v4'
 
 import { AppID, ThrottleSeconds } from 'src/const/const'
@@ -82,7 +83,7 @@ const target = computed(() => query.value?.target)
 
 const accountError = ref(false)
 const account = ref('')
-const accountType = ref(AccountType.Email)
+const accountType = ref(MyAccountType.Email)
 const password = ref('')
 
 const verifyAccount = ref(account)
@@ -90,7 +91,7 @@ const verifyAccountType = ref(accountType)
 
 const coderepo = useCodeRepoStore()
 const recaptcha = useReCaptcha()
-const application = useApplicationStore()
+const app = useFrontendAppStore()
 const kyc = useKYCStore()
 
 const router = useRouter()
@@ -152,14 +153,14 @@ const onSubmit = throttle(() => {
 }, ThrottleSeconds * 1000)
 
 const verify = () => {
-  if (!application.Application) {
-    application.getApplication({
-      ID: AppID,
+  if (!app.App) {
+    app.getApp({
+      AppID: AppID,
       Message: {
         Error: {
           Title: t('MSG_GET_APP_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
     }, () => {
@@ -167,12 +168,11 @@ const verify = () => {
     })
     return
   }
-
   _verify()
 }
 
 const _verify = () => {
-  if (!application.Application.Ctrl.SigninVerifyEnable) {
+  if (!app.App.SigninVerifyEnable) {
     void router.push({ path: '/' })
     return
   }
