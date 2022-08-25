@@ -24,7 +24,7 @@
           <p>
             <strong>Start of Mining: </strong>At the launch of the mainnet
             <a href='https://www.aleo.org/post/incentivized-testnet-retrospective' target='_blank'>
-              (scheduled for Q3 2022)
+              (scheduled between December 5th 2022 ~ December 12th 2022)
             </a>
           </p>
           <p><strong>Mining Period: </strong>365 days (after mainnet launch)</p>
@@ -52,7 +52,7 @@
             <li><strong>Founded: </strong>2019</li>
             <li><strong>Start of Testnet 1: </strong>Q1, 2021</li>
             <li><strong>Start of Testnet 2: </strong>December 6, 2021</li>
-            <li><strong>Mainnet Launch: </strong>Q3, 2022 (tentative date by Aleo Official)</li>
+            <li><strong>Mainnet Launch: </strong>scheduled between December 5th 2022 ~ December 12th 2022</li>
             <li><a href='https://www.aleo.org/post/aleo-token-economics' target='_blank'>Aleo Token Economics</a></li>
           </ul>
 
