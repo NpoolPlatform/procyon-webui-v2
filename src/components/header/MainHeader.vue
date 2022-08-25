@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useInspireStore, NotificationType, useUserStore } from 'npool-cli-v2'
+import { useInspireStore } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
@@ -95,7 +95,7 @@ import logo from '../../assets/procyon-logo.svg'
 import { useI18n } from 'vue-i18n'
 
 import userAvatar from '../../assets/icon-user.svg'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { NotifyType, useFrontendUserStore, useLocalUserStore } from 'npool-cli-v4'
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
@@ -106,20 +106,24 @@ const { t } = useI18n({ useScope: 'global' })
 
 const logined = useLocalUserStore()
 const inspire = useInspireStore()
-const user = useUserStore()
+const user = useFrontendUserStore()
 
 const router = useRouter()
 
+const localUser = useLocalUserStore()
 const onSwitchMenu = (item: MenuItem) => {
   if (item.label === 'MSG_LOGOUT') {
     user.logout({
+      Token: localUser.User.LoginToken,
       Message: {
         Error: {
           Title: t('MSG_LOGOUT_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
+    }, () => {
+      // TODO
     })
     void router.push({ path: '/' })
     return
