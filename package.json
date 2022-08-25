@@ -1,6 +1,6 @@
 {
   "name": "procyon-webui",
-  "version": "0.1.361",
+  "version": "0.1.362",
   "description": "vue3 framework use quasar ui and pinia manage store",
   "productName": "Procyon",
   "author": "Entropy Pool Team <kikakkz@hotmail.com>",
