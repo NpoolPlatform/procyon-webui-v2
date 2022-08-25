@@ -48,7 +48,7 @@
             <li><strong>創設日：</strong>2018年3月20日</li>
             <li><strong>プロジェクト始動日：</strong>2017年第4四半期</li>
             <li><strong>テストネット開始日：</strong>2019年第3四半期</li>
-            <li><strong>メインネットローンチ日：</strong>2022年12月5日〜12日(<a href='https://procyon-vip.medium.com/spacemesh%E9%80%B2%E6%8D%97%E6%83%85%E5%A0%B1%E3%81%BE%E3%81%A8%E3%82%81-vol-5-197a9b424a87' target='_blank'>Spacemesh公式からの発表</a>)</li>
+            <li><strong>メインネットローンチ日：</strong>2022年12月5日〜12日<a href='https://procyon-vip.medium.com/spacemesh%E9%80%B2%E6%8D%97%E6%83%85%E5%A0%B1%E3%81%BE%E3%81%A8%E3%82%81-vol-5-197a9b424a87' target='_blank'>(Spacemesh公式からの発表)</a></li>
             <li><a href='https://spacemesh.io/blog/spacemesh-white-paper-1/' target='_blank'>Spacemeshホワイトペーパー</a></li>
           </ul>
 
