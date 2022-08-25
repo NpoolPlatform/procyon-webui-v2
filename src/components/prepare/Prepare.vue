@@ -96,9 +96,7 @@ const getApplication = () => {
 onMounted(() => {
   getCoins()
   getGoods()
-  if (!application.App) {
-    getApplication()
-  }
+  getApplication()
 })
 
 </script>
