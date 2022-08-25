@@ -21,18 +21,18 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { useLoginedUserStore } from 'npool-cli-v2'
 import { LocalProductArchivement } from 'src/localstore/affiliates/types'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
+import { useLocalUserStore } from 'npool-cli-v4'
 
 const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.vue'))
 
-const logined = useLoginedUserStore()
+const logined = useLocalUserStore()
 const localArchivements = useLocalArchivementStore()
 
-const referrals = computed(() => localArchivements.Archivements.filter((el) => el.Kol && logined.LoginedUser?.User.ID !== el.UserID))
+const referrals = computed(() => localArchivements.Archivements.filter((el) => el.Kol && logined.User?.ID !== el.UserID))
 const inviter = computed(() => {
-  const index = localArchivements.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
+  const index = localArchivements.Archivements.findIndex((el) => el.UserID === logined.User?.ID)
   return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivements.Archivements[index]
 })
 

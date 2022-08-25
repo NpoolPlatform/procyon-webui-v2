@@ -24,19 +24,19 @@
 import {
   Currency,
   useCurrencyStore,
-  PriceCoinName,
-  useLoginedUserStore
+  PriceCoinName
 } from 'npool-cli-v2'
 import { onMounted, ref, computed, watch } from 'vue'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
+import { useLocalUserStore } from 'npool-cli-v4'
 
 const commissionJPY = ref(0)
 
 const currency = useCurrencyStore()
 const larchivements = useLocalArchivementStore()
-const logined = useLoginedUserStore()
+const logined = useLocalUserStore()
 
-const inviter = computed(() => larchivements.Archivements.find((el) => logined.LoginedUser?.User.ID === el.UserID))
+const inviter = computed(() => larchivements.Archivements.find((el) => logined.User.ID === el.UserID))
 
 const totalCommission = computed(() => {
   let total = 0
