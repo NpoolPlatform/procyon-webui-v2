@@ -47,7 +47,6 @@ import {
   encryptPassword,
   GoogleTokenType,
   useApplicationStore,
-  AccountType,
   MessageUsedFor,
   useKYCStore,
   ReviewState,
@@ -58,7 +57,8 @@ import {
 import {
   useFrontendUserStore,
   NotifyType,
-  User
+  User,
+  AccountType
 } from 'npool-cli-v4'
 
 import { AppID, ThrottleSeconds } from 'src/const/const'
