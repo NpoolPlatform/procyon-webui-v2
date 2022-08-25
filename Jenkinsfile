@@ -285,7 +285,8 @@ pipeline {
       steps {
         sh '''
           sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui.yaml
-          sed -i "s/godaddydns-procyon-letsencrypt-issuer/alidns-npool-letsencrypt-issuer/g" k8s/02-ingress.yaml
+          sed -i "s/procyon-vip/${CERT_NAME}/g" k8s/02-ingress.yaml
+          sed -i "s/procyon\\.vip/${ROOT_DOMAIN}/g" k8s/02-ingress.yaml
           kubectl apply -k k8s
         '''
       }
@@ -306,7 +307,6 @@ pipeline {
           sed -i "s/procyon-webui-v2:latest/procyon-webui-v2:$tag/g" k8s/01-procyon-webui.yaml
           sed -i "s/uhub.service.ucloud.cn/$DOCKER_REGISTRY/g" k8s/01-procyon-webui.yaml
 
-          sed -i "s/godaddydns-procyon-letsencrypt-issuer/alidns-npool-letsencrypt-issuer/g" k8s/02-ingress.yaml
           sed -i "s/procyon\\.vip/procyon\\.npool\\.top/g" k8s/02-ingress.yaml
           sed -i "s/procyon-vip/procyon-npool-top/g" k8s/02-ingress.yaml
           kubectl apply -k k8s
