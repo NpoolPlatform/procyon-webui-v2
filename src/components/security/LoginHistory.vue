@@ -9,16 +9,17 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { formatTime, NotificationType, useUserStore, LoginHistory } from 'npool-cli-v2'
+import { formatTime, LoginHistory } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { NotifyType, useFrontendUserStore } from 'npool-cli-v4'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const user = useUserStore()
-const histories = computed(() => user.LoginHistories)
+const user = useFrontendUserStore()
+const histories = computed(() => user.loginHistories)
 
 const table = computed(() => [
   {
@@ -43,17 +44,16 @@ const table = computed(() => [
 
 onMounted(() => {
   if (user.LoginHistories.length <= 0) {
-    user.getLoginHistories({
+    user.getLoginHistoriesContinuously({
+      offset: 0,
+      limit: 100,
       Message: {
         Error: {
           Title: t('MSG_GET_LOGIN_HISTORIES_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
-    }, () => {
-      // TODO
-      user.LoginHistories = user.LoginHistories.sort((a, b) => a.CreateAt > b.CreateAt ? -1 : 1)
     })
   }
 })
