@@ -153,22 +153,18 @@ const onSubmit = throttle(() => {
 }, ThrottleSeconds * 1000)
 
 const verify = () => {
-  if (!app.App) {
-    app.getApp({
-      AppID: AppID,
-      Message: {
-        Error: {
-          Title: t('MSG_GET_APP_FAIL'),
-          Popup: true,
-          Type: NotifyType.Error
-        }
+  app.getApp({
+    AppID: AppID,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_APP_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
       }
-    }, () => {
-      _verify()
-    })
-    return
-  }
-  _verify()
+    }
+  }, () => {
+    _verify()
+  })
 }
 
 const _verify = () => {
