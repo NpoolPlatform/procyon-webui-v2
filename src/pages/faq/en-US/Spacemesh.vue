@@ -48,7 +48,7 @@
             <li><strong>Start of Project: </strong>Q4 2017</li>
             <li><strong>Start of Testnet: </strong>Q3 2019</li>
             <li><strong>Mainnet Launch: </strong>2022/12/5 ~ 2022/12/12 (Announced by Spacemesh Official)</li>
-            <a href='https://spacemesh.io/blog/spacemesh-white-paper-1/' target='_blank'>Spacemesh Whitepaper</a>
+            <li><a href='https://spacemesh.io/blog/spacemesh-white-paper-1/' target='_blank'>Spacemesh Whitepaper</a><li>
           </ul>
 
           <h4>Co-Founders of Spacemesh</h4>
