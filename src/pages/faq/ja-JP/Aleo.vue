@@ -58,7 +58,7 @@
             <li><strong>テストネット1 開始日: </strong>2021年第1四半期</li>
             <li><strong>テストネット２ 開始日: </strong>2021年12月6日</li>
             <li><strong>メインネットローンチ日: </strong>2022年第4四半期 - 10月予定 (Aleo公式からの発表)</li>
-            <li><a href='https://www.aleo.org/post/aleo-token-economics' target='_blank'>Aleo トークンエコノミー</a></li>
+            <a href='https://www.aleo.org/post/aleo-token-economics' target='_blank'>Aleo トークンエコノミー</a>
           </ul>
 
           <h3>4名の創業者</h3>
