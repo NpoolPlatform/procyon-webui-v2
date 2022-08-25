@@ -8,7 +8,7 @@
         <li><a class='nav-link' href='#/faqs'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
         <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
-        <SignHelper v-if='!logined.getLogined' />
+        <SignHelper v-if='!logined.logined' />
         <q-btn
           v-else
           size='1.1rem'
@@ -44,7 +44,7 @@
 
     <div class='header-inner'>
       <LangSwitcher />
-      <SignHelper v-if='!logined.getLogined' />
+      <SignHelper v-if='!logined.logined' />
       <q-btn
         v-else
         size='1.1rem'
@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useInspireStore, useLoginedUserStore, NotificationType, useUserStore } from 'npool-cli-v2'
+import { useInspireStore, NotificationType, useUserStore } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
@@ -95,6 +95,7 @@ import logo from '../../assets/procyon-logo.svg'
 import { useI18n } from 'vue-i18n'
 
 import userAvatar from '../../assets/icon-user.svg'
+import { useLocalUserStore } from 'npool-cli-v4'
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
@@ -103,7 +104,7 @@ const ExpandList = defineAsyncComponent(() => import('src/components/list/Expand
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const logined = useLoginedUserStore()
+const logined = useLocalUserStore()
 const inspire = useInspireStore()
 const user = useUserStore()
 
@@ -142,7 +143,7 @@ const onLogoClick = () => {
   void router.push({ path: '/' })
 }
 
-const userLogined = computed(() => logined.getLogined)
+const userLogined = computed(() => logined.logined)
 
 watch(userLogined, () => {
   if (!userLogined.value) {
