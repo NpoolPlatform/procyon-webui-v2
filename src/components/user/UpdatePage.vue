@@ -27,11 +27,11 @@
 
 <script setup lang='ts'>
 import {
-  AccountType,
   MessageUsedFor,
   useCodeRepoStore,
   useLoginedUserStore,
-  validateVerificationCode
+  validateVerificationCode,
+  AccountType
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted, computed } from 'vue'
 

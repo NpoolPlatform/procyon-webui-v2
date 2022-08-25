@@ -46,6 +46,7 @@
 <script setup lang='ts'>
 import { defineProps, toRef, defineEmits, computed, watch, onMounted, ref, defineAsyncComponent } from 'vue'
 import { AccountType, MessageUsedFor, useCodeRepoStore, useLoginedUserStore, validateVerificationCode } from 'npool-cli-v2'
+import { AccountType as MyAccountType } from 'npool-cli-v4'
 
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
@@ -55,7 +56,7 @@ interface Props {
   usedFor: MessageUsedFor;
   toUsername?: string;
   account: string;
-  accountType: AccountType;
+  accountType: MyAccountType;
 }
 
 const props = defineProps<Props>()
