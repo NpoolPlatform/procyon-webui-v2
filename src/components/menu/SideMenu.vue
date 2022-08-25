@@ -23,16 +23,17 @@ import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
 import { BaseMenu, MenuItem } from 'src/menus/menus'
 import { computed, watch, onMounted } from 'vue'
-import { useInspireStore, useLoginedUserStore, NotificationType } from 'npool-cli-v2'
+import { useInspireStore, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { useLocalUserStore } from 'npool-cli-v4/.'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const setting = useSettingStore()
 const inspire = useInspireStore()
-const logined = useLoginedUserStore()
-const user = computed(() => logined.LoginedUser)
+const logined = useLocalUserStore()
+const user = computed(() => logined.User)
 watch(user, () => {
   if (!user.value) {
     return
