@@ -48,7 +48,7 @@
             <li><strong>Start of Project: </strong>Q4 2017</li>
             <li><strong>Start of Testnet: </strong>Q3 2019</li>
             <li><strong>Mainnet Launch: </strong>2022/12/5 ~ 2022/12/12 (<a href='https://procyon-vip.medium.com/spacemesh%E9%80%B2%E6%8D%97%E6%83%85%E5%A0%B1%E3%81%BE%E3%81%A8%E3%82%81-vol-5-197a9b424a87' target='_blank'>Announced by Spacemesh Official</a>)</li>
-            <li><a href='https://spacemesh.io/blog/spacemesh-white-paper-1/' target='_blank'>Spacemesh Whitepaper</a><li>
+            <li><a href='https://spacemesh.io/blog/spacemesh-white-paper-1/' target='_blank'>Spacemesh Whitepaper</a></li>
           </ul>
 
           <h4>Co-Founders of Spacemesh</h4>
