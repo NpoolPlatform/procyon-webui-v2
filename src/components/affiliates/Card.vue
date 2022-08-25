@@ -112,7 +112,6 @@ import {
   useGoodStore,
   PurchaseAmountSetting,
   formatTime,
-  useLoginedUserStore,
   username as Username,
   AppUser,
   AppUserExtra
@@ -122,6 +121,7 @@ import { useI18n } from 'vue-i18n'
 import chevrons from '../../assets/chevrons.svg'
 import { LocalArchivement, LocalProductArchivement } from 'src/localstore/affiliates/types'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
+import { useLocalUserStore } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
@@ -190,7 +190,7 @@ const larchivement = useLocalArchivementStore()
 
 // get parent
 const inviter = computed(() => {
-  const index = larchivement.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
+  const index = larchivement.Archivements.findIndex((el) => el.UserID === logined.User?.ID)
   return index < 0 ? undefined as unknown as LocalProductArchivement : larchivement.Archivements[index]
 })
 const inviterGoodPercent = (goodID: string) => {
@@ -229,7 +229,7 @@ const onSetCommissionClick = async (good: LocalArchivement) => {
   await nextTick()
 }
 
-const logined = useLoginedUserStore()
+const logined = useLocalUserStore()
 
 const onSaveCommissionClick = (elem: LocalProductArchivement, idx:number) => {
   if (elem.Archivements[idx].CommissionPercent > inviterGoodPercent(elem.Archivements[idx].GoodID)) {
@@ -240,7 +240,7 @@ const onSaveCommissionClick = (elem: LocalProductArchivement, idx:number) => {
   elem.Archivements[idx].Editing = false
   inspire.createPurchaseAmountSetting({
     TargetUserID: referral.value.UserID,
-    InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
+    InviterName: Username(logined.User as AppUser, logined.User as AppUserExtra, locale.value) as string,
     InviteeName: Username(referral.value, {
       FirstName: referral.value.FirstName,
       LastName: referral.value.LastName,

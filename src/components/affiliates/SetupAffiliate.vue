@@ -26,13 +26,13 @@
 <script setup lang='ts'>
 import {
   useInspireStore,
-  useLoginedUserStore,
   username as Username,
   AppUser,
   AppUserExtra,
   NotificationType,
   useGoodStore
 } from 'npool-cli-v2'
+import { useLocalUserStore } from 'npool-cli-v4'
 import { LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -55,7 +55,7 @@ const referral = computed(() => {
   const index = localArchivement.Archivements.findIndex((el) => el.UserID === query.value.userId)
   return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
 })
-const logined = useLoginedUserStore()
+const logined = useLocalUserStore()
 const router = useRouter()
 
 const username = computed(() => {
@@ -81,7 +81,7 @@ const username = computed(() => {
 })
 
 const inviter = computed(() => {
-  const index = localArchivement.Archivements.findIndex((el) => el.UserID === logined.LoginedUser?.User.ID)
+  const index = localArchivement.Archivements.findIndex((el) => el.UserID === logined.User.ID)
   return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
 })
 
@@ -122,7 +122,7 @@ const onSubmit = () => {
 
   inspire.createInvitationCode({
     TargetUserID: referral.value.UserID,
-    InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
+    InviterName: Username(logined.User as AppUser, logined.User as AppUserExtra, locale.value) as string,
     InviteeName: Username(referral.value, {
       FirstName: referral.value.FirstName,
       LastName: referral.value.LastName,
@@ -146,7 +146,7 @@ const onSubmit = () => {
   referral.value.Archivements.forEach((good) => {
     inspire.createPurchaseAmountSetting({
       TargetUserID: referral.value.UserID,
-      InviterName: Username(logined.LoginedUser?.User as AppUser, logined.LoginedUser?.Extra as AppUserExtra, locale.value) as string,
+      InviterName: Username(logined.User as AppUser, logined.User as AppUserExtra, locale.value) as string,
       InviteeName: Username(referral.value, {
         FirstName: referral.value.FirstName,
         LastName: referral.value.LastName,
