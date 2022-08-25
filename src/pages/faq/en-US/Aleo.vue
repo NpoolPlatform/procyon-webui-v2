@@ -53,7 +53,7 @@
             <li><strong>Start of Testnet 1: </strong>Q1, 2021</li>
             <li><strong>Start of Testnet 2: </strong>December 6, 2021</li>
             <li><strong>Mainnet Launch: </strong>October, 2022 (tentative schedule by Aleo Official)</li>
-            <a href='https://www.aleo.org/post/aleo-token-economics' target='_blank'>Aleo Token Economics</a>
+            <li><a href='https://www.aleo.org/post/aleo-token-economics' target='_blank'>Aleo Token Economics</a></li>
           </ul>
 
           <h3>Co-Founders of Aleo</h3>
