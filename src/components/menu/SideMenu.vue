@@ -25,7 +25,7 @@ import { BaseMenu, MenuItem } from 'src/menus/menus'
 import { computed, watch, onMounted } from 'vue'
 import { useInspireStore, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useLocalUserStore } from 'npool-cli-v4/.'
+import { useLocalUserStore } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
