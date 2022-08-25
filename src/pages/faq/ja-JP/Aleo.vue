@@ -26,7 +26,7 @@
 
           <p>
             <strong>マイニング開始時期: </strong>メインネットでローンチ時
-            <a href='https://www.aleo.org/post/incentivized-testnet-retrospective' target='_blank'>
+            <a href='https://www.aleo.org/post/announcing-testnet-3' target='_blank'>
               (Aleo公式からのローンチ想定: 2022年10月予定)
             </a>
           </p>

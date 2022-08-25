@@ -23,7 +23,7 @@
           <h4>Product Details</h4>
           <p>
             <strong>Start of Mining: </strong>At the launch of the mainnet
-            <a href='https://www.aleo.org/post/incentivized-testnet-retrospective' target='_blank'>
+            <a href='https://www.aleo.org/post/announcing-testnet-3' target='_blank'>
               (scheduled for October 2022)
             </a>
           </p>
