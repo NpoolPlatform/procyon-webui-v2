@@ -23,7 +23,7 @@
 
           <h4>Product Detail</h4>
 
-          <p><strong>Start of Mining: </strong>At the launch of the mainnet (2022/12/5 ~ 2022/12/12 (Announced by Spacemesh Official))</p>
+          <p><strong>Start of Mining: </strong>At the launch of the mainnet (scheduled between December 5th 2022 ~ December 12th 2022)</p>
 
           <p><strong>Mining Period: </strong>365 days (after mainnet launch)</p>
 
