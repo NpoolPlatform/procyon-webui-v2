@@ -78,8 +78,7 @@
           </h3>
 
           <p>
-            The mining rewards have not been distributed yet because Spacemesh mining has not started as of May 2022.
-            Procyon will update customers about the progress of Spacemesh as soon as information is available.
+            The mining rewards have not been distributed yet because Spacemesh mining has not started. Procyon will update customers about the progress of Spacemesh as soon as information is available.
           </p>
 
           <h3 id='What is the Technical Service Fee?'>
@@ -96,8 +95,7 @@
           </h3>
 
           <p>
-            Hashrate is a number that represents the mining speed. It is calculated in <strong>[MH/s]</strong>, and the
-            higher the number, the better the mining output.
+            Hashrate is a number that represents the mining speed. The higher the number, the better the mining output.
           </p>
 
           <h3 id='What is Network Daily Output?'>
@@ -115,13 +113,12 @@
 
           <p>
             No, mining does not stop even if Procyon's server goes down. The mining is processed at the following data
-            centers in Hong Kong and each center is operating independently, so the mining would continue without
+            centers in United States of America and each center is operating independently, so the mining would continue without
             interruption. The mining itself will not stop however the display of your mining rewards may be down until
             the server recovers.
           </p>
           <p>
-            <strong>Data center location: </strong>18 Chun Yat Street, Tseung Kwan O Industrial Estate, New
-            Territories, Hong Kong
+            <strong>Data center location: </strong>Dallas, Texas, United States of America
           </p>
 
           <div class='hr' />

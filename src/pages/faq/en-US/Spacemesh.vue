@@ -23,7 +23,7 @@
 
           <h4>Product Detail</h4>
 
-          <p><strong>Start of Mining: </strong>At the launch of the mainnet (scheduled for October 2022 ~ December 2022)</p>
+          <p><strong>Start of Mining: </strong>At the launch of the mainnet (2022/12/5 ~ 2022/12/12 (Announced by Spacemesh Official))</p>
 
           <p><strong>Mining Period: </strong>365 days (after mainnet launch)</p>
 
@@ -47,8 +47,8 @@
             <li><strong>Founded: </strong>March 20, 2018</li>
             <li><strong>Start of Project: </strong>Q4 2017</li>
             <li><strong>Start of Testnet: </strong>Q3 2019</li>
-            <li><strong>Mainnet Launch: </strong>Q3-Q4, 2022 (tentative)</li>
-            <li><a href='https://spacemesh.io/blog/spacemesh-white-paper-1/' target='_blank'>Spacemesh Whitepaper</a></li>
+            <li><strong>Mainnet Launch: </strong>2022/12/5 ~ 2022/12/12 (Announced by Spacemesh Official)</li>
+            <a href='https://spacemesh.io/blog/spacemesh-white-paper-1/' target='_blank'>Spacemesh Whitepaper</a>
           </ul>
 
           <h4>Co-Founders of Spacemesh</h4>

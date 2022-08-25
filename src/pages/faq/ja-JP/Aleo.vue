@@ -27,7 +27,7 @@
           <p>
             <strong>マイニング開始時期: </strong>メインネットでローンチ時
             <a href='https://www.aleo.org/post/incentivized-testnet-retrospective' target='_blank'>
-              (Aleo公式からのローンチ想定: 2022年第3四半期)
+              (Aleo公式からのローンチ想定: 2022年10月予定)
             </a>
           </p>
 
@@ -57,7 +57,7 @@
             <li><strong>創設日: </strong>2019年</li>
             <li><strong>テストネット1 開始日: </strong>2021年第1四半期</li>
             <li><strong>テストネット２ 開始日: </strong>2021年12月6日</li>
-            <li><strong>Mメインネットローンチ日: </strong>2022年 第3四半期 (Aleo公式からの予定)</li>
+            <li><strong>メインネットローンチ日: </strong>2022年第4四半期 - 10月予定 (Aleo公式からの発表)</li>
             <li><a href='https://www.aleo.org/post/aleo-token-economics' target='_blank'>Aleo トークンエコノミー</a></li>
           </ul>
 
