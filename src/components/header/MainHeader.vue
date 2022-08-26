@@ -8,7 +8,7 @@
         <li><a class='nav-link' href='#/faqs'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
         <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
-        <SignHelper v-if='!logined.logined' />
+        <SignHelper v-if='!localUser.logined' />
         <q-btn
           v-else
           size='1.1rem'
@@ -44,7 +44,7 @@
 
     <div class='header-inner'>
       <LangSwitcher />
-      <SignHelper v-if='!logined.logined' />
+      <SignHelper v-if='!localUser.logined' />
       <q-btn
         v-else
         size='1.1rem'
@@ -95,7 +95,11 @@ import logo from '../../assets/procyon-logo.svg'
 import { useI18n } from 'vue-i18n'
 
 import userAvatar from '../../assets/icon-user.svg'
-import { NotifyType, useFrontendUserStore, useLocalUserStore } from 'npool-cli-v4'
+import {
+  NotifyType,
+  useFrontendUserStore,
+  useLocalUserStore
+} from 'npool-cli-v4'
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
@@ -104,13 +108,12 @@ const ExpandList = defineAsyncComponent(() => import('src/components/list/Expand
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const logined = useLocalUserStore()
 const inspire = useInspireStore()
 const user = useFrontendUserStore()
+const localUser = useLocalUserStore()
 
 const router = useRouter()
 
-const localUser = useLocalUserStore()
 const onSwitchMenu = (item: MenuItem) => {
   if (item.label === 'MSG_LOGOUT') {
     user.logout({
@@ -139,7 +142,7 @@ const onSwitchMenu = (item: MenuItem) => {
 
 const menu = computed(() => {
   const myMenu = HeaderAvatarMenu()
-  myMenu.children = myMenu.children.filter((m) => m.label !== 'MSG_REFERRAL' || inspire.InvitationCode?.InvitationCode?.length)
+  myMenu.children = myMenu.children.filter((m) => m.label !== 'MSG_REFERRAL' || localUser.User?.InvitationCode?.length)
   return myMenu
 })
 
@@ -147,7 +150,7 @@ const onLogoClick = () => {
   void router.push({ path: '/' })
 }
 
-const userLogined = computed(() => logined.logined)
+const userLogined = computed(() => localUser.logined)
 
 watch(userLogined, () => {
   if (!userLogined.value) {
@@ -159,17 +162,13 @@ watch(userLogined, () => {
 })
 
 const initialize = () => {
-  inspire.getInvitationCode({
-    Message: {}
-  }, () => {
-    if (inspire.InvitationCode?.InvitationCode?.length) {
-      inspire.getPurchaseAmountSettings({
-        Message: {}
-      }, () => {
-        // TODO
-      })
-    }
-  })
+  if (localUser.User.InvitationCode.length) {
+    inspire.getPurchaseAmountSettings({
+      Message: {}
+    }, () => {
+      // TODO
+    })
+  }
 }
 
 onMounted(() => {
