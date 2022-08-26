@@ -77,17 +77,16 @@ export const useUserStore = defineStore('localuser', {
           done?.()
         })
     },
-    updateUser (req: UpdateUserRequest, done: (error: boolean) => void) {
+    updateUser (req: UpdateUserRequest, done: (user: User, error: boolean) => void) {
       doActionWithError<UpdateUserRequest, UpdateUserResponse>(
         API.UPDATE_USER,
         req,
         req.Message,
         (resp: UpdateUserResponse): void => {
           this.LoginedUser = resp.Info
-          console.log(resp.Info)
-          done(false)
+          done(resp.Info, false)
         }, () => {
-          done(true)
+          done(undefined as unknown as User, true)
         })
     },
     updateAccount (req: UpdateUserRequest, done: (error: boolean) => void) {

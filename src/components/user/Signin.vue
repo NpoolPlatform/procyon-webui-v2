@@ -47,8 +47,7 @@ import {
   encryptPassword,
   GoogleTokenType,
   MessageUsedFor,
-  NotificationType,
-  AccountType as OldAccountType
+  NotificationType
 } from 'npool-cli-v2'
 
 import {
@@ -187,29 +186,28 @@ const _verify = () => {
 
 const onCodeVerify = (code: string) => {
   verifing.value = false
-  coderepo.verifyCode(verifyMethod.value.toLowerCase() as OldAccountType, MessageUsedFor.Signin, code, (error: boolean) => {
-    if (!error) {
-      user.loginVerify({
+  user.loginVerify({
+    UserID: logined.User?.ID,
+    Token: logined.User?.LoginToken,
+    VerificationCode: code,
+    Message: {}
+  }, (u: User, error: boolean) => {
+    if (error) {
+      user.logout({
         Token: logined.User?.LoginToken,
-        VerificationCode: code,
-        Message: {}
+        Message: {
+          Error: {
+            Title: t('MSG_LOGOUT_FAIL'),
+            Popup: true,
+            Type: NotifyType.Error
+          }
+        }
       }, () => {
-        remainder()
+      // TODO
       })
       return
     }
-    user.logout({
-      Token: '',
-      Message: {
-        Error: {
-          Title: t('MSG_LOGOUT_FAIL'),
-          Popup: true,
-          Type: NotifyType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+    remainder()
   })
 }
 
