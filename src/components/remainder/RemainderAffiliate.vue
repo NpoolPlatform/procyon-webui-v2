@@ -21,6 +21,7 @@ const router = useRouter()
 const inspire = useInspireStore()
 
 const onSubmit = () => {
+  // FIXME
   inspire.InvitationCode.Confirmed = true
   inspire.updateInvitationCode({
     Info: inspire.InvitationCode as InvitationCode,

@@ -22,37 +22,16 @@
 import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
 import { BaseMenu, MenuItem } from 'src/menus/menus'
-import { computed, watch, onMounted } from 'vue'
-import { useInspireStore, NotificationType } from 'npool-cli-v2'
-import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 import { useLocalUserStore } from 'npool-cli-v4'
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
 const setting = useSettingStore()
-const inspire = useInspireStore()
-const logined = useLocalUserStore()
-const user = computed(() => logined.User)
-watch(user, () => {
-  if (!user.value) {
-    return
-  }
-  inspire.getInvitationCode({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_INVITATION_CODE_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  })
-})
+const user = useLocalUserStore()
 
 const router = useRouter()
 
 const showMenu = (menu: MenuItem) => {
-  if (menu.label === 'MSG_REFERRAL' && !inspire.InvitationCode?.InvitationCode?.length) {
+  if (menu.label === 'MSG_REFERRAL' && !user.User?.InvitationCode?.length) {
     return false
   }
   if (menu.label === 'MSG_ALEO_PURCHASE') {
@@ -70,21 +49,6 @@ const onMenuSwitch = (menu: MenuItem) => {
   setting.ActiveMenuTarget = menu.target
   void router.push({ path: menu.target })
 }
-
-onMounted(() => {
-  if (!user.value) {
-    return
-  }
-  inspire.getInvitationCode({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_INVITATION_CODE_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  })
-})
 
 </script>
 
