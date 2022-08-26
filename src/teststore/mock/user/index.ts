@@ -84,6 +84,7 @@ export const useUserStore = defineStore('localuser', {
         req.Message,
         (resp: UpdateUserResponse): void => {
           this.LoginedUser = resp.Info
+          console.log(resp.Info)
           done(false)
         }, () => {
           done(true)

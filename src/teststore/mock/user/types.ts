@@ -102,6 +102,8 @@ interface UpdateUserRequest extends BaseRequest {
   IDNumber?: string;
   SigninVerifyType?: string;
   PasswordHash?: string;
+  SigninVerifyByGoogleAuth?: boolean;
+  GoogleAuthVerified?: boolean;
 }
 interface UpdateUserResponse {
   Info: User;
