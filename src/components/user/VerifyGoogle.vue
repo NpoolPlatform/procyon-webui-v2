@@ -27,12 +27,11 @@
 
 <script setup lang='ts'>
 import {
-  AccountType,
   validateVerificationCode,
-  NotificationType,
   useCodeRepoStore,
-  useUserStore
+  NotificationType
 } from 'npool-cli-v2'
+import { useFrontendUserStore, AccountType, NotifyType, useLocalUserStore } from 'npool-cli-v4'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -58,31 +57,26 @@ const onVerificationCodeFocusOut = () => {
 }
 
 const coderepo = useCodeRepoStore()
-const user = useUserStore()
 const router = useRouter()
+const user = useFrontendUserStore()
+const logined = useLocalUserStore()
 
 const onSubmit = () => {
   if (verificationCodeError.value || oldVerificationCodeError.value) {
     return
   }
-  // FIXME
-  user.updateAccount({
-    Account: '',
-    AccountType: AccountType.Google,
-    VerificationCode: myVerificationCode.value,
-    VerificationCodes: [
-      {
-        Account: oldAccount.value,
-        AccountType: oldAccountType.value,
-        VerificationCode: oldVerificationCode.value
-      }
-    ],
+  user.updateUser({
+    Account: logined.User.LoginAccount,
+    AccountType: logined.User.LoginAccountType,
+    NewAccountType: AccountType.Google,
+    VerificationCode: oldVerificationCode.value,
+    NewVerificationCode: myVerificationCode.value,
     Message: {
       Error: {
         Title: t('MSG_UPDATE_ACCOUNT'),
         Message: t('MSG_UPDATE_ACCOUNT_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
   }, () => {
