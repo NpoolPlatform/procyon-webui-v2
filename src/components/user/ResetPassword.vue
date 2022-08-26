@@ -82,7 +82,7 @@
 import {
   validateEmailAddress,
   validatePassword,
-  AccountType,
+  AccountType as OldAccountType,
   validateMobileNO,
   validateVerificationCode,
   useCodeRepoStore,
@@ -94,7 +94,7 @@ import {
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-
+import { AccountType } from 'npool-cli-v4'
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
@@ -206,7 +206,7 @@ const onSendCodeClick = () => {
   }
 
   const account = signupMethod.value === AccountType.Email ? emailAddress.value : phoneNO.value
-  coderepo.sendVerificationCode(account, signupMethod.value, MessageUsedFor.Update, account)
+  coderepo.sendVerificationCode(account, signupMethod.value.toLowerCase() as OldAccountType, MessageUsedFor.Update, account)
 }
 
 </script>
