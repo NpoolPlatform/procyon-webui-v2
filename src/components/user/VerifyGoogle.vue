@@ -27,11 +27,15 @@
 
 <script setup lang='ts'>
 import {
-  validateVerificationCode,
-  useCodeRepoStore,
-  NotificationType
+  validateVerificationCode
 } from 'npool-cli-v2'
-import { useFrontendUserStore, AccountType, NotifyType, useLocalUserStore } from 'npool-cli-v4'
+import {
+  useFrontendUserStore,
+  AccountType,
+  NotifyType,
+  useLocalUserStore,
+  User
+} from 'npool-cli-v4'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -56,7 +60,6 @@ const onVerificationCodeFocusOut = () => {
   verificationCodeError.value = !validateVerificationCode(myVerificationCode.value)
 }
 
-const coderepo = useCodeRepoStore()
 const router = useRouter()
 const user = useFrontendUserStore()
 const logined = useLocalUserStore()
@@ -68,8 +71,8 @@ const onSubmit = () => {
   user.updateUser({
     Account: logined.User.LoginAccount,
     AccountType: logined.User.LoginAccountType,
-    NewAccountType: AccountType.Google,
     VerificationCode: oldVerificationCode.value,
+    NewAccountType: AccountType.Google,
     NewVerificationCode: myVerificationCode.value,
     Message: {
       Error: {
@@ -79,22 +82,11 @@ const onSubmit = () => {
         Type: NotifyType.Error
       }
     }
-  }, () => {
-    coderepo.verifyGoogleAuthenticationCode({
-      Code: myVerificationCode.value,
-      NotifyMessage: {
-        Error: {
-          Title: t('MSG_VERIFY_GOOGLE_AUTHENTICATION'),
-          Message: t('MSG_VERIFY_GOOGLE_AUTHENTICATION_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, (error: boolean) => {
-      if (!error) {
-        void router.push({ path: '/security' })
-      }
-    })
+  }, (u: User, error: boolean) => {
+    if (error) {
+      return
+    }
+    void router.push({ path: '/security' })
   })
 
   return false
