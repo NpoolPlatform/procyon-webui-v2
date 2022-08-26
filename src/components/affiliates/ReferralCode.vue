@@ -15,29 +15,20 @@
 
 <script setup lang='ts'>
 import { onMounted, computed } from 'vue'
-import { NotificationType, useInspireStore, useNotificationStore } from 'npool-cli-v2'
+import { NotificationType, useNotificationStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import copy from 'copy-to-clipboard'
+import { useLocalUserStore } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const inspire = useInspireStore()
-const inviteLink = computed(() => 'https://procyon.vip/#/invitation?code=' + (inspire.InvitationCode?.InvitationCode as string))
+const logined = useLocalUserStore()
+const inviteLink = computed(() => 'https://procyon.vip/#/invitation?code=' + (logined.User?.InvitationCode))
 const notification = useNotificationStore()
 
 onMounted(() => {
-  if (!inspire.InvitationCode?.InvitationCode?.length) {
-    inspire.getInvitationCode({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_INVITATION_CODE_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    })
-  }
+  // TODO
 })
 
 function onCopyCodeClick () {
