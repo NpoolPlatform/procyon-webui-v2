@@ -1,5 +1,5 @@
 <template>
-  <div class='content' v-if='inspire.InvitationCode?.InvitationCode?.length'>
+  <div class='content' v-if='user.User.InvitationCode?.length'>
     <Commission />
     <div class='hr' />
     <ReferralCode />
@@ -19,6 +19,7 @@
 
 <script setup lang='ts'>
 import { NotificationType, useCoinStore, useGoodStore, useInspireStore } from 'npool-cli-v2'
+import { useLocalUserStore } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
 import { useArchivementStore } from 'src/teststore/mock/archivement'
@@ -33,11 +34,12 @@ const ReferralCode = defineAsyncComponent(() => import('src/components/affiliate
 const Tree = defineAsyncComponent(() => import('src/components/affiliates/Tree.vue'))
 const Table = defineAsyncComponent(() => import('src/components/affiliates/Table.vue'))
 
+const user = useLocalUserStore()
 const archivement = useArchivementStore()
 const larchivement = useLocalArchivementStore()
 const coin = useCoinStore()
-const inspire = useInspireStore()
 const good = useGoodStore()
+const inspire = useInspireStore()
 
 const getArchivements = (offset: number, limit: number) => {
   archivement.getCoinArchivements({
@@ -65,18 +67,6 @@ const getArchivements = (offset: number, limit: number) => {
 }
 
 onMounted(() => {
-  if (!inspire.InvitationCode?.InvitationCode?.length) {
-    inspire.getInvitationCode({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_INVITATION_CODE_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    })
-  }
-
   if (larchivement.Archivements.length === 0) {
     getArchivements(0, 100)
   }
