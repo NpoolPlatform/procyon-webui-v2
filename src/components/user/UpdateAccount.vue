@@ -66,7 +66,7 @@ import {
   NotificationType,
   AccountType as OldAccountType
 } from 'npool-cli-v2'
-import { AccountType } from 'npool-cli-v4'
+import { AccountType, useLocalUserStore } from 'npool-cli-v4'
 import { useUserStore } from 'src/teststore/mock/user'
 import { defineAsyncComponent, ref, toRef, watch, defineProps } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -133,7 +133,7 @@ const onVerificationCodeFocusOut = () => {
 const coderepo = useCodeRepoStore()
 const user = useUserStore()
 const router = useRouter()
-
+const logined = useLocalUserStore()
 const onSubmit = () => {
   if (accountError.value || verificationCodeError.value || oldVerificationCodeError.value) {
     return
@@ -142,9 +142,10 @@ const onSubmit = () => {
   switch (accountType.value) {
     case AccountType.Email:
       user.updateUser({
-        EmailAddress: account.value,
-        VerificationCode: myVerificationCode.value,
+        Account: logined.User?.LoginAccount,
         AccountType: oldAccountType.value,
+        VerificationCode: myVerificationCode.value,
+        EmailAddress: account.value,
         Message: {
           Error: {
             Title: t('MSG_UPDATE_EMAIL'),
@@ -160,9 +161,10 @@ const onSubmit = () => {
       break
     case AccountType.Mobile:
       user.updateUser({
-        PhoneNO: account.value,
-        VerificationCode: myVerificationCode.value,
+        Account: logined.User?.LoginAccount,
         AccountType: oldAccountType.value,
+        VerificationCode: myVerificationCode.value,
+        PhoneNO: account.value,
         Message: {
           Error: {
             Title: t('MSG_UPDATE_MOBILE'),
