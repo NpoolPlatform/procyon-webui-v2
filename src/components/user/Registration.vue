@@ -106,9 +106,9 @@ import {
   validateVerificationCode,
   validatePassword,
   encryptPassword,
-  AccountType
+  AccountType as OldAccountType
 } from 'npool-cli-v2'
-import { NotifyType, useFrontendUserStore } from 'npool-cli-v4'
+import { NotifyType, AccountType, useFrontendUserStore } from 'npool-cli-v4'
 import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -188,7 +188,7 @@ const onSendCodeClick = () => {
   if (accountError.value) {
     return
   }
-  coderepo.sendVerificationCode(account.value, accountType.value, MessageUsedFor.Signup, account.value)
+  coderepo.sendVerificationCode(account.value, accountType.value.toLowerCase() as OldAccountType, MessageUsedFor.Signup, account.value)
 }
 
 const user = useFrontendUserStore()
