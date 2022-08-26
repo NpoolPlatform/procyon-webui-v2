@@ -150,14 +150,9 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  NotificationType,
-  validateUsername
-} from 'npool-cli-v2'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { NotifyType, useFrontendUserStore, useLocalUserStore, validateUsername } from 'npool-cli-v4'
 import { throttle } from 'quasar'
 import { ThrottleSeconds } from 'src/const/const'
-import { useUserStore } from 'src/teststore/mock/user'
 import { defineAsyncComponent, ref, computed } from 'vue'
 
 import { useI18n } from 'vue-i18n'
@@ -247,8 +242,7 @@ const street2 = computed({
 
 const street2Error = ref(false)
 
-const luser = useUserStore()
-
+const fuser = useFrontendUserStore()
 const onSubmit = throttle(() => {
   usernameError.value = !username.value?.length
   firstNameError.value = !firstName.value?.length
@@ -258,7 +252,7 @@ const onSubmit = throttle(() => {
     return
   }
 
-  luser.updateUser({
+  fuser.updateUser({
     Username: username.value,
     AddressFields: addressFields.value,
     Gender: gender.value,
@@ -270,7 +264,13 @@ const onSubmit = throttle(() => {
         Title: t('MSG_UPDATE_EXTRA'),
         Message: t('MSG_UPDATE_EXTRA_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
+      },
+      Info: {
+        Title: t('MSG_UPDATE_EXTRA'),
+        Message: t('MSG_UPDATE_EXTRA_SUCCESS'),
+        Popup: true,
+        Type: NotifyType.Success
       }
     }
   }, () => {
