@@ -154,7 +154,8 @@ import {
   NotificationType,
   validateUsername
 } from 'npool-cli-v2'
-import { throttle, uid } from 'quasar'
+import { useLocalUserStore } from 'npool-cli-v4'
+import { throttle } from 'quasar'
 import { ThrottleSeconds } from 'src/const/const'
 import { useUserStore } from 'src/teststore/mock/user'
 import { defineAsyncComponent, ref, computed } from 'vue'
@@ -166,9 +167,9 @@ const { t } = useI18n({ useScope: 'global' })
 
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
-const user = useUserStore()
+const user = useLocalUserStore()
 
-const username = ref(user.LoginedUser?.Username)
+const username = ref(user.User?.Username)
 const usernameError = ref(false)
 const onUsernameFocusIn = () => {
   usernameError.value = false
@@ -178,9 +179,9 @@ const onUsernameFocusOut = () => {
 }
 
 const genders = ref(['MSG_FAMALE', 'MSG_MALE', 'MSG_OTHER'])
-const gender = ref(user.LoginedUser?.Gender)
+const gender = ref(user.User?.Gender)
 
-const firstName = ref(user.LoginedUser?.FirstName)
+const firstName = ref(user.User?.FirstName)
 const firstNameError = ref(false)
 const onFirstNameFocusIn = () => {
   firstNameError.value = false
@@ -189,7 +190,7 @@ const onFirstNameFocusOut = () => {
   firstNameError.value = !firstName.value?.length
 }
 
-const lastName = ref(user.LoginedUser?.LastName)
+const lastName = ref(user.User?.LastName)
 const lastNameError = ref(false)
 const onLastNameFocusIn = () => {
   lastNameError.value = false
@@ -198,10 +199,10 @@ const onLastNameFocusOut = () => {
   lastNameError.value = !lastName.value?.length
 }
 
-const postalCode = ref(user.LoginedUser?.PostalCode)
+const postalCode = ref(user.User?.PostalCode)
 const postalCodeError = ref(false)
 
-const addressFields = ref(user.LoginedUser?.AddressFields ? user.LoginedUser?.AddressFields : [])
+const addressFields = ref(user.User?.AddressFields ? user.User?.AddressFields : [])
 const country = computed({
   get: () => addressFields.value.length > 0 ? addressFields.value[0] : '',
   set: (val) => {
@@ -246,6 +247,8 @@ const street2 = computed({
 
 const street2Error = ref(false)
 
+const luser = useUserStore()
+
 const onSubmit = throttle(() => {
   usernameError.value = !username.value?.length
   firstNameError.value = !firstName.value?.length
@@ -255,8 +258,7 @@ const onSubmit = throttle(() => {
     return
   }
 
-  user.updateUser({
-    IDNumber: 'NOT-USED' + uid(),
+  luser.updateUser({
     Username: username.value,
     AddressFields: addressFields.value,
     Gender: gender.value,
@@ -271,16 +273,15 @@ const onSubmit = throttle(() => {
         Type: NotificationType.Error
       }
     }
-  }, (error: boolean) => {
+  }, () => {
     // TODO
-    console.log(error)
   })
   return false
 }, ThrottleSeconds * 1000)
 
 </script>
 
-<stype lang='sass' scoped>
+<style lang='sass' scoped>
 .account-field
   width: 49% !important
   @media (max-width: $breakpoint-sm-max)
@@ -289,4 +290,4 @@ const onSubmit = throttle(() => {
 .alignment
   margin-left: 0px !important
   margin-right: 0px !important
-</stype>
+</style>
