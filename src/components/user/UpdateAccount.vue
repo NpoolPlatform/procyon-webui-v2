@@ -59,13 +59,14 @@
 <script setup lang='ts'>
 import {
   validateEmailAddress,
-  AccountType,
   validateMobileNO,
   validateVerificationCode,
   useCodeRepoStore,
   MessageUsedFor,
-  NotificationType
+  NotificationType,
+  AccountType as OldAccountType
 } from 'npool-cli-v2'
+import { AccountType } from 'npool-cli-v4'
 import { useUserStore } from 'src/teststore/mock/user'
 import { defineAsyncComponent, ref, toRef, watch, defineProps } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -184,7 +185,7 @@ const onSendCodeClick = () => {
   if (accountError.value) {
     return
   }
-  coderepo.sendVerificationCode(account.value, accountType.value, MessageUsedFor.Update, account.value)
+  coderepo.sendVerificationCode(account.value, accountType.value.toLowerCase() as OldAccountType, MessageUsedFor.Update, account.value)
 }
 
 </script>
