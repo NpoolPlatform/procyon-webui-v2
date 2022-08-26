@@ -29,10 +29,10 @@
 import {
   MessageUsedFor,
   useCodeRepoStore,
-  useLoginedUserStore,
   validateVerificationCode,
-  AccountType
+  AccountType as OldAccountType
 } from 'npool-cli-v2'
+import { useLocalUserStore, AccountType } from 'npool-cli-v4'
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted, computed } from 'vue'
 
 interface Props {
@@ -68,12 +68,12 @@ const onSendCodeClick = () => {
   if (!myAccount.value?.length) {
     return
   }
-  coderepo.sendVerificationCode(myAccount.value, myAccountType.value, MessageUsedFor.Update, myAccount.value)
+  coderepo.sendVerificationCode(myAccount.value, myAccountType.value.toLowerCase() as OldAccountType, MessageUsedFor.Update, myAccount.value)
 }
 
-const logined = useLoginedUserStore()
-const myAccountType = computed(() => logined.LoginedUser?.User?.EmailAddress?.length ? AccountType.Email : AccountType.Mobile)
-const myAccount = computed(() => myAccountType.value === AccountType.Email ? logined.LoginedUser?.User.EmailAddress : logined.LoginedUser?.User.PhoneNO)
+const logined = useLocalUserStore()
+const myAccountType = computed(() => logined.User?.EmailAddress?.length ? AccountType.Email : AccountType.Mobile)
+const myAccount = computed(() => myAccountType.value === AccountType.Email ? logined.User?.EmailAddress : logined.User?.PhoneNO)
 
 const emit = defineEmits<{(e: 'update:accountType', type: string): void;
   (e: 'update:account', type: string): void;
