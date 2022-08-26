@@ -162,7 +162,7 @@ watch(userLogined, () => {
 })
 
 const initialize = () => {
-  if (localUser.User.InvitationCode.length) {
+  if (localUser.User?.InvitationCode?.length) {
     inspire.getPurchaseAmountSettings({
       Message: {}
     }, () => {
