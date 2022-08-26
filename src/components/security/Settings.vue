@@ -24,9 +24,9 @@
       <p>{{ $t('MSG_UPDATE_EMAIL_TIP') }}</p>
       <div class='verification'>
         <!-- FIXME -->
-        <img :src='squareCheck' :class='[ logined.LoginedUser?.User?.EmailAddress?.length ? "verified" : "" ]'>
+        <img :src='squareCheck' :class='[ logined.User?.EmailAddress?.length ? "verified" : "" ]'>
         <span>
-          {{ logined.LoginedUser?.User?.EmailAddress?.length ? $t('MSG_VERIFIED') + ': ' + logined.LoginedUser?.User?.EmailAddress : $t('MSG_NOT_VERIFIED') }}
+          {{ logined.User?.EmailAddress?.length ? $t('MSG_VERIFIED') + ': ' + logined.User?.EmailAddress : $t('MSG_NOT_VERIFIED') }}
         </span>
       </div>
       <q-space />
@@ -43,9 +43,9 @@
       </div>
       <p>{{ $t('MSG_MOBILE_AUTHENTICATION_TIP') }}</p>
       <div class='verification'>
-        <img :src='squareCheck' :class='[ logined.LoginedUser?.User?.PhoneNO?.length ? "verified" : "" ]'>
+        <img :src='squareCheck' :class='[ logined.User?.PhoneNO?.length ? "verified" : "" ]'>
         <span>
-          {{ logined.LoginedUser?.User?.PhoneNO?.length ? $t('MSG_VERIFIED') + ': ' + logined.LoginedUser?.User?.PhoneNO : $t('MSG_NOT_VERIFIED') }}
+          {{ logined.User?.PhoneNO?.length ? $t('MSG_VERIFIED') + ': ' + logined.User?.PhoneNO : $t('MSG_NOT_VERIFIED') }}
         </span>
       </div>
       <q-space />
@@ -62,11 +62,11 @@
       </div>
       <p>{{ $t('MSG_GOOGLE_AUTHENTICATE_TIP') }}</p>
       <div class='verification'>
-        <img :src='squareCheck' :class='[ logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified ? "verified" : "" ]'>
-        <span>{{ logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified ? $t('MSG_VERIFIED') : $t('MSG_NOT_VERIFIED') }}</span>
+        <img :src='squareCheck' :class='[ logined.User?.GoogleAuthVerified ? "verified" : "" ]'>
+        <span>{{ logined.User?.GoogleAuthVerified ? $t('MSG_VERIFIED') : $t('MSG_NOT_VERIFIED') }}</span>
       </div>
       <q-space />
-      <button @click='onEnableGoogleClick' :disabled='logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified'>
+      <button @click='onEnableGoogleClick' :disabled='logined.User?.GoogleAuthVerified'>
         {{ $t('MSG_ENABLE_2FA_AUTH') }}
       </button>
     </div>
@@ -79,7 +79,7 @@
       </div>
       <p>{{ $t('MSG_LOGIN_AUTHENTICATION_TIP') }}</p>
       <div
-        :class='[ "verification", !logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified ? "disabled" : "enabled" ]'
+        :class='[ "verification", !logined.User?.GoogleAuthVerified ? "disabled" : "enabled" ]'
         @click='onGoogleSignClick'
       >
         <img :src='circleDot' :class='[ signGoogleVerify ? "verified" : "" ]'>
@@ -116,7 +116,7 @@
 
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
-import { useLoginedUserStore, useUserStore, NotificationType, useKYCStore, ReviewState } from 'npool-cli-v2'
+import { useKYCStore, ReviewState, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { ref, computed } from 'vue'
 
@@ -128,12 +128,13 @@ import shieldHalf from 'src/assets/shield-half.svg'
 import shieldSolid from 'src/assets/shield-solid.svg'
 import circleDot from 'src/assets/circle-dot.svg'
 import id from 'src/assets/id.svg'
+import { useLocalUserStore } from 'npool-cli-v4'
+import { useUserStore } from 'src/teststore/mock/user'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const logined = useLoginedUserStore()
-const user = useUserStore()
+const logined = useLocalUserStore()
 const kyc = useKYCStore()
 const kycVerified = computed(() => kyc.KYC?.State === ReviewState.Approved)
 
@@ -156,11 +157,11 @@ const onEnableGoogleClick = () => {
 }
 
 const signGoogleVerify = ref(
-  logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified && logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication
+  logined.User?.GoogleAuthVerified && logined.User?.SigninVerifyByGoogleAuth
 )
 
 const onGoogleSignClick = () => {
-  if (!logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified) {
+  if (!logined.User?.GoogleAuthVerified) {
     return
   }
   signGoogleVerify.value = true
@@ -171,13 +172,16 @@ const onEmailSignClick = () => {
 }
 
 const onSignVerifyClick = () => {
-  if (!logined.LoginedUser?.Ctrl || !logined.LoginedUser.Ctrl.GoogleAuthenticationVerified) {
+  if (!logined.User || !logined.User.GoogleAuthVerified) {
     return
   }
 
-  logined.LoginedUser.Ctrl.SigninVerifyByGoogleAuthentication = signGoogleVerify.value
-  user.updateCtrl({
-    Info: logined.LoginedUser.Ctrl,
+  logined.User.SigninVerifyByGoogleAuth = signGoogleVerify.value
+  const user = useUserStore()
+  // FIXME
+  user.updateUser({
+    SigninVerifyByGoogleAuth: signGoogleVerify.value,
+    GoogleAuthVerified: true,
     Message: {
       Error: {
         Title: t('MSG_UPDATE_USER_CONTROL_FAIL'),
