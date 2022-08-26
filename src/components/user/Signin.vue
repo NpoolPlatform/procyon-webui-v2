@@ -47,19 +47,17 @@ import {
   encryptPassword,
   GoogleTokenType,
   MessageUsedFor,
-  useKYCStore,
-  ReviewState,
   NotificationType,
-  useInspireStore,
-  AccountType
+  AccountType as OldAccountType
 } from 'npool-cli-v2'
 
 import {
   useFrontendUserStore,
   NotifyType,
   User,
-  AccountType as MyAccountType,
-  useFrontendAppStore
+  AccountType,
+  useFrontendAppStore,
+  useLocalUserStore
 } from 'npool-cli-v4'
 
 import { AppID, ThrottleSeconds } from 'src/const/const'
@@ -68,6 +66,8 @@ import { useI18n } from 'vue-i18n'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { useRoute, useRouter } from 'vue-router'
 import { throttle } from 'quasar'
+import { useFrontendKYCStore } from 'src/teststore/mock/kyc'
+import { KYCState } from 'src/teststore/mock/kyc/const'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
@@ -83,7 +83,7 @@ const target = computed(() => query.value?.target)
 
 const accountError = ref(false)
 const account = ref('')
-const accountType = ref(MyAccountType.Email)
+const accountType = ref(AccountType.Email)
 const password = ref('')
 
 const verifyAccount = ref(account)
@@ -92,7 +92,7 @@ const verifyAccountType = ref(accountType)
 const coderepo = useCodeRepoStore()
 const recaptcha = useReCaptcha()
 const app = useFrontendAppStore()
-const kyc = useKYCStore()
+const kyc = useFrontendKYCStore()
 
 const router = useRouter()
 
@@ -104,7 +104,7 @@ const onMenuHide = () => {
 }
 
 const user = useFrontendUserStore()
-const loginUser = ref({} as User)
+const logined = useLocalUserStore()
 
 const onSubmit = throttle(() => {
   coderepo.getGoogleToken({
@@ -137,7 +137,6 @@ const onSubmit = throttle(() => {
       if (error) {
         return
       }
-      loginUser.value = u
       if (target.value?.length) {
         void router.push({
           path: target.value,
@@ -175,11 +174,11 @@ const _verify = () => {
 
   verifing.value = true
 
-  if (loginUser?.value.GoogleAuthVerified && loginUser?.value.SigninVerifyByGoogleAuth) {
+  if (logined.User?.GoogleAuthVerified && logined.User?.SigninVerifyByGoogleAuth) {
     verifyMethod.value = AccountType.Google
     return
   }
-  if (loginUser?.value.EmailAddress?.length) {
+  if (logined.User?.EmailAddress?.length) {
     verifyMethod.value = AccountType.Email
     return
   }
@@ -188,22 +187,19 @@ const _verify = () => {
 
 const onCodeVerify = (code: string) => {
   verifing.value = false
-  coderepo.verifyCode(verifyMethod.value, MessageUsedFor.Signin, code, (error: boolean) => {
+  coderepo.verifyCode(verifyMethod.value.toLowerCase() as OldAccountType, MessageUsedFor.Signin, code, (error: boolean) => {
     if (!error) {
       user.loginVerify({
-        Token: loginUser.value.LoginToken,
+        Token: logined.User?.LoginToken,
         VerificationCode: code,
-        Message: {
-
-        }
+        Message: {}
       }, () => {
         remainder()
       })
-
       return
     }
     user.logout({
-      Token: loginUser.value.LoginToken,
+      Token: '',
       Message: {
         Error: {
           Title: t('MSG_LOGOUT_FAIL'),
@@ -217,36 +213,28 @@ const onCodeVerify = (code: string) => {
   })
 }
 
-const inspire = useInspireStore()
-
 const remainder = () => {
-  if (!loginUser?.value.PhoneNO?.length) {
+  if (!logined.User?.PhoneNO?.length) {
     void router.push({ path: '/remainder/mobile' })
     return
   }
 
-  // FIXME
   kyc.getKYC({
     Message: {}
   }, (error: boolean) => {
-    if (error || !kyc.KYC?.Kyc || kyc.KYC.State === ReviewState.Rejected) {
+    if (error || !kyc.KYC || kyc.KYC.State === KYCState.Rejected) {
       void router.push({ path: '/remainder/kyc' })
       return
     }
-    // FIXME
-    inspire.getInvitationCode({
-      Message: {}
-    }, () => {
-      if (inspire.InvitationCode && !inspire.InvitationCode?.Confirmed) {
-        void router.push({ path: '/remainder/affiliate' })
-        return
-      }
-      if (!loginUser?.value.GoogleAuthVerified) {
-        void router.push({ path: '/remainder/ga' })
-        return
-      }
-      void router.push({ path: '/' })
-    })
+    if (logined.User?.InvitationCode && !logined.User?.InvitationCodeConfirmed) {
+      void router.push({ path: '/remainder/affiliate' })
+      return
+    }
+    if (!logined.User?.GoogleAuthVerified) {
+      void router.push({ path: '/remainder/ga' })
+      return
+    }
+    void router.push({ path: '/' })
   })
 }
 </script>
