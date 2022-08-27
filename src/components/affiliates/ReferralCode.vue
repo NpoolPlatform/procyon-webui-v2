@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import { NotificationType, useNotificationStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import copy from 'copy-to-clipboard'
@@ -26,10 +26,6 @@ const { t } = useI18n({ useScope: 'global' })
 const logined = useLocalUserStore()
 const inviteLink = computed(() => 'https://procyon.vip/#/invitation?code=' + (logined.User?.InvitationCode))
 const notification = useNotificationStore()
-
-onMounted(() => {
-  // TODO
-})
 
 function onCopyCodeClick () {
   copy(inviteLink.value)
