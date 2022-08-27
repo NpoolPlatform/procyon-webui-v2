@@ -385,6 +385,10 @@ onMounted(() => {
           }
         }
       }, () => {
+        if (kyc.KYC?.DocumentType === DocumentType.Passport) {
+          return
+        }
+
         kyc.getKYCImage({
           ImageType: ImageType.BackImg,
           Message: {
