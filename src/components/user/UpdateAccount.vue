@@ -63,11 +63,9 @@ import {
   validateVerificationCode,
   useCodeRepoStore,
   MessageUsedFor,
-  NotificationType,
   AccountType as OldAccountType
 } from 'npool-cli-v2'
-import { AccountType, useLocalUserStore } from 'npool-cli-v4'
-import { useUserStore } from 'src/teststore/mock/user'
+import { AccountType, NotifyType, useFrontendUserStore, useLocalUserStore, User } from 'npool-cli-v4'
 import { defineAsyncComponent, ref, toRef, watch, defineProps } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -131,7 +129,7 @@ const onVerificationCodeFocusOut = () => {
 }
 
 const coderepo = useCodeRepoStore()
-const user = useUserStore()
+const user = useFrontendUserStore()
 const router = useRouter()
 const logined = useLocalUserStore()
 const onSubmit = () => {
@@ -144,18 +142,22 @@ const onSubmit = () => {
       user.updateUser({
         Account: logined.User?.LoginAccount,
         AccountType: oldAccountType.value,
-        VerificationCode: myVerificationCode.value,
-        EmailAddress: account.value,
+        VerificationCode: oldVerificationCode.value,
+        NewAccount: account.value,
+        NewAccountType: accountType.value,
+        NewVerificationCode: myVerificationCode.value,
         Message: {
           Error: {
             Title: t('MSG_UPDATE_EMAIL'),
             Message: t('MSG_UPDATE_EMAIL_FAIL'),
             Popup: true,
-            Type: NotificationType.Error
+            Type: NotifyType.Error
           }
         }
-      }, () => {
-        // TODO
+      }, (u: User, error: boolean) => {
+        if (error) {
+          return
+        }
         void router.push({ path: '/dashboard' })
       })
       break
@@ -163,17 +165,22 @@ const onSubmit = () => {
       user.updateUser({
         Account: logined.User?.LoginAccount,
         AccountType: oldAccountType.value,
-        VerificationCode: myVerificationCode.value,
-        PhoneNO: account.value,
+        VerificationCode: oldVerificationCode.value,
+        NewAccount: account.value,
+        NewAccountType: accountType.value,
+        NewVerificationCode: myVerificationCode.value,
         Message: {
           Error: {
             Title: t('MSG_UPDATE_MOBILE'),
             Message: t('MSG_UPDATE_MOBILE_FAIL'),
             Popup: true,
-            Type: NotificationType.Error
+            Type: NotifyType.Error
           }
         }
-      }, () => {
+      }, (u: User, error: boolean) => {
+        if (error) {
+          return
+        }
         void router.push({ path: '/dashboard' })
       })
       break
