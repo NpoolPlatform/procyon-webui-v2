@@ -92,7 +92,7 @@ import {
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { AccountType, NotifyType, useFrontendUserStore, User } from 'npool-cli-v4'
+import { AccountType, NotifyType, SignMethodType, useFrontendUserStore } from 'npool-cli-v4'
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
@@ -177,9 +177,9 @@ const onSubmit = () => {
   }
 
   const account = signupMethod.value === AccountType.Email ? emailAddress.value : phoneNO.value
-  user.updateUser({
+  user.resetUser({
     Account: account,
-    AccountType: signupMethod.value,
+    AccountType: signupMethod.value as unknown as SignMethodType,
     VerificationCode: verificationCode.value,
     PasswordHash: encryptPassword(password.value),
     Message: {
@@ -190,7 +190,7 @@ const onSubmit = () => {
         Type: NotifyType.Error
       }
     }
-  }, (u: User, error: boolean) => {
+  }, (error: boolean) => {
     if (error) {
       return
     }
