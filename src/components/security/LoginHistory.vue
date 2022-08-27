@@ -41,19 +41,28 @@ const table = computed(() => [
   }
 ])
 
+const getHistory = (offset: number, limit: number) => {
+  user.getLoginHistories({
+    offset: offset,
+    limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_LOGIN_HISTORIES_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (histories: Array<LoginHistory>) => {
+    if (histories.length === 0) {
+      return
+    }
+    getHistory(offset + limit, limit)
+  })
+}
+
 onMounted(() => {
   if (user.History.LoginHistories.length <= 0) {
-    user.getLoginHistoriesContinuously({
-      offset: 0,
-      limit: 100,
-      Message: {
-        Error: {
-          Title: t('MSG_GET_LOGIN_HISTORIES_FAIL'),
-          Popup: true,
-          Type: NotifyType.Error
-        }
-      }
-    })
+    getHistory(0, 100)
   }
 })
 
