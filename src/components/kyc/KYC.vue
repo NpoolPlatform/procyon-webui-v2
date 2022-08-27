@@ -198,7 +198,7 @@ const uploadKyc = () => {
     BackImg: kyc.Images.get(ImageType.BackImg)?.URI as string,
     FrontImg: kyc.Images.get(ImageType.FrontImg)?.URI as string,
     DocumentType: selectedType.value.value,
-    EntityType: EntityType.DefaultKycEntityType,
+    EntityType: EntityType.Individual,
     IDNumber: 'NOT-USED-' + uid(),
     Message: {
       Error: {
