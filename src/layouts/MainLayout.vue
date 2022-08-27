@@ -18,7 +18,8 @@
 
 <script setup lang='ts'>
 import { defineAsyncComponent, onMounted, computed, watch } from 'vue'
-import { useNotificationStore, notify, useLocaleStore, useErrorSwitcherStore, SwitchTarget, ErrorTarget, useLoginedUserStore, UserInfo } from 'npool-cli-v2'
+import { useNotificationStore, notify, useLocaleStore, useErrorSwitcherStore, SwitchTarget, ErrorTarget } from 'npool-cli-v2'
+import { useLocalUserStore, User } from 'npool-cli-v4'
 import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
 
@@ -35,7 +36,8 @@ const notification = useNotificationStore()
 const setting = useSettingStore()
 const errorswitcher = useErrorSwitcherStore()
 const trigger = computed(() => errorswitcher.ErrorTrigger)
-const logined = useLoginedUserStore()
+
+const logined = useLocalUserStore()
 
 const router = useRouter()
 
@@ -47,7 +49,7 @@ watch(trigger, () => {
     case SwitchTarget.LOGIN:
       void router.push('/signin')
       errorswitcher.ErrorTrigger = undefined as unknown as ErrorTarget
-      logined.LoginedUser = undefined as unknown as UserInfo
+      logined.User = undefined as unknown as User
   }
 })
 
