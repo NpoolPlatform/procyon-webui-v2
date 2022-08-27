@@ -9,9 +9,8 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { formatTime, LoginHistory } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { NotifyType, useFrontendUserStore } from 'npool-cli-v4'
+import { NotifyType, useFrontendUserStore, LoginHistory, formatTime } from 'npool-cli-v4'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
@@ -26,7 +25,7 @@ const table = computed(() => [
     name: 'Date',
     label: t('MSG_DATE'),
     align: 'left',
-    field: (row: LoginHistory) => formatTime(row.CreateAt)
+    field: (row: LoginHistory) => formatTime(row.CreatedAt)
   },
   {
     name: 'IP Addr',
@@ -43,7 +42,7 @@ const table = computed(() => [
 ])
 
 onMounted(() => {
-  if (user.LoginHistories.length <= 0) {
+  if (user.History.LoginHistories.length <= 0) {
     user.getLoginHistoriesContinuously({
       offset: 0,
       limit: 100,
