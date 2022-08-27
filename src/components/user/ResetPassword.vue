@@ -87,14 +87,12 @@ import {
   validateVerificationCode,
   useCodeRepoStore,
   MessageUsedFor,
-  useUserStore,
-  encryptPassword,
-  NotificationType
+  encryptPassword
 } from 'npool-cli-v2'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { AccountType } from 'npool-cli-v4'
+import { AccountType, NotifyType, useFrontendUserStore, User } from 'npool-cli-v4'
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
@@ -165,7 +163,7 @@ const onSwitcherClick = () => {
 }
 
 const coderepo = useCodeRepoStore()
-const user = useUserStore()
+const user = useFrontendUserStore()
 const router = useRouter()
 
 const onSubmit = () => {
@@ -179,7 +177,7 @@ const onSubmit = () => {
   }
 
   const account = signupMethod.value === AccountType.Email ? emailAddress.value : phoneNO.value
-  user.resetPassword({
+  user.updateUser({
     Account: account,
     AccountType: signupMethod.value,
     VerificationCode: verificationCode.value,
@@ -189,10 +187,13 @@ const onSubmit = () => {
         Title: t('MSG_RESET_PASSWORD'),
         Message: t('MSG_RESET_PASSWORD_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
-  }, () => {
+  }, (u: User, error: boolean) => {
+    if (error) {
+      return
+    }
     void router.push({ path: '/' })
   })
 
