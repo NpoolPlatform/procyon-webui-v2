@@ -57,7 +57,9 @@ import {
   AccountType,
   useFrontendAppStore,
   useLocalUserStore,
-  SigninVerifyType
+  SigninVerifyType,
+  useFrontendKYCStore,
+  KYCState
 } from 'npool-cli-v4'
 
 import { AppID, ThrottleSeconds } from 'src/const/const'
@@ -66,8 +68,6 @@ import { useI18n } from 'vue-i18n'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { useRoute, useRouter } from 'vue-router'
 import { throttle } from 'quasar'
-import { useFrontendKYCStore } from 'src/teststore/mock/kyc'
-import { KYCState } from 'src/teststore/mock/kyc/const'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 

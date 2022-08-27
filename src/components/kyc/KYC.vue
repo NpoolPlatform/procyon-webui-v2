@@ -109,9 +109,16 @@ import kycVerified from 'src/assets/kyc-verified.svg'
 import kycIDFront from 'src/assets/kyc-id-front.svg'
 import kycIDBack from 'src/assets/kyc-id-back.svg'
 import kycSelfieID from 'src/assets/kyc-selfie-id.svg'
-import { NotifyType, useLocalUserStore } from 'npool-cli-v4'
-import { useFrontendKYCStore, DocumentType, ImageType, KYCImage } from 'src/teststore/mock/kyc'
-import { EntityType, KYCState } from 'src/teststore/mock/kyc/const'
+import {
+  NotifyType,
+  useLocalUserStore,
+  useFrontendKYCStore,
+  DocumentType,
+  ImageType,
+  KYCImage,
+  EntityType,
+  KYCState
+} from 'npool-cli-v4'
 
 const DragableImg = defineAsyncComponent(() => import('src/components/image/DragableImg.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
