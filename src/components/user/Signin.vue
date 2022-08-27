@@ -56,7 +56,8 @@ import {
   User,
   AccountType,
   useFrontendAppStore,
-  useLocalUserStore
+  useLocalUserStore,
+  SigninVerifyType
 } from 'npool-cli-v4'
 
 import { AppID, ThrottleSeconds } from 'src/const/const'
@@ -173,7 +174,7 @@ const _verify = () => {
 
   verifing.value = true
 
-  if (logined.User?.GoogleAuthVerified && logined.User?.SigninVerifyByGoogleAuth) {
+  if (logined.User?.GoogleAuthVerified && logined.User?.SigninVerifyType === SigninVerifyType.Google) {
     verifyMethod.value = AccountType.Google
     return
   }
