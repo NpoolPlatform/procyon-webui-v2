@@ -188,6 +188,8 @@ const _verify = () => {
 const onCodeVerify = (code: string) => {
   verifing.value = false
   user.loginVerify({
+    Account: logined.User.LoginAccount,
+    AccountType: logined.User.LoginAccountType,
     UserID: logined.User?.ID,
     Token: logined.User?.LoginToken,
     VerificationCode: code,
