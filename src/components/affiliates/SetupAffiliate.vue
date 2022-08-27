@@ -26,13 +26,10 @@
 <script setup lang='ts'>
 import {
   useInspireStore,
-  username as Username,
-  AppUser,
-  AppUserExtra,
   NotificationType,
   useGoodStore
 } from 'npool-cli-v2'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { useLocalUserStore, useBaseUserStore, User } from 'npool-cli-v4'
 import { LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -55,30 +52,15 @@ const referral = computed(() => {
   const index = localArchivement.Archivements.findIndex((el) => el.UserID === query.value.userId)
   return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
 })
+
 const logined = useLocalUserStore()
+const baseuser = useBaseUserStore()
 const router = useRouter()
 
-const username = computed(() => {
-  let name = referral.value.Username
-
-  if (referral.value?.LastName?.length && referral.value?.FirstName?.length) {
-    name = referral.value.LastName + ' ' + referral.value.FirstName
-  }
-
-  if (!name?.length) {
-    name = referral.value?.Username
-  }
-
-  if (!name?.length) {
-    name = referral.value?.EmailAddress
-  }
-
-  if (!name?.length) {
-    name = referral.value?.PhoneNO
-  }
-
-  return name
-})
+const username = computed(() => baseuser.displayName({
+  FirstName: referral.value.FirstName,
+  LastName: referral.value.LastName
+} as User, locale.value))
 
 const inviter = computed(() => {
   const index = localArchivement.Archivements.findIndex((el) => el.UserID === logined.User.ID)
@@ -122,13 +104,8 @@ const onSubmit = () => {
 
   inspire.createInvitationCode({
     TargetUserID: referral.value.UserID,
-    InviterName: Username(logined.User as AppUser, logined.User as AppUserExtra, locale.value) as string,
-    InviteeName: Username(referral.value, {
-      FirstName: referral.value.FirstName,
-      LastName: referral.value.LastName,
-      IDNumber: ''
-    },
-    locale.value) as string,
+    InviterName: baseuser.displayName(logined.User, locale.value),
+    InviteeName: username.value,
     Info: {
       UserID: referral.value.UserID
     },
@@ -146,14 +123,11 @@ const onSubmit = () => {
   referral.value.Archivements.forEach((good) => {
     inspire.createPurchaseAmountSetting({
       TargetUserID: referral.value.UserID,
-      InviterName: Username(logined.User as AppUser, logined.User as AppUserExtra, locale.value) as string,
-      InviteeName: Username(referral.value, {
-        FirstName: referral.value.FirstName,
-        LastName: referral.value.LastName,
-        IDNumber: ''
-      }, locale.value) as string,
+      InviterName: baseuser.displayName(logined.User, locale.value),
+      InviteeName: username.value,
       Info: {
         GoodID: good.GoodID,
+        CoinTypeID: good.CoinTypeID,
         Percent: good.CommissionPercent,
         Start: Math.ceil(Date.now() / 1000),
         End: 0
