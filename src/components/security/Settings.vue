@@ -23,7 +23,6 @@
       </div>
       <p>{{ $t('MSG_UPDATE_EMAIL_TIP') }}</p>
       <div class='verification'>
-        <!-- FIXME -->
         <img :src='squareCheck' :class='[ logined.User?.EmailAddress?.length ? "verified" : "" ]'>
         <span>
           {{ logined.User?.EmailAddress?.length ? $t('MSG_VERIFIED') + ': ' + logined.User?.EmailAddress : $t('MSG_NOT_VERIFIED') }}
@@ -116,7 +115,7 @@
 
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
-import { useKYCStore, ReviewState, NotificationType } from 'npool-cli-v2'
+import { useKYCStore, ReviewState } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { ref, computed } from 'vue'
 
@@ -128,8 +127,7 @@ import shieldHalf from 'src/assets/shield-half.svg'
 import shieldSolid from 'src/assets/shield-solid.svg'
 import circleDot from 'src/assets/circle-dot.svg'
 import id from 'src/assets/id.svg'
-import { useLocalUserStore } from 'npool-cli-v4'
-import { useUserStore } from 'src/teststore/mock/user'
+import { NotifyType, SigninVerifyType, useFrontendUserStore, useLocalUserStore } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -157,7 +155,7 @@ const onEnableGoogleClick = () => {
 }
 
 const signGoogleVerify = ref(
-  logined.User?.GoogleAuthVerified && logined.User?.SigninVerifyByGoogleAuth
+  logined.User?.GoogleAuthVerified && logined.User?.SigninVerifyType === SigninVerifyType.Google
 )
 
 const onGoogleSignClick = () => {
@@ -170,23 +168,18 @@ const onGoogleSignClick = () => {
 const onEmailSignClick = () => {
   signGoogleVerify.value = false
 }
-
+const user = useFrontendUserStore()
 const onSignVerifyClick = () => {
   if (!logined.User || !logined.User.GoogleAuthVerified) {
     return
   }
-
-  logined.User.SigninVerifyByGoogleAuth = signGoogleVerify.value
-  const user = useUserStore()
-  // FIXME
   user.updateUser({
-    SigninVerifyByGoogleAuth: signGoogleVerify.value,
-    GoogleAuthVerified: true,
+    SigninVerifyType: signGoogleVerify.value ? SigninVerifyType.Google : SigninVerifyType.Email,
     Message: {
       Error: {
         Title: t('MSG_UPDATE_USER_CONTROL_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
   }, () => {
