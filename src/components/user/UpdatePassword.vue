@@ -113,6 +113,7 @@ const onSubmit = () => {
   user.updateUser({
     Account: account.value,
     AccountType: accountType.value,
+    OldPasswordHash: encryptPassword(oldPassword.value),
     PasswordHash: encryptPassword(newPassword.value),
     VerificationCode: verificationCode.value,
     Message: {
