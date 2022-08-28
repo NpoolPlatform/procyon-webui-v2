@@ -86,8 +86,8 @@ const account = ref('')
 const accountType = ref(AccountType.Email)
 const password = ref('')
 
-const verifyAccount = ref(account)
-const verifyAccountType = ref(accountType)
+const verifyAccount = ref('')
+const verifyAccountType = ref(AccountType.Email)
 
 const coderepo = useCodeRepoStore()
 const recaptcha = useReCaptcha()
@@ -193,18 +193,19 @@ const onCodeVerify = (code: string) => {
     UserID: logined.User?.ID,
     Token: logined.User?.LoginToken,
     VerificationCode: code,
-    Message: {}
+    Message: {
+      Error: {
+        Title: t('MSG_LOGIN_VERIFY'),
+        Message: t('MSG_LOGIN_VERIFY_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
   }, (u: User, error: boolean) => {
     if (error) {
       user.logout({
         Token: logined.User?.LoginToken,
-        Message: {
-          Error: {
-            Title: t('MSG_LOGOUT_FAIL'),
-            Popup: true,
-            Type: NotifyType.Error
-          }
-        }
+        Message: {}
       }, () => {
       // TODO
       })
