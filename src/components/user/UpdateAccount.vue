@@ -140,7 +140,7 @@ const onSubmit = () => {
   switch (accountType.value) {
     case AccountType.Email:
       user.updateUser({
-        Account: logined.User?.LoginAccount,
+        Account: oldAccount.value,
         AccountType: oldAccountType.value as unknown as SignMethodType,
         VerificationCode: oldVerificationCode.value,
         NewAccount: account.value,
@@ -173,7 +173,7 @@ const onSubmit = () => {
       break
     case AccountType.Mobile:
       user.updateUser({
-        Account: logined.User?.LoginAccount,
+        Account: oldAccount.value,
         AccountType: oldAccountType.value as unknown as SignMethodType,
         VerificationCode: oldVerificationCode.value,
         NewAccount: account.value,
