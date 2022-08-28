@@ -159,7 +159,14 @@ const onSubmit = () => {
           return
         }
         if (u.LoginAccountType === accountType.value as unknown as SignMethodType) {
+          user.logout({
+            Token: logined.User?.LoginToken,
+            Message: {}
+          }, () => {
+          // TODO
+          })
           void router.push({ path: '/signin' })
+          return
         }
         void router.push({ path: '/dashboard' })
       })
@@ -185,7 +192,14 @@ const onSubmit = () => {
           return
         }
         if (u.LoginAccountType === accountType.value as unknown as SignMethodType) {
+          user.logout({
+            Token: logined.User?.LoginToken,
+            Message: {}
+          }, () => {
+          // TODO
+          })
           void router.push({ path: '/signin' })
+          return
         }
         void router.push({ path: '/dashboard' })
       })
