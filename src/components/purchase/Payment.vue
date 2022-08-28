@@ -41,7 +41,7 @@
             </div>
             <div v-else class='warning warning-pink'>
               <img :src='warning'>
-              <span v-html='$t(MSG_COIN_PAYMENT_TIP', { COIN_NAME: coinName })' />
+              <span v-html='$t("MSG_COIN_PAYMENT_TIP", { COIN_NAME: coinName })' />
             </div>
             <span class='wallet-type'>{{ coinName }} &nbsp; </span>
             <span class='number'>  {{ order?.PaymentAddress }}</span>
