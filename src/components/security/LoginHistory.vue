@@ -43,8 +43,8 @@ const table = computed(() => [
 
 const getHistory = (offset: number, limit: number) => {
   user.getLoginHistories({
-    offset: offset,
-    limit: limit,
+    Offset: offset,
+    Limit: limit,
     Message: {
       Error: {
         Title: t('MSG_GET_LOGIN_HISTORIES_FAIL'),
