@@ -37,7 +37,7 @@
             <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
             <div v-if='showBUSDTip' class='warning warning-pink'>
               <img :src='warning'>
-              <span>{{ $t('MSG_BUSD_PAYMENT_TIP') }}</span>
+              <span v-html='$t("MSG_BUSD_PAYMENT_TIP")' />
             </div>
             <div v-else class='warning warning-pink'>
               <img :src='warning'>
