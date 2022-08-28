@@ -7725,10 +7725,17 @@ npool-cli-v2@^0.2.275:
     wrappy "^1.0.2"
     yocto-queue "^0.1.0"
 
+<<<<<<< HEAD
 npool-cli-v2@^0.2.293:
   version "0.2.293"
   resolved "https://registry.yarnpkg.com/npool-cli-v2/-/npool-cli-v2-0.2.293.tgz#10c96b83d28284aa78f9c810b5f5d3fdf71f17ba"
   integrity sha512-n/J73mbZI1gnZ2z7cUWSiSZdZBt6vvJSFd1wsBRSDbbgW1mJysR0mfKTY5w713Q6U6rjUlI9QX3GkZywmgGDug==
+=======
+npool-cli-v2@^0.2.287:
+  version "0.2.287"
+  resolved "https://registry.yarnpkg.com/npool-cli-v2/-/npool-cli-v2-0.2.287.tgz#f78b2b310feb103d3b08ed89ffd434af52831d24"
+  integrity sha512-R9MprYlny9zh99bMsNYRZhsEd9X8X9JEk+stpRPfwSOKNiS9jRNcayX3EzCK8IenpK7IgplaTa9LOU3TxmYXxw==
+>>>>>>> 22ed37a (Fix error cookie)
   dependencies:
     "@quasar/extras" "^1.0.0"
     "@typescript-eslint/eslint-plugin" "^5.17.0"
@@ -7813,10 +7820,10 @@ npool-cli-v2@^0.2.293:
     wrappy "^1.0.2"
     yocto-queue "^0.1.0"
 
-npool-cli-v4@^0.3.87:
-  version "0.3.87"
-  resolved "https://registry.yarnpkg.com/npool-cli-v4/-/npool-cli-v4-0.3.87.tgz#cb39dd644be8d3fb801c3e529e7663cc0f6f7372"
-  integrity sha512-iVn5jExfkIdUAm+awOc1gDG5lBbyLiErZASmq2+vBUT19UNHa3a0A8QoD2PAGWi/me7LWxhi2Yak1iKXFD7YDQ==
+npool-cli-v4@^0.3.91:
+  version "0.3.91"
+  resolved "https://registry.yarnpkg.com/npool-cli-v4/-/npool-cli-v4-0.3.91.tgz#848b1b7b30b6d8019fc3accbd68ebe47f412d7e1"
+  integrity sha512-rZzZbpCJOACG7eut4oNla/fmimEiIMPXMYtt6t+xGczQkclJpyjEJ0jgOYNNFZg5l8Zri+Dy2s+IGDMVf0cLeg==
   dependencies:
     "@quasar/extras" "^1.0.0"
     "@typescript-eslint/eslint-plugin" "^5.17.0"
