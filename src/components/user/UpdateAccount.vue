@@ -65,7 +65,7 @@ import {
   MessageUsedFor,
   AccountType as OldAccountType
 } from 'npool-cli-v2'
-import { AccountType, NotifyType, useFrontendUserStore, useLocalUserStore, User } from 'npool-cli-v4'
+import { AccountType, NotifyType, SignMethodType, useFrontendUserStore, useLocalUserStore, User } from 'npool-cli-v4'
 import { defineAsyncComponent, ref, toRef, watch, defineProps } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -141,10 +141,10 @@ const onSubmit = () => {
     case AccountType.Email:
       user.updateUser({
         Account: logined.User?.LoginAccount,
-        AccountType: oldAccountType.value,
+        AccountType: oldAccountType.value as unknown as SignMethodType,
         VerificationCode: oldVerificationCode.value,
         NewAccount: account.value,
-        NewAccountType: accountType.value,
+        NewAccountType: accountType.value as unknown as SignMethodType,
         NewVerificationCode: myVerificationCode.value,
         Message: {
           Error: {
@@ -158,16 +158,19 @@ const onSubmit = () => {
         if (error) {
           return
         }
+        if (u.LoginAccountType === accountType.value as unknown as SignMethodType) {
+          void router.push({ path: '/signin' })
+        }
         void router.push({ path: '/dashboard' })
       })
       break
     case AccountType.Mobile:
       user.updateUser({
         Account: logined.User?.LoginAccount,
-        AccountType: oldAccountType.value,
+        AccountType: oldAccountType.value as unknown as SignMethodType,
         VerificationCode: oldVerificationCode.value,
         NewAccount: account.value,
-        NewAccountType: accountType.value,
+        NewAccountType: accountType.value as unknown as SignMethodType,
         NewVerificationCode: myVerificationCode.value,
         Message: {
           Error: {
@@ -180,6 +183,9 @@ const onSubmit = () => {
       }, (u: User, error: boolean) => {
         if (error) {
           return
+        }
+        if (u.LoginAccountType === accountType.value as unknown as SignMethodType) {
+          void router.push({ path: '/signin' })
         }
         void router.push({ path: '/dashboard' })
       })
