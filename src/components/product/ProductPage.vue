@@ -286,21 +286,25 @@ const showBUSDTip = computed(() => {
 const coin = useCoinStore()
 const coins = computed(() => {
   const trc20Coins = [] as Array<Coin>
-  const normalCoins = [] as Array<Coin>
-  const specialCoins = [] as Array<Coin>
+  const erc20Coins = [] as Array<Coin>
+  const btcCoins = [] as Array<Coin>
+  const busdCoins = [] as Array<Coin>
 
   coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV).forEach((el) => {
     if (el.Name?.toLowerCase()?.includes('trc20')) {
       trc20Coins.push(el)
-    } else if (el.Unit?.includes('BUSD') || el.Unit?.includes('BTC')) {
-      specialCoins.push(el)
+    } else if (el.Unit?.includes('BUSD')) {
+      busdCoins.push(el)
+    } else if (el.Unit?.includes('BTC')) {
+      btcCoins.push(el)
     } else {
-      normalCoins.push(el)
+      erc20Coins.push(el)
     }
   })
 
-  trc20Coins.push(...normalCoins)
-  trc20Coins.push(...specialCoins)
+  trc20Coins.push(...erc20Coins)
+  trc20Coins.push(...btcCoins)
+  trc20Coins.push(...busdCoins)
 
   return trc20Coins
 })
@@ -308,6 +312,10 @@ const coins = computed(() => {
 const coinName = (c: Coin) => {
   if (c.Unit?.includes('BUSD')) {
     return 'BEP20'
+  } else if (c.Name?.toLowerCase()?.includes('erc20')) {
+    return 'ERC20'
+  } else if (c.Name?.toLowerCase()?.includes('trc20')) {
+    return 'TRC20'
   }
   return currency.formatCoinName(c.Name as string)
 }
