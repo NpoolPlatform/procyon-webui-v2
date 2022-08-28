@@ -133,7 +133,7 @@
                       :value='myCoin'
                       :selected='paymentCoin?.ID === myCoin?.ID'
                     >
-                      {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : currency.formatCoinName(myCoin?.Name as string) }})
+                      {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : coinName(myCoin) }})
                     </option>
                   </select>
                 </div>
@@ -285,21 +285,33 @@ const showBUSDTip = computed(() => {
 
 const coin = useCoinStore()
 const coins = computed(() => {
+  const trc20Coins = [] as Array<Coin>
   const normalCoins = [] as Array<Coin>
   const specialCoins = [] as Array<Coin>
 
   coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV).forEach((el) => {
-    if (el.Unit?.includes('BUSD') || el.Unit?.includes('BTC')) {
+    if (el.Name?.toLowerCase()?.includes('trc20')) {
+      trc20Coins.push(el)
+    } else if (el.Unit?.includes('BUSD') || el.Unit?.includes('BTC')) {
       specialCoins.push(el)
     } else {
       normalCoins.push(el)
     }
   })
 
-  normalCoins.push(...specialCoins)
+  trc20Coins.push(...normalCoins)
+  trc20Coins.push(...specialCoins)
 
-  return normalCoins
+  return trc20Coins
 })
+
+const coinName = (c: Coin) => {
+  if (c.Unit?.includes('BUSD')) {
+    return 'BEP20'
+  }
+  return currency.formatCoinName(c.Name as string)
+}
+
 const selectedCoinID = ref(undefined as unknown as string)
 
 const goods = useGoodStore()
