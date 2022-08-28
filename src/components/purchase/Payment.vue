@@ -35,6 +35,14 @@
           </div>
           <div class='full-section'>
             <h4>{{ $t('MSG_PAYMENT_ADDRESS') }}:</h4>
+            <div v-if='showBUSDTip' class='warning warning-pink'>
+              <img :src='warning'>
+              <span>{{ $t('MSG_BUSD_PAYMENT_TIP') }}</span>
+            </div>
+            <div v-else class='warning warning-pink'>
+              <img :src='warning'>
+              <span>{{ $t('MSG_COIN_PAYMENT_TIP', { COIN_NAME: coinName }) }}</span>
+            </div>
             <span class='wallet-type'>{{ coinName }} &nbsp; </span>
             <span class='number'>  {{ order?.PaymentAddress }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAddressClick'>
@@ -218,6 +226,8 @@ const coinName = computed(() => {
   }
   return currencies.formatCoinName(order.value?.PaymentCoinName)
 })
+
+const showBUSDTip = computed(() => order.value?.PaymentCoinName?.toLowerCase()?.includes('binanceusd'))
 
 const remainTicker = ref(-1)
 watch(counter, () => {
