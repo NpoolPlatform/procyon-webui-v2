@@ -63,7 +63,7 @@ const onCloseClick = () => {
 }
 
 onMounted(() => {
-  if (user.User.GoogleOTPAuth.length === 0) {
+  if (user.User.GoogleSecret.length === 0) {
     ga.setupGoogleAuth({
       AppID: AppID,
       UserID: user.User.ID,
