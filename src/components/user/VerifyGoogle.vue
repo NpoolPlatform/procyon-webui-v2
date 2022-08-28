@@ -34,7 +34,8 @@ import {
   AccountType,
   NotifyType,
   useLocalUserStore,
-  User
+  User,
+  SignMethodType
 } from 'npool-cli-v4'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -72,7 +73,7 @@ const onSubmit = () => {
     Account: logined.User.LoginAccount,
     AccountType: logined.User.LoginAccountType,
     VerificationCode: oldVerificationCode.value,
-    NewAccountType: AccountType.Google,
+    NewAccountType: AccountType.Google as unknown as SignMethodType,
     NewVerificationCode: myVerificationCode.value,
     Message: {
       Error: {

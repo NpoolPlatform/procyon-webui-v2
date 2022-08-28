@@ -63,20 +63,22 @@ const onCloseClick = () => {
 }
 
 onMounted(() => {
-  ga.setupGoogleAuth({
-    AppID: AppID,
-    UserID: user.User.ID,
-    Message: {
-      Error: {
-        Title: t('MSG_SETUP_GOOGLE_AUTHENTICATION'),
-        Message: t('MSG_SETUP_GOOGLE_AUTHENTICATION_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
+  if (user.User.GoogleOTPAuth.length === 0) {
+    ga.setupGoogleAuth({
+      AppID: AppID,
+      UserID: user.User.ID,
+      Message: {
+        Error: {
+          Title: t('MSG_SETUP_GOOGLE_AUTHENTICATION'),
+          Message: t('MSG_SETUP_GOOGLE_AUTHENTICATION_FAIL'),
+          Popup: true,
+          Type: NotifyType.Error
+        }
       }
-    }
-  }, () => {
-    // TODO
-  })
+    }, () => {
+      // TODO
+    })
+  }
 })
 
 </script>
