@@ -225,7 +225,8 @@ import {
   useCurrencyStore,
   useStockStore,
   useLoginedUserStore,
-  Currency
+  Currency,
+  Coin
 } from 'npool-cli-v2'
 import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -283,7 +284,22 @@ const showBUSDTip = computed(() => {
 })
 
 const coin = useCoinStore()
-const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV))
+const coins = computed(() => {
+  const normalCoins = [] as Array<Coin>
+  const specialCoins = [] as Array<Coin>
+
+  coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV).forEach((el) => {
+    if (el.Unit?.includes('BUSD') || el.Unit?.includes('BTC')) {
+      specialCoins.push(el)
+    } else {
+      normalCoins.push(el)
+    }
+  })
+
+  normalCoins.push(...specialCoins)
+
+  return normalCoins
+})
 const selectedCoinID = ref(undefined as unknown as string)
 
 const goods = useGoodStore()
