@@ -59,8 +59,7 @@ import {
   useLocalUserStore,
   SigninVerifyType,
   useFrontendKYCStore,
-  KYCState,
-  SignMethodType
+  KYCState
 } from 'npool-cli-v4'
 
 import { AppID, ThrottleSeconds } from 'src/const/const'
@@ -190,7 +189,7 @@ const onCodeVerify = (code: string) => {
   verifing.value = false
   user.loginVerify({
     Account: verifyAccount.value,
-    AccountType: verifyAccountType.value as unknown as SignMethodType,
+    AccountType: verifyAccountType.value,
     UserID: logined.User?.ID,
     Token: logined.User?.LoginToken,
     VerificationCode: code,
