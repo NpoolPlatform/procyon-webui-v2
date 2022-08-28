@@ -220,7 +220,7 @@ const preSaleCoin = (coinTypeID: string) => {
   return existingItem.PreSale
 }
 const coinBlacklist = (coinTypeID: string) => {
-  const names = ['Ethereum', 'Tron', 'Solana']
+  const names = ['Ethereum', 'Tron', 'Solana', 'USD Coin']
   const existingItem = coin.Coins.find((el) => el.ID === coinTypeID)
   if (!existingItem) {
     return true
