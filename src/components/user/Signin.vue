@@ -36,6 +36,7 @@
         v-model:verify-method='verifyMethod'
         @verify='onCodeVerify'
         :used-for='MessageUsedFor.Signin'
+        :disabled='submitting'
       />
     </div>
   </q-dialog>
@@ -185,8 +186,11 @@ const _verify = () => {
   verifyMethod.value = AccountType.Mobile
 }
 
+const submitting = ref(false)
+
 const onCodeVerify = (code: string) => {
-  verifing.value = false
+  submitting.value = true
+
   user.loginVerify({
     Account: verifyAccount.value,
     AccountType: verifyAccountType.value,
@@ -202,12 +206,13 @@ const onCodeVerify = (code: string) => {
       }
     }
   }, (u: User, error: boolean) => {
+    submitting.value = false
     if (error) {
       user.logout({
         Token: logined.User?.LoginToken,
         Message: {}
       }, () => {
-      // TODO
+        verifing.value = false
       })
       return
     }

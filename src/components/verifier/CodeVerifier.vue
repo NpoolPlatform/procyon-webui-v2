@@ -36,7 +36,7 @@
         class='margin-top-0'
         :target-error='false'
       />
-      <button class='btn' @click='onVerifyClick'>
+      <button class='btn' @click='onVerifyClick' :disabled='disabled'>
         {{ $t('MSG_VERIFY') }}
       </button>
     </div>
@@ -57,12 +57,14 @@ interface Props {
   toUsername?: string;
   account: string;
   accountType: AccountType;
+  disabled?: boolean;
 }
 
 const props = defineProps<Props>()
 const verifyMethod = toRef(props, 'verifyMethod')
 const usedFor = toRef(props, 'usedFor')
 const toUsername = toRef(props, 'toUsername')
+const disabled = toRef(props, 'disabled')
 
 const logined = useLocalUserStore()
 const coderepo = useCodeRepoStore()
