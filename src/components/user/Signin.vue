@@ -207,12 +207,13 @@ const onCodeVerify = (code: string) => {
     }
   }, (u: User, error: boolean) => {
     submitting.value = false
+    verifing.value = false
     if (error) {
       user.logout({
         Token: logined.User?.LoginToken,
         Message: {}
       }, () => {
-        verifing.value = false
+        // TODO
       })
       return
     }
