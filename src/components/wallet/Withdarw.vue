@@ -148,7 +148,7 @@ import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
-import { useLocalTransactionStore, AccountType as LocalAccountType } from 'src/teststore/mock/transaction'
+import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
 import { IntervalKey, ThrottleSeconds } from 'src/const/const'
 
@@ -279,20 +279,6 @@ const getUserGenerals = (offset:number, limit: number) => {
 }
 
 const onCodeVerify = (code: string) => {
-  let accType = LocalAccountType.EMAIL
-
-  switch (accountType.value) {
-    case AccountType.Email:
-      accType = LocalAccountType.EMAIL
-      break
-    case AccountType.Mobile:
-      accType = LocalAccountType.MOBILE
-      break
-    case AccountType.Google:
-      accType = LocalAccountType.GOOGLE
-      break
-  }
-
   submitting.value = true
 
   ltransation.createWithdraw({
@@ -301,7 +287,7 @@ const onCodeVerify = (code: string) => {
     AccountID: selectedAccount.value.Account.ID as string,
     VerificationCode: code,
     Account: account.value,
-    AccountType: accType,
+    AccountType: accountType.value,
     Message: {
       Error: {
         Title: t('MSG_SUBMIT_WITHDRAW_FAIL'),
