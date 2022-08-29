@@ -44,18 +44,24 @@
 <script setup lang='ts'>
 import {
   useCodeRepoStore,
-  NotificationType,
-  useUserStore,
   encryptPassword,
   GoogleTokenType,
-  useApplicationStore,
-  useLoginedUserStore,
-  AccountType,
   MessageUsedFor,
-  useKYCStore,
-  ReviewState,
-  useInspireStore
+  NotificationType
 } from 'npool-cli-v2'
+
+import {
+  useFrontendUserStore,
+  NotifyType,
+  User,
+  AccountType,
+  useFrontendAppStore,
+  useLocalUserStore,
+  SigninVerifyType,
+  useFrontendKYCStore,
+  KYCState
+} from 'npool-cli-v4'
+
 import { AppID, ThrottleSeconds } from 'src/const/const'
 import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -80,16 +86,13 @@ const account = ref('')
 const accountType = ref(AccountType.Email)
 const password = ref('')
 
-const verifyAccount = ref(account)
-const verifyAccountType = ref(accountType)
+const verifyAccount = ref('')
+const verifyAccountType = ref(AccountType.Email)
 
-const user = useUserStore()
 const coderepo = useCodeRepoStore()
 const recaptcha = useReCaptcha()
-const application = useApplicationStore()
-const logined = useLoginedUserStore()
-const kyc = useKYCStore()
-const inspire = useInspireStore()
+const app = useFrontendAppStore()
+const kyc = useFrontendKYCStore()
 
 const router = useRouter()
 
@@ -100,101 +103,8 @@ const onMenuHide = () => {
   verifing.value = false
 }
 
-const remainder = () => {
-  if (!logined.LoginedUser?.User?.PhoneNO?.length) {
-    void router.push({ path: '/remainder/mobile' })
-    return
-  }
-
-  kyc.getKYC({
-    Message: {
-      /*
-      Error: {
-        Title: t('MSG_GET_KYC_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-      */
-    }
-  }, (error: boolean) => {
-    if (error || !kyc.KYC?.Kyc || kyc.KYC.State === ReviewState.Rejected) {
-      void router.push({ path: '/remainder/kyc' })
-      return
-    }
-    inspire.getInvitationCode({
-      Message: {}
-    }, () => {
-      if (inspire.InvitationCode && !inspire.InvitationCode?.Confirmed) {
-        void router.push({ path: '/remainder/affiliate' })
-        return
-      }
-      if (!logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified) {
-        void router.push({ path: '/remainder/ga' })
-        return
-      }
-      void router.push({ path: '/' })
-    })
-  })
-}
-
-const onCodeVerify = (code: string) => {
-  verifing.value = false
-  coderepo.verifyCode(verifyMethod.value, MessageUsedFor.Signin, code, (error: boolean) => {
-    if (!error) {
-      remainder()
-      return
-    }
-    user.logout({
-      Message: {
-        Error: {
-          Title: t('MSG_LOGOUT_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    })
-  })
-}
-
-const _verify = () => {
-  if (!application.Application.Ctrl.SigninVerifyEnable) {
-    void router.push({ path: '/' })
-    return
-  }
-
-  verifing.value = true
-
-  if (logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified &&
-    logined.LoginedUser?.Ctrl?.SigninVerifyByGoogleAuthentication) {
-    verifyMethod.value = AccountType.Google
-    return
-  }
-  if (logined.LoginedUser?.User?.EmailAddress?.length) {
-    verifyMethod.value = AccountType.Email
-    return
-  }
-  verifyMethod.value = AccountType.Mobile
-}
-
-const verify = () => {
-  if (!application.Application) {
-    application.getApplication({
-      ID: AppID,
-      Message: {
-        Error: {
-          Title: t('MSG_GET_APP_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      _verify()
-    })
-    return
-  }
-
-  _verify()
-}
+const user = useFrontendUserStore()
+const logined = useLocalUserStore()
 
 const onSubmit = throttle(() => {
   coderepo.getGoogleToken({
@@ -209,20 +119,24 @@ const onSubmit = throttle(() => {
       }
     }
   }, (token: string) => {
-    user.signin({
-      PasswordHash: encryptPassword(password.value),
+    user.login({
       Account: account.value,
+      PasswordHash: encryptPassword(password.value),
       AccountType: accountType.value,
       ManMachineSpec: token,
+      EnvironmentSpec: 'NOT USED',
       Message: {
         Error: {
           Title: t('MSG_SIGNIN'),
           Message: t('MSG_SIGNIN_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
-    }, () => {
+    }, (u: User, error: boolean) => {
+      if (error) {
+        return
+      }
       if (target.value?.length) {
         void router.push({
           path: target.value,
@@ -237,6 +151,94 @@ const onSubmit = throttle(() => {
   return false
 }, ThrottleSeconds * 1000)
 
+const verify = () => {
+  app.getApp({
+    AppID: AppID,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_APP_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    _verify()
+  })
+}
+
+const _verify = () => {
+  if (!app.App.SigninVerifyEnable) {
+    void router.push({ path: '/' })
+    return
+  }
+
+  verifing.value = true
+
+  if (logined.User?.GoogleAuthVerified && logined.User?.SigninVerifyType === SigninVerifyType.Google) {
+    verifyMethod.value = AccountType.Google
+    return
+  }
+  if (logined.User?.EmailAddress?.length) {
+    verifyMethod.value = AccountType.Email
+    return
+  }
+  verifyMethod.value = AccountType.Mobile
+}
+
+const onCodeVerify = (code: string) => {
+  verifing.value = false
+  user.loginVerify({
+    Account: verifyAccount.value,
+    AccountType: verifyAccountType.value,
+    UserID: logined.User?.ID,
+    Token: logined.User?.LoginToken,
+    VerificationCode: code,
+    Message: {
+      Error: {
+        Title: t('MSG_LOGIN_VERIFY'),
+        Message: t('MSG_LOGIN_VERIFY_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (u: User, error: boolean) => {
+    if (error) {
+      user.logout({
+        Token: logined.User?.LoginToken,
+        Message: {}
+      }, () => {
+      // TODO
+      })
+      return
+    }
+    remainder()
+  })
+}
+
+const remainder = () => {
+  if (!logined.User?.PhoneNO?.length) {
+    void router.push({ path: '/remainder/mobile' })
+    return
+  }
+
+  kyc.getKYC({
+    Message: {}
+  }, (error: boolean) => {
+    if (error || !kyc.KYC || kyc.KYC.State === KYCState.Rejected) {
+      void router.push({ path: '/remainder/kyc' })
+      return
+    }
+    if (logined.User?.InvitationCode && !logined.User?.InvitationCodeConfirmed) {
+      void router.push({ path: '/remainder/affiliate' })
+      return
+    }
+    if (!logined.User?.GoogleAuthVerified) {
+      void router.push({ path: '/remainder/ga' })
+      return
+    }
+    void router.push({ path: '/' })
+  })
+}
 </script>
 
 <style lang='sass' scoped>

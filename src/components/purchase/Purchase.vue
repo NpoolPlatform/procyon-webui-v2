@@ -162,8 +162,7 @@ import {
   PriceCoinName,
   useStockStore,
   CoinDescriptionUsedFor,
-  useCurrencyStore,
-  useLoginedUserStore
+  useCurrencyStore
 } from 'npool-cli-v2'
 import { throttle } from 'quasar'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
@@ -172,6 +171,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ThrottleSeconds } from 'src/const/const'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalOrderStore } from 'src/teststore/mock/order'
+import { useLocalUserStore } from 'npool-cli-v4'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
@@ -252,7 +252,7 @@ const remainOrderAmount = computed(() => {
   }
   return value
 })
-const logined = useLoginedUserStore()
+const logined = useLocalUserStore()
 
 const createOrder = () => {
   if (getUserBalance.value <= 0) {
@@ -293,7 +293,7 @@ const onMenuHide = () => {
 }
 
 const onPurchaseClick = throttle(() => {
-  if (!logined.getLogined) {
+  if (!logined.logined) {
     void router.push({
       path: '/signin',
       query: {

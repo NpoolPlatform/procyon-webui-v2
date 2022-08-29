@@ -27,12 +27,16 @@
 
 <script setup lang='ts'>
 import {
-  AccountType,
-  validateVerificationCode,
-  NotificationType,
-  useCodeRepoStore,
-  useUserStore
+  validateVerificationCode
 } from 'npool-cli-v2'
+import {
+  useFrontendUserStore,
+  AccountType,
+  NotifyType,
+  useLocalUserStore,
+  User,
+  SignMethodType
+} from 'npool-cli-v4'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -57,50 +61,33 @@ const onVerificationCodeFocusOut = () => {
   verificationCodeError.value = !validateVerificationCode(myVerificationCode.value)
 }
 
-const coderepo = useCodeRepoStore()
-const user = useUserStore()
 const router = useRouter()
+const user = useFrontendUserStore()
+const logined = useLocalUserStore()
 
 const onSubmit = () => {
   if (verificationCodeError.value || oldVerificationCodeError.value) {
     return
   }
-
-  user.updateAccount({
-    Account: '',
-    AccountType: AccountType.Google,
-    VerificationCode: myVerificationCode.value,
-    VerificationCodes: [
-      {
-        Account: oldAccount.value,
-        AccountType: oldAccountType.value,
-        VerificationCode: oldVerificationCode.value
-      }
-    ],
+  user.updateUser({
+    Account: logined.User.LoginAccount,
+    AccountType: logined.User.LoginAccountType,
+    VerificationCode: oldVerificationCode.value,
+    NewAccountType: AccountType.Google as unknown as SignMethodType,
+    NewVerificationCode: myVerificationCode.value,
     Message: {
       Error: {
         Title: t('MSG_UPDATE_ACCOUNT'),
         Message: t('MSG_UPDATE_ACCOUNT_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
-  }, () => {
-    coderepo.verifyGoogleAuthenticationCode({
-      Code: myVerificationCode.value,
-      NotifyMessage: {
-        Error: {
-          Title: t('MSG_VERIFY_GOOGLE_AUTHENTICATION'),
-          Message: t('MSG_VERIFY_GOOGLE_AUTHENTICATION_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, (error: boolean) => {
-      if (!error) {
-        void router.push({ path: '/security' })
-      }
-    })
+  }, (u: User, error: boolean) => {
+    if (error) {
+      return
+    }
+    void router.push({ path: '/security' })
   })
 
   return false

@@ -32,9 +32,11 @@
 
 <script setup lang='ts'>
 import {
-  NotificationType,
-  useUserStore
-} from 'npool-cli-v2'
+  NotifyType,
+  useLocalUserStore,
+  useFrontendGoogleAuthStore
+} from 'npool-cli-v4'
+import { AppID } from 'src/const/const'
 import { onMounted, computed, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -45,9 +47,10 @@ const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const user = useUserStore()
-const googleToken = computed(() => user.GoogleOTPAuth)
-const googleSecret = computed(() => user.GoogleSecret)
+const user = useLocalUserStore()
+const ga = useFrontendGoogleAuthStore()
+const googleToken = computed(() => user.User.GoogleOTPAuth)
+const googleSecret = computed(() => user.User.GoogleSecret)
 
 const router = useRouter()
 
@@ -60,16 +63,22 @@ const onCloseClick = () => {
 }
 
 onMounted(() => {
-  user.setupGoogleAuthentication({
-    Message: {
-      Error: {
-        Title: t('MSG_SETUP_GOOGLE_AUTHENTICATION'),
-        Message: t('MSG_SETUP_GOOGLE_AUTHENTICATION_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
+  if (user.User.GoogleSecret.length === 0) {
+    ga.setupGoogleAuth({
+      AppID: AppID,
+      UserID: user.User.ID,
+      Message: {
+        Error: {
+          Title: t('MSG_SETUP_GOOGLE_AUTHENTICATION'),
+          Message: t('MSG_SETUP_GOOGLE_AUTHENTICATION_FAIL'),
+          Popup: true,
+          Type: NotifyType.Error
+        }
       }
-    }
-  })
+    }, () => {
+      // TODO
+    })
+  }
 })
 
 </script>

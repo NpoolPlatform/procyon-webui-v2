@@ -45,7 +45,8 @@
 
 <script setup lang='ts'>
 import { defineProps, toRef, defineEmits, computed, watch, onMounted, ref, defineAsyncComponent } from 'vue'
-import { AccountType, MessageUsedFor, useCodeRepoStore, useLoginedUserStore, validateVerificationCode } from 'npool-cli-v2'
+import { AccountType as OldAccountType, MessageUsedFor, useCodeRepoStore, validateVerificationCode } from 'npool-cli-v2'
+import { AccountType, useLocalUserStore } from 'npool-cli-v4'
 
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
@@ -63,7 +64,7 @@ const verifyMethod = toRef(props, 'verifyMethod')
 const usedFor = toRef(props, 'usedFor')
 const toUsername = toRef(props, 'toUsername')
 
-const logined = useLoginedUserStore()
+const logined = useLocalUserStore()
 const coderepo = useCodeRepoStore()
 
 const myVerifyMethod = computed(() => {
@@ -75,10 +76,10 @@ const myVerifyMethod = computed(() => {
         return verifyMethod.value
     }
   }
-  if (logined.LoginedUser?.Ctrl?.GoogleAuthenticationVerified) {
+  if (logined.User?.GoogleAuthVerified) {
     return AccountType.Google
   }
-  if (logined.LoginedUser?.User?.EmailAddress?.length) {
+  if (logined.User?.EmailAddress?.length) {
     return AccountType.Email
   }
   return AccountType.Mobile
@@ -99,15 +100,15 @@ const title = computed(() => {
 const account = computed(() => {
   switch (myVerifyMethod.value) {
     case AccountType.Mobile:
-      return logined.LoginedUser?.User?.PhoneNO
+      return logined.User?.PhoneNO
     case AccountType.Email:
-      return logined.LoginedUser?.User?.EmailAddress
+      return logined.User?.EmailAddress
     case AccountType.Google:
       return ''
     default:
       break
   }
-  return logined.LoginedUser?.User?.EmailAddress
+  return logined.User?.EmailAddress
 })
 const caption = computed(() => {
   switch (myVerifyMethod.value) {
@@ -143,7 +144,7 @@ watch(myVerifyMethod, () => {
   emit('update:accountType', myVerifyMethod.value)
 })
 watch(account, () => {
-  emit('update:account', account.value as string)
+  emit('update:account', account.value)
 })
 
 const onVerifyClick = () => {
@@ -156,15 +157,15 @@ const onVerifyClick = () => {
 
 const onSendCodeClick = () => {
   coderepo.sendVerificationCode(
-    account.value as string,
-    myVerifyMethod.value,
+    account.value,
+    myVerifyMethod.value.toLowerCase() as OldAccountType,
     usedFor.value,
-    toUsername.value?.length ? toUsername.value : account.value as string)
+    toUsername.value?.length ? toUsername.value : account.value)
 }
 
 onMounted(() => {
   onSendCodeClick()
-  emit('update:account', account.value as string)
+  emit('update:account', account.value)
   emit('update:accountType', myVerifyMethod.value)
 })
 

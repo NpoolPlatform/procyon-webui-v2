@@ -224,7 +224,6 @@ import {
   NotificationType,
   useCurrencyStore,
   useStockStore,
-  useLoginedUserStore,
   Currency,
   Coin
 } from 'npool-cli-v2'
@@ -237,6 +236,7 @@ import { useRouter } from 'vue-router'
 import warning from 'src/assets/warning.svg'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalOrderStore } from 'src/teststore/mock/order'
+import { useLocalUserStore } from 'npool-cli-v4'
 
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -454,7 +454,7 @@ const onPurchaseAmountFocusOut = () => {
 const submitting = ref(false)
 
 const router = useRouter()
-const logined = useLoginedUserStore()
+const logined = useLocalUserStore()
 const order = useLocalOrderStore()
 
 const getUserGenerals = (offset:number, limit: number) => {
@@ -548,7 +548,7 @@ const onMenuHide = () => {
 }
 
 const onPurchaseClick = throttle(() => {
-  if (!logined.getLogined) {
+  if (!logined.logined) {
     void router.push({
       path: '/signin',
       query: {

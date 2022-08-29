@@ -59,14 +59,13 @@
 <script setup lang='ts'>
 import {
   validateEmailAddress,
-  AccountType,
   validateMobileNO,
   validateVerificationCode,
   useCodeRepoStore,
   MessageUsedFor,
-  NotificationType,
-  useUserStore
+  AccountType as OldAccountType
 } from 'npool-cli-v2'
+import { AccountType, NotifyType, SignMethodType, useFrontendUserStore, useLocalUserStore, User } from 'npool-cli-v4'
 import { defineAsyncComponent, ref, toRef, watch, defineProps } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -130,9 +129,9 @@ const onVerificationCodeFocusOut = () => {
 }
 
 const coderepo = useCodeRepoStore()
-const user = useUserStore()
+const user = useFrontendUserStore()
 const router = useRouter()
-
+const logined = useLocalUserStore()
 const onSubmit = () => {
   if (accountError.value || verificationCodeError.value || oldVerificationCodeError.value) {
     return
@@ -140,40 +139,68 @@ const onSubmit = () => {
 
   switch (accountType.value) {
     case AccountType.Email:
-      user.updateEmail({
-        NewEmailAddress: account.value,
-        NewEmailVerificationCode: myVerificationCode.value,
-        OldAccount: oldAccount.value,
-        OldVerificationCode: oldVerificationCode.value,
-        OldAccountType: oldAccountType.value,
+      user.updateUser({
+        Account: oldAccount.value,
+        AccountType: oldAccountType.value as unknown as SignMethodType,
+        VerificationCode: oldVerificationCode.value,
+        NewAccount: account.value,
+        NewAccountType: accountType.value as unknown as SignMethodType,
+        NewVerificationCode: myVerificationCode.value,
         Message: {
           Error: {
             Title: t('MSG_UPDATE_EMAIL'),
             Message: t('MSG_UPDATE_EMAIL_FAIL'),
             Popup: true,
-            Type: NotificationType.Error
+            Type: NotifyType.Error
           }
         }
-      }, () => {
+      }, (u: User, error: boolean) => {
+        if (error) {
+          return
+        }
+        if (u.LoginAccountType === accountType.value as unknown as SignMethodType) {
+          user.logout({
+            Token: logined.User?.LoginToken,
+            Message: {}
+          }, () => {
+          // TODO
+          })
+          void router.push({ path: '/signin' })
+          return
+        }
         void router.push({ path: '/dashboard' })
       })
       break
     case AccountType.Mobile:
-      user.updateMobile({
-        NewPhoneNO: account.value,
-        NewPhoneVerificationCode: myVerificationCode.value,
-        OldAccount: oldAccount.value,
-        OldVerificationCode: oldVerificationCode.value,
-        OldAccountType: oldAccountType.value,
+      user.updateUser({
+        Account: oldAccount.value,
+        AccountType: oldAccountType.value as unknown as SignMethodType,
+        VerificationCode: oldVerificationCode.value,
+        NewAccount: account.value,
+        NewAccountType: accountType.value as unknown as SignMethodType,
+        NewVerificationCode: myVerificationCode.value,
         Message: {
           Error: {
             Title: t('MSG_UPDATE_MOBILE'),
             Message: t('MSG_UPDATE_MOBILE_FAIL'),
             Popup: true,
-            Type: NotificationType.Error
+            Type: NotifyType.Error
           }
         }
-      }, () => {
+      }, (u: User, error: boolean) => {
+        if (error) {
+          return
+        }
+        if (u.LoginAccountType === accountType.value as unknown as SignMethodType) {
+          user.logout({
+            Token: logined.User?.LoginToken,
+            Message: {}
+          }, () => {
+          // TODO
+          })
+          void router.push({ path: '/signin' })
+          return
+        }
         void router.push({ path: '/dashboard' })
       })
       break
@@ -187,7 +214,7 @@ const onSendCodeClick = () => {
   if (accountError.value) {
     return
   }
-  coderepo.sendVerificationCode(account.value, accountType.value, MessageUsedFor.Update, account.value)
+  coderepo.sendVerificationCode(account.value, accountType.value.toLowerCase() as OldAccountType, MessageUsedFor.Update, account.value)
 }
 
 </script>

@@ -53,10 +53,9 @@
 import {
   validatePassword,
   AccountType,
-  useUserStore,
-  encryptPassword,
-  NotificationType
+  encryptPassword
 } from 'npool-cli-v2'
+import { NotifyType, useFrontendUserStore, User } from 'npool-cli-v4'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -67,7 +66,7 @@ const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const user = useUserStore()
+const user = useFrontendUserStore()
 
 const account = ref('')
 const accountType = ref(AccountType.Email)
@@ -111,8 +110,7 @@ const onSubmit = () => {
   if (newPwdError.value || pwdError.value || confirmPwdError.value || verificationCodeError.value) {
     return
   }
-
-  user.updatePassword({
+  user.updateUser({
     Account: account.value,
     AccountType: accountType.value,
     OldPasswordHash: encryptPassword(oldPassword.value),
@@ -123,13 +121,15 @@ const onSubmit = () => {
         Title: t('MSG_UPDATE_PASSWORD'),
         Message: t('MSG_UPDATE_PASSWORD_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
-  }, () => {
+  }, (u: User, error: boolean) => {
+    if (error) {
+      return
+    }
     void router.push({ path: '/dashboard' })
   })
-
   return false
 }
 

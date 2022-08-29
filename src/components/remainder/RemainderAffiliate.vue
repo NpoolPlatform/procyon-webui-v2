@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang='ts'>
-import { InvitationCode, useInspireStore } from 'npool-cli-v2'
+import { useFrontendUserStore, useLocalUserStore, User } from 'npool-cli-v4'
 import {
   defineAsyncComponent
 } from 'vue'
@@ -18,17 +18,21 @@ import { useRouter } from 'vue-router'
 const RemainderPage = defineAsyncComponent(() => import('src/components/remainder/RemainderPage.vue'))
 
 const router = useRouter()
-const inspire = useInspireStore()
+
+const logined = useLocalUserStore()
+const user = useFrontendUserStore()
 
 const onSubmit = () => {
-  inspire.InvitationCode.Confirmed = true
-  inspire.updateInvitationCode({
-    Info: inspire.InvitationCode as InvitationCode,
+  user.updateUser({
+    InvitationCodeID: logined.User?.InvitationCodeID,
+    InvitationCodeConfirmed: true,
     Message: {}
-  }, () => {
-    // TDOO
+  }, (u: User, error: boolean) => {
+    if (error) {
+      return
+    }
+    void router.push({ path: '/affiliates' })
   })
-  void router.push({ path: '/affiliates' })
 }
 
 </script>

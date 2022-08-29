@@ -6,12 +6,12 @@
     <div class='content-glass kyc-status'>
       <img :src='stateImg'>
       <span class='status'>{{ $t(stateText) }}</span>
-      <p class='rejection-note' v-if='state === ReviewState.Rejected'>
+      <p class='rejection-note' v-if='state === KYCState.Rejected'>
         {{ rejectedReason }}
       </p>
     </div>
     <h2>{{ $t('MSG_IDENTIFICATION_DOCUMENTS') }}</h2>
-    <div :class='[ "content-glass kyc-documents", state === ReviewState.Approved ? "kyc-verified" : "" ]'>
+    <div :class='[ "content-glass kyc-documents", state === KYCState.Approved ? "kyc-verified" : "" ]'>
       <div class='document-select'>
         <h4>{{ $t('MSG_DOCUMENT_TYPE') }}</h4>
         <select :name='$t("MSG_DOCUMENT_TYPE")' :disabled='!updatable' v-model='selectedType'>
@@ -99,7 +99,7 @@
 <script setup lang='ts'>
 import { onMounted, computed, ref, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NotificationType, useKYCStore, ReviewState, DocumentType, ImageType, KYCImage, Message, useLoginedUserStore } from 'npool-cli-v2'
+import { Message } from 'npool-cli-v2'
 import { uid } from 'quasar'
 
 import kycNotVerified from 'src/assets/kyc-not-verified.svg'
@@ -109,38 +109,46 @@ import kycVerified from 'src/assets/kyc-verified.svg'
 import kycIDFront from 'src/assets/kyc-id-front.svg'
 import kycIDBack from 'src/assets/kyc-id-back.svg'
 import kycSelfieID from 'src/assets/kyc-selfie-id.svg'
+import {
+  NotifyType,
+  useLocalUserStore,
+  useFrontendKYCStore,
+  DocumentType,
+  ImageType,
+  KYCImage,
+  EntityType,
+  KYCState
+} from 'npool-cli-v4'
 
 const DragableImg = defineAsyncComponent(() => import('src/components/image/DragableImg.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const Account = defineAsyncComponent(() => import('src/components/account/Account.vue'))
 
-const kyc = useKYCStore()
-
 const srcFront = computed({
-  get: () => kyc.Images.get(ImageType.Front)?.Base64,
+  get: () => kyc.Images.get(ImageType.FrontImg)?.Base64,
   set: (val) => {
-    kyc.Images.set(ImageType.Front, {
-      Type: ImageType.Front,
+    kyc.Images.set(ImageType.FrontImg, {
+      Type: ImageType.FrontImg,
       URI: '',
       Base64: val
     } as KYCImage)
   }
 })
 const srcBack = computed({
-  get: () => kyc.Images.get(ImageType.Back)?.Base64,
+  get: () => kyc.Images.get(ImageType.BackImg)?.Base64,
   set: (val) => {
-    kyc.Images.set(ImageType.Back, {
-      Type: ImageType.Back,
+    kyc.Images.set(ImageType.BackImg, {
+      Type: ImageType.BackImg,
       URI: '',
       Base64: val
     } as KYCImage)
   }
 })
 const srcSelfie = computed({
-  get: () => kyc.Images.get(ImageType.Handing)?.Base64,
+  get: () => kyc.Images.get(ImageType.SelfieImg)?.Base64,
   set: (val) => {
-    kyc.Images.set(ImageType.Handing, {
-      Type: ImageType.Handing,
+    kyc.Images.set(ImageType.SelfieImg, {
+      Type: ImageType.SelfieImg,
       URI: '',
       Base64: val
     } as KYCImage)
@@ -169,26 +177,23 @@ const types = ref([
 const selectedType = ref(types.value[0])
 
 const uploadKyc = () => {
-  if (kyc.KYC?.Kyc) {
+  if (kyc.KYC) {
     kyc.updateKYC({
-      Info: {
-        ID: kyc.KYC?.Kyc?.ID,
-        UserHandingCardImg: kyc.Images.get(ImageType.Handing)?.URI,
-        BackCardImg: kyc.Images.get(ImageType.Back)?.URI,
-        FrontCardImg: kyc.Images.get(ImageType.Front)?.URI,
-        CardType: selectedType.value.value,
-        CardID: 'NOT-USED-' + uid()
-      },
+      KycID: kyc.KYC?.ID,
+      SelfieImg: kyc.Images.get(ImageType.SelfieImg)?.URI as string,
+      BackImg: kyc.Images.get(ImageType.BackImg)?.URI as string,
+      FrontImg: kyc.Images.get(ImageType.FrontImg)?.URI as string,
+      IDNumber: 'NOT-USED-' + uid(),
       Message: {
         Error: {
           Title: t('MSG_UPDATE_KYC_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         },
         Info: {
           Title: t('MSG_UPDATE_KYC_SUCCESS'),
           Popup: true,
-          Type: NotificationType.Success
+          Type: NotifyType.Success
         }
       }
     })
@@ -196,23 +201,22 @@ const uploadKyc = () => {
     return
   }
   kyc.createKYC({
-    Info: {
-      UserHandingCardImg: kyc.Images.get(ImageType.Handing)?.URI,
-      BackCardImg: kyc.Images.get(ImageType.Back)?.URI,
-      FrontCardImg: kyc.Images.get(ImageType.Front)?.URI,
-      CardType: selectedType.value.value,
-      CardID: 'NOT-USED-' + uid()
-    },
+    SelfieImg: kyc.Images.get(ImageType.SelfieImg)?.URI as string,
+    BackImg: kyc.Images.get(ImageType.BackImg)?.URI as string,
+    FrontImg: kyc.Images.get(ImageType.FrontImg)?.URI as string,
+    DocumentType: selectedType.value.value,
+    EntityType: EntityType.Individual,
+    IDNumber: 'NOT-USED-' + uid(),
     Message: {
       Error: {
         Title: t('MSG_CREATE_KYC_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       },
       Info: {
         Title: t('MSG_CREATE_KYC_SUCCESS'),
         Popup: true,
-        Type: NotificationType.Success
+        Type: NotifyType.Success
       }
     }
   }, () => {
@@ -236,13 +240,13 @@ const onSubmit = () => {
   submitting.value = true
 
   kyc.uploadImage({
-    ImageType: ImageType.Front,
+    ImageType: ImageType.FrontImg,
     ImageBase64: srcFront.value as string,
     Message: {
       Error: {
         Title: t('MSG_UPDATE_KYC_IMAGE_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
   }, (error: boolean) => {
@@ -251,13 +255,13 @@ const onSubmit = () => {
       return
     }
     kyc.uploadImage({
-      ImageType: ImageType.Handing,
+      ImageType: ImageType.SelfieImg,
       ImageBase64: srcSelfie.value as string,
       Message: {
         Error: {
           Title: t('MSG_UPDATE_KYC_IMAGE_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
     }, (error: boolean) => {
@@ -270,13 +274,13 @@ const onSubmit = () => {
         return
       }
       kyc.uploadImage({
-        ImageType: ImageType.Back,
+        ImageType: ImageType.BackImg,
         ImageBase64: srcBack.value as string,
         Message: {
           Error: {
             Title: t('MSG_UPDATE_KYC_IMAGE_FAIL'),
             Popup: true,
-            Type: NotificationType.Error
+            Type: NotifyType.Error
           }
         }
       }, (error: boolean) => {
@@ -293,16 +297,17 @@ const onSubmit = () => {
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const state = computed(() => kyc.KYC?.State as unknown as ReviewState)
+const kyc = useFrontendKYCStore()
+const state = computed(() => kyc.KYC?.State as unknown as KYCState)
 const stateImg = computed(() => {
   switch (state.value) {
     case undefined:
       return kycNotVerified
-    case ReviewState.Approved:
+    case KYCState.Approved:
       return kycVerified
-    case ReviewState.Rejected:
+    case KYCState.Rejected:
       return kycRejected
-    case ReviewState.Wait:
+    case KYCState.Reviewing:
       return kycReview
     default:
       break
@@ -313,11 +318,11 @@ const stateText = computed(() => {
   switch (state.value) {
     case undefined:
       return 'MSG_NOT_VERIFIED'
-    case ReviewState.Approved:
+    case KYCState.Approved:
       return 'MSG_VERIFIED'
-    case ReviewState.Rejected:
+    case KYCState.Rejected:
       return 'MSG_REJECTED'
-    case ReviewState.Wait:
+    case KYCState.Reviewing:
       return 'MSG_UNDER_REVIEW'
     default:
       break
@@ -325,72 +330,67 @@ const stateText = computed(() => {
   return 'MSG_NOT_VERIFIED'
 })
 
-const logined = useLoginedUserStore()
+const logined = useLocalUserStore()
+
 const rejectedReason = computed(() => kyc.KYC?.Message)
+
 const updatable = computed(() => {
-  const u = (state.value === ReviewState.Rejected || !state.value) &&
-        logined.LoginedUser?.Extra?.FirstName?.length &&
-        logined.LoginedUser?.Extra?.LastName?.length &&
-        logined.LoginedUser?.Extra?.Gender?.length &&
-        logined.LoginedUser?.Extra?.Username?.length &&
-        logined.LoginedUser?.Extra?.PostalCode?.length &&
-        logined.LoginedUser?.Extra?.AddressFields?.length === 5 &&
-        logined.LoginedUser?.Extra?.AddressFields[0].length &&
-        logined.LoginedUser?.Extra?.AddressFields[1].length &&
-        logined.LoginedUser?.Extra?.AddressFields[2].length &&
-        logined.LoginedUser?.Extra?.AddressFields[3].length
+  const u = (state.value === KYCState.Rejected || !state.value) &&
+        logined.User?.FirstName?.length &&
+        logined.User?.LastName?.length &&
+        logined.User?.Gender?.length &&
+        logined.User?.Username?.length &&
+        logined.User?.PostalCode?.length &&
+        logined.User?.AddressFields?.length === 5 &&
+        logined.User?.AddressFields[0].length &&
+        logined.User?.AddressFields[1].length &&
+        logined.User?.AddressFields[2].length &&
+        logined.User?.AddressFields[3].length
   return u !== undefined ? u as unknown as boolean : false
 })
 
 onMounted(() => {
   kyc.getKYC({
-    Message: {
-      /*
-      Error: {
-        Title: t('MSG_GET_KYC_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-      */
-    }
+    Message: {}
   }, (error: boolean) => {
     if (error) {
       return
     }
 
-    if (kyc.KYC?.Kyc?.CardType?.length) {
+    if (kyc.KYC?.DocumentType?.length) {
       types.value.forEach((t) => {
-        if (t.value === kyc.KYC?.Kyc?.CardType) {
+        if (t.value === kyc.KYC?.DocumentType) {
           selectedType.value = t
         }
       })
     }
 
     kyc.getKYCImage({
-      ImageType: ImageType.Front,
-      ImageS3Key: kyc.KYC?.Kyc?.FrontCardImg as string,
+      ImageType: ImageType.FrontImg,
       Message: {
         Error: {
           Title: t('MSG_GET_KYC_FRONT_IMAGE_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
     }, () => {
       kyc.getKYCImage({
-        ImageType: ImageType.Handing,
-        ImageS3Key: kyc.KYC?.Kyc?.UserHandingCardImg as string,
+        ImageType: ImageType.SelfieImg,
         Message: {
           Error: {
             Title: t('MSG_GET_KYC_HANDING_IMAGE_FAIL'),
             Popup: true,
-            Type: NotificationType.Error
+            Type: NotifyType.Error
           }
         }
       }, () => {
+        if (kyc.KYC?.DocumentType === DocumentType.Passport) {
+          return
+        }
+
         kyc.getKYCImage({
-          ImageType: ImageType.Back,
-          ImageS3Key: kyc.KYC?.Kyc?.BackCardImg as string,
+          ImageType: ImageType.BackImg,
           Message: {
             Error: undefined as unknown as Message
           }

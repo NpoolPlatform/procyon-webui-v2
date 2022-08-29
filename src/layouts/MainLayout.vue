@@ -18,7 +18,8 @@
 
 <script setup lang='ts'>
 import { defineAsyncComponent, onMounted, computed, watch } from 'vue'
-import { useNotificationStore, notify, useLocaleStore, useErrorSwitcherStore, SwitchTarget, ErrorTarget, useLoginedUserStore, UserInfo } from 'npool-cli-v2'
+import { useNotificationStore as useOldNotificationStore, notify as OldNotify, useLocaleStore, useErrorSwitcherStore, SwitchTarget, ErrorTarget } from 'npool-cli-v2'
+import { notify, useLocalUserStore, useNotificationStore, User } from 'npool-cli-v4'
 import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
 
@@ -31,11 +32,13 @@ const SideMenu = defineAsyncComponent(() => import('src/components/menu/SideMenu
 const locale = useLocaleStore()
 const special = computed(() => locale.CurLang?.Lang === 'ja-JP')
 
-const notification = useNotificationStore()
+const notification = useOldNotificationStore()
+const notificationV4 = useNotificationStore()
 const setting = useSettingStore()
 const errorswitcher = useErrorSwitcherStore()
 const trigger = computed(() => errorswitcher.ErrorTrigger)
-const logined = useLoginedUserStore()
+
+const logined = useLocalUserStore()
 
 const router = useRouter()
 
@@ -47,12 +50,20 @@ watch(trigger, () => {
     case SwitchTarget.LOGIN:
       void router.push('/signin')
       errorswitcher.ErrorTrigger = undefined as unknown as ErrorTarget
-      logined.LoginedUser = undefined as unknown as UserInfo
+      logined.User = undefined as unknown as User
   }
 })
 
 onMounted(() => {
   notification.$subscribe((_, state) => {
+    state.Notifications.forEach((notif, index) => {
+      if (notif.Popup) {
+        state.Notifications.splice(index, 1)
+        OldNotify(notif)
+      }
+    })
+  })
+  notificationV4.$subscribe((_, state) => {
     state.Notifications.forEach((notif, index) => {
       if (notif.Popup) {
         state.Notifications.splice(index, 1)

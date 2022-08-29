@@ -61,9 +61,9 @@
 import {
   validateEmailAddress,
   validatePassword,
-  AccountType,
   validateMobileNO
 } from 'npool-cli-v2'
+import { AccountType } from 'npool-cli-v4'
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted } from 'vue'
 
 interface Props {
