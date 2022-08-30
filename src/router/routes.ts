@@ -9,11 +9,11 @@ declare module 'vue-router' {
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '/maintanence',
     component: () => import('pages/Maintenance.vue')
   },
   {
-    path: '/testing',
+    path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {

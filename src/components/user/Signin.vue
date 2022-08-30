@@ -143,13 +143,6 @@ const onSubmit = throttle(() => {
       if (error) {
         return
       }
-      if (target.value?.length) {
-        void router.push({
-          path: target.value,
-          query: route.query
-        })
-        return
-      }
       verify()
     })
   })
@@ -174,6 +167,13 @@ const verify = () => {
 
 const _verify = () => {
   if (!app.App.SigninVerifyEnable) {
+    if (target.value?.length) {
+      void router.push({
+        path: target.value,
+        query: route.query
+      })
+      return
+    }
     void router.push({ path: '/' })
     return
   }
@@ -219,6 +219,13 @@ const onCodeVerify = (code: string) => {
         Message: {}
       }, () => {
         // TODO
+      })
+      return
+    }
+    if (target.value?.length) {
+      void router.push({
+        path: target.value,
+        query: route.query
       })
       return
     }
