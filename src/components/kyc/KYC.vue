@@ -117,7 +117,8 @@ import {
   ImageType,
   KYCImage,
   EntityType,
-  KYCState
+  KYCState,
+  UpdateKYCRequest
 } from 'npool-cli-v4'
 
 const DragableImg = defineAsyncComponent(() => import('src/components/image/DragableImg.vue'))
@@ -178,10 +179,9 @@ const selectedType = ref(types.value[0])
 
 const uploadKyc = () => {
   if (kyc.KYC) {
-    kyc.updateKYC({
+    const req = {
       KycID: kyc.KYC?.ID,
       SelfieImg: kyc.Images.get(ImageType.SelfieImg)?.URI as string,
-      BackImg: kyc.Images.get(ImageType.BackImg)?.URI as string,
       FrontImg: kyc.Images.get(ImageType.FrontImg)?.URI as string,
       DocumentType: selectedType.value.value,
       IDNumber: 'NOT-USED-' + uid(),
@@ -197,7 +197,11 @@ const uploadKyc = () => {
           Type: NotifyType.Success
         }
       }
-    })
+    } as UpdateKYCRequest
+    if (selectedType.value.value !== DocumentType.Passport) {
+      req.BackImg = kyc.Images.get(ImageType.BackImg)?.URI as string
+    }
+    kyc.updateKYC(req)
     submitting.value = false
     return
   }
