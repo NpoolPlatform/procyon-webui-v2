@@ -13,7 +13,7 @@
         </div>
         <form @submit='onSubmit' method='POST' action='javascript:void(0)'>
           <slot name='form-body' />
-          <input type='submit' :value='$t(submitText)' class='register'>
+          <input type='submit' :value='$t(submitText)' class='register' :disabled='submitting'>
           <slot name='append-submit' />
         </form>
       </div>
@@ -32,6 +32,7 @@ import {
 interface Props {
   label: string;
   submitText: string;
+  submitting?: boolean;
 }
 
 const props = defineProps<Props>()

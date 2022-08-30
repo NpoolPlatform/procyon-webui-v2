@@ -8,6 +8,7 @@
       @submit='onSubmit'
       label='MSG_USER_LOGIN'
       submit-text='MSG_SIGNIN'
+      :submitting='logging || submitting'
     >
       <template #append-submit>
         <div class='row'>
@@ -63,7 +64,7 @@ import {
   KYCState
 } from 'npool-cli-v4'
 
-import { AppID, ThrottleSeconds } from 'src/const/const'
+import { AppID } from 'src/const/const'
 import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useReCaptcha } from 'vue-recaptcha-v3'
@@ -107,6 +108,8 @@ const onMenuHide = () => {
 const user = useFrontendUserStore()
 const logined = useLocalUserStore()
 
+const logging = ref(false)
+
 const onSubmit = throttle(() => {
   coderepo.getGoogleToken({
     Recaptcha: recaptcha,
@@ -120,6 +123,7 @@ const onSubmit = throttle(() => {
       }
     }
   }, (token: string) => {
+    logging.value = true
     user.login({
       Account: account.value,
       PasswordHash: encryptPassword(password.value),
@@ -135,6 +139,7 @@ const onSubmit = throttle(() => {
         }
       }
     }, (u: User, error: boolean) => {
+      logging.value = false
       if (error) {
         return
       }
@@ -150,7 +155,7 @@ const onSubmit = throttle(() => {
   })
 
   return false
-}, ThrottleSeconds * 1000)
+}, 1000)
 
 const verify = () => {
   app.getApp({

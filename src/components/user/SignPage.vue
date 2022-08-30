@@ -1,5 +1,5 @@
 <template>
-  <FormPage @submit='onSubmit' :label='label' :submit-text='submitText'>
+  <FormPage @submit='onSubmit' :label='label' :submit-text='submitText' :submitting='submitting'>
     <template #top-right>
       <div class='switcher' @click='onSwitcherClick'>
         <q-icon
@@ -73,6 +73,7 @@ interface Props {
   accountError: boolean;
   password: string;
   submitText: string;
+  submitting?: boolean;
 }
 
 const props = defineProps<Props>()
