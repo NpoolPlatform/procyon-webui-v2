@@ -2,6 +2,11 @@
   <h2>{{ $t('MSG_ACCOUNT_TITLE') }}</h2>
   <form class='content-glass alignment' action='javascript:void(0)' @submit='onSubmit'>
     <h3>{{ $t('MSG_PERSON_DETAILS_FOR_KYC') }}</h3>
+    <div class='warning'>
+      <img :src='warning'>
+      <span>{{ $t('MSG_PERSONAL_DETAIL_TIP') }}</span>
+    </div>
+    <br>
     <div class='row'>
       <div class='account-field'>
         <Input
@@ -156,6 +161,8 @@ import { ThrottleSeconds } from 'src/const/const'
 import { defineAsyncComponent, ref, computed } from 'vue'
 
 import { useI18n } from 'vue-i18n'
+
+import warning from '../../assets/warning.svg'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
