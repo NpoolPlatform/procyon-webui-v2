@@ -183,6 +183,7 @@ const uploadKyc = () => {
       SelfieImg: kyc.Images.get(ImageType.SelfieImg)?.URI as string,
       BackImg: kyc.Images.get(ImageType.BackImg)?.URI as string,
       FrontImg: kyc.Images.get(ImageType.FrontImg)?.URI as string,
+      DocumentType: selectedType.value.value,
       IDNumber: 'NOT-USED-' + uid(),
       Message: {
         Error: {
