@@ -88,7 +88,6 @@
 import { computed, defineAsyncComponent, ref } from 'vue'
 import {
   BenefitModel,
-  useKYCStore,
   ReviewState,
   useAccountStore,
   useNotificationStore,
@@ -101,6 +100,7 @@ import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
 import { Account, useLocalAccountStore } from 'src/teststore/mock/account'
 import copy from 'copy-to-clipboard'
 import { useLocalCoinStore } from 'src/localstore/coin'
+import { KYCState, useFrontendKYCStore } from 'npool-cli-v4'
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
@@ -109,7 +109,7 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const kyc = useKYCStore()
+const kyc = useFrontendKYCStore()
 const localledger = useLocalLedgerStore()
 const submitting = ref(false)
 
@@ -175,7 +175,7 @@ const onWithdrawClick = (asset: BenefitModel) => {
       void router.push({ path: '/kyc' })
       return
     }
-    if (!kyc.KYC.Kyc || kyc.KYC.State !== ReviewState.Approved) {
+    if (kyc.KYC?.State !== KYCState.Approved) {
       void router.push({ path: '/kyc' })
       return
     }

@@ -7,7 +7,7 @@
       <p class='aff-email'>
         {{ subusername }}
       </p>
-      <div v-for='_good in referral.Archivements' :key='_good.GoodID'>
+      <div v-for='_good in inviter.Archivements' :key='_good.GoodID'>
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
         <select v-model='_good.CommissionPercent'>
           <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
@@ -60,7 +60,7 @@ const router = useRouter()
 const username = computed(() => baseuser.displayName({
   FirstName: referral.value.FirstName,
   LastName: referral.value.LastName
-} as User, locale.value))
+} as User, locale.value as string))
 
 const inviter = computed(() => {
   const index = localArchivement.Archivements.findIndex((el) => el.UserID === logined.User.ID)
@@ -70,6 +70,7 @@ const inviter = computed(() => {
 const userKOLOptions = computed(() => (maxKOL: number) => {
   const kolList = [30, 25, 15, 10, 5, 0]
   let index = kolList.findIndex(kol => kol <= maxKOL)
+  console.log(index, maxKOL)
   return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
 })
 const inviterGoodPercent = (goodID: string) => {
@@ -104,7 +105,7 @@ const onSubmit = () => {
 
   inspire.createInvitationCode({
     TargetUserID: referral.value.UserID,
-    InviterName: baseuser.displayName(logined.User, locale.value),
+    InviterName: baseuser.displayName(logined.User, locale.value as string),
     InviteeName: username.value,
     Info: {
       UserID: referral.value.UserID
@@ -123,7 +124,7 @@ const onSubmit = () => {
   referral.value.Archivements.forEach((good) => {
     inspire.createPurchaseAmountSetting({
       TargetUserID: referral.value.UserID,
-      InviterName: baseuser.displayName(logined.User, locale.value),
+      InviterName: baseuser.displayName(logined.User, locale.value as string),
       InviteeName: username.value,
       Info: {
         GoodID: good.GoodID,

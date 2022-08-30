@@ -115,7 +115,6 @@
 
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
-import { useKYCStore, ReviewState } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { ref, computed } from 'vue'
 
@@ -127,14 +126,21 @@ import shieldHalf from 'src/assets/shield-half.svg'
 import shieldSolid from 'src/assets/shield-solid.svg'
 import circleDot from 'src/assets/circle-dot.svg'
 import id from 'src/assets/id.svg'
-import { NotifyType, SigninVerifyType, useFrontendUserStore, useLocalUserStore } from 'npool-cli-v4'
+import {
+  KYCState,
+  NotifyType,
+  SigninVerifyType,
+  useFrontendKYCStore,
+  useFrontendUserStore,
+  useLocalUserStore
+} from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const logined = useLocalUserStore()
-const kyc = useKYCStore()
-const kycVerified = computed(() => kyc.KYC?.State === ReviewState.Approved)
+const kyc = useFrontendKYCStore()
+const kycVerified = computed(() => kyc.KYC?.State === KYCState.Approved)
 
 const router = useRouter()
 
