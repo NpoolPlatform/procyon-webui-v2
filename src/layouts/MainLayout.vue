@@ -18,8 +18,24 @@
 
 <script setup lang='ts'>
 import { defineAsyncComponent, onMounted, computed, watch } from 'vue'
-import { useNotificationStore as useOldNotificationStore, notify as OldNotify, useLocaleStore, useErrorSwitcherStore, SwitchTarget, ErrorTarget } from 'npool-cli-v2'
-import { notify, useLocalUserStore, useNotificationStore, User } from 'npool-cli-v4'
+import {
+  useNotificationStore as useOldNotificationStore,
+  notify as OldNotify,
+  useErrorSwitcherStore as useOldErrorSwitcherStore,
+  useLocaleStore,
+  SwitchTarget as OldSwitchTarget,
+  ErrorTarget as OldErrorTarget
+} from 'npool-cli-v2'
+
+import {
+  notify,
+  useErrorStore,
+  useLocalUserStore,
+  useNotificationStore,
+  User,
+  SwitchTarget,
+  ErrorTarget
+} from 'npool-cli-v4'
 import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
 
@@ -35,7 +51,8 @@ const special = computed(() => locale.CurLang?.Lang === 'ja-JP')
 const notification = useOldNotificationStore()
 const notificationV4 = useNotificationStore()
 const setting = useSettingStore()
-const errorswitcher = useErrorSwitcherStore()
+
+const errorswitcher = useOldErrorSwitcherStore()
 const trigger = computed(() => errorswitcher.ErrorTrigger)
 
 const logined = useLocalUserStore()
@@ -47,9 +64,24 @@ watch(trigger, () => {
     return
   }
   switch (trigger.value.Target) {
+    case OldSwitchTarget.LOGIN:
+      void router.push('/signin')
+      errorswitcher.ErrorTrigger = undefined as unknown as OldErrorTarget
+      logined.User = undefined as unknown as User
+  }
+})
+
+const errorswitcherV4 = useErrorStore()
+const triggerV4 = computed(() => errorswitcherV4.ErrorTrigger)
+
+watch(triggerV4, () => {
+  if (!triggerV4.value) {
+    return
+  }
+  switch (triggerV4.value.Target) {
     case SwitchTarget.LOGIN:
       void router.push('/signin')
-      errorswitcher.ErrorTrigger = undefined as unknown as ErrorTarget
+      errorswitcherV4.ErrorTrigger = undefined as unknown as ErrorTarget
       logined.User = undefined as unknown as User
   }
 })
