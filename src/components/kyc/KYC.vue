@@ -12,6 +12,10 @@
     </div>
     <h2>{{ $t('MSG_IDENTIFICATION_DOCUMENTS') }}</h2>
     <div :class='[ "content-glass kyc-documents", state === KYCState.Approved ? "kyc-verified" : "" ]'>
+      <div class='warning'>
+        <img :src='warning'>
+        <span>{{ $t('MSG_PERSONAL_DETAIL_TIP') }}</span>
+      </div>
       <div class='document-select'>
         <h4>{{ $t('MSG_DOCUMENT_TYPE') }}</h4>
         <select :name='$t("MSG_DOCUMENT_TYPE")' :disabled='!updatable' v-model='selectedType'>
@@ -120,6 +124,8 @@ import {
   KYCState,
   UpdateKYCRequest
 } from 'npool-cli-v4'
+
+import warning from '../../assets/warning.svg'
 
 const DragableImg = defineAsyncComponent(() => import('src/components/image/DragableImg.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
