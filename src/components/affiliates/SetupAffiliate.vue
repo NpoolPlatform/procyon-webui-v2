@@ -7,7 +7,7 @@
       <p class='aff-email'>
         {{ subusername }}
       </p>
-      <div v-for='_good in inviter.Archivements' :key='_good.GoodID'>
+      <div v-for='_good in inviter?.Archivements' :key='_good.GoodID'>
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
         <select v-model='_good.CommissionPercent'>
           <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
@@ -73,7 +73,7 @@ const userKOLOptions = computed(() => (maxKOL: number) => {
   return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
 })
 const inviterGoodPercent = (goodID: string) => {
-  const good = inviter.value.Archivements.find((el) => el.GoodID === goodID)
+  const good = inviter.value?.Archivements.find((el) => el.GoodID === goodID)
   return good === undefined ? 0 : good.CommissionPercent
 }
 
@@ -120,7 +120,7 @@ const onSubmit = () => {
     // TODO
   })
 
-  referral.value.Archivements.forEach((good) => {
+  referral.value?.Archivements?.forEach((good) => {
     inspire.createPurchaseAmountSetting({
       TargetUserID: referral.value?.UserID,
       InviterName: baseuser.displayName(logined.User, locale.value as string),
