@@ -58,8 +58,8 @@ const baseuser = useBaseUserStore()
 const router = useRouter()
 
 const username = computed(() => baseuser.displayName({
-  FirstName: referral.value.FirstName,
-  LastName: referral.value.LastName
+  FirstName: referral.value?.FirstName,
+  LastName: referral.value?.LastName
 } as User, locale.value as string))
 
 const inviter = computed(() => {
@@ -70,7 +70,6 @@ const inviter = computed(() => {
 const userKOLOptions = computed(() => (maxKOL: number) => {
   const kolList = [30, 25, 15, 10, 5, 0]
   let index = kolList.findIndex(kol => kol <= maxKOL)
-  console.log(index, maxKOL)
   return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
 })
 const inviterGoodPercent = (goodID: string) => {
@@ -79,7 +78,7 @@ const inviterGoodPercent = (goodID: string) => {
 }
 
 const subusername = computed(() => {
-  let name = referral.value.EmailAddress
+  let name = referral.value?.EmailAddress
 
   if (!name?.length) {
     name = referral.value?.PhoneNO
@@ -92,7 +91,7 @@ const backTimer = ref(-1)
 
 const onSubmit = () => {
   let overflow = false
-  for (const g of referral.value.Archivements) {
+  for (const g of referral.value?.Archivements) {
     if (g.CommissionPercent > inviterGoodPercent(g.GoodID)) {
       g.CommissionPercent = inviterGoodPercent(g.GoodID)
       overflow = true
@@ -104,7 +103,7 @@ const onSubmit = () => {
   }
 
   inspire.createInvitationCode({
-    TargetUserID: referral.value.UserID,
+    TargetUserID: referral.value?.UserID,
     InviterName: baseuser.displayName(logined.User, locale.value as string),
     InviteeName: username.value,
     Info: {
@@ -123,7 +122,7 @@ const onSubmit = () => {
 
   referral.value.Archivements.forEach((good) => {
     inspire.createPurchaseAmountSetting({
-      TargetUserID: referral.value.UserID,
+      TargetUserID: referral.value?.UserID,
       InviterName: baseuser.displayName(logined.User, locale.value as string),
       InviteeName: username.value,
       Info: {
