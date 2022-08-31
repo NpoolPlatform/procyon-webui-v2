@@ -112,11 +112,11 @@
       </p>
       <p v-html='$t("MSG_ALEO_TOKENOMICS_CAPTION")' />
       <h3>{{ $t('MSG_ALEO_VS_COMPETITORS') }}</h3>
-      <p v-html='$t("MSG_ALEO_VS_COMPETITORS_CAPTION")' />
-      <p><img class='project-promo-content' src='product/aleo/aleo-comparison-jp.jpg'></p>
+      <p v-html='$t("MSG_ALEO_VS_COMPETITORS_CAPTION")' />[ locale === "ja-JP" ? "selected" : "" ]
+      <p><img class='project-promo-content' :src='locale === "ja-JP" ? "product/aleo/aleo-comparison-jp.png" : "product/aleo/aleo-comparison.png"'></p>
       <h4>{{ $t('MSG_ZK_PROOF_PRIVACY') }}</h4>
       <p v-html='$t("MSG_ZK_PROOF_PRIVACY_CAPTION")' />
-      <p><img class='project-promo-content' src='product/aleo/aleo-algorithm-jp.jpg'></p>
+      <p><img class='project-promo-content' :src='locale === "ja-JP" ? "product/aleo/aleo-algorithm-jp.png" : "product/aleo/aleo-algorithm.png"'></p>
       <h3>{{ $t('MSG_ALEO_FUTURE') }}</h3>
       <p v-html='$t("MSG_ALEO_FUTURE_CAPTION_1")' />
       <div class='logo-display'>
@@ -210,6 +210,8 @@ interface Query {
   goodId: string;
   purchaseAmount: number;
 }
+
+const { locale } = useI18n({ useScope: 'global' })
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
