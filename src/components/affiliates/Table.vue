@@ -11,7 +11,6 @@
               &times;
             </button>
           </div>
-          <!-- input id='search-button' type='submit' :value='$t("MSG_SEARCH_RESULTS")' -->
         </form>
       </div>
       <q-space />

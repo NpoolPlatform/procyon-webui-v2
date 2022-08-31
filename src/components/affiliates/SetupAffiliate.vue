@@ -7,7 +7,7 @@
       <p class='aff-email'>
         {{ subusername }}
       </p>
-      <div v-for='_good in inviter?.Archivements' :key='_good.GoodID'>
+      <div v-for='(_good, idx) in visibleGoodsArchivements(referral?.Archivements)' :key='idx'>
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
         <select v-model='_good.CommissionPercent'>
           <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
@@ -30,7 +30,7 @@ import {
   useGoodStore
 } from 'npool-cli-v2'
 import { useLocalUserStore, useBaseUserStore, User } from 'npool-cli-v4'
-import { LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
+import { LocalArchivement, LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -72,11 +72,19 @@ const userKOLOptions = computed(() => (maxKOL: number) => {
   let index = kolList.findIndex(kol => kol <= maxKOL)
   return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
 })
+
 const inviterGoodPercent = (goodID: string) => {
-  const good = inviter.value?.Archivements.find((el) => el.GoodID === goodID)
+  const good = inviter.value.Archivements.find((el) => el.GoodID === goodID)
   return good === undefined ? 0 : good.CommissionPercent
 }
 
+const visibleGoodsArchivements = computed(() => (goodArchivements: Array<LocalArchivement>) => {
+  return goodArchivements.filter((el) => goodVisible(el.GoodID))
+})
+const goodVisible = (goodID: string) => {
+  const index = good.AppGoods.findIndex((el) => el.GoodID === goodID)
+  return index < 0 ? false : good.AppGoods[index].Visible
+}
 const subusername = computed(() => {
   let name = referral.value?.EmailAddress
 
@@ -120,7 +128,7 @@ const onSubmit = () => {
     // TODO
   })
 
-  referral.value?.Archivements?.forEach((good) => {
+  visibleGoodsArchivements.value(referral.value?.Archivements).forEach((good) => {
     inspire.createPurchaseAmountSetting({
       TargetUserID: referral.value?.UserID,
       InviterName: baseuser.displayName(logined.User, locale.value as string),
