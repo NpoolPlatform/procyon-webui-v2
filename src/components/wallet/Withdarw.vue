@@ -7,7 +7,7 @@
             <div class='product-page-icon'>
               <img :src='coins.getCoinLogo(coin)'>
             </div>
-            <h1>{{ coinName(coin.ID as string) }}</h1>
+            <h1>{{ coinName(coin?.ID as string) }}</h1>
           </div>
           <div class='withdraw'>
             <h3>{{ $t('MSG_ASSET_WITHDRAWAL') }}</h3>
@@ -15,15 +15,15 @@
               <div class='three-section'>
                 <h4>{{ $t('MSG_AVAILABLE_FOR_WITHDRAWAL') }}:</h4>
                 <span class='number'>{{ balance }}</span>
-                <span class='unit'>{{ coin.Unit }}</span>
+                <span class='unit'>{{ coin?.Unit }}</span>
               </div>
               <div class='three-section'>
                 <h4>{{ $t('MSG_TRANSACTION_FEE') }}:</h4>
                 <span class='number'>{{ feeAmount }}</span>
-                <span class='unit'>{{ coin.Unit }}</span>
+                <span class='unit'>{{ coin?.Unit }}</span>
               </div>
               <div class='full-section'>
-                <h4>{{ $t('MSG_AMOUNT_TO_WITHDRAW') }} ({{ coin.Unit }}):</h4>
+                <h4>{{ $t('MSG_AMOUNT_TO_WITHDRAW') }} ({{ coin?.Unit }}):</h4>
                 <Input
                   v-model:value='amount'
                   type='number'
@@ -41,7 +41,7 @@
               <div class='three-section'>
                 <h4>{{ $t('MSG_AMOUNT_WILL_RECEIVE') }}:</h4>
                 <span class='number'>{{ amount - feeAmount > 0 ? (amount - feeAmount).toFixed(4) : 0 }}</span>
-                <span class='unit'>{{ coin.Unit }}</span>
+                <span class='unit'>{{ coin?.Unit }}</span>
               </div>
 
               <div class='full-section'>
@@ -53,7 +53,7 @@
                   @click='onAddressSelected(withdraw)'
                 >
                   <span class='wallet-type'>{{ withdraw.Address.Labels.join(',') }}</span>
-                  <span class='wallet-type coin-type'>{{ coinName(coin.ID as string) }}</span>
+                  <span class='wallet-type coin-type'>{{ coinName(coin?.ID as string) }}</span>
                   <span class='number'>{{ withdraw.Account.Address }}</span>
                   <img class='checkmark' :src='checkmark'>
                 </span>
@@ -150,10 +150,9 @@ import { useI18n } from 'vue-i18n'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
-import { IntervalKey, ThrottleSeconds } from 'src/const/const'
+import { IntervalKey } from 'src/const/const'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
-import { throttle } from 'quasar'
 import { useLocalCoinStore } from 'src/localstore/coin'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
@@ -202,9 +201,9 @@ const general = useGeneralStore()
 const localledger = useLocalLedgerStore()
 const ltransation = useLocalTransactionStore()
 
-const balance = computed(() => general.getCoinBalance(coin?.value.ID as string))
+const balance = computed(() => general.getCoinBalance(coin?.value?.ID as string))
 
-const onSubmit = throttle(() => {
+const onSubmit = () => {
   if (!selectedAccount.value) {
     return
   }
@@ -214,7 +213,7 @@ const onSubmit = throttle(() => {
     return
   }
   verifing.value = true
-}, ThrottleSeconds * 1000)
+}
 
 const onMenuHide = () => {
   verifing.value = false
@@ -280,7 +279,6 @@ const getUserGenerals = (offset:number, limit: number) => {
 
 const onCodeVerify = (code: string) => {
   submitting.value = true
-
   ltransation.createWithdraw({
     CoinTypeID: coinTypeId.value,
     Amount: `${amount.value}`,
@@ -300,7 +298,6 @@ const onCodeVerify = (code: string) => {
     if (error) {
       return
     }
-
     general.$reset()
     void router.push({ path: '/wallet' })
   })
