@@ -150,10 +150,9 @@ import { useI18n } from 'vue-i18n'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
-import { IntervalKey, ThrottleSeconds } from 'src/const/const'
+import { IntervalKey } from 'src/const/const'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
-import { throttle } from 'quasar'
 import { useLocalCoinStore } from 'src/localstore/coin'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
@@ -204,13 +203,7 @@ const ltransation = useLocalTransactionStore()
 
 const balance = computed(() => general.getCoinBalance(coin?.value?.ID as string))
 
-const throttleSeconds = ref(0)
-
-const resetThrottleSeconds = () => {
-  throttleSeconds.value = 0
-}
-
-const onSubmit = throttle(() => {
+const onSubmit = () => {
   if (!selectedAccount.value) {
     return
   }
@@ -220,8 +213,7 @@ const onSubmit = throttle(() => {
     return
   }
   verifing.value = true
-  throttleSeconds.value = 500
-}, ThrottleSeconds * throttleSeconds.value)
+}
 
 const onMenuHide = () => {
   verifing.value = false
@@ -304,10 +296,8 @@ const onCodeVerify = (code: string) => {
   }, (error: boolean) => {
     submitting.value = false
     if (error) {
-      resetThrottleSeconds()
       return
     }
-
     general.$reset()
     void router.push({ path: '/wallet' })
   })
