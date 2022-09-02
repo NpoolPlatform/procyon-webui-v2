@@ -195,7 +195,7 @@ const accounts = useAccountStore()
 const withdraws = computed(() => accounts.Accounts.filter((account) => {
   return account.Account?.CoinTypeID === coinTypeId.value && account.State === ReviewState.Approved
 }))
-const selectedAccount = ref(undefined as unknown as WithdrawAccount)
+const selectedAccount = computed(() => withdraws.value.length > 0 ? withdraws.value[0] : undefined as unknown as WithdrawAccount)
 
 const general = useGeneralStore()
 const localledger = useLocalLedgerStore()

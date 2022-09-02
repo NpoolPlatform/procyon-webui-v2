@@ -38,7 +38,7 @@
         </thead>
         <tbody>
           <tr class='aff-info' v-for='(_good, idx) in visibleGoodsArchivements(referral.Archivements)' :key='idx'>
-            <td><span class='aff-product'>{{ _good.CoinName }}</span></td>
+            <td><span class='aff-product'>{{ currency.formatCoinName(_good.CoinName) }}</span></td>
             <td v-if='_good.Editing'>
               <select v-model='_good.CommissionPercent' class='kol-dropdown'>
                 <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
@@ -87,7 +87,7 @@
             </thead>
             <tbody>
               <tr class='aff-info' v-for='setting in settings' :key='setting.ID'>
-                <td><span class='aff-product'>{{ good.getGoodByID(setting.GoodID)?.Good?.Good?.Title }}</span></td>
+                <td><span class='aff-product'>{{ good.getGoodByID(setting.GoodID)?.Main?.Name }}</span></td>
                 <td><span class='aff-number'>{{ settingDate(setting) }}<span class='unit'>{{ settingTime(setting) }}</span></span></td>
                 <td><span class='aff-number'>{{ setting.Percent }}<span class='unit'>%</span></span></td>
               </tr>
@@ -111,7 +111,8 @@ import {
   useInspireStore,
   useGoodStore,
   PurchaseAmountSetting,
-  formatTime
+  formatTime,
+  useCurrencyStore
 } from 'npool-cli-v2'
 import { ref, toRef, defineProps, computed, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -138,11 +139,12 @@ const referral = toRef(props, 'referral')
 
 const logined = useLocalUserStore()
 const baseuser = useBaseUserStore()
+const currency = useCurrencyStore()
 
 const username = computed(() => baseuser.displayName({
   FirstName: referral.value.FirstName,
   LastName: referral.value.LastName
-} as User, locale.value))
+} as User, locale.value as string))
 
 const subusername = computed(() => {
   let name = referral.value.EmailAddress
@@ -171,7 +173,6 @@ const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
 }))
 const larchivement = useLocalArchivementStore()
 
-// get parent
 const inviter = computed(() => {
   const index = larchivement.Archivements.findIndex((el) => el.UserID === logined.User?.ID)
   return index < 0 ? undefined as unknown as LocalProductArchivement : larchivement.Archivements[index]
@@ -221,7 +222,7 @@ const onSaveCommissionClick = (elem: LocalProductArchivement, idx:number) => {
   elem.Archivements[idx].Editing = false
   inspire.createPurchaseAmountSetting({
     TargetUserID: referral.value.UserID,
-    InviterName: baseuser.displayName(logined.User, locale.value),
+    InviterName: baseuser.displayName(logined.User, locale.value as string),
     InviteeName: username.value,
     Info: {
       GoodID: elem.Archivements[idx].GoodID,
