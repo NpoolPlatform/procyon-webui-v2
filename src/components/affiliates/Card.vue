@@ -38,7 +38,7 @@
         </thead>
         <tbody>
           <tr class='aff-info' v-for='(_good, idx) in visibleGoodsArchivements(referral.Archivements)' :key='idx'>
-            <td><span class='aff-product'>{{ _good.CoinName }}</span></td>
+            <td><span class='aff-product'>{{ _good.GoodName }}</span></td>
             <td v-if='_good.Editing'>
               <select v-model='_good.CommissionPercent' class='kol-dropdown'>
                 <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
@@ -171,7 +171,6 @@ const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
 }))
 const larchivement = useLocalArchivementStore()
 
-// get parent
 const inviter = computed(() => {
   const index = larchivement.Archivements.findIndex((el) => el.UserID === logined.User?.ID)
   return index < 0 ? undefined as unknown as LocalProductArchivement : larchivement.Archivements[index]
