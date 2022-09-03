@@ -1,10 +1,17 @@
 <template>
   <ShowSwitchTable
-    label='MSG_TRANSFERS'
+    label='MSG_TRANSFERS_ADDRESS'
     :rows='(transfers as Array<never>)'
     :table='(table as never)'
     :customize-body='true'
   >
+    <template #top-right>
+      <div class='buttons'>
+        <button @click='onAddNewAddressClick'>
+          {{ $t('MSG_ADD_NEW_ADDRESS') }}
+        </button>
+      </div>
+    </template>
     <template #table-body='myProps'>
       <q-tr :props='myProps'>
         <q-td key='TargetUserID' :props='myProps'>
@@ -21,7 +28,11 @@
         </q-td>
         <q-td key='ActionButtons' :props='myProps'>
           <button class='small' @click='onTransferClick(myProps.row)'>
-            {{ $t('MSG_WITHDRAW') }}
+            {{ $t('MSG_TRANSFER') }}
+          </button>
+          <span class='btn-gap' />
+          <button class='small' @click='onDeleteTransferAddressClick(myProps.row)'>
+            {{ $t('MSG_DELETE_ADDRESS') }}
           </button>
         </q-td>
       </q-tr>
@@ -32,19 +43,20 @@
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NotifyType, Transfer, useFrontendTransferStore } from 'npool-cli-v4'
+import { NotifyType, TransferAddress, useFrontendTransferAddressStore } from 'npool-cli-v4'
+import { useRouter } from 'vue-router'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const transfers = computed(() => transfer.Transfers.Transfers)
+const transfers = computed(() => transferAddress.TransferAddress.TransferAddress)
 
-const transfer = useFrontendTransferStore()
+const transferAddress = useFrontendTransferAddressStore()
 
-const getTransfers = (offset: number, limit: number) => {
-  transfer.getTransfers({
+const getTransferAddress = (offset: number, limit: number) => {
+  transferAddress.getTransfers({
     Offset: offset,
     Limit: limit,
     Message: {
@@ -54,50 +66,77 @@ const getTransfers = (offset: number, limit: number) => {
         Type: NotifyType.Error
       }
     }
-  }, (transfers: Array<Transfer>, error: boolean) => {
+  }, (transfers: Array<TransferAddress>, error: boolean) => {
     if (error || transfers.length < limit) {
       return
     }
-    getTransfers(limit + offset, limit)
+    getTransferAddress(limit + offset, limit)
   })
 }
 onMounted(() => {
-  if (transfer.Transfers.Transfers.length === 0) {
-    getTransfers(0, 500)
+  if (transferAddress.TransferAddress.TransferAddress.length === 0) {
+    getTransferAddress(0, 500)
   }
 })
-const onTransferClick = (row: Transfer) => {
-  // TODO
+const onTransferClick = (row: TransferAddress) => {
   console.log(row)
 }
 
+const router = useRouter()
+const onAddNewAddressClick = () => {
+  void router.push({ path: '/add/transfer' })
+}
+
+const onDeleteTransferAddressClick = (row: TransferAddress) => {
+  transferAddress.deleteTransfer({
+    TransferID: row.ID,
+    Message: {
+      Error: {
+        Title: t('MSG_DELETE_TRANSFER_ACCOUNT_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (address: TransferAddress, error: boolean) => {
+    if (error) {
+      return
+    }
+    console.log('address: ', address)
+  })
+}
 const table = computed(() => [
   {
     name: 'TargetUserID',
     label: t('MSG_TARGET_USERID'),
     align: 'left',
-    field: (row: Transfer) => row.TargetUserID
+    field: (row: TransferAddress) => row.TargetUserID
   },
   {
     name: 'TargetEmailAddress',
     label: t('MSG_TARGET_EMAIL_ADDRESS'),
     align: 'center',
-    field: (row: Transfer) => row.TargetEmailAddress
+    field: (row: TransferAddress) => row.TargetEmailAddress
   },
   {
     name: 'TargetPhoneNO',
     label: t('MSG_TARGET_PHONENO'),
     align: 'center',
-    field: (row: Transfer) => row.TargetPhoneNO
+    field: (row: TransferAddress) => row.TargetPhoneNO
   },
   {
     name: 'TargetUsername',
     label: t('MSG_TARGET_USERNAME'),
     align: 'center',
-    field: (row: Transfer) => row.TargetUsername
+    field: (row: TransferAddress) => row.TargetUsername
+  },
+  {
+    name: 'ActionButtons',
+    align: 'center'
   }
 ])
 </script>
 
 <style lang='sass' scoped>
+  .btn-gap
+    margin-right: 9px
 </style>
