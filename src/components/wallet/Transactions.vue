@@ -50,6 +50,8 @@ const transactionType = (tx: Detail) => {
       switch (tx.IOSubType) {
         case IOSubType.Payment:
           return 'MSG_DEPOSIT'
+        case IOSubType.Transfer:
+          return 'MSG_DEPOSIT'
         case IOSubType.MiningBenefit:
           return 'MSG_MINING_REWARD'
         case IOSubType.Commission:
@@ -66,6 +68,8 @@ const transactionType = (tx: Detail) => {
         case IOSubType.Payment:
           return 'MSG_ORDER_PAYMENT'
         case IOSubType.Withdrawal:
+          return 'MSG_WITHDRAWAL'
+        case IOSubType.Transfer:
           return 'MSG_WITHDRAWAL'
         default:
           return 'MSG_UNKNOWN'
