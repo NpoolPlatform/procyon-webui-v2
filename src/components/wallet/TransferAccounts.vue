@@ -1,6 +1,6 @@
 <template>
   <ShowSwitchTable
-    label='MSG_TRANSFERS_ADDRESS'
+    label='MSG_TRANSFERS_ACCOUNT'
     :rows='(transfers as Array<never>)'
     :table='(table as never)'
     :customize-body='true'
@@ -43,7 +43,7 @@
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NotifyType, TransferAddress, useFrontendTransferAddressStore } from 'npool-cli-v4'
+import { KYCState, NotifyType, TransferAccount, useFrontendKYCStore, useFrontendTransferAccountStore } from 'npool-cli-v4'
 import { useRouter } from 'vue-router'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
@@ -51,12 +51,12 @@ const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const transfers = computed(() => transferAddress.TransferAddress.TransferAddress)
+const transfers = computed(() => transferAccount.TransferAccounts.TransferAccounts)
 
-const transferAddress = useFrontendTransferAddressStore()
+const transferAccount = useFrontendTransferAccountStore()
 
-const getTransferAddress = (offset: number, limit: number) => {
-  transferAddress.getTransfers({
+const getTransferAccounts = (offset: number, limit: number) => {
+  transferAccount.getTransfers({
     Offset: offset,
     Limit: limit,
     Message: {
@@ -66,29 +66,48 @@ const getTransferAddress = (offset: number, limit: number) => {
         Type: NotifyType.Error
       }
     }
-  }, (transfers: Array<TransferAddress>, error: boolean) => {
+  }, (transfers: Array<TransferAccount>, error: boolean) => {
     if (error || transfers.length < limit) {
       return
     }
-    getTransferAddress(limit + offset, limit)
+    getTransferAccounts(limit + offset, limit)
   })
 }
 onMounted(() => {
-  if (transferAddress.TransferAddress.TransferAddress.length === 0) {
-    getTransferAddress(0, 500)
+  if (transferAccount.TransferAccounts.TransferAccounts.length === 0) {
+    getTransferAccounts(0, 500)
   }
 })
-const onTransferClick = (row: TransferAddress) => {
-  console.log(row)
+const kyc = useFrontendKYCStore()
+const onTransferClick = (row: TransferAccount) => {
+  kyc.getKYC({
+    Message: {}
+  }, (error: boolean) => {
+    if (error) {
+      void router.push({ path: '/kyc' })
+      return
+    }
+    if (kyc.KYC?.State !== KYCState.Approved) {
+      void router.push({ path: '/kyc' })
+      return
+    }
+
+    void router.push({
+      path: '/add/transfer',
+      query: {
+        transferID: row.ID
+      }
+    })
+  })
 }
 
 const router = useRouter()
 const onAddNewAddressClick = () => {
-  void router.push({ path: '/add/transfer' })
+  void router.push({ path: '/add/transferaccount' })
 }
 
-const onDeleteTransferAddressClick = (row: TransferAddress) => {
-  transferAddress.deleteTransfer({
+const onDeleteTransferAddressClick = (row: TransferAccount) => {
+  transferAccount.deleteTransfer({
     TransferID: row.ID,
     Message: {
       Error: {
@@ -97,7 +116,7 @@ const onDeleteTransferAddressClick = (row: TransferAddress) => {
         Type: NotifyType.Error
       }
     }
-  }, (address: TransferAddress, error: boolean) => {
+  }, (address: TransferAccount, error: boolean) => {
     if (error) {
       return
     }
@@ -109,25 +128,25 @@ const table = computed(() => [
     name: 'TargetUserID',
     label: t('MSG_TARGET_USERID'),
     align: 'left',
-    field: (row: TransferAddress) => row.TargetUserID
+    field: (row: TransferAccount) => row.TargetUserID
   },
   {
     name: 'TargetEmailAddress',
     label: t('MSG_TARGET_EMAIL_ADDRESS'),
     align: 'center',
-    field: (row: TransferAddress) => row.TargetEmailAddress
+    field: (row: TransferAccount) => row.TargetEmailAddress
   },
   {
     name: 'TargetPhoneNO',
     label: t('MSG_TARGET_PHONENO'),
     align: 'center',
-    field: (row: TransferAddress) => row.TargetPhoneNO
+    field: (row: TransferAccount) => row.TargetPhoneNO
   },
   {
     name: 'TargetUsername',
     label: t('MSG_TARGET_USERNAME'),
     align: 'center',
-    field: (row: TransferAddress) => row.TargetUsername
+    field: (row: TransferAccount) => row.TargetUsername
   },
   {
     name: 'ActionButtons',
