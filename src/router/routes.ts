@@ -333,8 +333,21 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
-        path: 'add/transfer',
+        path: 'add/transferaccount',
         component: () => import('pages/AddTransferAddress.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
+        path: 'add/transfer',
+        component: () => import('pages/Transfer.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
           ShowMainHeader: true,
