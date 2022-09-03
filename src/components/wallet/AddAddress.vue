@@ -1,13 +1,13 @@
 <template>
   <div :class='[ verifing ? "blur" : "" ]'>
-    <FormPage @submit='onSubmit' label='MSG_WITHDRAWAL_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
+    <FormPage @submit='onSubmit' label='MSG_NEW_WALLET_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
       <template #form-body>
         <CoinSelector
-          v-model:selected-coin='selectedCoin' label='MSG_TRANSFER_TYPE' :disabled='gotoWithdraw' :transfer='internalTransfer'
+          v-model:selected-coin='selectedCoin' label='MSG_BLOCKCHAIN' :disabled='gotoWithdraw'
         />
         <Input
           v-model:value='address'
-          :label='selectedTransfer ? "MSG_PROCYON_ACCOUNT_EMAIL_ADDRESS" : "MSG_BLOCKCHAIN_ADDRESS"'
+          label='MSG_WALLET_ADDRESS'
           type='text'
           id='address'
           required
@@ -19,7 +19,7 @@
         />
         <div class='warning waring-gap'>
           <img src='font-awesome/warning.svg'>
-          <span v-html='!selectedTransfer ? $t("MSG_WITHDRAW_ADDRESS_WARNING") : $t("MSG_INTERNAL_TRANSFER_WARNING")' />
+          <span v-html='$t("MSG_WITHDRAW_ADDRESS_WARNING")' />
         </div>
         <Input
           v-model:value='labels'
@@ -57,9 +57,8 @@
 </template>
 
 <script setup lang='ts'>
-import { Coin, useAccountStore, MessageUsedFor, AccountType, NotificationType, useCoinStore, InvalidID } from 'npool-cli-v2'
-import { transferObj } from 'src/localstore/transfer/types'
-import { ref, defineAsyncComponent, computed, onMounted, watch } from 'vue'
+import { Coin, useAccountStore, MessageUsedFor, AccountType, NotificationType, useCoinStore } from 'npool-cli-v2'
+import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -86,13 +85,11 @@ const coin = useCoinStore()
 const selectedCoinTypeID = ref(coinTypeID.value)
 
 const selectedCoin = computed({
-  get: () => selectedCoinTypeID.value === InvalidID ? transferObj : coin.getCoinByID(selectedCoinTypeID.value),
+  get: () => coin.getCoinByID(selectedCoinTypeID.value),
   set: (val: Coin) => {
     selectedCoinTypeID.value = val.ID as string
   }
 })
-const internalTransfer = ref(true)
-const selectedTransfer = ref(false)
 
 const accounts = useAccountStore()
 
@@ -105,13 +102,6 @@ const onAddressFocusOut = () => {
   addressError.value = !address.value.length
 }
 
-watch(() => selectedCoin.value?.ID, () => {
-  if (selectedCoin.value?.ID === InvalidID) {
-    selectedTransfer.value = true
-  } else {
-    selectedTransfer.value = false
-  }
-})
 const labels = ref('')
 const labelsError = ref(false)
 
