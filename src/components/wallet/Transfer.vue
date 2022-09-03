@@ -127,7 +127,6 @@
 import {
   MessageUsedFor,
   NotificationType,
-  AccountType,
   SecondsEachDay,
   useCoinStore
 } from 'npool-cli-v2'
@@ -138,7 +137,8 @@ import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
 import { IntervalKey } from 'src/const/const'
 import { useLocalCoinStore } from 'src/localstore/coin'
-import { NotifyType, Transfer, TransferAccount, useFrontendTransferAccountStore, useFrontendTransferStore } from 'npool-cli-v4'
+import { NotifyType, Transfer, TransferAccount, useFrontendTransferAccountStore, useFrontendTransferStore, AccountType } from 'npool-cli-v4'
+import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -166,49 +166,7 @@ const targetUsername = computed(() => {
 
 const localledger = useLocalLedgerStore()
 const coinBalanceGenerals = computed(() => {
-  localledger.generals.filter((el) => !preSaleCoin(el.CoinTypeID) && !coinBlacklist(el.CoinTypeID) && el.Balance > 0)
-  return [
-    {
-      CoinTypeID: '8d25ae9d-32f7-4842-b459-f97ea0ac54fb',
-      CoinName: 'ethereum',
-      CoinLogo: '',
-      CoinUnit: 'ETH',
-      Balance: 1000,
-      Last24HoursBalance: 0,
-      USDValue: 1000,
-      JPYValue: 0
-    },
-    {
-      CoinTypeID: '1991cbeb-0c1f-43c6-902f-d1ea6edfd686',
-      CoinName: 'bitcoin',
-      CoinLogo: '',
-      CoinUnit: 'BTC',
-      Balance: 890,
-      Last24HoursBalance: 0,
-      USDValue: 890,
-      JPYValue: 0
-    },
-    {
-      CoinTypeID: '9e30e5d7-56b3-4fa2-b9a8-85e4ab83d9eb',
-      CoinName: 'usdterc20',
-      CoinLogo: '',
-      CoinUnit: 'USD',
-      Balance: 120,
-      Last24HoursBalance: 0,
-      USDValue: 120,
-      JPYValue: 0
-    },
-    {
-      CoinTypeID: '87c1b2cd-814b-4ab4-90f8-63bdb7b9f566',
-      CoinName: 'tusdterc20',
-      CoinLogo: '',
-      CoinUnit: 'USD',
-      Balance: 0,
-      Last24HoursBalance: 0,
-      USDValue: 0,
-      JPYValue: 0
-    }
-  ]
+  return localledger.generals.filter((el) => !preSaleCoin(el.CoinTypeID) && !coinBlacklist(el.CoinTypeID) && el.Balance > 0)
 })
 
 const coin = useCoinStore()
@@ -265,6 +223,9 @@ const onSubmit = () => {
     return
   }
   verifying.value = true
+  if (targetAccount.value) {
+    accountType.value = targetAccount?.value?.TargetEmailAddress?.length > 0 ? AccountType.Email : AccountType.Mobile
+  }
 }
 
 const onMenuHide = () => {
@@ -328,7 +289,7 @@ const getUserGenerals = (offset:number, limit: number) => {
     getUserGenerals(limit + offset, limit)
   })
 }
-
+const localtrans = useLocalTransactionStore()
 const transfer = useFrontendTransferStore()
 const onCodeVerify = (code: string) => {
   submitting.value = true
@@ -351,6 +312,8 @@ const onCodeVerify = (code: string) => {
     if (error) {
       return
     }
+
+    localtrans.$reset()
     general.$reset()
     void router.push({ path: '/wallet' })
   })

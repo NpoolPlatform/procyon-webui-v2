@@ -1,0 +1,135 @@
+<template>
+  <div :class='[ verifing ? "blur" : "" ]'>
+    <FormPage @submit='onSubmit' label='MSG_WITHDRAWAL_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
+      <template #form-body>
+        <label for='coin'>{{ $t('MSG_TRANSFER_TYPE') }}</label>
+        <Input
+          v-model:value='address'
+          label='MSG_PROCYON_ACCOUNT_ID'
+          type='text'
+          id='address'
+          required
+          :error='addressError'
+          message='MSG_TRANSFER_ADDRESS_TIP'
+          placeholder='MSG_TRANSFER_ADDRESS_PLACEHOLDER'
+          @focus='onAddressFocusIn'
+          @blur='onAddressFocusOut'
+        />
+        <div class='warning waring-gap'>
+          <img src='font-awesome/warning.svg'>
+          <span v-html='$t("MSG_INTERNAL_TRANSFER_WARNING")' />
+        </div>
+        <Input
+          v-model:value='labels'
+          label='MSG_TRANSFER_ADDRESS_LABELS'
+          caption='MSG_TRANSFER_ADDRESS_LABELS_TIP'
+          type='text'
+          id='address'
+          :required='false'
+          :error='labelsError'
+          message=''
+          placeholder='MSG_TRANSFER_ADDRESS_LABELS_PLACEHOLDER'
+        />
+      </template>
+      <template #append-submit>
+        <h3>{{ $t('MSG_CAUTION') }}</h3>
+        <p v-html='$t("MSG_WALLET_ADDRESS_CAUTION_CONTENT")' />
+      </template>
+    </FormPage>
+  </div>
+  <q-dialog
+    v-model='verifing'
+    seamless
+    maximized
+    @hide='onMenuHide'
+  >
+    <div class='popup'>
+      <CodeVerifier
+        v-model:account='account'
+        v-model:account-type='accountType'
+        @verify='onCodeVerify'
+        :used-for='MessageUsedFor.UsedForSetTransferTargetUser'
+      />
+    </div>
+  </q-dialog>
+</template>
+
+<script setup lang='ts'>
+import { MessageUsedFor } from 'npool-cli-v2'
+import { ref, defineAsyncComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { useFrontendTransferAccountStore, AccountType, NotifyType, TransferAccount, validateEmailAddress, validateMobileNO, useLocalUserStore } from 'npool-cli-v4'
+
+const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
+const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
+
+const address = ref('')
+const addressError = ref(false)
+const onAddressFocusIn = () => {
+  addressError.value = false
+}
+const onAddressFocusOut = () => {
+  addressError.value = !address.value.length
+}
+
+const labels = ref('')
+const labelsError = ref(false)
+
+const verifing = ref(false)
+
+const logined = useLocalUserStore()
+const onSubmit = () => {
+  if (validateEmailAddress(logined.User.EmailAddress)) {
+    accountType.value = AccountType.Email
+  }
+  if (validateMobileNO(logined.User.PhoneNO)) {
+    accountType.value = AccountType.Mobile
+  }
+  verifing.value = true
+}
+
+const onMenuHide = () => {
+  verifing.value = false
+}
+
+const account = ref('')
+const accountType = ref(AccountType.Email)
+
+const router = useRouter()
+
+const transferAccount = useFrontendTransferAccountStore()
+const onCodeVerify = (code: string) => {
+  transferAccount.createTransfer({
+    Account: account.value,
+    AccountType: accountType.value,
+    VerificationCode: code,
+    TargetAccount: address.value,
+    TargetAccountType: AccountType.Email,
+    Message: {
+      Error: {
+        Title: t('MSG_SET_TRANSFER_ADDRESS'),
+        Message: t('MSG_SET_TRANSFER_ADDRESS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (address: TransferAccount, error: boolean) => {
+    if (error) {
+      return
+    }
+    onMenuHide()
+    void router.back()
+  })
+}
+
+</script>
+
+<style lang='sass' scoped>
+.waring-gap
+  margin: 24px 0
+</style>
