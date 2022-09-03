@@ -1,5 +1,5 @@
 <template>
-  <label for='coin'>{{ $t('MSG_BLOCKCHAIN') }}</label>
+  <label for='coin'>{{ $t('MSG_TRANSFER_TYPE') }}</label>
   <select
     id='coin' :name='$t(label)' v-model='myCoin'
     required :disabled='disabled'
@@ -10,7 +10,12 @@
       :value='_myCoin'
       :selected='myCoin?.ID === _myCoin.ID'
     >
-      {{ _myCoin.Unit }} ({{ currency.formatCoinName(_myCoin.Name as string) }})
+      <span v-if='_myCoin.ID === InvalidID'>
+        {{ _myCoin.Name }}
+      </span>
+      <span v-else>
+        {{ _myCoin.Unit }} ({{ currency.formatCoinName(_myCoin.Name as string) }})
+      </span>
     </option>
   </select>
 </template>
@@ -19,11 +24,14 @@
 import { computed, defineEmits, ref, watch, defineProps, toRef, onMounted } from 'vue'
 import { useCoinStore, Coin, NotificationType, useCurrencyStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { InvalidID } from 'npool-cli-v4'
+import { transferObj } from 'src/localstore/transfer/types'
 
 interface Props {
   selectedCoin: Coin;
   label: string;
   disabled?: boolean;
+  transfer?: boolean;
 }
 
 const props = defineProps<Props>()
@@ -31,7 +39,14 @@ const selectedCoin = toRef(props, 'selectedCoin')
 const label = toRef(props, 'label')
 
 const coin = useCoinStore()
-const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale))
+const coins = computed(() => {
+  const displayCoins = coin.Coins.filter((coin) => !coin.PreSale)
+  if (props.transfer) {
+    displayCoins.push(transferObj)
+  }
+  return displayCoins
+})
+
 const myCoin = ref(selectedCoin.value)
 const currency = useCurrencyStore()
 
