@@ -220,7 +220,7 @@ const onAmountFocusIn = () => {
   amountError.value = false
 }
 const onAmountFocusOut = () => {
-  amountError.value = !amount.value || amount.value > balance.value || withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0
+  amountError.value = !amount.value || amount.value > balance.value || (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0)
 }
 
 interface Query {
@@ -263,7 +263,7 @@ const onSubmit = () => {
     return
   }
 
-  amountError.value = !amount.value || amount.value > balance.value || withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0
+  amountError.value = !amount.value || amount.value > balance.value || (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0)
   if (amountError.value) {
     return
   }
