@@ -259,7 +259,7 @@ const selectedTransferAccount = computed(() => transferAccounts.value.length > 0
 const balance = computed(() => general.getCoinBalance(coin?.value?.ID as string))
 
 const onSubmit = () => {
-  if (!selectedAccount.value) {
+  if (!selectedAccount.value && !selectedTransferAccount.value) {
     return
   }
 
