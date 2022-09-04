@@ -32,7 +32,7 @@
                   :error='amountError'
                   message='MSG_AMOUNT_TIP'
                   placeholder='MSG_AMOUNT_PLACEHOLDER'
-                  :min='feeAmount'
+                  :min='withdrawType === "ExternalAddress" ? feeAmount : 0'
                   :max='balance'
                   @focus='onAmountFocusIn'
                   @blur='onAmountFocusOut'
@@ -40,7 +40,8 @@
               </div>
               <div class='three-section'>
                 <h4>{{ $t('MSG_AMOUNT_WILL_RECEIVE') }}:</h4>
-                <span class='number'>{{ amount - feeAmount > 0 ? (amount - feeAmount).toFixed(4) : 0 }}</span>
+                <span v-if='withdrawType === "ExternalAddress"' class='number'>{{ amount - feeAmount > 0 ? (amount - feeAmount).toFixed(4) : 0 }}</span>
+                <span v-else class='number'>{{ amount > 0 ? amount.toFixed(4) : 0 }}</span>
                 <span class='unit'>{{ coin?.Unit }}</span>
               </div>
 
@@ -74,8 +75,8 @@
                 <div v-else>
                   <span
                     v-for='_account in transferAccounts'
-                    :key='_account.UserID'
-                    :class='[ "address-option", selectedTransferAccount?.UserID === _account.UserID ? "address-selected" : "" ]'
+                    :key='_account.TargetUserID'
+                    :class='[ "address-option", selectedTransferAccount?.TargetUserID === _account.TargetUserID ? "address-selected" : "" ]'
                     @click='onTransferAccountSelected(_account)'
                   >
                     <span class='wallet-type'>{{ baseuser.displayName1(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string) }}</span>
