@@ -59,7 +59,7 @@ import { MessageUsedFor } from 'npool-cli-v2'
 import { ref, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useFrontendTransferAccountStore, AccountType, NotifyType, TransferAccount, validateEmailAddress, validateMobileNO, useLocalUserStore } from 'npool-cli-v4'
+import { useFrontendTransferAccountStore, AccountType, NotifyType, TransferAccount, validateEmailAddress, validateMobileNO } from 'npool-cli-v4'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
@@ -82,13 +82,13 @@ const labelsError = ref(false)
 
 const verifing = ref(false)
 
-const logined = useLocalUserStore()
+const targetAccountType = ref(AccountType.Email)
 const onSubmit = () => {
-  if (validateEmailAddress(logined.User.EmailAddress)) {
-    accountType.value = AccountType.Email
+  if (validateEmailAddress(address.value)) {
+    targetAccountType.value = AccountType.Email
   }
-  if (validateMobileNO(logined.User.PhoneNO)) {
-    accountType.value = AccountType.Mobile
+  if (validateMobileNO(address.value)) {
+    targetAccountType.value = AccountType.Mobile
   }
   verifing.value = true
 }
@@ -109,7 +109,7 @@ const onCodeVerify = (code: string) => {
     AccountType: accountType.value,
     VerificationCode: code,
     TargetAccount: address.value,
-    TargetAccountType: AccountType.Email,
+    TargetAccountType: targetAccountType.value,
     Message: {
       Error: {
         Title: t('MSG_SET_TRANSFER_ADDRESS'),

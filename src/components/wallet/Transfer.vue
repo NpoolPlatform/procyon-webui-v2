@@ -223,9 +223,6 @@ const onSubmit = () => {
     return
   }
   verifying.value = true
-  if (targetAccount.value) {
-    accountType.value = targetAccount?.value?.TargetEmailAddress?.length > 0 ? AccountType.Email : AccountType.Mobile
-  }
 }
 
 const onMenuHide = () => {
