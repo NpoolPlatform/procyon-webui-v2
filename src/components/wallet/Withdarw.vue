@@ -60,10 +60,11 @@
               <div class='full-section'>
                 <h4>{{ $t('MSG_SELECT_RECIPIENT_ADDRESS') }}:</h4>
                 <div v-if='withdrawType === "ExternalAddress"'>
-                  <div>
+                  <div
+                    v-for='withdraw in withdraws'
+                    :key='withdraw.Address.ID'
+                  >
                     <span
-                      v-for='withdraw in withdraws'
-                      :key='withdraw.Address.ID'
                       :class='[ "address-option", selectedAccount?.Account?.ID === withdraw.Account.ID ? "address-selected" : "" ]'
                       @click='onAddressSelected(withdraw)'
                     >
@@ -75,10 +76,11 @@
                   </div>
                 </div>
                 <div v-else>
-                  <div>
+                  <div
+                    v-for='_account in transferAccounts'
+                    :key='_account.TargetUserID'
+                  >
                     <span
-                      v-for='_account in transferAccounts'
-                      :key='_account.TargetUserID'
                       :class='[ "address-option", selectedTransferAccount?.TargetUserID === _account.TargetUserID ? "address-selected" : "" ]'
                       @click='onTransferAccountSelected(_account)'
                     >
@@ -218,7 +220,7 @@ const onAmountFocusIn = () => {
   amountError.value = false
 }
 const onAmountFocusOut = () => {
-  amountError.value = !amount.value || amount.value > balance.value || amount.value <= feeAmount.value
+  amountError.value = !amount.value || amount.value > balance.value || withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : true
 }
 
 interface Query {
@@ -261,7 +263,7 @@ const onSubmit = () => {
     return
   }
 
-  amountError.value = !amount.value || amount.value > balance.value || amount.value <= feeAmount.value
+  amountError.value = !amount.value || amount.value > balance.value || withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : true
   if (amountError.value) {
     return
   }
