@@ -991,6 +991,7 @@ input[type="email"],
 input[type="password"],
 input[type="text"],
 input[type="number"],
+input[type="search"],
 select
   background: #e1eeef
   border: none
@@ -1022,6 +1023,8 @@ input[type="checkbox"]:active,
 input[type="checkbox"]:focus,
 input[type="number"]:active,
 input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="search"]:active,
 select:active,
 select:focus
   outline: 2px solid #1ec498
@@ -1169,7 +1172,8 @@ h4#signature
   width: 100%
 
 .product-container .withdraw .submit,
-.product-container .withdraw input
+.product-container .withdraw input,
+.product-container .withdraw select
   width: 200px
 
 .product-container .info-flex
@@ -1223,11 +1227,16 @@ h4#signature
   opacity: .8
 
 .product-container .address-selected .number
+  background: linear-gradient(to left, var(--green-1) 0, var(--green-2) 50%)
   filter: contrast(1.5)
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
 
 .product-container .address-selected .checkmark
   display: inline
-  opacity: .8
+  filter: opacity(1) sepia(15%) saturate(4000%) hue-rotate(80deg) brightness(70%) contrast(200%)
+  opacity: 1
   transition: all ease-in-out .3s
 
 .order-form,

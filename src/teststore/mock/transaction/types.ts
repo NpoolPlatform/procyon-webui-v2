@@ -12,7 +12,8 @@ export enum IOSubType {
   Commission = 'Commission',
   TechniqueFeeCommission = 'TechniqueFeeCommission',
   Deposit = 'Deposit',
-  Withdrawal = 'Withdrawal'
+  Withdrawal = 'Withdrawal',
+  Transfer = 'Transfer'
 }
 
 export interface Detail {

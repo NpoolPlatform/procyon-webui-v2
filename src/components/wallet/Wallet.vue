@@ -10,6 +10,8 @@
     <div class='hr' />
     <WithdrawAddresses />
     <div class='hr' />
+    <TransferAccounts />
+    <div class='hr' />
   </div>
   <q-ajax-bar
     ref='progress'
@@ -42,6 +44,9 @@ const WithdrawAddresses = defineAsyncComponent(
 )
 const WithdrawRecords = defineAsyncComponent(
   () => import('src/components/wallet/WithdrawRecords.vue')
+)
+const TransferAccounts = defineAsyncComponent(
+  () => import('src/components/wallet/TransferAccounts.vue')
 )
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
