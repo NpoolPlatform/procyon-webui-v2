@@ -60,30 +60,34 @@
               <div class='full-section'>
                 <h4>{{ $t('MSG_SELECT_RECIPIENT_ADDRESS') }}:</h4>
                 <div v-if='withdrawType === "ExternalAddress"'>
-                  <span
-                    v-for='withdraw in withdraws'
-                    :key='withdraw.Address.ID'
-                    :class='[ "address-option", selectedAccount?.Account?.ID === withdraw.Account.ID ? "address-selected" : "" ]'
-                    @click='onAddressSelected(withdraw)'
-                  >
-                    <span class='wallet-type'>{{ withdraw.Address.Labels.join(',') }}</span>
-                    <span class='wallet-type coin-type'>{{ coinName(coin?.ID as string) }}</span>
-                    <span class='number'>{{ withdraw.Account.Address }}</span>
-                    <img class='checkmark' :src='checkmark'>
-                  </span>
+                  <div>
+                    <span
+                      v-for='withdraw in withdraws'
+                      :key='withdraw.Address.ID'
+                      :class='[ "address-option", selectedAccount?.Account?.ID === withdraw.Account.ID ? "address-selected" : "" ]'
+                      @click='onAddressSelected(withdraw)'
+                    >
+                      <span class='wallet-type'>{{ withdraw.Address.Labels.join(',') }}</span>
+                      <span class='wallet-type coin-type'>{{ coinName(coin?.ID as string) }}</span>
+                      <span class='number'>{{ withdraw.Account.Address }}</span>
+                      <img class='checkmark' :src='checkmark'>
+                    </span>
+                  </div>
                 </div>
                 <div v-else>
-                  <span
-                    v-for='_account in transferAccounts'
-                    :key='_account.TargetUserID'
-                    :class='[ "address-option", selectedTransferAccount?.TargetUserID === _account.TargetUserID ? "address-selected" : "" ]'
-                    @click='onTransferAccountSelected(_account)'
-                  >
-                    <span class='wallet-type'>{{ baseuser.displayName1(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string) }}</span>
-                    <span class='wallet-type coin-type'>{{ $t('MSG_INTERNAL') }}</span>
-                    <span class='number'>{{ _account.TargetEmailAddress.length ? _account.TargetEmailAddress : _account.TargetPhoneNO }}</span>
-                    <img class='checkmark' :src='checkmark'>
-                  </span>
+                  <div>
+                    <span
+                      v-for='_account in transferAccounts'
+                      :key='_account.TargetUserID'
+                      :class='[ "address-option", selectedTransferAccount?.TargetUserID === _account.TargetUserID ? "address-selected" : "" ]'
+                      @click='onTransferAccountSelected(_account)'
+                    >
+                      <span class='wallet-type'>{{ baseuser.displayName1(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string) }}</span>
+                      <span class='wallet-type coin-type'>{{ $t('MSG_INTERNAL') }}</span>
+                      <span class='number'>{{ _account.TargetEmailAddress.length ? _account.TargetEmailAddress : _account.TargetPhoneNO }}</span>
+                      <img class='checkmark' :src='checkmark'>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
