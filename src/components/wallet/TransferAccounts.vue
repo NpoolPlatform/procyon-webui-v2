@@ -14,8 +14,8 @@
     </template>
     <template #table-body='myProps'>
       <q-tr :props='myProps'>
-        <q-td key='TargetUserID' :props='myProps'>
-          {{ myProps.row.TargetUserID }}
+        <q-td key='TargetUsername' :props='myProps'>
+          {{ baseuser.displayName1(myProps.row.TargetEmailAddress, myProps.row.TargetPhoneNO, myProps.row.TargetFirstName, myProps.row.TargetLastName, locale as string) }}
         </q-td>
         <q-td key='TargetEmailAddress' :props='myProps'>
           {{ myProps.row.TargetEmailAddress }}
@@ -23,14 +23,7 @@
         <q-td key='TargetPhoneNO' :props='myProps'>
           {{ myProps.row.TargetPhoneNO }}
         </q-td>
-        <q-td key='TargetUsername' :props='myProps'>
-          {{ myProps.row.TargetUsername }}
-        </q-td>
         <q-td key='ActionButtons' :props='myProps'>
-          <button class='small' @click='onTransferClick(myProps.row)'>
-            {{ $t('MSG_TRANSFER') }}
-          </button>
-          <span class='btn-gap' />
           <button class='small' @click='onDeleteTransferAddressClick(myProps.row)'>
             {{ $t('MSG_DELETE_ACCOUNT') }}
           </button>
@@ -43,17 +36,18 @@
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { KYCState, NotifyType, TransferAccount, useFrontendKYCStore, useFrontendTransferAccountStore } from 'npool-cli-v4'
+import { NotifyType, TransferAccount, useBaseUserStore, useFrontendTransferAccountStore } from 'npool-cli-v4'
 import { useRouter } from 'vue-router'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+const { locale, t } = useI18n({ useScope: 'global' })
 
 const transfers = computed(() => transferAccount.TransferAccounts.TransferAccounts)
 
 const transferAccount = useFrontendTransferAccountStore()
+const baseuser = useBaseUserStore()
 
 const getTransferAccounts = (offset: number, limit: number) => {
   transferAccount.getTransfers({
@@ -78,28 +72,6 @@ onMounted(() => {
     getTransferAccounts(0, 500)
   }
 })
-const kyc = useFrontendKYCStore()
-const onTransferClick = (row: TransferAccount) => {
-  kyc.getKYC({
-    Message: {}
-  }, (error: boolean) => {
-    if (error) {
-      void router.push({ path: '/kyc' })
-      return
-    }
-    if (kyc.KYC?.State !== KYCState.Approved) {
-      void router.push({ path: '/kyc' })
-      return
-    }
-
-    void router.push({
-      path: '/add/transfer',
-      query: {
-        transferID: row.ID
-      }
-    })
-  })
-}
 
 const router = useRouter()
 const onAddNewAddressClick = () => {
@@ -116,19 +88,24 @@ const onDeleteTransferAddressClick = (row: TransferAccount) => {
         Type: NotifyType.Error
       }
     }
-  }, (address: TransferAccount, error: boolean) => {
-    if (error) {
-      return
-    }
-    console.log('address: ', address)
+  }, () => {
+    // TODO
   })
 }
 const table = computed(() => [
+  /*
   {
     name: 'TargetUserID',
     label: t('MSG_TARGET_USERID'),
     align: 'left',
     field: (row: TransferAccount) => row.TargetUserID
+  },
+  */
+  {
+    name: 'TargetUsername',
+    label: t('MSG_TARGET_USERNAME'),
+    align: 'left',
+    field: (row: TransferAccount) => baseuser.displayName1(row.TargetEmailAddress, row.TargetPhoneNO, row.TargetFirstName, row.TargetLastName, locale.value as string)
   },
   {
     name: 'TargetEmailAddress',
@@ -141,12 +118,6 @@ const table = computed(() => [
     label: t('MSG_TARGET_PHONENO'),
     align: 'center',
     field: (row: TransferAccount) => row.TargetPhoneNO
-  },
-  {
-    name: 'TargetUsername',
-    label: t('MSG_TARGET_USERNAME'),
-    align: 'center',
-    field: (row: TransferAccount) => row.TargetUsername
   },
   {
     name: 'ActionButtons',

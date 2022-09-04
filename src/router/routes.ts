@@ -346,19 +346,6 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
-        path: 'add/transfer',
-        component: () => import('pages/Transfer.vue'),
-        meta: {
-          ShowHeaderAnnouncement: true,
-          ShowMainHeader: true,
-          ShowBigLogo: true,
-          ShowFooterTop: true,
-          ShowSignHelper: true,
-          ShowTopTip: false,
-          NeedLogined: true,
-          ShowSideMenu: false
-        }
-      }, {
         path: 'withdraw',
         component: () => import('pages/Withdraw.vue'),
         meta: {

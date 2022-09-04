@@ -1,6 +1,6 @@
 <template>
   <div :class='[ verifing ? "blur" : "" ]'>
-    <FormPage @submit='onSubmit' label='MSG_WITHDRAWAL_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
+    <FormPage @submit='onSubmit' label='MSG_TRANSFER_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
       <template #form-body>
         <Input
           v-model:value='address'
@@ -54,7 +54,7 @@
 
 <script setup lang='ts'>
 import { MessageUsedFor } from 'npool-cli-v2'
-import { ref, defineAsyncComponent } from 'vue'
+import { ref, defineAsyncComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useFrontendTransferAccountStore, AccountType, NotifyType, TransferAccount, validateEmailAddress, validateMobileNO } from 'npool-cli-v4'
@@ -67,7 +67,9 @@ const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/
 const { t } = useI18n({ useScope: 'global' })
 
 const address = ref('')
+const submitAddress = computed(() => address.value.replace(/ /g, ''))
 const addressError = ref(false)
+
 const onAddressFocusIn = () => {
   addressError.value = false
 }
@@ -81,11 +83,12 @@ const labelsError = ref(false)
 const verifing = ref(false)
 
 const targetAccountType = ref(AccountType.Email)
+
 const onSubmit = () => {
-  if (validateEmailAddress(address.value)) {
+  if (validateEmailAddress(submitAddress.value)) {
     targetAccountType.value = AccountType.Email
   }
-  if (validateMobileNO(address.value)) {
+  if (validateMobileNO(submitAddress.value)) {
     targetAccountType.value = AccountType.Mobile
   }
   verifing.value = true
@@ -99,14 +102,14 @@ const account = ref('')
 const accountType = ref(AccountType.Email)
 
 const router = useRouter()
-
 const transferAccount = useFrontendTransferAccountStore()
+
 const onCodeVerify = (code: string) => {
   transferAccount.createTransfer({
     Account: account.value,
     AccountType: accountType.value,
     VerificationCode: code,
-    TargetAccount: address.value,
+    TargetAccount: submitAddress.value,
     TargetAccountType: targetAccountType.value,
     Message: {
       Error: {
