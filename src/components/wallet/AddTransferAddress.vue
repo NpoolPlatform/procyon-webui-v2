@@ -2,7 +2,6 @@
   <div :class='[ verifing ? "blur" : "" ]'>
     <FormPage @submit='onSubmit' label='MSG_WITHDRAWAL_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
       <template #form-body>
-        <label for='coin'>{{ $t('MSG_TRANSFER_TYPE') }}</label>
         <Input
           v-model:value='address'
           label='MSG_PROCYON_ACCOUNT_ID'
@@ -11,7 +10,7 @@
           required
           :error='addressError'
           message='MSG_TRANSFER_ADDRESS_TIP'
-          placeholder='MSG_TRANSFER_ADDRESS_PLACEHOLDER'
+          placeholder='MSG_PROCYON_ACCOUNT_ID_PLACEHOLDER'
           @focus='onAddressFocusIn'
           @blur='onAddressFocusOut'
         />
@@ -22,7 +21,6 @@
         <Input
           v-model:value='labels'
           label='MSG_TRANSFER_ADDRESS_LABELS'
-          caption='MSG_TRANSFER_ADDRESS_LABELS_TIP'
           type='text'
           id='address'
           :required='false'

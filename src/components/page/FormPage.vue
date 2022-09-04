@@ -3,9 +3,9 @@
     <div class='content'>
       <div class='form-container content-glass'>
         <div class='row'>
-          <h3 class='form-title'>
+          <h2 class='form-title'>
             {{ $t(label) }}
-          </h3>
+          </h2>
           <q-space />
           <div class='top-right'>
             <slot name='top-right' />

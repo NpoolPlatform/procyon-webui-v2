@@ -46,10 +46,11 @@
                   :max='selectedCoin?.Balance'
                   @focus='onAmountFocusIn'
                   @blur='onAmountFocusOut'
+                  class='transfer-amount'
                 />
               </div>
             </div>
-            <div class='submit'>
+            <div class='submit transfer-btn'>
               <WaitingBtn
                 label='MSG_TRANSFER'
                 type='button'
@@ -356,4 +357,8 @@ onMounted(() => {
 
 .coin-type
   text-transform: uppercase !important
+.full-section ::v-deep input
+  width: 323px
+.transfer-btn ::v-deep button
+  width: 323px
 </style>

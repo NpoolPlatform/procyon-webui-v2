@@ -1,6 +1,6 @@
 <template>
   <ShowSwitchTable
-    label='MSG_TRANSFERS_ACCOUNT'
+    label='MSG_TRANSFER_ACCOUNTS'
     :rows='(transfers as Array<never>)'
     :table='(table as never)'
     :customize-body='true'
@@ -8,7 +8,7 @@
     <template #top-right>
       <div class='buttons'>
         <button @click='onAddNewAddressClick'>
-          {{ $t('MSG_ADD_NEW_ADDRESS') }}
+          {{ $t('MSG_ADD_TRANSFER_ACCOUNT') }}
         </button>
       </div>
     </template>
@@ -32,7 +32,7 @@
           </button>
           <span class='btn-gap' />
           <button class='small' @click='onDeleteTransferAddressClick(myProps.row)'>
-            {{ $t('MSG_DELETE_ADDRESS') }}
+            {{ $t('MSG_DELETE_ACCOUNT') }}
           </button>
         </q-td>
       </q-tr>
@@ -61,7 +61,7 @@ const getTransferAccounts = (offset: number, limit: number) => {
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_WITHDRAWS_FAIL'),
+        Title: t('MSG_GET_TRANSFER_ACCOUNTS_FAIL'),
         Popup: true,
         Type: NotifyType.Error
       }
