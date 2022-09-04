@@ -171,7 +171,7 @@ import {
   AccountType,
   SecondsEachDay
 } from 'npool-cli-v2'
-import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
+import { ref, defineAsyncComponent, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
@@ -199,6 +199,9 @@ const WaitingBtn = defineAsyncComponent(() => import('src/components/button/Wait
 const { locale, t } = useI18n({ useScope: 'global' })
 
 const withdrawType = ref('ExternalAddress')
+watch(withdrawType, () => {
+  selectedAccountIndex.value = 0
+})
 
 const verifing = ref(false)
 const showReviewing = ref(false)
