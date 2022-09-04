@@ -120,7 +120,7 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        :used-for='MessageUsedFor.Withdraw'
+        :used-for='withdrawType === "ExternalAddress" ? MessageUsedFor.Withdraw : MessageUsedFor.UsedForTransfer'
       />
     </div>
   </q-dialog>
