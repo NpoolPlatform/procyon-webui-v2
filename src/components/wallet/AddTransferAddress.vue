@@ -19,6 +19,7 @@
           <span v-html='$t("MSG_INTERNAL_TRANSFER_WARNING")' />
         </div>
         <Input
+          v-if='false'
           v-model:value='labels'
           label='MSG_TRANSFER_ADDRESS_LABELS'
           type='text'
