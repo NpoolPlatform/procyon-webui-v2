@@ -106,17 +106,17 @@
         </div>
       </div>
       <h3>{{ $t('MSG_ALEO_TOKENOMICS') }}</h3>
-      <p><img class='project-promo-content' src='product/aleo/aleo-posw-jp.jpg'></p>
+      <p><img class='project-promo-content' :src='locale === "ja-JP" ? "product/aleo/aleo-posw-jp.jpg" : "product/aleo/aleo-posw-en.jpg"'></p>
       <p>
         <a href='https://coingenius.news/tokenomics-aleo/'>{{ $t('MSG_ALEO_TOKENOMICS_COINGENIUS_NEWS') }}</a>
       </p>
       <p v-html='$t("MSG_ALEO_TOKENOMICS_CAPTION")' />
       <h3>{{ $t('MSG_ALEO_VS_COMPETITORS') }}</h3>
       <p v-html='$t("MSG_ALEO_VS_COMPETITORS_CAPTION")' />
-      <p><img class='project-promo-content' :src='locale === "ja-JP" ? "product/aleo/aleo-comparison-jp.png" : "product/aleo/aleo-comparison.png"'></p>
+      <p><img class='project-promo-content' :src='locale === "ja-JP" ? "product/aleo/aleo-comparison-jp.png" : "product/aleo/aleo-comparison-en.png"'></p>
       <h4>{{ $t('MSG_ZK_PROOF_PRIVACY') }}</h4>
       <p v-html='$t("MSG_ZK_PROOF_PRIVACY_CAPTION")' />
-      <p><img class='project-promo-content' :src='locale === "ja-JP" ? "product/aleo/aleo-algorithm-jp.png" : "product/aleo/aleo-algorithm.png"'></p>
+      <p><img class='project-promo-content' :src='locale === "ja-JP" ? "product/aleo/aleo-algorithm-jp.png" : "product/aleo/aleo-algorithm-en.png"'></p>
       <h3>{{ $t('MSG_ALEO_FUTURE') }}</h3>
       <p v-html='$t("MSG_ALEO_FUTURE_CAPTION_1")' />
       <div class='logo-display'>
