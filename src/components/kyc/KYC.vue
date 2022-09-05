@@ -343,7 +343,7 @@ const stateText = computed(() => {
 
 const logined = useLocalUserStore()
 
-const rejectedReason = computed(() => kyc.KYC?.Message)
+const rejectedReason = computed(() => kyc.KYC?.ReviewMessage)
 
 const updatable = computed(() => {
   const u = (state.value === KYCState.Rejected || !state.value) &&
