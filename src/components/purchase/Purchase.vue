@@ -68,7 +68,7 @@
             id='amount'
             required
             :error='purchaseAmountError'
-            message='MSG_AMOUNT_TIP'
+            :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
             placeholder='MSG_AMOUNT_PLACEHOLDER'
             :min='0'
             :max='total'

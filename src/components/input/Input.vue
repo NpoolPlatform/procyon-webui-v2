@@ -20,10 +20,10 @@
     @focus='onFocus'
     @blur='onBlur'
     :disabled='disabled'
-    @invalid='onInvalid(t(message, { MAX: max }))'
+    @invalid='onInvalid(t(message))'
   >
   <div class='error-message'>
-    <span>{{ error ? $t(message, { MAX: max }) : '' }}</span>
+    <span>{{ error ? $t(message) : '' }}</span>
   </div>
 </template>
 
