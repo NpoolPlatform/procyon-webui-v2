@@ -6,6 +6,7 @@
     <span class='caption'>({{ $t(caption) }})</span>
   </div>
   <input
+    ref='input'
     :type='type'
     :id='id'
     :name='name'
@@ -19,6 +20,7 @@
     @focus='onFocus'
     @blur='onBlur'
     :disabled='disabled'
+    @invalid='onInvalid(t(message))'
   >
   <div class='error-message'>
     <span>{{ error ? $t(message) : '' }}</span>
@@ -27,6 +29,9 @@
 
 <script setup lang='ts'>
 import { defineProps, toRef, defineEmits, watch, ref, withDefaults } from 'vue'
+import { useI18n } from 'vue-i18n'
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
   value: string | number;
@@ -81,6 +86,12 @@ const onFocus = () => {
 
 const onBlur = () => {
   emit('blur')
+}
+
+const input = ref<HTMLInputElement>()
+
+const onInvalid = (str: string) => {
+  input.value?.setCustomValidity(str)
 }
 
 </script>
