@@ -162,7 +162,7 @@ const totalUnits = computed(() => {
   let total = 0
   referrals.value.forEach((referral) => {
     referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-      total += Number(el.TotalUnits)
+      total += el.TotalUnits ? Number(el.TotalUnits) : 0
     })
   })
   return total
@@ -172,7 +172,7 @@ const totalAmount = computed(() => {
   let total = 0
   referrals.value.forEach((referral) => {
     referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-      total += Number(el.TotalAmount)
+      total += el.TotalAmount ? Number(el.TotalAmount) : 0
     })
   })
   return total
@@ -182,7 +182,7 @@ const totalCommission = computed(() => {
   let total = 0
   referrals.value.forEach((referral) => {
     referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-      total += Number(el.SuperiorCommission)
+      total += el.SuperiorCommission ? Number(el.SuperiorCommission) : 0
     })
   })
   return total
@@ -191,7 +191,7 @@ const totalCommission = computed(() => {
 const userTotalUnits = (referral: LocalProductArchivement) => {
   let total = 0
   referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-    total += Number(el.TotalUnits)
+    total += el.TotalUnits ? Number(el.TotalUnits) : 0
   })
   return total
 }
@@ -199,7 +199,7 @@ const userTotalUnits = (referral: LocalProductArchivement) => {
 const userTotalAmount = (referral: LocalProductArchivement) => {
   let total = 0
   referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-    total += Number(el.TotalAmount)
+    total += el.TotalAmount ? Number(el.TotalAmount) : 0
   })
   return total
 }
@@ -207,7 +207,7 @@ const userTotalAmount = (referral: LocalProductArchivement) => {
 const userTotalCommission = (referral: LocalProductArchivement) => {
   let total = 0
   referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-    total += Number(el.SuperiorCommission)
+    total += el.SuperiorCommission ? Number(el.SuperiorCommission) : 0
   })
   return total
 }
