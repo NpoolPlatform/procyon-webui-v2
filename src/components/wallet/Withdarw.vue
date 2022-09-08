@@ -30,7 +30,7 @@
                   id='amount'
                   required
                   :error='amountError'
-                  :message='$t("MSG_AMOUNT_TIP", {MAX: balance})'
+                  :message='$t("MSG_WITHDRAW_AMOUNT_TIP", {MAX: balance})'
                   placeholder='MSG_AMOUNT_PLACEHOLDER'
                   :min='withdrawType === "ExternalAddress" ? feeAmount : 0'
                   :max='balance'
