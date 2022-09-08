@@ -37,6 +37,9 @@ export const useLocalOrderStore = defineStore('localorder', {
           return 'MSG_ERROR'
         }
 
+        if (order.PaymentID === OrderState.DEFAULT_STATE) {
+          return 'MSG_ERROR'
+        }
         if (order.PaymentID === InvalidID) {
           return 'MSG_INVALID_PAYMENT'
         }
