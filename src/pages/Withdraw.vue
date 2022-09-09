@@ -1,10 +1,10 @@
 <template>
-  <Withdarw />
+  <Withdraw />
 </template>
 
 <script setup lang='ts'>
 import { defineAsyncComponent } from 'vue'
 
-const Withdarw = defineAsyncComponent(() => import('src/components/wallet/Withdarw.vue'))
+const Withdraw = defineAsyncComponent(() => import('src/components/wallet/Withdraw.vue'))
 
 </script>
