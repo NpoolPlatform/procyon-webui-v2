@@ -33,7 +33,7 @@ const selectedCoin = toRef(props, 'selectedCoin')
 const label = toRef(props, 'label')
 
 const coin = useCoinStore()
-const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale))
+const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale && coin.ForPay))
 const myCoin = ref(selectedCoin.value)
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
