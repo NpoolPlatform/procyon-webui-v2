@@ -10,15 +10,17 @@
       :value='_myCoin'
       :selected='myCoin?.ID === _myCoin.ID'
     >
-      {{ _myCoin.Unit }} ({{ currency.formatCoinName(_myCoin.Name as string) }})
+      {{ coinName(_myCoin.ID as string) }}
+      <!-- {{ _myCoin.Unit }} ({{ currency.formatCoinName(_myCoin.Name as string) }}) -->
     </option>
   </select>
 </template>
 
 <script setup lang='ts'>
 import { computed, defineEmits, ref, watch, defineProps, toRef, onMounted } from 'vue'
-import { useCoinStore, Coin, NotificationType, useCurrencyStore } from 'npool-cli-v2'
+import { useCoinStore, Coin, NotificationType } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { useLocalCoinStore } from 'src/localstore/coin'
 
 interface Props {
   selectedCoin: Coin;
@@ -31,12 +33,14 @@ const selectedCoin = toRef(props, 'selectedCoin')
 const label = toRef(props, 'label')
 
 const coin = useCoinStore()
-const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale))
+const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale && coin.ForPay))
 const myCoin = ref(selectedCoin.value)
-const currency = useCurrencyStore()
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
+
+const localcoin = useLocalCoinStore()
+const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
 const emit = defineEmits<{(e: 'update:selectedCoin', coin: Coin): void}>()
 watch(myCoin, () => {

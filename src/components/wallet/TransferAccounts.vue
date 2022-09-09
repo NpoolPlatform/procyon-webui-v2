@@ -31,10 +31,43 @@
       </q-tr>
     </template>
   </ShowSwitchTable>
+  <q-dialog
+    v-model='deleting'
+    seamless
+    maximized
+    @hide='onMenuHide'
+  >
+    <div class='product-container content-glass'>
+      <div class='popup'>
+        <div class='form-container content-glass'>
+          <div class='confirmation'>
+            <h3>{{ $t('MSG_DELETE_TRANSFER_ACCOUNTS') }}</h3>
+            <p v-html='$t("MSG_DELETE_TRANSFER_ACCOUNTS_CAPTION")' />
+            <!-- <div class='full-section'>
+              <h4>{{ $t('MSG_DELETE_LABEL') }}:</h4>
+              <span class='number'>{{ targetTransferAccount.AppID }}</span>
+            </div> -->
+            <div class='full-section'>
+              <!-- <h4>{{ $t('MSG_WITHDRAW_ADDRESS') }}:</h4> -->
+              <span class='wallet-type'>{{ targetTransferAccount.TargetEmailAddress.length > 0 ? targetTransferAccount.TargetEmailAddress : targetTransferAccount.TargetPhoneNO }}</span><br>
+              <!-- <img class='copy-button' src='font-awesome/copy.svg'> -->
+            </div>
+
+            <button class='alt' @click='onCancelClick'>
+              {{ $t('MSG_CANCEL1') }}
+            </button>
+            <button @click='onDeleteClick'>
+              {{ $t('MSG_DELETE_ACCOUNT') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
-import { computed, defineAsyncComponent, onMounted } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { NotifyType, TransferAccount, useBaseUserStore, useFrontendTransferAccountStore } from 'npool-cli-v4'
 import { useRouter } from 'vue-router'
@@ -79,28 +112,10 @@ const onAddNewAddressClick = () => {
 }
 
 const onDeleteTransferAddressClick = (row: TransferAccount) => {
-  transferAccount.deleteTransfer({
-    TransferID: row.ID,
-    Message: {
-      Error: {
-        Title: t('MSG_DELETE_TRANSFER_ACCOUNT_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
+  targetTransferAccount.value = { ...row }
+  deleting.value = true
 }
 const table = computed(() => [
-  /*
-  {
-    name: 'TargetUserID',
-    label: t('MSG_TARGET_USERID'),
-    align: 'left',
-    field: (row: TransferAccount) => row.TargetUserID
-  },
-  */
   {
     name: 'TargetUsername',
     label: t('MSG_TARGET_USERNAME'),
@@ -124,6 +139,31 @@ const table = computed(() => [
     align: 'center'
   }
 ])
+
+const targetTransferAccount = ref({} as TransferAccount)
+const deleting = ref(false)
+const onMenuHide = () => {
+  deleting.value = false
+}
+
+const onDeleteClick = () => {
+  transferAccount.deleteTransfer({
+    TransferID: targetTransferAccount.value.ID,
+    Message: {
+      Error: {
+        Title: t('MSG_DELETE_TRANSFER_ACCOUNT_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    deleting.value = false
+  })
+}
+const onCancelClick = () => {
+  deleting.value = false
+  targetTransferAccount.value = {} as TransferAccount
+}
 </script>
 
 <style lang='sass' scoped>
