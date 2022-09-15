@@ -51,6 +51,8 @@
         v-model:account-type='accountType'
         @verify='onCodeVerify'
         :used-for='MessageUsedFor.SetWithdrawAddress'
+        @cancel='onCancelClick'
+        show-cancel
       />
     </div>
   </q-dialog>
@@ -122,6 +124,10 @@ const account = ref('')
 const accountType = ref(AccountType.Email)
 
 const router = useRouter()
+
+const onCancelClick = () => {
+  verifing.value = false
+}
 
 const onCodeVerify = (code: string) => {
   accounts.setWithdrawAddress({
