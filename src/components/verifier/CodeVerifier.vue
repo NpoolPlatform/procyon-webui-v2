@@ -39,6 +39,9 @@
       <button class='btn' @click='onVerifyClick' :disabled='disabled'>
         {{ $t('MSG_VERIFY') }}
       </button>
+      <button v-if='showCancel' class='send-code alt' @click='onCancelClick' :disabled='disabled'>
+        {{ $t('MSG_CANCEL') }}
+      </button>
     </div>
   </div>
 </template>
@@ -58,6 +61,7 @@ interface Props {
   account: string;
   accountType: AccountType;
   disabled?: boolean;
+  showCancel?: boolean;
 }
 
 const props = defineProps<Props>()
@@ -65,6 +69,7 @@ const verifyMethod = toRef(props, 'verifyMethod')
 const usedFor = toRef(props, 'usedFor')
 const toUsername = toRef(props, 'toUsername')
 const disabled = toRef(props, 'disabled')
+const showCancel = toRef(props, 'showCancel')
 
 const logined = useLocalUserStore()
 const coderepo = useCodeRepoStore()
@@ -139,6 +144,7 @@ const emit = defineEmits<{(e: 'update:account', account: string): void;
   (e: 'update:accountType', code: string): void;
   (e: 'update:verifyMethod', method: string): void;
   (e: 'verify', code: string): void;
+  (e: 'cancel'): void;
 }>()
 
 watch(myVerifyMethod, () => {
@@ -155,6 +161,10 @@ const onVerifyClick = () => {
     return
   }
   emit('verify', myCode.value)
+}
+
+const onCancelClick = () => {
+  emit('cancel')
 }
 
 const onSendCodeClick = () => {

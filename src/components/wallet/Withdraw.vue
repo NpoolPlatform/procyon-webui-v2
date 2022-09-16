@@ -97,7 +97,7 @@
               <WaitingBtn
                 label='MSG_WITHDRAW'
                 type='button'
-                :disabled='submitting'
+                :disabled='submitting || needDisable'
                 :waiting='submitting'
                 @click='onSubmit'
               />
@@ -121,6 +121,8 @@
         v-model:account-type='accountType'
         @verify='onCodeVerify'
         :used-for='withdrawType === "ExternalAddress" ? MessageUsedFor.Withdraw : MessageUsedFor.UsedForTransfer'
+        @cancel='onCancelClick'
+        show-cancel
       />
     </div>
   </q-dialog>
@@ -223,6 +225,8 @@ const onAmountFocusOut = () => {
   amountError.value = !amount.value || amount.value > balance.value || (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0)
 }
 
+const needDisable = computed(() => (withdrawType.value === 'ExternalAddress' && withdraws.value.length === 0) || (withdrawType.value === 'InternalTransfer' && transferAccounts.value.length === 0))
+
 interface Query {
   coinTypeId: string;
 }
@@ -259,18 +263,21 @@ const selectedTransferAccount = computed(() => transferAccounts.value.length > 0
 const balance = computed(() => general.getCoinBalance(coin?.value?.ID as string))
 
 const onSubmit = () => {
-  if (!selectedAccount.value && !selectedTransferAccount.value) {
-    return
-  }
-
   amountError.value = !amount.value || amount.value > balance.value || (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0)
   if (amountError.value) {
+    return
+  }
+  if (!selectedAccount.value && !selectedTransferAccount.value) {
     return
   }
   verifing.value = true
 }
 
 const onMenuHide = () => {
+  verifing.value = false
+}
+
+const onCancelClick = () => {
   verifing.value = false
 }
 
