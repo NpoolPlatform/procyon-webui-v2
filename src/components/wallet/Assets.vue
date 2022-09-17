@@ -26,11 +26,11 @@
           {{ myProps.row.JPYValue.toFixed(4) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps'>
-          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='disableCoin(myProps.row.CoinTypeID) || myProps.row.Balance <= 0.0001 || submitting || depositClick'>
+          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
-          <button class='small' @click='onDepositClick(myProps.row)' :disabled='disableCoin(myProps.row.CoinTypeID) || !payCoin(myProps.row.CoinTypeID) || depositClick'>
+          <button class='small' @click='onDepositClick(myProps.row)' :disabled='!payCoin(myProps.row.CoinTypeID) || depositClick'>
             {{ $t('MSG_DEPOSIT') }}
           </button>
         </q-td>
@@ -233,13 +233,6 @@ const coinBlacklist = (coinTypeID: string) => {
   })
   return flag
 }
-
-const disableCoin = computed(() => (coinID: string) => {
-  const blacklist = ['USDT (ERC20)']
-  const name = localcoin.formatCoinName(coinID)
-  const index = blacklist.findIndex((el) => el === name)
-  return index > -1
-})
 
 const localcoin = useLocalCoinStore()
 const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
