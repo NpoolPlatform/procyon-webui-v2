@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ verifing ? "blur" : "" ]'>
+  <div :class='[ verifying ? "blur" : "" ]'>
     <SignPage
       v-model:account='account'
       v-model:account-type='accountType'
@@ -25,7 +25,7 @@
     </SignPage>
   </div>
   <q-dialog
-    v-model='verifing'
+    v-model='verifying'
     seamless
     maximized
     @hide='onMenuHide'
@@ -95,11 +95,11 @@ const kyc = useFrontendKYCStore()
 
 const router = useRouter()
 
-const verifing = ref(false)
+const verifying = ref(false)
 const verifyMethod = ref(AccountType.Email)
 
 const onMenuHide = () => {
-  verifing.value = false
+  verifying.value = false
 }
 
 const user = useFrontendUserStore()
@@ -175,7 +175,7 @@ const _verify = () => {
     return
   }
 
-  verifing.value = true
+  verifying.value = true
 
   if (logined.User?.GoogleAuthVerified && logined.User?.SigninVerifyType === SigninVerifyType.Google) {
     verifyMethod.value = AccountType.Google
@@ -209,7 +209,7 @@ const onCodeVerify = (code: string) => {
     }
   }, (u: User, error: boolean) => {
     submitting.value = false
-    verifing.value = false
+    verifying.value = false
     if (error) {
       user.logout({
         Token: logined.User?.LoginToken,
