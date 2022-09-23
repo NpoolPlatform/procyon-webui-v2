@@ -44,12 +44,6 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  useCodeRepoStore,
-  encryptPassword,
-  GoogleTokenType,
-  NotificationType
-} from 'npool-cli-v2'
 
 import {
   useFrontendUserStore,
@@ -61,7 +55,10 @@ import {
   SigninVerifyType,
   useFrontendKYCStore,
   KYCState,
-  UsedFor
+  UsedFor,
+  useFrontendVerifyStore,
+  encryptPassword,
+  GoogleTokenType
 } from 'npool-cli-v4'
 
 import { AppID } from 'src/const/const'
@@ -91,7 +88,7 @@ const password = ref('')
 const verifyAccount = ref('')
 const verifyAccountType = ref(AccountType.Email)
 
-const coderepo = useCodeRepoStore()
+const coderepo = useFrontendVerifyStore()
 const recaptcha = useReCaptcha()
 const app = useFrontendAppStore()
 const kyc = useFrontendKYCStore()
@@ -119,7 +116,7 @@ const onSubmit = throttle(() => {
         Title: t('MSG_GET_GOOGLE_TOKEN'),
         Message: t('MSG_GET_GOOGLE_TOKEN_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
   }, (token: string) => {
