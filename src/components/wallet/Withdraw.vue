@@ -120,7 +120,7 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        :used-for='withdrawType === "ExternalAddress" ? MessageUsedFor.Withdraw : MessageUsedFor.UsedForTransfer'
+        :used-for='withdrawType === "ExternalAddress" ? UsedFor.Withdraw : UsedFor.Transfer'
         @cancel='onCancelClick'
         show-cancel
       />
@@ -171,13 +171,11 @@
 
 <script setup lang='ts'>
 import {
-  MessageUsedFor,
   useCoinStore,
   useAccountStore,
   WithdrawAccount,
   NotificationType,
   ReviewState,
-  AccountType,
   SecondsEachDay
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted, watch } from 'vue'
@@ -194,7 +192,9 @@ import {
   NotifyType,
   useBaseUserStore,
   useFrontendTransferStore,
-  Transfer
+  Transfer,
+  UsedFor,
+  AccountType
 } from 'npool-cli-v4'
 
 import checkmark from 'src/assets/icon-checkmark.svg'

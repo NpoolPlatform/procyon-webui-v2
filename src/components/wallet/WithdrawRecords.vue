@@ -32,7 +32,7 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { formatTime } from 'npool-cli-v2'
+import { formatTime } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 import { useLocalTransactionStore, Withdraw } from 'src/teststore/mock/transaction'
 import { WithdrawState } from 'src/teststore/mock/transaction/const'
@@ -100,5 +100,5 @@ const withdrawStatus = (wd: Withdraw) => {
 }
 </script>
 
-<stype lang='sass' scoped>
-</stype>
+<style lang='sass' scoped>
+</style>

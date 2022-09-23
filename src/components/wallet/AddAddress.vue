@@ -50,7 +50,7 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        :used-for='MessageUsedFor.SetWithdrawAddress'
+        :used-for='UsedFor.SetWithdrawAddress'
         @cancel='onCancelClick'
         show-cancel
       />
@@ -59,10 +59,11 @@
 </template>
 
 <script setup lang='ts'>
-import { Coin, useAccountStore, MessageUsedFor, AccountType, NotificationType, useCoinStore } from 'npool-cli-v2'
+import { Coin, useAccountStore, NotificationType, useCoinStore } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { UsedFor, AccountType } from 'npool-cli-v4'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))

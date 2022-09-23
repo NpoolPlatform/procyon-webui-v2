@@ -47,7 +47,7 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        :used-for='MessageUsedFor.UsedForSetTransferTargetUser'
+        :used-for='UsedFor.SetTransferTargetUser'
         @cancel='onCancelClick'
         show-cancel
       />
@@ -56,11 +56,10 @@
 </template>
 
 <script setup lang='ts'>
-import { MessageUsedFor } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useFrontendTransferAccountStore, AccountType, NotifyType, TransferAccount, validateEmailAddress, validateMobileNO } from 'npool-cli-v4'
+import { useFrontendTransferAccountStore, AccountType, NotifyType, TransferAccount, validateEmailAddress, validateMobileNO, UsedFor } from 'npool-cli-v4'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
