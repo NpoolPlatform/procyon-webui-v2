@@ -36,7 +36,7 @@
         v-model:account-type='verifyAccountType'
         v-model:verify-method='verifyMethod'
         @verify='onCodeVerify'
-        :used-for='MessageUsedFor.Signin'
+        :used-for='UsedFor.Signin'
         :disabled='submitting'
       />
     </div>
@@ -48,7 +48,6 @@ import {
   useCodeRepoStore,
   encryptPassword,
   GoogleTokenType,
-  MessageUsedFor,
   NotificationType
 } from 'npool-cli-v2'
 
@@ -61,7 +60,8 @@ import {
   useLocalUserStore,
   SigninVerifyType,
   useFrontendKYCStore,
-  KYCState
+  KYCState,
+  UsedFor
 } from 'npool-cli-v4'
 
 import { AppID } from 'src/const/const'

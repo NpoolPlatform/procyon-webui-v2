@@ -79,20 +79,22 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  validateEmailAddress,
-  validatePassword,
-  AccountType as OldAccountType,
-  validateMobileNO,
-  validateVerificationCode,
-  useCodeRepoStore,
-  MessageUsedFor,
-  encryptPassword
-} from 'npool-cli-v2'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { AccountType, NotifyType, SignMethodType, useFrontendUserStore } from 'npool-cli-v4'
+import {
+  AccountType,
+  NotifyType,
+  SignMethodType,
+  useFrontendUserStore,
+  UsedFor,
+  useFrontendVerifyStore,
+  validateEmailAddress,
+  validatePassword,
+  validateMobileNO,
+  validateVerificationCode,
+  encryptPassword
+} from 'npool-cli-v4'
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
@@ -162,7 +164,7 @@ const onSwitcherClick = () => {
   accountError.value = false
 }
 
-const coderepo = useCodeRepoStore()
+const coderepo = useFrontendVerifyStore()
 const user = useFrontendUserStore()
 const router = useRouter()
 
@@ -207,7 +209,7 @@ const onSendCodeClick = () => {
   }
 
   const account = signupMethod.value === AccountType.Email ? emailAddress.value : phoneNO.value
-  coderepo.sendVerificationCode(account, signupMethod.value.toLowerCase() as OldAccountType, MessageUsedFor.Update, account)
+  coderepo.sendVerificationCode(account, signupMethod.value, UsedFor.Update, account)
 }
 
 </script>

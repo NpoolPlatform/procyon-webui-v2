@@ -26,18 +26,12 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  MessageUsedFor,
-  useCodeRepoStore,
-  validateVerificationCode,
-  AccountType as OldAccountType
-} from 'npool-cli-v2'
-import { useLocalUserStore, AccountType } from 'npool-cli-v4'
+import { useLocalUserStore, AccountType, useFrontendVerifyStore, UsedFor, validateVerificationCode } from 'npool-cli-v4'
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted, computed } from 'vue'
 
 interface Props {
   label: string;
-  accountType: string;
+  accountType: AccountType;
   account: string;
   verificationCode: string;
   verificationCodeError: boolean;
@@ -62,13 +56,13 @@ const onVerificationCodeFocusOut = () => {
   myVerificationCodeError.value = !validateVerificationCode(myVerificationCode.value)
 }
 
-const coderepo = useCodeRepoStore()
+const coderepo = useFrontendVerifyStore()
 
 const onSendCodeClick = () => {
   if (!myAccount.value?.length) {
     return
   }
-  coderepo.sendVerificationCode(myAccount.value, myAccountType.value.toLowerCase() as OldAccountType, MessageUsedFor.Update, myAccount.value)
+  coderepo.sendVerificationCode(myAccount.value, myAccountType.value, UsedFor.Update, myAccount.value)
 }
 
 const logined = useLocalUserStore()

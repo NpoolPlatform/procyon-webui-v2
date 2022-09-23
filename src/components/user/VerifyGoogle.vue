@@ -27,15 +27,13 @@
 
 <script setup lang='ts'>
 import {
-  validateVerificationCode
-} from 'npool-cli-v2'
-import {
   useFrontendUserStore,
   AccountType,
   NotifyType,
   useLocalUserStore,
   User,
-  SignMethodType
+  SignMethodType,
+  validateVerificationCode
 } from 'npool-cli-v4'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
