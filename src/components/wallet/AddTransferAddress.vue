@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ verifing ? "blur" : "" ]'>
+  <div :class='[ verifying ? "blur" : "" ]'>
     <FormPage @submit='onSubmit' label='MSG_TRANSFER_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
       <template #form-body>
         <Input
@@ -37,7 +37,7 @@
     </FormPage>
   </div>
   <q-dialog
-    v-model='verifing'
+    v-model='verifying'
     seamless
     maximized
     @hide='onMenuHide'
@@ -82,7 +82,7 @@ const onAddressFocusOut = () => {
 const labels = ref('')
 const labelsError = ref(false)
 
-const verifing = ref(false)
+const verifying = ref(false)
 
 const targetAccountType = ref(AccountType.Email)
 
@@ -93,11 +93,11 @@ const onSubmit = () => {
   if (validateMobileNO(submitAddress.value)) {
     targetAccountType.value = AccountType.Mobile
   }
-  verifing.value = true
+  verifying.value = true
 }
 
 const onMenuHide = () => {
-  verifing.value = false
+  verifying.value = false
 }
 
 const account = ref('')
@@ -107,7 +107,7 @@ const router = useRouter()
 const transferAccount = useFrontendTransferAccountStore()
 
 const onCancelClick = () => {
-  verifing.value = false
+  verifying.value = false
 }
 
 const onCodeVerify = (code: string) => {

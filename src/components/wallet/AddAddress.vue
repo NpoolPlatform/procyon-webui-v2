@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ verifing ? "blur" : "" ]'>
+  <div :class='[ verifying ? "blur" : "" ]'>
     <FormPage @submit='onSubmit' label='MSG_NEW_WALLET_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
       <template #form-body>
         <CoinSelector
@@ -40,7 +40,7 @@
     </FormPage>
   </div>
   <q-dialog
-    v-model='verifing'
+    v-model='verifying'
     seamless
     maximized
     @hide='onMenuHide'
@@ -108,17 +108,17 @@ const onAddressFocusOut = () => {
 const labels = ref('')
 const labelsError = ref(false)
 
-const verifing = ref(false)
+const verifying = ref(false)
 
 const onSubmit = () => {
-  verifing.value = true
+  verifying.value = true
 }
 
 const onMenuHide = () => {
   if (selectedCoinTypeID.value.length === 0) {
     return
   }
-  verifing.value = false
+  verifying.value = false
 }
 
 const account = ref('')
@@ -127,7 +127,7 @@ const accountType = ref(AccountType.Email)
 const router = useRouter()
 
 const onCancelClick = () => {
-  verifing.value = false
+  verifying.value = false
 }
 
 const onCodeVerify = (code: string) => {
@@ -160,7 +160,7 @@ const onCodeVerify = (code: string) => {
     }
     void router.back()
   })
-  verifing.value = false
+  verifying.value = false
 }
 
 onMounted(() => {

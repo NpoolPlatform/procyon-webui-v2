@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ verifing || showReviewing || showWaiting ? "blur" : "" ]'>
+  <div :class='[ verifying || showReviewing || showWaiting ? "blur" : "" ]'>
     <BackPage>
       <div class='content order-page'>
         <div class='product-container content-glass'>
@@ -110,7 +110,7 @@
     </BackPage>
   </div>
   <q-dialog
-    v-model='verifing'
+    v-model='verifying'
     seamless
     maximized
     @hide='onMenuHide'
@@ -212,7 +212,7 @@ watch(withdrawType, () => {
   selectedAccountIndex.value = 0
 })
 
-const verifing = ref(false)
+const verifying = ref(false)
 const showReviewing = ref(false)
 const showWaiting = ref(true)
 
@@ -270,15 +270,15 @@ const onSubmit = () => {
   if (!selectedAccount.value && !selectedTransferAccount.value) {
     return
   }
-  verifing.value = true
+  verifying.value = true
 }
 
 const onMenuHide = () => {
-  verifing.value = false
+  verifying.value = false
 }
 
 const onCancelClick = () => {
-  verifing.value = false
+  verifying.value = false
 }
 
 const account = ref('')
@@ -391,7 +391,7 @@ const onCodeVerify = (code: string) => {
       void router.push({ path: '/wallet' })
     })
   }
-  verifing.value = false
+  verifying.value = false
 }
 
 const onStateTipBtnClick = () => {
