@@ -48,15 +48,17 @@
 
 <script setup lang='ts'>
 import { defineProps, toRef, defineEmits, computed, watch, onMounted, ref, defineAsyncComponent } from 'vue'
-import { AccountType as OldAccountType, MessageUsedFor, useCodeRepoStore, validateVerificationCode } from 'npool-cli-v2'
-import { AccountType, useLocalUserStore } from 'npool-cli-v4'
+import { AccountType, useLocalUserStore, useFrontendVerifyStore, UsedFor, validateVerificationCode, NotifyType } from 'npool-cli-v4'
+import { useI18n } from 'vue-i18n'
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 interface Props {
   verifyMethod?: AccountType;
-  usedFor: MessageUsedFor;
+  usedFor: UsedFor;
   toUsername?: string;
   account: string;
   accountType: AccountType;
@@ -72,7 +74,7 @@ const disabled = toRef(props, 'disabled')
 const showCancel = toRef(props, 'showCancel')
 
 const logined = useLocalUserStore()
-const coderepo = useCodeRepoStore()
+const coderepo = useFrontendVerifyStore()
 
 const myVerifyMethod = computed(() => {
   if (verifyMethod.value?.length) {
@@ -168,11 +170,22 @@ const onCancelClick = () => {
 }
 
 const onSendCodeClick = () => {
-  coderepo.sendVerificationCode(
-    account.value,
-    myVerifyMethod.value.toLowerCase() as OldAccountType,
-    usedFor.value,
-    toUsername.value?.length ? toUsername.value : account.value)
+  coderepo.sendCode({
+    Account: account.value,
+    AccountType: myVerifyMethod.value,
+    UsedFor: usedFor.value,
+    ToUsername: toUsername.value?.length ? toUsername.value : account.value,
+    Message: {
+      Error: {
+        Title: myVerifyMethod.value === AccountType.Email ? t('MSG_SEND_EMAIL_CODE') : t('MSG_SEND_SMS_CODE'),
+        Message: myVerifyMethod.value === AccountType.Email ? t('MSG_SEND_EMAIL_CODE_FAIL') : t('MSG_SEND_SMS_CODE_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
 }
 
 onMounted(() => {
