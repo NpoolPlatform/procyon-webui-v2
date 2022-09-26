@@ -127,7 +127,7 @@ const { t } = useI18n({ useScope: 'global' })
 const SignPage = defineAsyncComponent(() => import('src/components/user/SignPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
-const Legal = defineAsyncComponent(() => import('src/components/help/Legal.vue'))
+const Legal = defineAsyncComponent(() => import('src/pages/Legal.vue'))
 
 const accountError = ref(false)
 const account = ref('')
