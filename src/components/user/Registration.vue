@@ -63,7 +63,7 @@
           </div>
           <div class='agreement-label column  justify-center' @click='onAgreementClick'>
             <label
-              v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "#/legal", USER_AGREEMENT: "#/legal" })'
+              v-html='$t("MSG_READ_AND_AGREE", { POLICY_PATH: "javascript:void(0);", USER_AGREEMENT: "javascript:void(0);" })'
             />
           </div>
         </div>
@@ -127,7 +127,7 @@ const { t } = useI18n({ useScope: 'global' })
 const SignPage = defineAsyncComponent(() => import('src/components/user/SignPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
-const Legal = defineAsyncComponent(() => import('src/components/help/Legal.vue'))
+const Legal = defineAsyncComponent(() => import('src/pages/Legal.vue'))
 
 const accountError = ref(false)
 const account = ref('')
