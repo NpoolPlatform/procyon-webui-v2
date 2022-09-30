@@ -81,6 +81,7 @@ watch(myValue, () => {
 })
 
 const onFocus = () => {
+  input.value?.setCustomValidity('')
   emit('focus')
 }
 
