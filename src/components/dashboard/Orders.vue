@@ -111,7 +111,7 @@ onUnmounted(() => {
 
 </script>
 
-<stype lang='sass' scoped>
+<style lang='sass' scoped>
 .last
   margin-right: 0
-</stype>
+</style>

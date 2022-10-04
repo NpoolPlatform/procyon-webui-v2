@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ verifing ? "blur" : "" ]'>
+  <div :class='[ verifying ? "blur" : "" ]'>
     <SignPage
       v-model:account='account'
       v-model:account-type='accountType'
@@ -25,7 +25,7 @@
     </SignPage>
   </div>
   <q-dialog
-    v-model='verifing'
+    v-model='verifying'
     seamless
     maximized
     @hide='onMenuHide'
@@ -36,7 +36,7 @@
         v-model:account-type='verifyAccountType'
         v-model:verify-method='verifyMethod'
         @verify='onCodeVerify'
-        :used-for='MessageUsedFor.Signin'
+        :used-for='UsedFor.Signin'
         :disabled='submitting'
       />
     </div>
@@ -44,13 +44,6 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  useCodeRepoStore,
-  encryptPassword,
-  GoogleTokenType,
-  MessageUsedFor,
-  NotificationType
-} from 'npool-cli-v2'
 
 import {
   useFrontendUserStore,
@@ -61,7 +54,11 @@ import {
   useLocalUserStore,
   SigninVerifyType,
   useFrontendKYCStore,
-  KYCState
+  KYCState,
+  UsedFor,
+  useFrontendVerifyStore,
+  encryptPassword,
+  GoogleTokenType
 } from 'npool-cli-v4'
 
 import { AppID } from 'src/const/const'
@@ -91,18 +88,18 @@ const password = ref('')
 const verifyAccount = ref('')
 const verifyAccountType = ref(AccountType.Email)
 
-const coderepo = useCodeRepoStore()
+const coderepo = useFrontendVerifyStore()
 const recaptcha = useReCaptcha()
 const app = useFrontendAppStore()
 const kyc = useFrontendKYCStore()
 
 const router = useRouter()
 
-const verifing = ref(false)
+const verifying = ref(false)
 const verifyMethod = ref(AccountType.Email)
 
 const onMenuHide = () => {
-  verifing.value = false
+  verifying.value = false
 }
 
 const user = useFrontendUserStore()
@@ -119,7 +116,7 @@ const onSubmit = throttle(() => {
         Title: t('MSG_GET_GOOGLE_TOKEN'),
         Message: t('MSG_GET_GOOGLE_TOKEN_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
   }, (token: string) => {
@@ -178,7 +175,7 @@ const _verify = () => {
     return
   }
 
-  verifing.value = true
+  verifying.value = true
 
   if (logined.User?.GoogleAuthVerified && logined.User?.SigninVerifyType === SigninVerifyType.Google) {
     verifyMethod.value = AccountType.Google
@@ -212,7 +209,7 @@ const onCodeVerify = (code: string) => {
     }
   }, (u: User, error: boolean) => {
     submitting.value = false
-    verifing.value = false
+    verifying.value = false
     if (error) {
       user.logout({
         Token: logined.User?.LoginToken,

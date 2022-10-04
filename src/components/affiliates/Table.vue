@@ -233,7 +233,7 @@ const pageReferrals = computed(() => displayReferrals.value.filter((el, index) =
 
 </script>
 
-<stype lang='sass' scoped>
+<style lang='sass' scoped>
 .pagination
   max-width: 40%
-</stype>
+</style>

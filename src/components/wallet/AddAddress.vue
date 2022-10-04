@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ verifing ? "blur" : "" ]'>
+  <div :class='[ verifying ? "blur" : "" ]'>
     <FormPage @submit='onSubmit' label='MSG_NEW_WALLET_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
       <template #form-body>
         <CoinSelector
@@ -40,7 +40,7 @@
     </FormPage>
   </div>
   <q-dialog
-    v-model='verifing'
+    v-model='verifying'
     seamless
     maximized
     @hide='onMenuHide'
@@ -50,7 +50,7 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        :used-for='MessageUsedFor.SetWithdrawAddress'
+        :used-for='UsedFor.SetWithdrawAddress'
         @cancel='onCancelClick'
         show-cancel
       />
@@ -59,10 +59,11 @@
 </template>
 
 <script setup lang='ts'>
-import { Coin, useAccountStore, MessageUsedFor, AccountType, NotificationType, useCoinStore } from 'npool-cli-v2'
+import { Coin, useAccountStore, NotificationType, useCoinStore } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { UsedFor, AccountType } from 'npool-cli-v4'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
@@ -107,17 +108,17 @@ const onAddressFocusOut = () => {
 const labels = ref('')
 const labelsError = ref(false)
 
-const verifing = ref(false)
+const verifying = ref(false)
 
 const onSubmit = () => {
-  verifing.value = true
+  verifying.value = true
 }
 
 const onMenuHide = () => {
   if (selectedCoinTypeID.value.length === 0) {
     return
   }
-  verifing.value = false
+  verifying.value = false
 }
 
 const account = ref('')
@@ -126,7 +127,7 @@ const accountType = ref(AccountType.Email)
 const router = useRouter()
 
 const onCancelClick = () => {
-  verifing.value = false
+  verifying.value = false
 }
 
 const onCodeVerify = (code: string) => {
@@ -159,7 +160,7 @@ const onCodeVerify = (code: string) => {
     }
     void router.back()
   })
-  verifing.value = false
+  verifying.value = false
 }
 
 onMounted(() => {

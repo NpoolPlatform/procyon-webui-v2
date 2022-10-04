@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ verifing ? "blur" : "" ]'>
+  <div :class='[ verifying ? "blur" : "" ]'>
     <FormPage @submit='onSubmit' label='MSG_TRANSFER_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
       <template #form-body>
         <Input
@@ -37,7 +37,7 @@
     </FormPage>
   </div>
   <q-dialog
-    v-model='verifing'
+    v-model='verifying'
     seamless
     maximized
     @hide='onMenuHide'
@@ -47,7 +47,7 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        :used-for='MessageUsedFor.UsedForSetTransferTargetUser'
+        :used-for='UsedFor.SetTransferTargetUser'
         @cancel='onCancelClick'
         show-cancel
       />
@@ -56,11 +56,10 @@
 </template>
 
 <script setup lang='ts'>
-import { MessageUsedFor } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useFrontendTransferAccountStore, AccountType, NotifyType, TransferAccount, validateEmailAddress, validateMobileNO } from 'npool-cli-v4'
+import { useFrontendTransferAccountStore, AccountType, NotifyType, TransferAccount, validateEmailAddress, validateMobileNO, UsedFor } from 'npool-cli-v4'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
@@ -83,7 +82,7 @@ const onAddressFocusOut = () => {
 const labels = ref('')
 const labelsError = ref(false)
 
-const verifing = ref(false)
+const verifying = ref(false)
 
 const targetAccountType = ref(AccountType.Email)
 
@@ -94,11 +93,11 @@ const onSubmit = () => {
   if (validateMobileNO(submitAddress.value)) {
     targetAccountType.value = AccountType.Mobile
   }
-  verifing.value = true
+  verifying.value = true
 }
 
 const onMenuHide = () => {
-  verifing.value = false
+  verifying.value = false
 }
 
 const account = ref('')
@@ -108,7 +107,7 @@ const router = useRouter()
 const transferAccount = useFrontendTransferAccountStore()
 
 const onCancelClick = () => {
-  verifing.value = false
+  verifying.value = false
 }
 
 const onCodeVerify = (code: string) => {

@@ -86,7 +86,7 @@ const onRowClick = (row: never) => {
 
 </script>
 
-<stype lang='sass' scoped>
+<style lang='sass' scoped>
 .table-box
   background: transparent
   border-bottom: 1px solid #23292b
@@ -115,4 +115,4 @@ input[type='submit']
 
 .pagination
   max-width: 40%
-</stype>
+</style>

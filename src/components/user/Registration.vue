@@ -101,14 +101,15 @@
 
 <script setup lang='ts'>
 import {
-  useCodeRepoStore,
-  MessageUsedFor,
+  NotifyType,
+  AccountType,
+  useFrontendUserStore,
+  useFrontendVerifyStore,
+  UsedFor,
   validateVerificationCode,
   validatePassword,
-  encryptPassword,
-  AccountType as OldAccountType
-} from 'npool-cli-v2'
-import { NotifyType, AccountType, useFrontendUserStore } from 'npool-cli-v4'
+  encryptPassword
+} from 'npool-cli-v4'
 import { defineAsyncComponent, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -179,7 +180,7 @@ const onCancelClick = () => {
   onAgreeFocusOut()
 }
 
-const coderepo = useCodeRepoStore()
+const coderepo = useFrontendVerifyStore()
 
 const router = useRouter()
 
@@ -188,7 +189,7 @@ const onSendCodeClick = () => {
   if (accountError.value) {
     return
   }
-  coderepo.sendVerificationCode(account.value, accountType.value.toLowerCase() as OldAccountType, MessageUsedFor.Signup, account.value)
+  coderepo.sendVerificationCode(account.value, accountType.value, UsedFor.Signup, account.value)
 }
 
 const user = useFrontendUserStore()
