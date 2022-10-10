@@ -59,11 +59,11 @@
 </template>
 
 <script setup lang='ts'>
-import { Coin, useAccountStore, NotificationType, useCoinStore } from 'npool-cli-v2'
+import { Coin, useCoinStore } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { UsedFor, AccountType } from 'npool-cli-v4'
+import { UsedFor, AccountType, useFrontendWithdrawAddressStore, NotifyType } from 'npool-cli-v4'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
@@ -94,7 +94,7 @@ const selectedCoin = computed({
   }
 })
 
-const accounts = useAccountStore()
+const accounts = useFrontendWithdrawAddressStore()
 
 const address = ref('')
 const addressError = ref(false)
@@ -134,8 +134,6 @@ const onCodeVerify = (code: string) => {
   accounts.setWithdrawAddress({
     CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
-    Name: '',
-    Message: '',
     Account: account.value,
     AccountType: accountType.value,
     VerificationCode: code,
@@ -145,7 +143,7 @@ const onCodeVerify = (code: string) => {
         Title: t('MSG_SET_WITHDRAW_ADDRESS'),
         Message: t('MSG_SET_WITHDRAW_ADDRESS_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
   }, () => {
