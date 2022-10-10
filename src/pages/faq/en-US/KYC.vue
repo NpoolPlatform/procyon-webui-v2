@@ -21,28 +21,26 @@
         </div>
 
         <div class='faq-content-main'>
-          <h3 id='How to submit your KYC'>
+          <h3 id='KYCの申請の方法'>
             How to submit your KYC
           </h3>
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/80zQV5wLT6Y'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-              allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/80zQV5wLT6Y' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
           <ul>
-            <li>(1) Open the <a href='https://www.procyon.vip/#/kyc'><strong>[KYC]</strong></a> page after logging in.</li>
-            <li>(2) Select the <strong>[type of identification]</strong> from the list below:</li>
+            <li>(1) After logging in, access the <a href='/#/kyc'>Personal Info</a> page.</li>
+            <li>(2) Select the "Document Type" you wish to use for KYC submission.</li>
             <ul>
               <li>Passport</li>
-              <li>ID Card (for Driver's License, please select ID Card)</li>
+              <li>ID Card / Driver's license</li>
             </ul>
-            <li>(3) Follow the instructions and upload all required pictures.</li>
-            <li>(4) Click the <strong>[Submit Documents]</strong> button.</li>
+            <li>(3) Take a picture of the required images and upload.</li>
+            <li>(4) Click the orange "Submit" button at the bottom.</li>
           </ul>
 
           <h3 id='How to check the application status'>
@@ -50,31 +48,25 @@
           </h3>
 
           <ul>
-            <li>(1) Open the <a href='https://www.procyon.vip/#/kyc'><strong>[KYC]</strong></a> page after logging in.</li>
-            <li>(2) You can check the status under <strong>[KYC Verification Status]</strong>.</li>
+            <li>(1) After logging in, access the <a href='/#/kyc'>Personal Info</a> page.</li>
+            <li>(2) Confirm the submission status in the "KYC Verification Status" section of the page.</li>
           </ul>
 
           <ul>
-            <li>
-              <strong>[Under Review] </strong>Please wait until the status changes to either of the following below.
-              (Note: email notification is NOT sent when status is changed.)
-            </li>
-            <li><strong>[Verified] </strong>The KYC process has been successfully completed.</li>
-            <li><strong>[Rejected] </strong>The KYC application has been rejected. Please re-apply according to the reasons provided.</li>
+            <li><strong>Under Review: </strong>Please wait until the status changes to either of the following two. There will be no notification sent upon completion of the review.</li>
+            <li><strong>Verified: </strong>The KYC review has been approved.</li>
+            <li><strong>Rejected: </strong>The KYC review has been rejected. Please re-apply with reference to the reasons provided.</li>
           </ul>
 
           <h3 id='What should I do if the site crashes in the middle of submission?'>
             What should I do if the site crashes in the middle of submission?
           </h3>
 
-          <p>Please re-open the KYC page and follow the steps below based on the <strong>[KYC Verification Status]</strong>.</p>
+          <p>Please take the following actions according to the "KYC Verification Status" on the Personal Info page.</p>
 
           <ul>
-            <li>
-              <strong>[Under Review] </strong>Please wait until the status changes to either of the following below.
-              (Note: email notification is NOT sent when status is changed.)
-            </li>
-            <li><strong>[Not Verified] </strong>Please re-submit your application.</li>
+            <li><strong>Under Review: </strong>No action required. Your submission has been received. Please wait for the review to be completed. (※ Notification will not be sent upon completion of the review)</li>
+            <li><strong>Not Verified: </strong>Please submit your documents again.</li>
           </ul>
 
           <div class='hr' />

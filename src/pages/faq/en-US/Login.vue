@@ -25,9 +25,8 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/CSeoLtAPOR0'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/CSeoLtAPOR0' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
@@ -50,28 +49,28 @@
           <h3 id='How to login for the first time'>
             How to login for the first time
           </h3>
+
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/s9bNxlU7JVs'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/s9bNxlU7JVs' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
-          <p><strong>Users are asked to change their password when first logging in to Procyon.vip.</strong> From the second time, you will be able to login normally.</p>
+          <p><strong>Users are asked to change their password when first loggin in to Procyon.vip.</strong> From the second time, you will be able to login normally.</p>
 
           <h4>Reset Your Password</h4>
           <ul>
             <li>(1) Open the <strong>[Login]</strong> page.</li>
             <li>(2) Click <strong>[Forgot password?]</strong> in green.</li>
-            <li>(3) Enter your email address (the one you submitted when you placed your order), and click <strong>[Send Code]</strong>.</li>
+            <li>(3) Enter your email address (the one you submitted when you placed your order), and click [Send Code].</li>
             <li>(4) Enter the verification code sent to your email.</li>
             <li>(5) Set your new password and click the <strong>[Confirm]</strong> button.</li>
           </ul>
 
           <h4>Login Process</h4>
           <ul>
-            <li>(1) Open the <strong>[Login]</strong> page, then enter the registered email address/password.</li>
+            <li>(1) Open the <strong>[login]</strong> page, then enter the registered email address/password.</li>
             <li>(2) Click the <strong>[Login]</strong> button.</li>
             <li>(3) Enter the verification code sent to your email address.</li>
           </ul>
@@ -79,18 +78,18 @@
           <h3 id='Forgot your password?'>
             Forgot your password?
           </h3>
+
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/s9bNxlU7JVs'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/s9bNxlU7JVs' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
           <ul>
             <li>(1) Open the <strong>[Login]</strong> page.</li>
             <li>(2) Click the <strong>[Forgot password?]</strong> link.</li>
-            <li>(3) Enter the email address you registered for this account and click <strong>[Send Code]</strong>.</li>
+            <li>(3) Enter the email address you registered for this account and click [Send Code].</li>
             <li>(4) Enter the verification code sent to your email.</li>
             <li>(5) Set your new password and click the <strong>[Confirm]</strong> button.</li>
           </ul>
@@ -101,9 +100,8 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/bMWoc0qflwI'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/bMWoc0qflwI' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
@@ -145,7 +143,7 @@
             <li>(1) Check your spam folder.</li>
             <li>(2) Search your inbox using the following subject and address:</li>
             <ul>
-              <li><strong>Subject: </strong>Procyon.vip - Email verification code</li>
+              <li><strong>Subject:</strong>【Procyon】Email認証コード</li>
               <li><strong>Email Address: </strong>support@procyon.vip</li>
             </ul>
           </ul>

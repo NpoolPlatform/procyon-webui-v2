@@ -17,7 +17,7 @@
             <li><a @click='scrollTo("What is the Technical Service Fee?")'>What is the Technical Service Fee?</a></li>
             <li><a @click='scrollTo("What is hashrate?")'>What is hashrate?</a></li>
             <li><a @click='scrollTo("What is Network Daily Output?")'>What is Network Daily Output?</a></li>
-            <li><a @click='scrollTo("If Procyons servers go down will the mining stop?")'>If Procyon's servers go down will the mining stop?</a></li>
+            <li><a @click='scrollTo("If the website servers go down will the mining stop?")'>If the website servers go down will the mining stop?</a></li>
           </ul>
 
           <div class='hr' />
@@ -37,7 +37,7 @@
             Which products can I see on my Dashboard?
           </h3>
 
-          <p>Only mining products you have purchase will appear on your <strong>[Dashboard]</strong>. When you purchase a mining product, it will begin to mine tokens and the daily rewards will be airdropped into your <strong>[Dashboard]</strong> on Procyon.</p>
+          <p>Only mining products you have purchase will appear on your <strong>[Dashboard]</strong>. When you purchase a mining product, it will begin to mine tokens and the daily rewards will be airdropped into your <strong>[Dashboard]</strong> on the Platform.</p>
 
           <h3 id='Why does the amount of rewards change from day to day?'>
             Why does the amount of rewards change from day to day?
@@ -67,7 +67,7 @@
             Why don't numbers change on the dashboard?
           </h3>
 
-          <p>The mining rewards will bring to appear once mining starts for your purchased products. Since Procyon offers first-batch mining, this means you can purchase mining before it can begin. In such cases you have to wait until the mainnet launches and mining can begin.</p>
+          <p>The mining rewards will bring to appear once mining starts for your purchased products. Since our Platform offers first-batch mining, this means you can purchase mining before it can begin. In such cases you have to wait until the mainnet launches and mining can begin.</p>
 
           <h3 id='What is the Technical Service Fee?'>
             What is the Technical Service Fee?
@@ -87,12 +87,13 @@
 
           <p>The Network Daily Output shows the overall mining volume on the token's network. This is determined by the network itself.</p>
 
-          <h3 id='If Procyons servers go down will the mining stop?'>
-            If Procyon's servers go down will the mining stop?
+          <h3 id='If the website servers go down will the mining stop?'>
+            If the website servers go down will the mining stop?
           </h3>
 
-          <p>No, mining does not stop even if Procyon's server goes down. The mining is processed at the following data centers in Hong Kong and each center is operating independently, so the mining would continue without interruption. The mining itself will not stop however the display of your mining rewards may be down until the server recovers.</p>
-          <p><strong>Data center location: </strong>18 Chun Yat Street, Tseung Kwan O Industrial Estate, New Territories, Hong Kong</p>
+          <p>No, mining will not stop in the event that the Platform is down.</p>
+
+          <p>Since mining is being carried out at our data center, mining will continue without any problems because the data center and webside server are operating independently.</p>
 
           <div class='hr' />
         </div>
