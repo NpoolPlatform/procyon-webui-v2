@@ -24,18 +24,16 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/q3FLVYDtlaQ'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-              allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/q3FLVYDtlaQ' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
           <ul>
-            <li>(1) Open the <strong>[Account]</strong> page after logging in.</li>
-            <li>(2) Click on the account details and edit the information.</li>
-            <li>*For corporate accounts, please provide the personal information of the representative.</li>
-            <li>(3) After entering your new account information click <strong>[Save]</strong>.</li>
+            <li>(1) After logging in, access the Personal Info page.</li>
+            <li>(2) Click on the section you wish to change and enter the information.</li>
+            <li>※ In the case of a corporate account, please enter the personal information of the representative.</li>
+            <li>(3) After entering the information, click the <strong>"Save"</strong> button at the bottom.</li>
           </ul>
 
           <h3 id='How to bind your mobile number to your account'>
@@ -44,20 +42,21 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/SFIiq9SdNXA'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-              allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/SFIiq9SdNXA' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
           <ul>
-            <li>(1) Open the <strong>[Security]</strong> page after logging in.</li>
-            <li>(2) Click the <strong>[Not Verified]</strong> button.</li>
-            <li>(3) Enter your phone number. *Do not enter the first '0'.</li>
-            <li>(4) Click <strong>[Send Code]</strong>.</li>
-            <li>(5) Enter the verification code sent to your phone.</li>
-            <li>(6) Click the <strong>[Setup Mobile Number]</strong> button.</li>
+            <li>(1) After logging in, access the Security page.</li>
+            <li>(2) Click the orange button in the "Mobile Authentication" section.</li>
+            <li>(3) Enter the verification code sent to your registered e-mail address.</li>
+            <li>(4) Enter your mobile number in the second line.</li>
+            <li>(4-1) Select your country to the left of the mobile number field.</li>
+            <li>(4-2) Enter your mobile number without the first "0" (in the case of Japan).</li>
+            <li>(5) Click "Send Code" at the bottom of the mobile number input section.</li>
+            <li>(6) Enter the verification code sent to the mobile number you just entered.</li>
+            <li>(7) Click the orange button at the bottom.</li>
           </ul>
 
           <h3 id='How to bind two-factor authentication'>
@@ -66,10 +65,8 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/-ZhLnqi2ESI'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-              allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/-ZhLnqi2ESI' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
@@ -82,7 +79,7 @@
               <li><a href='https://apps.apple.com/jp/app/google-authenticator/id388497605' target='_blank'>For iOS (iPhone)</a></li>
               <li><a href='https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=ja&gl=US' target='_blank'>For Android</a></li>
             </ul>
-            <li>(4) Click <strong>[Next Step]</strong> on Procyon.vip.</li>
+            <li>(4) Click [Next Step] on Procyon.vip.</li>
             <li>(5) Enter the authentication code from Google Authenticator on Procyon.vip to complete the two-factor setup.</li>
           </ul>
 
@@ -92,16 +89,14 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/uZnoRTd6L4w'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-              allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/uZnoRTd6L4w' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
           <ul>
             <li>(1) Open <strong>[Security]</strong> page after login.</li>
-            <li>(2) Click <strong>[Google Login Authentication]</strong> in the <strong>[Login Verification]</strong>section.</li>
+            <li>(2) Click <strong>[Google Login Authentication]</strong> in the <strong>[Login Verification]</strong> section.</li>
             <li>*Please confirm that <strong>[Google Login Authentication]</strong> is highlighted green.</li>
             <li>(3) Click the <strong>[Submit Change]</strong> button.</li>
           </ul>
