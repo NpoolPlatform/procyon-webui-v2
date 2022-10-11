@@ -5,7 +5,7 @@
 
       <div class='faq-content'>
         <div class='faq-content-nav'>
-          <h3>目次</h3>
+          <h3>ナビゲーション</h3>
 
           <ul class='faq-nav-links'>
             <li><a @click='scrollTo("アカウント情報の変更 (氏名、住所、ユーザー名)")'>アカウント情報の変更 (氏名、住所、ユーザー名)</a></li>
