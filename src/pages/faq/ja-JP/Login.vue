@@ -4,7 +4,7 @@
       <h2>Procyon プラットフォーム：ログイン</h2>
       <div class='faq-content'>
         <div class='faq-content-nav'>
-          <h3>目次</h3>
+          <h3>ナビゲーション</h3>
 
           <ul class='faq-nav-links'>
             <li><a @click='scrollTo("ログインの方法")'>ログインの方法</a></li>
