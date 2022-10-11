@@ -96,7 +96,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
 const account = useFrontendWithdrawAddressStore()
-const accounts = computed(() => account.WithdrawAddress.WithdrawAddress.filter((el) => el.State === ReviewState.Approved).sort((a, b) => {
+const accounts = computed(() => account.WithdrawAddress.WithdrawAddress.filter((el) => el.State === ReviewState.Approved && el.Address.DeleteAt === 0).sort((a, b) => {
   return b.Account.CreateAt - a.Account.CreateAt
 }))
 
