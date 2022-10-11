@@ -26,10 +26,8 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/CSeoLtAPOR0'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-              allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/CSeoLtAPOR0' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
@@ -49,14 +47,7 @@
           <p>メール認証の場合は、届いているメールにて再度ご確認をお願いします。</p>
           <p>GoogleAuthenticatorの場合は、認証コードに制限時間があるため現在表示されているものをご入力ください。</p>
 
-          <p>
-            <a
-              href='https://drive.google.com/file/d/1aoNOumwbMMoB9KKEwvYMkVpMFBa_wjEt/view?usp=sharing'
-              target='_blank'
-            >
-              ログイン方法のユーザーガイドで確認
-            </a>
-          </p>
+          <p><a href='https://drive.google.com/file/d/1aoNOumwbMMoB9KKEwvYMkVpMFBa_wjEt/view?usp=sharing' target='_blank'>ログイン方法のユーザーガイドで確認</a></p>
 
           <h3 id='初回ログインの方法'>
             初回ログインの方法
@@ -64,10 +55,8 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/s9bNxlU7JVs'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-              allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/s9bNxlU7JVs' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
@@ -89,14 +78,7 @@
             <li>(3)ご登録メールアドレスに届く認証コードを入力します。</li>
           </ul>
 
-          <p>
-            <a
-              href='https://drive.google.com/file/d/1GahESamBwv7oCtFjizir8Q19F5lRSi6_/view?usp=sharing'
-              target='_blank'
-            >
-              初回ログインの方法をユーザーガイドで確認
-            </a>
-          </p>
+          <p><a href='https://drive.google.com/file/d/1GahESamBwv7oCtFjizir8Q19F5lRSi6_/view?usp=sharing' target='_blank'>初回ログインの方法をユーザーガイドで確認</a></p>
 
           <h3 id='パスワードを忘れた場合'>
             パスワードを忘れた場合
@@ -104,10 +86,8 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/s9bNxlU7JVs'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-              allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/s9bNxlU7JVs' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
@@ -119,14 +99,7 @@
             <li>(5)新パスワード／新パスワードの再入力をし、オレンジ色の確認ボタンをクリックします。</li>
           </ul>
 
-          <p>
-            <a
-              href='https://drive.google.com/file/d/1otpSmbJDje3Lt64XrUYt1jSZ0OhlZ4Sk/view?usp=sharing'
-              target='_blank'
-            >
-              パスワードを忘れた場合の対応方法をユーザーガイドで確認
-            </a>
-          </p>
+          <p><a href='https://drive.google.com/file/d/1otpSmbJDje3Lt64XrUYt1jSZ0OhlZ4Sk/view?usp=sharing' target='_blank'>パスワードを忘れた場合の対応方法をユーザーガイドで確認</a></p>
 
           <h3 id='パスワードの変更'>
             パスワードの変更
@@ -134,10 +107,8 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/bMWoc0qflwI'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-              allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/bMWoc0qflwI' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
@@ -150,14 +121,7 @@
             <li>(6)画面下部のオレンジ色の確認ボタンを押下します。</li>
           </ul>
 
-          <p>
-            <a
-              href='https://drive.google.com/file/d/1hDYVQStVh-Db5t-ezrRE2idsjgOkdTKk/view?usp=sharing'
-              target='_blank'
-            >
-              パスワードの変更方法をユーザーガイドで確認
-            </a>
-          </p>
+          <p><a href='https://drive.google.com/file/d/1hDYVQStVh-Db5t-ezrRE2idsjgOkdTKk/view?usp=sharing' target='_blank'>パスワードの変更方法をユーザーガイドで確認</a></p>
 
           <h3 id='ログイン履歴の確認方法'>
             ログイン履歴の確認方法
@@ -174,10 +138,7 @@
             招待コードとはなんですか？
           </h3>
 
-          <p>
-            招待コードは、特定のユーザーに付与されアカウント登録の際の必須項目です。招待コードをお持ちでない方は、Procyon
-            Platformにてアカウント登録を行うことができません。招待コードに関する弊社へのお問い合わせは受け付けておりませんので、あらかじめご了承くださいませ。
-          </p>
+          <p>招待コードは、特定のユーザーに付与されアカウント登録の際の必須項目です。招待コードをお持ちでない方は、Procyon Platformにてアカウント登録を行うことができません。招待コードに関する弊社へのお問い合わせは受け付けておりませんので、あらかじめご了承くださいませ。</p>
 
           <h3 id='認証コードが届きません'>
             認証コードが届きません

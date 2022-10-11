@@ -23,50 +23,40 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/80zQV5wLT6Y'
-              title='YouTube video player' frameborder='0'
-              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-              allowfullscreen
+              width='720' height='405' src='https://www.youtube.com/embed/80zQV5wLT6Y' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
 
           <ul>
-            <li>(1)ログイン後、<a href='https://www.procyon.vip/#/kyc'>KYCページ</a>へアクセスします。</li>
+            <li>(1)ログイン後、<a href='/#/kyc'>個人情報ページ</a>へアクセスします。</li>
             <li>(2)身分証明書一覧からKYCに使用する身分証明書を選択します。</li>
             <ul>
               <li>パスポート</li>
-              <li>マイナンバーカード（運転免許証の場合もこちらを選択ください）</li>
+              <li>マイナンバーカード／運転免許証</li>
             </ul>
-            <li>(3)表示されている必要画像をスマートホンなどで撮影をし、アップロードをします。</li>
+            <li>(3)表示されている必要画像をスマートフォンなどで撮影をし、アップロードをします。</li>
             <li>(4)画面下部の、オレンジ色の申請ボタンを押下します。</li>
           </ul>
 
-          <p>
-            <a href='https://drive.google.com/file/d/1w-P1WTkuWBDxcIaxvwNLYReL4mFh08ro/view?usp=sharing' target='_blank'>
-              KYCの申請方法をユーザーガイドで確認
-            </a>
-          </p>
+          <p>KYCの<a href='https://drive.google.com/file/d/1w-P1WTkuWBDxcIaxvwNLYReL4mFh08ro/view?usp=sharing' target='_blank'>申請方法をユーザーガイドで確認</a></p>
 
           <h3 id='審査状況の確認方法'>
             審査状況の確認方法
           </h3>
 
           <ul>
-            <li>(1)ログイン後、<a href='https://www.procyon.vip/#/kyc'>KYCページ</a>へアクセスします。</li>
+            <li>(1)ログイン後、<a href='/#/kyc'>個人情報ページ</a>へアクセスします。</li>
             <li>(2)身分証明の認証ステータスの記載内容から確認をします。</li>
           </ul>
 
           <ul>
             <li><strong>審査中：</strong>以下2点に変わるまでお待ちください。審査完了等の通知はございません。</li>
-            <li><strong>成功：</strong>KYCの審査がとおった状態です。</li>
+            <li><strong>成功：</strong>KYCの審査が受理された状態です。</li>
             <li><strong>失敗：</strong>KYCの審査が棄却された状態です。併記されている理由を参考に再度申請をお願いします。</li>
           </ul>
 
-          <p>
-            <a href='https://drive.google.com/file/d/1w-P1WTkuWBDxcIaxvwNLYReL4mFh08ro/view?usp=sharing' target='_blank'>
-              審査状況の確認方法をユーザーガイドで確認
-            </a>
-          </p>
+          <p><a href='https://drive.google.com/file/d/1w-P1WTkuWBDxcIaxvwNLYReL4mFh08ro/view?usp=sharing' target='_blank'>審査状況の確認方法をユーザーガイドで確認</a></p>
 
           <h3 id='KYC申請中'>
             KYC申請中(ボタンをクリック中)にサイトが落ちた場合、どうすればいいですか？
