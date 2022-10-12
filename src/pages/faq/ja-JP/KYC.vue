@@ -5,7 +5,7 @@
 
       <div class='faq-content'>
         <div class='faq-content-nav'>
-          <h3>ナビゲーション</h3>
+          <h3>目次</h3>
 
           <ul class='faq-nav-links'>
             <li><a @click='scrollTo("KYCの申請の方法")'>KYCの申請の方法</a></li>
