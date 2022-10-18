@@ -39,7 +39,7 @@
         type='password'
         id='pass'
         required
-        :error='newPwdError'
+        :error='confirmPwdError'
         message='MSG_PASSWORD_TIP'
         placeholder='MSG_PASSWORD_PLACEHOLDER'
         @focus='onConfirmPasswordFocusIn'
@@ -55,7 +55,7 @@ import {
   AccountType,
   encryptPassword
 } from 'npool-cli-v2'
-import { NotifyType, useFrontendUserStore, User } from 'npool-cli-v4'
+import { NotifyType, SignMethodType, useFrontendUserStore, User } from 'npool-cli-v4'
 import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -112,7 +112,7 @@ const onSubmit = () => {
   }
   user.updateUser({
     Account: account.value,
-    AccountType: accountType.value,
+    AccountType: accountType.value as unknown as SignMethodType,
     OldPasswordHash: encryptPassword(oldPassword.value),
     PasswordHash: encryptPassword(newPassword.value),
     VerificationCode: verificationCode.value,
