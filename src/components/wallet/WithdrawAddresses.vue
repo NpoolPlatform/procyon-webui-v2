@@ -79,13 +79,14 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent, ref } from 'vue'
-import { NotificationType, useCoinStore, WithdrawAccount, formatTime, useAccountStore, ReviewState, useNotificationStore } from 'npool-cli-v2'
+import { NotificationType, useCoinStore, useNotificationStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { WithdrawState } from 'src/teststore/mock/transaction/const'
 import { useLocalCoinStore } from 'src/localstore/coin'
+import { NotifyType, useFrontendWithdrawAddressStore, WithdrawAddress, formatTime, ReviewState } from 'npool-cli-v4'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -94,18 +95,18 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
-const account = useAccountStore()
-const accounts = computed(() => account.Accounts.filter((el) => el.State === ReviewState.Approved).sort((a, b) => {
+const account = useFrontendWithdrawAddressStore()
+const accounts = computed(() => account.WithdrawAddress.WithdrawAddress.filter((el) => el.State === ReviewState.Approved && el.Address.DeleteAt === 0).sort((a, b) => {
   return b.Account.CreateAt - a.Account.CreateAt
 }))
 
-const ltrans = useLocalTransactionStore()
-const withdraws = computed(() => ltrans.withdraws)
+const trans = useLocalTransactionStore()
+const withdraws = computed(() => trans.withdraws)
 
 const localcoin = useLocalCoinStore()
 const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
-const deletable = (account: WithdrawAccount) => {
+const deletable = (account: WithdrawAddress) => {
   return withdraws.value.filter((el) => {
     return el.State === WithdrawState.Reviewing || el.State === WithdrawState.Transferring
   }).findIndex((el) => el.Address === account.Account.Address) < 0
@@ -116,25 +117,25 @@ const table = computed(() => [
     name: 'Blockchain',
     label: t('MSG_BLOCKCHAIN'),
     align: 'left',
-    field: (row: WithdrawAccount) => coin.getCoinByID(row.Address.CoinTypeID)?.Name
+    field: (row: WithdrawAddress) => coin.getCoinByID(row.Address.CoinTypeID)?.Name
   },
   {
     name: 'Address',
     label: t('MSG_ADDRESS'),
     align: 'center',
-    field: (row: WithdrawAccount) => row.Account.Address
+    field: (row: WithdrawAddress) => row.Account.Address
   },
   {
     name: 'Label',
     label: t('MSG_LABEL'),
     align: 'center',
-    field: (row: WithdrawAccount) => row.Address.Labels?.join(',')
+    field: (row: WithdrawAddress) => row.Address.Labels?.join(',')
   },
   {
     name: 'DateAdded',
     label: t('MSG_DATE_ADDED'),
     align: 'center',
-    field: (row: WithdrawAccount) => formatTime(row.Address.CreateAt)
+    field: (row: WithdrawAddress) => formatTime(row.Address.CreateAt)
   },
   {
     name: 'ActionButtons',
@@ -160,14 +161,16 @@ onMounted(() => {
   }
 
   if (accounts.value.length === 0) {
-    account.getWithdrawAccounts({
+    account.getWithdrawAddress({
       Message: {
         Error: {
           Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
+    }, () => {
+      // TODO
     })
   }
 })
@@ -178,12 +181,12 @@ const onAddNewAddressClick = () => {
   void router.push({ path: '/add/address' })
 }
 
-const deleteAccount = ref(undefined as unknown as WithdrawAccount)
+const deleteAccount = ref(undefined as unknown as WithdrawAddress)
 const deleting = ref(false)
 
-const onRemove = (address: WithdrawAccount) => {
+const onRemove = (account: WithdrawAddress) => {
   deleting.value = true
-  deleteAccount.value = address
+  deleteAccount.value = account
 }
 
 const onDeleteClick = () => {
@@ -194,20 +197,22 @@ const onDeleteClick = () => {
   }
 
   account.deleteWithdrawAddress({
-    ID: deleteAccount.value.Address.ID as string,
+    ID: deleteAccount.value.Address.ID,
     Message: {
       Error: {
         Title: t('MSG_DELETE_WITHDRAW_ACCOUNT_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
+  }, () => {
+    // TODO
   })
 }
 
 const onCancelClick = () => {
   onMenuHide()
-  deleteAccount.value = undefined as unknown as WithdrawAccount
+  deleteAccount.value = undefined as unknown as WithdrawAddress
 }
 
 const deleteLabels = computed(() => deleteAccount.value?.Address?.Labels?.join(','))
