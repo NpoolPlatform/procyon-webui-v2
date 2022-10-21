@@ -214,20 +214,23 @@ const onSetCommissionClick = async (good: LocalArchivement) => {
 }
 
 const onSaveCommissionClick = (elem: LocalProductArchivement, idx:number) => {
-  if (elem.Archivements[idx].CommissionPercent > inviterGoodPercent(elem.Archivements[idx].GoodID)) {
-    elem.Archivements[idx].CommissionPercent = inviterGoodPercent(elem.Archivements[idx].GoodID)
+  if (visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent > inviterGoodPercent(visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID)) {
+    visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent = inviterGoodPercent(visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID)
     return
   }
-
-  elem.Archivements[idx].Editing = false
+  if (visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent < 0) {
+    visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent = 0
+    return
+  }
+  visibleGoodsArchivements.value(referral.value.Archivements)[idx].Editing = false
   inspire.createPurchaseAmountSetting({
     TargetUserID: referral.value.UserID,
     InviterName: baseuser.displayName(logined.User, locale.value as string),
     InviteeName: username.value,
     Info: {
-      GoodID: elem.Archivements[idx].GoodID,
-      CoinTypeID: elem.Archivements[idx].CoinTypeID,
-      Percent: elem.Archivements[idx].CommissionPercent,
+      GoodID: visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID,
+      CoinTypeID: visibleGoodsArchivements.value(referral.value.Archivements)[idx].CoinTypeID,
+      Percent: visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent,
       Start: Math.ceil(Date.now() / 1000),
       End: 0
     },
