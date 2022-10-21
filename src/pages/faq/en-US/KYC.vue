@@ -21,13 +21,13 @@
         </div>
 
         <div class='faq-content-main'>
-          <h3 id='KYCの申請の方法'>
+          <h3 id='How to submit your KYC'>
             How to submit your KYC
           </h3>
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/80zQV5wLT6Y' title='YouTube video player'
+              width='720' height='405' src='https://www.youtube.com/embed/Rhc-uyRe2uw' title='YouTube video player'
               frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>

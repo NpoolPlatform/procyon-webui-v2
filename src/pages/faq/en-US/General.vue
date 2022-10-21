@@ -31,6 +31,13 @@
             <li>(2) Browse through the blog posts that appear and see what interests you!</li>
           </ul>
 
+          <div class='video-box'>
+            <iframe
+              width='720' height='405' src='https://www.youtube.com/embed/ZxGKm-B9vU4' title='YouTube video player'
+              frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
+            />
+          </div>
+
           <div class='hr' />
         </div>
       </div>
