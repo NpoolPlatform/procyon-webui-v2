@@ -24,7 +24,7 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/q3FLVYDtlaQ' title='YouTube video player'
+              width='720' height='405' src='https://www.youtube.com/embed/CKNDVnxc9r4' title='YouTube video player'
               frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
@@ -42,7 +42,7 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/SFIiq9SdNXA' title='YouTube video player'
+              width='720' height='405' src='https://www.youtube.com/embed/DdvOzdjYCsM' title='YouTube video player'
               frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
@@ -65,7 +65,7 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/-ZhLnqi2ESI' title='YouTube video player'
+              width='720' height='405' src='https://www.youtube.com/embed/eYO5GNUjMgs' title='YouTube video player'
               frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
@@ -89,7 +89,7 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/uZnoRTd6L4w' title='YouTube video player'
+              width='720' height='405' src='https://www.youtube.com/embed/HIA060jno1E' title='YouTube video player'
               frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
