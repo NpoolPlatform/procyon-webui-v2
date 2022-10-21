@@ -9,7 +9,7 @@ declare module 'vue-router' {
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/maintanence',
+    path: '/maintenance',
     component: () => import('pages/Maintenance.vue')
   },
   {
