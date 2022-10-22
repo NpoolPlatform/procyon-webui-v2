@@ -52,7 +52,7 @@
 
           <div class='video-box'>
             <iframe
-              width='720' height='405' src='https://www.youtube.com/embed/s9bNxlU7JVs' title='YouTube video player'
+              width='720' height='405' src='https://www.youtube.com/embed/8RkDiUaafb4' title='YouTube video player'
               frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen
             />
           </div>
