@@ -86,7 +86,7 @@ import copy from 'copy-to-clipboard'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { WithdrawState } from 'src/teststore/mock/transaction/const'
 import { useLocalCoinStore } from 'src/localstore/coin'
-import { NotifyType, useFrontendWithdrawAddressStore, WithdrawAddress, formatTime, ReviewState } from 'npool-cli-v4'
+import { NotifyType, useFrontendWithdrawAddressStore, WithdrawAddress, formatTime, WithdrawAddressReviewState } from 'npool-cli-v4'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -96,7 +96,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
 const account = useFrontendWithdrawAddressStore()
-const accounts = computed(() => account.WithdrawAddress.WithdrawAddress.filter((el) => el.State === ReviewState.Approved && el.Address.DeleteAt === 0).sort((a, b) => {
+const accounts = computed(() => account.WithdrawAddress.WithdrawAddress.filter((el) => el.State === WithdrawAddressReviewState.Approved && el.Address.DeleteAt === 0).sort((a, b) => {
   return b.Account.CreateAt - a.Account.CreateAt
 }))
 
