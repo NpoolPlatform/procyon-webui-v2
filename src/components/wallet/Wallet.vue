@@ -149,15 +149,17 @@ const getCurrencies = () => {
       }
     }
   }, () => {
-    account.getWithdrawAccounts({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
+    if (account.Accounts.length === 0) {
+      account.getWithdrawAccounts({
+        Message: {
+          Error: {
+            Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
         }
-      }
-    })
+      })
+    }
   })
 }
 
