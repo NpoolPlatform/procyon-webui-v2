@@ -34,64 +34,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted } from 'vue'
-import { useGoodStore, NotificationType } from 'npool-cli-v2'
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
-const good = useGoodStore()
-const firstGood = computed(() => good.getRecommendGoods?.[0])
-
-onMounted(() => {
-  if (firstGood.value) {
-    return
-  }
-
-  good.getGoods({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GOODS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
-
-  good.getRecommends({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_RECOMMENDS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  })
-
-  good.getPromotions({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_PROMOTIONS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  })
-
-  good.getAppGoods({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_APP_GOODS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  })
-})
 
 const router = useRouter()
 
