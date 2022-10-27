@@ -23,6 +23,7 @@
 
 <script setup lang="ts">
 import { Currency, NotificationType, SecondsEachDay, useAccountStore, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
+import { NotifyType, TransferAccount, useFrontendTransferAccountStore } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { IntervalKey } from 'src/const/const'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
@@ -198,6 +199,8 @@ const getUserDetails = (offset: number, limit: number) => {
   })
 }
 
+const transferAccount = useFrontendTransferAccountStore()
+
 onMounted(() => {
   if (localtrans.Withdraws.Withdraws.length === 0) {
     getWithdraws(0, 100)
@@ -211,5 +214,27 @@ onMounted(() => {
   if (localtrans.Details.Details.length === 0) {
     getUserDetails(0, 100)
   }
+  if (transferAccount.TransferAccounts.TransferAccounts.length === 0) {
+    getTransferAccounts(0, 500)
+  }
 })
+
+const getTransferAccounts = (offset: number, limit: number) => {
+  transferAccount.getTransfers({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_TRANSFER_ACCOUNTS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (transfers: Array<TransferAccount>, error: boolean) => {
+    if (error || transfers.length < limit) {
+      return
+    }
+    getTransferAccounts(limit + offset, limit)
+  })
+}
 </script>
