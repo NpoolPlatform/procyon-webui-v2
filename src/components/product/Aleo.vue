@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ good?.Good?.Good?.Price }}</span>
+        <span class='number'>{{ target?.Price }}</span>
         <span class='unit'>{{ PriceCoinName }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -21,7 +21,7 @@
       <div class='three-section'>
         <h4>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</h4>
         <span class='number'>*</span>
-        <span class='unit'>{{ good?.Main?.Unit }} / {{ $t('MSG_DAY') }}</span>
+        <span class='unit'>{{ target?.CoinUnit }} / {{ $t('MSG_DAY') }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -31,7 +31,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
-        <span class='number'>{{ good?.Good?.Good?.DurationDays }}</span>
+        <span class='number'>{{ target?.DurationDays }}</span>
         <span class='unit'>{{ $t('MSG_DAYS') }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -53,7 +53,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span class='number'>{{ true ? 'TBD*' : formatTime(good?.Good?.Good?.StartAt, true) }}</span>
+        <span class='number'>{{ true ? 'TBD*' : formatTime(target?.StartAt, true) }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -196,12 +196,13 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { CoinDescriptionUsedFor, useGoodStore, NotificationType, useCoinStore, PriceCoinName, formatTime } from 'npool-cli-v2'
+import { CoinDescriptionUsedFor, NotificationType, useCoinStore, PriceCoinName, formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
 import lightbulb from '../../assets/lightbulb.svg'
 import { DefaultGoodID } from 'src/const/const'
+import { AppGood, NotifyType, useAdminAppGoodStore } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -220,12 +221,12 @@ const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 
-const goods = useGoodStore()
-const good = computed(() => goods.getGoodByID(goodId.value))
+const good = useAdminAppGoodStore()
+const target = computed(() => good.getGoodByID(goodId.value) as AppGood)
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 
 const coin = useCoinStore()
-const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
+const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(target.value?.CoinTypeID, usedFor.value))
 
 interface Member {
   Name: string;
@@ -254,31 +255,19 @@ const members = computed(() => [
 ] as Array<Member>)
 
 onMounted(() => {
-  if (!good.value) {
-    goods.getAppGoods({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_APP_GOODS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+  good.getAppGood({
+    GoodID: goodId.value,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GOOD'),
+        Message: t('MSG_GET_GOOD_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
       }
-    }, () => {
-      goods.getGood({
-        ID: goodId.value,
-        Message: {
-          Error: {
-            Title: t('MSG_GET_GOOD'),
-            Message: t('MSG_GET_GOOD_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      }, () => {
-        // TODO
-      })
-    })
-  }
+    }
+  }, () => {
+    // TODO
+  })
 
   if (!description.value) {
     coin.getCoinDescriptions({
