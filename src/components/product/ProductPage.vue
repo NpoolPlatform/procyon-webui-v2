@@ -6,9 +6,9 @@
           <div class='product-title-section project-title-section' :style='{"background-image": "url(" + bgImg + ")"}'>
             <div class='product-title-container'>
               <div class='product-page-icon'>
-                <img :src='good?.Main?.Logo'>
+                <img :src='target?.CoinLogo'>
               </div>
-              <h1>{{ good?.Main?.Name }} {{ $t('MSG_MINING') }}</h1>
+              <h1>{{ target?.CoinName }} {{ $t('MSG_MINING') }}</h1>
             </div>
           </div>
           <div id='product-form' class='product-sidebar-section mobile'>
@@ -77,17 +77,17 @@
             <div v-else class='info-flex'>
               <div class='three-section'>
                 <h4>{{ $t('MSG_PRICE') }}:</h4>
-                <span class='number'>{{ good?.Good?.Good?.Price }}</span>
+                <span class='number'>{{ target?.Price }}</span>
                 <span class='unit'>{{ PriceCoinName }}</span>
               </div>
               <div class='three-section'>
                 <h4>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</h4>
                 <span class='number'>*</span>
-                <span class='unit'>{{ good?.Main?.Unit }} / {{ $t('MSG_DAY') }}</span>
+                <span class='unit'>{{ target?.CoinUnit }} / {{ $t('MSG_DAY') }}</span>
               </div>
               <div class='three-section'>
                 <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
-                <span class='number'>{{ good?.Good?.Good?.DurationDays }}</span>
+                <span class='number'>{{ target?.DurationDays }}</span>
                 <span class='unit'>{{ $t('MSG_DAYS') }}</span>
               </div>
               <div class='three-section'>
@@ -97,7 +97,7 @@
               </div>
               <div class='three-section'>
                 <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-                <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
+                <span class='number'>{{ formatTime(target?.StartAt, true) }}</span>
               </div>
               <div class='product-detail-text'>
                 <slot name='product-detail' />
@@ -220,10 +220,8 @@ import {
   PriceCoinName,
   CoinDescriptionUsedFor,
   useCoinStore,
-  useGoodStore,
   NotificationType,
   useCurrencyStore,
-  useStockStore,
   Currency,
   Coin
 } from 'npool-cli-v2'
@@ -236,7 +234,7 @@ import { useRouter } from 'vue-router'
 import warning from 'src/assets/warning.svg'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
 import { useLocalOrderStore } from 'src/teststore/mock/order'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { AppGood, NotifyType, useAdminAppGoodStore, useLocalUserStore } from 'npool-cli-v4'
 
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
@@ -290,7 +288,8 @@ const coins = computed(() => {
   const btcCoins = [] as Array<Coin>
   const busdCoins = [] as Array<Coin>
 
-  coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV).forEach((el) => {
+  const targetCoin = coin.getCoinByID(target.value.CoinTypeID)
+  coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === targetCoin?.ENV).forEach((el) => {
     if (el.Name?.toLowerCase()?.includes('trc20')) {
       trc20Coins.push(el)
     } else if (el.Unit?.includes('BUSD')) {
@@ -322,12 +321,12 @@ const coinName = (c: Coin) => {
 
 const selectedCoinID = ref(undefined as unknown as string)
 
-const goods = useGoodStore()
-const good = computed(() => goods.getGoodByID(goodId.value))
+const good = useAdminAppGoodStore()
+const target = computed(() => good.getGoodByID(goodId.value) as AppGood)
 const myPurchaseAmount = ref(purchaseAmount.value ? purchaseAmount.value : 1)
 
 const selectedCoinCurrency = ref(1)
-const totalAmount = computed(() => good.value?.Good?.Good?.Price * myPurchaseAmount.value / selectedCoinCurrency.value)
+const totalAmount = computed(() => Number(target.value?.Price) * myPurchaseAmount.value / selectedCoinCurrency.value)
 
 const paymentCoin = computed({
   get: () => {
@@ -355,46 +354,27 @@ const paymentCoin = computed({
   }
 })
 
-const stock = useStockStore()
-const total = computed(() => {
-  const total1 = stock.getStockByGoodID(goodId.value)?.Total
-  let total2 = total1
-  const index = goods.AppGoods.findIndex((el) => el.GoodID === goodId.value)
-  if (index >= 0) {
-    total2 = goods.AppGoods[index].PurchaseLimit
-  }
-  return total1 > total2 ? total2 : total1
-})
+const total = computed(() => Math.min(target.value.PurchaseLimit, target.value.GoodTotal))
 
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
-const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
+const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(target.value?.CoinTypeID, usedFor.value))
 
 const currency = useCurrencyStore()
 const inputBalance = ref(0)
 onMounted(() => {
-  if (!good.value) {
-    goods.getAppGoods({
+  if (!target.value) {
+    good.getAppGood({
+      GoodID: goodId.value,
       Message: {
         Error: {
-          Title: t('MSG_GET_APP_GOODS_FAIL'),
+          Title: t('MSG_GET_GOOD'),
+          Message: t('MSG_GET_GOOD_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
     }, () => {
-      goods.getGood({
-        ID: goodId.value,
-        Message: {
-          Error: {
-            Title: t('MSG_GET_GOOD'),
-            Message: t('MSG_GET_GOOD_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      }, () => {
-        // TODO
-      })
+    // TODO
     })
   }
 
@@ -425,25 +405,9 @@ onMounted(() => {
       }
     })
   }
-
-  if (!total.value) {
-    stock.getStocks({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOOD_STOCKS'),
-          Message: t('MSG_GET_GOOD_STOCKS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
 })
 
 const purchaseAmountError = ref(false)
-// const balanceAmountError = ref(false)
 const onPurchaseAmountFocusIn = () => {
   purchaseAmountError.value = false
 }
@@ -553,7 +517,7 @@ const onPurchaseClick = throttle(() => {
       path: '/signin',
       query: {
         target: '/product/aleo',
-        goodId: good.value.Good.Good.ID as string,
+        goodId: target.value.GoodID,
         purchaseAmount: myPurchaseAmount.value
       }
     })
