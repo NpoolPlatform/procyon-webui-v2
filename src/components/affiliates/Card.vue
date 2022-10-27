@@ -53,8 +53,8 @@
               <span class='aff-number'>{{ _good.CommissionPercent }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
-                :class='[ "alt", goodOnline(_good.GoodID) ? "" : "in-active" ]'
-                :disabled='!goodOnline(_good.GoodID)'
+                :class='[ "alt", good.online(_good.GoodID) ? "" : "in-active" ]'
+                :disabled='!good.online(_good.GoodID)'
                 @click='onSetCommissionClick(_good)'
               >
                 {{ $t('MSG_SET') }}
@@ -87,7 +87,7 @@
             </thead>
             <tbody>
               <tr class='aff-info' v-for='setting in settings' :key='setting.ID'>
-                <td><span class='aff-product'>{{ good.getGoodByID(setting.GoodID)?.Main?.Name }}</span></td>
+                <td><span class='aff-product'>{{ good.getGoodByID(setting.GoodID)?.GoodName }}</span></td>
                 <td><span class='aff-number'>{{ settingDate(setting) }}<span class='unit'>{{ settingTime(setting) }}</span></span></td>
                 <td><span class='aff-number'>{{ setting.Percent }}<span class='unit'>%</span></span></td>
               </tr>
@@ -109,7 +109,6 @@ import {
   PriceCoinName,
   NotificationType,
   useInspireStore,
-  useGoodStore,
   PurchaseAmountSetting,
   formatTime,
   useCurrencyStore
@@ -119,7 +118,7 @@ import { useI18n } from 'vue-i18n'
 import chevrons from '../../assets/chevrons.svg'
 import { LocalArchivement, LocalProductArchivement } from 'src/localstore/affiliates/types'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
-import { useBaseUserStore, useLocalUserStore, User } from 'npool-cli-v4'
+import { useBaseUserStore, useLocalUserStore, User, useAdminAppGoodStore } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
@@ -164,7 +163,7 @@ const onShowMoreClick = () => {
 
 const inspire = useInspireStore()
 
-const good = useGoodStore()
+const good = useAdminAppGoodStore()
 
 const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
   return el.UserID === referral.value.UserID
@@ -188,17 +187,9 @@ const userKOLOptions = computed(() => (maxKOL: number) => {
   return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
 })
 
-const goodOnline = (goodID: string) => {
-  const index = good.AppGoods.findIndex((el) => el.GoodID === goodID)
-  return index < 0 ? false : good.AppGoods[index].Online
-}
 const visibleGoodsArchivements = computed(() => (goodArchivements: Array<LocalArchivement>) => {
-  return goodArchivements.filter((el) => goodVisible(el.GoodID))
+  return goodArchivements.filter((el) => good.visible(el.GoodID))
 })
-const goodVisible = (goodID: string) => {
-  const index = good.AppGoods.findIndex((el) => el.GoodID === goodID)
-  return index < 0 ? false : good.AppGoods[index].Visible
-}
 
 const settingDate = (setting: PurchaseAmountSetting) => {
   return formatTime(setting.Start, true)
