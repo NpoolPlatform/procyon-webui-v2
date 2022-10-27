@@ -100,7 +100,7 @@ import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
 import { Account, useLocalAccountStore } from 'src/teststore/mock/account'
 import copy from 'copy-to-clipboard'
 import { useLocalCoinStore } from 'src/localstore/coin'
-import { KYCState, useFrontendKYCStore } from 'npool-cli-v4'
+import { KYCState, useFrontendKYCStore, useFrontendTransferAccountStore } from 'npool-cli-v4'
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
@@ -156,19 +156,15 @@ const table = computed(() => [
 const router = useRouter()
 const account = useAccountStore()
 const accounts = computed(() => account.Accounts.filter((el) => el.State === ReviewState.Approved))
+const getTargetAddress = computed(() => (ID:string) => accounts.value.find((el) => el.Account.CoinTypeID === ID))
+
+const transferAccount = useFrontendTransferAccountStore()
+const transfers = computed(() => transferAccount.TransferAccounts.TransferAccounts)
 
 const onWithdrawClick = (asset: BenefitModel) => {
   submitting.value = true
   kyc.getKYC({
-    Message: {
-      /*
-      Error: {
-        Title: t('MSG_GET_KYCS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-      */
-    }
+    Message: {}
   }, (error: boolean) => {
     submitting.value = false
     if (error) {
@@ -180,10 +176,23 @@ const onWithdrawClick = (asset: BenefitModel) => {
       return
     }
 
-    const exist = accounts.value.find((account) => {
-      return account.Account.CoinTypeID === asset.CoinTypeID && account.State === ReviewState.Approved
-    })
-    if (!exist) {
+    if (getTargetAddress.value(asset.CoinTypeID)) {
+      void router.push({
+        path: '/withdraw',
+        query: {
+          coinTypeId: asset.CoinTypeID,
+          type: 'ExternalAddress'
+        }
+      })
+    } else if (transfers.value.length > 0) {
+      void router.push({
+        path: '/withdraw',
+        query: {
+          coinTypeId: asset.CoinTypeID,
+          type: 'InternalTransfer'
+        }
+      })
+    } else {
       void router.push({
         path: '/add/address',
         query: {
@@ -191,15 +200,7 @@ const onWithdrawClick = (asset: BenefitModel) => {
           gotoWithdraw: 'true'
         }
       })
-      return
     }
-
-    void router.push({
-      path: '/withdraw',
-      query: {
-        coinTypeId: asset.CoinTypeID
-      }
-    })
   })
 }
 const laccount = useLocalAccountStore()
