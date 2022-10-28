@@ -4,9 +4,9 @@
       <div class='product-container content-glass'>
         <div class='product-title-section fallback-title'>
           <div class='product-page-icon'>
-            <img :src='good?.Main?.Logo'>
+            <img :src='good?.CoinLogo'>
           </div>
-          <h1>{{ good?.Main?.Name }} {{ $t('MSG_MINING') }}</h1>
+          <h1>{{ good?.CoinName }} {{ $t('MSG_MINING') }}</h1>
         </div>
         <slot />
       </div>
@@ -16,11 +16,11 @@
 </template>
 
 <script setup lang='ts'>
-import { Good } from 'npool-cli-v2'
+import { AppGood } from 'npool-cli-v4'
 import { defineAsyncComponent, defineProps, toRef } from 'vue'
 
 interface Props {
-  good: Good;
+  good: AppGood;
 }
 
 const props = defineProps<Props>()
