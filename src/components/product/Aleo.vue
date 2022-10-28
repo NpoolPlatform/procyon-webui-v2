@@ -267,7 +267,6 @@ onMounted(() => {
     }
   }, () => {
     // TODO
-    console.log('GoodID: ', goodId.value)
   })
 
   if (!description.value) {
