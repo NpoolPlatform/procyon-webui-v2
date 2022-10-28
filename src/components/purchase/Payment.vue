@@ -305,6 +305,7 @@ onUnmounted(() => {
   if (ticker.value >= 0) {
     window.clearInterval(ticker.value)
   }
+  odr.$reset()
 })
 
 const router = useRouter()
