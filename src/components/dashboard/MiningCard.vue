@@ -55,7 +55,7 @@
       <button class='alt' disabled>
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
-      <button @click='onPurchaseClick' :disabled='purchaseDisable'>
+      <button @click='onPurchaseClick' :disabled='good.canBuy(general.GoodID, general.CoinTypeID)'>
         {{ $t('MSG_PURCHASE_CAPACITY') }}
       </button>
     </div>
@@ -65,11 +65,10 @@
 <script setup lang='ts'>
 import {
   useCoinStore,
-  PriceCoinName,
-  useGoodStore
+  PriceCoinName
 } from 'npool-cli-v2'
+import { useAdminAppGoodStore } from 'npool-cli-v4'
 import { GoodGeneral } from 'src/localstore/good'
-// import { useLocalOrderStore } from 'src/teststore/mock/order'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -87,22 +86,7 @@ const coins = useCoinStore()
 const productInfo = computed(() => coins.getCoinProductInfoByCoin(general.value?.CoinTypeID))
 const productPage = computed(() => productInfo.value?.ProductPage)
 
-const good = useGoodStore()
-
-const purchaseDisable = computed(() => {
-  const index = good.Goods.findIndex((el) => {
-    for (const g of good.AppGoods) {
-      if (g.GoodID === el.Good.Good.ID && el.Main?.ID === general.value?.CoinTypeID && g.Visible && g.Online) {
-        return true
-      }
-    }
-    return false
-  })
-  if (index >= 0) {
-    return false
-  }
-  return true
-})
+const good = useAdminAppGoodStore()
 
 const totalEarningUSD = ref(0)
 const _last24HoursEarningCoin = ref(0)
