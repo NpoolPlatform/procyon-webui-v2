@@ -401,7 +401,6 @@ const onPurchaseClick = throttle(() => {
     })
     return
   }
-  getOrders(0, 100)
   onPurchaseAmountFocusOut()
   if (purchaseAmountError.value) {
     return
@@ -531,24 +530,7 @@ onMounted(() => {
     })
   }
 })
-const getOrders = (offset:number, limit: number) => {
-  order.getOrders({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_ORDERS_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, (orders: Array<Order>, error: boolean) => {
-    if (error || orders.length < limit) {
-      return
-    }
-    getOrders(offset + limit, limit)
-  })
-}
+
 </script>
 
 <style lang='sass' scoped>
