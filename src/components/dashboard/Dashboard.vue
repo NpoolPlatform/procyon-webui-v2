@@ -22,8 +22,8 @@ import { NotificationType, SecondsEachDay, useCoinStore, useStockStore } from 'n
 import { useI18n } from 'vue-i18n'
 import { IntervalKey } from 'src/const/const'
 import { QAjaxBar } from 'quasar'
-import { useLocalOrderStore } from 'src/teststore/mock/order'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
+import { NotifyType, Order, useFrontendOrderStore } from 'npool-cli-v4'
 
 const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
 const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/MiningCards.vue'))
@@ -33,7 +33,7 @@ const Orders = defineAsyncComponent(() => import('src/components/dashboard/Order
 const { t } = useI18n({ useScope: 'global' })
 
 const profit = useProfitStore()
-const order = useLocalOrderStore()
+const order = useFrontendOrderStore()
 const coin = useCoinStore()
 const stock = useStockStore()
 const localledger = useLocalLedgerStore()
@@ -121,25 +121,6 @@ const getGoodProfits = (key: IntervalKey, startAt: number, endAt: number, offset
   })
 }
 
-const getOrders = (offset:number, limit: number) => {
-  order.getOrders({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_ORDERS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, (error: boolean, count?: number) => {
-    if (error || count === 0) {
-      return
-    }
-    getOrders(offset + limit, limit)
-  })
-}
-
 onMounted(() => {
   if (profit.Profits.Total === 0) {
     getProfits(0, 100)
@@ -164,7 +145,7 @@ onMounted(() => {
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
   }
-  if (order.Orders.length === 0) {
+  if (order.Orders.Orders.length === 0) {
     getOrders(0, 100)
   }
 
@@ -197,6 +178,25 @@ onMounted(() => {
     })
   }
 })
+
+const getOrders = (offset:number, limit: number) => {
+  order.getOrders({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_ORDERS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (orders: Array<Order>, error: boolean) => {
+    if (error || orders.length < limit) {
+      return
+    }
+    getOrders(offset + limit, limit)
+  })
+}
 </script>
 
 <style lang='sass' scoped>
