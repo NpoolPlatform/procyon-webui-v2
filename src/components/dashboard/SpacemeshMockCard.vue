@@ -71,9 +71,9 @@ import {
   useCoinStore,
   PriceCoinName,
   NotificationType,
-  useStockStore,
   Coin
 } from 'npool-cli-v2'
+import { useAdminAppGoodStore } from 'npool-cli-v4'
 import { IntervalKey } from 'src/const/const'
 import { useMockSpacemeshStore } from 'src/teststore'
 import { useProfitStore } from 'src/teststore/mock/profit'
@@ -110,8 +110,9 @@ const profits = computed(() => goodProfits.value?.Profits.filter((p) => {
 const goodUnit = computed(() => profits.value?.length ? profits.value?.[0].GoodUnit : '')
 const goodPeriod = computed(() => profits.value?.length ? profits.value?.[0].GoodServicePeriodDays : '')
 const totalUnits = computed(() => profits.value?.length ? profits.value?.[0].Units : 0)
-const stock = useStockStore()
-const total = computed(() => profits.value?.length ? stock.getStockByGoodID(profits.value?.[0].GoodID)?.Total : 0)
+
+const good = useAdminAppGoodStore()
+const total = computed(() => profits.value?.length ? good.getGoodByID(profits.value?.[0].GoodID)?.GoodTotal : 0)
 const unitsRatio = computed(() => profits.value?.length && total.value ? totalUnits.value / total.value : 0)
 const daily = computed(() => spacemesh.getNetworkDailyOutput)
 
