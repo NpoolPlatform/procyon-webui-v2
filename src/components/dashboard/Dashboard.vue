@@ -18,12 +18,12 @@
 <script setup lang='ts'>
 import { Profit, useProfitStore } from 'src/teststore/mock/profit'
 import { defineAsyncComponent, onMounted } from 'vue'
-import { NotificationType, SecondsEachDay, useCoinStore, useStockStore } from 'npool-cli-v2'
+import { NotificationType, SecondsEachDay, useCoinStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { IntervalKey } from 'src/const/const'
 import { QAjaxBar } from 'quasar'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
-import { NotifyType, Order, useFrontendOrderStore } from 'npool-cli-v4'
+import { AppGood, NotifyType, Order, useAdminAppGoodStore, useFrontendOrderStore } from 'npool-cli-v4'
 
 const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
 const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/MiningCards.vue'))
@@ -35,8 +35,9 @@ const { t } = useI18n({ useScope: 'global' })
 const profit = useProfitStore()
 const order = useFrontendOrderStore()
 const coin = useCoinStore()
-const stock = useStockStore()
 const localledger = useLocalLedgerStore()
+
+const good = useAdminAppGoodStore()
 
 const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
   profit.getIntervalProfits({
@@ -162,20 +163,8 @@ onMounted(() => {
       // TODO
     })
   }
-
-  if (stock.Stocks.length === 0) {
-    stock.getStocks({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOOD_STOCKS'),
-          Message: t('MSG_GET_GOOD_STOCKS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+  if (good.AppGoods.AppGoods.length === 0) {
+    getAppGoods(0, 500)
   }
 })
 
@@ -195,6 +184,25 @@ const getOrders = (offset:number, limit: number) => {
       return
     }
     getOrders(offset + limit, limit)
+  })
+}
+
+const getAppGoods = (offset: number, limit: number) => {
+  good.getAppGoods({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_APP_GOODS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (g: Array<AppGood>, error: boolean) => {
+    if (error || g.length < limit) {
+      return
+    }
+    getAppGoods(offset + limit, limit)
   })
 }
 </script>
