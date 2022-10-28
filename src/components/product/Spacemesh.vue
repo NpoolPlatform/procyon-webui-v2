@@ -14,15 +14,15 @@
         <span v-html='$t("MSG_WHY_TITLE")' />
       </h3>
       <p v-html='$t("MSG_WHY_CONTENT")' />
-      <div v-show='good?.Main?.Specs'>
-        <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
+      <div v-show='targetCoin?.Specs'>
+        <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.CoinName }) }}</h3>
         <p>
-          <img class='content-image' :src='good?.Main?.Specs'>
+          <img class='content-image' :src='targetCoin?.Specs'>
         </p>
       </div>
       <p>
-        <a :href='good?.Main?.HomePage'>
-          {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
+        <a :href='targetCoin?.HomePage'>
+          {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.CoinName }) }}
         </a>
       </p>
     </template>
@@ -83,8 +83,9 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { CoinDescriptionUsedFor, useGoodStore, NotificationType, useCoinStore } from 'npool-cli-v2'
+import { CoinDescriptionUsedFor, NotificationType, useCoinStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { NotifyType, useAdminAppGoodStore } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -97,25 +98,26 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const goodId = computed(() => query.value.goodId)
 
-const goods = useGoodStore()
-const good = computed(() => goods.getGoodByID(goodId.value))
+const appGood = useAdminAppGoodStore()
+const good = computed(() => appGood.getGoodByID(goodId.value))
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 
 const coin = useCoinStore()
-const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
+const targetCoin = computed(() => coin.getCoinByID(good.value?.CoinTypeID as string))
+const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.CoinTypeID as string, usedFor.value))
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 
 onMounted(() => {
   if (!good.value) {
-    goods.getGood({
-      ID: goodId.value,
+    appGood.getAppGood({
+      GoodID: goodId.value,
       Message: {
         Error: {
           Title: t('MSG_GET_GOOD'),
           Message: t('MSG_GET_GOOD_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
     }, () => {
@@ -133,6 +135,19 @@ onMounted(() => {
           Type: NotificationType.Error
         }
       }
+    })
+  }
+  if (coin.Coins.length === 0) {
+    coin.getCoins({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COINS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
     })
   }
 })
