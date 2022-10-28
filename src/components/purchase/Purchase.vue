@@ -42,17 +42,17 @@
             </div>
             <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
             <p v-html='$t("MSG_WHY_CONTENT")' />
-            <!-- <div v-show='good?.Main?.Specs'>
-              <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
+            <div v-show='targetCoin?.Specs'>
+              <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.CoinName }) }}</h3>
               <p>
-                <img class='content-image' :src='good?.Main?.Specs'>
+                <img class='content-image' :src='targetCoin?.Specs'>
               </p>
             </div>
             <p>
-              <a :href='good?.Main?.HomePage'>
-                {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
+              <a :href='targetCoin?.HomePage'>
+                {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.CoinName }) }}
               </a>
-            </p> -->
+            </p>
           </div>
         </div>
       </div>
@@ -195,6 +195,7 @@ const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const coin = useCoinStore()
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.CoinTypeID, usedFor.value))
 const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale /* && coin.ENV === good.value?.Main?.ENV */))
+const targetCoin = computed(() => coin.getCoinByID(good.value?.CoinTypeID))
 const selectedCoinID = ref(undefined as unknown as string)
 const paymentCoin = computed({
   get: () => {
@@ -382,6 +383,19 @@ onMounted(() => {
           Type: NotificationType.Error
         }
       }
+    })
+  }
+  if (coins.value.length === 0) {
+    coin.getCoins({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COINS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
+    }, () => {
+      // TODO
     })
   }
 })
