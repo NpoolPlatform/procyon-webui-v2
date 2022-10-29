@@ -193,9 +193,11 @@ const total = computed(() => Math.min(good.value?.PurchaseLimit, good.value?.Tot
 
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const coin = useCoinStore()
-const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.CoinTypeID, usedFor.value))
-const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale /* && coin.ENV === good.value?.Main?.ENV */))
 const targetCoin = computed(() => coin.getCoinByID(good.value?.CoinTypeID))
+
+const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.CoinTypeID, usedFor.value))
+const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === targetCoin.value?.ENV))
+
 const selectedCoinID = ref(undefined as unknown as string)
 const paymentCoin = computed({
   get: () => {
