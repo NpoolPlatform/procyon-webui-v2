@@ -112,7 +112,7 @@ const goodPeriod = computed(() => profits.value?.length ? profits.value?.[0].Goo
 const totalUnits = computed(() => profits.value?.length ? profits.value?.[0].Units : 0)
 
 const good = useAdminAppGoodStore()
-const total = computed(() => profits.value?.length ? good.getGoodByID(profits.value?.[0].GoodID)?.GoodTotal : 0)
+const total = computed(() => profits.value?.length ? good.getGoodByID(profits.value?.[0].GoodID)?.Total : 0)
 const unitsRatio = computed(() => profits.value?.length && total.value ? totalUnits.value / total.value : 0)
 const daily = computed(() => spacemesh.getNetworkDailyOutput)
 

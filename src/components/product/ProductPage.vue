@@ -357,7 +357,7 @@ const paymentCoin = computed({
   }
 })
 
-const total = computed(() => Math.min(target.value?.PurchaseLimit, target.value?.GoodTotal))
+const total = computed(() => Math.min(target.value?.PurchaseLimit, target.value?.Total))
 
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(target.value?.CoinTypeID, usedFor.value))
