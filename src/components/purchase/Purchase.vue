@@ -189,7 +189,7 @@ const good = computed(() => appGood.getGoodByID(goodId.value) as AppGood)
 
 const currency = useCurrencyStore()
 
-const total = computed(() => Math.min(good.value?.PurchaseLimit, good.value?.GoodTotal))
+const total = computed(() => Math.min(good.value?.PurchaseLimit, good.value?.Total))
 
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const coin = useCoinStore()
