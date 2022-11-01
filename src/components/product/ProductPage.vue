@@ -232,10 +232,12 @@ import { useI18n } from 'vue-i18n'
 import {
   AppGood,
   General,
+  KYCState,
   NotifyType,
   Order,
   useAdminAppGoodStore,
   useFrontendGeneralStore,
+  useFrontendKYCStore,
   useFrontendOrderStore,
   useLocalUserStore
 } from 'npool-cli-v4'
@@ -389,6 +391,7 @@ const onMenuHide = () => {
   showBalanceDialog.value = false
 }
 
+const kyc = useFrontendKYCStore()
 const onPurchaseClick = throttle(() => {
   if (!logined.logined) {
     void router.push({
@@ -401,11 +404,19 @@ const onPurchaseClick = throttle(() => {
     })
     return
   }
-  onPurchaseAmountFocusOut()
-  if (purchaseAmountError.value) {
-    return
-  }
-  getGenerals(0, 100)
+  kyc.getKYC({
+    Message: {}
+  }, (error: boolean) => {
+    if (error || !kyc.KYC || kyc.KYC.State !== KYCState.Approved) {
+      void router.push({ path: '/kyc' })
+      return
+    }
+    onPurchaseAmountFocusOut()
+    if (purchaseAmountError.value) {
+      return
+    }
+    getGenerals(0, 100)
+  })
 }, ThrottleSeconds * 1000)
 
 const getGenerals = (offset:number, limit: number) => {
