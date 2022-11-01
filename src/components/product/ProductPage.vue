@@ -407,7 +407,7 @@ const onPurchaseClick = throttle(() => {
   kyc.getKYC({
     Message: {}
   }, (error: boolean) => {
-    if (error || !kyc.KYC || kyc.KYC.State !== KYCState.Approved) {
+    if (error || kyc.KYC?.State !== KYCState.Approved) {
       void router.push({ path: '/kyc' })
       return
     }
