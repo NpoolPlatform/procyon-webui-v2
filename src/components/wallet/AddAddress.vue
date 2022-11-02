@@ -63,7 +63,7 @@ import { Coin, useCoinStore } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { UsedFor, AccountType, useFrontendWithdrawAddressStore, NotifyType } from 'npool-cli-v4'
+import { UsedFor, AccountType, NotifyType, useFrontendUserAccountStore, SignMethodType, AccountUsedFor } from 'npool-cli-v4'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
@@ -84,17 +84,13 @@ const coinTypeID = computed(() => query.value.coinTypeId)
 const gotoWithdraw = computed(() => query.value.gotoWithdraw !== undefined)
 
 const coin = useCoinStore()
-
 const selectedCoinTypeID = ref(coinTypeID.value)
-
 const selectedCoin = computed({
   get: () => coin.getCoinByID(selectedCoinTypeID.value),
   set: (val: Coin) => {
     selectedCoinTypeID.value = val.ID as string
   }
 })
-
-const accounts = useFrontendWithdrawAddressStore()
 
 const address = ref('')
 const addressError = ref(false)
@@ -124,21 +120,24 @@ const onMenuHide = () => {
 const account = ref('')
 const accountType = ref(AccountType.Email)
 
-const router = useRouter()
-
 const onCancelClick = () => {
   verifying.value = false
 }
 
+const router = useRouter()
+
+const userAccount = useFrontendUserAccountStore()
+
 const onCodeVerify = (code: string) => {
-  accounts.setWithdrawAddress({
+  userAccount.createUserAccount({
     CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
     Account: account.value,
-    AccountType: accountType.value,
+    AccountType: accountType.value as unknown as SignMethodType,
     VerificationCode: code,
-    Labels: labels.value.split(','),
-    NotifyMessage: {
+    Labels: labels.value?.split(','),
+    UsedFor: AccountUsedFor.UserWithdraw,
+    Message: {
       Error: {
         Title: t('MSG_SET_WITHDRAW_ADDRESS'),
         Message: t('MSG_SET_WITHDRAW_ADDRESS_FAIL'),
