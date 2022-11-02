@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { Currency, NotificationType, SecondsEachDay, useAccountStore, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
-import { NotifyType, TransferAccount, useFrontendTransferAccountStore } from 'npool-cli-v4'
+import { Currency, NotificationType, SecondsEachDay, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
+import { Account, AccountUsedFor, NotifyType, TransferAccount, useFrontendTransferAccountStore, useFrontendUserAccountStore } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { IntervalKey } from 'src/const/const'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
@@ -56,7 +56,7 @@ const localtrans = useLocalTransactionStore()
 const localledger = useLocalLedgerStore()
 const coin = useCoinStore()
 const currency = useCurrencyStore()
-const account = useAccountStore()
+const account = useFrontendUserAccountStore()
 const general = useGeneralStore()
 
 const getWithdraws = (offset: number, limit: number) => {
@@ -209,16 +209,8 @@ onMounted(() => {
   if (transferAccount.TransferAccounts.TransferAccounts.length === 0) {
     getTransferAccounts(0, 500)
   }
-  if (account.Accounts.length === 0) {
-    account.getWithdrawAccounts({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    })
+  if (account.UserAccounts.UserAccounts.length === 0) {
+    getUserAccounts(0, 500)
   }
 })
 
@@ -238,6 +230,24 @@ const getTransferAccounts = (offset: number, limit: number) => {
       return
     }
     getTransferAccounts(limit + offset, limit)
+  })
+}
+
+const getUserAccounts = (offset: number, limit: number) => {
+  account.getUserAccounts({
+    Offset: offset,
+    Limit: limit,
+    UsedFor: AccountUsedFor.UserWithdraw,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (accounts: Array<Account>, error: boolean) => {
+    if (error || accounts.length < limit) return
+    getUserAccounts(offset + limit, limit)
   })
 }
 </script>
