@@ -48,9 +48,9 @@
           <h3>{{ $t('MSG_DEPOSIT_ADDRESS') }}</h3>
 
           <div class='qr-code-container' ref='qrCodeContainer'>
-            <h5>{{ coinName(ant?.CoinTypeID) }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
+            <h5>{{ coinName(depositAccount?.CoinTypeID) }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
             <qrcode-vue
-              :value='ant?.Address'
+              :value='depositAccount?.Address'
               :size='qrCodeContainer?.clientWidth as number - 1'
               :margin='3'
               class='qr-code'
@@ -62,9 +62,9 @@
           <div class='full-section'>
             <h4>{{ $t('MSG_YOUR_ADDRESS') }}</h4>
             <div class='wallet-type'>
-              {{ coinName(ant.CoinTypeID) }}
+              {{ coinName(depositAccount.CoinTypeID) }}
             </div>
-            <span class='number word-wrapper'>{{ ant.Address }}</span>
+            <span class='number word-wrapper'>{{ depositAccount.Address }}</span>
             <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyDepositAddress'>
           </div>
 
@@ -88,8 +88,6 @@
 import { computed, defineAsyncComponent, ref } from 'vue'
 import {
   BenefitModel,
-  ReviewState,
-  useAccountStore,
   useNotificationStore,
   NotificationType,
   useCoinStore
@@ -97,10 +95,9 @@ import {
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
-import { Account, useLocalAccountStore } from 'src/teststore/mock/account'
 import copy from 'copy-to-clipboard'
 import { useLocalCoinStore } from 'src/localstore/coin'
-import { KYCState, useFrontendKYCStore, useFrontendTransferAccountStore } from 'npool-cli-v4'
+import { Account, AccountUsedFor, KYCState, NotifyType, useFrontendKYCStore, useFrontendTransferAccountStore, useFrontendUserAccountStore } from 'npool-cli-v4'
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
@@ -154,9 +151,7 @@ const table = computed(() => [
 ])
 
 const router = useRouter()
-const account = useAccountStore()
-const accounts = computed(() => account.Accounts.filter((el) => el.State === ReviewState.Approved))
-const getTargetAddress = computed(() => (ID:string) => accounts.value.find((el) => el.Account.CoinTypeID === ID))
+const account = useFrontendUserAccountStore()
 
 const transferAccount = useFrontendTransferAccountStore()
 const transfers = computed(() => transferAccount.TransferAccounts.TransferAccounts)
@@ -176,7 +171,7 @@ const onWithdrawClick = (asset: BenefitModel) => {
       return
     }
 
-    if (getTargetAddress.value(asset.CoinTypeID)) {
+    if (account.getWithdrawAddressByID(asset.CoinTypeID)) {
       void router.push({
         path: '/withdraw',
         query: {
@@ -203,7 +198,6 @@ const onWithdrawClick = (asset: BenefitModel) => {
     }
   })
 }
-const laccount = useLocalAccountStore()
 
 const coin = useCoinStore()
 const payCoin = (coinTypeID: string) => {
@@ -238,46 +232,47 @@ const coinBlacklist = (coinTypeID: string) => {
 const localcoin = useLocalCoinStore()
 const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
-const ant = ref({} as Account)
+const depositAccount = ref({} as Account)
 const showDepositing = ref(false)
 const qrCodeContainer = ref<HTMLDivElement>()
 const depositClick = ref(false)
 
 const onDepositClick = (row: BalanceGeneral) => {
   depositClick.value = true
-  laccount.getDepositAccount({
+  account.getDepositAccount({
     CoinTypeID: row.CoinTypeID,
+    UsedFor: AccountUsedFor.UserDeposit,
     Message: {
       Error: {
         Title: t('MSG_FAIL_TO_GET_DEPOSIT_ACCOUNT'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
-  }, (error: boolean, act?: Account) => {
+  }, (row: Account, error: boolean) => {
     depositClick.value = false
 
-    if (error || act === undefined) {
+    if (error || !row) {
       return
     }
-    showDepositDialog(act)
+    showDepositDialog(row)
   })
 }
 const onReturnWallet = () => {
   hideDepositDialog()
 }
-const showDepositDialog = (act: Account) => {
-  ant.value = { ...act }
+const showDepositDialog = (row: Account) => {
+  depositAccount.value = { ...row }
   showDepositing.value = true
 }
 const hideDepositDialog = () => {
-  ant.value = {} as Account
+  depositAccount.value = {} as Account
   showDepositing.value = false
 }
 
 const notification = useNotificationStore()
 function onCopyDepositAddress () {
-  copy(ant.value.Address)
+  copy(depositAccount.value.Address)
   notification.Notifications.push({
     Title: t('MSG_DEPOSIT_ADDRESS_COPIED'),
     Message: t('MSG_COPY_DEPOSIT_ADDRESS_SUCCESS'),
