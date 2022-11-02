@@ -23,18 +23,18 @@
         <q-tr :props='myProps'>
           <q-td key='Blockchain' :props='myProps'>
             <LogoName
-              :logo='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Logo'
-              :name='coinName(myProps.row.Address.CoinTypeID as string)'
+              :logo='myProps.row?.CoinLogo'
+              :name='coinName(myProps.row?.CoinTypeID)'
             />
           </q-td>
           <q-td key='Address' :props='myProps'>
-            {{ myProps.row.Account?.Address }}
+            {{ myProps.row?.Address }}
           </q-td>
           <q-td key='Label' :props='myProps'>
-            {{ myProps.row.Address.Labels?.join(',') }}
+            {{ myProps.row.Labels?.join(',') }}
           </q-td>
           <q-td key='DateAdded' :props='myProps'>
-            {{ formatTime(myProps.row.Address.CreateAt) }}
+            {{ formatTime(myProps.row?.CreatedAt) }}
           </q-td>
           <q-td key='ActionButtons' :props='myProps'>
             <button class='small' @click='onRemove(myProps.row)' :disabled='!deletable(myProps.row)'>
@@ -92,7 +92,7 @@ import copy from 'copy-to-clipboard'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { WithdrawState } from 'src/teststore/mock/transaction/const'
 import { useLocalCoinStore } from 'src/localstore/coin'
-import { NotifyType, useFrontendWithdrawAddressStore, WithdrawAddress, formatTime, WithdrawAddressReviewState } from 'npool-cli-v4'
+import { NotifyType, formatTime, useFrontendUserAccountStore, Account } from 'npool-cli-v4'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -101,10 +101,8 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 const { t } = useI18n({ useScope: 'global' })
 
 const coin = useCoinStore()
-const account = useFrontendWithdrawAddressStore()
-const accounts = computed(() => account.WithdrawAddress.WithdrawAddress.filter((el) => el.State === WithdrawAddressReviewState.Approved && el.Address.DeleteAt === 0).sort((a, b) => {
-  return b.Account.CreateAt - a.Account.CreateAt
-}))
+const account = useFrontendUserAccountStore()
+const accounts = computed(() => account.withdrawAddress)
 
 const trans = useLocalTransactionStore()
 const withdraws = computed(() => trans.withdraws)
@@ -112,10 +110,10 @@ const withdraws = computed(() => trans.withdraws)
 const localcoin = useLocalCoinStore()
 const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
-const deletable = (account: WithdrawAddress) => {
+const deletable = (row: Account) => {
   return withdraws.value.filter((el) => {
     return el.State === WithdrawState.Reviewing || el.State === WithdrawState.Transferring
-  }).findIndex((el) => el.Address === account.Account.Address) < 0
+  }).findIndex((el) => el.Address === row.Address) < 0
 }
 
 const table = computed(() => [
@@ -123,25 +121,25 @@ const table = computed(() => [
     name: 'Blockchain',
     label: t('MSG_BLOCKCHAIN'),
     align: 'left',
-    field: (row: WithdrawAddress) => coin.getCoinByID(row.Address.CoinTypeID)?.Name
+    field: (row: Account) => row.CoinName
   },
   {
     name: 'Address',
     label: t('MSG_ADDRESS'),
     align: 'center',
-    field: (row: WithdrawAddress) => row.Account.Address
+    field: (row: Account) => row.Address
   },
   {
     name: 'Label',
     label: t('MSG_LABEL'),
     align: 'center',
-    field: (row: WithdrawAddress) => row.Address.Labels?.join(',')
+    field: (row: Account) => row.Labels?.join(',')
   },
   {
     name: 'DateAdded',
     label: t('MSG_DATE_ADDED'),
     align: 'center',
-    field: (row: WithdrawAddress) => formatTime(row.Address.CreateAt)
+    field: (row: Account) => formatTime(row.CreatedAt)
   },
   {
     name: 'ActionButtons',
@@ -150,6 +148,72 @@ const table = computed(() => [
     field: ''
   }
 ])
+
+const router = useRouter()
+
+const onAddNewAddressClick = () => {
+  void router.push({ path: '/add/address' })
+}
+
+const deleteAccount = ref({} as Account)
+const deleting = ref(false)
+
+const onRemove = (row: Account) => {
+  deleting.value = true
+  deleteAccount.value = { ...row }
+}
+
+const onDeleteClick = () => {
+  onMenuHide()
+
+  if (!deleteAccount.value) {
+    return
+  }
+
+  account.deleteUserAccount({
+    ID: deleteAccount.value.ID,
+    Message: {
+      Error: {
+        Title: t('MSG_DELETE_WITHDRAW_ACCOUNT_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
+}
+
+const onCancelClick = () => {
+  onMenuHide()
+}
+
+const deleteLabels = computed(() => deleteAccount.value.Labels?.join(','))
+const deleteCoinType = computed(() => {
+  const dcoin = coin.getCoinByID(deleteAccount.value?.CoinTypeID)
+  if (!dcoin) {
+    return ''
+  }
+  return dcoin.Name
+})
+
+const notification = useNotificationStore()
+
+const deleteAddress = computed(() => deleteAccount.value?.Address)
+const onCopyAddressClick = () => {
+  copy(deleteAddress.value)
+  notification.Notifications.push({
+    Title: t('MSG_ADDRESS_COPIED'),
+    Message: t('MSG_COPY_ADDRESS_SUCCESS'),
+    Popup: true,
+    Type: NotificationType.Success
+  })
+}
+
+const onMenuHide = () => {
+  deleting.value = false
+  deleteAccount.value = {} as Account
+}
 
 onMounted(() => {
   if (coin.Coins.length === 0) {
@@ -165,87 +229,7 @@ onMounted(() => {
       // TODO
     })
   }
-
-  if (accounts.value.length === 0) {
-    account.getWithdrawAddress({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
-          Popup: true,
-          Type: NotifyType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
 })
-
-const router = useRouter()
-
-const onAddNewAddressClick = () => {
-  void router.push({ path: '/add/address' })
-}
-
-const deleteAccount = ref(undefined as unknown as WithdrawAddress)
-const deleting = ref(false)
-
-const onRemove = (account: WithdrawAddress) => {
-  deleting.value = true
-  deleteAccount.value = account
-}
-
-const onDeleteClick = () => {
-  onMenuHide()
-
-  if (!deleteAccount.value) {
-    return
-  }
-
-  account.deleteWithdrawAddress({
-    ID: deleteAccount.value.Address.ID,
-    Message: {
-      Error: {
-        Title: t('MSG_DELETE_WITHDRAW_ACCOUNT_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
-}
-
-const onCancelClick = () => {
-  onMenuHide()
-  deleteAccount.value = undefined as unknown as WithdrawAddress
-}
-
-const deleteLabels = computed(() => deleteAccount.value?.Address?.Labels?.join(','))
-const deleteCoinType = computed(() => {
-  const dcoin = coin.getCoinByID(deleteAccount.value?.Account?.CoinTypeID)
-  if (!dcoin) {
-    return ''
-  }
-  return dcoin.Name
-})
-
-const notification = useNotificationStore()
-
-const deleteAddress = computed(() => deleteAccount.value?.Account?.Address)
-const onCopyAddressClick = () => {
-  copy(deleteAddress.value)
-  notification.Notifications.push({
-    Title: t('MSG_ADDRESS_COPIED'),
-    Message: t('MSG_COPY_ADDRESS_SUCCESS'),
-    Popup: true,
-    Type: NotificationType.Success
-  })
-}
-
-const onMenuHide = () => {
-  deleting.value = false
-}
 
 </script>
 

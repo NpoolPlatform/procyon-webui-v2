@@ -62,15 +62,15 @@
                 <div v-if='withdrawType === "ExternalAddress"'>
                   <div
                     v-for='withdraw in withdraws'
-                    :key='withdraw.Address.ID'
+                    :key='withdraw.ID'
                   >
                     <span
-                      :class='[ "address-option", selectedAccount?.Account?.ID === withdraw.Account.ID ? "address-selected" : "" ]'
+                      :class='[ "address-option", selectedAccount?.ID === withdraw.ID ? "address-selected" : "" ]'
                       @click='onAddressSelected(withdraw)'
                     >
-                      <span class='wallet-type'>{{ withdraw.Address.Labels.join(',') }}</span>
+                      <span class='wallet-type'>{{ withdraw.Labels.join(',') }}</span>
                       <span class='wallet-type coin-type'>{{ coinName(coin?.ID as string) }}</span>
-                      <span class='number'>{{ withdraw.Account.Address }}</span>
+                      <span class='number'>{{ withdraw?.Address }}</span>
                       <img class='checkmark' :src='checkmark'>
                     </span>
                   </div>
@@ -172,10 +172,7 @@
 <script setup lang='ts'>
 import {
   useCoinStore,
-  useAccountStore,
-  WithdrawAccount,
   NotificationType,
-  ReviewState,
   SecondsEachDay
 } from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted, watch } from 'vue'
@@ -194,7 +191,10 @@ import {
   useFrontendTransferStore,
   Transfer,
   UsedFor,
-  AccountType
+  AccountType,
+  useFrontendUserAccountStore,
+  AccountUsedFor,
+  Account
 } from 'npool-cli-v4'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
@@ -244,13 +244,11 @@ const coin = computed(() => coins.getCoinByID(coinTypeId.value))
 const feeAmount = ref(0)
 const submitting = ref(false)
 
-const accounts = useAccountStore()
-const withdraws = computed(() => accounts.Accounts.filter((account) => {
-  return account.Account?.CoinTypeID === coinTypeId.value && account.State === ReviewState.Approved
-}))
+const userAccount = useFrontendUserAccountStore()
+const withdraws = computed(() => userAccount.withdrawAddress.filter((el) => el.CoinTypeID === coinTypeId.value))
 
 const selectedAccountIndex = ref(0)
-const selectedAccount = computed(() => withdraws.value.length > 0 ? withdraws.value[selectedAccountIndex.value] : undefined as unknown as WithdrawAccount)
+const selectedAccount = computed(() => withdraws.value.length > 0 ? withdraws.value[selectedAccountIndex.value] : undefined as unknown as Account)
 
 const general = useGeneralStore()
 const localledger = useLocalLedgerStore()
@@ -348,7 +346,7 @@ const onCodeVerify = (code: string) => {
     ltransation.createWithdraw({
       CoinTypeID: coinTypeId.value,
       Amount: `${amount.value}`,
-      AccountID: selectedAccount.value.Account.ID as string,
+      AccountID: selectedAccount.value.ID,
       VerificationCode: code,
       Account: account.value,
       AccountType: accountType.value,
@@ -438,12 +436,8 @@ onMounted(() => {
     getUserGenerals(0, 100)
   }
 
-  if (accounts.Accounts.filter((el) => {
-    return el.Account.CoinTypeID === coinTypeId.value && el.State === ReviewState.Approved
-  }).length === 0) {
-    accounts.getWithdrawAccounts({
-      Message: {}
-    })
+  if (userAccount.UserAccounts.UserAccounts.length === 0) {
+    getUserAccounts(0, 500)
   }
 
   if (transferAccount.TransferAccounts.TransferAccounts.length === 0) {
@@ -454,14 +448,31 @@ onMounted(() => {
   }
 })
 
-const onAddressSelected = (account: WithdrawAccount) => {
-  selectedAccountIndex.value = withdraws.value.findIndex((el) => el.Account.ID === account.Account.ID)
+const onAddressSelected = (row: Account) => {
+  selectedAccountIndex.value = withdraws.value.findIndex((el) => el.ID === row.ID)
 }
 
 const onTransferAccountSelected = (account: TransferAccount) => {
   selectedAccountIndex.value = transferAccounts.value.findIndex((el) => el.ID === account.ID)
 }
 
+const getUserAccounts = (offset: number, limit: number) => {
+  userAccount.getUserAccounts({
+    Offset: offset,
+    Limit: limit,
+    UsedFor: AccountUsedFor.UserWithdraw,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (accounts: Array<Account>, error: boolean) => {
+    if (error || accounts.length < limit) return
+    getUserAccounts(offset + limit, limit)
+  })
+}
 </script>
 
 <style lang='sass' scoped>
