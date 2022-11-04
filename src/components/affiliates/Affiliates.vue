@@ -18,8 +18,8 @@
 </template>
 
 <script setup lang='ts'>
-import { NotificationType, useCoinStore, useGoodStore, useInspireStore } from 'npool-cli-v2'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { NotificationType, useCoinStore, useInspireStore } from 'npool-cli-v2'
+import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
 import { useArchivementStore } from 'src/teststore/mock/archivement'
@@ -38,7 +38,6 @@ const user = useLocalUserStore()
 const archivement = useArchivementStore()
 const larchivement = useLocalArchivementStore()
 const coin = useCoinStore()
-const good = useGoodStore()
 const inspire = useInspireStore()
 
 const getArchivements = (offset: number, limit: number) => {
@@ -66,23 +65,15 @@ const getArchivements = (offset: number, limit: number) => {
   })
 }
 
+const good = useAdminAppGoodStore()
+
 onMounted(() => {
   if (larchivement.Archivements.length === 0) {
     getArchivements(0, 100)
   }
 
-  if (good.AppGoods.length === 0) {
-    good.getAppGoods({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_APP_GOODS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-    // NOTHING TODO
-    })
+  if (good.AppGoods.AppGoods.length === 0) {
+    getAppGoods(0, 500)
   }
 
   if (inspire.PurchaseAmountSettings.length === 0) {
@@ -114,4 +105,22 @@ onMounted(() => {
   }
 })
 
+const getAppGoods = (offset: number, limit: number) => {
+  good.getAppGoods({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_APP_GOODS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (g: Array<AppGood>, error: boolean) => {
+    if (error || g.length < limit) {
+      return
+    }
+    getAppGoods(offset + limit, limit)
+  })
+}
 </script>

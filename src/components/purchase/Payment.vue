@@ -159,7 +159,7 @@
 </template>
 
 <script setup lang='ts'>
-import { NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds, useNotificationStore, useGoodStore, useCurrencyStore } from 'npool-cli-v2'
+import { NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds, useNotificationStore, useCurrencyStore } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -168,7 +168,7 @@ import copy from 'copy-to-clipboard'
 import copyIcon from 'src/assets/icon-copy.svg'
 import question from 'src/assets/question.svg'
 import warning from 'src/assets/warning.svg'
-import { Order, useLocalOrderStore } from 'src/teststore/mock/order'
+import { NotifyType, useFrontendOrderStore, Order, useAdminAppGoodStore, AppGood } from 'npool-cli-v4'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
@@ -185,15 +185,15 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const orderId = computed(() => query.value.orderId)
 
-const localOrder = useLocalOrderStore()
-const order = computed(() => localOrder.getOrderByID(orderId.value))
+const odr = useFrontendOrderStore()
+const order = computed(() => odr.getOrderByID(orderId.value))
 
-const goods = useGoodStore()
-const good = computed(() => goods.getGoodByID(order.value?.GoodID as string))
+const appGood = useAdminAppGoodStore()
+const good = computed(() => appGood.getGoodByID(order.value?.GoodID as string) as AppGood)
 
 const notification = useNotificationStore()
 
-const remainSeconds = ref(localOrder.getOrderState(order.value as Order))
+const remainSeconds = ref(odr.getOrderState(order.value as Order))
 const ticker = ref(-1)
 const counter = ref(0)
 
@@ -232,14 +232,14 @@ const showBUSDTip = computed(() => order.value?.PaymentCoinName?.toLowerCase()?.
 const remainTicker = ref(-1)
 watch(counter, () => {
   if (counter.value % 30 === 0) {
-    localOrder.getOrder({
+    odr.getOrder({
       ID: order.value?.ID as string,
       Message: {
         Error: {
           Title: t('MSG_GET_ORDER'),
           Message: t('MSG_GET_ORDER_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
     }, () => {
@@ -250,9 +250,9 @@ watch(counter, () => {
 
 const launchTicker = () => {
   ticker.value = window.setInterval(() => {
-    remainSeconds.value = localOrder.getOrderState(order.value as Order)
+    remainSeconds.value = odr.getOrderState(order.value as Order)
 
-    if (localOrder.orderPaid(order.value as Order)) {
+    if (odr.orderPaid(order.value as Order)) {
       showStatus.value = true
       popupTitle.value = 'MSG_ORDER_COMPLETE'
       tipMessage.value = 'MSG_REVIEW_ORDER'
@@ -283,18 +283,18 @@ const launchTicker = () => {
 }
 
 onMounted(() => {
-  localOrder.getOrder({
+  odr.getOrder({
     ID: orderId.value,
     Message: {
       Error: {
         Title: t('MSG_GET_ORDER'),
         Message: t('MSG_GET_ORDER_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
-  }, () => {
-    if (!localOrder.validateOrder(order.value as Order)) {
+  }, (o: Order, error: boolean) => {
+    if (error || !odr.validateOrder(o)) {
       return
     }
     launchTicker()
@@ -305,6 +305,7 @@ onUnmounted(() => {
   if (ticker.value >= 0) {
     window.clearInterval(ticker.value)
   }
+  odr.$reset()
 })
 
 const router = useRouter()
@@ -321,7 +322,7 @@ const onPaymentCanceled = () => {
 
 const onCancelOrderClick = () => {
   showCancelling.value = false
-  localOrder.updateOrder({
+  odr.updateOrder({
     ID: order.value?.ID as string,
     PaymentID: order.value?.PaymentID as string,
     Canceled: true,
@@ -330,10 +331,12 @@ const onCancelOrderClick = () => {
         Title: t('MSG_UPDATE_PAYMENT'),
         Message: t('MSG_UPDATE_PAYMENT_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
-  }, () => {
+  }, (o: Order, error: boolean) => {
+    if (error) return
+
     void router.push({
       path: '/dashboard'
     })

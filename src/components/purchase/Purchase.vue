@@ -9,11 +9,11 @@
           <div class='three-section'>
             <h4>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</h4>
             <span class='number'>*</span>
-            <span class='unit'>{{ good?.Main?.Unit }} / {{ $t('MSG_DAY') }}</span>
+            <span class='unit'>{{ good?.CoinUnit }} / {{ $t('MSG_DAY') }}</span>
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
-            <span class='number'>{{ good?.Good?.Good?.DurationDays }}</span>
+            <span class='number'>{{ good?.DurationDays }}</span>
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </div>
           <div class='three-section'>
@@ -28,11 +28,11 @@
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-            <span class='number'>{{ formatTime(good?.Good?.Good?.StartAt, true) }}</span>
+            <span class='number'>{{ formatTime(good?.StartAt, true) }}</span>
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_PRICE') }}:</h4>
-            <span class='number'>{{ good?.Good?.Good?.Price }}</span>
+            <span class='number'>{{ appGood?.goodPrice(good) }}</span>
             <span class='unit'>{{ PriceCoinName }}</span>
           </div>
           <div class='product-detail-text'>
@@ -42,15 +42,15 @@
             </div>
             <h3>{{ $t('MSG_WHY_TITLE') }}?</h3>
             <p v-html='$t("MSG_WHY_CONTENT")' />
-            <div v-show='good?.Main?.Specs'>
-              <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.Main?.Name }) }}</h3>
+            <div v-show='targetCoin?.Specs'>
+              <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.CoinName }) }}</h3>
               <p>
-                <img class='content-image' :src='good?.Main?.Specs'>
+                <img class='content-image' :src='targetCoin?.Specs'>
               </p>
             </div>
             <p>
-              <a :href='good?.Main?.HomePage'>
-                {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.Main?.Name }) }}
+              <a :href='targetCoin?.HomePage'>
+                {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.CoinName }) }}
               </a>
             </p>
           </div>
@@ -115,7 +115,7 @@
             <h3>{{ $t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
             <div class='full-section'>
               <h4>{{ $t('MSG_AVAILABLE_BALANCE') }}</h4>
-              <span class='number'>{{ getUserBalance }}</span>
+              <span class='number'>{{ balance.toFixed(4) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
             <div class='hr' />
@@ -130,7 +130,7 @@
               <input
                 type='number'
                 :min='0'
-                :max='Math.min(getUserBalance, totalAmount)'
+                :max='Math.min(balance, totalAmount)'
                 v-model='inputBalance'
               >
             </div>
@@ -143,7 +143,7 @@
               <img src='font-awesome/warning.svg'>
               <span>{{ $t('MSG_PAY_THE_REMAINDER') }}</span>
             </div>
-            <button @click='onSubmit' :disabled='inputBalance < 0 || inputBalance > getUserBalance || inputBalance > (Math.ceil(totalAmount * 10000) / 10000)'>
+            <button @click='onSubmit' :disabled='inputBalance < 0 || inputBalance > balance || inputBalance > (Math.ceil(totalAmount * 10000) / 10000)'>
               {{ $t('MSG_CONTINUE2') }}
             </button>
           </div>
@@ -155,12 +155,10 @@
 
 <script setup lang='ts'>
 import {
-  useGoodStore,
   NotificationType,
   formatTime,
   useCoinStore,
   PriceCoinName,
-  useStockStore,
   CoinDescriptionUsedFor,
   useCurrencyStore
 } from 'npool-cli-v2'
@@ -169,9 +167,7 @@ import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ThrottleSeconds } from 'src/const/const'
-import { useGeneralStore } from 'src/teststore/mock/ledger'
-import { useLocalOrderStore } from 'src/teststore/mock/order'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { AppGood, General, NotifyType, Order, useAdminAppGoodStore, useFrontendGeneralStore, useFrontendOrderStore, useLocalUserStore } from 'npool-cli-v4'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
@@ -188,18 +184,20 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const goodId = computed(() => query.value.goodId)
 
-const goods = useGoodStore()
-const good = computed(() => goods.getGoodByID(goodId.value))
+const appGood = useAdminAppGoodStore()
+const good = computed(() => appGood.getGoodByID(goodId.value) as AppGood)
 
 const currency = useCurrencyStore()
 
-const stock = useStockStore()
-const total = computed(() => stock.getStockByGoodID(goodId.value)?.Total)
+const total = computed(() => Math.min(good.value?.PurchaseLimit, good.value?.Total))
 
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const coin = useCoinStore()
-const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.Main?.ID as string, usedFor.value))
-const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === good.value?.Main?.ENV))
+const targetCoin = computed(() => coin.getCoinByID(good.value?.CoinTypeID))
+
+const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.CoinTypeID, usedFor.value))
+const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === targetCoin.value?.ENV))
+
 const selectedCoinID = ref(undefined as unknown as string)
 const paymentCoin = computed({
   get: () => {
@@ -236,13 +234,13 @@ const submitting = ref(false)
 const router = useRouter()
 
 const showBalanceDialog = ref(false)
-const general = useGeneralStore()
-const getUserBalance = computed(() => {
-  return general.getCoinBalance(paymentCoin.value?.ID as string)
+const general = useFrontendGeneralStore()
+const balance = computed(() => {
+  return Number(general.getBalanceByID(paymentCoin.value?.ID as string))
 })
 
 const selectedCoinCurrency = ref(1)
-const totalAmount = computed(() => good.value?.Good?.Good?.Price * purchaseAmount.value / selectedCoinCurrency.value)
+const totalAmount = computed(() => Number(good.value.Price) * purchaseAmount.value / selectedCoinCurrency.value)
 const inputBalance = ref(0)
 
 const remainOrderAmount = computed(() => {
@@ -255,37 +253,12 @@ const remainOrderAmount = computed(() => {
 const logined = useLocalUserStore()
 
 const createOrder = () => {
-  if (getUserBalance.value <= 0) {
+  if (balance.value <= 0) {
     onSubmit()
   } else {
     inputBalance.value = 0
     showBalanceDialog.value = true
   }
-}
-
-const getUserGenerals = (offset:number, limit: number) => {
-  submitting.value = true
-  general.getGenerals({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GENERAL_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, (error: boolean, count?: number) => {
-    submitting.value = false
-    if (error) {
-      return
-    }
-    if (count === 0) {
-      createOrder()
-      return
-    }
-    getUserGenerals(limit + offset, limit)
-  })
 }
 
 const onMenuHide = () => {
@@ -298,7 +271,7 @@ const onPurchaseClick = throttle(() => {
       path: '/signin',
       query: {
         target: '/product/aleo',
-        goodId: good.value.Good.Good.ID as string,
+        goodId: goodId.value,
         purchaseAmount: purchaseAmount.value
       }
     })
@@ -308,33 +281,82 @@ const onPurchaseClick = throttle(() => {
   if (purchaseAmountError.value) {
     return
   }
-  getUserGenerals(0, 100)
+  getGenerals(0, 100)
+}, ThrottleSeconds * 1000)
+
+const getGenerals = (offset:number, limit: number) => {
+  submitting.value = true
+  general.getGenerals({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GENERAL_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (g: Array<General>, error: boolean) => {
+    submitting.value = false
+    if (error) {
+      return
+    }
+    if (g.length < limit) {
+      createOrder()
+      return
+    }
+    getGenerals(limit + offset, limit)
+  })
+}
+
+const odr = useFrontendOrderStore()
+
+const onSubmit = throttle(() => {
+  showBalanceDialog.value = false
+  submitting.value = true
+
+  odr.createOrder({
+    GoodID: goodId.value,
+    Units: purchaseAmount.value,
+    PaymentCoinID: paymentCoin.value?.ID as string,
+    PayWithBalanceAmount: `${inputBalance.value}`,
+    Message: {
+      Error: {
+        Title: t('MSG_CREATE_ORDER'),
+        Message: t('MSG_CREATE_ORDER_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (o: Order, error: boolean) => {
+    submitting.value = false
+    if (error) {
+      return
+    }
+
+    void router.push({
+      path: '/payment',
+      query: {
+        orderId: o.ID
+      }
+    })
+  })
 }, ThrottleSeconds * 1000)
 
 onMounted(() => {
   if (!good.value) {
-    goods.getAppGoods({
+    appGood.getAppGood({
+      GoodID: goodId.value,
       Message: {
         Error: {
-          Title: t('MSG_GET_APP_GOODS_FAIL'),
+          Title: t('MSG_GET_GOOD'),
+          Message: t('MSG_GET_GOOD_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
     }, () => {
-      goods.getGood({
-        ID: goodId.value,
-        Message: {
-          Error: {
-            Title: t('MSG_GET_GOOD'),
-            Message: t('MSG_GET_GOOD_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
-      }, () => {
-        // TODO
-      })
+      // TODO
     })
   }
 
@@ -365,13 +387,11 @@ onMounted(() => {
       }
     })
   }
-
-  if (total.value === 0) {
-    stock.getStocks({
+  if (coins.value.length === 0) {
+    coin.getCoins({
       Message: {
         Error: {
-          Title: t('MSG_GET_GOOD_STOCKS'),
-          Message: t('MSG_GET_GOOD_STOCKS_FAIL'),
+          Title: t('MSG_GET_COINS_FAIL'),
           Popup: true,
           Type: NotificationType.Error
         }
@@ -381,61 +401,6 @@ onMounted(() => {
     })
   }
 })
-
-const getOrders = (offset:number, limit: number) => {
-  localOrder.getOrders({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_ORDERS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, (error: boolean, count?: number) => {
-    if (error || count === 0) {
-      return
-    }
-    getOrders(offset + limit, limit)
-  })
-}
-
-const localOrder = useLocalOrderStore()
-const onSubmit = throttle(() => {
-  showBalanceDialog.value = false
-  submitting.value = true
-
-  localOrder.createOrder({
-    GoodID: goodId.value,
-    Units: purchaseAmount.value,
-    PaymentCoinID: paymentCoin.value?.ID as string,
-    PayWithBalanceAmount: `${inputBalance.value}`,
-    Message: {
-      Error: {
-        Title: t('MSG_CREATE_ORDER'),
-        Message: t('MSG_CREATE_ORDER_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, (orderId: string, paymentId: string, error: boolean) => {
-    submitting.value = false
-    if (error) {
-      return
-    }
-
-    getOrders(0, 100)
-
-    void router.push({
-      path: '/payment',
-      query: {
-        orderId: orderId
-      }
-    })
-  })
-}, ThrottleSeconds * 1000)
-
 </script>
 
 <style lang='sass' scoped>

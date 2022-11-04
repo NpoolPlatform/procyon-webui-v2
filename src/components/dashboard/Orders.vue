@@ -21,14 +21,14 @@ import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue
 import { formatTime, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { Order, useLocalOrderStore, OrderState } from 'src/teststore/mock/order'
+import { useFrontendOrderStore, Order, OrderState } from 'npool-cli-v4'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const order = useLocalOrderStore()
+const order = useFrontendOrderStore()
 const orders = computed(() => order.orders)
 
 const table = computed(() => [
@@ -54,7 +54,7 @@ const table = computed(() => [
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: Order) => row.GoodValue + ' ' + PriceCoinName
+    field: (row: Order) => Number(row.GoodValue).toFixed(4) + ' ' + PriceCoinName
   },
   {
     name: 'Period',

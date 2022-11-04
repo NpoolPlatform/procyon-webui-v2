@@ -3,9 +3,9 @@
     <div class='product-title-section project-title-section' :style='{"background-image": "url(" + bgImg + ")"}'>
       <div class='product-title-container'>
         <div class='product-page-icon'>
-          <img :src='good?.Main?.Logo'>
+          <img :src='good?.CoinLogo'>
         </div>
-        <h1>{{ good?.Main?.Name }} {{ $t('MSG_MINING') }}</h1>
+        <h1>{{ good?.CoinName }} {{ $t('MSG_MINING') }}</h1>
       </div>
     </div>
     <div class='info'>
@@ -15,7 +15,7 @@
       <div class='info-flex'>
         <div class='three-section'>
           <h4>{{ $t('MSG_PRICE') }}:</h4>
-          <span class='number'>{{ good?.Good?.Good?.Price }}</span>
+          <span class='number'>{{ good?.Price }}</span>
           <span class='unit'>{{ PriceCoinName }}</span>
           <div class='tooltip'>
             <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -27,7 +27,7 @@
         <div class='three-section'>
           <h4>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</h4>
           <span class='number'>*</span>
-          <span class='unit'>{{ good?.Main?.Unit }} / {{ $t('MSG_DAY') }}</span>
+          <span class='unit'>{{ good?.CoinUnit }} / {{ $t('MSG_DAY') }}</span>
           <div class='tooltip'>
             <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
             <p class='tooltip-text'>
@@ -37,7 +37,7 @@
         </div>
         <div class='three-section'>
           <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
-          <span class='number'>{{ good?.Good?.Good?.DurationDays }}</span>
+          <span class='number'>{{ good?.DurationDays }}</span>
           <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           <div class='tooltip'>
             <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -59,7 +59,7 @@
         </div>
         <div class='three-section'>
           <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-          <span class='number'>{{ true ? 'TBD*' : formatTime(good?.Good?.Good?.StartAt, true) }}</span>
+          <span class='number'>{{ true ? 'TBD*' : formatTime(good?.StartAt, true) }}</span>
           <div class='tooltip'>
             <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
             <p class='tooltip-text'>
@@ -93,7 +93,6 @@ import {
   formatTime,
   PriceCoinName,
   useCoinStore,
-  Good,
   NotificationType
 } from 'npool-cli-v2'
 import { defineProps, toRef, computed, onMounted } from 'vue'
@@ -102,12 +101,13 @@ import { useI18n } from 'vue-i18n'
 
 import lightbulb from '../../assets/lightbulb.svg'
 import question from '../../assets/question.svg'
+import { AppGood } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
-  good: Good;
+  good: AppGood;
   projectClass: string;
   bgImg: string;
   purchaseCaption: string;
@@ -120,7 +120,7 @@ const good = toRef(props, 'good')
 const purchaseCaption = toRef(props, 'purchaseCaption')
 
 const coin = useCoinStore()
-const productInfo = computed(() => coin.getCoinProductInfoByCoin(good.value?.Main?.ID as string))
+const productInfo = computed(() => coin.getCoinProductInfoByCoin(good.value?.CoinTypeID))
 
 const router = useRouter()
 
@@ -133,7 +133,7 @@ const onLearnMoreAndPurchaseClick = () => {
   void router.push({
     path: target,
     query: {
-      goodId: good.value.Good.Good.ID
+      goodId: good.value.GoodID
     }
   })
 }

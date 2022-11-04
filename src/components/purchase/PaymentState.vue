@@ -3,7 +3,7 @@
     <div class='confirmation'>
       <h3>{{ $t(title) }}</h3>
       <h3 class='form-title'>
-        {{ currencies.formatCoinName(order?.PaymentCoinName as string) }} | <strong>{{ order?.ID }}</strong>
+        {{ order?.PaymentCoinName?.length ? currencies.formatCoinName(order?.CoinName as string) : '' }} | <strong>{{ order?.ID }}</strong>
       </h3>
       <div class='full-section'>
         <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}:</h4>
@@ -45,8 +45,8 @@ import { defineProps, toRef, computed, defineEmits } from 'vue'
 import { date } from 'quasar'
 
 import warning from 'src/assets/warning.svg'
-import { useLocalOrderStore } from 'src/teststore/mock/order'
 import { useCurrencyStore } from 'npool-cli-v2'
+import { useFrontendOrderStore } from 'npool-cli-v4'
 
 interface Props {
   orderId: string;
@@ -62,8 +62,8 @@ const props = defineProps<Props>()
 const orderId = toRef(props, 'orderId')
 const title = toRef(props, 'title')
 
-const localOrder = useLocalOrderStore()
-const order = computed(() => localOrder.getOrderByID(orderId.value))
+const odr = useFrontendOrderStore()
+const order = computed(() => odr.getOrderByID(orderId.value))
 
 const currencies = useCurrencyStore()
 const emit = defineEmits<{(e: 'proceed'): void}>()
