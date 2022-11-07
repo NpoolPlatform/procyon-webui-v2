@@ -164,8 +164,6 @@ const onRemove = (row: Account) => {
 }
 
 const onDeleteClick = () => {
-  onMenuHide()
-
   if (!deleteAccount.value) {
     return
   }
@@ -180,7 +178,7 @@ const onDeleteClick = () => {
       }
     }
   }, () => {
-    // TODO
+    onMenuHide()
   })
 }
 
