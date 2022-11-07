@@ -13,6 +13,9 @@
     <template #top-right>
       <slot name='top-right' />
     </template>
+    <template #top>
+      <slot name='top' />
+    </template>
     <template #bottom-left>
       <div class='column justify-center'>
         <div class='buttons'>

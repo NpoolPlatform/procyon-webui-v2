@@ -7,6 +7,9 @@
       <slot name='top-right' />
     </div>
   </div>
+  <div class='no-wrap'>
+    <slot name='top' />
+  </div>
   <div class='minning-summary content-glass'>
     <q-table
       flat
@@ -115,4 +118,7 @@ input[type='submit']
 
 .pagination
   max-width: 40%
+
+.no-wrap
+  white-space: nowrap
 </style>
