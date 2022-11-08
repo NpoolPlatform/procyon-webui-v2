@@ -12,6 +12,12 @@
         </button>
       </div>
     </template>
+    <template #top>
+      <div class='warning waring-gap'>
+        <img src='font-awesome/warning.svg'>
+        <span v-html='$t("MSG_INTERNAL_TRANSFER_ADDRESS_WARNING")' />
+      </div>
+    </template>
     <template #table-body='myProps'>
       <q-tr :props='myProps'>
         <q-td key='TargetUsername' :props='myProps'>
