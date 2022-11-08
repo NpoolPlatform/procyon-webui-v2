@@ -122,36 +122,37 @@ const onSubmit = () => {
         Type: NotificationType.Error
       }
     }
-  }, () => {
-    // TODO
-  })
-
-  visibleGoodsArchivements.value(referral.value?.Archivements).forEach((good) => {
-    inspire.createPurchaseAmountSetting({
-      TargetUserID: referral.value?.UserID,
-      InviterName: baseuser.displayName(logined.User, locale.value as string),
-      InviteeName: username.value,
-      Info: {
-        GoodID: good.GoodID,
-        CoinTypeID: good.CoinTypeID,
-        Percent: good.CommissionPercent,
-        Start: Math.ceil(Date.now() / 1000),
-        End: 0
-      },
-      Message: {
-        Error: {
-          Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
+  }, (error: boolean) => {
+    if (error) {
+      return
+    }
+    visibleGoodsArchivements.value(referral.value?.Archivements).forEach((good) => {
+      inspire.createPurchaseAmountSetting({
+        TargetUserID: referral.value?.UserID,
+        InviterName: baseuser.displayName(logined.User, locale.value as string),
+        InviteeName: username.value,
+        Info: {
+          GoodID: good.GoodID,
+          CoinTypeID: good.CoinTypeID,
+          Percent: good.CommissionPercent,
+          Start: Math.ceil(Date.now() / 1000),
+          End: 0
+        },
+        Message: {
+          Error: {
+            Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
+            Popup: true,
+            Type: NotificationType.Error
+          }
         }
-      }
-    }, () => {
-      if (backTimer.value >= 0) {
-        window.clearTimeout(backTimer.value)
-      }
-      backTimer.value = window.setTimeout(() => {
-        void router.push({ path: '/affiliates' })
-      }, 1000)
+      }, () => {
+        if (backTimer.value >= 0) {
+          window.clearTimeout(backTimer.value)
+        }
+        backTimer.value = window.setTimeout(() => {
+          void router.push({ path: '/affiliates' })
+        }, 1000)
+      })
     })
   })
 }
