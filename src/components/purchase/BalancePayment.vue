@@ -54,7 +54,9 @@ import {
   Order,
   useFrontendGeneralStore,
   General,
-  useAdminAppGoodStore
+  useAdminAppGoodStore,
+  useFrontendKYCStore,
+  KYCState
 } from 'npool-cli-v4'
 import { DefaultGoodID } from 'src/const/const'
 import { defineAsyncComponent, onMounted, ref, computed } from 'vue'
@@ -104,29 +106,39 @@ const insufficientFunds = computed(() => balance.value < paymentAmount.value)
 const order = useFrontendOrderStore()
 const submitting = ref(false)
 
+const kyc = useFrontendKYCStore()
+
 const onPurchaseClick = () => {
-  submitting.value = true
-  order.createOrder({
-    GoodID: goodID.value,
-    Units: purchaseAmount.value,
-    PaymentCoinID: coinTypeID.value,
-    PayWithBalanceAmount: `${paymentAmount.value}`,
-    Message: {
-      Error: {
-        Title: t('MSG_CREATE_ORDER'),
-        Message: t('MSG_CREATE_ORDER_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, (o: Order, error: boolean) => {
-    submitting.value = false
-    if (error) {
+  kyc.getKYC({
+    Message: {}
+  }, (error: boolean) => {
+    if (error || kyc.KYC?.State !== KYCState.Approved) {
+      void router.push({ path: '/kyc' })
       return
     }
-    order.$reset()
-    void router.push({
-      path: '/dashboard'
+    submitting.value = true
+    order.createOrder({
+      GoodID: goodID.value,
+      Units: purchaseAmount.value,
+      PaymentCoinID: coinTypeID.value,
+      PayWithBalanceAmount: `${paymentAmount.value}`,
+      Message: {
+        Error: {
+          Title: t('MSG_CREATE_ORDER'),
+          Message: t('MSG_CREATE_ORDER_FAIL'),
+          Popup: true,
+          Type: NotifyType.Error
+        }
+      }
+    }, (o: Order, error: boolean) => {
+      submitting.value = false
+      if (error) {
+        return
+      }
+      order.$reset()
+      void router.push({
+        path: '/dashboard'
+      })
     })
   })
 }
