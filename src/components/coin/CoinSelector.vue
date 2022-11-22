@@ -1,5 +1,5 @@
 <template>
-  <label for='coin'>{{ $t('MSG_BLOCKCHAIN') }}</label>
+  <label for='coin' v-if='!hideLabel'>{{ $t('MSG_BLOCKCHAIN') }}</label>
   <select
     id='coin' :name='$t(label)' v-model='myCoin'
     required :disabled='disabled'
@@ -26,6 +26,7 @@ interface Props {
   selectedCoin: Coin;
   label: string;
   disabled?: boolean;
+  hideLabel?: boolean;
 }
 
 const props = defineProps<Props>()
