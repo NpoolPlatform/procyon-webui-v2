@@ -61,6 +61,17 @@
           </p>
         </div>
       </div>
+      <div class='three-section'>
+        <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
+        <span class='number'>2022-12-20</span>
+        <span class='unit'>12:00am JST</span>
+        <div class='tooltip'>
+          <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <p class='tooltip-text'>
+            {{ $t('MSG_SALE_END_DATE_TIP') }}
+          </p>
+        </div>
+      </div>
     </template>
     <template #product-detail>
       <div v-show='description'>
@@ -207,6 +218,8 @@ import { AppGood, NotifyType, useAdminAppGoodStore } from 'npool-cli-v4'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
+const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
+
 interface Query {
   goodId: string;
   purchaseAmount: number;
@@ -218,8 +231,6 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const goodId = computed(() => query.value.goodId?.length ? query.value.goodId : DefaultGoodID)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
-
-const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodId.value) as AppGood)
