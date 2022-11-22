@@ -17,7 +17,7 @@
               <span class='number'>{{ balance.toFixed(4) }}</span>
               <span class='unit'>USDT</span>
             </div>
-            <label>{{ $t('MSG_ALEO_PURCHASE_AMOUNT') }}</label>
+            <label>{{ $t('MSG_PURCHASE_AMOUNT') }}</label>
             <input type='number' v-model='purchaseAmount' disabled>
             <label>{{ $t('MSG_ORDER_DUE_AMOUNT') }}</label>
             <div class='three-section'>
@@ -26,7 +26,7 @@
             </div>
             <div class='warning warning-pink' v-if='insufficientFunds'>
               <img src='font-awesome/warning.svg'>
-              <span>Insufficient funds! <a href='javascript:void(0)'>Please transfer additional funds to your Wallet</a>.</span>
+              <span>{{ $t("MSG_INSUFFICIENT_FUNDS") }} <a href='javascript:void(0)'>{{ $t("MSG_INSUFFICIENT_FUNDS_INFO") }}</a></span>
             </div>
             <div class='submit-container'>
               <WaitingBtn

@@ -19,11 +19,11 @@
             <div class='full-section'>
               <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
               <span class='number'>{{ remainDays }}</span>
-              <span class='unit'>days</span>
+              <span class='unit'> {{ $t("MSG_DAYS") }} </span>
               <span class='number'>{{ remainHours }}</span>
-              <span class='unit'>hours</span>
+              <span class='unit'>{{ $t("MSG_HOURS") }} </span>
               <span class='number'>{{ remainMinutes }}</span>
-              <span class='unit'>mins</span>
+              <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
               <!-- <span class='number'>{{ remainSeconds }}</span> -->
               <!-- <span class='unit'>s</span> -->
             </div>
@@ -124,11 +124,11 @@
               <div class='full-section'>
                 <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
                 <span class='number'>{{ remainDays }}</span>
-                <span class='unit'>days</span>
+                <span class='unit'> {{ $t("MSG_DAYS") }} </span>
                 <span class='number'>{{ remainHours }}</span>
-                <span class='unit'>hours</span>
+                <span class='unit'>{{ $t("MSG_HOURS") }} </span>
                 <span class='number'>{{ remainMinutes }}</span>
-                <span class='unit'>mins</span>
+                <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
                 <!-- <span class='number'>{{ remainSeconds }}</span> -->
                 <!-- <span class='unit'>s</span> -->
               </div>
