@@ -431,7 +431,7 @@ onMounted(() => {
 
 const endTime = ref(1671505200)
 const ticker = ref(-1)
-const remainDays = ref(99)
+const remainDays = ref(27)
 const remainHours = ref(23)
 const remainMinutes = ref(59)
 const remainSeconds = ref(59)
