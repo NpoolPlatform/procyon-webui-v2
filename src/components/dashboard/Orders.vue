@@ -82,7 +82,7 @@ const onRowClick = (myOrder: Order) => {
       return
   }
   void router.push({
-    path: '/payment',
+    path: '/detail',
     query: {
       paymentId: order.getOrderByID(myOrder.ID)?.PaymentID,
       orderId: myOrder.ID
