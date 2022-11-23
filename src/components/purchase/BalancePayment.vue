@@ -2,24 +2,40 @@
   <BackPage>
     <div class='content'>
       <div class='form-container content-glass'>
-        <h3>{{ $t('MSG_MINING_PURCHASE') }}</h3>
+        <h3>{{ $t('MSG_ALEO_MINING_PURCHASE') }}</h3>
         <div class='info-flex'>
-          <form>
-            <label>{{ $t('MSG_SELECT_PAYMENT_CURRENCY') }} {{ currency }}</label>
-            <CoinSelector
-              v-model:selected-coin='selectedCoin'
-              label=''
-              :hide-label='true'
-              :disabled='true'
-            />
-            <label>{{ $t('MSG_AVAILABLE_BALANCE') }}</label>
+          <form action='javascript:void(0)'>
+            <label>{{ $t('MSG_SELECT_PAYMENT_CURRENCY') }}</label>
+            <select :name='$t("MSG_PAYMENT_METHOD")' v-model='selectedCoin' required>
+              <option
+                v-for='myCoin in coins'
+                :key='myCoin?.ID'
+                :value='myCoin'
+                :selected='selectedCoin?.ID === myCoin?.ID'
+              >
+                {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : coinName(myCoin) }})
+              </option>
+            </select>
+            <label>{{ $t('MSG_TOTAL_BALANCE') }}</label>
             <div class='three-section'>
               <span class='number'>{{ balance.toFixed(4) }}</span>
               <span class='unit'>USDT</span>
             </div>
-            <label>{{ $t('MSG_PURCHASE_AMOUNT') }}</label>
-            <input type='number' v-model='purchaseAmount' disabled>
-            <label>{{ $t('MSG_ORDER_DUE_AMOUNT') }}</label>
+            <label>{{ $t('MSG_ALEO_PURCHASE_AMOUNT') }}</label>
+            <Input
+              v-model:value='purchaseAmount'
+              type='number'
+              id='amount'
+              required
+              :error='purchaseAmountError'
+              :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
+              placeholder='MSG_AMOUNT_PLACEHOLDER'
+              :min='1'
+              :max='total'
+              @focus='onPurchaseAmountFocusIn'
+              @blur='onPurchaseAmountFocusOut'
+            />
+            <label>{{ $t('MSG_ALEO_DUE_AMOUNT') }}</label>
             <div class='three-section'>
               <span class='number'>{{ paymentAmount }}</span>
               <span class='unit'>USDT</span>
@@ -33,7 +49,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='submitting || insufficientFunds'
+                :disabled='submitting || insufficientFunds || purchaseAmountError'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -47,7 +63,7 @@
 </template>
 
 <script setup lang='ts'>
-import { Coin, useAdminOracleStore, useCoinStore } from 'npool-cli-v2'
+import { Coin, NotificationType, useAdminOracleStore, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
 import {
   useFrontendOrderStore,
   NotifyType,
@@ -56,7 +72,8 @@ import {
   General,
   useAdminAppGoodStore,
   useFrontendKYCStore,
-  KYCState
+  KYCState,
+  AppGood
 } from 'npool-cli-v4'
 import { DefaultGoodID } from 'src/const/const'
 import { defineAsyncComponent, onMounted, ref, computed } from 'vue'
@@ -66,8 +83,8 @@ import { useRoute, useRouter } from 'vue-router'
 const { t } = useI18n({ useScope: 'global' })
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
-const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
+const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 interface Query {
   goodID: string;
@@ -79,20 +96,58 @@ const router = useRouter()
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const goodID = computed(() => query.value.goodID?.length ? query.value.goodID : DefaultGoodID)
-const purchaseAmount = computed(() => query.value.purchaseAmount)
+const purchaseAmount = ref(query.value.purchaseAmount)
 const coinTypeID = ref(query.value.coinTypeID)
 
 const coin = useCoinStore()
+const coins = computed(() => {
+  const trc20Coins = [] as Array<Coin>
+  const erc20Coins = [] as Array<Coin>
+  const btcCoins = [] as Array<Coin>
+  const busdCoins = [] as Array<Coin>
+
+  const targetCoin = coin.getCoinByID(coinTypeID.value)
+  coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === targetCoin?.ENV).forEach((el) => {
+    if (el.Name?.toLowerCase()?.includes('trc20')) {
+      trc20Coins.push(el)
+    } else if (el.Unit?.includes('BUSD')) {
+      busdCoins.push(el)
+    } else if (el.Unit?.includes('BTC')) {
+      btcCoins.push(el)
+    } else {
+      erc20Coins.push(el)
+    }
+  })
+
+  trc20Coins.push(...erc20Coins)
+  trc20Coins.push(...btcCoins)
+  trc20Coins.push(...busdCoins)
+
+  return trc20Coins
+})
 const selectedCoin = computed({
   get: () => coin.getCoinByID(coinTypeID.value),
   set: (val: Coin) => {
     coinTypeID.value = val.ID as string
   }
 })
+const myCurrency = useCurrencyStore()
+const coinName = (c: Coin) => {
+  if (c.Unit?.includes('BUSD')) {
+    return 'BEP20'
+  } else if (c.Name?.toLowerCase()?.includes('erc20')) {
+    return 'ERC20'
+  } else if (c.Name?.toLowerCase()?.includes('trc20')) {
+    return 'TRC20'
+  }
+  return myCurrency.formatCoinName(c.Name as string)
+}
 
 const good = useAdminAppGoodStore()
-const targetGood = computed(() => good.getGoodByID(goodID.value))
+const targetGood = computed(() => good.getGoodByID(goodID.value) as AppGood)
 const goodPrice = computed(() => good.getPriceByID(goodID.value))
+
+const total = computed(() => Math.min(targetGood.value?.PurchaseLimit, targetGood.value?.Total))
 const paymentAmount = computed(() => Number(goodPrice.value) * purchaseAmount.value)
 
 const general = useFrontendGeneralStore()
@@ -108,12 +163,24 @@ const submitting = ref(false)
 
 const kyc = useFrontendKYCStore()
 
+const purchaseAmountError = ref(false)
+const onPurchaseAmountFocusIn = () => {
+  purchaseAmountError.value = false
+}
+const onPurchaseAmountFocusOut = () => {
+  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > total.value
+}
+
 const onPurchaseClick = () => {
   kyc.getKYC({
     Message: {}
   }, (error: boolean) => {
     if (error || kyc.KYC?.State !== KYCState.Approved) {
       void router.push({ path: '/kyc' })
+      return
+    }
+    onPurchaseAmountFocusOut()
+    if (purchaseAmountError.value) {
       return
     }
     submitting.value = true
@@ -167,6 +234,7 @@ const getGenerals = (offset:number, limit: number) => {
 }
 
 onMounted(() => {
+  general.$reset()
   if (general.Generals.Generals.length === 0) {
     getGenerals(0, 100)
   }
@@ -189,6 +257,19 @@ onMounted(() => {
   if (oracle.Currencies.length === 0) {
     oracle.getCurrencies({
       Message: {}
+    }, () => {
+      // TODO
+    })
+  }
+  if (coin.Coins.length === 0) {
+    coin.getCoins({
+      Message: {
+        Error: {
+          Title: t('MSG_GET_COINS_FAIL'),
+          Popup: true,
+          Type: NotificationType.Error
+        }
+      }
     }, () => {
       // TODO
     })
