@@ -38,7 +38,7 @@
                 @click='onPurchaseClick'
               />
             </div>
-            <input type='submit' value='Go to Wallet' class='submit submit-alt' @click='goWallet'>
+            <input type='submit' :value='$t("MSG_GO_WALLET")' class='submit submit-alt' @click='goWallet'>
           </form>
         </div>
       </div>
