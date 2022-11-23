@@ -203,6 +203,7 @@ const onPurchaseClick = () => {
         return
       }
       order.$reset()
+      general.$reset()
       void router.push({
         path: '/dashboard'
       })
