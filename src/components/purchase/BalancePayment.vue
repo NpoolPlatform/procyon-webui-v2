@@ -16,12 +16,12 @@
                 {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : coinName(myCoin) }})
               </option>
             </select>
-            <label>{{ $t('MSG_TOTAL_BALANCE') }}</label>
+            <label>{{ $t('MSG_BALANCE') }}</label>
             <div class='three-section'>
               <span class='number'>{{ balance.toFixed(4) }}</span>
               <span class='unit'>USDT</span>
             </div>
-            <label>{{ $t('MSG_ALEO_PURCHASE_AMOUNT') }}</label>
+            <label>{{ $t('MSG_PURCHASE_AMOUNT') }}</label>
             <Input
               v-model:value='purchaseAmount'
               type='number'
@@ -46,7 +46,7 @@
             </div>
             <div class='submit-container'>
               <WaitingBtn
-                label='MSG_PURCHASE'
+                label='MSG_ALEO_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
                 :disabled='submitting || insufficientFunds || purchaseAmountError'
