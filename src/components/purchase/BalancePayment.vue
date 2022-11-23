@@ -71,8 +71,6 @@ import {
   useFrontendGeneralStore,
   General,
   useAdminAppGoodStore,
-  useFrontendKYCStore,
-  KYCState,
   AppGood
 } from 'npool-cli-v4'
 import { DefaultGoodID } from 'src/const/const'
@@ -161,8 +159,6 @@ const insufficientFunds = computed(() => balance.value < paymentAmount.value)
 const order = useFrontendOrderStore()
 const submitting = ref(false)
 
-const kyc = useFrontendKYCStore()
-
 const purchaseAmountError = ref(false)
 const onPurchaseAmountFocusIn = () => {
   purchaseAmountError.value = false
@@ -172,41 +168,33 @@ const onPurchaseAmountFocusOut = () => {
 }
 
 const onPurchaseClick = () => {
-  kyc.getKYC({
-    Message: {}
-  }, (error: boolean) => {
-    if (error || kyc.KYC?.State !== KYCState.Approved) {
-      void router.push({ path: '/kyc' })
+  onPurchaseAmountFocusOut()
+  if (purchaseAmountError.value) {
+    return
+  }
+  submitting.value = true
+  order.createOrder({
+    GoodID: goodID.value,
+    Units: purchaseAmount.value,
+    PaymentCoinID: coinTypeID.value,
+    PayWithBalanceAmount: `${paymentAmount.value}`,
+    Message: {
+      Error: {
+        Title: t('MSG_CREATE_ORDER'),
+        Message: t('MSG_CREATE_ORDER_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (o: Order, error: boolean) => {
+    submitting.value = false
+    if (error) {
       return
     }
-    onPurchaseAmountFocusOut()
-    if (purchaseAmountError.value) {
-      return
-    }
-    submitting.value = true
-    order.createOrder({
-      GoodID: goodID.value,
-      Units: purchaseAmount.value,
-      PaymentCoinID: coinTypeID.value,
-      PayWithBalanceAmount: `${paymentAmount.value}`,
-      Message: {
-        Error: {
-          Title: t('MSG_CREATE_ORDER'),
-          Message: t('MSG_CREATE_ORDER_FAIL'),
-          Popup: true,
-          Type: NotifyType.Error
-        }
-      }
-    }, (o: Order, error: boolean) => {
-      submitting.value = false
-      if (error) {
-        return
-      }
-      order.$reset()
-      general.$reset()
-      void router.push({
-        path: '/dashboard'
-      })
+    order.$reset()
+    general.$reset()
+    void router.push({
+      path: '/dashboard'
     })
   })
 }
