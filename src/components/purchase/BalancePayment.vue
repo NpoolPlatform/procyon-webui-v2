@@ -24,7 +24,7 @@
             <div class='three-section' v-else>
               <span class='number'>{{ general.getBalanceByID(coinTypeID) }}</span>
               <span class='unit'>{{ selectedCoin?.Unit }}</span>
-              <span>&nbsp;(</span>
+              <span>&nbsp;({{ $t("MSG_APPROX") }}</span>
               <span class='small number'>{{ usdBalance.toFixed(4) }}</span>
               <span class='small unit'>USDT</span>
               <span>)</span>
@@ -62,7 +62,7 @@
             </div>
             <div class='warning warning-pink' v-if='insufficientFunds'>
               <img src='font-awesome/warning.svg'>
-              <span>{{ $t("MSG_INSUFFICIENT_FUNDS") }} <a href='javascript:void(0)'>{{ $t("MSG_INSUFFICIENT_FUNDS_INFO") }}</a></span>
+              <span>{{ $t("MSG_INSUFFICIENT_FUNDS") }} {{ $t("MSG_INSUFFICIENT_FUNDS_INFO") }}</span>
             </div>
             <div class='submit-container'>
               <WaitingBtn
