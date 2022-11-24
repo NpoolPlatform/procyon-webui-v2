@@ -83,7 +83,15 @@
 </template>
 
 <script setup lang='ts'>
-import { Coin, NotificationType, useAdminOracleStore, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
+import {
+  Coin,
+  Currency,
+  NotificationType,
+  PriceCoinName,
+  useAdminOracleStore,
+  useCoinStore,
+  useCurrencyStore
+} from 'npool-cli-v2'
 import {
   useFrontendOrderStore,
   NotifyType,
@@ -143,13 +151,38 @@ const coins = computed(() => {
   return trc20Coins
 })
 
+const currency = useCurrencyStore()
+
 const selectedCoin = computed({
-  get: () => coin.getCoinByID(coinTypeID.value),
-  set: (val: Coin) => {
-    coinTypeID.value = val.ID as string
+  get: () => {
+    const myCoin = coin.getCoinByID(coinTypeID.value)
+    if (!myCoin) {
+      for (const scoin of coins.value) {
+        if (scoin.Name?.toLowerCase().includes(PriceCoinName.toLowerCase())) {
+          return scoin
+        }
+      }
+      if (coins.value.length > 0) {
+        return coins.value[0]
+      }
+      return undefined
+    }
+    return myCoin
+  },
+  set: (val) => {
+    coinTypeID.value = val?.ID as string
+    if (currencyFromOracle.value) {
+      selectedCoinCurrency.value = Math.min(currencyFromOracle.value.AppPriceVSUSDT, currencyFromOracle.value.PriceVSUSDT)
+      return
+    }
+    currency.getCoinCurrency(coin.getCoinByID(coinTypeID.value), Currency.USD, (usdCurrency: number) => {
+      if (usdCurrency > 0) {
+        selectedCoinCurrency.value = usdCurrency
+      }
+    })
   }
 })
-const myCurrency = useCurrencyStore()
+
 const coinName = (c: Coin) => {
   if (c.Unit?.includes('BUSD')) {
     return 'BEP20'
@@ -158,7 +191,7 @@ const coinName = (c: Coin) => {
   } else if (c.Name?.toLowerCase()?.includes('trc20')) {
     return 'TRC20'
   }
-  return myCurrency.formatCoinName(c.Name as string)
+  return currency.formatCoinName(c.Name as string)
 }
 const isUSDCoin = computed(() => selectedCoin.value?.Unit?.includes('USD'))
 
@@ -169,14 +202,15 @@ const goodPrice = computed(() => good.getPriceByID(goodID.value))
 const total = computed(() => Math.min(targetGood.value?.PurchaseLimit, targetGood.value?.Total))
 const paymentAmount = computed(() => Number(goodPrice.value) * purchaseAmount.value)
 
+const selectedCoinCurrency = ref(1)
+
 const general = useFrontendGeneralStore()
-const usdBalance = computed(() => Number(general.getBalanceByID(coinTypeID.value)) * currency.value)
-const usdToOtherAmount = computed(() => (Math.ceil(paymentAmount.value / currency.value * 10000) / 10000).toFixed(4))
+const usdBalance = computed(() => Number(general.getBalanceByID(coinTypeID.value)) * selectedCoinCurrency.value)
+const usdToOtherAmount = computed(() => (Math.ceil(paymentAmount.value / selectedCoinCurrency.value * 10000) / 10000).toFixed(4))
+const insufficientFunds = computed(() => usdBalance.value < paymentAmount.value)
 
 const oracle = useAdminOracleStore()
-const currency = computed(() => oracle.getCurrencyByID(coinTypeID.value))
-
-const insufficientFunds = computed(() => usdBalance.value < paymentAmount.value)
+const currencyFromOracle = computed(() => oracle.getCurrencyByID(coinTypeID.value))
 
 const order = useFrontendOrderStore()
 const submitting = ref(false)
