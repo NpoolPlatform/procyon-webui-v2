@@ -1,79 +1,90 @@
 <template>
-  <div :class='[ showBalanceDialog ? "blur" : "" ]'>
-    <BackPage>
-      <div class='content order-page'>
-        <div :class='[ "product-container content-glass project", projectClass ]'>
-          <div class='product-title-section project-title-section' :style='{"background-image": "url(" + bgImg + ")"}'>
-            <div class='product-title-container'>
-              <div class='product-page-icon'>
-                <img :src='target?.CoinLogo'>
-              </div>
-              <h1>{{ target?.CoinName }} {{ $t('MSG_MINING') }}</h1>
+  <BackPage>
+    <div class='content order-page'>
+      <div :class='[ "product-container content-glass project", projectClass ]'>
+        <div class='product-title-section project-title-section' :style='{"background-image": "url(" + bgImg + ")"}'>
+          <div class='product-title-container'>
+            <div class='product-page-icon'>
+              <img :src='target?.CoinLogo'>
             </div>
+            <h1>{{ target?.CoinName }} {{ $t('MSG_MINING') }}</h1>
           </div>
-          <div id='product-form' class='product-sidebar-section mobile'>
-            <h3 class='form-title'>
-              {{ $t('MSG_MINING_PURCHASE') }}
-            </h3>
-            <form action='javascript:void(0)' id='purchase'>
-              <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
-              <Input
-                v-model:value='myPurchaseAmount'
-                type='number'
-                id='amount'
-                required
-                :error='purchaseAmountError'
-                :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
-                placeholder='MSG_AMOUNT_PLACEHOLDER'
-                :min='0'
-                :max='total'
-                @focus='onPurchaseAmountFocusIn'
-                @blur='onPurchaseAmountFocusOut'
+        </div>
+        <!-- mobile start -->
+        <div id='product-form' class='product-sidebar-section mobile'>
+          <h3 class='form-title'>
+            {{ $t('MSG_MINING_PURCHASE') }}
+          </h3>
+          <form action='javascript:void(0)' id='purchase'>
+            <div class='full-section'>
+              <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
+              <span class='number'>{{ remainDays }}</span>
+              <span class='unit'> {{ $t("MSG_DAYS") }} </span>
+              <span class='number'>{{ remainHours }}</span>
+              <span class='unit'>{{ $t("MSG_HOURS") }} </span>
+              <span class='number'>{{ remainMinutes }}</span>
+              <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
+              <!-- <span class='number'>{{ remainSeconds }}</span> -->
+              <!-- <span class='unit'>s</span> -->
+            </div>
+            <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
+            <Input
+              v-model:value='myPurchaseAmount'
+              type='number'
+              id='amount'
+              required
+              :error='purchaseAmountError'
+              :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
+              placeholder='MSG_AMOUNT_PLACEHOLDER'
+              :min='0'
+              :max='total'
+              @focus='onPurchaseAmountFocusIn'
+              @blur='onPurchaseAmountFocusOut'
+            />
+            <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
+            <div v-show='paymentCoin'>
+              <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
+                <option
+                  v-for='myCoin in coins'
+                  :key='myCoin?.ID'
+                  :value='myCoin'
+                  :selected='paymentCoin?.ID === myCoin?.ID'
+                >
+                  {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : coinName(myCoin) }})
+                </option>
+              </select>
+            </div>
+            <div class='warning' v-if='showRateTip'>
+              <img :src='warning'>
+              <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
+            </div>
+            <div class='warning' v-if='showBUSDTip'>
+              <img :src='warning'>
+              <span>{{ $t('MSG_COIN_BUSD_PAYMENT_TIP') }}</span>
+            </div>
+            <div class='submit-container'>
+              <WaitingBtn
+                label='MSG_PURCHASE'
+                type='submit'
+                class='submit-btn'
+                :disabled='submitting'
+                :waiting='submitting'
+                @click='onPurchaseClick'
               />
-              <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
-              <div v-show='paymentCoin'>
-                <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
-                  <option
-                    v-for='myCoin in coins'
-                    :key='myCoin?.ID'
-                    :value='myCoin'
-                    :selected='paymentCoin?.ID === myCoin?.ID'
-                  >
-                    {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : coinName(myCoin) }})
-                  </option>
-                </select>
-              </div>
-              <div class='submit-container'>
-                <WaitingBtn
-                  label='MSG_PURCHASE'
-                  type='submit'
-                  class='submit-btn'
-                  :disabled='submitting'
-                  :waiting='submitting'
-                  @click='onPurchaseClick'
-                />
-              </div>
-              <div class='warning' v-if='showRateTip'>
-                <img :src='warning'>
-                <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
-              </div>
-              <div class='warning' v-if='showBUSDTip'>
-                <img :src='warning'>
-                <span>{{ $t('MSG_COIN_BUSD_PAYMENT_TIP') }}</span>
-              </div>
-            </form>
-          </div>
-          <div class='info'>
-            <h3 class='form-title'>
-              {{ $t('MSG_PRODUCT_DETAILS') }}
-            </h3>
-            <div v-if='customizeInfo' class='info-flex'>
-              <slot name='product-info' />
-              <div class='product-detail-text'>
-                <slot name='product-detail' />
-              </div>
             </div>
-            <div v-else class='info-flex'>
+          </form>
+        </div>
+        <div class='info'>
+          <h3 class='form-title'>
+            {{ $t('MSG_PRODUCT_DETAILS') }}
+          </h3>
+          <div v-if='customizeInfo' class='info-flex'>
+            <slot name='product-info' />
+            <div class='product-detail-text'>
+              <slot name='product-detail' />
+            </div>
+          </div>
+          <!-- <div v-else class='info-flex'>
               <div class='three-section'>
                 <h4>{{ $t('MSG_PRICE') }}:</h4>
                 <span class='number'>{{ target?.Price }}</span>
@@ -101,144 +112,99 @@
               <div class='product-detail-text'>
                 <slot name='product-detail' />
               </div>
-            </div>
-          </div>
-          <div class='product-sidebar'>
-            <div id='product-form' class='product-sidebar-section'>
-              <h3 class='form-title'>
-                {{ $t('MSG_MINING_PURCHASE') }}
-              </h3>
-              <form action='javascript:void(0)' id='purchase'>
-                <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
-                <Input
-                  v-model:value='myPurchaseAmount'
-                  type='number'
-                  id='amount'
-                  required
-                  :error='purchaseAmountError'
-                  :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
-                  placeholder='MSG_AMOUNT_PLACEHOLDER'
-                  :min='0'
-                  :max='total'
-                  @focus='onPurchaseAmountFocusIn'
-                  @blur='onPurchaseAmountFocusOut'
-                />
-                <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
-                <div v-show='paymentCoin'>
-                  <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
-                    <option
-                      v-for='myCoin in coins'
-                      :key='myCoin?.ID'
-                      :value='myCoin'
-                      :selected='paymentCoin?.ID === myCoin?.ID'
-                    >
-                      {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : coinName(myCoin) }})
-                    </option>
-                  </select>
-                </div>
-                <div class='submit-container'>
-                  <WaitingBtn
-                    label='MSG_PURCHASE'
-                    type='submit'
-                    class='submit-btn'
-                    :disabled='submitting'
-                    :waiting='submitting'
-                    @click='onPurchaseClick'
-                  />
-                </div>
-                <div class='warning' v-if='showRateTip'>
-                  <img :src='warning'>
-                  <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
-                </div>
-                <div class='warning' v-if='showBUSDTip'>
-                  <img :src='warning'>
-                  <span>{{ $t('MSG_COIN_BUSD_PAYMENT_TIP') }}</span>
-                </div>
-              </form>
-            </div>
-            <slot name='sidebar' />
-          </div>
+            </div> -->
         </div>
-        <div class='hr' />
-      </div>
-    </BackPage>
-  </div>
-  <q-dialog
-    v-model='showBalanceDialog'
-    maximized
-    @hide='onMenuHide'
-  >
-    <div class='product-container content-glass popup-container plur'>
-      <div class='popup'>
-        <div class='form-container content-glass'>
-          <div class='confirmation'>
-            <h3>{{ $t('MSG_HAVE_UNSPENT_FUNDS') }}</h3>
-            <div class='full-section'>
-              <h4>{{ $t('MSG_AVAILABLE_BALANCE') }}</h4>
-              <span class='number'>{{ balance.toFixed(4) }}</span>
-              <span class='unit'>{{ paymentCoin?.Unit }}</span>
-            </div>
-            <div class='hr' />
-            <div class='full-section'>
-              <h4>{{ $t('MSG_ORDER_DUE_AMOUNT') }}</h4>
-              <span class='number'>{{ (Math.ceil(totalAmount * 10000) / 10000).toFixed(4) }}</span>
-              <span class='unit'>{{ paymentCoin?.Unit }}</span>
-            </div>
-            <div class='hr' />
-            <div class='full-section'>
-              <h4>{{ $t('MSG_USE_WALLET_BALANCE') }}</h4>
-              <input
+        <!-- mobile end -->
+        <div class='product-sidebar'>
+          <div id='product-form' class='product-sidebar-section'>
+            <h3 class='form-title'>
+              {{ $t('MSG_MINING_PURCHASE') }}
+            </h3>
+            <form action='javascript:void(0)' id='purchase'>
+              <div class='full-section'>
+                <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
+                <span class='number'>{{ remainDays }}</span>
+                <span class='unit'> {{ $t("MSG_DAYS") }} </span>
+                <span class='number'>{{ remainHours }}</span>
+                <span class='unit'>{{ $t("MSG_HOURS") }} </span>
+                <span class='number'>{{ remainMinutes }}</span>
+                <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
+                <!-- <span class='number'>{{ remainSeconds }}</span> -->
+                <!-- <span class='unit'>s</span> -->
+              </div>
+              <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
+              <Input
+                v-model:value='myPurchaseAmount'
                 type='number'
+                id='amount'
+                required
+                :error='purchaseAmountError'
+                :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
+                placeholder='MSG_AMOUNT_PLACEHOLDER'
                 :min='0'
-                :max='Math.min(balance, totalAmount)'
-                v-model='inputBalance'
-              >
-            </div>
-            <div class='full-section'>
-              <h4>{{ $t('MSG_REMAINING_DUE_AMOUNT') }}</h4>
-              <span class='number'>{{ (Math.ceil(remainOrderAmount * 10000) / 10000).toFixed(4) }}</span>
-              <span class='unit'>{{ paymentCoin?.Unit }}</span>
-            </div>
-            <div class='warning'>
-              <img src='font-awesome/warning.svg'>
-              <span>{{ $t('MSG_PAY_THE_REMAINDER') }}</span>
-            </div>
-            <button @click='onSubmit' :disabled='inputBalance < 0 || inputBalance > balance || inputBalance > (Math.ceil(totalAmount * 10000) / 10000)'>
-              {{ $t('MSG_CONTINUE2') }}
-            </button>
+                :max='total'
+                @focus='onPurchaseAmountFocusIn'
+                @blur='onPurchaseAmountFocusOut'
+              />
+              <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
+              <div v-show='paymentCoin'>
+                <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
+                  <option
+                    v-for='myCoin in coins'
+                    :key='myCoin?.ID'
+                    :value='myCoin'
+                    :selected='paymentCoin?.ID === myCoin?.ID'
+                  >
+                    {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : coinName(myCoin) }})
+                  </option>
+                </select>
+              </div>
+              <div class='warning' v-if='showRateTip'>
+                <img :src='warning'>
+                <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
+              </div>
+              <div class='warning' v-if='showBUSDTip'>
+                <img :src='warning'>
+                <span>{{ $t('MSG_COIN_BUSD_PAYMENT_TIP') }}</span>
+              </div>
+              <div class='submit-container'>
+                <WaitingBtn
+                  label='MSG_PURCHASE'
+                  type='submit'
+                  class='submit-btn'
+                  :disabled='submitting'
+                  :waiting='submitting'
+                  @click='onPurchaseClick'
+                />
+              </div>
+            </form>
           </div>
+          <slot name='sidebar' />
         </div>
       </div>
+      <div class='hr' />
     </div>
-  </q-dialog>
+  </BackPage>
 </template>
 
 <script setup lang='ts'>
 import {
-  formatTime,
   PriceCoinName,
   CoinDescriptionUsedFor,
   useCoinStore,
   NotificationType,
   useCurrencyStore,
   Currency,
-  Coin
+  Coin,
+  useAdminOracleStore
 } from 'npool-cli-v2'
-import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted } from 'vue'
-import { throttle } from 'quasar'
-import { ThrottleSeconds } from 'src/const/const'
+import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
   AppGood,
-  General,
-  KYCState,
   NotifyType,
-  Order,
   useAdminAppGoodStore,
-  useFrontendGeneralStore,
-  useFrontendKYCStore,
-  useFrontendOrderStore,
   useLocalUserStore
 } from 'npool-cli-v4'
 
@@ -331,7 +297,6 @@ const target = computed(() => good.getGoodByID(goodId.value) as AppGood)
 const myPurchaseAmount = ref(purchaseAmount.value ? purchaseAmount.value : 1)
 
 const selectedCoinCurrency = ref(1)
-const totalAmount = computed(() => Number(target.value?.Price) * myPurchaseAmount.value / selectedCoinCurrency.value)
 
 const paymentCoin = computed({
   get: () => {
@@ -364,35 +329,12 @@ const total = computed(() => Math.min(target.value?.PurchaseLimit, target.value?
 const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(target.value?.CoinTypeID, usedFor.value))
 
-const currency = useCurrencyStore()
-
-const inputBalance = ref(0)
-const general = useFrontendGeneralStore()
-const balance = computed(() => {
-  return Number(general.getBalanceByID(paymentCoin.value?.ID as string))
-})
-
-const showBalanceDialog = ref(false)
-
 const submitting = ref(false)
 
-const remainOrderAmount = computed(() => {
-  const value = Math.ceil(totalAmount.value * 10000) / 10000 - inputBalance.value
-  if (value < 0) {
-    return 0
-  }
-  return value
-})
 const router = useRouter()
 const logined = useLocalUserStore()
-const order = useFrontendOrderStore()
 
-const onMenuHide = () => {
-  showBalanceDialog.value = false
-}
-
-const kyc = useFrontendKYCStore()
-const onPurchaseClick = throttle(() => {
+const onPurchaseClick = () => {
   if (!logined.logined) {
     void router.push({
       path: '/signin',
@@ -404,85 +346,19 @@ const onPurchaseClick = throttle(() => {
     })
     return
   }
-  kyc.getKYC({
-    Message: {}
-  }, (error: boolean) => {
-    if (error || kyc.KYC?.State !== KYCState.Approved) {
-      void router.push({ path: '/kyc' })
-      return
-    }
-    onPurchaseAmountFocusOut()
-    if (purchaseAmountError.value) {
-      return
-    }
-    getGenerals(0, 100)
-  })
-}, ThrottleSeconds * 1000)
-
-const getGenerals = (offset:number, limit: number) => {
-  submitting.value = true
-  general.getGenerals({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GENERAL_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, (g: Array<General>, error: boolean) => {
-    submitting.value = false
-    if (error) {
-      return
-    }
-    if (g.length < limit) {
-      createOrder()
-      return
-    }
-    getGenerals(limit + offset, limit)
-  })
-}
-
-const createOrder = () => {
-  if (balance.value <= 0) {
-    onSubmit()
-  } else {
-    inputBalance.value = 0
-    showBalanceDialog.value = true
+  onPurchaseAmountFocusOut()
+  if (purchaseAmountError.value) {
+    return
   }
-}
-
-const onSubmit = () => {
-  showBalanceDialog.value = false
-  submitting.value = true
-
-  order.createOrder({
-    GoodID: goodId.value,
-    Units: myPurchaseAmount.value,
-    PaymentCoinID: paymentCoin.value?.ID as string,
-    PayWithBalanceAmount: `${inputBalance.value}`,
-    Message: {
-      Error: {
-        Title: t('MSG_CREATE_ORDER'),
-        Message: t('MSG_CREATE_ORDER_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
+  void router.push({
+    path: '/payment',
+    query: {
+      coinTypeID: paymentCoin.value?.ID as string,
+      purchaseAmount: myPurchaseAmount.value
     }
-  }, (o: Order, error: boolean) => {
-    submitting.value = false
-    if (error) {
-      return
-    }
-    void router.push({
-      path: '/payment',
-      query: {
-        orderId: o.ID
-      }
-    })
   })
 }
+const currency = useCurrencyStore()
 
 onMounted(() => {
   if (coins.value.length > 0) {
@@ -495,6 +371,8 @@ onMounted(() => {
     })
   }
 })
+
+const oracle = useAdminOracleStore()
 
 onMounted(() => {
   if (!target.value) {
@@ -513,20 +391,22 @@ onMounted(() => {
     })
   }
 
-  if (coins.value.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS'),
-          Message: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+  coin.getCoins({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COINS'),
+        Message: t('MSG_GET_COINS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
       }
+    }
+  }, () => {
+    oracle.getCurrencies({
+      Message: {}
     }, () => {
       // TODO
     })
-  }
+  })
 
   if (!description.value) {
     coin.getCoinDescriptions({
@@ -542,6 +422,31 @@ onMounted(() => {
   }
 })
 
+const endTime = ref(1671505200)
+const ticker = ref(-1)
+const remainDays = ref(27)
+const remainHours = ref(23)
+const remainMinutes = ref(59)
+const remainSeconds = ref(59)
+onMounted(() => {
+  ticker.value = window.setInterval(() => {
+    const now = Math.floor(Date.now() / 1000)
+    const remain = endTime.value - now >= 0 ? endTime.value - now : 0
+    remainDays.value = Math.floor(remain / 24 / 60 / 60)
+    remainHours.value = Math.floor((remain - remainDays.value * 24 * 60 * 60) / 60 / 60)
+    remainMinutes.value = Math.floor((remain - remainDays.value * 24 * 60 * 60 - remainHours.value * 60 * 60) / 60)
+    remainSeconds.value = remain - remainDays.value * 24 * 60 * 60 - remainHours.value * 60 * 60 - remainMinutes.value * 60
+    if (remainDays.value > 99) {
+      remainDays.value = 99
+    }
+  }, 1000)
+})
+
+onUnmounted(() => {
+  if (ticker.value >= 0) {
+    window.clearInterval(ticker.value)
+  }
+})
 </script>
 
 <style lang='sass' scoped>

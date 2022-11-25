@@ -43,15 +43,15 @@
               <img :src='warning'>
               <span v-html='$t("MSG_COIN_PAYMENT_TIP", { COIN_NAME: coinName })' />
             </div>
-            <span class='wallet-type'>{{ coinName }} &nbsp; </span>
-            <span class='number'>  {{ order?.PaymentAddress }}</span>
-            <img class='copy-button' :src='copyIcon' @click='onCopyAddressClick'>
-            <div class='tooltip'>
+            <!-- <span class='wallet-type'>{{ coinName }} &nbsp; </span> -->
+            <!-- <span class='number'>  {{ order?.PaymentAddress }}</span> -->
+            <!-- <img class='copy-button' :src='copyIcon' @click='onCopyAddressClick'> -->
+            <!-- <div class='tooltip'>
               <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
               <p class='tooltip-text'>
                 {{ $t('MSG_PAYMENT_ADDRESS_TIP') }}
               </p>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class='hr' />
@@ -59,7 +59,7 @@
         <p v-html='$t("MSG_PAYMENT_NOTE", { COIN_NAME: coinName })' />
       </div>
       <div class='order-form'>
-        <h3 class='form-title'>
+        <!-- <h3 class='form-title'>
           {{ $t('MSG_SCAN_QR_CODE_TO_PAY') }}
         </h3>
         <div class='qr-code-container'>
@@ -72,7 +72,7 @@
               class='qr-code'
             />
           </div>
-        </div>
+        </div> -->
         <div class='hr' />
         <button @click='onPaymentProceed'>
           {{ $t('MSG_PROCEED_TO_DASHBOARD') }}
@@ -171,7 +171,6 @@ import warning from 'src/assets/warning.svg'
 import { NotifyType, useFrontendOrderStore, Order, useAdminAppGoodStore, AppGood } from 'npool-cli-v4'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
-const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 const PaymentState = defineAsyncComponent(() => import('src/components/purchase/PaymentState.vue'))
 
 interface Query {
@@ -196,8 +195,6 @@ const notification = useNotificationStore()
 const remainSeconds = ref(odr.getOrderState(order.value as Order))
 const ticker = ref(-1)
 const counter = ref(0)
-
-const qrCodeContainer = ref<HTMLDivElement>()
 
 const showStatus = ref(false)
 const popupTitle = ref('')
@@ -353,15 +350,15 @@ const onCopyAmountClick = () => {
   })
 }
 
-const onCopyAddressClick = () => {
-  copy(order.value?.PaymentAddress as string)
-  notification.Notifications.push({
-    Title: t('MSG_ADDRESS_COPIED'),
-    Message: t('MSG_COPY_ADDRESS_SUCCESS'),
-    Popup: true,
-    Type: NotificationType.Success
-  })
-}
+// const onCopyAddressClick = () => {
+//   copy(order.value?.PaymentAddress as string)
+//   notification.Notifications.push({
+//     Title: t('MSG_ADDRESS_COPIED'),
+//     Message: t('MSG_COPY_ADDRESS_SUCCESS'),
+//     Popup: true,
+//     Type: NotificationType.Success
+//   })
+// }
 
 </script>
 

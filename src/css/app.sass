@@ -27,7 +27,7 @@
   --pink: #fc4468
   --yellow-1: #ffe91d
   --yellow-2: #ffcc4a
-  
+
 *, *:before, *:after
   -webkit-box-sizing: border-box
   -moz-box-sizing: border-box
@@ -965,6 +965,38 @@ input#search-button:hover
   min-width: 360px
   max-width: 480px
 
+.form-container h3
+  margin: 0 0 24px 0
+
+.form-container .three-section
+  margin: 0 0 24px 0
+
+.form-container .three-section .small
+  font-size: 16px !important
+
+.form-container .three-section .number
+  color: var(--light-green-2)
+  font-size: 24px
+  font-weight: 700
+
+.form-container .three-section .unit
+  font-size: 24px
+  font-weight: 700
+
+.form-container .submit-alt
+  background: none
+  border: 1px solid var(--orange-1)
+  color: var(--orange-1)
+  text-shadow: 1px 1px 1px var(--dark-blue-1)
+
+.form-container .submit-gray
+  cursor: not-allowed
+  filter: saturate(0) contrast(.7)
+
+.form-container .submit-gray:hover
+  border-radius: 18px
+  filter: saturate(0) contrast(.7)
+
 h3.form-title
   color: #e1eeef
   font-size: 24px
@@ -985,7 +1017,6 @@ h3.form-title::after
 
 label
   font-size: 16px
-  font-weight: 100
 
 input[type="email"],
 input[type="password"],
@@ -1132,6 +1163,23 @@ h4#signature
   margin: 0
   padding: 4px
   text-transform: uppercase
+
+.form-container .submit
+  margin: 24px 0 0 0
+
+  &-alt
+    background: none
+    border: 1px solid var(--orange-1)
+    color: var(--orange-1)
+    text-shadow: 1px 1px 1px var(--dark-blue-1)
+
+  &-gray
+    cursor: not-allowed
+    filter: saturate(0) contrast(.7)
+
+  &-gray:hover
+    border-radius: 18px
+    filter: saturate(0) contrast(.7)
 
 /* PRODUCT, IDO, ORDER, WITHDRAW */
 
@@ -1288,6 +1336,7 @@ h4#signature
   filter: contrast(1.5)
   font-size: 16px
   font-weight: 700
+  text-transform: uppercase
 
 .product-container .hr
   background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%)
@@ -2155,6 +2204,7 @@ img.faq-product
 
 .unit
   color: #1ec498
+  filter: contrast(2)
   font-size: 18px
   font-weight: 700
   margin: 0 0 0 2px

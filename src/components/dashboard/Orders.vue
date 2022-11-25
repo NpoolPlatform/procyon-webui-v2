@@ -4,7 +4,6 @@
     :rows='(orders as Array<never>)'
     :table='(table as never)'
     :count-per-page='10'
-    @row-click='(row) => onRowClick(row as Order)'
   >
     <template #top-right>
       <div class='buttons'>
@@ -20,8 +19,7 @@
 import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
 import { formatTime, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { useFrontendOrderStore, Order, OrderState } from 'npool-cli-v4'
+import { useFrontendOrderStore, Order } from 'npool-cli-v4'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
@@ -69,26 +67,6 @@ const table = computed(() => [
     field: (row: Order) => stateMap?.value.get(row.ID)?.length ? t(stateMap?.value.get(row.ID) as string) : ''
   }
 ])
-
-const router = useRouter()
-
-const onRowClick = (myOrder: Order) => {
-  if (!order.validateOrder(order.getOrderByID(myOrder.ID) as Order)) {
-    return
-  }
-  switch (myOrder.State) {
-    case OrderState.IN_SERVICE:
-    case OrderState.EXPIRED:
-      return
-  }
-  void router.push({
-    path: '/payment',
-    query: {
-      paymentId: order.getOrderByID(myOrder.ID)?.PaymentID,
-      orderId: myOrder.ID
-    }
-  })
-}
 
 const stateMap = ref(new Map<string, string>())
 
