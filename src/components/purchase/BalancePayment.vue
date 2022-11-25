@@ -281,9 +281,11 @@ const getGenerals = (offset:number, limit: number) => {
 const setCurrency = () => {
   if (currencyFromOracle.value) {
     selectedCoinCurrency.value = Math.min(currencyFromOracle.value.AppPriceVSUSDT, currencyFromOracle.value.PriceVSUSDT)
+    console.log('oracle: ', selectedCoinCurrency.value)
     return
   }
   currency.getCoinCurrency(coin.getCoinByID(coinTypeID.value), Currency.USD, (usdCurrency: number) => {
+    console.log('trans: ', usdCurrency)
     if (usdCurrency > 0) {
       selectedCoinCurrency.value = usdCurrency
     }
@@ -311,14 +313,6 @@ onMounted(() => {
     })
   }
 
-  if (oracle.Currencies.length === 0) {
-    oracle.getCurrencies({
-      Message: {}
-    }, () => {
-      // TODO
-    })
-  }
-
   if (coin.Coins.length === 0) {
     coin.getCoins({
       Message: {
@@ -329,22 +323,26 @@ onMounted(() => {
         }
       }
     }, () => {
-      currency.getAllCoinCurrencies({
-        Currencies: [Currency.USD],
-        Message: {
-          Error: {
-            Title: t('MSG_GET_CURRENCIES'),
-            Message: t('MSG_GET_CURRENCIES_FAIL'),
-            Popup: true,
-            Type: NotificationType.Error
-          }
-        }
+      oracle.getCurrencies({
+        Message: {}
       }, () => {
-        // TODO
+        currency.getAllCoinCurrencies({
+          Currencies: [Currency.USD],
+          Message: {
+            Error: {
+              Title: t('MSG_GET_CURRENCIES'),
+              Message: t('MSG_GET_CURRENCIES_FAIL'),
+              Popup: true,
+              Type: NotificationType.Error
+            }
+          }
+        }, () => {
+          setCurrency()
+        })
       })
-      setCurrency()
     })
   }
+
   if (coins.value.length > 0) {
     setCurrency()
   }
