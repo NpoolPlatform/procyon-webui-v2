@@ -278,6 +278,18 @@ const getGenerals = (offset:number, limit: number) => {
   })
 }
 
+const setCurrency = () => {
+  if (currencyFromOracle.value) {
+    selectedCoinCurrency.value = Math.min(currencyFromOracle.value.AppPriceVSUSDT, currencyFromOracle.value.PriceVSUSDT)
+    return
+  }
+  currency.getCoinCurrency(coin.getCoinByID(coinTypeID.value), Currency.USD, (usdCurrency: number) => {
+    if (usdCurrency > 0) {
+      selectedCoinCurrency.value = usdCurrency
+    }
+  })
+}
+
 onMounted(() => {
   general.$reset()
   if (general.Generals.Generals.length === 0) {
@@ -330,27 +342,11 @@ onMounted(() => {
       }, () => {
         // TODO
       })
-      if (currencyFromOracle.value) {
-        selectedCoinCurrency.value = Math.min(currencyFromOracle.value.AppPriceVSUSDT, currencyFromOracle.value.PriceVSUSDT)
-        return
-      }
-      currency.getCoinCurrency(coin.getCoinByID(coinTypeID.value), Currency.USD, (usdCurrency: number) => {
-        if (usdCurrency > 0) {
-          selectedCoinCurrency.value = usdCurrency
-        }
-      })
+      setCurrency()
     })
   }
   if (coins.value.length > 0) {
-    if (currencyFromOracle.value) {
-      selectedCoinCurrency.value = Math.min(currencyFromOracle.value.AppPriceVSUSDT, currencyFromOracle.value.PriceVSUSDT)
-      return
-    }
-    currency.getCoinCurrency(coin.getCoinByID(coinTypeID.value), Currency.USD, (usdCurrency: number) => {
-      if (usdCurrency > 0) {
-        selectedCoinCurrency.value = usdCurrency
-      }
-    })
+    setCurrency()
   }
 })
 
