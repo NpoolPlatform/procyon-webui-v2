@@ -391,24 +391,22 @@ onMounted(() => {
     })
   }
 
-  if (coins.value.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS'),
-          Message: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
+  coin.getCoins({
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COINS'),
+        Message: t('MSG_GET_COINS_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
       }
+    }
+  }, () => {
+    oracle.getCurrencies({
+      Message: {}
     }, () => {
-      oracle.getCurrencies({
-        Message: {}
-      }, () => {
-        // TODO
-      })
+      // TODO
     })
-  }
+  })
 
   if (!description.value) {
     coin.getCoinDescriptions({
