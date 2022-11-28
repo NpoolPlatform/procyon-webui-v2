@@ -180,7 +180,7 @@
           {{ $t('MSG_PRODUCT_FAQ') }}
         </h3>
         <ul class='product-links'>
-          <li>
+          <!-- <li>
             <a href='https://www.youtube.com/watch?v=xHIXUVhCLMY' target='_blank'>
               <img class='link-icon' :src='lightbulb'>
               <span>{{ $t('MSG_PURCHASE_ALEO_METHOD') }}</span>
@@ -191,9 +191,9 @@
               <img class='link-icon' :src='lightbulb'>
               <span>{{ $t('MSG_MOBILE_PURCHASE_ALEO_METHOD') }}</span>
             </a>
-          </li>
+          </li> -->
           <li>
-            <a href='https://procyon-public.s3.ap-northeast-1.amazonaws.com/【Procyon_vip】Aleoマイニング製品の購入方法マニュアル_20220606.pdf'>
+            <a href='https://drive.google.com/file/d/1DuZm_aDiqojpA6VlDq_z4Dt3JTi44XVe/view?usp=share_link'>
               <img class='link-icon' :src='lightbulb'>
               <span>{{ $t('MSG_PDF_MANUAL') }}</span>
             </a>
