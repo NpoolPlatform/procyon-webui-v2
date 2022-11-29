@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div v-show='profits?.length' class='mining-summary content-glass'>
     <div class='mining-heading'>
       <div class='product-page-icon'>
@@ -178,4 +178,4 @@ const onExpandClick = () => {
   short.value = !short.value
 }
 
-</script>
+</script> -->
