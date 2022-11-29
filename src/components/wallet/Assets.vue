@@ -30,7 +30,7 @@
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
-          <button class='small' @click='onDepositClick(myProps.row)' :disabled='!payCoin(myProps.row.CoinTypeID) || depositClick'>
+          <button class='small' @click='onDepositClick(myProps.row)' :disabled='!coin.getCoinByID(myProps.row.CoinTypeID)?.CoinForPay || depositClick'>
             {{ $t('MSG_DEPOSIT') }}
           </button>
         </q-td>
@@ -89,15 +89,14 @@ import { computed, defineAsyncComponent, ref } from 'vue'
 import {
   BenefitModel,
   useNotificationStore,
-  NotificationType,
-  useCoinStore
+  NotificationType
 } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { BalanceGeneral, useLocalLedgerStore } from 'src/localstore/ledger'
 import copy from 'copy-to-clipboard'
 import { useLocalCoinStore } from 'src/localstore/coin'
-import { Account, AccountUsedFor, KYCState, NotifyType, useFrontendKYCStore, useFrontendTransferAccountStore, useFrontendUserAccountStore } from 'npool-cli-v4'
+import { Account, AccountUsedFor, KYCState, NotifyType, useAdminAppCoinStore, useFrontendKYCStore, useFrontendTransferAccountStore, useFrontendUserAccountStore } from 'npool-cli-v4'
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
@@ -106,49 +105,13 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
+const coin = useAdminAppCoinStore()
+
 const kyc = useFrontendKYCStore()
 const localledger = useLocalLedgerStore()
 const submitting = ref(false)
 
-const balanceGenerals = computed(() => localledger.generals.filter((el) => !preSaleCoin(el.CoinTypeID) && !coinBlacklist(el.CoinTypeID)))
-
-const table = computed(() => [
-  {
-    name: 'CoinName',
-    label: t('MSG_NAME'),
-    align: 'left',
-    field: 'CoinName'
-  },
-  {
-    name: 'Balance',
-    label: t('MSG_BALANCE'),
-    align: 'center',
-    field: 'Balance'
-  },
-  {
-    name: 'Last24HoursBalance',
-    label: t('MSG_24_HOUR_CHANGE'),
-    align: 'center',
-    field: 'Last24HoursBalance'
-  },
-  {
-    name: 'USDTValue',
-    label: t('MSG_MARKET_VALUE_USDT'),
-    align: 'center',
-    field: 'USDTValue'
-  },
-  {
-    name: 'JPYValue',
-    label: t('MSG_MARKET_VALUE_JPY'),
-    align: 'center',
-    field: 'JPYValue'
-  },
-  {
-    name: 'ActionButtons',
-    label: '',
-    align: 'center'
-  }
-])
+const balanceGenerals = computed(() => localledger.generals.filter((el) => !coin.getCoinByID(el.CoinTypeID)?.Presale && !coinBlacklist(el.CoinTypeID)))
 
 const router = useRouter()
 const account = useFrontendUserAccountStore()
@@ -199,24 +162,9 @@ const onWithdrawClick = (asset: BenefitModel) => {
   })
 }
 
-const coin = useCoinStore()
-const payCoin = (coinTypeID: string) => {
-  const existingItem = coin.Coins.find((el) => el.ID === coinTypeID)
-  if (!existingItem) {
-    return true
-  }
-  return existingItem.ForPay
-}
-const preSaleCoin = (coinTypeID: string) => {
-  const existingItem = coin.Coins.find((el) => el.ID === coinTypeID)
-  if (!existingItem) {
-    return true
-  }
-  return existingItem.PreSale
-}
 const coinBlacklist = (coinTypeID: string) => {
   const names = ['Ethereum', 'Tron', 'Solana', 'USD Coin']
-  const existingItem = coin.Coins.find((el) => el.ID === coinTypeID)
+  const existingItem = coin.getCoinByID(coinTypeID)
   if (!existingItem) {
     return true
   }
@@ -280,6 +228,44 @@ function onCopyDepositAddress () {
     Type: NotificationType.Success
   })
 }
+
+const table = computed(() => [
+  {
+    name: 'CoinName',
+    label: t('MSG_NAME'),
+    align: 'left',
+    field: 'CoinName'
+  },
+  {
+    name: 'Balance',
+    label: t('MSG_BALANCE'),
+    align: 'center',
+    field: 'Balance'
+  },
+  {
+    name: 'Last24HoursBalance',
+    label: t('MSG_24_HOUR_CHANGE'),
+    align: 'center',
+    field: 'Last24HoursBalance'
+  },
+  {
+    name: 'USDTValue',
+    label: t('MSG_MARKET_VALUE_USDT'),
+    align: 'center',
+    field: 'USDTValue'
+  },
+  {
+    name: 'JPYValue',
+    label: t('MSG_MARKET_VALUE_JPY'),
+    align: 'center',
+    field: 'JPYValue'
+  },
+  {
+    name: 'ActionButtons',
+    label: '',
+    align: 'center'
+  }
+])
 </script>
 
 <style lang='sass' scoped>
