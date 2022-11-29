@@ -154,7 +154,7 @@ const onWithdrawClick = (asset: BenefitModel) => {
       void router.push({
         path: '/add/address',
         query: {
-          coinTypeId: asset.CoinTypeID,
+          coinTypeID: asset.CoinTypeID,
           gotoWithdraw: 'true'
         }
       })
