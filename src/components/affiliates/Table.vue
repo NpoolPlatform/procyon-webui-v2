@@ -84,25 +84,24 @@
 import { computed, ref, watch } from 'vue'
 import {
   formatTime,
-  PriceCoinName,
-  useCoinStore,
-  Coin
+  PriceCoinName
 } from 'npool-cli-v2'
 
 import edit from '../../assets/edit.svg'
 import { useRouter } from 'vue-router'
 import { LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
+import { useAdminAppCoinStore, AppCoin } from 'npool-cli-v4'
 
 interface MyCoin {
   label: string;
-  value: Coin;
+  value: AppCoin;
 }
 
 const larchivements = useLocalArchivementStore()
 const referrals = computed(() => larchivements.Archivements.filter((referral) => !referral.Kol).sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
 
-const coin = useCoinStore()
-const coins = computed(() => Array.from(coin.Coins.filter((el) => {
+const coin = useAdminAppCoinStore()
+const coins = computed(() => Array.from(coin.AppCoins.AppCoins.filter((el) => {
   const rfs = referrals.value.filter((rel) => {
     for (const sum of rel.Archivements) {
       if (sum.CoinTypeID === el.ID) {
