@@ -1,67 +1,57 @@
 <template>
+  <UseCoin />
   <label for='coin' v-if='!hideLabel'>{{ $t('MSG_BLOCKCHAIN') }}</label>
   <select
-    id='coin' :name='$t(label)' v-model='myCoin'
-    required :disabled='disabled'
+    id='coin'
+    :name='$t(label)'
+    v-model='selectedCoin'
+    required
+    :disabled='disabled'
+    @change='onChange'
   >
     <option
-      v-for='_myCoin in coins'
-      :key='_myCoin.ID'
-      :value='_myCoin'
-      :selected='myCoin?.ID === _myCoin.ID'
+      v-for='_coin in coins'
+      :key='_coin.ID'
+      :value='_coin'
+      :selected='selectedCoin?.CoinTypeID === _coin.CoinTypeID'
     >
-      {{ coinName(_myCoin.ID as string) }}
-      <!-- {{ _myCoin.Unit }} ({{ currency.formatCoinName(_myCoin.Name as string) }}) -->
+      {{ _coin.Name }}
     </option>
   </select>
 </template>
 
 <script setup lang='ts'>
-import { computed, defineEmits, ref, watch, defineProps, toRef, onMounted } from 'vue'
-import { useCoinStore, Coin, NotificationType } from 'npool-cli-v2'
-import { useI18n } from 'vue-i18n'
-import { useLocalCoinStore } from 'src/localstore/coin'
+import { useAdminAppCoinStore } from 'npool-cli-v4'
+import { computed, defineEmits, ref, defineProps, toRef, defineAsyncComponent } from 'vue'
+
+const UseCoin = defineAsyncComponent(() => import('src/components/coin/UseCoin.vue'))
 
 interface Props {
-  selectedCoin: Coin;
+  id: string;
   label: string;
   disabled?: boolean;
   hideLabel?: boolean;
 }
 
 const props = defineProps<Props>()
-const selectedCoin = toRef(props, 'selectedCoin')
+const id = toRef(props, 'id')
 const label = toRef(props, 'label')
 
-const coin = useCoinStore()
-const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale && coin.ForPay))
-const myCoin = ref(selectedCoin.value)
+const emit = defineEmits<{(e: 'update:id', id: string): void}>()
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+const coin = useAdminAppCoinStore()
+const coins = computed(() => coin.AppCoins.AppCoins.filter((coin) => !coin.Presale && coin.ForPay))
 
-const localcoin = useLocalCoinStore()
-const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
-
-const emit = defineEmits<{(e: 'update:selectedCoin', coin: Coin): void}>()
-watch(myCoin, () => {
-  emit('update:selectedCoin', myCoin.value)
-})
-
-onMounted(() => {
-  if (coins.value.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+const target = ref(id.value)
+const selectedCoin = computed({
+  get: () => coin.getCoinByID(target.value),
+  set: (val) => {
+    target.value = val?.CoinTypeID as string
   }
 })
+
+const onChange = () => {
+  emit('update:id', target.value)
+}
 
 </script>

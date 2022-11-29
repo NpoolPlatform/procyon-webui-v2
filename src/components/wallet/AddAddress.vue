@@ -3,7 +3,7 @@
     <FormPage @submit='onSubmit' label='MSG_NEW_WALLET_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
       <template #form-body>
         <CoinSelector
-          v-model:selected-coin='selectedCoin' label='MSG_BLOCKCHAIN' :disabled='gotoWithdraw'
+          v-model:id='selectedCoinTypeID' label='MSG_BLOCKCHAIN' :disabled='gotoWithdraw'
         />
         <Input
           v-model:value='address'
@@ -59,8 +59,7 @@
 </template>
 
 <script setup lang='ts'>
-import { Coin, useCoinStore } from 'npool-cli-v2'
-import { ref, defineAsyncComponent, computed, onMounted } from 'vue'
+import { ref, defineAsyncComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { UsedFor, AccountType, NotifyType, useFrontendUserAccountStore, SignMethodType, AccountUsedFor } from 'npool-cli-v4'
@@ -74,23 +73,18 @@ const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/
 const { t } = useI18n({ useScope: 'global' })
 
 interface Query {
-  coinTypeId: string;
+  coinTypeID: string;
   gotoWithdraw: boolean;
 }
 
 const route = useRoute()
+const router = useRouter()
+
 const query = computed(() => route.query as unknown as Query)
-const coinTypeID = computed(() => query.value.coinTypeId)
+const coinTypeID = computed(() => query.value.coinTypeID)
 const gotoWithdraw = computed(() => query.value.gotoWithdraw !== undefined)
 
-const coin = useCoinStore()
 const selectedCoinTypeID = ref(coinTypeID.value)
-const selectedCoin = computed({
-  get: () => coin.getCoinByID(selectedCoinTypeID.value),
-  set: (val: Coin) => {
-    selectedCoinTypeID.value = val.ID as string
-  }
-})
 
 const address = ref('')
 const addressError = ref(false)
@@ -105,7 +99,6 @@ const labels = ref('')
 const labelsError = ref(false)
 
 const verifying = ref(false)
-
 const onSubmit = () => {
   verifying.value = true
 }
@@ -117,14 +110,12 @@ const onMenuHide = () => {
   verifying.value = false
 }
 
-const account = ref('')
-const accountType = ref(AccountType.Email)
-
 const onCancelClick = () => {
   verifying.value = false
 }
 
-const router = useRouter()
+const account = ref('')
+const accountType = ref(AccountType.Email)
 
 const userAccount = useFrontendUserAccountStore()
 
@@ -159,16 +150,6 @@ const onCodeVerify = (code: string) => {
   })
   verifying.value = false
 }
-
-onMounted(() => {
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {}
-    }, () => {
-      // TODO
-    })
-  }
-})
 
 </script>
 

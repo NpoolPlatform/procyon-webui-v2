@@ -9,9 +9,8 @@ const { t } = useI18n({ useScope: 'global' })
 const coin = useAdminAppCoinStore()
 
 onMounted(() => {
-  if (coin.AppCoins.AppCoins.length === 0) {
-    getCoins(0, 100)
-  }
+  coin.$reset()
+  getCoins(0, 100)
 })
 
 const getCoins = (offset: number, limit: number) => {
