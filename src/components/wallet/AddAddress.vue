@@ -1,6 +1,6 @@
 <template>
   <div :class='[ verifying ? "blur" : "" ]'>
-    <FormPage @submit='onSubmit' label='MSG_NEW_WALLET_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
+    <FormPage @submit='onSubmit' label='MSG_NEW_WALLET_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS' :submitting='submitting'>
       <template #form-body>
         <CoinSelector
           v-model:id='selectedCoinTypeID' label='MSG_BLOCKCHAIN' :disabled='gotoWithdraw'
@@ -101,6 +101,7 @@ const labelsError = ref(false)
 const verifying = ref(false)
 const onSubmit = () => {
   verifying.value = true
+  submitting.value = true
 }
 
 const onMenuHide = () => {
@@ -118,6 +119,8 @@ const account = ref('')
 const accountType = ref(AccountType.Email)
 
 const userAccount = useFrontendUserAccountStore()
+
+const submitting = ref(false)
 
 const onCodeVerify = (code: string) => {
   userAccount.createUserAccount({
@@ -137,6 +140,7 @@ const onCodeVerify = (code: string) => {
       }
     }
   }, () => {
+    submitting.value = false
     if (gotoWithdraw.value) {
       void router.push({
         path: '/withdraw',
