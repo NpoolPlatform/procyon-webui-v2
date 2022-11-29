@@ -12,7 +12,6 @@
     <div class='hr' />
     <TransferAccounts />
     <div class='hr' />
-    <UseCoin />
   </div>
   <q-ajax-bar
     ref='progress'
@@ -29,10 +28,12 @@ import {
   AccountUsedFor,
   NotifyType,
   TransferAccount,
+  useAdminAppCoinStore,
   useFrontendTransferAccountStore,
   useFrontendUserAccountStore
 } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
+import { getCoins } from 'src/api/coin'
 import { IntervalKey } from 'src/const/const'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
 import { useGeneralStore } from 'src/teststore/mock/ledger'
@@ -57,7 +58,6 @@ const WithdrawRecords = defineAsyncComponent(
 const TransferAccounts = defineAsyncComponent(
   () => import('src/components/wallet/TransferAccounts.vue')
 )
-const UseCoin = defineAsyncComponent(() => import('src/components/coin/UseCoin.vue'))
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
@@ -185,6 +185,7 @@ const getUserDetails = (offset: number, limit: number) => {
 }
 
 const transferAccount = useFrontendTransferAccountStore()
+const coin = useAdminAppCoinStore()
 
 onMounted(() => {
   if (localtrans.Withdraws.Withdraws.length === 0) {
@@ -202,6 +203,9 @@ onMounted(() => {
   }
   if (account.UserAccounts.UserAccounts.length === 0) {
     getUserAccounts(0, 500)
+  }
+  if (coin.AppCoins.AppCoins.length === 0) {
+    getCoins(0, 100)
   }
   getCurrencies()
 })
