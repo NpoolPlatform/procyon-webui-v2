@@ -12,6 +12,7 @@
     <div class='hr' />
     <TransferAccounts />
     <div class='hr' />
+    <UseCoin />
   </div>
   <q-ajax-bar
     ref='progress'
@@ -22,8 +23,15 @@
 </template>
 
 <script setup lang="ts">
-import { Currency, NotificationType, SecondsEachDay, useCoinStore, useCurrencyStore } from 'npool-cli-v2'
-import { Account, AccountUsedFor, NotifyType, TransferAccount, useFrontendTransferAccountStore, useFrontendUserAccountStore } from 'npool-cli-v4'
+import { Currency, NotificationType, SecondsEachDay, useCurrencyStore } from 'npool-cli-v2'
+import {
+  Account,
+  AccountUsedFor,
+  NotifyType,
+  TransferAccount,
+  useFrontendTransferAccountStore,
+  useFrontendUserAccountStore
+} from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { IntervalKey } from 'src/const/const'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
@@ -49,12 +57,12 @@ const WithdrawRecords = defineAsyncComponent(
 const TransferAccounts = defineAsyncComponent(
   () => import('src/components/wallet/TransferAccounts.vue')
 )
+const UseCoin = defineAsyncComponent(() => import('src/components/coin/UseCoin.vue'))
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const localtrans = useLocalTransactionStore()
 const localledger = useLocalLedgerStore()
-const coin = useCoinStore()
 const currency = useCurrencyStore()
 const account = useFrontendUserAccountStore()
 const general = useGeneralStore()
@@ -153,21 +161,6 @@ const getCurrencies = () => {
   })
 }
 
-const getCoins = () => {
-  coin.getCoins({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_COINS'),
-        Message: t('MSG_GET_COINS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    getCurrencies()
-  })
-}
-
 const getUserDetails = (offset: number, limit: number) => {
   localtrans.getDetails({
     Offset: offset,
@@ -200,9 +193,7 @@ onMounted(() => {
   if (general.Generals.Generals.length === 0 || localledger.Generals.size === 0) {
     getUserGenerals(0, 100)
   }
-  if (coin.Coins.length === 0) {
-    getCoins()
-  }
+
   if (localtrans.Details.Details.length === 0) {
     getUserDetails(0, 100)
   }
@@ -212,6 +203,7 @@ onMounted(() => {
   if (account.UserAccounts.UserAccounts.length === 0) {
     getUserAccounts(0, 500)
   }
+  getCurrencies()
 })
 
 const getTransferAccounts = (offset: number, limit: number) => {

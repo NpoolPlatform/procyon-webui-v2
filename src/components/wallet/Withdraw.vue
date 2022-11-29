@@ -5,7 +5,7 @@
         <div class='product-container content-glass'>
           <div class='product-title-section'>
             <div class='product-page-icon'>
-              <img :src='coins.getCoinLogo(coin)'>
+              <img :src='coins.getCoinByID(coin?.CoinTypeID as string)?.Logo'>
             </div>
             <h1>{{ coinName(coin?.ID as string) }}</h1>
           </div>
@@ -171,7 +171,6 @@
 
 <script setup lang='ts'>
 import {
-  useCoinStore,
   NotificationType,
   SecondsEachDay
 } from 'npool-cli-v2'
@@ -194,7 +193,8 @@ import {
   AccountType,
   useFrontendUserAccountStore,
   AccountUsedFor,
-  Account
+  Account,
+  useAdminAppCoinStore
 } from 'npool-cli-v4'
 
 import checkmark from 'src/assets/icon-checkmark.svg'
@@ -237,11 +237,11 @@ const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const coins = useCoinStore()
+const coins = useAdminAppCoinStore()
 const coinTypeId = computed(() => query.value.coinTypeId)
 const type = computed(() => query.value.type)
 const coin = computed(() => coins.getCoinByID(coinTypeId.value))
-const feeAmount = ref(0)
+const feeAmount = computed(() => Math.ceil(Number(coin.value?.WithdrawFeeAmount) * 1000000) / 1000000)
 const submitting = ref(false)
 
 const userAccount = useFrontendUserAccountStore()
@@ -419,19 +419,6 @@ const getTransferAccounts = (offset: number, limit: number) => {
 }
 
 onMounted(() => {
-  coins.getCurrentFee({
-    CoinTypeID: coinTypeId.value,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_CURRENT_FEE_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, (amount: number) => {
-    feeAmount.value = Math.ceil(amount * 1000000) / 1000000
-  })
-
   if (general.Generals.Generals.length === 0) {
     getUserGenerals(0, 100)
   }
