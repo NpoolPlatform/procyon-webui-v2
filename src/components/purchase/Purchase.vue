@@ -77,6 +77,9 @@
           />
           <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
           <div v-show='paymentCoin'>
+            <!-- <CoinSelector
+              v-model:id='selectedCoinID' label='MSG_PAYMENT_METHOD'
+            /> -->
             <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
               <option
                 v-for='myCoin in coins'
@@ -172,20 +175,21 @@ import { AppGood, General, NotifyType, Order, useAdminAppGoodStore, useFrontendG
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+// const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 interface Query {
-  goodId: string;
+  goodID: string;
 }
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodId = computed(() => query.value.goodId)
+const goodID = computed(() => query.value.goodID)
 
 const appGood = useAdminAppGoodStore()
-const good = computed(() => appGood.getGoodByID(goodId.value) as AppGood)
+const good = computed(() => appGood.getGoodByID(goodID.value) as AppGood)
 
 const currency = useCurrencyStore()
 
@@ -271,7 +275,7 @@ const onPurchaseClick = throttle(() => {
       path: '/signin',
       query: {
         target: '/product/aleo',
-        goodId: goodId.value,
+        goodId: goodID.value,
         purchaseAmount: purchaseAmount.value
       }
     })
@@ -316,7 +320,7 @@ const onSubmit = throttle(() => {
   submitting.value = true
 
   odr.createOrder({
-    GoodID: goodId.value,
+    GoodID: goodID.value,
     Units: purchaseAmount.value,
     PaymentCoinID: paymentCoin.value?.ID as string,
     PayWithBalanceAmount: `${inputBalance.value}`,
@@ -335,7 +339,7 @@ const onSubmit = throttle(() => {
     }
 
     void router.push({
-      path: '/payment',
+      path: '/extrapayment',
       query: {
         orderId: o.ID
       }
@@ -346,7 +350,7 @@ const onSubmit = throttle(() => {
 onMounted(() => {
   if (!good.value) {
     appGood.getAppGood({
-      GoodID: goodId.value,
+      GoodID: goodID.value,
       Message: {
         Error: {
           Title: t('MSG_GET_GOOD'),
