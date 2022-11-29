@@ -40,7 +40,7 @@ const label = toRef(props, 'label')
 const emit = defineEmits<{(e: 'update:id', id: string): void}>()
 
 const coin = useAdminAppCoinStore()
-const coins = computed(() => coin.AppCoins.AppCoins.filter((coin) => !coin.Presale && coin.ForPay))
+const coins = computed(() => coin.AppCoins.AppCoins.filter((el) => !el.Disabled && !el.CoinDisabled && el.ForPay && el.CoinForPay && !el.Presale))
 
 const target = ref(id.value)
 const selectedCoin = computed({
