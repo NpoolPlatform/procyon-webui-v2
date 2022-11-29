@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div :class='[ "product-container content-glass project", projectClass ]'>
     <div class='product-title-section project-title-section' :style='{"background-image": "url(" + bgImg + ")"}'>
       <div class='product-title-container'>
@@ -157,4 +157,4 @@ onMounted(() => {
 </script>
 
 <style lang='sass' scoped>
-</style>
+</style> -->
