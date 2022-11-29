@@ -18,9 +18,10 @@
 </template>
 
 <script setup lang='ts'>
-import { NotificationType, useCoinStore, useInspireStore } from 'npool-cli-v2'
-import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood } from 'npool-cli-v4'
+import { NotificationType, useInspireStore } from 'npool-cli-v2'
+import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
+import { getCoins } from 'src/api/coin'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
 import { useArchivementStore } from 'src/teststore/mock/archivement'
 import { defineAsyncComponent, onMounted } from 'vue'
@@ -37,7 +38,7 @@ const Table = defineAsyncComponent(() => import('src/components/affiliates/Table
 const user = useLocalUserStore()
 const archivement = useArchivementStore()
 const larchivement = useLocalArchivementStore()
-const coin = useCoinStore()
+
 const inspire = useInspireStore()
 
 const getArchivements = (offset: number, limit: number) => {
@@ -67,6 +68,8 @@ const getArchivements = (offset: number, limit: number) => {
 
 const good = useAdminAppGoodStore()
 
+const coin = useAdminAppCoinStore()
+
 onMounted(() => {
   if (larchivement.Archivements.length === 0) {
     getArchivements(0, 100)
@@ -90,18 +93,8 @@ onMounted(() => {
     })
   }
 
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+  if (coin.AppCoins.AppCoins.length === 0) {
+    getCoins(0, 100)
   }
 })
 
