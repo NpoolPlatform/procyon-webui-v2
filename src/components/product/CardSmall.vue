@@ -41,13 +41,10 @@
 
 <script setup lang='ts'>
 import { defineProps, toRef, computed, onMounted } from 'vue'
-import { formatTime, useCoinStore, PriceCoinName, NotificationType } from 'npool-cli-v2'
+import { formatTime, PriceCoinName } from 'npool-cli-v2'
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { AppGood } from 'npool-cli-v4'
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+import { AppGood, useAdminAppCoinStore } from 'npool-cli-v4'
+import { getCoins } from 'src/api/coin'
 
 interface Props {
   good: AppGood;
@@ -56,14 +53,14 @@ interface Props {
 const props = defineProps<Props>()
 const good = toRef(props, 'good')
 
-const coin = useCoinStore()
-const productInfo = computed(() => coin.getCoinProductInfoByCoin(good.value?.CoinTypeID))
+const coin = useAdminAppCoinStore()
+const productInfo = computed(() => coin.getProductPage(good.value?.CoinTypeID))
 
 const router = useRouter()
 const onPurchaseClick = () => {
   let target = '/purchase'
-  if (productInfo.value?.ProductPage?.length) {
-    target = productInfo.value.ProductPage
+  if (productInfo.value?.length) {
+    target = productInfo.value
   }
 
   void router.push({
@@ -75,18 +72,8 @@ const onPurchaseClick = () => {
 }
 
 onMounted(() => {
-  if (!productInfo.value) {
-    coin.getCoinProductInfos({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COIN_PRODUCT_INFOS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+  if (coin.AppCoins.AppCoins.length === 0) {
+    getCoins(0, 100)
   }
 })
 
