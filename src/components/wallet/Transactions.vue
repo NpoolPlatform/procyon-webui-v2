@@ -1,4 +1,5 @@
 <template>
+  <UseCoin />
   <ShowSwitchTable
     label='MSG_TRANSACTIONS'
     :rows='(transactions as Array<never>)'
@@ -9,7 +10,7 @@
       <q-tr :props='myProps'>
         <q-td key='CoinName' :props='myProps'>
           <LogoName
-            :logo='coin.getCoinByID(myProps.row.CoinTypeID)?.Logo'
+            :logo='coin.getCoinByID(myProps.row.CoinTypeID)?.Logo as string'
             :name='coinName(myProps.row.CoinTypeID)'
           />
         </q-td>
@@ -28,19 +29,20 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, formatTime } from 'npool-cli-v2'
+import { computed, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Detail, IOType, IOSubType, useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { useLocalCoinStore } from 'src/localstore/coin'
+import { useAdminAppCoinStore, formatTime } from 'npool-cli-v4'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
+const UseCoin = defineAsyncComponent(() => import('src/components/coin/UseCoin.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const coin = useCoinStore()
+const coin = useAdminAppCoinStore()
 const localtrans = useLocalTransactionStore()
 const transactions = computed(() => localtrans.details)
 
@@ -118,22 +120,6 @@ const table = computed(() => [
 ])
 const localcoin = useLocalCoinStore()
 const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
-
-onMounted(() => {
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-})
 
 </script>
 

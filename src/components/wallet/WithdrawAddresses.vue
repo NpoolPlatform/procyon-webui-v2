@@ -85,14 +85,15 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent, ref } from 'vue'
-import { NotificationType, useCoinStore, useNotificationStore } from 'npool-cli-v2'
+import { NotificationType, useNotificationStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
 import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { WithdrawState } from 'src/teststore/mock/transaction/const'
 import { useLocalCoinStore } from 'src/localstore/coin'
-import { NotifyType, formatTime, useFrontendUserAccountStore, Account } from 'npool-cli-v4'
+import { NotifyType, formatTime, useFrontendUserAccountStore, Account, useAdminAppCoinStore } from 'npool-cli-v4'
+import { getCoins } from 'src/api/coin'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -100,7 +101,7 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const coin = useCoinStore()
+const coin = useAdminAppCoinStore()
 const account = useFrontendUserAccountStore()
 const accounts = computed(() => account.withdrawAddress)
 
@@ -214,18 +215,8 @@ const onMenuHide = () => {
 }
 
 onMounted(() => {
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+  if (coin.AppCoins.AppCoins.length === 0) {
+    getCoins(0, 100)
   }
 })
 
