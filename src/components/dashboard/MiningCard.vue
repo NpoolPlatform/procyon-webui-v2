@@ -64,10 +64,9 @@
 
 <script setup lang='ts'>
 import {
-  useCoinStore,
   PriceCoinName
 } from 'npool-cli-v2'
-import { useAdminAppGoodStore } from 'npool-cli-v4'
+import { useAdminAppCoinStore, useAdminAppGoodStore } from 'npool-cli-v4'
 import { GoodGeneral } from 'src/localstore/good'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -82,8 +81,8 @@ const props = defineProps<Props>()
 const general = toRef(props, 'general')
 const short = ref(true)
 
-const coins = useCoinStore()
-const productInfo = computed(() => coins.getCoinProductInfoByCoin(general.value?.CoinTypeID))
+const coin = useAdminAppCoinStore()
+const productInfo = computed(() => coin.getCoinByID(general.value?.CoinTypeID))
 const productPage = computed(() => productInfo.value?.ProductPage)
 
 const good = useAdminAppGoodStore()

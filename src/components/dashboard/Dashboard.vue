@@ -18,12 +18,13 @@
 <script setup lang='ts'>
 import { Profit, useProfitStore } from 'src/teststore/mock/profit'
 import { defineAsyncComponent, onMounted } from 'vue'
-import { NotificationType, SecondsEachDay, useCoinStore } from 'npool-cli-v2'
+import { NotificationType, SecondsEachDay } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { IntervalKey } from 'src/const/const'
 import { QAjaxBar } from 'quasar'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
-import { AppGood, NotifyType, Order, useAdminAppGoodStore, useFrontendOrderStore } from 'npool-cli-v4'
+import { AppGood, NotifyType, Order, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendOrderStore } from 'npool-cli-v4'
+import { getCoins } from 'src/api/coin'
 
 const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
 const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/MiningCards.vue'))
@@ -34,7 +35,6 @@ const { t } = useI18n({ useScope: 'global' })
 
 const profit = useProfitStore()
 const order = useFrontendOrderStore()
-const coin = useCoinStore()
 const localledger = useLocalLedgerStore()
 
 const good = useAdminAppGoodStore()
@@ -122,6 +122,8 @@ const getGoodProfits = (key: IntervalKey, startAt: number, endAt: number, offset
   })
 }
 
+const coin = useAdminAppCoinStore()
+
 onMounted(() => {
   if (profit.Profits.Total === 0) {
     getProfits(0, 100)
@@ -150,21 +152,12 @@ onMounted(() => {
     getOrders(0, 100)
   }
 
-  if (coin.ProductInfos.size === 0) {
-    coin.getCoinProductInfos({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COIN_PRODUCT_INFOS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
   if (good.AppGoods.AppGoods.length === 0) {
     getAppGoods(0, 500)
+  }
+
+  if (coin.AppCoins.AppCoins.length === 0) {
+    getCoins(0, 100)
   }
 })
 
