@@ -50,24 +50,25 @@ onMounted(() => {
   if (profit.Profits.Profits.length === 0) {
     getProfits(0, 100)
   }
-  if (!profit.getIntervalProfitsByKey(IntervalKey.LastDay)) {
+  if (!profit.IntervalProfits.IntervalProfits.get(IntervalKey.LastDay)) {
     getIntervalProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
   }
+
   if (profit.GoodProfits.GoodProfits.length === 0) {
     getGoodProfits(0, 100)
   }
-
-  if (!profit.getIntervalGoodProfitsByKey(IntervalKey.LastDay)) {
+  if (!profit.IntervalGoodProfits.IntervalGoodProfits.get(IntervalKey.LastDay)) {
     getIntervalGoodProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
   }
+
   if (order.Orders.Orders.length === 0) {
     getOrders(0, 100)
   }
