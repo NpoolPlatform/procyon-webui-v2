@@ -94,7 +94,7 @@ import {
   Currency
 } from 'npool-cli-v4'
 import { DefaultGoodID } from 'src/const/const'
-import { defineAsyncComponent, onMounted, ref, computed } from 'vue'
+import { defineAsyncComponent, onMounted, ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -207,6 +207,7 @@ const currency = useAdminCurrencyStore()
 const setCurrency = () => {
   if (coin.stableCoin(coinTypeID.value)) {
     selectedCoinCurrency.value = 1
+    console.log('稳定币: ', selectedCoinCurrency.value)
     return
   }
   if (coin.haveCurrency(coinTypeID.value)) {
@@ -220,6 +221,10 @@ const setCurrency = () => {
   }
   selectedCoinCurrency.value = parseFloat(currency.getCurrency(coinTypeID.value)?.MarketValueLow as string)
 }
+
+watch(selectedCoinCurrency, () => {
+  setCurrency()
+})
 
 const getCoins = (offset: number, limit: number) => {
   coin.getAppCoins({
