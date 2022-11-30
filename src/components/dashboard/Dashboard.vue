@@ -16,14 +16,22 @@
 </template>
 
 <script setup lang='ts'>
-import { Profit, useProfitStore } from 'src/teststore/mock/profit'
 import { defineAsyncComponent, onMounted } from 'vue'
-import { NotificationType, SecondsEachDay } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { IntervalKey } from 'src/const/const'
 import { QAjaxBar } from 'quasar'
-import { useLocalLedgerStore } from 'src/localstore/ledger'
-import { AppGood, NotifyType, Order, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendOrderStore } from 'npool-cli-v4'
+import {
+  AppGood,
+  GoodProfit,
+  NotifyType,
+  Order,
+  Profit,
+  SecondsEachDay,
+  useAdminAppCoinStore,
+  useAdminAppGoodStore,
+  useFrontendOrderStore,
+  useFrontendProfitStore
+} from 'npool-cli-v4'
 import { getCoins } from 'src/api/chain'
 
 const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
@@ -33,116 +41,28 @@ const Orders = defineAsyncComponent(() => import('src/components/dashboard/Order
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const profit = useProfitStore()
+const profit = useFrontendProfitStore()
+const coin = useAdminAppCoinStore()
 const order = useFrontendOrderStore()
-const localledger = useLocalLedgerStore()
-
 const good = useAdminAppGoodStore()
 
-const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
-  profit.getIntervalProfits({
-    StartAt: startAt,
-    EndAt: endAt,
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_PROFIT_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, key, (error: boolean, count?: number) => {
-    if (error) {
-      return
-    }
-    if (count === 0) {
-      switch (key) {
-        case IntervalKey.LastDay:
-          if (profit.CoinProfits.get(key)) {
-            localledger.initLastDayProfit(profit.CoinProfits.get(key)?.Profits as Array<Profit>)
-          }
-          break
-        case IntervalKey.LastMonth:
-          if (profit.CoinProfits.get(key)) {
-            localledger.initLastMonthProfit(profit.CoinProfits.get(key)?.Profits as Array<Profit>)
-          }
-          break
-      }
-      return
-    }
-    getIntervalProfits(key, startAt, endAt, limit + offset, limit)
-  })
-}
-
-const getProfits = (offset:number, limit: number) => {
-  profit.getProfits({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_PROFIT_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, (error: boolean, count?: number) => {
-    if (error) {
-      return
-    }
-    if (count === 0) {
-      localledger.initProfit(profit.Profits.Profits)
-      return
-    }
-    getProfits(limit + offset, limit)
-  })
-}
-
-const getGoodProfits = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
-  profit.getGoodProfits({
-    StartAt: startAt,
-    EndAt: endAt,
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_PROFIT_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, key, (error: boolean, count?: number) => {
-    if (error) {
-      return
-    }
-    if (count === 0) {
-      return
-    }
-    getIntervalProfits(key, startAt, endAt, limit + offset, limit)
-  })
-}
-
-const coin = useAdminAppCoinStore()
-
 onMounted(() => {
-  if (profit.Profits.Total === 0) {
+  if (profit.Profits.Profits.length === 0) {
     getProfits(0, 100)
   }
-  if (!profit.CoinProfits.get(IntervalKey.LastDay)) {
+  if (!profit.getIntervalProfitsByKey(IntervalKey.LastDay)) {
     getIntervalProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
   }
-  if (!profit.GoodProfits.get(IntervalKey.All)) {
-    getGoodProfits(IntervalKey.All,
-      0,
-      Math.ceil(new Date().getTime() / 1000),
-      0, 100)
+  if (profit.GoodProfits.GoodProfits.length === 0) {
+    getGoodProfits(0, 100)
   }
-  if (!profit.GoodProfits.get(IntervalKey.LastDay)) {
-    getGoodProfits(
+
+  if (!profit.getIntervalGoodProfitsByKey(IntervalKey.LastDay)) {
+    getIntervalGoodProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
       Math.ceil(new Date().getTime() / 1000),
@@ -161,6 +81,86 @@ onMounted(() => {
   }
 })
 
+const getProfits = (offset:number, limit: number) => {
+  profit.getProfits({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_PROFIT_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (error: boolean, rows: Array<Profit>) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getProfits(limit + offset, limit)
+  })
+}
+
+const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, offset: number, limit: number) => {
+  profit.getIntervalProfits({
+    StartAt: startAt,
+    EndAt: endAt,
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_PROFIT_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, key, (error: boolean, rows: Array<Profit>) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getIntervalProfits(key, startAt, endAt, limit + offset, limit)
+  })
+}
+
+const getGoodProfits = (offset: number, limit: number) => {
+  profit.getGoodProfits({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_PROFIT_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (error: boolean, rows: Array<GoodProfit>) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getGoodProfits(limit + offset, limit)
+  })
+}
+
+const getIntervalGoodProfits = (key: IntervalKey, startAt: number, endAt: number, offset: number, limit: number) => {
+  profit.getIntervalGoodProfits({
+    StartAt: startAt,
+    EndAt: endAt,
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_PROFIT_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, key, (error: boolean, rows: Array<GoodProfit>) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getIntervalGoodProfits(key, startAt, endAt, limit + offset, limit)
+  })
+}
+
 const getOrders = (offset:number, limit: number) => {
   order.getOrders({
     Offset: offset,
@@ -172,8 +172,8 @@ const getOrders = (offset:number, limit: number) => {
         Type: NotifyType.Error
       }
     }
-  }, (orders: Array<Order>, error: boolean) => {
-    if (error || orders.length < limit) {
+  }, (rows: Array<Order>, error: boolean) => {
+    if (error || rows.length < limit) {
       return
     }
     getOrders(offset + limit, limit)
@@ -191,8 +191,8 @@ const getAppGoods = (offset: number, limit: number) => {
         Type: NotifyType.Error
       }
     }
-  }, (g: Array<AppGood>, error: boolean) => {
-    if (error || g.length < limit) {
+  }, (rows: Array<AppGood>, error: boolean) => {
+    if (error || rows.length < limit) {
       return
     }
     getAppGoods(offset + limit, limit)
