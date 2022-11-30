@@ -14,14 +14,14 @@
             />
             <label>{{ $t('MSG_BALANCE') }}</label>
             <div class='three-section' v-if='paymentCoin?.StableUsd'>
-              <span class='number'>{{ parseFloat(usdBalance.toFixed(4)) }}</span>
+              <span class='number'>{{ balance }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
             <div class='three-section' v-else>
               <span class='number'>{{ general.getBalanceByID(coinTypeID) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
               <span>&nbsp;({{ $t("MSG_APPROX") }}</span>
-              <span class='small number'>{{ parseFloat(usdBalance.toFixed(4)) }}</span>
+              <span class='small number'>{{ balance }}</span>
               <span class='small unit'>USDT</span>
               <span>)</span>
             </div>
@@ -45,7 +45,7 @@
               <span class='unit'>USDT</span>
             </div>
             <div class='three-section' v-else>
-              <span class='number'>{{ parseFloat(usdToOtherAmount) }}</span>
+              <span class='number'>{{ usdToOtherAmount }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
               <span>&nbsp;(</span>
               <span class='number small'>{{ paymentAmount }}</span>
@@ -90,9 +90,9 @@ import {
   AppGood,
   useAdminAppCoinStore,
   AppCoin,
-  useAdminCurrencyStore
+  useAdminCurrencyStore,
+  Currency
 } from 'npool-cli-v4'
-import { getCurrencies } from 'src/api/chain'
 import { DefaultGoodID } from 'src/const/const'
 import { defineAsyncComponent, onMounted, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -116,7 +116,6 @@ const route = useRoute()
 
 const query = computed(() => route.query as unknown as Query)
 const goodID = computed(() => query.value.goodID?.length ? query.value.goodID : DefaultGoodID)
-const purchaseAmount = ref(query.value.purchaseAmount)
 const coinTypeID = ref(query.value.coinTypeID)
 
 const coin = useAdminAppCoinStore()
@@ -125,20 +124,16 @@ const paymentCoin = computed(() => coin.getCoinByID(coinTypeID.value))
 
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
-const goodPrice = computed(() => good.getPrice(goodID.value))
 const total = computed(() => good.getPurchaseLimit(target.value))
 
-const paymentAmount = computed(() => Number(goodPrice.value) * purchaseAmount.value)
-
-const selectedCoinCurrency = ref(1)
-
+const selectedCoinCurrency = ref(1) // 币种汇率
 const general = useFrontendGeneralStore()
-const usdBalance = computed(() => Number(general.getBalanceByID(coinTypeID.value)) * selectedCoinCurrency.value)
-const usdToOtherAmount = computed(() => (Math.ceil(paymentAmount.value / selectedCoinCurrency.value * 10000) / 10000).toFixed(4))
-const insufficientFunds = computed(() => usdBalance.value < paymentAmount.value)
+const balance = computed(() => parseFloat((Number(general.getBalanceByID(coinTypeID.value)) * selectedCoinCurrency.value).toFixed(4))) // 余额
 
-const order = useFrontendOrderStore()
-const submitting = ref(false)
+const purchaseAmount = ref(query.value.purchaseAmount) // 购买数量
+const paymentAmount = computed(() => Number(good.getPrice(goodID.value)) * purchaseAmount.value) // 支付金额
+const usdToOtherAmount = computed(() => parseFloat((Math.ceil(paymentAmount.value / selectedCoinCurrency.value * 10000) / 10000).toFixed(4))) // 美金转其它币种
+const insufficientFunds = computed(() => balance.value < paymentAmount.value)
 
 const purchaseAmountError = ref(false)
 const onPurchaseAmountFocusIn = () => {
@@ -148,6 +143,9 @@ const onPurchaseAmountFocusOut = () => {
   purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > total.value
 }
 
+const order = useFrontendOrderStore()
+
+const submitting = ref(false)
 const onPurchaseClick = () => {
   onPurchaseAmountFocusOut()
   if (purchaseAmountError.value) {
@@ -204,7 +202,13 @@ const getGenerals = (offset:number, limit: number) => {
 }
 
 const currency = useAdminCurrencyStore()
+
+// 币种汇率优先级
 const setCurrency = () => {
+  if (coin.stableCoin(coinTypeID.value)) {
+    selectedCoinCurrency.value = 1
+    return
+  }
   if (coin.haveCurrency(coinTypeID.value)) {
     selectedCoinCurrency.value = coin.getCurrency(coinTypeID.value) as number
     console.log('AppCoin: ', selectedCoinCurrency.value)
@@ -238,8 +242,21 @@ const getCoins = (offset: number, limit: number) => {
   })
 }
 
+const getCurrencies = (offset: number, limit: number) => {
+  currency.getCurrencies({
+    Offset: offset,
+    Limit: limit,
+    Message: {}
+  }, (error: boolean, rows: Array<Currency>) => {
+    if (error || rows.length < limit) {
+      if (!error) setCurrency()
+      return
+    }
+    getCurrencies(offset + limit, limit)
+  })
+}
+
 onMounted(() => {
-  general.$reset()
   if (general.Generals.Generals.length === 0) {
     getGenerals(0, 100)
   }
