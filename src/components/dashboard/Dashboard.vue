@@ -24,7 +24,7 @@ import { IntervalKey } from 'src/const/const'
 import { QAjaxBar } from 'quasar'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
 import { AppGood, NotifyType, Order, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendOrderStore } from 'npool-cli-v4'
-import { getCoins } from 'src/api/coin'
+import { getCoins } from 'src/api/chain'
 
 const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
 const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/MiningCards.vue'))

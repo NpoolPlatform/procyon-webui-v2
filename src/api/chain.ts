@@ -1,4 +1,4 @@
-import { AppCoin, CoinDescription, useAdminAppCoinStore, useAdminCoinDescriptionStore } from 'npool-cli-v4'
+import { AppCoin, CoinDescription, Currency, useAdminAppCoinStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
 
 const coin = useAdminAppCoinStore()
 
@@ -26,5 +26,19 @@ export const getDescriptions = (offset: number, limit: number) => {
       return
     }
     getDescriptions(offset + limit, limit)
+  })
+}
+
+const currency = useAdminCurrencyStore()
+export const getCurrencies = (offset: number, limit: number) => {
+  currency.getCurrencies({
+    Offset: offset,
+    Limit: limit,
+    Message: {}
+  }, (error: boolean, rows: Array<Currency>) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getCurrencies(offset + limit, limit)
   })
 }

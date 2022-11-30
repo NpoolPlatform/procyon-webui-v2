@@ -3,7 +3,7 @@ import { AppID } from 'src/const/const'
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { AppGood, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendAppStore } from 'npool-cli-v4'
-import { getCoins } from 'src/api/coin'
+import { getCoins } from 'src/api/chain'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 

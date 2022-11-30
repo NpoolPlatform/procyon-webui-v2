@@ -93,7 +93,7 @@ import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
 import { WithdrawState } from 'src/teststore/mock/transaction/const'
 import { useLocalCoinStore } from 'src/localstore/coin'
 import { NotifyType, formatTime, useFrontendUserAccountStore, Account, useAdminAppCoinStore } from 'npool-cli-v4'
-import { getCoins } from 'src/api/coin'
+import { getCoins } from 'src/api/chain'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
