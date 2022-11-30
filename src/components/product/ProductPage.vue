@@ -154,6 +154,7 @@ import {
   AppGood,
   useAdminAppCoinStore,
   useAdminAppGoodStore,
+  useFrontendGeneralStore,
   useLocalUserStore
 } from 'npool-cli-v4'
 
@@ -180,6 +181,8 @@ const purchaseAmount = toRef(props, 'purchaseAmount')
 const router = useRouter()
 
 const logined = useLocalUserStore()
+
+const general = useFrontendGeneralStore()
 
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
@@ -230,6 +233,7 @@ const onPurchaseClick = () => {
   if (purchaseAmountError.value) {
     return
   }
+  general.$reset()
   void router.push({
     path: '/payment',
     query: {

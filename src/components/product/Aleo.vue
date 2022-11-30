@@ -202,8 +202,8 @@ import { useI18n } from 'vue-i18n'
 import question from '../../assets/question.svg'
 import lightbulb from '../../assets/lightbulb.svg'
 import { DefaultGoodID } from 'src/const/const'
-import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, CoinDescriptionUsedFor } from 'npool-cli-v4'
-import { getDescriptions } from 'src/api/chain'
+import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, CoinDescriptionUsedFor, useAdminCurrencyStore } from 'npool-cli-v4'
+import { getCurrencies, getDescriptions } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -225,6 +225,8 @@ const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
+
+const currency = useAdminCurrencyStore()
 
 const description = useAdminCoinDescriptionStore()
 const coinDescription = computed(() => description.getCoinDescriptionByCoinUsedFor(target.value?.CoinTypeID, CoinDescriptionUsedFor.ProductPage))
@@ -272,6 +274,9 @@ onMounted(() => {
 
   if (description.CoinDescriptions.CoinDescriptions.length === 0) {
     getDescriptions(0, 100)
+  }
+  if (currency.Currencies.Currencies.length === 0) {
+    getCurrencies(0, 100)
   }
 })
 
