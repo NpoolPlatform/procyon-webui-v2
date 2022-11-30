@@ -33,7 +33,7 @@ import {
   useFrontendUserAccountStore
 } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
-import { getCoins } from 'src/api/coin'
+import { getCoins } from 'src/api/chain'
 import { IntervalKey } from 'src/const/const'
 import { useLocalLedgerStore } from 'src/localstore/ledger'
 import { useGeneralStore } from 'src/teststore/mock/ledger'

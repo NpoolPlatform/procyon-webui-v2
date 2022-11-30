@@ -44,7 +44,7 @@ import { defineProps, toRef, computed, onMounted } from 'vue'
 import { formatTime, PriceCoinName } from 'npool-cli-v2'
 import { useRouter } from 'vue-router'
 import { AppGood, useAdminAppCoinStore } from 'npool-cli-v4'
-import { getCoins } from 'src/api/coin'
+import { getCoins } from 'src/api/chain'
 
 interface Props {
   good: AppGood;

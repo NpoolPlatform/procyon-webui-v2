@@ -21,7 +21,7 @@
 import { NotificationType, useInspireStore } from 'npool-cli-v2'
 import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
-import { getCoins } from 'src/api/coin'
+import { getCoins } from 'src/api/chain'
 import { useLocalArchivementStore } from 'src/localstore/affiliates'
 import { useArchivementStore } from 'src/teststore/mock/archivement'
 import { defineAsyncComponent, onMounted } from 'vue'
