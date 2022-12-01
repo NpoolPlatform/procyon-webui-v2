@@ -30,7 +30,7 @@
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
-          <button class='small' @click='onDepositClick(myProps.row)' :disabled='!coin.getCoinByID(myProps.row.CoinTypeID)?.CoinForPay || depositClick'>
+          <button class='small' @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(myProps.row.CoinTypeID) || depositClick'>
             {{ $t('MSG_DEPOSIT') }}
           </button>
         </q-td>
