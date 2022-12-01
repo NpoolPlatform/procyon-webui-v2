@@ -1,3 +1,5 @@
+import { GoodProfit } from 'npool-cli-v4'
+
 interface BalanceGeneral{
   CoinTypeID: string;
   CoinName: string;
@@ -29,6 +31,16 @@ interface CoinProfit {
   Last30DayAmount: number;
   Last30DayUSDAmount: number;
   Last30DayJPYAmount: number;
+}
+
+export interface MyGoodProfit extends GoodProfit {
+  CoinPreSale: boolean;
+  TotalInComing: number;
+  TotalUSDInComing: number;
+  Last24HoursInComing: number;
+  Last24HoursUSDInComing: number;
+  Last30DaysInComing: number;
+  Last30DaysUSDInComing: number;
 }
 
 export {
