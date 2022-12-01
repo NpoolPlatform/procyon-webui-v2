@@ -57,16 +57,15 @@
 
 <script setup lang='ts'>
 import { ref, defineAsyncComponent, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useFrontendTransferAccountStore, AccountType, NotifyType, TransferAccount, validateEmailAddress, validateMobileNO, UsedFor } from 'npool-cli-v4'
+import { useI18n } from 'vue-i18n'
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 
 const address = ref('')
 const submitAddress = computed(() => address.value.replace(/ /g, ''))
