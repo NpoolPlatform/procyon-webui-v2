@@ -1,41 +1,35 @@
 <template>
   <h2>{{ $t('MSG_MINING_DASHBOARD') }}</h2>
   <MiningCard
-    v-for='general in goodGenerals'
-    :key='general.CoinTypeID'
-    :general='general'
+    v-for='goodProfit in goodProfits'
+    :key='goodProfit.CoinTypeID'
+    :profit='goodProfit'
   />
-  <SpacemeshMockCard />
+  <SpaceMeshMockCard />
 </template>
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { useProfitStore } from 'src/teststore/mock/profit'
-import { GoodGeneral } from 'src/localstore/good'
+import { useFrontendProfitStore } from 'npool-cli-v4'
+import { MyGoodProfit } from 'src/localstore/ledger'
 import { IntervalKey } from 'src/const/const'
 
 const MiningCard = defineAsyncComponent(() => import('src/components/dashboard/MiningCard.vue'))
-const SpacemeshMockCard = defineAsyncComponent(() => import('src/components/dashboard/SpacemeshMockCard.vue'))
+const SpaceMeshMockCard = defineAsyncComponent(() => import('src/components/dashboard/SpacemeshMockCard.vue'))
 
-const profit = useProfitStore()
-
-const goodGenerals = computed(() => {
-  const result = [] as Array<GoodGeneral>
-  const goodProfits = profit.GoodProfits.get(IntervalKey.All)
-  if (!goodProfits) {
-    return result
-  }
-
-  goodProfits.Profits.forEach((el) => {
-    const existItem = result.find((gel) => gel.CoinTypeID === el.CoinTypeID)
-    if (!existItem) {
-      result.push({ ...el, ...{ Last24HoursIncoming: 0 } })
-    } else {
-      existItem.Units += el.Units
-      existItem.Incoming += Number(el.Incoming)
-    }
+const profit = useFrontendProfitStore()
+const goodProfits = computed(() => {
+  return Array.from(profit.GoodProfits.GoodProfits).map((el) => {
+    return {
+      ...el,
+      CoinPreSale: false,
+      TotalInComing: Number(el.Incoming),
+      TotalUSDInComing: 1,
+      Last24HoursInComing: profit.getIntervalGoodProfitIncoming(IntervalKey.LastDay, el.CoinTypeID),
+      Last24HoursUSDInComing: 1,
+      Last30DaysInComing: profit.getIntervalGoodProfitIncoming(IntervalKey.LastMonth, el.CoinTypeID),
+      Last30DaysUSDInComing: 1
+    } as MyGoodProfit
   })
-  return result
 })
-
 </script>
