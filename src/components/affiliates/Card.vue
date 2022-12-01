@@ -39,7 +39,7 @@
             <td><span class='aff-product'>{{ _good.CoinName }}</span></td>
             <td v-if='_good.Editing'>
               <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' />
-              <button @click='onSaveCommissionClick(referral,idx)'>
+              <button @click='onSaveCommissionClick(_good)'>
                 {{ $t('MSG_SAVE') }}
               </button>
             </td>
@@ -103,7 +103,8 @@ import {
   PriceCoinName,
   useInspireStore,
   PurchaseAmountSetting,
-  formatTime
+  formatTime,
+  NotificationType
 } from 'npool-cli-v2'
 import { ref, toRef, defineProps, computed, defineAsyncComponent } from 'vue'
 import chevrons from '../../assets/chevrons.svg'
@@ -116,9 +117,9 @@ import {
   UserArchivement
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
-import { MyArchivement } from 'src/localstore/ledger/types'
+import { MyArchivement, MyGoodArchivement } from 'src/localstore/ledger/types'
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const { locale } = useI18n({ useScope: 'global' })
+const { locale, t } = useI18n({ useScope: 'global' })
 
 const KolOption = defineAsyncComponent(() => import('src/components/affiliates/KolOption.vue'))
 
@@ -170,39 +171,34 @@ const settingTime = computed(() => (setting: PurchaseAmountSetting) => {
   return formatTime(setting.Start, false).split(' ')[1]
 })
 
-const onSaveCommissionClick = (row: MyArchivement, idx: number) => {
-  console.log(row, idx)
-  row.Archivements[idx].Editing = false
-  // editing.value = false
-  // if (visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent > inviterGoodPercent(visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID)) {
-  //   visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent = inviterGoodPercent(visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID)
-  //   return
-  // }
-  // if (visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent < 0) {
-  //   visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent = 0
-  //   return
-  // }
-  // visibleGoodsArchivements.value(referral.value.Archivements)[idx].Editing = false
-  // inspire.createPurchaseAmountSetting({
-  //   TargetUserID: referral.value.UserID,
-  //   InviterName: baseUser.displayName(logined.User, locale.value as string),
-  //   InviteeName: username.value,
-  //   Info: {
-  //     GoodID: visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID,
-  //     CoinTypeID: visibleGoodsArchivements.value(referral.value.Archivements)[idx].CoinTypeID,
-  //     Percent: visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent,
-  //     Start: Math.ceil(Date.now() / 1000),
-  //     End: 0
-  //   },
-  //   Message: {
-  //     Error: {
-  //       Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
-  //       Popup: true,
-  //       Type: NotificationType.Error
-  //     }
-  //   }
-  // }, () => {
-  //   // TODO
-  // })
+const onSaveCommissionClick = (good: MyGoodArchivement) => {
+  if (good.CommissionPercent > getGoodPercent.value(good.GoodID)) {
+    good.CommissionPercent = getGoodPercent.value(good.GoodID)
+  }
+  if (good.CommissionPercent < 0) {
+    good.CommissionPercent = 0
+  }
+  good.Editing = false
+  inspire.createPurchaseAmountSetting({
+    TargetUserID: referral.value.UserID,
+    InviterName: baseUser.displayName(logined.User, locale.value as string),
+    InviteeName: username.value,
+    Info: {
+      GoodID: good.GoodID,
+      CoinTypeID: good.CoinTypeID,
+      Percent: good.CommissionPercent,
+      Start: Math.ceil(Date.now() / 1000),
+      End: 0
+    },
+    Message: {
+      Error: {
+        Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
+        Popup: true,
+        Type: NotificationType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
 }
 </script>
