@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ deleting ? "blur" : "" ]'>
+  <div :class='[ showing ? "blur" : "" ]'>
     <ShowSwitchTable
       label='MSG_APPROVED_ADDRESSES'
       :rows='(accounts as Array<never>)'
@@ -24,7 +24,7 @@
           <q-td key='Blockchain' :props='myProps'>
             <LogoName
               :logo='myProps.row?.CoinLogo'
-              :name='coinName(myProps.row?.CoinTypeID)'
+              :name='myProps.row?.CoinName'
             />
           </q-td>
           <q-td key='Address' :props='myProps'>
@@ -37,7 +37,7 @@
             {{ formatTime(myProps.row?.CreatedAt) }}
           </q-td>
           <q-td key='ActionButtons' :props='myProps'>
-            <button class='small' @click='onRemove(myProps.row)' :disabled='!deletable(myProps.row)'>
+            <button class='small' @click='onRemove(myProps.row)'>
               {{ $t('MSG_REMOVE') }}
             </button>
           </q-td>
@@ -46,7 +46,7 @@
     </ShowSwitchTable>
   </div>
   <q-dialog
-    v-model='deleting'
+    v-model='showing'
     seamless
     maximized
     @hide='onMenuHide'
@@ -60,13 +60,13 @@
 
             <div class='full-section'>
               <h4>{{ $t('MSG_DELETE_LABEL') }}:</h4>
-              <span class='number'>{{ deleteLabels }}</span>
+              <span class='number'>{{ target.Labels?.join(',') }}</span>
             </div>
 
             <div class='full-section'>
               <h4>{{ $t('MSG_WITHDRAW_ADDRESS') }}:</h4>
-              <span class='wallet-type'>{{ deleteCoinType }}</span><br>
-              <span class='number'>{{ deleteAddress }}</span>
+              <span class='wallet-type'>{{ target?.CoinName }}</span><br>
+              <span class='number'>{{ target?.Address }}</span>
               <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyAddressClick'>
             </div>
 
@@ -84,37 +84,71 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineAsyncComponent, ref } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import { NotificationType, useNotificationStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
-import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
-import { WithdrawState } from 'src/teststore/mock/transaction/const'
-import { useLocalCoinStore } from 'src/localstore/coin'
-import { NotifyType, formatTime, useFrontendUserAccountStore, Account, useAdminAppCoinStore } from 'npool-cli-v4'
-import { getCoins } from 'src/api/chain'
+import { NotifyType, formatTime, useFrontendUserAccountStore, Account } from 'npool-cli-v4'
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
-const coin = useAdminAppCoinStore()
 const account = useFrontendUserAccountStore()
 const accounts = computed(() => account.withdrawAddress)
 
-const trans = useLocalTransactionStore()
-const withdraws = computed(() => trans.withdraws)
+const target = ref({} as Account)
+const showing = ref(false)
 
-const localcoin = useLocalCoinStore()
-const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
+const onRemove = (row: Account) => {
+  showing.value = true
+  target.value = { ...row }
+}
 
-const deletable = (row: Account) => {
-  return withdraws.value.filter((el) => {
-    return el.State === WithdrawState.Reviewing || el.State === WithdrawState.Transferring
-  }).findIndex((el) => el.Address === row.Address) < 0
+const onCancelClick = () => {
+  onMenuHide()
+}
+
+const onMenuHide = () => {
+  showing.value = false
+  target.value = {} as Account
+}
+
+const router = useRouter()
+const onAddNewAddressClick = () => {
+  void router.push({ path: '/add/address' })
+}
+
+const onDeleteClick = () => {
+  if (!target.value) {
+    return
+  }
+
+  account.deleteUserAccount({
+    ID: target.value.ID,
+    Message: {
+      Error: {
+        Title: t('MSG_DELETE_WITHDRAW_ACCOUNT_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    onMenuHide()
+  })
+}
+
+const notification = useNotificationStore()
+const onCopyAddressClick = () => {
+  copy(target.value?.Address)
+  notification.Notifications.push({
+    Title: t('MSG_ADDRESS_COPIED'),
+    Message: t('MSG_COPY_ADDRESS_SUCCESS'),
+    Popup: true,
+    Type: NotificationType.Success
+  })
 }
 
 const table = computed(() => [
@@ -149,77 +183,6 @@ const table = computed(() => [
     field: ''
   }
 ])
-
-const router = useRouter()
-
-const onAddNewAddressClick = () => {
-  void router.push({ path: '/add/address' })
-}
-
-const deleteAccount = ref({} as Account)
-const deleting = ref(false)
-
-const onRemove = (row: Account) => {
-  deleting.value = true
-  deleteAccount.value = { ...row }
-}
-
-const onDeleteClick = () => {
-  if (!deleteAccount.value) {
-    return
-  }
-
-  account.deleteUserAccount({
-    ID: deleteAccount.value.ID,
-    Message: {
-      Error: {
-        Title: t('MSG_DELETE_WITHDRAW_ACCOUNT_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, () => {
-    onMenuHide()
-  })
-}
-
-const onCancelClick = () => {
-  onMenuHide()
-}
-
-const deleteLabels = computed(() => deleteAccount.value.Labels?.join(','))
-const deleteCoinType = computed(() => {
-  const dcoin = coin.getCoinByID(deleteAccount.value?.CoinTypeID)
-  if (!dcoin) {
-    return ''
-  }
-  return dcoin.Name
-})
-
-const notification = useNotificationStore()
-
-const deleteAddress = computed(() => deleteAccount.value?.Address)
-const onCopyAddressClick = () => {
-  copy(deleteAddress.value)
-  notification.Notifications.push({
-    Title: t('MSG_ADDRESS_COPIED'),
-    Message: t('MSG_COPY_ADDRESS_SUCCESS'),
-    Popup: true,
-    Type: NotificationType.Success
-  })
-}
-
-const onMenuHide = () => {
-  deleting.value = false
-  deleteAccount.value = {} as Account
-}
-
-onMounted(() => {
-  if (coin.AppCoins.AppCoins.length === 0) {
-    getCoins(0, 100)
-  }
-})
-
 </script>
 
 <style lang='sass' scoped>
