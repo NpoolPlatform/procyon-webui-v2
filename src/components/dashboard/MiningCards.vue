@@ -25,9 +25,9 @@ const goodProfits = computed(() => {
       CoinPreSale: false,
       TotalInComing: Number(el.Incoming),
       TotalUSDInComing: 1,
-      Last24HoursInComing: profit.getIntervalGoodProfitIncoming(IntervalKey.LastDay, el.CoinTypeID),
+      Last24HoursInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
       Last24HoursUSDInComing: 1,
-      Last30DaysInComing: profit.getIntervalGoodProfitIncoming(IntervalKey.LastMonth, el.CoinTypeID),
+      Last30DaysInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID),
       Last30DaysUSDInComing: 1
     } as MyGoodProfit
   })
