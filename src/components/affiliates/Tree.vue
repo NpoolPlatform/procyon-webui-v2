@@ -9,11 +9,11 @@
       :referral='inviter'
     />
     <Card
-      v-for='(referral, idx) in referrals'
+      v-for='(referral, idx) in invitees'
       :key='referral.UserID'
       :child='true'
       :first-child='idx === 0'
-      :last-child='idx === referrals.length - 1'
+      :last-child='idx === invitees.length - 1'
       :referral='referral'
     />
   </div>
@@ -21,19 +21,28 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { LocalProductArchivement } from 'src/localstore/affiliates/types'
-import { useLocalArchivementStore } from 'src/localstore/affiliates'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { useAdminAppGoodStore, useFrontendArchivementStore, useLocalUserStore, UserArchivement } from 'npool-cli-v4'
+import { MyArchivement, MyGoodArchivement } from 'src/localstore/ledger/types'
 
 const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.vue'))
 
 const logined = useLocalUserStore()
-const localArchivements = useLocalArchivementStore()
+const good = useAdminAppGoodStore()
 
-const referrals = computed(() => localArchivements.Archivements.filter((el) => el.Kol && logined.User?.ID !== el.UserID))
+const archivement = useFrontendArchivementStore()
 const inviter = computed(() => {
-  const index = localArchivements.Archivements.findIndex((el) => el.UserID === logined.User?.ID)
-  return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivements.Archivements[index]
+  const userArchivement = archivement.getArchivementByUserID(logined?.User?.ID) as UserArchivement
+  if (!userArchivement) return {} as MyArchivement
+  const goodArchivements = Array.from(userArchivement?.Archivements?.filter?.((el) => good.visible(el.GoodID))).map((el) => {
+    return { ...el, Editing: false } as MyGoodArchivement
+  })
+  return { ...userArchivement, Archivements: goodArchivements } as MyArchivement
 })
 
+const invitees = computed(() => archivement.getInviteesArchivements(logined.User?.ID).map((el) => {
+  const goodArchivements = Array.from(el.Archivements.filter((el) => good.visible(el.GoodID))).map((el) => {
+    return { ...el, Editing: false } as MyGoodArchivement
+  })
+  return { ...el, Archivements: goodArchivements } as MyArchivement
+}))
 </script>
