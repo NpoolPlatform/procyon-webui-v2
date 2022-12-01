@@ -1,4 +1,4 @@
-import { GoodProfit } from 'npool-cli-v4'
+import { GoodArchivement, GoodProfit, UserArchivement } from 'npool-cli-v4'
 
 interface BalanceGeneral{
   CoinTypeID: string;
@@ -41,6 +41,13 @@ export interface MyGoodProfit extends GoodProfit {
   Last24HoursUSDInComing: number;
   Last30DaysInComing: number;
   Last30DaysUSDInComing: number;
+}
+
+export interface MyGoodArchivement extends GoodArchivement {
+  Editing: boolean;
+}
+export interface MyArchivement extends UserArchivement {
+  Archivements: MyGoodArchivement[];
 }
 
 export {
