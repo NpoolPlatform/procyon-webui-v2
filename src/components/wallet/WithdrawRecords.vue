@@ -10,7 +10,7 @@
         <q-td key='Name' :props='myProps'>
           <LogoName
             :logo='myProps.row.CoinLogo'
-            :name='coinName(myProps.row.CoinTypeID)'
+            :name='myProps.row.CoinName'
           />
         </q-td>
         <q-td key='Date' :props='myProps'>
@@ -31,21 +31,59 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, defineAsyncComponent } from 'vue'
-import { formatTime } from 'npool-cli-v4'
+import { computed, defineAsyncComponent, onMounted } from 'vue'
+import { formatTime, NotifyType, useFrontendWithdrawStore, Withdraw, WithdrawState } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
-import { useLocalTransactionStore, Withdraw } from 'src/teststore/mock/transaction'
-import { WithdrawState } from 'src/teststore/mock/transaction/const'
-import { useLocalCoinStore } from 'src/localstore/coin'
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+const withdraw = useFrontendWithdrawStore()
+const withdraws = computed(() => withdraw.withdraws)
 
-const locationTrans = useLocalTransactionStore()
-const withdraws = computed(() => locationTrans.withdraws)
+const withdrawStatus = (wd: Withdraw) => {
+  switch (wd.State) {
+    case WithdrawState.Reviewing:
+      return 'MSG_UNDER_REVIEW'
+    case WithdrawState.Transferring:
+      return 'MSG_IN_PROGRESS'
+    case WithdrawState.Rejected:
+      return 'MSG_FAILED'
+    case WithdrawState.TransactionFail:
+      return 'MSG_FAILED'
+    case WithdrawState.Successful:
+      return 'MSG_COMPLETED'
+    default:
+      return 'MSG_UNKNOWN'
+  }
+}
+
+onMounted(() => {
+  if (withdraws.value.length === 0) {
+    getWithdraws(0, 100)
+  }
+})
+
+const getWithdraws = (offset: number, limit: number) => {
+  withdraw.getWithdraws({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_WITHDRAWS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (error: boolean, rows: Array<Withdraw>) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getWithdraws(limit + offset, limit)
+  })
+}
 
 const table = computed(() => [
   {
@@ -79,25 +117,6 @@ const table = computed(() => [
     field: (row: Withdraw) => row.Address
   }
 ])
-const localcoin = useLocalCoinStore()
-const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
-
-const withdrawStatus = (wd: Withdraw) => {
-  switch (wd.State) {
-    case WithdrawState.Reviewing:
-      return 'MSG_UNDER_REVIEW'
-    case WithdrawState.Transferring:
-      return 'MSG_IN_PROGRESS'
-    case WithdrawState.Rejected:
-      return 'MSG_FAILED'
-    case WithdrawState.TransactionFail:
-      return 'MSG_FAILED'
-    case WithdrawState.Successful:
-      return 'MSG_COMPLETED'
-    default:
-      return 'MSG_UNKNOWN'
-  }
-}
 </script>
 
 <style lang='sass' scoped>
