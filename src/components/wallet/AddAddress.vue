@@ -109,10 +109,11 @@ const onMenuHide = () => {
     return
   }
   verifying.value = false
+  submitting.value = false
 }
 
 const onCancelClick = () => {
-  verifying.value = false
+  onMenuHide()
 }
 
 const account = ref('')
