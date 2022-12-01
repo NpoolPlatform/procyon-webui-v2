@@ -50,7 +50,7 @@ onMounted(() => {
   if (profit.Profits.Profits.length === 0) {
     getProfits(0, 100)
   }
-  if (!profit.IntervalProfits.IntervalProfits.get(IntervalKey.LastDay)) {
+  if (profit.getIntervalGoodProfitsByKey(IntervalKey.LastDay).length === 0) {
     getIntervalProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
@@ -61,10 +61,17 @@ onMounted(() => {
   if (profit.GoodProfits.GoodProfits.length === 0) {
     getGoodProfits(0, 100)
   }
-  if (!profit.IntervalGoodProfits.IntervalGoodProfits.get(IntervalKey.LastDay)) {
+  if (profit.getIntervalGoodProfitsByKey(IntervalKey.LastDay).length === 0) {
     getIntervalGoodProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
+      Math.ceil(new Date().getTime() / 1000),
+      0, 100)
+  }
+  if (profit.getIntervalGoodProfitsByKey(IntervalKey.LastMonth).length === 0) {
+    getIntervalGoodProfits(
+      IntervalKey.LastMonth,
+      Math.ceil(new Date().getTime() / 1000) - (SecondsEachDay * 30),
       Math.ceil(new Date().getTime() / 1000),
       0, 100)
   }
