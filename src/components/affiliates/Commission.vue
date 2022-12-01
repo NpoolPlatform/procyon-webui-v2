@@ -21,22 +21,13 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  Currency,
-  useCurrencyStore,
-  PriceCoinName
-} from 'npool-cli-v2'
-import { onMounted, ref, computed, watch } from 'vue'
-import { useLocalArchivementStore } from 'src/localstore/affiliates'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { computed, ref } from 'vue'
+import { useFrontendArchivementStore, useLocalUserStore, PriceCoinName } from 'npool-cli-v4'
 
-const commissionJPY = ref(0)
-
-const currency = useCurrencyStore()
-const larchivements = useLocalArchivementStore()
 const logined = useLocalUserStore()
 
-const inviter = computed(() => larchivements.Archivements.find((el) => logined.User.ID === el.UserID))
+const archivement = useFrontendArchivementStore()
+const inviter = computed(() => archivement.getArchivementByUserID(logined?.User.ID))
 
 const totalCommission = computed(() => {
   let total = 0
@@ -46,16 +37,5 @@ const totalCommission = computed(() => {
   return total
 })
 
-watch(totalCommission, () => {
-  currency.getUSDTCurrency(Currency.JPY, (currency: number) => {
-    commissionJPY.value = totalCommission.value * currency
-  })
-})
-
-onMounted(() => {
-  currency.getUSDTCurrency(Currency.JPY, (currency: number) => {
-    commissionJPY.value = totalCommission.value * currency
-  })
-})
-
+const commissionJPY = ref(0)
 </script>

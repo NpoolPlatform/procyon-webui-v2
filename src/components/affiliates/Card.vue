@@ -4,16 +4,14 @@
       <h3 class='aff-name'>
         {{ username }}
       </h3>
-      <span class='aff-email'>{{ subusername }}</span>
+      <span class='aff-email'>{{ archivement.subUsername(referral) }}</span>
       <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ referral.TotalInvitees }}</span></span>
     </div>
     <div class='aff-table'>
       <table id='commission-table'>
         <thead>
           <tr>
-            <th>
-              <span>{{ $t('MSG_PRODUCT') }}</span>
-            </th>
+            <th><span>{{ $t('MSG_PRODUCT') }}</span></th>
             <th>
               <div class='tooltip'>
                 <span>{{ $t('MSG_COMMISSION_RATE') }}</span>
@@ -31,20 +29,16 @@
             </th>
             <th>
               <div class='tooltip'>
-                <span>{{ $t('MSG_REFERRAL_COMMISSION') }}</span>
+                <span>{{ $t('MSG_REFERRAL_COMMISSION') }} </span>
               </div>
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='(_good, idx) in visibleGoodsArchivements(referral.Archivements)' :key='idx'>
-            <td><span class='aff-product'>{{ currency.formatCoinName(_good.CoinName) }}</span></td>
+          <tr class='aff-info' v-for='(_good, idx) in referral.Archivements' :key='idx'>
+            <td><span class='aff-product'>{{ _good.CoinName }}</span></td>
             <td v-if='_good.Editing'>
-              <select v-model='_good.CommissionPercent' class='kol-dropdown'>
-                <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
-                  {{ kol }}
-                </option>
-              </select>
+              <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' />
               <button @click='onSaveCommissionClick(referral,idx)'>
                 {{ $t('MSG_SAVE') }}
               </button>
@@ -55,7 +49,7 @@
                 v-if='child'
                 :class='[ "alt", good.online(_good.GoodID) ? "" : "in-active" ]'
                 :disabled='!good.online(_good.GoodID)'
-                @click='onSetCommissionClick(_good)'
+                @click='(_good.Editing = true)'
               >
                 {{ $t('MSG_SET') }}
               </button>
@@ -107,142 +101,108 @@
 <script setup lang='ts'>
 import {
   PriceCoinName,
-  NotificationType,
   useInspireStore,
   PurchaseAmountSetting,
-  formatTime,
-  useCurrencyStore
+  formatTime
 } from 'npool-cli-v2'
-import { ref, toRef, defineProps, computed, nextTick } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { ref, toRef, defineProps, computed, defineAsyncComponent } from 'vue'
 import chevrons from '../../assets/chevrons.svg'
-import { LocalArchivement, LocalProductArchivement } from 'src/localstore/affiliates/types'
-import { useLocalArchivementStore } from 'src/localstore/affiliates'
-import { useBaseUserStore, useLocalUserStore, User, useAdminAppGoodStore } from 'npool-cli-v4'
-
+import {
+  useBaseUserStore,
+  useLocalUserStore,
+  User,
+  useAdminAppGoodStore,
+  useFrontendArchivementStore,
+  UserArchivement
+} from 'npool-cli-v4'
+import { useI18n } from 'vue-i18n'
+import { MyArchivement } from 'src/localstore/ledger/types'
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const { locale, t } = useI18n({ useScope: 'global' })
+const { locale } = useI18n({ useScope: 'global' })
+
+const KolOption = defineAsyncComponent(() => import('src/components/affiliates/KolOption.vue'))
 
 interface Props {
   child: boolean;
   firstChild: boolean;
   lastChild: boolean;
-  referral: LocalProductArchivement;
+  referral: MyArchivement;
 }
 
 const props = defineProps<Props>()
 const child = toRef(props, 'child')
 const firstChild = toRef(props, 'firstChild')
 const lastChild = toRef(props, 'lastChild')
-const referral = toRef(props, 'referral')
+const target = toRef(props, 'referral')
 
-const logined = useLocalUserStore()
-const baseuser = useBaseUserStore()
-const currency = useCurrencyStore()
+const referral = ref(target.value)
 
-const username = computed(() => baseuser.displayName({
+const baseUser = useBaseUserStore()
+const username = computed(() => baseUser.displayName({
   FirstName: referral.value.FirstName,
   LastName: referral.value.LastName
 } as User, locale.value as string))
 
-const subusername = computed(() => {
-  let name = referral.value.EmailAddress
+const logined = useLocalUserStore()
+const good = useAdminAppGoodStore()
 
-  if (!name?.length) {
-    name = referral.value?.PhoneNO
-  }
-
-  return name
+const archivement = useFrontendArchivementStore()
+const getGoodPercent = computed(() => (goodID: string) => {
+  const inviterArchivement = archivement.getArchivementByUserID(logined?.User.ID)
+  return archivement.getInviterGoodPercent(inviterArchivement as UserArchivement, goodID)
 })
 
 const showDetailSummary = ref(false)
-
 const onShowMoreClick = () => {
   showDetailSummary.value = !showDetailSummary.value
 }
 
 const inspire = useInspireStore()
-
-const good = useAdminAppGoodStore()
-
 const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
   return el.UserID === referral.value.UserID
 }).sort((a, b) => {
   return a.Start < b.Start ? 1 : -1
 }))
-const larchivement = useLocalArchivementStore()
-
-const inviter = computed(() => {
-  const index = larchivement.Archivements.findIndex((el) => el.UserID === logined.User?.ID)
-  return index < 0 ? undefined as unknown as LocalProductArchivement : larchivement.Archivements[index]
-})
-const inviterGoodPercent = (goodID: string) => {
-  const good = inviter.value.Archivements.find((el) => el.GoodID === goodID)
-  return good === undefined ? 0 : good.CommissionPercent
-}
-
-const userKOLOptions = computed(() => (maxKOL: number) => {
-  const kolList = [30, 25, 15, 10, 5, 0]
-  let index = kolList.findIndex(kol => kol <= maxKOL)
-  return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
-})
-
-const visibleGoodsArchivements = computed(() => (goodArchivements: Array<LocalArchivement>) => {
-  return goodArchivements.filter((el) => good.visible(el.GoodID))
-})
-
-const settingDate = (setting: PurchaseAmountSetting) => {
+const settingDate = computed(() => (setting: PurchaseAmountSetting) => {
   return formatTime(setting.Start, true)
-}
-
-const settingTime = (setting: PurchaseAmountSetting) => {
+})
+const settingTime = computed(() => (setting: PurchaseAmountSetting) => {
   return formatTime(setting.Start, false).split(' ')[1]
-}
+})
 
-const onSetCommissionClick = async (good: LocalArchivement) => {
-  good.Editing = true
-  await nextTick()
+const onSaveCommissionClick = (row: MyArchivement, idx: number) => {
+  console.log(row, idx)
+  row.Archivements[idx].Editing = false
+  // editing.value = false
+  // if (visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent > inviterGoodPercent(visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID)) {
+  //   visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent = inviterGoodPercent(visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID)
+  //   return
+  // }
+  // if (visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent < 0) {
+  //   visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent = 0
+  //   return
+  // }
+  // visibleGoodsArchivements.value(referral.value.Archivements)[idx].Editing = false
+  // inspire.createPurchaseAmountSetting({
+  //   TargetUserID: referral.value.UserID,
+  //   InviterName: baseUser.displayName(logined.User, locale.value as string),
+  //   InviteeName: username.value,
+  //   Info: {
+  //     GoodID: visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID,
+  //     CoinTypeID: visibleGoodsArchivements.value(referral.value.Archivements)[idx].CoinTypeID,
+  //     Percent: visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent,
+  //     Start: Math.ceil(Date.now() / 1000),
+  //     End: 0
+  //   },
+  //   Message: {
+  //     Error: {
+  //       Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
+  //       Popup: true,
+  //       Type: NotificationType.Error
+  //     }
+  //   }
+  // }, () => {
+  //   // TODO
+  // })
 }
-
-const onSaveCommissionClick = (elem: LocalProductArchivement, idx:number) => {
-  if (visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent > inviterGoodPercent(visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID)) {
-    visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent = inviterGoodPercent(visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID)
-    return
-  }
-  if (visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent < 0) {
-    visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent = 0
-    return
-  }
-  visibleGoodsArchivements.value(referral.value.Archivements)[idx].Editing = false
-  inspire.createPurchaseAmountSetting({
-    TargetUserID: referral.value.UserID,
-    InviterName: baseuser.displayName(logined.User, locale.value as string),
-    InviteeName: username.value,
-    Info: {
-      GoodID: visibleGoodsArchivements.value(referral.value.Archivements)[idx].GoodID,
-      CoinTypeID: visibleGoodsArchivements.value(referral.value.Archivements)[idx].CoinTypeID,
-      Percent: visibleGoodsArchivements.value(referral.value.Archivements)[idx].CommissionPercent,
-      Start: Math.ceil(Date.now() / 1000),
-      End: 0
-    },
-    Message: {
-      Error: {
-        Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
-}
-
 </script>
-<style>
-  .kol-dropdown {
-    padding: 4px 8px;
-    margin: 0;
-    width: 52px;
-  }
-
-</style>
