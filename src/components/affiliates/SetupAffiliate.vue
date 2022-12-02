@@ -5,15 +5,11 @@
         {{ username }}
       </h3>
       <p class='aff-email'>
-        {{ subusername }}
+        {{ subUsername }}
       </p>
-      <div v-for='(_good, idx) in visibleGoodsArchivements(referral?.Archivements)' :key='idx'>
+      <div v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
-        <select v-model='_good.CommissionPercent'>
-          <option v-for='kol in userKOLOptions(inviterGoodPercent(_good.GoodID))' :key='kol'>
-            {{ kol }}
-          </option>
-        </select>
+        <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' />
       </div>
     </template>
     <template #append-submit>
@@ -28,92 +24,72 @@ import {
   useInspireStore,
   NotificationType
 } from 'npool-cli-v2'
-import { useLocalUserStore, useBaseUserStore, User, useAdminAppGoodStore, NotifyType, AppGood } from 'npool-cli-v4'
-import { LocalArchivement, LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
+import {
+  useLocalUserStore,
+  useBaseUserStore,
+  User,
+  useAdminAppGoodStore,
+  useFrontendArchivementStore,
+  UserArchivement,
+  NotifyType
+} from 'npool-cli-v4'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-
-const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
-
+import { useI18n } from 'vue-i18n'
+import { getAppGoods } from 'src/api/good'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
 
+const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
+const KolOption = defineAsyncComponent(() => import('src/components/affiliates/KolOption.vue'))
+
 interface Query {
-  userId: string;
+  userID: string;
 }
+
 const route = useRoute()
+const router = useRouter()
 const query = computed(() => route.query as unknown as Query)
 
-const inspire = useInspireStore()
-const localArchivement = useLocalArchivementStore()
-const referral = computed(() => {
-  const index = localArchivement.Archivements.findIndex((el) => el.UserID === query.value.userId)
-  return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
-})
+const archivement = useFrontendArchivementStore()
+const referral = computed(() => archivement.getArchivementByUserID(query.value?.userID))
 
-const logined = useLocalUserStore()
-const baseuser = useBaseUserStore()
-const router = useRouter()
-
-const username = computed(() => baseuser.displayName({
+const baseUser = useBaseUserStore()
+const username = computed(() => baseUser.displayName({
   FirstName: referral.value?.FirstName,
   LastName: referral.value?.LastName
 } as User, locale.value as string))
+const subUsername = computed(() => archivement.subUsername(referral.value as UserArchivement))
 
-const inviter = computed(() => {
-  const index = localArchivement.Archivements.findIndex((el) => el.UserID === logined.User.ID)
-  return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivement.Archivements[index]
-})
-
-const userKOLOptions = computed(() => (maxKOL: number) => {
-  const kolList = [30, 25, 15, 10, 5, 0]
-  let index = kolList.findIndex(kol => kol <= maxKOL)
-  return index === kolList.length - 1 || index === -1 ? [0] : kolList.splice(++index)
-})
-
-const inviterGoodPercent = (goodID: string) => {
-  const good = inviter.value.Archivements.find((el) => el.GoodID === goodID)
-  return good === undefined ? 0 : good.CommissionPercent
-}
+const logined = useLocalUserStore()
 
 const good = useAdminAppGoodStore()
-
-const visibleGoodsArchivements = computed(() => (goodArchivements: Array<LocalArchivement>) => {
-  return goodArchivements.filter((el) => good.visible(el.GoodID))
+const getGoodPercent = computed(() => (goodID: string) => {
+  const inviterArchivement = archivement.getArchivementByUserID(logined?.User.ID)
+  return archivement.getInviterGoodPercent(inviterArchivement as UserArchivement, goodID)
 })
 
-const subusername = computed(() => {
-  let name = referral.value?.EmailAddress
-
-  if (!name?.length) {
-    name = referral.value?.PhoneNO
-  }
-
-  return name
-})
+const visibleGoodArchivements = computed(() => referral.value?.Archivements?.filter((el) => good.visible(el.GoodID)))
 
 const backTimer = ref(-1)
 
+const inspire = useInspireStore()
 const onSubmit = () => {
-  let overflow = false
-  for (const g of referral.value?.Archivements) {
-    if (g.CommissionPercent > inviterGoodPercent(g.GoodID)) {
-      g.CommissionPercent = inviterGoodPercent(g.GoodID)
-      overflow = true
+  referral.value?.Archivements?.forEach((g) => {
+    if (g.CommissionPercent > getGoodPercent.value(g.GoodID)) {
+      g.CommissionPercent = getGoodPercent.value(g.GoodID)
     }
-  }
-
-  if (overflow) {
-    return
-  }
+    if (g.CommissionPercent < 0) {
+      g.CommissionPercent = 0
+    }
+  })
 
   inspire.createInvitationCode({
-    TargetUserID: referral.value?.UserID,
-    InviterName: baseuser.displayName(logined.User, locale.value as string),
+    TargetUserID: referral.value?.UserID as string,
+    InviterName: baseUser.displayName(logined.User, locale.value as string),
     InviteeName: username.value,
     Info: {
-      UserID: referral.value.UserID
+      UserID: referral.value?.UserID
     },
     Message: {
       Error: {
@@ -126,10 +102,15 @@ const onSubmit = () => {
     if (error) {
       return
     }
-    visibleGoodsArchivements.value(referral.value?.Archivements).forEach((good) => {
+    if (visibleGoodArchivements.value?.length === 0) {
+      void router.push({ path: '/affiliates' })
+      archivement.$reset()
+      return
+    }
+    visibleGoodArchivements?.value?.forEach((good) => {
       inspire.createPurchaseAmountSetting({
-        TargetUserID: referral.value?.UserID,
-        InviterName: baseuser.displayName(logined.User, locale.value as string),
+        TargetUserID: referral.value?.UserID as string,
+        InviterName: baseUser.displayName(logined.User, locale.value as string),
         InviteeName: username.value,
         Info: {
           GoodID: good.GoodID,
@@ -150,6 +131,7 @@ const onSubmit = () => {
           window.clearTimeout(backTimer.value)
         }
         backTimer.value = window.setTimeout(() => {
+          archivement.$reset()
           void router.push({ path: '/affiliates' })
         }, 1000)
       })
@@ -161,24 +143,27 @@ onMounted(() => {
   if (good.AppGoods.AppGoods.length === 0) {
     getAppGoods(0, 500)
   }
+  if (archivement.Archivements.Archivements.length === 0) {
+    getArchivements(0, 100)
+  }
 })
 
-const getAppGoods = (offset: number, limit: number) => {
-  good.getAppGoods({
+const getArchivements = (offset: number, limit: number) => {
+  archivement.getGoodArchivements({
     Offset: offset,
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_APP_GOODS_FAIL'),
+        Title: t('MSG_GET_COIN_ARCHIVEMENT_FAIL'),
         Popup: true,
         Type: NotifyType.Error
       }
     }
-  }, (g: Array<AppGood>, error: boolean) => {
-    if (error || g.length < limit) {
+  }, (error: boolean, rows: Array<UserArchivement>) => {
+    if (error || rows.length < limit) {
       return
     }
-    getAppGoods(offset + limit, limit)
+    getArchivements(offset + limit, limit)
   })
 }
 </script>
