@@ -1,5 +1,5 @@
 <template>
-  <FormPage @submit='onSubmit' label='MSG_SETUP_AFFILIATE' submit-text='MSG_CREATE_AFFILIATE'>
+  <FormPage @submit='onSubmit' label='MSG_SETUP_AFFILIATE' submit-text='MSG_CREATE_AFFILIATE' :submitting='submitting'>
     <template #form-body>
       <h3 class='aff-name'>
         {{ username }}
@@ -72,9 +72,11 @@ const getGoodPercent = computed(() => (goodID: string) => {
 const visibleGoodArchivements = computed(() => referral.value?.Archivements?.filter((el) => good.visible(el.GoodID)))
 
 const backTimer = ref(-1)
+const submitting = ref(false)
 
 const inspire = useInspireStore()
 const onSubmit = () => {
+  submitting.value = true
   referral.value?.Archivements?.forEach((g) => {
     if (g.CommissionPercent > getGoodPercent.value(g.GoodID)) {
       g.CommissionPercent = getGoodPercent.value(g.GoodID)
@@ -99,12 +101,13 @@ const onSubmit = () => {
       }
     }
   }, (error: boolean) => {
+    submitting.value = false
     if (error) {
       return
     }
     if (visibleGoodArchivements.value?.length === 0) {
-      void router.push({ path: '/affiliates' })
       archivement.$reset()
+      void router.push({ path: '/affiliates' })
       return
     }
     visibleGoodArchivements?.value?.forEach((good) => {

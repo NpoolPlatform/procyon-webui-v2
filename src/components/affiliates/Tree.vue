@@ -44,5 +44,5 @@ const invitees = computed(() => archivement.getInviteesArchivements(logined.User
     return { ...el, Editing: false } as MyGoodArchivement
   })
   return { ...el, Archivements: goodArchivements } as MyArchivement
-}))
+}).sort((a, b) => a.InvitedAt > b.InvitedAt ? 1 : -1))
 </script>
