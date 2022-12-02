@@ -1,5 +1,4 @@
 <template>
-  <UseCoin />
   <ShowSwitchTable
     label='MSG_TRANSACTIONS'
     :rows='(details as Array<never>)'
@@ -35,7 +34,6 @@ import { Detail, IOType, IOSubType } from 'src/teststore/mock/transaction'
 import { formatTime, NotifyType, useFrontendDetailStore } from 'npool-cli-v4'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
-const UseCoin = defineAsyncComponent(() => import('src/components/coin/UseCoin.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
