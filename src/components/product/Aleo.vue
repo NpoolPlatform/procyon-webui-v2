@@ -186,7 +186,6 @@
               <span>{{ $t('MSG_PDF_MANUAL') }}</span>
             </a>
           </li>
-          <UseCoinDescription />
         </ul>
       </div>
     </template>
@@ -209,7 +208,6 @@ import { getCurrencies, getDescriptions } from 'src/api/chain'
 const { t } = useI18n({ useScope: 'global' })
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
-const UseCoinDescription = defineAsyncComponent(() => import('src/components/coin/UseCoinDescription.vue'))
 
 interface Query {
   goodId: string;
