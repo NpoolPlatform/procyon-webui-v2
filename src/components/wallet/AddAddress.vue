@@ -124,6 +124,7 @@ const userAccount = useFrontendUserAccountStore()
 const submitting = ref(false)
 
 const onCodeVerify = (code: string) => {
+  submitting.value = true
   userAccount.createUserAccount({
     CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
@@ -141,19 +142,20 @@ const onCodeVerify = (code: string) => {
       }
     }
   }, () => {
-    submitting.value = false
     if (gotoWithdraw.value) {
+      submitting.value = false
       void router.push({
         path: '/withdraw',
         query: {
-          coinTypeId: selectedCoinTypeID.value
+          coinTypeID: selectedCoinTypeID.value
         }
       })
       return
     }
+    submitting.value = false
     void router.back()
   })
-  verifying.value = false
+  onMenuHide()
 }
 
 </script>
