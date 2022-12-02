@@ -42,7 +42,7 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 const { t } = useI18n({ useScope: 'global' })
 
 const detail = useFrontendDetailStore()
-const details = computed(() => detail.Details.Details)
+const details = computed(() => detail.details)
 
 const transactionType = (tx: Detail) => {
   switch (tx.IOType) {
