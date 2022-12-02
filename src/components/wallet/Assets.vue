@@ -187,7 +187,7 @@ const onWithdrawClick = (row: MyGeneral) => {
       void router.push({
         path: '/withdraw',
         query: {
-          coinTypeId: row.CoinTypeID,
+          coinTypeID: row.CoinTypeID,
           type: 'ExternalAddress'
         }
       })
@@ -195,7 +195,7 @@ const onWithdrawClick = (row: MyGeneral) => {
       void router.push({
         path: '/withdraw',
         query: {
-          coinTypeId: row.CoinTypeID,
+          coinTypeID: row.CoinTypeID,
           type: 'InternalTransfer'
         }
       })
