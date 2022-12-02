@@ -2,21 +2,16 @@
 import { AppID } from 'src/const/const'
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { AppGood, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendAppStore } from 'npool-cli-v4'
-import { getCoins } from 'src/api/chain'
+import { AppGood, NotifyType, useAdminAppGoodStore, useFrontendAppStore } from 'npool-cli-v4'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const good = useAdminAppGoodStore()
 const application = useFrontendAppStore()
-const coin = useAdminAppCoinStore()
 
 onMounted(() => {
   if (good.AppGoods.AppGoods.length === 0) {
     getAppGoods(0, 500)
-  }
-  if (coin.AppCoins.AppCoins.length === 0) {
-    getCoins(0, 500)
   }
   getApplication()
 })
