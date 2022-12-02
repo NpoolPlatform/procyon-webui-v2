@@ -157,6 +157,7 @@ import {
   useFrontendGeneralStore,
   useLocalUserStore
 } from 'npool-cli-v4'
+import { getCoins } from 'src/api/chain'
 
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
@@ -262,6 +263,10 @@ onMounted(() => {
       remainDays.value = 99
     }
   }, 1000)
+
+  if (coin.AppCoins.AppCoins.length === 0) {
+    getCoins(0, 100)
+  }
 })
 
 onUnmounted(() => {
