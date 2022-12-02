@@ -30,12 +30,13 @@ import {
   NotifyType,
   TransferAccount,
   useAdminAppCoinStore,
+  useAdminCurrencyStore,
   useFrontendGeneralStore,
   useFrontendTransferAccountStore,
   useFrontendUserAccountStore
 } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
-import { getCoins } from 'src/api/chain'
+import { getCoins, getCurrencies } from 'src/api/chain'
 import { IntervalKey } from 'src/const/const'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -53,6 +54,7 @@ const general = useFrontendGeneralStore()
 const coin = useAdminAppCoinStore()
 const account = useFrontendUserAccountStore()
 const transfer = useFrontendTransferAccountStore()
+const currency = useAdminCurrencyStore()
 
 onMounted(() => {
   if (general.Generals.Generals.length === 0) {
@@ -73,6 +75,9 @@ onMounted(() => {
   }
   if (transfer.TransferAccounts.TransferAccounts.length === 0) {
     getTransfers(0, 100)
+  }
+  if (currency.Currencies.Currencies.length === 0) {
+    getCurrencies(0, 100)
   }
 })
 

@@ -27,20 +27,19 @@ import { computed } from 'vue'
 const general = useFrontendGeneralStore()
 const currency = useAdminCurrencyStore()
 
-const totalUSDTBalance = computed(() => {
-  let total = 0
-  general.Generals.Generals.forEach((el) => {
-    total += Number(el.Spendable) * Number(currency.getCurrency(el.CoinTypeID))
-  })
-  return total
-})
-
 const totalJPYBalance = computed(() => {
   let total = 0
   general.Generals.Generals.forEach((el) => {
-    total += Number(el.Spendable) * Number(currency.getCurrency(el.CoinTypeID))
+    total += Number(el.Spendable) * 134.11
   })
   return total
 })
 
+const totalUSDTBalance = computed(() => {
+  let total = 0
+  general.Generals.Generals.forEach((el) => {
+    total += Number(el.Spendable) * currency.getUSDCurrency(el.CoinTypeID)
+  })
+  return total
+})
 </script>
