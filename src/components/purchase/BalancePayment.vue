@@ -186,10 +186,8 @@ const currency = useAdminCurrencyStore()
 
 // 币种汇率优先级
 const setCurrency = () => {
-  console.log('coinTypeID: ', coinTypeID.value)
   if (coin.stableCoin(coinTypeID.value)) {
     selectedCoinCurrency.value = 1
-    console.log('稳定币: ', selectedCoinCurrency.value)
     return
   }
   if (coin.haveCurrency(coinTypeID.value)) {
@@ -204,7 +202,7 @@ const setCurrency = () => {
   selectedCoinCurrency.value = parseFloat(currency.getCurrency(coinTypeID.value)?.MarketValueLow as string)
 }
 
-watch(selectedCoinCurrency, () => {
+watch(coinTypeID, () => {
   setCurrency()
 })
 
@@ -252,8 +250,8 @@ const getGenerals = (offset:number, limit: number) => {
         Type: NotifyType.Error
       }
     }
-  }, (g: Array<General>, error: boolean) => {
-    if (error || g.length < limit) {
+  }, (error: boolean, rows: Array<General>) => {
+    if (error || rows.length < limit) {
       return
     }
     getGenerals(limit + offset, limit)
