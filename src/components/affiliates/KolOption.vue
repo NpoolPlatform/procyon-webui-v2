@@ -1,5 +1,5 @@
 <template>
-  <select v-model='target' class='kol-dropdown'>
+  <select v-model='target' :class='ignoreStyle ? "": "kol-dropdown"'>
     <option v-for='kol in options' :key='kol' :value='kol' @change='onChange'>
       {{ kol }}
     </option>
@@ -11,11 +11,13 @@ import { computed, defineProps, ref, toRef, defineEmits } from 'vue'
 interface Props {
   percent: number;
   max: number;
+  ignoreStyle?: boolean;
 }
 
 const props = defineProps<Props>()
 const percent = toRef(props, 'percent')
 const max = toRef(props, 'max')
+const ignoreStyle = toRef(props, 'ignoreStyle')
 const target = ref(percent.value)
 
 const emit = defineEmits<{(e: 'update:percent', percent: number): void}>()

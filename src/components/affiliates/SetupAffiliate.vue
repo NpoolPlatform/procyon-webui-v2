@@ -9,7 +9,7 @@
       </p>
       <div v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
-        <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' />
+        <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' ignore-style />
       </div>
     </template>
     <template #append-submit>
