@@ -65,9 +65,12 @@ const setDefault = () => {
 }
 
 onMounted(() => {
-  if (coin.AppCoins.AppCoins.length === 0) {
-    getCoins(0, 100)
+  if (!coins.value) {
+    if (coin.AppCoins.AppCoins.length === 0) {
+      getCoins(0, 100)
+    }
   }
+
   if (!target.value && setDefaultValue.value) setDefault()
 })
 
