@@ -125,7 +125,7 @@ const generals = computed(() => {
       TotalUSDValue: Number(el.Spendable) * Number(1),
       TotalJPYValue: Number(el.Spendable) * Number(1)
     } as MyGeneral
-  })
+  }).sort((a, b) => a.TotalUSDValue > b.TotalUSDValue ? -1 : 1)
 })
 
 const transferAccount = useFrontendTransferAccountStore()
