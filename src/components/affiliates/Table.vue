@@ -17,16 +17,13 @@
       <div v-show='coins.length >= 1' id='product-filter'>
         <h4>{{ $t('MSG_PRODUCT_FILTER') }}</h4>
         <form>
-          <select v-model='selectedCoin'>
-            <option
-              v-for='_coin in coins'
-              :key='_coin.value.ID'
-              :value='_coin'
-              :selected='_coin.value.ID === selectedCoin?.value.ID'
-            >
-              {{ _coin.label }}
-            </option>
-          </select>
+          <CoinSelector
+            v-model:id='selectedCoinID'
+            :coins='coins'
+            label=''
+            hide-label
+            default
+          />
         </form>
       </div>
     </div>
@@ -42,6 +39,7 @@
           </tr>
         </thead>
         <tbody>
+          <!-- summary start -->
           <tr class='aff-info total-row'>
             <td><span class='aff-product'>{{ $t('MSG_TOTAL') }}</span></td>
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
@@ -49,9 +47,10 @@
             <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
             <td><span class='aff-number'>{{ totalCommission.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
+          <!-- summary end -->
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
             <td>
-              <span class='aff-product'>{{ accountName(referral) }}</span>
+              <span class='aff-product'>{{ archivement.subUsername(referral) }}</span>
               <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
@@ -81,57 +80,52 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, ref, watch } from 'vue'
-import {
-  formatTime,
-  PriceCoinName
-} from 'npool-cli-v2'
-
 import edit from '../../assets/edit.svg'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { LocalProductArchivement, useLocalArchivementStore } from 'src/localstore/affiliates'
-import { useAdminAppCoinStore, AppCoin } from 'npool-cli-v4'
+import {
+  useAdminAppCoinStore,
+  useFrontendArchivementStore,
+  UserArchivement,
+  PriceCoinName
+} from 'npool-cli-v4'
 
-interface MyCoin {
-  label: string;
-  value: AppCoin;
-}
+const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 
-const larchivements = useLocalArchivementStore()
-const referrals = computed(() => larchivements.Archivements.filter((referral) => !referral.Kol).sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
+const archivement = useFrontendArchivementStore()
+const referrals = computed(() => archivement.notKolUsers())
 
 const coin = useAdminAppCoinStore()
-const coins = computed(() => Array.from(coin.AppCoins.AppCoins.filter((el) => {
-  const rfs = referrals.value.filter((rel) => {
-    for (const sum of rel.Archivements) {
-      if (sum.CoinTypeID === el.ID) {
-        return true
-      }
-    }
-    return false
+const coins = computed(() => coin.AppCoins.AppCoins.filter((el) => {
+  referrals.value.forEach((rel) => {
+    rel.Archivements.forEach((good) => {
+      if (good.CoinTypeID === el.CoinTypeID) return true
+    })
   })
-  return rfs.length > 0
-}).map((el) => {
-  return {
-    label: el.Name,
-    value: el
-  } as MyCoin
-})))
-const selectedCoin = ref(coins.value.length ? coins.value[0] : undefined as unknown as MyCoin)
-watch(coins, () => {
-  selectedCoin.value = coins.value.length ? coins.value[0] : undefined as unknown as MyCoin
-})
+  return false
+}))
+const selectedCoinID = ref(undefined as unknown as string)
+
+const joinDate = computed(() => (referral: UserArchivement) => archivement.getJoinDate(referral))
+const joinTime = computed(() => (referral: UserArchivement) => archivement.getJoinTime(referral))
 
 const goodUnit = computed(() => {
   for (const rf of referrals.value) {
-    for (const sum of rf.Archivements) {
-      if (sum.CoinTypeID === selectedCoin.value?.value.ID) {
-        return sum.GoodUnit
+    for (const good of rf.Archivements) {
+      if (good.CoinTypeID === selectedCoinID.value) {
+        return good.GoodUnit
       }
     }
   }
   return ''
 })
+const totalUnits = computed(() => archivement.totalUnits(referrals.value, selectedCoinID.value))
+const totalAmount = computed(() => archivement.totalAmount(referrals.value, selectedCoinID.value))
+const totalCommission = computed(() => archivement.totalCommission(referrals.value, selectedCoinID.value))
+
+const userTotalUnits = computed(() => (referral: UserArchivement) => archivement.userTotalUnits(referral.Archivements, selectedCoinID.value))
+const userTotalAmount = computed(() => (referral: UserArchivement) => archivement.userTotalAmount(referral.Archivements, selectedCoinID.value))
+const userTotalCommission = computed(() => (referral: UserArchivement) => archivement.userTotalCommission(referral.Archivements, selectedCoinID.value))
 
 const searchStr = ref('')
 const displayReferrals = computed(() => referrals.value.filter((el) => {
@@ -145,83 +139,6 @@ const onSearchResetClick = () => {
   searchStr.value = ''
 }
 
-const accountName = (referral: LocalProductArchivement) => {
-  return referral.EmailAddress?.length ? referral.EmailAddress : referral.PhoneNO
-}
-
-const joinDate = (referral: LocalProductArchivement) => {
-  return formatTime(referral.InvitedAt, true)
-}
-
-const joinTime = (referral: LocalProductArchivement) => {
-  return formatTime(referral.InvitedAt, false)?.split(' ')[1]
-}
-
-const totalUnits = computed(() => {
-  let total = 0
-  referrals.value.forEach((referral) => {
-    referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-      total += Number(el.TotalUnits)
-    })
-  })
-  return total
-})
-
-const totalAmount = computed(() => {
-  let total = 0
-  referrals.value.forEach((referral) => {
-    referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-      total += Number(el.TotalAmount)
-    })
-  })
-  return total
-})
-
-const totalCommission = computed(() => {
-  let total = 0
-  referrals.value.forEach((referral) => {
-    referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-      total += Number(el.SuperiorCommission)
-    })
-  })
-  return total
-})
-
-const userTotalUnits = (referral: LocalProductArchivement) => {
-  let total = 0
-  referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-    total += Number(el.TotalUnits)
-  })
-  return total
-}
-
-const userTotalAmount = (referral: LocalProductArchivement) => {
-  let total = 0
-  referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-    total += Number(el.TotalAmount)
-  })
-  return total
-}
-
-const userTotalCommission = (referral: LocalProductArchivement) => {
-  let total = 0
-  referral.Archivements.filter((el) => el.CoinTypeID === selectedCoin.value?.value.ID).forEach((el) => {
-    total += Number(el.SuperiorCommission)
-  })
-  return total
-}
-
-const router = useRouter()
-
-const onSetKolClick = (referral: LocalProductArchivement) => {
-  void router.push({
-    path: '/setup/affiliate',
-    query: {
-      userId: referral.UserID
-    }
-  })
-}
-
 const page = ref(1)
 const countPerPage = ref(10)
 const pages = computed(() => Math.ceil(displayReferrals.value.length / countPerPage.value))
@@ -230,6 +147,15 @@ const pageReferrals = computed(() => displayReferrals.value.filter((el, index) =
   return index >= (page.value - 1) * countPerPage.value && index < page.value * countPerPage.value
 }))
 
+const router = useRouter()
+const onSetKolClick = (referral: UserArchivement) => {
+  void router.push({
+    path: '/setup/affiliate',
+    query: {
+      userID: referral.UserID
+    }
+  })
+}
 </script>
 
 <style lang='sass' scoped>
