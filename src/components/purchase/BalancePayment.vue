@@ -13,7 +13,7 @@
               hide-label
             />
             <label>{{ $t('MSG_BALANCE') }}</label>
-            <div class='three-section' v-if='paymentCoin?.StableUsd'>
+            <div class='three-section' v-if='paymentCoin?.StableUSD'>
               <span class='number'>{{ balance }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
@@ -40,7 +40,7 @@
               @blur='onPurchaseAmountFocusOut'
             />
             <label>{{ $t('MSG_ALEO_DUE_AMOUNT') }}</label>
-            <div class='three-section' v-if='paymentCoin?.StableUsd'>
+            <div class='three-section' v-if='paymentCoin?.StableUSD'>
               <span class='number'>{{ paymentAmount }}</span>
               <span class='unit'>USDT</span>
             </div>
@@ -182,29 +182,11 @@ const goWallet = () => {
   void router.push({ path: '/wallet' })
 }
 
-const getGenerals = (offset:number, limit: number) => {
-  general.getGenerals({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GENERAL_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, (g: Array<General>, error: boolean) => {
-    if (error || g.length < limit) {
-      return
-    }
-    getGenerals(limit + offset, limit)
-  })
-}
-
 const currency = useAdminCurrencyStore()
 
 // 币种汇率优先级
 const setCurrency = () => {
+  console.log('coinTypeID: ', coinTypeID.value)
   if (coin.stableCoin(coinTypeID.value)) {
     selectedCoinCurrency.value = 1
     console.log('稳定币: ', selectedCoinCurrency.value)
@@ -225,41 +207,6 @@ const setCurrency = () => {
 watch(selectedCoinCurrency, () => {
   setCurrency()
 })
-
-const getCoins = (offset: number, limit: number) => {
-  coin.getAppCoins({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_COINS'),
-        Message: t('MSG_GET_COINS_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, (error: boolean, rows: Array<AppCoin>) => {
-    if (error || rows.length < limit) {
-      if (!error) setCurrency()
-      return
-    }
-    getCoins(offset + limit, limit)
-  })
-}
-
-const getCurrencies = (offset: number, limit: number) => {
-  currency.getCurrencies({
-    Offset: offset,
-    Limit: limit,
-    Message: {}
-  }, (error: boolean, rows: Array<Currency>) => {
-    if (error || rows.length < limit) {
-      if (!error) setCurrency()
-      return
-    }
-    getCurrencies(offset + limit, limit)
-  })
-}
 
 onMounted(() => {
   if (general.Generals.Generals.length === 0) {
@@ -294,4 +241,56 @@ onMounted(() => {
   }
 })
 
+const getGenerals = (offset:number, limit: number) => {
+  general.getGenerals({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GENERAL_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (g: Array<General>, error: boolean) => {
+    if (error || g.length < limit) {
+      return
+    }
+    getGenerals(limit + offset, limit)
+  })
+}
+const getCoins = (offset: number, limit: number) => {
+  coin.getAppCoins({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COINS'),
+        Message: t('MSG_GET_COINS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (error: boolean, rows: Array<AppCoin>) => {
+    if (error || rows.length < limit) {
+      if (!error) setCurrency()
+      return
+    }
+    getCoins(offset + limit, limit)
+  })
+}
+
+const getCurrencies = (offset: number, limit: number) => {
+  currency.getCurrencies({
+    Offset: offset,
+    Limit: limit,
+    Message: {}
+  }, (error: boolean, rows: Array<Currency>) => {
+    if (error || rows.length < limit) {
+      if (!error) setCurrency()
+      return
+    }
+    getCurrencies(offset + limit, limit)
+  })
+}
 </script>
