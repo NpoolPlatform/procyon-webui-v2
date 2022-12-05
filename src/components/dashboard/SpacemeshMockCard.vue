@@ -70,9 +70,7 @@
 import {
   NotificationType
 } from 'npool-cli-v2'
-import { AppCoin, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCurrencyStore, useFrontendProfitStore, PriceCoinName } from 'npool-cli-v4'
-import { IntervalKey } from 'src/const/const'
-import { MyGoodProfit } from 'src/localstore/ledger'
+import { AppCoin, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendProfitStore, PriceCoinName } from 'npool-cli-v4'
 import { useMockSpacemeshStore } from 'src/teststore'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -87,23 +85,8 @@ const { t } = useI18n({ useScope: 'global' })
 const coin = useAdminAppCoinStore()
 const target = computed(() => coin.getAvailableCoins().find((el) => el.Name?.toLowerCase()?.includes('spacemesh')) as AppCoin)
 
-const currency = useAdminCurrencyStore()
-
 const profit = useFrontendProfitStore()
-const goodProfits = computed(() => {
-  return Array.from(profit.GoodProfits.GoodProfits).filter((gl) => gl.CoinTypeID === target?.value?.CoinTypeID).map((el) => {
-    return {
-      ...el,
-      CoinPreSale: false,
-      TotalInComing: Number(el.Incoming),
-      TotalUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * Number(el.Incoming),
-      Last24HoursInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
-      Last24HoursUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
-      Last30DaysInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID),
-      Last30DaysUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID)
-    } as MyGoodProfit
-  })
-})
+const goodProfits = computed(() => profit.GoodProfits.GoodProfits.filter((el) => el.CoinTypeID === target?.value?.CoinTypeID))
 
 const goodUnit = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodUnit : '')
 const goodPeriod = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodServicePeriodDays : '')
