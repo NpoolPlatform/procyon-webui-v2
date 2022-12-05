@@ -1,26 +1,26 @@
-<!-- <template>
-  <div v-show='profits?.length' class='mining-summary content-glass'>
+<template>
+  <div v-show='goodProfits?.length' class='mining-summary content-glass'>
     <div class='mining-heading'>
       <div class='product-page-icon'>
-        <img :src='coin?.Logo'>
+        <img :src='target?.Logo'>
       </div>
       <h3 class='mining-title'>
-        {{ coin?.Name }} ({{ $t('MSG_TESTNET') }})
+        {{ target?.Name }} ({{ $t('MSG_TESTNET') }})
       </h3>
     </div>
     <div class='warning'>
       <img :src='warning'>
-      <span>{{ $t('MSG_TESTNET_WARNING', { COIN_NAME: coin?.Name, COIN_UNIT: coin?.Unit }) }}</span>
+      <span>{{ $t('MSG_TESTNET_WARNING', { COIN_NAME: target?.Name, COIN_UNIT: target?.Unit }) }}</span>
     </div>
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
-        <span class='value'>{{ _totalEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
+        <span class='value'>{{ _totalEarningCoin.toFixed(2) }} {{ target?.Unit }}</span>
         <span class='sub-value'>(* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
-        <span class='value'>{{ _last24HoursEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
+        <span class='value'>{{ _last24HoursEarningCoin.toFixed(2) }} {{ target?.Unit }}</span>
         <span class='sub-value'>(* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
@@ -32,15 +32,15 @@
       <div class='detailed-summary' v-show='!short'>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
-          <span class='value'>{{ _last30DaysDailyEarningCoin.toFixed(2) }} {{ coin?.Unit }}</span>
+          <span class='value'>{{ _last30DaysDailyEarningCoin.toFixed(2) }} {{ target?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
-          <span class='value'>{{ (_last24HoursEarningCoin * 0.2).toFixed(2) }} {{ coin?.Unit }} (20%)</span>
+          <span class='value'>{{ (_last24HoursEarningCoin * 0.2).toFixed(2) }} {{ target?.Unit }} (20%)</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-          <span class='value'>{{ (_last30DaysDailyEarningCoin * 0.8).toFixed(2) }} {{ coin?.Unit }}</span>
+          <span class='value'>{{ (_last30DaysDailyEarningCoin * 0.8).toFixed(2) }} {{ target?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
@@ -48,7 +48,7 @@
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
-          <span class='value'>{{ daily.toFixed(2) }} {{ coin?.Unit }}</span>
+          <span class='value'>{{ daily.toFixed(2) }} {{ target?.Unit }}</span>
         </div>
       </div>
     </q-slide-transition>
@@ -68,15 +68,12 @@
 
 <script setup lang='ts'>
 import {
-  useCoinStore,
-  PriceCoinName,
-  NotificationType,
-  Coin
+  NotificationType
 } from 'npool-cli-v2'
-import { useAdminAppGoodStore } from 'npool-cli-v4'
+import { AppCoin, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCurrencyStore, useFrontendProfitStore, PriceCoinName } from 'npool-cli-v4'
 import { IntervalKey } from 'src/const/const'
+import { MyGoodProfit } from 'src/localstore/ledger'
 import { useMockSpacemeshStore } from 'src/teststore'
-import { useProfitStore } from 'src/teststore/mock/profit'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -84,40 +81,42 @@ import { useRouter } from 'vue-router'
 import chevrons from '../../assets/chevrons.svg'
 import warning from '../../assets/warning.svg'
 
-const short = ref(true)
-
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const coins = useCoinStore()
-const coin = computed(() => {
-  let myCoin = undefined as unknown as Coin
-  for (const c of coins.Coins) {
-    if (c.Name?.toLowerCase().includes('spacemesh')) {
-      myCoin = c
-      break
-    }
-  }
-  return myCoin
+const coin = useAdminAppCoinStore()
+const target = computed(() => coin.getAvailableCoins().find((el) => el.Name?.toLowerCase()?.includes('spacemesh')) as AppCoin)
+
+const currency = useAdminCurrencyStore()
+
+const profit = useFrontendProfitStore()
+const goodProfits = computed(() => {
+  return Array.from(profit.GoodProfits.GoodProfits).filter((gl) => gl.CoinTypeID === target?.value?.CoinTypeID).map((el) => {
+    return {
+      ...el,
+      CoinPreSale: false,
+      TotalInComing: Number(el.Incoming),
+      TotalUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * Number(el.Incoming),
+      Last24HoursInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
+      Last24HoursUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
+      Last30DaysInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID),
+      Last30DaysUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID)
+    } as MyGoodProfit
+  })
 })
 
-const profit = useProfitStore()
-const goodProfits = computed(() => profit.GoodProfits.get(IntervalKey.All))
-
-const profits = computed(() => goodProfits.value?.Profits.filter((p) => {
-  return p.CoinTypeID === coin.value?.ID
-}))
-const goodUnit = computed(() => profits.value?.length ? profits.value?.[0].GoodUnit : '')
-const goodPeriod = computed(() => profits.value?.length ? profits.value?.[0].GoodServicePeriodDays : '')
-const totalUnits = computed(() => profits.value?.length ? profits.value?.[0].Units : 0)
+const goodUnit = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodUnit : '')
+const goodPeriod = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodServicePeriodDays : '')
+const totalUnits = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].Units : 0)
 
 const good = useAdminAppGoodStore()
-const total = computed(() => profits.value?.length ? good.getGoodByID(profits.value?.[0].GoodID)?.Total : 0)
-const unitsRatio = computed(() => profits.value?.length && total.value ? totalUnits.value / total.value : 0)
+const total = computed(() => goodProfits.value?.length ? good.getGoodByID(goodProfits.value?.[0].GoodID)?.Total : 0)
+const unitsRatio = computed(() => goodProfits.value?.length && total.value ? totalUnits.value / total.value : 0)
 const daily = computed(() => spacemesh.getNetworkDailyOutput)
 
-const spacemesh = useMockSpacemeshStore()
+const short = ref(true)
 
+const spacemesh = useMockSpacemeshStore()
 const _last24HoursEarningCoin = computed(() => {
   return spacemesh.getLastDaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3)
 })
@@ -129,6 +128,28 @@ const _totalEarningCoin = computed(() => {
 })
 
 const ticker = ref(-1)
+
+const router = useRouter()
+const onPurchaseClick = () => {
+  void router.push({ path: '/' })
+}
+
+const onExpandClick = () => {
+  short.value = !short.value
+}
+
+onMounted(() => {
+  ticker.value = window.setInterval(() => {
+    updater()
+  }, 30000)
+  updater()
+})
+
+onUnmounted(() => {
+  if (ticker.value >= 0) {
+    window.clearInterval(ticker.value)
+  }
+})
 
 const updater = () => {
   spacemesh.getNetworks({
@@ -155,27 +176,4 @@ const updater = () => {
     })
   })
 }
-
-onMounted(() => {
-  ticker.value = window.setInterval(() => {
-    updater()
-  }, 30000)
-  updater()
-})
-
-onUnmounted(() => {
-  if (ticker.value >= 0) {
-    window.clearInterval(ticker.value)
-  }
-})
-
-const router = useRouter()
-const onPurchaseClick = () => {
-  void router.push({ path: '/' })
-}
-
-const onExpandClick = () => {
-  short.value = !short.value
-}
-
-</script> -->
+</script>
