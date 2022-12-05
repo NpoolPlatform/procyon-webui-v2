@@ -189,10 +189,11 @@ import {
   useFrontendGeneralStore,
   useFrontendWithdrawStore,
   General,
-  useFrontendDetailStore
+  useFrontendDetailStore,
+  useAdminCurrencyStore
 } from 'npool-cli-v4'
 import checkmark from 'src/assets/icon-checkmark.svg'
-import { getCoins } from 'src/api/chain'
+import { getCoins, getCurrencies } from 'src/api/chain'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
 
@@ -249,7 +250,7 @@ const feeAmount = computed(() => {
   }
   if (target?.value?.WithdrawFeeByStableUSD) {
     if (target?.value?.WithdrawFeeAmount.length > 0) {
-      return Number(target.value.WithdrawFeeAmount)
+      return Number(target.value?.WithdrawFeeAmount) / currency.getUSDCurrency(coinTypeID.value)
     }
   }
   return Math.ceil(Number(target.value?.WithdrawFeeAmount) * 1000000) / 1000000
@@ -362,6 +363,8 @@ const onTransferAccountSelected = (account: TransferAccount) => {
   selectedAccountIndex.value = transferAccounts.value.findIndex((el) => el.ID === account.ID)
 }
 
+const currency = useAdminCurrencyStore()
+
 onMounted(() => {
   if (general.Generals.Generals.length === 0) {
     getGenerals(0, 20)
@@ -379,6 +382,9 @@ onMounted(() => {
   }
   if (type.value) {
     withdrawType.value = type.value
+  }
+  if (currency.Currencies.Currencies.length === 0) {
+    getCurrencies(0, 100)
   }
 })
 
