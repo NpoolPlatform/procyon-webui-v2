@@ -45,7 +45,7 @@
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
             <td><span class='aff-number'>{{ totalUnits.toFixed(0) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ totalCommission.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ parseFloat(totalCommission.toFixed(4)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
           <!-- summary end -->
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
@@ -56,7 +56,7 @@
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
             <td><span class='aff-number'>{{ userTotalUnits(referral) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ userTotalAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ userTotalCommission(referral).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ parseFloat(userTotalCommission(referral).toFixed(4)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -97,12 +97,13 @@ const referrals = computed(() => archivement.notKolUsers().sort((a, b) => a.Crea
 
 const coin = useAdminAppCoinStore()
 const coins = computed(() => coin.AppCoins.AppCoins.filter((el) => {
-  referrals.value.forEach((rel) => {
-    rel.Archivements.forEach((good) => {
-      if (good.CoinTypeID === el.CoinTypeID) return true
-    })
+  const rfs = referrals.value?.filter((rel) => {
+    for (const g of rel.Archivements) {
+      if (g.CoinTypeID === el.CoinTypeID) return true
+    }
+    return false
   })
-  return false
+  return rfs.length > 0
 }))
 const selectedCoinID = ref(undefined as unknown as string)
 
