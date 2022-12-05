@@ -26,7 +26,6 @@ import { IntervalKey } from 'src/const/const'
 import { computed } from 'vue'
 
 const currency = useAdminCurrencyStore()
-const usdCurrency = computed(() => (coinTypeID: string) => parseFloat(currency.getCurrency(coinTypeID)?.MarketValueLow as string))
 
 const profit = useFrontendProfitStore()
 const profits = computed(() => profit.Profits.Profits)
@@ -35,7 +34,7 @@ const intervalProfits = computed(() => profit.getIntervalProfitsByKey(IntervalKe
 const totalProfit = computed(() => {
   let total = 0
   profits.value.forEach((el) => {
-    total += Number(el.Incoming) * Number(usdCurrency.value)
+    total += Number(el.Incoming) * currency.getUSDCurrency(el.CoinTypeID)
   })
   return total.toFixed(4)
 })
@@ -43,7 +42,7 @@ const totalProfit = computed(() => {
 const last24HoursEarning = computed(() => {
   let total = 0
   intervalProfits.value.forEach((el) => {
-    total += Number(el.Incoming) * Number(usdCurrency.value)
+    total += Number(el.Incoming) * currency.getUSDCurrency(el.CoinTypeID)
   })
   return total.toFixed(4)
 })

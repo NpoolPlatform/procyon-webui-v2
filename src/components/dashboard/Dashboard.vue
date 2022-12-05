@@ -29,10 +29,11 @@ import {
   SecondsEachDay,
   useAdminAppCoinStore,
   useAdminAppGoodStore,
+  useAdminCurrencyStore,
   useFrontendOrderStore,
   useFrontendProfitStore
 } from 'npool-cli-v4'
-import { getCoins } from 'src/api/chain'
+import { getCoins, getCurrencies } from 'src/api/chain'
 
 const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
 const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/MiningCards.vue'))
@@ -45,6 +46,7 @@ const profit = useFrontendProfitStore()
 const coin = useAdminAppCoinStore()
 const order = useFrontendOrderStore()
 const good = useAdminAppGoodStore()
+const currency = useAdminCurrencyStore()
 
 onMounted(() => {
   if (profit.Profits.Profits.length === 0) {
@@ -86,6 +88,9 @@ onMounted(() => {
 
   if (coin.AppCoins.AppCoins.length === 0) {
     getCoins(0, 100)
+  }
+  if (currency.Currencies.Currencies.length === 0) {
+    getCurrencies(0, 100)
   }
 })
 
