@@ -93,7 +93,7 @@ import {
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 
 const archivement = useFrontendArchivementStore()
-const referrals = computed(() => archivement.notKolUsers())
+const referrals = computed(() => archivement.notKolUsers().sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 1))
 
 const coin = useAdminAppCoinStore()
 const coins = computed(() => coin.AppCoins.AppCoins.filter((el) => {
