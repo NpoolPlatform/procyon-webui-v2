@@ -35,7 +35,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='(_good, idx) in referral.Archivements' :key='idx'>
+          <tr class='aff-info' v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
             <td><span class='aff-product'>{{ _good.CoinName }}</span></td>
             <td v-if='_good.Editing'>
               <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' />
@@ -117,7 +117,7 @@ import {
   UserArchivement
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
-import { MyArchivement, MyGoodArchivement } from 'src/localstore/ledger/types'
+import { MyGoodArchivement } from 'src/localstore/ledger/types'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
 
@@ -127,7 +127,7 @@ interface Props {
   child: boolean;
   firstChild: boolean;
   lastChild: boolean;
-  referral: MyArchivement;
+  referral: UserArchivement;
 }
 
 const props = defineProps<Props>()
@@ -135,7 +135,6 @@ const child = toRef(props, 'child')
 const firstChild = toRef(props, 'firstChild')
 const lastChild = toRef(props, 'lastChild')
 const target = toRef(props, 'referral')
-
 const referral = ref(target.value)
 
 const baseUser = useBaseUserStore()
@@ -148,6 +147,14 @@ const logined = useLocalUserStore()
 const good = useAdminAppGoodStore()
 
 const archivement = useFrontendArchivementStore()
+const goodArchivements = computed(() => Array.from(referral.value.Archivements.filter((el) => good.visible(el.GoodID))).map((el) => {
+  return {
+    ...el,
+    Editing: false
+  } as MyGoodArchivement
+}))
+const visibleGoodArchivements = ref(goodArchivements.value)
+
 const getGoodPercent = computed(() => (goodID: string) => {
   const inviterArchivement = archivement.getArchivementByUserID(logined?.User.ID)
   return archivement.getInviterGoodPercent(inviterArchivement as UserArchivement, goodID)
