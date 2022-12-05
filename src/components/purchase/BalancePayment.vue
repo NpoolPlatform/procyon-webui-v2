@@ -128,11 +128,11 @@ const total = computed(() => good.getPurchaseLimit(target.value))
 
 const selectedCoinCurrency = ref(1) // 币种汇率
 const general = useFrontendGeneralStore()
-const balance = computed(() => parseFloat((Number(general.getBalanceByID(coinTypeID.value)) * selectedCoinCurrency.value).toFixed(4))) // 余额
+const balance = computed(() => parseFloat((Number(general.getBalanceByID(coinTypeID.value)) * selectedCoinCurrency.value).toFixed(4)))
 
 const purchaseAmount = ref(query.value.purchaseAmount) // 购买数量
 const paymentAmount = computed(() => Number(good.getPrice(goodID.value)) * purchaseAmount.value) // 支付金额
-const usdToOtherAmount = computed(() => parseFloat((Math.ceil(paymentAmount.value / selectedCoinCurrency.value * 10000) / 10000).toFixed(4))) // 美金转其它币种
+const usdToOtherAmount = computed(() => parseFloat((Math.ceil(paymentAmount.value / selectedCoinCurrency.value * 10000) / 10000).toFixed(4)))
 const insufficientFunds = computed(() => balance.value < paymentAmount.value)
 
 const purchaseAmountError = ref(false)
