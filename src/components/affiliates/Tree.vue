@@ -21,28 +21,13 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { useAdminAppGoodStore, useFrontendArchivementStore, useLocalUserStore, UserArchivement } from 'npool-cli-v4'
-import { MyArchivement, MyGoodArchivement } from 'src/localstore/ledger/types'
+import { useFrontendArchivementStore, useLocalUserStore } from 'npool-cli-v4'
 
 const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.vue'))
 
 const logined = useLocalUserStore()
-const good = useAdminAppGoodStore()
 
 const archivement = useFrontendArchivementStore()
-const inviter = computed(() => {
-  const userArchivement = archivement.getArchivementByUserID(logined?.User?.ID) as UserArchivement
-  if (!userArchivement) return {} as MyArchivement
-  const goodArchivements = Array.from(userArchivement?.Archivements?.filter?.((el) => good.visible(el.GoodID))).map((el) => {
-    return { ...el, Editing: false } as MyGoodArchivement
-  })
-  return { ...userArchivement, Archivements: goodArchivements } as MyArchivement
-})
-
-const invitees = computed(() => archivement.getInviteesArchivements(logined.User?.ID).map((el) => {
-  const goodArchivements = Array.from(el.Archivements.filter((el) => good.visible(el.GoodID))).map((el) => {
-    return { ...el, Editing: false } as MyGoodArchivement
-  })
-  return { ...el, Archivements: goodArchivements } as MyArchivement
-}).sort((a, b) => a.InvitedAt > b.InvitedAt ? 1 : -1))
+const inviter = computed(() => archivement.getArchivementByUserID(logined?.User?.ID))
+const invitees = computed(() => archivement.getInviteesArchivements(logined.User?.ID).sort((a, b) => a.InvitedAt > b.InvitedAt ? 1 : -1))
 </script>
