@@ -192,7 +192,10 @@ const total = computed(() => good.getPurchaseLimit(target?.value))
 const coin = useAdminAppCoinStore()
 const coins = computed(() => coin.getAvailableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
 
-const selectedCoinID = ref(undefined as unknown as string)
+const defaultCoinTypeID = computed(() => {
+  return coins.value?.length > 0 ? coins.value?.[0].CoinTypeID : undefined as unknown as string
+})
+const selectedCoinID = ref(defaultCoinTypeID.value)
 const paymentCoin = computed(() => coin.getCoinByID(selectedCoinID.value))
 
 const showRateTip = computed(() => {
