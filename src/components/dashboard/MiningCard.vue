@@ -79,13 +79,13 @@ const goodProfit = toRef(props, 'profit')
 
 const short = ref(true)
 
-const router = useRouter()
 const good = useAdminAppGoodStore()
 
 const coin = useAdminAppCoinStore()
 const productInfo = computed(() => coin.getCoinByID(goodProfit.value?.CoinTypeID))
 const productPage = computed(() => productInfo.value?.ProductPage)
 
+const router = useRouter()
 const onPurchaseClick = () => {
   let target = '/#'
   if (productPage.value) {

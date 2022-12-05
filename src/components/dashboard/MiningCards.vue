@@ -10,12 +10,14 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { useFrontendProfitStore } from 'npool-cli-v4'
+import { useAdminCurrencyStore, useFrontendProfitStore } from 'npool-cli-v4'
 import { MyGoodProfit } from 'src/localstore/ledger'
 import { IntervalKey } from 'src/const/const'
 
 const MiningCard = defineAsyncComponent(() => import('src/components/dashboard/MiningCard.vue'))
 const SpaceMeshMockCard = defineAsyncComponent(() => import('src/components/dashboard/SpacemeshMockCard.vue'))
+
+const currency = useAdminCurrencyStore()
 
 const profit = useFrontendProfitStore()
 const goodProfits = computed(() => {
@@ -24,11 +26,11 @@ const goodProfits = computed(() => {
       ...el,
       CoinPreSale: false,
       TotalInComing: Number(el.Incoming),
-      TotalUSDInComing: 1,
+      TotalUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * Number(el.Incoming),
       Last24HoursInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
-      Last24HoursUSDInComing: 1,
+      Last24HoursUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
       Last30DaysInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID),
-      Last30DaysUSDInComing: 1
+      Last30DaysUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID)
     } as MyGoodProfit
   })
 })
