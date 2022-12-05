@@ -10,7 +10,7 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { useAdminCurrencyStore, useFrontendProfitStore } from 'npool-cli-v4'
+import { useAdminAppCoinStore, useAdminCurrencyStore, useFrontendProfitStore } from 'npool-cli-v4'
 import { MyGoodProfit } from 'src/localstore/ledger'
 import { IntervalKey } from 'src/const/const'
 
@@ -18,13 +18,14 @@ const MiningCard = defineAsyncComponent(() => import('src/components/dashboard/M
 const SpaceMeshMockCard = defineAsyncComponent(() => import('src/components/dashboard/SpacemeshMockCard.vue'))
 
 const currency = useAdminCurrencyStore()
+const coin = useAdminAppCoinStore()
 
 const profit = useFrontendProfitStore()
 const goodProfits = computed(() => {
   return Array.from(profit.GoodProfits.GoodProfits).map((el) => {
     return {
       ...el,
-      CoinPreSale: false,
+      CoinPreSale: coin.preSale(el.CoinTypeID),
       TotalInComing: Number(el.Incoming),
       TotalUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * Number(el.Incoming),
       Last24HoursInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
