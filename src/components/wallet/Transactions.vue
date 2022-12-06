@@ -30,8 +30,7 @@
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Detail, IOType, IOSubType } from 'src/teststore/mock/transaction'
-import { formatTime, NotifyType, useFrontendDetailStore } from 'npool-cli-v4'
+import { Detail, formatTime, IOSubType, IOType, NotifyType, useFrontendDetailStore } from 'npool-cli-v4'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))

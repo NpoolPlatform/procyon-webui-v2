@@ -11,8 +11,8 @@
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
 import { useAdminAppCoinStore, useAdminCurrencyStore, useFrontendProfitStore } from 'npool-cli-v4'
-import { MyGoodProfit } from 'src/localstore/ledger'
 import { IntervalKey } from 'src/const/const'
+import { MyGoodProfit } from 'src/localstore/ledger/types'
 
 const MiningCard = defineAsyncComponent(() => import('src/components/dashboard/MiningCard.vue'))
 const SpaceMeshMockCard = defineAsyncComponent(() => import('src/components/dashboard/SpacemeshMockCard.vue'))
