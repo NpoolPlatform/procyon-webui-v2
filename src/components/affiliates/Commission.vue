@@ -21,8 +21,8 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, ref } from 'vue'
-import { useFrontendArchivementStore, useLocalUserStore, PriceCoinName } from 'npool-cli-v4'
+import { computed } from 'vue'
+import { useFrontendArchivementStore, useLocalUserStore, PriceCoinName, useAdminCurrencyStore } from 'npool-cli-v4'
 
 const logined = useLocalUserStore()
 
@@ -37,5 +37,7 @@ const totalCommission = computed(() => {
   return total
 })
 
-const commissionJPY = ref(0)
+const currency = useAdminCurrencyStore()
+const commissionJPY = computed(() => totalCommission.value * currency.getJPYCurrency())
+
 </script>
