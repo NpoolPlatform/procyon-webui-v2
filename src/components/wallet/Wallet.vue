@@ -26,6 +26,7 @@ import { SecondsEachDay } from 'npool-cli-v2'
 import {
   Account,
   AccountUsedFor,
+  CurrencyType,
   General,
   NotifyType,
   TransferAccount,
@@ -78,6 +79,15 @@ onMounted(() => {
   }
   if (currency.Currencies.Currencies.length === 0) {
     getCurrencies(0, 100)
+  }
+
+  if (!currency.LegalCurrencies.get(CurrencyType.JPY)) {
+    currency.getLegalCurrencies({
+      CurrencyType: CurrencyType.JPY,
+      Message: {}
+    }, () => {
+    // TODO
+    })
   }
 })
 

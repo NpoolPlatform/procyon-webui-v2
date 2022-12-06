@@ -19,7 +19,7 @@
 
 <script setup lang='ts'>
 import { NotificationType, useInspireStore } from 'npool-cli-v2'
-import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useFrontendArchivementStore, UserArchivement } from 'npool-cli-v4'
+import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useFrontendArchivementStore, UserArchivement, useAdminCurrencyStore, CurrencyType } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { getCoins } from 'src/api/chain'
 import { defineAsyncComponent, onMounted } from 'vue'
@@ -38,6 +38,7 @@ const inspire = useInspireStore()
 const archivement = useFrontendArchivementStore()
 const good = useAdminAppGoodStore()
 const coin = useAdminAppCoinStore()
+const currency = useAdminCurrencyStore()
 
 onMounted(() => {
   if (archivement.Archivements.Archivements.length === 0) {
@@ -61,6 +62,15 @@ onMounted(() => {
   }
   if (coin.AppCoins.AppCoins.length === 0) {
     getCoins(0, 100)
+  }
+
+  if (!currency.LegalCurrencies.get(CurrencyType.JPY)) {
+    currency.getLegalCurrencies({
+      CurrencyType: CurrencyType.JPY,
+      Message: {}
+    }, () => {
+      // TODO
+    })
   }
 })
 

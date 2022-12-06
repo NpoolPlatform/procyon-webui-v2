@@ -27,14 +27,6 @@ import { computed } from 'vue'
 const general = useFrontendGeneralStore()
 const currency = useAdminCurrencyStore()
 
-const totalJPYBalance = computed(() => {
-  let total = 0
-  general.Generals.Generals.forEach((el) => {
-    total += Number(el.Spendable) * 134.11
-  })
-  return total
-})
-
 const totalUSDTBalance = computed(() => {
   let total = 0
   general.Generals.Generals.forEach((el) => {
@@ -42,4 +34,5 @@ const totalUSDTBalance = computed(() => {
   })
   return total
 })
+const totalJPYBalance = computed(() => totalUSDTBalance.value * currency.getJPYCurrency())
 </script>

@@ -125,7 +125,7 @@ const generals = computed(() => {
       Balance: Number(el.Spendable),
       Last24HoursBalance: general.getIntervalInComing(IntervalKey.LastDay, el.CoinTypeID),
       TotalUSDValue: Number(el.Spendable) * currency.getUSDCurrency(el.CoinTypeID),
-      TotalJPYValue: Number(el.Spendable) * Number(1)
+      TotalJPYValue: Number(el.Spendable) * currency.getUSDCurrency(el.CoinTypeID) * currency.getJPYCurrency()
     } as MyGeneral
   }).sort((a, b) => a.TotalUSDValue > b.TotalUSDValue ? -1 : 1)
 })
