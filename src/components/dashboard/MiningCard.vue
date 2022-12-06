@@ -64,7 +64,7 @@
 
 <script setup lang='ts'>
 import { useAdminAppCoinStore, useAdminAppGoodStore, PriceCoinName } from 'npool-cli-v4'
-import { MyGoodProfit } from 'src/localstore/ledger'
+import { MyGoodProfit } from 'src/localstore/ledger/types'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 

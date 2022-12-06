@@ -300,7 +300,7 @@ const getGenerals = (offset:number, limit: number) => {
         Type: NotifyType.Error
       }
     }
-  }, (g: Array<General>, error: boolean) => {
+  }, (error: boolean, g: Array<General>) => {
     submitting.value = false
     if (error) {
       return
