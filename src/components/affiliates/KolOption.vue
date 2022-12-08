@@ -1,6 +1,6 @@
 <template>
-  <select v-model='target' :class='ignoreStyle ? "": "kol-dropdown"'>
-    <option v-for='kol in options' :key='kol' :value='kol' @change='onChange'>
+  <select v-model='target' :class='ignoreStyle ? "": "kol-dropdown"' @change='onChange'>
+    <option v-for='kol in options' :key='kol' :value='kol'>
       {{ kol }}
     </option>
   </select>
