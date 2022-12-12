@@ -200,7 +200,7 @@ const setCurrency = () => {
     selectedCoinCurrency.value = parseFloat(currency.getCurrency(coinTypeID.value)?.MarketValueLow as string)
     return
   }
-  selectedCoinCurrency.value = undefined as unknown as number
+  selectedCoinCurrency.value = undefined as unknown as number // can't buy
 }
 
 watch(coinTypeID, () => {
