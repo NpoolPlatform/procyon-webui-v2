@@ -298,7 +298,7 @@ const onCodeVerify = (code: string) => {
     withdraw.createWithdraw({
       CoinTypeID: coinTypeID.value,
       Amount: `${amount.value}`,
-      AccountID: selectedAccount.value.ID,
+      AccountID: selectedAccount.value.AccountID,
       VerificationCode: code,
       Account: account.value,
       AccountType: accountType.value,
