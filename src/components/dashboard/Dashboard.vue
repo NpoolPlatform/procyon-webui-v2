@@ -52,7 +52,7 @@ onMounted(() => {
   if (profit.Profits.Profits.length === 0) {
     getProfits(0, 100)
   }
-  if (profit.getIntervalGoodProfitsByKey(IntervalKey.LastDay).length === 0) {
+  if (profit.getIntervalProfitsByKey(IntervalKey.LastDay).length === 0) {
     getIntervalProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
