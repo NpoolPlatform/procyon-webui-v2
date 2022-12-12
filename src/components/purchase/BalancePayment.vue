@@ -65,7 +65,7 @@
                 label='MSG_ALEO_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='submitting || insufficientFunds || purchaseAmountError'
+                :disabled='submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -133,6 +133,7 @@ const balance = computed(() => parseFloat((Number(general.getBalanceByID(coinTyp
 const purchaseAmount = ref(query.value.purchaseAmount) // 购买数量
 const paymentAmount = computed(() => Number(good.getPrice(goodID.value)) * purchaseAmount.value) // 支付金额
 const usdToOtherAmount = computed(() => parseFloat((Math.ceil(paymentAmount.value / selectedCoinCurrency.value * 10000) / 10000).toFixed(4)))
+const usedToOtherAmountISNaN = computed(() => isNaN(usdToOtherAmount.value))
 const insufficientFunds = computed(() => balance.value < paymentAmount.value)
 
 const purchaseAmountError = ref(false)
@@ -191,15 +192,15 @@ const setCurrency = () => {
     return
   }
   if (coin.haveCurrency(coinTypeID.value)) {
-    selectedCoinCurrency.value = coin.getCurrency(coinTypeID.value) as number
+    selectedCoinCurrency.value = coin.getCurrency(coinTypeID.value)
     console.log('AppCoin: ', selectedCoinCurrency.value)
     return
   }
-  if (!currency.getCurrency(coinTypeID.value)) {
-    console.log('fail get currency')
+  if (currency.haveCurrency(coinTypeID.value)) {
+    selectedCoinCurrency.value = parseFloat(currency.getCurrency(coinTypeID.value)?.MarketValueLow as string)
     return
   }
-  selectedCoinCurrency.value = parseFloat(currency.getCurrency(coinTypeID.value)?.MarketValueLow as string)
+  selectedCoinCurrency.value = undefined as unknown as number
 }
 
 watch(coinTypeID, () => {
