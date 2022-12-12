@@ -21,7 +21,7 @@
 
 <script setup lang='ts'>
 import { AppCoin, NotifyType, useAdminAppCoinStore } from 'npool-cli-v4'
-import { computed, defineEmits, ref, defineProps, toRef, onMounted } from 'vue'
+import { computed, defineEmits, ref, defineProps, toRef, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -52,6 +52,12 @@ const selectedCoin = computed({
   get: () => coin.getCoinByID(target.value),
   set: (val) => {
     target.value = val?.CoinTypeID as string
+  }
+})
+
+watch([() => displayCoins.value], () => {
+  if (coins.value && coins.value.length > 0 && setDefaultValue) {
+    setDefault()
   }
 })
 
