@@ -16,7 +16,7 @@
       <q-space />
       <div v-show='coins.length >= 1' id='product-filter'>
         <h4>{{ $t('MSG_PRODUCT_FILTER') }}</h4>
-        <form>
+        <form class='safari-adaptor'>
           <select v-model='selectedCoin'>
             <option
               v-for='_coin in coins'
@@ -236,4 +236,9 @@ const pageReferrals = computed(() => displayReferrals.value.filter((el, index) =
 <style lang='sass' scoped>
 .pagination
   max-width: 40%
+
+.safari-adaptor
+  ::v-deep select
+    -webkit-appearance: none
+    line-height: 23px
 </style>
