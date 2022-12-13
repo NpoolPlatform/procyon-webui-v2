@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { formatTime, PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useFrontendOrderStore, Order } from 'npool-cli-v4'
@@ -64,28 +64,9 @@ const table = computed(() => [
     name: 'State',
     label: t('MSG_STATE'),
     align: 'center',
-    field: (row: Order) => stateMap?.value.get(row.ID)?.length ? t(stateMap?.value.get(row.ID) as string) : ''
+    field: (row: Order) => order.getOrderState(row)?.startsWith('MSG') ? t(order.getOrderState(row)) : t('MSG_AWAITING_CONFIRMATION')
   }
 ])
-
-const stateMap = ref(new Map<string, string>())
-
-const ticker = ref(-1)
-
-onMounted(() => {
-  ticker.value = window.setInterval(() => {
-    orders.value.forEach((el: Order) => {
-      stateMap.value.set(el.ID, order.getOrderState(el))
-    })
-    ticker.value += 1
-  }, 1000)
-})
-
-onUnmounted(() => {
-  if (ticker.value >= 0) {
-    window.clearInterval(ticker.value)
-  }
-})
 
 </script>
 

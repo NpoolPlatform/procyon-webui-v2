@@ -23,7 +23,7 @@
 
           <h4>Product Detail</h4>
 
-          <p><strong>Start of Mining: </strong>At the launch of the mainnet (scheduled between December 5th 2022 ~ December 12th 2022)</p>
+          <p><strong>Start of Mining: </strong>At the launch of the mainnet (scheduled at the end of January 2023)</p>
 
           <p><strong>Mining Period: </strong>365 days (after mainnet launch)</p>
 

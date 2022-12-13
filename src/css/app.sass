@@ -197,7 +197,7 @@ input[type="submit"]
   height: 48px
   margin: 24px 24px 24px 0
   padding: 12px 24px
-  text-shadow: 1px 1px 1px #ce5417
+  // text-shadow: 1px 1px 1px #ce5417
   transition: all ease-in-out .1s
 
 button.alt,
@@ -983,6 +983,9 @@ input#search-button:hover
   font-size: 24px
   font-weight: 700
 
+.form-container .three-section .separater
+  font-size: 16px
+
 .form-container .submit-alt
   background: none
   border: 1px solid var(--orange-1)
@@ -1307,6 +1310,7 @@ h4#signature
 .product-container h4
   font-size: 18px
   font-weight: 400
+  line-height: 1.2
   margin: 12px 0 4px 0
   text-transform: unset
 
@@ -2520,6 +2524,8 @@ h3.mining-title
 .direct-ref #product-filter,
 .direct-ref #product-filter select
   margin: 0
+  @media (max-width: $breakpoint-sm-max)
+    width: 100%
 
 .direct-ref #search-box form,
 .direct-ref #product-filter form
