@@ -27,7 +27,7 @@
 
           <h4>Product Details</h4>
 
-          <p><strong>Start of Mining: </strong>At the launch of the mainnet (predicted December 2022, Aleo has not announced an official date)</p>
+          <p><strong>Start of Mining: </strong> At the launch of the mainnet (scheduled at Q1 2023)</p>
 
           <p><strong>Mining Period: </strong>365 days (after mainnet launch)</p>
 
