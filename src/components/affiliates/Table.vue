@@ -14,7 +14,7 @@
         </form>
       </div>
       <q-space />
-      <div v-show='coins.length >= 1' id='product-filter'>
+      <div id='product-filter'>
         <h4>{{ $t('MSG_PRODUCT_FILTER') }}</h4>
         <form>
           <select v-model='selectedCoin'>
