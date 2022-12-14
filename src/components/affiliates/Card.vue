@@ -36,7 +36,7 @@
         </thead>
         <tbody>
           <tr class='aff-info' v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
-            <td><span class='aff-product'>{{ _good.CoinName }}</span></td>
+            <td><span class='aff-product'>{{ _good.GoodName }}</span></td>
             <td v-if='_good.Editing'>
               <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' />
               <button @click='onSaveCommissionClick(_good)'>
