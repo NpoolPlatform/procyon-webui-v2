@@ -26,11 +26,11 @@
           {{ myProps.row.TotalJPYValue?.toFixed(4) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps'>
-          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick'>
+          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
-          <button class='small' @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(myProps.row.CoinTypeID) || depositClick'>
+          <button class='small' @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick'>
             {{ $t('MSG_DEPOSIT') }}
           </button>
         </q-td>
@@ -119,7 +119,7 @@ const currency = useAdminCurrencyStore()
 
 const general = useFrontendGeneralStore()
 const generals = computed(() => {
-  return Array.from(general.Generals.Generals).filter((el) => !coin.preSale(el.CoinTypeID) || !el.CoinDisabled).map((el) => {
+  return Array.from(general.Generals.Generals.filter((el) => !coin.preSale(el.CoinTypeID) && !el.CoinDisabled)).map((el) => {
     return {
       ...el,
       Balance: Number(el.Spendable),
