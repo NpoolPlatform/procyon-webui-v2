@@ -61,7 +61,7 @@ onMounted(() => {
   }
 
   if (profit.GoodProfits.GoodProfits.length === 0) {
-    getGoodProfits(0, 100)
+    getGoodProfits(0, 100, 0, Math.ceil(new Date().getTime() / 1000))
   }
   if (profit.getIntervalGoodProfitsByKey(IntervalKey.LastDay).length === 0) {
     getIntervalGoodProfits(
@@ -135,10 +135,12 @@ const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, of
   })
 }
 
-const getGoodProfits = (offset: number, limit: number) => {
+const getGoodProfits = (offset: number, limit: number, startAt: number, endAt: number) => {
   profit.getGoodProfits({
     Offset: offset,
     Limit: limit,
+    StartAt: startAt,
+    EndAt: endAt,
     Message: {
       Error: {
         Title: t('MSG_GET_PROFIT_FAIL'),
@@ -150,7 +152,7 @@ const getGoodProfits = (offset: number, limit: number) => {
     if (error || rows.length < limit) {
       return
     }
-    getGoodProfits(limit + offset, limit)
+    getGoodProfits(limit + offset, limit, startAt, endAt)
   })
 }
 
