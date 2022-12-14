@@ -119,7 +119,7 @@ const currency = useAdminCurrencyStore()
 
 const general = useFrontendGeneralStore()
 const generals = computed(() => {
-  return Array.from(general.Generals.Generals).filter((el) => !coin.preSale(el.CoinTypeID)).map((el) => {
+  return Array.from(general.Generals.Generals).filter((el) => !coin.preSale(el.CoinTypeID) || !coin.disabled(el.CoinTypeID)).map((el) => {
     return {
       ...el,
       Balance: Number(el.Spendable),
