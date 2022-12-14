@@ -157,7 +157,7 @@ const onPurchaseClick = () => {
     GoodID: goodID.value,
     Units: purchaseAmount.value,
     PaymentCoinID: coinTypeID.value,
-    PayWithBalanceAmount: `${paymentAmount.value}`,
+    PayWithBalanceAmount: `${usdToOtherAmount.value}`,
     Message: {
       Error: {
         Title: t('MSG_CREATE_ORDER'),
