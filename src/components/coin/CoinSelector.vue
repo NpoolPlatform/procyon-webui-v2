@@ -45,7 +45,7 @@ const setDefaultValue = toRef(props, 'default')
 const emit = defineEmits<{(e: 'update:id', id: string): void}>()
 
 const coin = useAdminAppCoinStore()
-const displayCoins = computed(() => !coins.value ? coin.AppCoins.AppCoins.filter((el) => !el.Disabled && !el.CoinDisabled && el.ForPay && el.CoinForPay && !el.Presale) : coins.value)
+const displayCoins = computed(() => !coins.value ? coin.AppCoins.AppCoins.filter((el) => !el.Disabled && !el.Presale) : coins.value)
 
 const target = ref(id.value)
 const selectedCoin = computed({
