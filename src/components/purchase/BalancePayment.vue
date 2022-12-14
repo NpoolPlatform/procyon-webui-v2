@@ -286,7 +286,7 @@ const getCurrencies = (offset: number, limit: number) => {
     Limit: limit,
     Message: {}
   }, (error: boolean, rows: Array<Currency>) => {
-    if (error || rows.length < limit) {
+    if (error || rows.length <= 0) {
       if (!error) setCurrency()
       return
     }
