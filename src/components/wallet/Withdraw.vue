@@ -224,7 +224,7 @@ const transferAccounts = computed(() => transferAccount.TransferAccounts.Transfe
 const selectedTransferAccount = computed(() => transferAccounts.value.length > 0 ? transferAccounts.value[selectedAccountIndex.value] : undefined as unknown as TransferAccount)
 
 const userAccount = useFrontendUserAccountStore()
-const withdraws = computed(() => userAccount.withdrawAddress.filter((el) => el.CoinTypeID === coinTypeID.value))
+const withdraws = computed(() => userAccount.withdrawAddress.filter((el) => el.CoinTypeID === coinTypeID.value).filter((el) => !el.Blocked && el.Active))
 const selectedAccountIndex = ref(0)
 const selectedAccount = computed(() => withdraws.value.length > 0 ? withdraws.value[selectedAccountIndex.value] : undefined as unknown as Account)
 
