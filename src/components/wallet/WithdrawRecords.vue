@@ -23,7 +23,7 @@
           {{ $t(withdrawStatus(myProps.row)) }}
         </q-td>
         <q-td key='Address' :props='myProps'>
-          {{ myProps.row.AddressLabels }} ({{ myProps.row.Address }})
+          {{ myProps.row.AddressLabels?.join(',') }} ({{ myProps.row.Address }})
         </q-td>
       </q-tr>
     </template>
