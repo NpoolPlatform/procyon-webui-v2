@@ -11,13 +11,13 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : parseFloat(Number(goodProfit?.Incoming).toFixed(2)) }} {{ goodProfit?.CoinUnit }}</span>
-        <span class='sub-value'>({{ parseFloat(goodProfit.TotalUSDInComing.toFixed(2)) }} {{ PriceCoinName }})</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.TotalInComing }} {{ goodProfit?.CoinUnit }}</span>
+        <span class='sub-value'>({{ goodProfit.TotalUSDInComing }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : parseFloat(Number(goodProfit?.Last24HoursInComing).toFixed(2)) }} {{ goodProfit?.CoinUnit }}</span>
-        <span class='sub-value'>({{ parseFloat(goodProfit.Last24HoursUSDInComing.toFixed(2)) }} {{ PriceCoinName }})</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }} {{ goodProfit?.CoinUnit }}</span>
+        <span class='sub-value'>({{ goodProfit.Last24HoursUSDInComing }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
