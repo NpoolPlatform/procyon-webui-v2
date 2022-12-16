@@ -1,6 +1,6 @@
 <template>
   <ProductPage
-    :good-id='goodId'
+    :good-id='goodID'
     :purchase-amount='purchaseAmount'
     project-class='project-aleo'
     bg-img='product/aleo/aleo-banner.jpg'
@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ parseFloat(target?.Price) }}</span>
+        <span class='number'>{{ good.getPrice(goodID) }}</span>
         <span class='unit'>{{ PriceCoinName }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -53,7 +53,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span class='number'>{{ true ? 'TBD*' : formatTime(target?.StartAt, true) }}</span>
+        <span class='number'>{{ true ? 'TBD*' : good.getFormatTime(target?.StartAt) }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -74,9 +74,9 @@
       </div>
     </template>
     <template #product-detail>
-      <div v-show='description'>
-        <h3>{{ description ? $t(description?.Title) : '' }}</h3>
-        <p v-html='description ? $t(description?.Message) : ""' />
+      <div v-show='coinDescription'>
+        <h3>{{ coinDescription ? $t(coinDescription?.Title) : '' }}</h3>
+        <p v-html='coinDescription ? $t(coinDescription?.Message) : ""' />
       </div>
       <h3>{{ $t('MSG_VC_INVESTMENT') }}</h3>
       <p v-html='$t("MSG_VC_INVESTMENT_CAPTION")' />
@@ -180,18 +180,6 @@
           {{ $t('MSG_PRODUCT_FAQ') }}
         </h3>
         <ul class='product-links'>
-          <!-- <li>
-            <a href='https://www.youtube.com/watch?v=xHIXUVhCLMY' target='_blank'>
-              <img class='link-icon' :src='lightbulb'>
-              <span>{{ $t('MSG_PURCHASE_ALEO_METHOD') }}</span>
-            </a>
-          </li>
-          <li>
-            <a href='https://www.youtube.com/watch?v=CW2ndiAvYD0' target='_blank'>
-              <img class='link-icon' :src='lightbulb'>
-              <span>{{ $t('MSG_MOBILE_PURCHASE_ALEO_METHOD') }}</span>
-            </a>
-          </li> -->
           <li>
             <a href='https://drive.google.com/file/d/1DuZm_aDiqojpA6VlDq_z4Dt3JTi44XVe/view?usp=share_link'>
               <img class='link-icon' :src='lightbulb'>
@@ -205,15 +193,16 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, ref, onMounted } from 'vue'
+import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { CoinDescriptionUsedFor, NotificationType, useCoinStore, PriceCoinName, formatTime } from 'npool-cli-v2'
+import { PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
 import lightbulb from '../../assets/lightbulb.svg'
 import { DefaultGoodID } from 'src/const/const'
-import { AppGood, NotifyType, useAdminAppGoodStore } from 'npool-cli-v4'
+import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, CoinDescriptionUsedFor, useAdminCurrencyStore } from 'npool-cli-v4'
+import { getCurrencies, getDescriptions } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -229,15 +218,16 @@ const { locale } = useI18n({ useScope: 'global' })
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodId = computed(() => query.value.goodId?.length ? query.value.goodId : DefaultGoodID)
+const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : DefaultGoodID)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = useAdminAppGoodStore()
-const target = computed(() => good.getGoodByID(goodId.value) as AppGood)
-const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
+const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 
-const coin = useCoinStore()
-const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(target.value?.CoinTypeID, usedFor.value))
+const currency = useAdminCurrencyStore()
+
+const description = useAdminCoinDescriptionStore()
+const coinDescription = computed(() => description.getCoinDescriptionByCoinUsedFor(target.value?.CoinTypeID, CoinDescriptionUsedFor.ProductPage))
 
 interface Member {
   Name: string;
@@ -267,7 +257,7 @@ const members = computed(() => [
 
 onMounted(() => {
   good.getAppGood({
-    GoodID: goodId.value,
+    GoodID: goodID.value,
     Message: {
       Error: {
         Title: t('MSG_GET_GOOD'),
@@ -280,17 +270,12 @@ onMounted(() => {
     // TODO
   })
 
-  if (!description.value) {
-    coin.getCoinDescriptions({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COIN_DESCRIPTIONS'),
-          Message: t('MSG_GET_COIN_DESCRIPTIONS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    })
+  if (description.CoinDescriptions.CoinDescriptions.length === 0) {
+    getDescriptions(0, 100)
+  }
+  if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
+    currency.$reset()
+    getCurrencies(0, 100)
   }
 })
 

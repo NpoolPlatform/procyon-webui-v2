@@ -255,6 +255,19 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        path: 'extrapayment',
+        component: () => import('pages/Payment.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
         path: 'detail',
         component: () => import('pages/OrderDetail.vue'),
         meta: {

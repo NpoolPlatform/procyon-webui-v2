@@ -18,11 +18,10 @@
 </template>
 
 <script setup lang='ts'>
-import { NotificationType, useCoinStore, useInspireStore } from 'npool-cli-v2'
-import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood } from 'npool-cli-v4'
+import { NotificationType, useInspireStore } from 'npool-cli-v2'
+import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useFrontendArchivementStore, UserArchivement, useAdminCurrencyStore, CurrencyType } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
-import { useLocalArchivementStore } from 'src/localstore/affiliates'
-import { useArchivementStore } from 'src/teststore/mock/archivement'
+import { getCoins } from 'src/api/chain'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -35,47 +34,19 @@ const Tree = defineAsyncComponent(() => import('src/components/affiliates/Tree.v
 const Table = defineAsyncComponent(() => import('src/components/affiliates/Table.vue'))
 
 const user = useLocalUserStore()
-const archivement = useArchivementStore()
-const larchivement = useLocalArchivementStore()
-const coin = useCoinStore()
 const inspire = useInspireStore()
-
-const getArchivements = (offset: number, limit: number) => {
-  archivement.getCoinArchivements({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_COIN_ARCHIVEMENT_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, (error: boolean, count?: number) => {
-    if (error) {
-      return
-    }
-    if (!count || count <= 1) {
-      larchivement.$reset()
-      larchivement.addArchivement(archivement.Archivements.Archivements)
-      larchivement.Total = archivement.Archivements.Total
-      return
-    }
-    getArchivements(offset + limit, limit)
-  })
-}
-
+const archivement = useFrontendArchivementStore()
 const good = useAdminAppGoodStore()
+const coin = useAdminAppCoinStore()
+const currency = useAdminCurrencyStore()
 
 onMounted(() => {
-  if (larchivement.Archivements.length === 0) {
+  if (archivement.Archivements.Archivements.length === 0) {
     getArchivements(0, 100)
   }
-
   if (good.AppGoods.AppGoods.length === 0) {
     getAppGoods(0, 500)
   }
-
   if (inspire.PurchaseAmountSettings.length === 0) {
     inspire.getPurchaseAmountSettings({
       Message: {
@@ -89,16 +60,14 @@ onMounted(() => {
       // TODO
     })
   }
+  if (coin.AppCoins.AppCoins.length === 0) {
+    getCoins(0, 100)
+  }
 
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
+  if (!currency.LegalCurrencies.get(CurrencyType.JPY)) {
+    currency.getLegalCurrencies({
+      CurrencyType: CurrencyType.JPY,
+      Message: {}
     }, () => {
       // TODO
     })
@@ -121,6 +90,24 @@ const getAppGoods = (offset: number, limit: number) => {
       return
     }
     getAppGoods(offset + limit, limit)
+  })
+}
+const getArchivements = (offset: number, limit: number) => {
+  archivement.getGoodArchivements({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COIN_ARCHIVEMENT_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (error: boolean, rows: Array<UserArchivement>) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getArchivements(offset + limit, limit)
   })
 }
 </script>

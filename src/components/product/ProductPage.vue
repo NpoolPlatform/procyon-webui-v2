@@ -7,7 +7,7 @@
             <div class='product-page-icon'>
               <img :src='target?.CoinLogo'>
             </div>
-            <h1>{{ target?.CoinName }} {{ $t('MSG_MINING') }}</h1>
+            <h1>{{ target?.GoodName }} {{ $t('MSG_MINING') }}</h1>
           </div>
         </div>
         <!-- mobile start -->
@@ -23,9 +23,8 @@
               <span class='number'>{{ remainHours }}</span>
               <span class='unit'>{{ $t("MSG_HOURS") }} </span>
               <span class='number'>{{ remainMinutes }}</span>
+
               <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
-              <!-- <span class='number'>{{ remainSeconds }}</span> -->
-              <!-- <span class='unit'>s</span> -->
             </div>
             <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
             <Input
@@ -36,24 +35,19 @@
               :error='purchaseAmountError'
               :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
               placeholder='MSG_AMOUNT_PLACEHOLDER'
-              :min='0'
+              :min='1'
               :max='total'
               @focus='onPurchaseAmountFocusIn'
               @blur='onPurchaseAmountFocusOut'
             />
             <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
-            <div v-show='paymentCoin'>
-              <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
-                <option
-                  v-for='myCoin in coins'
-                  :key='myCoin?.ID'
-                  :value='myCoin'
-                  :selected='paymentCoin?.ID === myCoin?.ID'
-                >
-                  {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : coinName(myCoin) }})
-                </option>
-              </select>
-            </div>
+            <CoinSelector
+              v-model:id='selectedCoinID'
+              :coins='coins'
+              label=''
+              hide-label
+              default
+            />
             <div class='warning' v-if='showRateTip'>
               <img :src='warning'>
               <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
@@ -84,35 +78,6 @@
               <slot name='product-detail' />
             </div>
           </div>
-          <!-- <div v-else class='info-flex'>
-              <div class='three-section'>
-                <h4>{{ $t('MSG_PRICE') }}:</h4>
-                <span class='number'>{{ target?.Price }}</span>
-                <span class='unit'>{{ PriceCoinName }}</span>
-              </div>
-              <div class='three-section'>
-                <h4>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</h4>
-                <span class='number'>*</span>
-                <span class='unit'>{{ target?.CoinUnit }} / {{ $t('MSG_DAY') }}</span>
-              </div>
-              <div class='three-section'>
-                <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
-                <span class='number'>{{ target?.DurationDays }}</span>
-                <span class='unit'>{{ $t('MSG_DAYS') }}</span>
-              </div>
-              <div class='three-section'>
-                <h4>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</h4>
-                <span class='number'>20</span>
-                <span class='unit'>%</span>
-              </div>
-              <div class='three-section'>
-                <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-                <span class='number'>{{ formatTime(target?.StartAt, true) }}</span>
-              </div>
-              <div class='product-detail-text'>
-                <slot name='product-detail' />
-              </div>
-            </div> -->
         </div>
         <!-- mobile end -->
         <div class='product-sidebar'>
@@ -129,8 +94,6 @@
                 <span class='unit'>{{ $t("MSG_HOURS") }} </span>
                 <span class='number'>{{ remainMinutes }}</span>
                 <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
-                <!-- <span class='number'>{{ remainSeconds }}</span> -->
-                <!-- <span class='unit'>s</span> -->
               </div>
               <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
               <Input
@@ -141,24 +104,19 @@
                 :error='purchaseAmountError'
                 :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
                 placeholder='MSG_AMOUNT_PLACEHOLDER'
-                :min='0'
+                :min='1'
                 :max='total'
                 @focus='onPurchaseAmountFocusIn'
                 @blur='onPurchaseAmountFocusOut'
               />
               <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
-              <div v-show='paymentCoin'>
-                <select :name='$t("MSG_PAYMENT_METHOD")' v-model='paymentCoin' required>
-                  <option
-                    v-for='myCoin in coins'
-                    :key='myCoin?.ID'
-                    :value='myCoin'
-                    :selected='paymentCoin?.ID === myCoin?.ID'
-                  >
-                    {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : coinName(myCoin) }})
-                  </option>
-                </select>
-              </div>
+              <CoinSelector
+                v-model:id='selectedCoinID'
+                :coins='coins'
+                label=''
+                hide-label
+                default
+              />
               <div class='warning' v-if='showRateTip'>
                 <img :src='warning'>
                 <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
@@ -188,31 +146,20 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  PriceCoinName,
-  CoinDescriptionUsedFor,
-  useCoinStore,
-  NotificationType,
-  useCurrencyStore,
-  Currency,
-  Coin,
-  useAdminOracleStore
-} from 'npool-cli-v2'
+import { PriceCoinName } from 'npool-cli-v2'
 import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
+import warning from 'src/assets/warning.svg'
 import {
   AppGood,
-  NotifyType,
+  useAdminAppCoinStore,
   useAdminAppGoodStore,
+  useFrontendGeneralStore,
   useLocalUserStore
 } from 'npool-cli-v4'
+import { getCoins } from 'src/api/chain'
 
-import warning from 'src/assets/warning.svg'
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
+const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
@@ -226,11 +173,30 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const goodId = toRef(props, 'goodId')
+const goodID = toRef(props, 'goodId')
 const projectClass = toRef(props, 'projectClass')
 const bgImg = toRef(props, 'bgImg')
 const customizeInfo = toRef(props, 'customizeInfo')
 const purchaseAmount = toRef(props, 'purchaseAmount')
+
+const router = useRouter()
+
+const logined = useLocalUserStore()
+
+const general = useFrontendGeneralStore()
+
+const good = useAdminAppGoodStore()
+const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
+const total = computed(() => good.getPurchaseLimit(target?.value))
+
+const coin = useAdminAppCoinStore()
+const coins = computed(() => coin.getAvailableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
+
+const defaultCoinTypeID = computed(() => {
+  return coins.value?.length > 0 ? coins.value?.[0].CoinTypeID : undefined as unknown as string
+})
+const selectedCoinID = ref(defaultCoinTypeID.value)
+const paymentCoin = computed(() => coin.getCoinByID(selectedCoinID.value))
 
 const showRateTip = computed(() => {
   return paymentCoin.value?.Unit?.length &&
@@ -244,6 +210,7 @@ const showBUSDTip = computed(() => {
   return paymentCoin.value?.Unit?.includes('BUSD')
 })
 
+const myPurchaseAmount = ref(purchaseAmount.value ? purchaseAmount.value : 1)
 const purchaseAmountError = ref(false)
 const onPurchaseAmountFocusIn = () => {
   purchaseAmountError.value = false
@@ -252,87 +219,7 @@ const onPurchaseAmountFocusOut = () => {
   purchaseAmountError.value = myPurchaseAmount.value <= 0 || myPurchaseAmount.value > total.value
 }
 
-const coin = useCoinStore()
-const coins = computed(() => {
-  const trc20Coins = [] as Array<Coin>
-  const erc20Coins = [] as Array<Coin>
-  const btcCoins = [] as Array<Coin>
-  const busdCoins = [] as Array<Coin>
-
-  const targetCoin = coin.getCoinByID(target.value?.CoinTypeID)
-  coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === targetCoin?.ENV).forEach((el) => {
-    if (el.Name?.toLowerCase()?.includes('trc20')) {
-      trc20Coins.push(el)
-    } else if (el.Unit?.includes('BUSD')) {
-      busdCoins.push(el)
-    } else if (el.Unit?.includes('BTC')) {
-      btcCoins.push(el)
-    } else {
-      erc20Coins.push(el)
-    }
-  })
-
-  trc20Coins.push(...erc20Coins)
-  trc20Coins.push(...btcCoins)
-  trc20Coins.push(...busdCoins)
-
-  return trc20Coins
-})
-
-const coinName = (c: Coin) => {
-  if (c.Unit?.includes('BUSD')) {
-    return 'BEP20'
-  } else if (c.Name?.toLowerCase()?.includes('erc20')) {
-    return 'ERC20'
-  } else if (c.Name?.toLowerCase()?.includes('trc20')) {
-    return 'TRC20'
-  }
-  return currency.formatCoinName(c.Name as string)
-}
-
-const selectedCoinID = ref(undefined as unknown as string)
-
-const good = useAdminAppGoodStore()
-const target = computed(() => good.getGoodByID(goodId.value) as AppGood)
-const myPurchaseAmount = ref(purchaseAmount.value ? purchaseAmount.value : 1)
-
-const selectedCoinCurrency = ref(1)
-
-const paymentCoin = computed({
-  get: () => {
-    const myCoin = coin.getCoinByID(selectedCoinID.value)
-    if (!myCoin) {
-      for (const scoin of coins.value) {
-        if (scoin.Name?.toLowerCase().includes(PriceCoinName.toLowerCase())) {
-          return scoin
-        }
-      }
-      if (coins.value.length > 0) {
-        return coins.value[0]
-      }
-      return undefined
-    }
-    return myCoin
-  },
-  set: (val) => {
-    selectedCoinID.value = val?.ID as string
-    currency.getCoinCurrency(coin.getCoinByID(selectedCoinID.value), Currency.USD, (usdCurrency: number) => {
-      if (usdCurrency > 0) {
-        selectedCoinCurrency.value = usdCurrency
-      }
-    })
-  }
-})
-
-const total = computed(() => Math.min(target.value?.PurchaseLimit, target.value?.Total))
-
-const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
-const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(target.value?.CoinTypeID, usedFor.value))
-
 const submitting = ref(false)
-
-const router = useRouter()
-const logined = useLocalUserStore()
 
 const onPurchaseClick = () => {
   if (!logined.logined) {
@@ -350,77 +237,15 @@ const onPurchaseClick = () => {
   if (purchaseAmountError.value) {
     return
   }
+  general.$reset()
   void router.push({
     path: '/payment',
     query: {
-      coinTypeID: paymentCoin.value?.ID as string,
+      coinTypeID: selectedCoinID.value,
       purchaseAmount: myPurchaseAmount.value
     }
   })
 }
-const currency = useCurrencyStore()
-
-onMounted(() => {
-  if (coins.value.length > 0) {
-    selectedCoinID.value = coins.value[0].ID as string
-    currency.getCoinCurrency(coin.getCoinByID(selectedCoinID.value), Currency.USD, (usdCurrency: number) => {
-      console.log(usdCurrency)
-      if (usdCurrency > 0) {
-        selectedCoinCurrency.value = usdCurrency
-      }
-    })
-  }
-})
-
-const oracle = useAdminOracleStore()
-
-onMounted(() => {
-  if (!target.value) {
-    good.getAppGood({
-      GoodID: goodId.value,
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOOD'),
-          Message: t('MSG_GET_GOOD_FAIL'),
-          Popup: true,
-          Type: NotifyType.Error
-        }
-      }
-    }, () => {
-    // TODO
-    })
-  }
-
-  coin.getCoins({
-    Message: {
-      Error: {
-        Title: t('MSG_GET_COINS'),
-        Message: t('MSG_GET_COINS_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, () => {
-    oracle.getCurrencies({
-      Message: {}
-    }, () => {
-      // TODO
-    })
-  })
-
-  if (!description.value) {
-    coin.getCoinDescriptions({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COIN_DESCRIPTIONS'),
-          Message: t('MSG_GET_COIN_DESCRIPTIONS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    })
-  }
-})
 
 const endTime = ref(1671505200)
 const ticker = ref(-1)
@@ -428,6 +253,7 @@ const remainDays = ref(27)
 const remainHours = ref(23)
 const remainMinutes = ref(59)
 const remainSeconds = ref(59)
+
 onMounted(() => {
   ticker.value = window.setInterval(() => {
     const now = Math.floor(Date.now() / 1000)
@@ -440,6 +266,10 @@ onMounted(() => {
       remainDays.value = 99
     }
   }, 1000)
+
+  if (coin.AppCoins.AppCoins.length === 0) {
+    getCoins(0, 100)
+  }
 })
 
 onUnmounted(() => {

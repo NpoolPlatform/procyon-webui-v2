@@ -9,11 +9,11 @@
       :referral='inviter'
     />
     <Card
-      v-for='(referral, idx) in referrals'
+      v-for='(referral, idx) in invitees'
       :key='referral.UserID'
       :child='true'
       :first-child='idx === 0'
-      :last-child='idx === referrals.length - 1'
+      :last-child='idx === invitees.length - 1'
       :referral='referral'
     />
   </div>
@@ -21,19 +21,13 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { LocalProductArchivement } from 'src/localstore/affiliates/types'
-import { useLocalArchivementStore } from 'src/localstore/affiliates'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { useFrontendArchivementStore, useLocalUserStore } from 'npool-cli-v4'
 
 const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.vue'))
 
 const logined = useLocalUserStore()
-const localArchivements = useLocalArchivementStore()
 
-const referrals = computed(() => localArchivements.Archivements.filter((el) => el.Kol && logined.User?.ID !== el.UserID))
-const inviter = computed(() => {
-  const index = localArchivements.Archivements.findIndex((el) => el.UserID === logined.User?.ID)
-  return index < 0 ? undefined as unknown as LocalProductArchivement : localArchivements.Archivements[index]
-})
-
+const archivement = useFrontendArchivementStore()
+const inviter = computed(() => archivement.getArchivementByUserID(logined?.User?.ID))
+const invitees = computed(() => archivement.getInviteesArchivements(logined.User?.ID).sort((a, b) => a.InvitedAt > b.InvitedAt ? 1 : -1))
 </script>

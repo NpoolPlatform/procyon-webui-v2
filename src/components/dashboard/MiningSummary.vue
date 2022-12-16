@@ -2,7 +2,7 @@
   <h2>{{ $t("MSG_EARNINGS") }}</h2>
   <div class='earnings-summary'>
     <div class='earnings-figure'>
-      <span class='amount'>{{ totalProfit?.toFixed(4) }}</span>
+      <span class='amount'>{{ totalProfit }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -10,7 +10,7 @@
       </h4>
     </div>
     <div class='earnings-figure'>
-      <span class='amount'>{{ last24HoursEarning?.toFixed(4) }}</span>
+      <span class='amount'>{{ last24HoursEarning }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -21,13 +21,30 @@
 </template>
 
 <script setup lang="ts">
-import { PriceCoinName } from 'npool-cli-v2'
-import { useLocalLedgerStore } from 'src/localstore/ledger'
+import { PriceCoinName, useAdminCurrencyStore, useFrontendProfitStore } from 'npool-cli-v4'
+import { IntervalKey } from 'src/const/const'
 import { computed } from 'vue'
 
-const localledger = useLocalLedgerStore()
+const currency = useAdminCurrencyStore()
 
-const totalProfit = computed(() => localledger.toUsdtProfit)
-const last24HoursEarning = computed(() => localledger.toLastDayUsdtProfit)
+const profit = useFrontendProfitStore()
+const profits = computed(() => profit.Profits.Profits)
+const intervalProfits = computed(() => profit.getIntervalProfitsByKey(IntervalKey.LastDay))
+
+const totalProfit = computed(() => {
+  let total = 0
+  profits.value.forEach((el) => {
+    total += Number(el.Incoming) * currency.getUSDCurrency(el.CoinTypeID)
+  })
+  return total.toFixed(4)
+})
+
+const last24HoursEarning = computed(() => {
+  let total = 0
+  intervalProfits.value.forEach((el) => {
+    total += Number(el.Incoming) * currency.getUSDCurrency(el.CoinTypeID)
+  })
+  return total.toFixed(4)
+})
 
 </script>

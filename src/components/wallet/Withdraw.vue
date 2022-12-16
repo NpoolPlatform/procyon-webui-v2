@@ -5,9 +5,9 @@
         <div class='product-container content-glass'>
           <div class='product-title-section'>
             <div class='product-page-icon'>
-              <img :src='coins.getCoinLogo(coin)'>
+              <img :src='target?.Logo'>
             </div>
-            <h1>{{ coinName(coin?.ID as string) }}</h1>
+            <h1>{{ target?.Name }}</h1>
           </div>
           <div class='withdraw'>
             <h3>{{ $t('MSG_ASSET_WITHDRAWAL') }}</h3>
@@ -15,15 +15,15 @@
               <div class='three-section'>
                 <h4>{{ $t('MSG_AVAILABLE_FOR_WITHDRAWAL') }}:</h4>
                 <span class='number'>{{ balance }}</span>
-                <span class='unit'>{{ coin?.Unit }}</span>
+                <span class='unit'>{{ target?.Unit }}</span>
               </div>
               <div v-if='withdrawType === "ExternalAddress"' class='three-section'>
                 <h4>{{ $t('MSG_TRANSACTION_FEE') }}:</h4>
                 <span class='number'>{{ feeAmount }}</span>
-                <span class='unit'>{{ coin?.Unit }}</span>
+                <span class='unit'>{{ target?.Unit }}</span>
               </div>
               <div class='full-section'>
-                <h4>{{ $t('MSG_AMOUNT_TO_WITHDRAW') }} ({{ coin?.Unit }}):</h4>
+                <h4>{{ $t('MSG_AMOUNT_TO_WITHDRAW') }} ({{ target?.Unit }}):</h4>
                 <Input
                   v-model:value='amount'
                   type='number'
@@ -32,7 +32,7 @@
                   :error='amountError'
                   :message='$t("MSG_WITHDRAW_AMOUNT_TIP", {MAX: balance})'
                   placeholder='MSG_AMOUNT_PLACEHOLDER'
-                  :min='withdrawType === "ExternalAddress" ? feeAmount : 0'
+                  :min='feeAmount'
                   :max='balance'
                   @focus='onAmountFocusIn'
                   @blur='onAmountFocusOut'
@@ -40,9 +40,9 @@
               </div>
               <div class='three-section'>
                 <h4>{{ $t('MSG_AMOUNT_WILL_RECEIVE') }}:</h4>
-                <span v-if='withdrawType === "ExternalAddress"' class='number'>{{ amount - feeAmount > 0 ? (amount - feeAmount).toFixed(4) : 0 }}</span>
+                <span v-if='withdrawType === "ExternalAddress"' class='number'>{{ receiveAmount }}</span>
                 <span v-else class='number'>{{ amount > 0 ? amount.toFixed(4) : 0 }}</span>
-                <span class='unit'>{{ coin?.Unit }}</span>
+                <span class='unit'>{{ target?.Unit }}</span>
               </div>
 
               <div class='full-section'>
@@ -61,16 +61,16 @@
                 <h4>{{ $t('MSG_SELECT_RECIPIENT_ADDRESS') }}:</h4>
                 <div v-if='withdrawType === "ExternalAddress"'>
                   <div
-                    v-for='withdraw in withdraws'
-                    :key='withdraw.Address.ID'
+                    v-for='_withdraw in withdraws'
+                    :key='_withdraw.ID'
                   >
                     <span
-                      :class='[ "address-option", selectedAccount?.Account?.ID === withdraw.Account.ID ? "address-selected" : "" ]'
-                      @click='onAddressSelected(withdraw)'
+                      :class='[ "address-option", selectedAccount?.ID === _withdraw.ID ? "address-selected" : "" ]'
+                      @click='onAddressSelected(_withdraw)'
                     >
-                      <span class='wallet-type'>{{ withdraw.Address.Labels.join(',') }}</span>
-                      <span class='wallet-type coin-type'>{{ coinName(coin?.ID as string) }}</span>
-                      <span class='number'>{{ withdraw.Account.Address }}</span>
+                      <span class='wallet-type'>{{ _withdraw.Labels?.join(',') }}</span>
+                      <span class='wallet-type coin-type'>{{ target?.Name }}</span>
+                      <span class='number'>{{ _withdraw?.Address }}</span>
                       <img class='checkmark' :src='checkmark'>
                     </span>
                   </div>
@@ -84,7 +84,7 @@
                       :class='[ "address-option", selectedTransferAccount?.TargetUserID === _account.TargetUserID ? "address-selected" : "" ]'
                       @click='onTransferAccountSelected(_account)'
                     >
-                      <span class='wallet-type'>{{ baseuser.displayName1(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string) }}</span>
+                      <span class='wallet-type'>{{ baseUser.displayName1(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string) }}</span>
                       <span class='wallet-type coin-type'>{{ $t('MSG_INTERNAL') }}</span>
                       <span class='number'>{{ _account.TargetEmailAddress.length ? _account.TargetEmailAddress : _account.TargetPhoneNO }}</span>
                       <img class='checkmark' :src='checkmark'>
@@ -97,7 +97,7 @@
               <WaitingBtn
                 label='MSG_WITHDRAW'
                 type='button'
-                :disabled='submitting || needDisable'
+                :disabled='(submitting || disableTtn)'
                 :waiting='submitting'
                 @click='onSubmit'
               />
@@ -170,22 +170,9 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  useCoinStore,
-  useAccountStore,
-  WithdrawAccount,
-  NotificationType,
-  ReviewState,
-  SecondsEachDay
-} from 'npool-cli-v2'
 import { ref, defineAsyncComponent, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useGeneralStore } from 'src/teststore/mock/ledger'
-import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
-import { useLocalLedgerStore } from 'src/localstore/ledger'
-import { IntervalKey } from 'src/const/const'
-import { useLocalCoinStore } from 'src/localstore/coin'
 import {
   TransferAccount,
   useFrontendTransferAccountStore,
@@ -194,23 +181,52 @@ import {
   useFrontendTransferStore,
   Transfer,
   UsedFor,
-  AccountType
+  AccountType,
+  useFrontendUserAccountStore,
+  AccountUsedFor,
+  Account,
+  useAdminAppCoinStore,
+  useFrontendGeneralStore,
+  useFrontendWithdrawStore,
+  General,
+  useFrontendDetailStore,
+  useAdminCurrencyStore
 } from 'npool-cli-v4'
-
 import checkmark from 'src/assets/icon-checkmark.svg'
+import { getCoins, getCurrencies } from 'src/api/chain'
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { locale, t } = useI18n({ useScope: 'global' })
 
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { locale, t } = useI18n({ useScope: 'global' })
+interface Query {
+  coinTypeID: string;
+  type: string;
+}
+
+const query = computed(() => route.query as unknown as Query)
+const type = computed(() => query.value.type)
+
+const coin = useAdminAppCoinStore()
+const coinTypeID = computed(() => query.value.coinTypeID)
+const target = computed(() => coin.getCoinByID(coinTypeID.value))
 
 const withdrawType = ref('ExternalAddress')
 watch(withdrawType, () => {
   selectedAccountIndex.value = 0
 })
+
+const transferAccount = useFrontendTransferAccountStore()
+const transferAccounts = computed(() => transferAccount.TransferAccounts.TransferAccounts)
+const selectedTransferAccount = computed(() => transferAccounts.value.length > 0 ? transferAccounts.value[selectedAccountIndex.value] : undefined as unknown as TransferAccount)
+
+const userAccount = useFrontendUserAccountStore()
+const withdraws = computed(() => userAccount.withdrawAddress.filter((el) => el.CoinTypeID === coinTypeID.value).filter((el) => !el.Blocked && el.Active))
+const selectedAccountIndex = ref(0)
+const selectedAccount = computed(() => withdraws.value.length > 0 ? withdraws.value[selectedAccountIndex.value] : undefined as unknown as Account)
 
 const verifying = ref(false)
 const showReviewing = ref(false)
@@ -225,44 +241,42 @@ const onAmountFocusOut = () => {
   amountError.value = !amount.value || amount.value > balance.value || (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0)
 }
 
-const needDisable = computed(() => (withdrawType.value === 'ExternalAddress' && withdraws.value.length === 0) || (withdrawType.value === 'InternalTransfer' && transferAccounts.value.length === 0))
-
-interface Query {
-  coinTypeId: string;
-  type: string;
-}
-
-const localcoin = useLocalCoinStore()
-const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
-
 const route = useRoute()
-const query = computed(() => route.query as unknown as Query)
-const coins = useCoinStore()
-const coinTypeId = computed(() => query.value.coinTypeId)
-const type = computed(() => query.value.type)
-const coin = computed(() => coins.getCoinByID(coinTypeId.value))
-const feeAmount = ref(0)
-const submitting = ref(false)
 
-const accounts = useAccountStore()
-const withdraws = computed(() => accounts.Accounts.filter((account) => {
-  return account.Account?.CoinTypeID === coinTypeId.value && account.State === ReviewState.Approved
-}))
+const balance = computed(() => Number(general.getBalanceByID(coinTypeID.value)))
+const feeAmount = computed(() => {
+  if (withdrawType.value === 'InternalTransfer') {
+    return 0
+  }
+  if (target?.value?.WithdrawFeeByStableUSD) {
+    if (target?.value?.WithdrawFeeAmount.length > 0) {
+      return Number(target.value?.WithdrawFeeAmount) / currency.getUSDCurrency(coinTypeID.value)
+    }
+  }
+  return Math.ceil(Number(target.value?.WithdrawFeeAmount) * 1000000) / 1000000
+})
+const receiveAmount = computed(() => {
+  return amount.value - feeAmount.value > 0 ? (amount.value - feeAmount.value).toFixed(4) : 0
+})
 
-const selectedAccountIndex = ref(0)
-const selectedAccount = computed(() => withdraws.value.length > 0 ? withdraws.value[selectedAccountIndex.value] : undefined as unknown as WithdrawAccount)
+const disableTtn = computed(() => (withdrawType.value === 'ExternalAddress' && withdraws.value.length === 0) || (withdrawType.value === 'InternalTransfer' && transferAccounts.value.length === 0))
 
-const general = useGeneralStore()
-const localledger = useLocalLedgerStore()
-const ltransation = useLocalTransactionStore()
-const transferAccount = useFrontendTransferAccountStore()
+const general = useFrontendGeneralStore()
+const detail = useFrontendDetailStore()
+const withdraw = useFrontendWithdrawStore()
 const transfer = useFrontendTransferStore()
-const baseuser = useBaseUserStore()
+const baseUser = useBaseUserStore()
 
-const transferAccounts = computed(() => transferAccount.TransferAccounts.TransferAccounts)
-const selectedTransferAccount = computed(() => transferAccounts.value.length > 0 ? transferAccounts.value[selectedAccountIndex.value] : undefined as unknown as TransferAccount)
+const account = ref('')
+const accountType = ref(AccountType.Email)
 
-const balance = computed(() => general.getCoinBalance(coin?.value?.ID as string))
+const submitting = ref(false)
+const onMenuHide = () => {
+  verifying.value = false
+}
+const onCancelClick = () => {
+  onMenuHide()
+}
 
 const onSubmit = () => {
   amountError.value = !amount.value || amount.value > balance.value || (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0)
@@ -275,80 +289,16 @@ const onSubmit = () => {
   verifying.value = true
 }
 
-const onMenuHide = () => {
-  verifying.value = false
-}
-
-const onCancelClick = () => {
-  verifying.value = false
-}
-
-const account = ref('')
-const accountType = ref(AccountType.Email)
-
 const router = useRouter()
-
-const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
-  general.getIntervalGenerals({
-    StartAt: startAt,
-    EndAt: endAt,
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GENERAL_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, key, (error: boolean, count?: number) => {
-    if (error) {
-      return
-    }
-    if (count === 0) {
-      localledger.setLastDayGeneral(general.IntervalGenerals.get(key)?.Generals)
-      return
-    }
-    getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
-  })
-}
-
-const getUserGenerals = (offset:number, limit: number) => {
-  general.getGenerals({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GENERAL_FAIL'),
-        Popup: true,
-        Type: NotificationType.Error
-      }
-    }
-  }, (error: boolean, count?: number) => {
-    if (error) {
-      return
-    }
-    if (count === 0) {
-      localledger.initGeneral(general.Generals.Generals)
-      getIntervalGenerals(
-        IntervalKey.LastDay,
-        Math.ceil(new Date().getTime() / 1000) - SecondsEachDay,
-        Math.ceil(new Date().getTime() / 1000),
-        0, 100)
-      return
-    }
-    getUserGenerals(limit + offset, limit)
-  })
-}
 
 const onCodeVerify = (code: string) => {
   submitting.value = true
 
   if (withdrawType.value === 'ExternalAddress') {
-    ltransation.createWithdraw({
-      CoinTypeID: coinTypeId.value,
+    withdraw.createWithdraw({
+      CoinTypeID: coinTypeID.value,
       Amount: `${amount.value}`,
-      AccountID: selectedAccount.value.Account.ID as string,
+      AccountID: selectedAccount.value.AccountID,
       VerificationCode: code,
       Account: account.value,
       AccountType: accountType.value,
@@ -356,7 +306,7 @@ const onCodeVerify = (code: string) => {
         Error: {
           Title: t('MSG_SUBMIT_WITHDRAW_FAIL'),
           Popup: true,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
     }, (error: boolean) => {
@@ -364,7 +314,7 @@ const onCodeVerify = (code: string) => {
       if (error) {
         return
       }
-      general.$reset()
+      getLatestData()
       void router.push({ path: '/wallet' })
     })
   } else {
@@ -374,7 +324,7 @@ const onCodeVerify = (code: string) => {
       VerificationCode: code,
       TargetUserID: selectedTransferAccount.value?.TargetUserID,
       Amount: `${amount.value}`,
-      CoinTypeID: coinTypeId.value,
+      CoinTypeID: coinTypeID.value,
       Message: {
         Error: {
           Title: t('MSG_SUBMIT_WITHDRAW_FAIL'),
@@ -388,17 +338,73 @@ const onCodeVerify = (code: string) => {
         return
       }
 
-      ltransation.$reset()
-      general.$reset()
+      getLatestData()
       void router.push({ path: '/wallet' })
     })
   }
   verifying.value = false
 }
 
+const getLatestData = () => {
+  detail.$reset()
+  general.$reset()
+}
+
 const onStateTipBtnClick = () => {
   showWaiting.value = false
   showReviewing.value = false
+}
+
+const onAddressSelected = (row: Account) => {
+  selectedAccountIndex.value = withdraws.value.findIndex((el) => el.ID === row.ID)
+}
+
+const onTransferAccountSelected = (account: TransferAccount) => {
+  selectedAccountIndex.value = transferAccounts.value.findIndex((el) => el.ID === account.ID)
+}
+
+const currency = useAdminCurrencyStore()
+
+onMounted(() => {
+  if (general.Generals.Generals.length === 0) {
+    getGenerals(0, 20)
+  }
+
+  if (userAccount.UserAccounts.UserAccounts.length === 0) {
+    getUserAccounts(0, 20)
+  }
+
+  if (transferAccount.TransferAccounts.TransferAccounts.length === 0) {
+    getTransferAccounts(0, 20)
+  }
+  if (coin.AppCoins.AppCoins.length === 0) {
+    getCoins(0, 100)
+  }
+  if (type.value) {
+    withdrawType.value = type.value
+  }
+  if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
+    currency.$reset()
+    getCurrencies(0, 100)
+  }
+})
+
+const getUserAccounts = (offset: number, limit: number) => {
+  userAccount.getUserAccounts({
+    Offset: offset,
+    Limit: limit,
+    UsedFor: AccountUsedFor.UserWithdraw,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (accounts: Array<Account>, error: boolean) => {
+    if (error || accounts.length < limit) return
+    getUserAccounts(offset + limit, limit)
+  })
 }
 
 const getTransferAccounts = (offset: number, limit: number) => {
@@ -420,48 +426,24 @@ const getTransferAccounts = (offset: number, limit: number) => {
   })
 }
 
-onMounted(() => {
-  coins.getCurrentFee({
-    CoinTypeID: coinTypeId.value,
+const getGenerals = (offset: number, limit: number) => {
+  general.getGenerals({
+    Offset: offset,
+    Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_CURRENT_FEE_FAIL'),
+        Title: t('MSG_GET_GENERAL_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
-  }, (amount: number) => {
-    feeAmount.value = Math.ceil(amount * 1000000) / 1000000
+  }, (error: boolean, rows: Array<General>) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getGenerals(limit + offset, limit)
   })
-
-  if (general.Generals.Generals.length === 0) {
-    getUserGenerals(0, 100)
-  }
-
-  if (accounts.Accounts.filter((el) => {
-    return el.Account.CoinTypeID === coinTypeId.value && el.State === ReviewState.Approved
-  }).length === 0) {
-    accounts.getWithdrawAccounts({
-      Message: {}
-    })
-  }
-
-  if (transferAccount.TransferAccounts.TransferAccounts.length === 0) {
-    getTransferAccounts(0, 500)
-  }
-  if (type.value) {
-    withdrawType.value = type.value
-  }
-})
-
-const onAddressSelected = (account: WithdrawAccount) => {
-  selectedAccountIndex.value = withdraws.value.findIndex((el) => el.Account.ID === account.Account.ID)
 }
-
-const onTransferAccountSelected = (account: TransferAccount) => {
-  selectedAccountIndex.value = transferAccounts.value.findIndex((el) => el.ID === account.ID)
-}
-
 </script>
 
 <style lang='sass' scoped>

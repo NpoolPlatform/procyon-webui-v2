@@ -1,5 +1,5 @@
 <template>
-  <div :class='[ deleting ? "blur" : "" ]'>
+  <div :class='[ showing ? "blur" : "" ]'>
     <ShowSwitchTable
       label='MSG_APPROVED_ADDRESSES'
       :rows='(accounts as Array<never>)'
@@ -23,21 +23,21 @@
         <q-tr :props='myProps'>
           <q-td key='Blockchain' :props='myProps'>
             <LogoName
-              :logo='coin.getCoinByID(myProps.row.Address.CoinTypeID)?.Logo'
-              :name='coinName(myProps.row.Address.CoinTypeID as string)'
+              :logo='myProps.row?.CoinLogo'
+              :name='myProps.row?.CoinName'
             />
           </q-td>
           <q-td key='Address' :props='myProps'>
-            {{ myProps.row.Account?.Address }}
+            {{ myProps.row?.Address }}
           </q-td>
           <q-td key='Label' :props='myProps'>
-            {{ myProps.row.Address.Labels?.join(',') }}
+            {{ myProps.row.Labels?.join(',') }}
           </q-td>
           <q-td key='DateAdded' :props='myProps'>
-            {{ formatTime(myProps.row.Address.CreateAt) }}
+            {{ formatTime(myProps.row?.CreatedAt) }}
           </q-td>
           <q-td key='ActionButtons' :props='myProps'>
-            <button class='small' @click='onRemove(myProps.row)' :disabled='!deletable(myProps.row)'>
+            <button class='small' @click='onRemove(myProps.row)'>
               {{ $t('MSG_REMOVE') }}
             </button>
           </q-td>
@@ -46,7 +46,7 @@
     </ShowSwitchTable>
   </div>
   <q-dialog
-    v-model='deleting'
+    v-model='showing'
     seamless
     maximized
     @hide='onMenuHide'
@@ -60,13 +60,13 @@
 
             <div class='full-section'>
               <h4>{{ $t('MSG_DELETE_LABEL') }}:</h4>
-              <span class='number'>{{ deleteLabels }}</span>
+              <span class='number'>{{ target.Labels?.join(',') }}</span>
             </div>
 
             <div class='full-section'>
               <h4>{{ $t('MSG_WITHDRAW_ADDRESS') }}:</h4>
-              <span class='wallet-type'>{{ deleteCoinType }}</span><br>
-              <span class='number'>{{ deleteAddress }}</span>
+              <span class='wallet-type'>{{ target?.CoinName }}</span><br>
+              <span class='number'>{{ target?.Address }}</span>
               <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyAddressClick'>
             </div>
 
@@ -84,126 +84,50 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineAsyncComponent, ref } from 'vue'
-import { NotificationType, useCoinStore, useNotificationStore } from 'npool-cli-v2'
+import { computed, defineAsyncComponent, ref } from 'vue'
+import { NotificationType, useNotificationStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
-import { useLocalTransactionStore } from 'src/teststore/mock/transaction'
-import { WithdrawState } from 'src/teststore/mock/transaction/const'
-import { useLocalCoinStore } from 'src/localstore/coin'
-import { NotifyType, useFrontendWithdrawAddressStore, WithdrawAddress, formatTime, WithdrawAddressReviewState } from 'npool-cli-v4'
+import { NotifyType, formatTime, useFrontendUserAccountStore, Account } from 'npool-cli-v4'
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+const account = useFrontendUserAccountStore()
+const accounts = computed(() => account.withdrawAddress)
 
-const coin = useCoinStore()
-const account = useFrontendWithdrawAddressStore()
-const accounts = computed(() => account.WithdrawAddress.WithdrawAddress.filter((el) => el.State === WithdrawAddressReviewState.Approved && el.Address.DeleteAt === 0).sort((a, b) => {
-  return b.Account.CreateAt - a.Account.CreateAt
-}))
+const target = ref({} as Account)
+const showing = ref(false)
 
-const trans = useLocalTransactionStore()
-const withdraws = computed(() => trans.withdraws)
-
-const localcoin = useLocalCoinStore()
-const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
-
-const deletable = (account: WithdrawAddress) => {
-  return withdraws.value.filter((el) => {
-    return el.State === WithdrawState.Reviewing || el.State === WithdrawState.Transferring
-  }).findIndex((el) => el.Address === account.Account.Address) < 0
+const onRemove = (row: Account) => {
+  showing.value = true
+  target.value = { ...row }
 }
 
-const table = computed(() => [
-  {
-    name: 'Blockchain',
-    label: t('MSG_BLOCKCHAIN'),
-    align: 'left',
-    field: (row: WithdrawAddress) => coin.getCoinByID(row.Address.CoinTypeID)?.Name
-  },
-  {
-    name: 'Address',
-    label: t('MSG_ADDRESS'),
-    align: 'center',
-    field: (row: WithdrawAddress) => row.Account.Address
-  },
-  {
-    name: 'Label',
-    label: t('MSG_LABEL'),
-    align: 'center',
-    field: (row: WithdrawAddress) => row.Address.Labels?.join(',')
-  },
-  {
-    name: 'DateAdded',
-    label: t('MSG_DATE_ADDED'),
-    align: 'center',
-    field: (row: WithdrawAddress) => formatTime(row.Address.CreateAt)
-  },
-  {
-    name: 'ActionButtons',
-    label: '',
-    align: 'center',
-    field: ''
-  }
-])
+const onCancelClick = () => {
+  onMenuHide()
+}
 
-onMounted(() => {
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-
-  if (accounts.value.length === 0) {
-    account.getWithdrawAddress({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
-          Popup: true,
-          Type: NotifyType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
-  }
-})
+const onMenuHide = () => {
+  showing.value = false
+  target.value = {} as Account
+}
 
 const router = useRouter()
-
 const onAddNewAddressClick = () => {
   void router.push({ path: '/add/address' })
 }
 
-const deleteAccount = ref(undefined as unknown as WithdrawAddress)
-const deleting = ref(false)
-
-const onRemove = (account: WithdrawAddress) => {
-  deleting.value = true
-  deleteAccount.value = account
-}
-
 const onDeleteClick = () => {
-  onMenuHide()
-
-  if (!deleteAccount.value) {
+  if (!target.value) {
     return
   }
 
-  account.deleteWithdrawAddress({
-    ID: deleteAccount.value.Address.ID,
+  account.deleteUserAccount({
+    ID: target.value.ID,
     Message: {
       Error: {
         Title: t('MSG_DELETE_WITHDRAW_ACCOUNT_FAIL'),
@@ -212,29 +136,13 @@ const onDeleteClick = () => {
       }
     }
   }, () => {
-    // TODO
+    onMenuHide()
   })
 }
 
-const onCancelClick = () => {
-  onMenuHide()
-  deleteAccount.value = undefined as unknown as WithdrawAddress
-}
-
-const deleteLabels = computed(() => deleteAccount.value?.Address?.Labels?.join(','))
-const deleteCoinType = computed(() => {
-  const dcoin = coin.getCoinByID(deleteAccount.value?.Account?.CoinTypeID)
-  if (!dcoin) {
-    return ''
-  }
-  return dcoin.Name
-})
-
 const notification = useNotificationStore()
-
-const deleteAddress = computed(() => deleteAccount.value?.Account?.Address)
 const onCopyAddressClick = () => {
-  copy(deleteAddress.value)
+  copy(target.value?.Address)
   notification.Notifications.push({
     Title: t('MSG_ADDRESS_COPIED'),
     Message: t('MSG_COPY_ADDRESS_SUCCESS'),
@@ -243,10 +151,38 @@ const onCopyAddressClick = () => {
   })
 }
 
-const onMenuHide = () => {
-  deleting.value = false
-}
-
+const table = computed(() => [
+  {
+    name: 'Blockchain',
+    label: t('MSG_BLOCKCHAIN'),
+    align: 'left',
+    field: (row: Account) => row.CoinName
+  },
+  {
+    name: 'Address',
+    label: t('MSG_ADDRESS'),
+    align: 'center',
+    field: (row: Account) => row.Address
+  },
+  {
+    name: 'Label',
+    label: t('MSG_LABEL'),
+    align: 'center',
+    field: (row: Account) => row.Labels?.join(',')
+  },
+  {
+    name: 'DateAdded',
+    label: t('MSG_DATE_ADDED'),
+    align: 'center',
+    field: (row: Account) => formatTime(row.CreatedAt)
+  },
+  {
+    name: 'ActionButtons',
+    label: '',
+    align: 'center',
+    field: ''
+  }
+])
 </script>
 
 <style lang='sass' scoped>

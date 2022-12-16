@@ -1,67 +1,103 @@
 <template>
   <label for='coin' v-if='!hideLabel'>{{ $t('MSG_BLOCKCHAIN') }}</label>
   <select
-    id='coin' :name='$t(label)' v-model='myCoin'
-    required :disabled='disabled'
+    id='coin'
+    :name='$t(label)'
+    v-model='selectedCoin'
+    required
+    :disabled='disabled'
+    @change='onChange'
   >
     <option
-      v-for='_myCoin in coins'
-      :key='_myCoin.ID'
-      :value='_myCoin'
-      :selected='myCoin?.ID === _myCoin.ID'
+      v-for='_coin in displayCoins'
+      :key='_coin.ID'
+      :value='_coin'
+      :selected='selectedCoin?.CoinTypeID === _coin.CoinTypeID'
     >
-      {{ coinName(_myCoin.ID as string) }}
-      <!-- {{ _myCoin.Unit }} ({{ currency.formatCoinName(_myCoin.Name as string) }}) -->
+      {{ _coin.Name }}
     </option>
   </select>
 </template>
 
 <script setup lang='ts'>
-import { computed, defineEmits, ref, watch, defineProps, toRef, onMounted } from 'vue'
-import { useCoinStore, Coin, NotificationType } from 'npool-cli-v2'
+import { AppCoin, NotifyType, useAdminAppCoinStore } from 'npool-cli-v4'
+import { computed, defineEmits, ref, defineProps, toRef, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useLocalCoinStore } from 'src/localstore/coin'
-
-interface Props {
-  selectedCoin: Coin;
-  label: string;
-  disabled?: boolean;
-  hideLabel?: boolean;
-}
-
-const props = defineProps<Props>()
-const selectedCoin = toRef(props, 'selectedCoin')
-const label = toRef(props, 'label')
-
-const coin = useCoinStore()
-const coins = computed(() => coin.Coins.filter((coin) => !coin.PreSale && coin.ForPay))
-const myCoin = ref(selectedCoin.value)
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const localcoin = useLocalCoinStore()
-const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
+interface Props {
+  id: string;
+  label: string;
+  disabled?: boolean;
+  hideLabel?: boolean;
+  coins?: Array<AppCoin>;
+  default?: boolean;
+}
 
-const emit = defineEmits<{(e: 'update:selectedCoin', coin: Coin): void}>()
-watch(myCoin, () => {
-  emit('update:selectedCoin', myCoin.value)
-})
+const props = defineProps<Props>()
+const id = toRef(props, 'id')
+const label = toRef(props, 'label')
+const coins = toRef(props, 'coins')
+const setDefaultValue = toRef(props, 'default')
 
-onMounted(() => {
-  if (coins.value.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+const emit = defineEmits<{(e: 'update:id', id: string): void}>()
+
+const coin = useAdminAppCoinStore()
+const displayCoins = computed(() => !coins.value ? coin.AppCoins.AppCoins.filter((el) => !el.Presale && el.Display) : coins.value)
+
+const target = ref(id.value)
+const selectedCoin = computed({
+  get: () => coin.getCoinByID(target.value),
+  set: (val) => {
+    target.value = val?.CoinTypeID as string
   }
 })
 
+watch([() => displayCoins.value], () => {
+  if (coins.value && coins.value.length > 0 && setDefaultValue) {
+    setDefault()
+  }
+})
+
+const onChange = () => {
+  emit('update:id', target.value)
+}
+
+const setDefault = () => {
+  target.value = displayCoins?.value[0]?.CoinTypeID
+  emit('update:id', target.value)
+}
+
+onMounted(() => {
+  if (!coins.value) {
+    if (coin.AppCoins.AppCoins.length === 0) {
+      getCoins(0, 100)
+    }
+  }
+
+  if (!target.value && setDefaultValue.value) setDefault()
+})
+
+const getCoins = (offset: number, limit: number) => {
+  coin.getAppCoins({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_COINS'),
+        Message: t('MSG_GET_COINS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (error: boolean, rows: Array<AppCoin>) => {
+    if (error || rows.length < limit) {
+      if (!target.value && setDefaultValue.value) setDefault()
+      return
+    }
+    getCoins(offset + limit, limit)
+  })
+}
 </script>

@@ -1,7 +1,7 @@
 <template>
   <ShowSwitchTable
     label='MSG_TRANSACTIONS'
-    :rows='(transactions as Array<never>)'
+    :rows='(details as Array<never>)'
     :table='(table as never)'
     :customize-body='true'
   >
@@ -9,8 +9,8 @@
       <q-tr :props='myProps'>
         <q-td key='CoinName' :props='myProps'>
           <LogoName
-            :logo='coin.getCoinByID(myProps.row.CoinTypeID)?.Logo'
-            :name='coinName(myProps.row.CoinTypeID)'
+            :logo='myProps.row.CoinLogo'
+            :name='myProps.row.CoinName'
           />
         </q-td>
         <q-td key='CreatedAt' :props='myProps'>
@@ -28,11 +28,9 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, defineAsyncComponent } from 'vue'
-import { NotificationType, useCoinStore, formatTime } from 'npool-cli-v2'
+import { computed, defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Detail, IOType, IOSubType, useLocalTransactionStore } from 'src/teststore/mock/transaction'
-import { useLocalCoinStore } from 'src/localstore/coin'
+import { Detail, formatTime, IOSubType, IOType, NotifyType, useFrontendDetailStore } from 'npool-cli-v4'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
@@ -40,9 +38,8 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const coin = useCoinStore()
-const localtrans = useLocalTransactionStore()
-const transactions = computed(() => localtrans.details)
+const detail = useFrontendDetailStore()
+const details = computed(() => detail.details)
 
 const transactionType = (tx: Detail) => {
   switch (tx.IOType) {
@@ -116,25 +113,32 @@ const table = computed(() => [
     field: () => (row: Detail) => transactionType(row)
   }
 ])
-const localcoin = useLocalCoinStore()
-const coinName = computed(() => (ID: string) => localcoin.formatCoinName(ID))
 
 onMounted(() => {
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+  if (details.value.length === 0) {
+    getDetails(0, 100)
   }
 })
 
+const getDetails = (offset: number, limit: number) => {
+  detail.getDetails({
+    Offset: offset,
+    Limit: limit,
+    EndAt: Math.ceil(Date.now() / 1000),
+    Message: {
+      Error: {
+        Title: t('MSG_GET_WITHDRAWS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (error: boolean, rows: Array<Detail>) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getDetails(limit + offset, limit)
+  })
+}
 </script>
 
 <style lang='sass' scoped>

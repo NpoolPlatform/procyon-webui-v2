@@ -38,7 +38,7 @@
     </template>
   </ShowSwitchTable>
   <q-dialog
-    v-model='deleting'
+    v-model='showing'
     seamless
     maximized
     @hide='onMenuHide'
@@ -51,11 +51,11 @@
             <p v-html='$t("MSG_DELETE_TRANSFER_ACCOUNTS_CAPTION")' />
             <!-- <div class='full-section'>
               <h4>{{ $t('MSG_DELETE_LABEL') }}:</h4>
-              <span class='number'>{{ targetTransferAccount.AppID }}</span>
+              <span class='number'>{{ target.AppID }}</span>
             </div> -->
             <div class='full-section'>
               <!-- <h4>{{ $t('MSG_WITHDRAW_ADDRESS') }}:</h4> -->
-              <span class='wallet-type'>{{ targetTransferAccount.TargetEmailAddress.length > 0 ? targetTransferAccount.TargetEmailAddress : targetTransferAccount.TargetPhoneNO }}</span><br>
+              <span class='wallet-type'>{{ target.TargetEmailAddress.length > 0 ? target.TargetEmailAddress : target.TargetPhoneNO }}</span><br>
               <!-- <img class='copy-button' src='font-awesome/copy.svg'> -->
             </div>
 
@@ -74,29 +74,56 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { NotifyType, TransferAccount, useBaseUserStore, useFrontendTransferAccountStore } from 'npool-cli-v4'
 import { useRouter } from 'vue-router'
-
-const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
-
+import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
+
+const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 
 const baseuser = useBaseUserStore()
 
 const transferAccount = useFrontendTransferAccountStore()
 const transfers = computed(() => transferAccount.TransferAccounts.TransferAccounts)
 
+const showing = ref(false)
+const target = ref({} as TransferAccount)
+
+const onDeleteTransferAddressClick = (row: TransferAccount) => {
+  target.value = { ...row }
+  showing.value = true
+}
+
+const onMenuHide = () => {
+  showing.value = false
+  target.value = {} as TransferAccount
+}
+
+const onCancelClick = () => {
+  onMenuHide()
+}
+
+const onDeleteClick = () => {
+  transferAccount.deleteTransfer({
+    TransferID: target.value.ID,
+    Message: {
+      Error: {
+        Title: t('MSG_DELETE_TRANSFER_ACCOUNT_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    onMenuHide()
+  })
+}
+
 const router = useRouter()
 const onAddNewAddressClick = () => {
   void router.push({ path: '/add/transferaccount' })
 }
 
-const onDeleteTransferAddressClick = (row: TransferAccount) => {
-  targetTransferAccount.value = { ...row }
-  deleting.value = true
-}
 const table = computed(() => [
   {
     name: 'TargetUsername',
@@ -122,30 +149,6 @@ const table = computed(() => [
   }
 ])
 
-const targetTransferAccount = ref({} as TransferAccount)
-const deleting = ref(false)
-const onMenuHide = () => {
-  deleting.value = false
-}
-
-const onDeleteClick = () => {
-  transferAccount.deleteTransfer({
-    TransferID: targetTransferAccount.value.ID,
-    Message: {
-      Error: {
-        Title: t('MSG_DELETE_TRANSFER_ACCOUNT_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, () => {
-    deleting.value = false
-  })
-}
-const onCancelClick = () => {
-  deleting.value = false
-  targetTransferAccount.value = {} as TransferAccount
-}
 </script>
 
 <style lang='sass' scoped>
