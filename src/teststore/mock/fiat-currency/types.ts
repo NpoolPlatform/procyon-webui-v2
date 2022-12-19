@@ -113,3 +113,11 @@ export interface GetHistoriesResponse {
   /** @format int64 */
   Total: number;
 }
+
+export interface GetFiatCurrencyRequest extends BaseRequest {
+  FiatCurrencyTypeName: string;
+}
+
+export interface GetFiatCurrencyResponse {
+  Info: FiatCurrency;
+}

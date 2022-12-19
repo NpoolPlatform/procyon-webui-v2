@@ -12,7 +12,9 @@ import {
   GetCoinFiatCurrenciesRequest,
   GetCoinFiatCurrenciesResponse,
   GetHistoriesRequest,
-  GetHistoriesResponse
+  GetHistoriesResponse,
+  GetFiatCurrencyRequest,
+  GetFiatCurrencyResponse
 } from './types'
 import { doActionWithError } from 'npool-cli-v4'
 
@@ -35,6 +37,12 @@ export const useAdminFiatCurrencyStore = defineStore('admin-fiatcurrency-v4', {
     getFiatCurrencyTypeByName () {
       return (name: string) => {
         return this.FiatCurrencyTypes.FiatCurrencyTypes.find((el) => el.Name === name)
+      }
+    },
+    getJYPCurrency () {
+      return () => {
+        const data = this.CoinFiatCurrencies.CoinFiatCurrencies.find((el) => el.FiatCurrencyName === 'name')
+        return !data ? '' : data.MarketValueHigh
       }
     }
   },
@@ -105,6 +113,20 @@ export const useAdminFiatCurrencyStore = defineStore('admin-fiatcurrency-v4', {
           done(false, resp.Infos)
         }, () => {
           done(true, [] as Array<FiatCurrency>)
+        }
+      )
+    },
+    getFiatCurrency (req: GetFiatCurrencyRequest, done: (error: boolean, rows: FiatCurrency) => void) {
+      doActionWithError<GetFiatCurrencyRequest, GetFiatCurrencyResponse>(
+        API.GET_HISTORIES,
+        req,
+        req.Message,
+        (resp: GetFiatCurrencyResponse): void => {
+          this.CoinFiatCurrencies.CoinFiatCurrencies.push(resp.Info)
+          this.CoinFiatCurrencies.Total += 1
+          done(false, resp.Info)
+        }, () => {
+          done(true, {} as FiatCurrency)
         }
       )
     }
