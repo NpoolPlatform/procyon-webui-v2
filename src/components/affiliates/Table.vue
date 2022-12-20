@@ -45,7 +45,7 @@
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
             <td><span class='aff-number'>{{ totalUnits.toFixed(0) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ totalCommission.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ totalSuperiorCommission.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
           <!-- summary end -->
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
@@ -122,7 +122,7 @@ const goodUnit = computed(() => {
 })
 const totalUnits = computed(() => archivement.totalUnits(referrals.value, selectedCoinID.value))
 const totalAmount = computed(() => archivement.totalAmount(referrals.value, selectedCoinID.value))
-const totalCommission = computed(() => archivement.totalCommission(referrals.value, selectedCoinID.value))
+const totalSuperiorCommission = computed(() => archivement.totalSuperiorCommission(referrals.value, selectedCoinID.value))
 
 const userTotalUnits = computed(() => (referral: UserArchivement) => archivement.userTotalUnits(referral.Archivements, selectedCoinID.value))
 const userTotalAmount = computed(() => (referral: UserArchivement) => archivement.userTotalAmount(referral.Archivements, selectedCoinID.value))
