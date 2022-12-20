@@ -39,6 +39,8 @@ import {
 import { QAjaxBar } from 'quasar'
 import { getCoins, getCurrencies } from 'src/api/chain'
 import { IntervalKey } from 'src/const/const'
+import { useAdminFiatCurrencyStore } from 'src/teststore/mock/fiat-currency'
+import { FiatCurrencyType } from 'src/teststore/mock/fiat-currency/types'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -56,6 +58,7 @@ const coin = useAdminAppCoinStore()
 const account = useFrontendUserAccountStore()
 const transfer = useFrontendTransferAccountStore()
 const currency = useAdminCurrencyStore()
+const fiat = useAdminFiatCurrencyStore()
 
 onMounted(() => {
   if (general.Generals.Generals.length === 0) {
@@ -89,6 +92,10 @@ onMounted(() => {
     }, () => {
     // TODO
     })
+  }
+
+  if (fiat.FiatCurrencyTypes.FiatCurrencyTypes.length === 0) {
+    getFiatCurrencyTypes(0, 10)
   }
 })
 
@@ -166,6 +173,23 @@ const getUserAccounts = (offset: number, limit: number) => {
   }, (accounts: Array<Account>, error: boolean) => {
     if (error || accounts.length < limit) return
     getUserAccounts(offset + limit, limit)
+  })
+}
+
+const getFiatCurrencyTypes = (offset: number, limit: number) => {
+  fiat.getFiatCurrencyTypes({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+
+      }
+    }
+  }, (error: boolean, rows: Array<FiatCurrencyType>) => {
+    if (error || rows.length === 0) {
+      return
+    }
+    getFiatCurrencyTypes(offset + limit, limit)
   })
 }
 </script>
