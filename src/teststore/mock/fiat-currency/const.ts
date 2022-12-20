@@ -6,3 +6,7 @@ export enum API {
   UPDATE_FIATCURRENCYTYPE = '/chain/v1/update/fiatcurrencytype',
   GET_FIATCURRENCY = '/chain/v1/get/fiatcurrency',
 }
+
+export enum FiatCurrencyType {
+  JPY = 'JPY'
+}
