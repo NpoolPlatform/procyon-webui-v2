@@ -94,7 +94,8 @@ import {
   useFrontendKYCStore,
   useFrontendTransferAccountStore,
   useFrontendUserAccountStore,
-  useNotificationStore
+  useNotificationStore,
+  useAdminFiatCurrencyStore
 } from 'npool-cli-v4'
 import { IntervalKey } from 'src/const/const'
 import { useI18n } from 'vue-i18n'
@@ -116,6 +117,7 @@ const router = useRouter()
 const coin = useAdminAppCoinStore()
 const kyc = useFrontendKYCStore()
 const currency = useAdminCurrencyStore()
+const fiat = useAdminFiatCurrencyStore()
 
 const general = useFrontendGeneralStore()
 const generals = computed(() => {
@@ -125,7 +127,7 @@ const generals = computed(() => {
       Balance: Number(el.Spendable),
       Last24HoursBalance: general.getIntervalInComing(IntervalKey.LastDay, el.CoinTypeID),
       TotalUSDValue: Number(el.Spendable) * currency.getUSDCurrency(el.CoinTypeID),
-      TotalJPYValue: Number(el.Spendable) * currency.getUSDCurrency(el.CoinTypeID) * currency.getJPYCurrency()
+      TotalJPYValue: Number(el.Spendable) * currency.getUSDCurrency(el.CoinTypeID) * fiat.getJPYCurrency()
     } as MyGeneral
   }).sort((a, b) => a.TotalUSDValue > b.TotalUSDValue ? -1 : 1)
 })

@@ -22,7 +22,7 @@
 
 <script setup lang='ts'>
 import { computed } from 'vue'
-import { useFrontendArchivementStore, useLocalUserStore, PriceCoinName, useAdminCurrencyStore } from 'npool-cli-v4'
+import { useFrontendArchivementStore, useLocalUserStore, PriceCoinName, useAdminFiatCurrencyStore } from 'npool-cli-v4'
 
 const logined = useLocalUserStore()
 
@@ -37,7 +37,7 @@ const totalCommission = computed(() => {
   return total
 })
 
-const currency = useAdminCurrencyStore()
-const commissionJPY = computed(() => totalCommission.value * currency.getJPYCurrency())
+const fiat = useAdminFiatCurrencyStore()
+const commissionJPY = computed(() => totalCommission.value * fiat.getJPYCurrency())
 
 </script>

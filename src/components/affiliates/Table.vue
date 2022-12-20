@@ -14,7 +14,7 @@
         </form>
       </div>
       <q-space />
-      <div v-show='coins.length >= 1' id='product-filter'>
+      <div v-show='coins.length >= 1' id='product-filter' class='safari-adaptor'>
         <h4>{{ $t('MSG_PRODUCT_FILTER') }}</h4>
         <form>
           <CoinSelector
@@ -45,7 +45,7 @@
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
             <td><span class='aff-number'>{{ totalUnits.toFixed(0) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
             <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ parseFloat(totalCommission.toFixed(4)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ totalCommission.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
           <!-- summary end -->
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
@@ -55,8 +55,8 @@
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
             <td><span class='aff-number'>{{ userTotalUnits(referral) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ userTotalAmount(referral).toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ parseFloat(userTotalCommission(referral).toFixed(4)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ userTotalAmount(referral) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ userSuperiorCommission(referral).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -126,7 +126,7 @@ const totalCommission = computed(() => archivement.totalCommission(referrals.val
 
 const userTotalUnits = computed(() => (referral: UserArchivement) => archivement.userTotalUnits(referral.Archivements, selectedCoinID.value))
 const userTotalAmount = computed(() => (referral: UserArchivement) => archivement.userTotalAmount(referral.Archivements, selectedCoinID.value))
-const userTotalCommission = computed(() => (referral: UserArchivement) => archivement.userTotalCommission(referral.Archivements, selectedCoinID.value))
+const userSuperiorCommission = computed(() => (referral: UserArchivement) => archivement.userSuperiorCommission(referral.Archivements, selectedCoinID.value))
 
 const searchStr = ref('')
 const displayReferrals = computed(() => referrals.value.filter((el) => {

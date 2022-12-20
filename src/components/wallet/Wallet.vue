@@ -26,7 +26,6 @@ import { SecondsEachDay } from 'npool-cli-v2'
 import {
   Account,
   AccountUsedFor,
-  CurrencyType,
   General,
   NotifyType,
   TransferAccount,
@@ -34,13 +33,13 @@ import {
   useAdminCurrencyStore,
   useFrontendGeneralStore,
   useFrontendTransferAccountStore,
-  useFrontendUserAccountStore
+  useFrontendUserAccountStore,
+  useAdminFiatCurrencyStore,
+  FiatType
 } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { getCoins, getCurrencies } from 'src/api/chain'
 import { IntervalKey } from 'src/const/const'
-import { useAdminFiatCurrencyStore } from 'src/teststore/mock/fiat-currency'
-import { FiatCurrencyType } from 'src/teststore/mock/fiat-currency/const'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -83,15 +82,6 @@ onMounted(() => {
   if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
     currency.$reset()
     getCurrencies(0, 100)
-  }
-
-  if (!currency.LegalCurrencies.get(CurrencyType.JPY)) {
-    currency.getLegalCurrencies({
-      CurrencyType: CurrencyType.JPY,
-      Message: {}
-    }, () => {
-    // TODO
-    })
   }
 
   if (fiat.CoinFiatCurrencies.CoinFiatCurrencies.length === 0) {
@@ -178,11 +168,8 @@ const getUserAccounts = (offset: number, limit: number) => {
 
 const getFiatCurrency = () => {
   fiat.getFiatCurrency({
-    FiatCurrencyTypeName: FiatCurrencyType.JPY,
+    FiatCurrencyTypeName: FiatType.JPY,
     Message: {
-      Error: {
-
-      }
     }
   }, () => {
     // TODO
