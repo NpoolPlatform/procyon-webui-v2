@@ -26,7 +26,6 @@ import { SecondsEachDay } from 'npool-cli-v2'
 import {
   Account,
   AccountUsedFor,
-  CurrencyType,
   General,
   NotifyType,
   TransferAccount,
@@ -83,15 +82,6 @@ onMounted(() => {
   if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
     currency.$reset()
     getCurrencies(0, 100)
-  }
-
-  if (!currency.LegalCurrencies.get(CurrencyType.JPY)) {
-    currency.getLegalCurrencies({
-      CurrencyType: CurrencyType.JPY,
-      Message: {}
-    }, () => {
-    // TODO
-    })
   }
 
   if (fiat.CoinFiatCurrencies.CoinFiatCurrencies.length === 0) {
@@ -180,9 +170,6 @@ const getFiatCurrency = () => {
   fiat.getFiatCurrency({
     FiatCurrencyTypeName: FiatCurrencyType.JPY,
     Message: {
-      Error: {
-
-      }
     }
   }, () => {
     // TODO

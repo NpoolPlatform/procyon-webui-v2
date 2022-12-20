@@ -22,10 +22,12 @@
 
 <script setup lang='ts'>
 import { PriceCoinName, useAdminCurrencyStore, useFrontendGeneralStore } from 'npool-cli-v4'
+import { useAdminFiatCurrencyStore } from 'src/teststore/mock/fiat-currency'
 import { computed } from 'vue'
 
 const general = useFrontendGeneralStore()
 const currency = useAdminCurrencyStore()
+const fiat = useAdminFiatCurrencyStore()
 
 const totalUSDTBalance = computed(() => {
   let total = 0
@@ -34,5 +36,5 @@ const totalUSDTBalance = computed(() => {
   })
   return total
 })
-const totalJPYBalance = computed(() => totalUSDTBalance.value * currency.getJPYCurrency())
+const totalJPYBalance = computed(() => totalUSDTBalance.value * fiat.getJPYCurrency())
 </script>
