@@ -94,11 +94,11 @@ import {
   useFrontendKYCStore,
   useFrontendTransferAccountStore,
   useFrontendUserAccountStore,
-  useNotificationStore
+  useNotificationStore,
+  useAdminFiatCurrencyStore
 } from 'npool-cli-v4'
 import { IntervalKey } from 'src/const/const'
 import { useI18n } from 'vue-i18n'
-import { useAdminFiatCurrencyStore } from 'src/teststore/mock/fiat-currency'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 

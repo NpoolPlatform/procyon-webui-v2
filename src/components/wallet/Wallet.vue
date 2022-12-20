@@ -33,13 +33,13 @@ import {
   useAdminCurrencyStore,
   useFrontendGeneralStore,
   useFrontendTransferAccountStore,
-  useFrontendUserAccountStore
+  useFrontendUserAccountStore,
+  useAdminFiatCurrencyStore,
+  FiatType
 } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { getCoins, getCurrencies } from 'src/api/chain'
 import { IntervalKey } from 'src/const/const'
-import { useAdminFiatCurrencyStore } from 'src/teststore/mock/fiat-currency'
-import { FiatCurrencyType } from 'src/teststore/mock/fiat-currency/const'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -168,7 +168,7 @@ const getUserAccounts = (offset: number, limit: number) => {
 
 const getFiatCurrency = () => {
   fiat.getFiatCurrency({
-    FiatCurrencyTypeName: FiatCurrencyType.JPY,
+    FiatCurrencyTypeName: FiatType.JPY,
     Message: {
     }
   }, () => {

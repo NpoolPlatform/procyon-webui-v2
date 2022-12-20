@@ -19,11 +19,9 @@
 
 <script setup lang='ts'>
 import { NotificationType, useInspireStore } from 'npool-cli-v2'
-import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useFrontendArchivementStore, UserArchivement } from 'npool-cli-v4'
+import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useFrontendArchivementStore, UserArchivement, useAdminFiatCurrencyStore, FiatType } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { getCoins } from 'src/api/chain'
-import { useAdminFiatCurrencyStore } from 'src/teststore/mock/fiat-currency'
-import { FiatCurrencyType } from 'src/teststore/mock/fiat-currency/const'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -110,7 +108,7 @@ const getArchivements = (offset: number, limit: number) => {
 
 const getFiatCurrency = () => {
   fiat.getFiatCurrency({
-    FiatCurrencyTypeName: FiatCurrencyType.JPY,
+    FiatCurrencyTypeName: FiatType.JPY,
     Message: {
     }
   }, () => {

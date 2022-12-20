@@ -22,8 +22,7 @@
 
 <script setup lang='ts'>
 import { computed } from 'vue'
-import { useFrontendArchivementStore, useLocalUserStore, PriceCoinName } from 'npool-cli-v4'
-import { useAdminFiatCurrencyStore } from 'src/teststore/mock/fiat-currency'
+import { useFrontendArchivementStore, useLocalUserStore, PriceCoinName, useAdminFiatCurrencyStore } from 'npool-cli-v4'
 
 const logined = useLocalUserStore()
 

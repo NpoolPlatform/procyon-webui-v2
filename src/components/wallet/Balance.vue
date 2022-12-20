@@ -21,8 +21,7 @@
 </template>
 
 <script setup lang='ts'>
-import { PriceCoinName, useAdminCurrencyStore, useFrontendGeneralStore } from 'npool-cli-v4'
-import { useAdminFiatCurrencyStore } from 'src/teststore/mock/fiat-currency'
+import { PriceCoinName, useAdminCurrencyStore, useFrontendGeneralStore, useAdminFiatCurrencyStore } from 'npool-cli-v4'
 import { computed } from 'vue'
 
 const general = useFrontendGeneralStore()
