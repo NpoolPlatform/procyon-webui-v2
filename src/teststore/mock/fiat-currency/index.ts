@@ -118,7 +118,7 @@ export const useAdminFiatCurrencyStore = defineStore('admin-fiatcurrency-v4', {
     },
     getFiatCurrency (req: GetFiatCurrencyRequest, done: (error: boolean, rows: FiatCurrency) => void) {
       doActionWithError<GetFiatCurrencyRequest, GetFiatCurrencyResponse>(
-        API.GET_HISTORIES,
+        API.GET_FIATCURRENCY,
         req,
         req.Message,
         (resp: GetFiatCurrencyResponse): void => {
