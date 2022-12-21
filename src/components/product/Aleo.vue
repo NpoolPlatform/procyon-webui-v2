@@ -63,8 +63,8 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
-        <span class='number'>2022-12-20</span>
-        <span class='unit'>12:00am {{ $t("MSG_JST") }}</span>
+        <span class='number'>2023-01-26</span>
+        <span class='unit'>14:59 {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
