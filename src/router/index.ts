@@ -54,12 +54,10 @@ export default route(function (/* { store, ssrContext } */) {
     setting.ShowMainHeader = to.meta.ShowMainHeader ? to.meta.ShowMainHeader : false
     setting.ShowFooterTop = to.meta.ShowMainHeader ? to.meta.ShowMainHeader : false
 
-    /*
     if (!to.path.startsWith('/testing') && to.path !== '/') {
       next({ path: '/', replace: true })
       return
     }
-    */
 
     BaseMenu.children.forEach((menu) => {
       if (to.path.includes(menu.target)) {
