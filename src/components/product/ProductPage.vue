@@ -47,6 +47,8 @@
               label=''
               hide-label
               default
+              :tip-index='1'
+              :name-index='1'
             />
             <div class='warning' v-if='showRateTip'>
               <img :src='warning'>
@@ -116,6 +118,8 @@
                 label=''
                 hide-label
                 default
+                :tip-index='1'
+                :name-index='1'
               />
               <div class='warning' v-if='showRateTip'>
                 <img :src='warning'>

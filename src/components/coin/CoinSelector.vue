@@ -14,7 +14,7 @@
       :value='_coin'
       :selected='selectedCoin?.CoinTypeID === _coin.CoinTypeID'
     >
-      {{ _coin.Name }}
+      {{ coinLabel(_coin) }}
     </option>
   </select>
 </template>
@@ -34,6 +34,8 @@ interface Props {
   hideLabel?: boolean;
   coins?: Array<AppCoin>;
   default?: boolean;
+  nameIndex?: number;
+  tipIndex?: number;
 }
 
 const props = defineProps<Props>()
@@ -41,6 +43,19 @@ const id = toRef(props, 'id')
 const label = toRef(props, 'label')
 const coins = toRef(props, 'coins')
 const setDefaultValue = toRef(props, 'default')
+const nameIndex = toRef(props, 'nameIndex')
+const tipIndex = toRef(props, 'tipIndex')
+
+const coinLabel = (coin: AppCoin) => {
+  let label = coin.Name
+  if (nameIndex.value !== undefined && nameIndex.value >= 0 && coin.DisplayNames.length > nameIndex.value && coin.DisplayNames[nameIndex.value].length > 0) {
+    label = coin.DisplayNames[nameIndex.value]
+  }
+  if (tipIndex.value !== undefined && tipIndex.value >= 0 && coin.SettleTips.length > tipIndex.value && coin.SettleTips[tipIndex.value].length > 0) {
+    label += '(' + coin.SettleTips[tipIndex.value] + ')'
+  }
+  return label
+}
 
 const emit = defineEmits<{(e: 'update:id', id: string): void}>()
 

@@ -3,7 +3,11 @@
     <FormPage @submit='onSubmit' label='MSG_NEW_WALLET_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS' :submitting='submitting'>
       <template #form-body>
         <CoinSelector
-          v-model:id='selectedCoinTypeID' label='MSG_BLOCKCHAIN' :disabled='gotoWithdraw'
+          v-model:id='selectedCoinTypeID'
+          label='MSG_BLOCKCHAIN'
+          :disabled='gotoWithdraw'
+          :tip-index='1'
+          :name-index='1'
         />
         <Input
           v-model:value='address'
