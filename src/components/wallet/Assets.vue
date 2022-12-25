@@ -10,7 +10,7 @@
         <q-td key='CoinName' :props='myProps'>
           <LogoName
             :logo='myProps.row.CoinLogo'
-            :name='myProps.row.CoinName'
+            :name='assetLabel(myProps.row)'
           />
         </q-td>
         <q-td key='Balance' :props='myProps'>
@@ -111,6 +111,14 @@ interface MyGeneral extends General {
   Last24HoursBalance: number;
   TotalUSDValue: number;
   TotalJPYValue: number;
+}
+
+const assetLabel = (asset: General) => {
+  let label = asset.CoinName
+  if (asset.DisplayNames.length > 2 && asset.DisplayNames[2].length > 0) {
+    label = asset.DisplayNames[2]
+  }
+  return label
 }
 
 const router = useRouter()

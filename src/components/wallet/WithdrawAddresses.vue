@@ -24,7 +24,7 @@
           <q-td key='Blockchain' :props='myProps'>
             <LogoName
               :logo='myProps.row?.CoinLogo'
-              :name='myProps.row?.CoinName'
+              :name='accountLabel(myProps.row)'
             />
           </q-td>
           <q-td key='Address' :props='myProps'>
@@ -65,7 +65,7 @@
 
             <div class='full-section'>
               <h4>{{ $t('MSG_WITHDRAW_ADDRESS') }}:</h4>
-              <span class='wallet-type'>{{ target?.CoinName }}</span><br>
+              <span class='wallet-type'>{{ target ? accountLabel(target) : '' }}</span><br>
               <span class='number'>{{ target?.Address }}</span>
               <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyAddressClick'>
             </div>
@@ -98,6 +98,14 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 
 const account = useFrontendUserAccountStore()
 const accounts = computed(() => account.withdrawAddress)
+
+const accountLabel = (acc: Account) => {
+  let label = acc.CoinName
+  if (acc.CoinDisplayNames.length > 2 && acc.CoinDisplayNames[2].length > 0) {
+    label = acc.CoinDisplayNames[2]
+  }
+  return label
+}
 
 const target = ref({} as Account)
 const showing = ref(false)

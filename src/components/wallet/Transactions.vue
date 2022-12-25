@@ -10,7 +10,7 @@
         <q-td key='CoinName' :props='myProps'>
           <LogoName
             :logo='myProps.row.CoinLogo'
-            :name='myProps.row.CoinName'
+            :name='transactionLabel(myProps.row)'
           />
         </q-td>
         <q-td key='CreatedAt' :props='myProps'>
@@ -40,6 +40,14 @@ const { t } = useI18n({ useScope: 'global' })
 
 const detail = useFrontendDetailStore()
 const details = computed(() => detail.details)
+
+const transactionLabel = (asset: Detail) => {
+  let label = asset.CoinName
+  if (asset.DisplayNames.length > 2 && asset.DisplayNames[2].length > 0) {
+    label = asset.DisplayNames[2]
+  }
+  return label
+}
 
 const transactionType = (tx: Detail) => {
   switch (tx.IOType) {

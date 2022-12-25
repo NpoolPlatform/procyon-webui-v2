@@ -6,8 +6,8 @@
           v-model:id='selectedCoinTypeID'
           label='MSG_BLOCKCHAIN'
           :disabled='gotoWithdraw'
-          :tip-index='1'
-          :name-index='1'
+          :tip-index='2'
+          :name-index='2'
         />
         <Input
           v-model:value='address'

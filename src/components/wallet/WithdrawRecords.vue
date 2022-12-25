@@ -10,7 +10,7 @@
         <q-td key='Name' :props='myProps'>
           <LogoName
             :logo='myProps.row.CoinLogo'
-            :name='myProps.row.CoinName'
+            :name='withdrawLabel(myProps.row)'
           />
         </q-td>
         <q-td key='Date' :props='myProps'>
@@ -42,6 +42,14 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 
 const withdraw = useFrontendWithdrawStore()
 const withdraws = computed(() => withdraw.withdraws)
+
+const withdrawLabel = (w: Withdraw) => {
+  let label = w.CoinName
+  if (w.DisplayNames.length > 2 && w.DisplayNames[2].length > 0) {
+    label = w.DisplayNames[2]
+  }
+  return label
+}
 
 const withdrawStatus = (wd: Withdraw) => {
   switch (wd.State) {
