@@ -251,7 +251,7 @@ const onPurchaseClick = () => {
   })
 }
 
-const endTime = ref(1674745199)
+const endTime = ref(1674777540)
 const ticker = ref(-1)
 const remainDays = ref(27)
 const remainHours = ref(23)
