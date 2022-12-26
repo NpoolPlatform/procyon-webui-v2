@@ -52,7 +52,7 @@ const coinLabel = (coin: AppCoin) => {
     label = coin.DisplayNames[nameIndex.value]
   }
   if (tipIndex.value !== undefined && tipIndex.value >= 0 && coin.SettleTips.length > tipIndex.value && coin.SettleTips[tipIndex.value].length > 0) {
-    label += '(' + t(coin.SettleTips[tipIndex.value]) + ')'
+    label += ' (' + t(coin.SettleTips[tipIndex.value]).toUpperCase() + ')'
   }
   return label
 }
