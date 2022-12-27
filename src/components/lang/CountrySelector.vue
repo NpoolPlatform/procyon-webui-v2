@@ -43,11 +43,13 @@
 
 <script setup lang='ts'>
 import { computed, onBeforeMount, defineProps, toRef, defineEmits } from 'vue'
-import { useLangStore, NotificationType, Country } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { useAdminAppCountryStore } from 'src/teststore/mock/g11n/appcountry'
+import { AppCountry } from 'src/teststore/mock/g11n/appcountry/types'
+import { NotifyType } from 'npool-cli-v4'
 
 interface Props {
-  country: Country;
+  country: AppCountry;
 }
 
 const props = defineProps<Props>()
@@ -56,12 +58,12 @@ const country = toRef(props, 'country')
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const lang = useLangStore()
-const countries = computed(() => lang.Countries)
+const _country = useAdminAppCountryStore()
+const countries = computed(() => _country.AppCountries.AppCountries)
 
-const emit = defineEmits<{(e: 'update:country', country: Country): void}>()
+const emit = defineEmits<{(e: 'update:country', country: AppCountry): void}>()
 
-const onItemClick = (country: Country) => {
+const onItemClick = (country: AppCountry) => {
   emit('update:country', country)
 }
 
@@ -71,20 +73,28 @@ onBeforeMount(() => {
     return
   }
 
-  lang.getCountries({
+  getAppCountries(0, 100)
+})
+
+const getAppCountries = (offset: number, limit: number) => {
+  _country.getAppCountries({
+    Offset: offset,
+    Limit: limit,
     Message: {
       Error: {
         Title: t('MSG_GET_COUNTRIES_CODE'),
         Message: t('MSG_GET_COUNTRIES_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
-  }, () => {
-    // DO NOTHING
+  }, (error: boolean, rows: Array<AppCountry>) => {
+    if (error || rows.length === 0) {
+      return
+    }
+    getAppCountries(offset + limit, limit)
   })
-})
-
+}
 </script>
 
 <style lang='sass' scope>
