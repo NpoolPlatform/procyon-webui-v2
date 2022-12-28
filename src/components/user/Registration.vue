@@ -43,11 +43,13 @@
           label='MSG_INVITATION_CODE'
           type='text'
           id='inv-code'
-          :required='false'
+          required
           :error='invCodeError'
           message='MSG_INVITATION_CODE_TIP'
           placeholder='MSG_INVITATION_CODE_PLACEHOLDER'
           :disabled='originInvitationCode?.length > 0'
+          @focus='onConfirmInvCodeErrorFocusIn'
+          @blur='onConfirmInvCodeErrorFocusOut'
         />
         <div class='row'>
           <div class='agreement-check'>
@@ -152,6 +154,16 @@ const onConfirmPasswordFocusIn = () => {
 const onConfirmPasswordFocusOut = () => {
   confirmPasswdError.value = !validatePassword(confirmPassword.value) ||
                              password.value !== confirmPassword.value
+}
+const onConfirmInvCodeErrorFocusIn = () => {
+  invCodeError.value = false
+}
+const onConfirmInvCodeErrorFocusOut = () => {
+  if (!invitationCode.value) {
+    invCodeError.value = true
+    return
+  }
+  invCodeError.value = invitationCode.value?.length !== 14
 }
 
 const invitationCode = ref(originInvitationCode.value)
