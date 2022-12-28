@@ -15,15 +15,13 @@
 
 <script setup lang='ts'>
 
-import { useLocalLangStore } from 'src/localstore/lang'
-import { useAdminAppLangStore } from 'src/teststore/mock/g11n/applang'
-import { AppLang } from 'src/teststore/mock/g11n/applang/types'
+import { useLocaleStore, useAdminAppLangStore, AppLang } from 'npool-cli-v4'
 import { computed } from 'vue'
 
 const lang = useAdminAppLangStore()
 const langs = computed(() => lang.AppLangs.AppLangs)
 
-const locale = useLocalLangStore()
+const locale = useLocaleStore()
 const curLang = computed(() => locale.AppLang?.Lang)
 
 const onLangClick = (language: AppLang) => {

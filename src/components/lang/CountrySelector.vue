@@ -44,9 +44,7 @@
 <script setup lang='ts'>
 import { computed, onBeforeMount, defineProps, toRef, defineEmits } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useAdminAppCountryStore } from 'src/teststore/mock/g11n/appcountry'
-import { AppCountry } from 'src/teststore/mock/g11n/appcountry/types'
-import { NotifyType } from 'npool-cli-v4'
+import { useAdminAppCountryStore, AppCountry, NotifyType } from 'npool-cli-v4'
 
 interface Props {
   country: AppCountry;

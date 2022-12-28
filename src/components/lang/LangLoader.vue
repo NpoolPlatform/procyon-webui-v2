@@ -1,17 +1,12 @@
 <script setup lang='ts'>
 import { onMounted, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useLocalLangStore } from 'src/localstore/lang'
-import { useAdminAppLangStore } from 'src/teststore/mock/g11n/applang'
-import { AppLang } from 'src/teststore/mock/g11n/applang/types'
-import { NotifyType } from 'npool-cli-v4'
-import { useFrontendMessageStore } from 'src/teststore/mock/g11n/message'
-import { Message } from 'src/teststore/mock/g11n/message/types'
+import { useLocaleStore, useAdminAppLangStore, AppLang, NotifyType, useFrontendMessageStore, Message } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const locale = useLocalLangStore()
+const locale = useLocaleStore()
 const langID = computed(() => locale.AppLang?.LangID)
 
 const message = useFrontendMessageStore()
