@@ -1,7 +1,7 @@
 <template>
   <ul class='language-picker'>
     <li
-      v-for='language in locale.Languages'
+      v-for='language in langs'
       :class='[ curLang === language.Lang ? "selected" : "" ]'
       :key='language.ID'
       @click='onLangClick(language)'
@@ -15,15 +15,17 @@
 
 <script setup lang='ts'>
 
-import { Language, useLangStore, useLocaleStore } from 'npool-cli-v2'
+import { useLocaleStore, useAdminAppLangStore, AppLang } from 'npool-cli-v4'
 import { computed } from 'vue'
 
-const lang = useLangStore()
-const locale = useLocaleStore()
-const curLang = computed(() => locale.CurLang?.Lang)
+const lang = useAdminAppLangStore()
+const langs = computed(() => lang.AppLangs.AppLangs)
 
-const onLangClick = (language: Language) => {
-  lang.setLang(language)
+const locale = useLocaleStore()
+const curLang = computed(() => locale.AppLang?.Lang)
+
+const onLangClick = (language: AppLang) => {
+  locale.setLang(language)
 }
 
 </script>

@@ -22,7 +22,6 @@ import {
   useNotificationStore as useOldNotificationStore,
   notify as OldNotify,
   useErrorSwitcherStore as useOldErrorSwitcherStore,
-  useLocaleStore,
   SwitchTarget as OldSwitchTarget,
   ErrorTarget as OldErrorTarget
 } from 'npool-cli-v2'
@@ -34,7 +33,8 @@ import {
   useNotificationStore,
   User,
   SwitchTarget,
-  ErrorTarget
+  ErrorTarget,
+  useLocaleStore
 } from 'npool-cli-v4'
 import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
@@ -46,7 +46,7 @@ const Prepare = defineAsyncComponent(() => import('src/components/prepare/Prepar
 const SideMenu = defineAsyncComponent(() => import('src/components/menu/SideMenu.vue'))
 
 const locale = useLocaleStore()
-const special = computed(() => locale.CurLang?.Lang === 'ja-JP')
+const special = computed(() => locale.AppLang?.Lang === 'ja-JP')
 
 const notification = useOldNotificationStore()
 const notificationV4 = useNotificationStore()
