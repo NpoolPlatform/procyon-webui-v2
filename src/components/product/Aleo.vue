@@ -223,7 +223,7 @@ const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
-const saleEndDate = computed(() => target?.value?.SaleEndAt === 0 ? '2023-01-27' : formatTime(target?.value?.SaleEndAt, true))
+const saleEndDate = computed(() => target?.value?.SaleEndAt === 0 ? '2023-01-27' : formatTime(target?.value?.SaleEndAt, true)?.replace(/\//g, '-'))
 const saleEndTime = computed(() => target?.value?.SaleEndAt === 0 ? '08:59' : formatTime(target?.value?.SaleEndAt, false)?.split(' ')[1])
 
 const currency = useAdminCurrencyStore()
