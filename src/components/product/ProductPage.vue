@@ -16,7 +16,7 @@
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
           <form action='javascript:void(0)' id='purchase'>
-            <div class='full-section'>
+            <div class='full-section' v-if='good.haveSale(target)'>
               <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
               <span class='number'>{{ remainDays }}</span>
               <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -88,7 +88,7 @@
               {{ $t('MSG_MINING_PURCHASE') }}
             </h3>
             <form action='javascript:void(0)' id='purchase'>
-              <div class='full-section'>
+              <div class='full-section' v-if='good.haveSale(target)'>
                 <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
                 <span class='number'>{{ remainDays }}</span>
                 <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -251,7 +251,7 @@ const onPurchaseClick = () => {
   })
 }
 
-const endTime = computed(() => target?.value?.SaleEndAt === 0 ? 1674777540 : target?.value?.SaleEndAt)
+const endTime = computed(() => target.value?.SaleEndAt)
 const ticker = ref(-1)
 const remainDays = ref(27)
 const remainHours = ref(23)
