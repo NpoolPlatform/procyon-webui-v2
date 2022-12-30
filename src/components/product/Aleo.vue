@@ -63,8 +63,8 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
-        <span class='number'>2023-01-27</span>
-        <span class='unit'>08:59 {{ $t("MSG_JST") }}</span>
+        <span class='number'>{{ saleEndDate }}</span>
+        <span class='unit'>{{ saleEndTime }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -201,7 +201,7 @@ import { useI18n } from 'vue-i18n'
 import question from '../../assets/question.svg'
 import lightbulb from '../../assets/lightbulb.svg'
 import { DefaultGoodID } from 'src/const/const'
-import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, CoinDescriptionUsedFor, useAdminCurrencyStore } from 'npool-cli-v4'
+import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, CoinDescriptionUsedFor, useAdminCurrencyStore, formatTime } from 'npool-cli-v4'
 import { getCurrencies, getDescriptions } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -223,6 +223,8 @@ const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
+const saleEndDate = computed(() => target?.value?.SaleEndAt === 0 ? '2023-01-27' : formatTime(target?.value?.SaleEndAt, true))
+const saleEndTime = computed(() => target?.value?.SaleEndAt === 0 ? '08:59' : formatTime(target?.value?.SaleEndAt, false)?.split(' ')[1])
 
 const currency = useAdminCurrencyStore()
 

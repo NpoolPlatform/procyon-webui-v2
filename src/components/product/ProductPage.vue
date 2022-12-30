@@ -251,7 +251,7 @@ const onPurchaseClick = () => {
   })
 }
 
-const endTime = ref(1674777540)
+const endTime = computed(() => target?.value?.SaleEndAt === 0 ? 1674777540 : target?.value?.SaleEndAt)
 const ticker = ref(-1)
 const remainDays = ref(27)
 const remainHours = ref(23)
