@@ -61,10 +61,10 @@
           </p>
         </div>
       </div>
-      <div class='three-section'>
+      <div class='three-section' v-if='good.haveSale(target)'>
         <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
-        <span class='number'>2023-01-27</span>
-        <span class='unit'>08:59 {{ $t("MSG_JST") }}</span>
+        <span class='number'>{{ good.getSaleEndDate(target) }}</span>
+        <span class='unit'>{{ good.getSaleEndTime(target) }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
