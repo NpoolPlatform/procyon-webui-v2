@@ -260,7 +260,7 @@ const remainSeconds = ref(59)
 
 onMounted(() => {
   ticker.value = window.setInterval(() => {
-    const now = Math.floor(Date.now() / 1000)
+    const now = Math.floor(Date.now() / 1000 + 60 * new Date().getTimezoneOffset()) // UTC时间
     const remain = endTime.value - now >= 0 ? endTime.value - now : 0
     remainDays.value = Math.floor(remain / 24 / 60 / 60)
     remainHours.value = Math.floor((remain - remainDays.value * 24 * 60 * 60) / 60 / 60)
