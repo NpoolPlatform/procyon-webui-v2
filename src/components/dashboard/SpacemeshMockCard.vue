@@ -140,7 +140,7 @@ const updater = () => {
       Error: {
         Title: t('MSG_GET_SPACEMESH_NETWORKS'),
         Message: t('MSG_GET_SPACEMESH_NETWORKS_FAIL'),
-        Popup: true,
+        Popup: false,
         Type: NotificationType.Error
       }
     }
@@ -150,7 +150,7 @@ const updater = () => {
         Error: {
           Title: t('MSG_GET_SPACEMESH_NETWORK_INFOS'),
           Message: t('MSG_GET_SPACEMESH_NETWORK_INFOS_FAIL'),
-          Popup: true,
+          Popup: false,
           Type: NotificationType.Error
         }
       }
