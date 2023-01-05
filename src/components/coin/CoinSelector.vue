@@ -48,10 +48,10 @@ const tipIndex = toRef(props, 'tipIndex')
 
 const coinLabel = (coin: AppCoin) => {
   let label = coin.Name
-  if (nameIndex.value !== undefined && nameIndex.value >= 0 && coin.DisplayNames.length > nameIndex.value && coin.DisplayNames[nameIndex.value].length > 0) {
+  if (nameIndex.value !== undefined && nameIndex.value >= 0 && coin.DisplayNames?.length > nameIndex.value && coin.DisplayNames[nameIndex.value]?.length > 0) {
     label = coin.DisplayNames[nameIndex.value]
   }
-  if (tipIndex.value !== undefined && tipIndex.value >= 0 && coin.SettleTips.length > tipIndex.value && coin.SettleTips[tipIndex.value].length > 0) {
+  if (tipIndex.value !== undefined && tipIndex.value >= 0 && coin.SettleTips?.length > tipIndex.value && coin.SettleTips[tipIndex.value]?.length > 0) {
     label += ' (' + t(coin.SettleTips[tipIndex.value]).toUpperCase() + ')'
   }
   return label
