@@ -101,7 +101,7 @@ const accounts = computed(() => account.withdrawAddress)
 
 const accountLabel = (acc: Account) => {
   let label = acc.CoinName
-  if (acc.CoinDisplayNames.length > 2 && acc.CoinDisplayNames[2].length > 0) {
+  if (acc.CoinDisplayNames?.length > 2 && acc.CoinDisplayNames[2]?.length > 0) {
     label = acc.CoinDisplayNames[2]
   }
   return label

@@ -45,7 +45,7 @@ const withdraws = computed(() => withdraw.withdraws)
 
 const withdrawLabel = (w: Withdraw) => {
   let label = w.CoinName
-  if (w.DisplayNames.length > 2 && w.DisplayNames[2].length > 0) {
+  if (w.DisplayNames?.length > 2 && w.DisplayNames[2]?.length > 0) {
     label = w.DisplayNames[2]
   }
   return label
