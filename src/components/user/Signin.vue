@@ -172,6 +172,7 @@ const _verify = () => {
       return
     }
     void router.push({ path: '/' })
+    remainder()
     return
   }
 
