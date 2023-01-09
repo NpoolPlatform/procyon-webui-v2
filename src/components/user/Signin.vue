@@ -243,7 +243,7 @@ const remainder = () => {
       void router.push({ path: '/remainder/kyc' })
       return
     }
-    if (logined.User?.InvitationCode && !logined.User?.InvitationCodeConfirmed) {
+    if (logined.User?.Kol && !logined.User?.KolConfirmed) {
       void router.push({ path: '/remainder/affiliate' })
       return
     }
