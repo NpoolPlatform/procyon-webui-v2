@@ -31,7 +31,8 @@ import {
   useAdminAppGoodStore,
   useFrontendArchivementStore,
   UserArchivement,
-  NotifyType
+  NotifyType,
+  useFrontendUserStore
 } from 'npool-cli-v4'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -74,6 +75,7 @@ const visibleGoodArchivements = computed(() => referral.value?.Archivements?.fil
 const backTimer = ref(-1)
 const submitting = ref(false)
 
+const user = useFrontendUserStore()
 const inspire = useInspireStore()
 const onSubmit = () => {
   submitting.value = true
@@ -86,18 +88,14 @@ const onSubmit = () => {
     }
   })
 
-  inspire.createInvitationCode({
+  user.updateUserKol({
     TargetUserID: referral.value?.UserID as string,
-    InviterName: baseUser.displayName(logined.User, locale.value as string),
-    InviteeName: username.value,
-    Info: {
-      UserID: referral.value?.UserID
-    },
+    Kol: true,
     Message: {
       Error: {
         Title: t('MSG_CREATE_INVITATION_CODE_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
   }, (error: boolean) => {
