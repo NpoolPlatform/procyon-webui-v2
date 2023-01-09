@@ -21,10 +21,6 @@
 
 <script setup lang='ts'>
 import {
-  useInspireStore,
-  NotificationType
-} from 'npool-cli-v2'
-import {
   useLocalUserStore,
   useBaseUserStore,
   User,
@@ -32,12 +28,14 @@ import {
   useFrontendArchivementStore,
   UserArchivement,
   NotifyType,
-  useFrontendUserStore
+  useFrontendUserStore,
+  SettleType
 } from 'npool-cli-v4'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getAppGoods } from 'src/api/good'
+import { useFrontendCommissionStore } from 'src/teststore/mock/commission'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
 
@@ -76,7 +74,7 @@ const backTimer = ref(-1)
 const submitting = ref(false)
 
 const user = useFrontendUserStore()
-const inspire = useInspireStore()
+const commission = useFrontendCommissionStore()
 const onSubmit = () => {
   submitting.value = true
   referral.value?.Archivements?.forEach((g) => {
@@ -108,23 +106,18 @@ const onSubmit = () => {
       void router.push({ path: '/affiliates' })
       return
     }
-    visibleGoodArchivements?.value?.forEach((good) => {
-      inspire.createPurchaseAmountSetting({
+    visibleGoodArchivements?.value?.forEach((row) => {
+      commission.createCommission({
         TargetUserID: referral.value?.UserID as string,
-        InviterName: baseUser.displayName(logined.User, locale.value as string),
-        InviteeName: username.value,
-        Info: {
-          GoodID: good.GoodID,
-          CoinTypeID: good.CoinTypeID,
-          Percent: good.CommissionPercent,
-          Start: Math.ceil(Date.now() / 1000),
-          End: 0
-        },
+        GoodID: row.GoodID,
+        SettleType: good.settleType(row.GoodID) as SettleType,
+        Value: `${row.CommissionPercent}`,
+        StartAt: Math.ceil(Date.now() / 1000),
         Message: {
           Error: {
             Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
             Popup: true,
-            Type: NotificationType.Error
+            Type: NotifyType.Error
           }
         }
       }, () => {
