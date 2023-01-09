@@ -140,7 +140,7 @@ const onSwitchMenu = (item: MenuItem) => {
 
 const menu = computed(() => {
   const myMenu = HeaderAvatarMenu()
-  myMenu.children = myMenu.children.filter((m) => m.label !== 'MSG_REFERRAL' || localUser.User?.InvitationCode?.length)
+  myMenu.children = myMenu.children.filter((m) => m.label !== 'MSG_REFERRAL' || localUser.isKol)
   return myMenu
 })
 

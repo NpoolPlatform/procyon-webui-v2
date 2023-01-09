@@ -1,5 +1,5 @@
 <template>
-  <div class='content' v-if='user.User.InvitationCode?.length'>
+  <div class='content' v-if='user.isKol'>
     <CommissionCard />
     <div class='hr' />
     <ReferralCode />
@@ -22,7 +22,7 @@ import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminA
 import { QAjaxBar } from 'quasar'
 import { getCoins } from 'src/api/chain'
 import { useFrontendCommissionStore } from 'src/teststore/mock/commission'
-import { Commission, SettleType, SettleTypes } from 'src/teststore/mock/commission/types'
+import { Commission, SettleType } from 'src/teststore/mock/commission/types'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -56,9 +56,7 @@ onMounted(() => {
     getFiatCurrency()
   }
   if (commission.Commissions.Commissions.length === 0) {
-    SettleTypes.forEach((type) => {
-      getCommissions(0, 100, type)
-    })
+    getCommissions(0, 100)
   }
 })
 
@@ -109,11 +107,11 @@ const getFiatCurrency = () => {
   })
 }
 
-const getCommissions = (offset: number, limit: number, settleType: SettleType) => {
+const getCommissions = (offset: number, limit: number) => {
   commission.getCommissions({
     Offset: offset,
     Limit: limit,
-    SettleType: settleType,
+    SettleType: SettleType.GoodOrderPercent,
     Message: {
       Error: {
         Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
@@ -125,7 +123,7 @@ const getCommissions = (offset: number, limit: number, settleType: SettleType) =
     if (error || rows.length < limit) {
       return
     }
-    getCommissions(offset + limit, limit, settleType)
+    getCommissions(offset + limit, limit)
   })
 }
 </script>

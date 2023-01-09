@@ -31,7 +31,7 @@ const user = useLocalUserStore()
 const router = useRouter()
 
 const showMenu = (menu: MenuItem) => {
-  if (menu.label === 'MSG_REFERRAL' && !user.User?.InvitationCode?.length) {
+  if (menu.label === 'MSG_REFERRAL' && !user.isKol) {
     return false
   }
   if (menu.label === 'MSG_ALEO_PURCHASE') {
