@@ -29,13 +29,14 @@ import {
   UserArchivement,
   NotifyType,
   useFrontendUserStore,
-  SettleType
+  SettleType,
+  useFrontendCommissionStore
 } from 'npool-cli-v4'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getAppGoods } from 'src/api/good'
-import { useFrontendCommissionStore } from 'src/teststore/mock/commission'
+
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
 

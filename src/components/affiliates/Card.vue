@@ -112,11 +112,11 @@ import {
   useFrontendArchivementStore,
   UserArchivement,
   NotifyType,
-  SettleType
+  SettleType,
+  useFrontendCommissionStore
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 import { MyGoodArchivement } from 'src/localstore/ledger/types'
-import { useFrontendCommissionStore } from 'src/teststore/mock/commission'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })

@@ -18,11 +18,9 @@
 </template>
 
 <script setup lang='ts'>
-import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useFrontendArchivementStore, UserArchivement, useAdminFiatCurrencyStore, FiatType } from 'npool-cli-v4'
+import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useFrontendArchivementStore, UserArchivement, useAdminFiatCurrencyStore, FiatType, useFrontendCommissionStore, Commission, SettleType } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { getCoins } from 'src/api/chain'
-import { useFrontendCommissionStore } from 'src/teststore/mock/commission'
-import { Commission, SettleType } from 'src/teststore/mock/commission/types'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
