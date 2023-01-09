@@ -85,7 +85,6 @@
 </template>
 
 <script setup lang='ts'>
-import { useInspireStore } from 'npool-cli-v2'
 import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
@@ -108,7 +107,6 @@ const ExpandList = defineAsyncComponent(() => import('src/components/list/Expand
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const inspire = useInspireStore()
 const user = useFrontendUserStore()
 const localUser = useLocalUserStore()
 
@@ -163,13 +161,7 @@ watch(logined, () => {
 
 const initialize = () => {
   if (localUser.User?.InvitationCode?.length) {
-    if (inspire.PurchaseAmountSettings.length === 0) {
-      inspire.getPurchaseAmountSettings({
-        Message: {}
-      }, () => {
-      // TODO
-      })
-    }
+    // TODO
   }
 }
 
