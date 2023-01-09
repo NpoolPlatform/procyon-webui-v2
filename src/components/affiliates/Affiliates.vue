@@ -116,7 +116,7 @@ const getCommissions = (offset: number, limit: number, settleType: SettleType) =
     SettleType: settleType,
     Message: {
       Error: {
-        Title: t('MSG_GET_APP_GOODS_FAIL'),
+        Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
         Popup: true,
         Type: NotifyType.Error
       }
