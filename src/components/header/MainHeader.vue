@@ -150,10 +150,10 @@ const onLogoClick = () => {
   void router.push({ path: '/' })
 }
 
-const userLogined = computed(() => localUser.logined)
+const logined = computed(() => localUser.logined)
 
-watch(userLogined, () => {
-  if (!userLogined.value) {
+watch(logined, () => {
+  if (!logined.value) {
     return
   }
   setTimeout(() => {
@@ -174,7 +174,7 @@ const initialize = () => {
 }
 
 onMounted(() => {
-  if (userLogined.value) {
+  if (logined.value) {
     setTimeout(() => {
       initialize()
     }, 2000)
