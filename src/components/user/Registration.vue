@@ -161,7 +161,6 @@ const onConfirmInvCodeErrorFocusIn = () => {
 const onConfirmInvCodeErrorFocusOut = () => {
   if (!invitationCode.value) {
     invCodeError.value = true
-    return
   }
   invCodeError.value = invitationCode.value?.length !== 12
 }
