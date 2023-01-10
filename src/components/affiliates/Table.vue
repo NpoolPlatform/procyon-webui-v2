@@ -99,7 +99,7 @@ const referrals = computed(() => archivement.notKolUsers())
 const coin = useAdminAppCoinStore()
 const coins = computed(() => coin.AppCoins.AppCoins.filter((el) => {
   const rfs = referrals.value?.filter((rel) => {
-    for (const g of rel.Archivements) {
+    for (const g of rel?.Archivements) {
       if (g.CoinTypeID === el.CoinTypeID) return true
     }
     return false
@@ -113,7 +113,7 @@ const joinTime = computed(() => (referral: UserArchivement) => archivement.getJo
 
 const goodUnit = computed(() => {
   for (const rf of referrals.value) {
-    for (const good of rf.Archivements) {
+    for (const good of rf?.Archivements) {
       if (good.CoinTypeID === selectedCoinID.value) {
         return good.GoodUnit
       }
@@ -125,9 +125,9 @@ const totalUnits = computed(() => archivement.totalUnits(referrals.value, select
 const totalAmount = computed(() => archivement.totalAmount(referrals.value, selectedCoinID.value))
 const totalSuperiorCommission = computed(() => archivement.totalSuperiorCommission(referrals.value, selectedCoinID.value))
 
-const userTotalUnits = computed(() => (referral: UserArchivement) => archivement.userTotalUnits(referral.Archivements, selectedCoinID.value))
-const userTotalAmount = computed(() => (referral: UserArchivement) => archivement.userTotalAmount(referral.Archivements, selectedCoinID.value))
-const userSuperiorCommission = computed(() => (referral: UserArchivement) => archivement.userSuperiorCommission(referral.Archivements, selectedCoinID.value))
+const userTotalUnits = computed(() => (referral: UserArchivement) => archivement.userTotalUnits(referral?.Archivements, selectedCoinID.value))
+const userTotalAmount = computed(() => (referral: UserArchivement) => archivement.userTotalAmount(referral?.Archivements, selectedCoinID.value))
+const userSuperiorCommission = computed(() => (referral: UserArchivement) => archivement.userSuperiorCommission(referral?.Archivements, selectedCoinID.value))
 
 const searchStr = ref('')
 const displayReferrals = computed(() => referrals.value.filter((el) => {
