@@ -117,7 +117,9 @@ input[type='submit']
     width: 100%
 
 .pagination
-  max-width: 40%
+  max-width: 70%
+  @media (max-width: $breakpoint-sm-max)
+    max-width: 100%
 
 .no-wrap
   white-space: nowrap

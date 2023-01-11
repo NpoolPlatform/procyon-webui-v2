@@ -1,37 +1,54 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= productName %></title>
 
-    <meta charset="utf-8">
-    <meta name="description" content="<%= productDescription %>">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>">
+<head>
+  <title>
+    <%= productName %>
+  </title>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@procyon" />
-    <meta name="twitter:domain" content="procyon.vip"/>
-    <meta name="twitter:title" content="Procyon" />
-    <meta name="twitter:description" content="Procyon | Crypto Mining and IDO Platform" />
-    <meta name="twitter:image"content="https://www.procyon.vip/link-img/link-preview.jpg" />
-    <meta name="twitter:image:alt" content="procyon.vip" />
+  <meta charset="utf-8">
+  <meta name="description" content="<%= productDescription %>">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="viewport"
+    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>">
 
-    <meta property="og:title" content="procyon" />
-    <meta property="og:type" content="website" />
-    <meta property="og:description" content="Procyon | Crypto Mining and IDO Platform" />
-    <meta property="og:image" content="https://www.procyon.vip/link-img/link-preview.jpg" />
-    <meta property="og:url" content="https://www.procyon.vip/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@procyon" />
+  <meta name="twitter:domain" content="procyon.vip" />
+  <meta name="twitter:title" content="Procyon" />
+  <meta name="twitter:description" content="Procyon | Crypto Mining and IDO Platform" />
+  <meta name="twitter:image" content="https://www.procyon.vip/link-img/link-preview.jpg" />
+  <meta name="twitter:image:alt" content="procyon.vip" />
 
-    <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128x128.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
-    <link rel="icon" type="image/ico" href="favicon.ico">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap">
-  </head>
-  <body>
-    <!-- DO NOT touch the following DIV -->
-    <div id="q-app"></div>
-  </body>
+  <meta property="og:title" content="procyon" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="Procyon | Crypto Mining and IDO Platform" />
+  <meta property="og:image" content="https://www.procyon.vip/link-img/link-preview.jpg" />
+  <meta property="og:url" content="https://www.procyon.vip/" />
+
+  <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128x128.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+  <link rel="icon" type="image/ico" href="favicon.ico">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap">
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WMDW59ENZM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments)
+  }
+  gtag('js', new Date())
+  gtag('config', 'G-WMDW59ENZM')
+</script>
+
+<body>
+  <!-- DO NOT touch the following DIV -->
+  <div id="q-app"></div>
+</body>
+
 </html>

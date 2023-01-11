@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useFrontendUserStore, useLocalUserStore, User } from 'npool-cli-v4'
+import { useFrontendUserStore, User } from 'npool-cli-v4'
 import {
   defineAsyncComponent
 } from 'vue'
@@ -19,13 +19,11 @@ const RemainderPage = defineAsyncComponent(() => import('src/components/remainde
 
 const router = useRouter()
 
-const logined = useLocalUserStore()
 const user = useFrontendUserStore()
 
 const onSubmit = () => {
   user.updateUser({
-    InvitationCodeID: logined.User?.InvitationCodeID,
-    InvitationCodeConfirmed: true,
+    KolConfirmed: true,
     Message: {}
   }, (u: User, error: boolean) => {
     if (error) {
