@@ -756,6 +756,21 @@ h3.product-title
   margin: 0
   text-transform: uppercase
 
+h3.product-title span.project-name
+  font-weight: 700
+
+.label-gold
+  background:
+    radial-gradient: ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #be9132 30%, #c48b0a 40%, transparent 80%
+    radial-gradient: ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #edc34f 25%, #987525 62.5%, #816015 100%
+  background-clip: border-box
+  filter: brightness(1.1) contrast(1.4) drop-shadow(0 0 6px #FDB931)
+  font-weight: 700
+  text-transform: uppercase
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
 .product .price
   color: #1ec498
   filter: contrast(1.1) brightness(1.1)
@@ -1046,6 +1061,70 @@ input[type="checkbox"]
   font-size: 16px
   font-weight: 400
   opacity: .7
+
+/* TABLE */
+.info-table-container
+  background: var(--light-green-2-11)
+  border-radius: 20px
+  box-shadow: 16px 16px 20px 0 var(--dark-blue-3-66)
+  padding: 24px
+
+  .info-table-title
+    font-size: 24px
+    font-weight: 700
+    margin: 0 0 12px 0
+    padding: 0 0 0 16px
+    text-transform: uppercase
+
+  .info-table-note
+    font-size: 14px
+    padding: 0 0 0 16px
+
+.info-table
+  border-collapse: collapse
+  font-size: 18px
+  width: 100%
+
+.table-2-columns th,
+.table-2-columns td
+  width: 50%
+
+.info-table #aqua span
+  color: var(--aqua-3)
+  filter: contrast(1.5)
+
+.info-table #pink span
+  color: var(--pink)
+  filter: contrast(1.25)
+
+.info-table th
+  border-bottom: 3px solid var(--white-77)
+  border-collapse: collapse
+  font-size: 28px
+  font-weight: 700
+  height: 48px
+  padding: 8px 16px
+  text-align: left
+
+.info-table td
+  border-bottom: 1px dashed var(--white-77)
+  height: 48px
+  padding: 8px 16px
+  text-align: left
+
+.info-table th.table-highlight
+  border-top: 6px solid var(--orange-2)
+  border-left: 6px solid var(--orange-2)
+  border-right: 6px solid var(--orange-2)
+
+.info-table td.table-highlight
+  border-left: 6px solid var(--orange-2)
+  border-right: 6px solid var(--orange-2)
+
+.info-table tr:last-of-type td.table-highlight
+  border-left: 6px solid var(--orange-2)
+  border-right: 6px solid var(--orange-2)
+  border-bottom: 6px solid var(--orange-2)
 
 input[type="email"]:active,
 input[type="email"]:focus,
