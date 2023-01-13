@@ -74,7 +74,12 @@
       </div>
     </template>
     <template #product-detail>
-      <ProductDetail />
+      <div v-if='locale === "en-US"'>
+        <ProductDetailUS />
+      </div>
+      <div v-else>
+        <ProductDetailJP />
+      </div>
     </template>
     <template #sidebar>
       <div id='project-links' class='product-sidebar-section'>
@@ -139,17 +144,16 @@ import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore
 import { getCurrencies, getDescriptions } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+const { t, locale } = useI18n({ useScope: 'global' })
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
-const ProductDetail = defineAsyncComponent(() => import('src/components/product/detail/ja-JP/Detail.vue'))
+const ProductDetailUS = defineAsyncComponent(() => import('src/components/product/en-US/Detail.vue'))
+const ProductDetailJP = defineAsyncComponent(() => import('src/components/product/ja-JP/Detail.vue'))
 
 interface Query {
   goodId: string;
   purchaseAmount: number;
 }
-
-// const { locale } = useI18n({ useScope: 'global' })
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)

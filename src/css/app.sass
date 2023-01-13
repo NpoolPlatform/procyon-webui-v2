@@ -1,6 +1,8 @@
 :root
   --aqua-1: #11afaf
   --aqua-2: #a1d0d0
+  --aqua-3: #299ad3
+  --aqua-4: #1272ad
   --aqua-2-77: #a1d0d077
   --dark-blue-1: #27424c
   --dark-blue-2: #1f293a
@@ -27,6 +29,8 @@
   --pink: #fc4468
   --yellow-1: #ffe91d
   --yellow-2: #ffcc4a
+  --white: #ffffff
+  --white-77: #ffffff77
 
 *, *:before, *:after
   -webkit-box-sizing: border-box
@@ -324,11 +328,14 @@ ul.language-picker li.selected
 
 .content-glass
   background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
-  box-shadow: 16px 16px 20px 0 #05131966
+  box-shadow: 16px 16px 20px 0 var(--dark-blue-3-66)
   border-radius: 12px
-  color: #e1eeef
+  color: var(--light-green-2)
   padding: 24px
   margin: 24px 0
+
+.dark-glass
+  background: linear-gradient(to bottom right, var(--gray-2) 0, var(--dark-violet) 100%)
 
 .content p:not([class])
   font-size: 18px
@@ -708,15 +715,78 @@ h3.feature-title::after
   display: flex
   flex-wrap: wrap
   justify-content: flex-start
-  margin: 0 0 96px 0
+  // margin: 0 0 96px 0
 
 .product
-  padding: 36px
+  border-right: 1px solid var(--dark-blue-2)
+  display: flex
+  flex-wrap: wrap
+  justify-content: center
+  padding: 32px
+  position: relative
   margin: 0 5% 5% 0
+  overflow: hidden
   text-align: center
   transition: all ease-in-out .5s
   min-width: 320px
   width: 30%
+
+.product::before
+  background-position: center
+  background-size: 100% auto
+  border-radius: 12px 12px 0 0
+  box-shadow: 0 0 10px var(--dark-blue-3)
+  content: ""
+  display: block
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 120px
+
+.products .project-aleo-platinum::before
+  background-image: url('../../public/product/aleo/aleo-product-platinum.png')
+
+.products .project-aleo-gold::before
+  background-image: url('../../public/product/aleo/aleo-product-gold.png')
+
+.products .product-note
+  color: #ff6f5f
+
+.product
+  border-right: 1px solid var(--dark-blue-2)
+  display: flex
+  flex-wrap: wrap
+  justify-content: center
+  padding: 32px
+  position: relative
+  margin: 0 5% 5% 0
+  overflow: hidden
+  text-align: center
+  transition: all ease-in-out .5s
+  min-width: 320px
+  width: 30%
+
+.product::before
+  background-position: center
+  background-size: 100% auto
+  border-radius: 12px 12px 0 0
+  box-shadow: 0 0 10px var(--dark-blue-3)
+  content: ""
+  display: block
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 120px
+
+// .product
+//   padding: 36px
+//   margin: 0 5% 5% 0
+//   text-align: center
+//   transition: all ease-in-out .5s
+//   min-width: 320px
+//   width: 30%
 
 .product:last-of-type
   margin-right: 0
@@ -726,15 +796,12 @@ h3.feature-title::after
   box-shadow: 8px 8px 20px 0 #051319
 
 .product-heading
-  align-items: center
-  display: flex
-  justify-content: center
   padding: 0 0 12px 0
   position: relative
   width: 100%
 
 .product-heading::after
-  background: linear-gradient(to right, transparent 0, #e85f1a 30%, #ffe91d 50%, #1ec498 80%, transparent 100%)
+  background: linear-gradient(to right, transparent 0, var(--light-green-2) 50%, transparent 100%)
   display: block
   content: ""
   position: absolute
@@ -744,15 +811,15 @@ h3.feature-title::after
   width: 100%
 
 .product .icon
-  filter: opacity(.9)
-  margin: 0 8px 0 0
-  max-width: 32px
-  max-height: 32px
+  filter: drop-shadow(0 0 20px var(--light-green-2-33))
+  margin: 28px 0 18px 0
+  max-width: 120px
+  max-height: 120px
 
 h3.product-title
   color: #e1eeef
   font-size: 28px
-  font-weight: 200
+  font-weight: 400
   margin: 0
   text-transform: uppercase
 
@@ -760,9 +827,8 @@ h3.product-title span.project-name
   font-weight: 700
 
 .label-gold
-  background:
-    radial-gradient: ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #be9132 30%, #c48b0a 40%, transparent 80%
-    radial-gradient: ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #edc34f 25%, #987525 62.5%, #816015 100%
+  background: radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #be9132 30%, #c48b0a 40%, transparent 80%)
+  background: radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #edc34f 25%, #987525 62.5%, #816015 100%)
   background-clip: border-box
   filter: brightness(1.1) contrast(1.4) drop-shadow(0 0 6px #FDB931)
   font-weight: 700
@@ -770,6 +836,26 @@ h3.product-title span.project-name
   -webkit-background-clip: text
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
+
+.label-platinum
+  background: radial-gradient(ellipse farthest-corner at right bottom, #f5f5f5 0%, #c8cfd3 8%, #b7becb 30%, #a4acb7 40%, transparent 80%)
+  background: radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #d3d9dd 8%, #b6c7db 25%, #747d8d 62.5%, #81868e 100%)
+  background-clip: border-box
+  filter: brightness(1.1) contrast(1.4) drop-shadow(0 0 6px #a7c5ea)
+  font-weight: 700
+  text-transform: uppercase
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+h4.product-tagline
+  font-size: 20px
+  font-weight: 400
+  text-transform: none
+
+.product-note
+  font-size: 14px
+  font-weight: 700
 
 .product .price
   color: #1ec498
@@ -800,9 +886,9 @@ h3.product-title span.project-name
   font-weight: 700
 
 .product button
+  align-self: flex-end
   font-size: 16px
   margin: 24px 0 0 0
-  height: auto
   width: 100%
 
 /* COLUMNS */
@@ -1069,16 +1155,16 @@ input[type="checkbox"]
   box-shadow: 16px 16px 20px 0 var(--dark-blue-3-66)
   padding: 24px
 
-  .info-table-title
-    font-size: 24px
-    font-weight: 700
-    margin: 0 0 12px 0
-    padding: 0 0 0 16px
-    text-transform: uppercase
+.info-table-title
+  font-size: 24px
+  font-weight: 700
+  margin: 0 0 12px 0
+  padding: 0 0 0 16px
+  text-transform: uppercase
 
-  .info-table-note
-    font-size: 14px
-    padding: 0 0 0 16px
+.info-table-note
+  font-size: 14px
+  padding: 0 0 0 16px
 
 .info-table
   border-collapse: collapse
@@ -1703,6 +1789,9 @@ img.product-banner
 
 /* #3affa7 #cdabfe #a971d1 */
 
+.products .project-spacemesh::before
+  background-image: url('../../public/product/spacemesh/spacemesh-product-back.png')
+
 .project-spacemesh h1
   background: #3affa7
   background-clip: text
@@ -1742,6 +1831,12 @@ img.product-banner
   background: none
   border-color: #3affa7
   color: #3affa7
+
+.project-spacemesh button.in-active
+  background: none
+  border: 1px solid var(--white-77)
+  color: white
+  filter: saturate(0) contrast(.7)
 
 .project-spacemesh .number
   background: #a971d1
@@ -1810,8 +1905,14 @@ img.product-banner
 
 .project-aleo button.alt
   background: none
-  border-color: #154bf9
-  color: #ea5bc5
+  border-color: #ff6f5f
+  color: #ff6f5f
+
+.project-aleo button.in-active
+  background: none
+  border: 1px solid var(--white-77)
+  color: white
+  filter: saturate(0) contrast(.7)
 
 .project-aleo .number
   background: #ff6f5f
