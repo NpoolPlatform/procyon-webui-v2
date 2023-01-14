@@ -14,7 +14,7 @@
           A revolutionary Zero Knowledge-powered Layer 1 smartchain
         </h4>
         <span class='product-note'>Aleo Mining Platinum let's you receive FULL testnet incentive rewards!</span>
-        <button class='alt'>
+        <button class='alt' @click='onPurchaseClick'>
           Purchase
         </button>
       </div>
@@ -38,3 +38,12 @@
     <div class='hr' />
   </div>
 </template>
+<script setup lang='ts'>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const onPurchaseClick = () => {
+  void router.push({ path: '/product/aleo' })
+}
+
+</script>

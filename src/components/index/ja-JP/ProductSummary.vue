@@ -13,7 +13,7 @@
           革命的なゼロ知識証明技術を使用したレイヤー1スマートチェーン
         </h4>
         <span class='product-note'>プラチナプランは、メインネットマイニング報酬に加えてテストネット報酬を受け取ることができます</span>
-        <button class='alt'>
+        <button class='alt' @click='onPurchaseClick'>
           購入
         </button>
       </div>
@@ -35,3 +35,12 @@
     <div class='hr' />
   </div>
 </template>
+<script setup lang='ts'>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const onPurchaseClick = () => {
+  void router.push({ path: '/product/aleo' })
+}
+
+</script>
