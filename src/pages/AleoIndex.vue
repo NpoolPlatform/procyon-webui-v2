@@ -13,8 +13,8 @@
     <WhatMakesUS />
   </div>
   <div v-else>
-    <WhatWeKnowJP />
     <WhatMakesJP />
+    <WhatWeKnowJP />
   </div>
   <SupportCenter id='support' />
 </template>
