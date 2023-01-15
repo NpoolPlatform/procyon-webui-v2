@@ -67,7 +67,7 @@
                 label='MSG_ALEO_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='saleTimeEnd || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
+                :disabled='!good.haveSale(target) || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -127,13 +127,6 @@ const paymentCoin = computed(() => coin.getCoinByID(coinTypeID.value))
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 const total = computed(() => good.getPurchaseLimit(target.value))
-const saleTimeEnd = computed(() => {
-  const now = Math.floor(Date.now() / 1000)
-  if (good.haveSale(target?.value) && now > target.value?.SaleEndAt) {
-    return true
-  }
-  return false
-})
 
 const selectedCoinCurrency = ref(1) // 币种汇率
 const general = useFrontendGeneralStore()

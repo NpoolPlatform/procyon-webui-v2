@@ -134,7 +134,7 @@
                   label='MSG_PURCHASE'
                   type='submit'
                   class='submit-btn'
-                  :disabled='submitting || saleTimeEnd'
+                  :disabled='submitting || !good.haveSale(target)'
                   :waiting='submitting'
                   @click='onPurchaseClick'
                 />
@@ -192,13 +192,6 @@ const general = useFrontendGeneralStore()
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 const total = computed(() => good.getPurchaseLimit(target?.value))
-const saleTimeEnd = computed(() => {
-  const now = Math.floor(Date.now() / 1000)
-  if (good.haveSale(target?.value) && now > target.value?.SaleEndAt) {
-    return true
-  }
-  return false
-})
 
 const coin = useAdminAppCoinStore()
 const coins = computed(() => coin.getAvailableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
