@@ -13,7 +13,7 @@
           革命的なゼロ知識証明技術を使用したレイヤー1スマートチェーン
         </h4>
         <span class='product-note'>プラチナプランは、メインネットマイニング報酬に加えてテストネット報酬を受け取ることができます</span>
-        <button class='alt' @click='onPurchaseClick'>
+        <button :class='["alt", purchasable("de420061-e878-4a8b-986a-805cadd59233") ? "" : "in-active"]' @click='onPurchaseClick'>
           {{ goodAction('de420061-e878-4a8b-986a-805cadd59233') }}
         </button>
       </div>
@@ -27,7 +27,7 @@
         <h4 class='product-tagline'>
           世界で最も分散化された暗号資産をマイニング
         </h4>
-        <button class='alt in-active'>
+        <button :class='["alt", purchasable("eaf9fc2d-63cd-450a-b098-5ef8f624df47") ? "" : "in-active"]'>
           {{ goodAction('eaf9fc2d-63cd-450a-b098-5ef8f624df47') }}
         </button>
       </div>
@@ -89,6 +89,17 @@ const goodAction = (id: string) => {
     return '売り切れ'
   }
   return '購入'
+}
+
+const purchasable = (id: string) => {
+  const good = goods.value.find((el) => el.GoodID === id)
+  if (!good) {
+    return false
+  }
+  if (good.SaleEndAt < Math.floor(Date.now() / 1000)) {
+    return false
+  }
+  return true
 }
 
 </script>
