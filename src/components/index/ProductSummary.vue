@@ -19,7 +19,7 @@
           {{ _good?.Descriptions?.[1] ? t(_good?.Descriptions?.[1]) : '' }}
         </h4>
         <span class='product-note'>
-          Aleo Mining Platinum let's you receive FULL testnet incentive rewards!
+          <!-- Aleo Mining Platinum let's you receive FULL testnet incentive rewards! -->
           {{ _good?.Descriptions?.[2] ? t(_good?.Descriptions?.[2]) : '' }}
         </span>
         <div v-if='good.haveSale(_good)'>
