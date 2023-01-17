@@ -3,35 +3,35 @@
     <h2>Premiere Products</h2>
 
     <div class='products'>
-      <div class='product content-glass dark-glass project-aleo project-aleo-platinum'>
+      <div
+        class='product content-glass dark-glass project-aleo project-aleo-platinum'
+        v-for='_good in goods' :key='_good.ID'
+      >
         <div class='product-heading'>
-          <img class='icon' src='product/aleo/product-aleo.png'>
+          <img class='icon' :src='_good.CoinLogo'>
           <h3 class='product-title'>
-            <span class='project-name'>Aleo </span>First Batch Mining: <span class='label-platinum'>Platinum</span>
+            {{ _good?.Descriptions?.[0] ? t(_good?.Descriptions?.[0]) : '' }}
+            <!-- <span class='project-name'>Aleo </span>First Batch Mining: <span class='label-platinum'>Platinum</span> -->
           </h3>
         </div>
         <h4 class='product-tagline'>
-          A revolutionary Zero Knowledge-powered Layer 1 smartchain
+          <!-- A revolutionary Zero Knowledge-powered Layer 1 smartchain -->
+          {{ _good?.Descriptions?.[1] ? t(_good?.Descriptions?.[1]) : '' }}
         </h4>
-        <span class='product-note'>Aleo Mining Platinum let's you receive FULL testnet incentive rewards!</span>
-        <button :class='["alt", purchasable("de420061-e878-4a8b-986a-805cadd59233") ? "" : "in-active"]' @click='onPurchaseClick'>
-          {{ goodAction('de420061-e878-4a8b-986a-805cadd59233') }}
-        </button>
-      </div>
-
-      <div class='product content-glass dark-glass project-spacemesh'>
-        <div class='product-heading'>
-          <img class='icon' src='product/spacemesh/product-spacemesh.svg'>
-          <h3 class='product-title'>
-            <span class='project-name'>Spacemesh </span>First Batch Mining
-          </h3>
+        <span class='product-note'>
+          Aleo Mining Platinum let's you receive FULL testnet incentive rewards!
+          {{ _good?.Descriptions?.[2] ? t(_good?.Descriptions?.[2]) : '' }}
+        </span>
+        <div v-if='good.haveSale(_good)'>
+          <button class='alt' @click='onPurchaseClick'>
+            {{ t('MSG_PURCHASE') }}
+          </button>
         </div>
-        <h4 class='product-tagline'>
-          Mine the world's most decentralized cryptocurrency.
-        </h4>
-        <button :class='["alt", purchasable("eaf9fc2d-63cd-450a-b098-5ef8f624df47") ? "" : "in-active"]'>
-          {{ goodAction('eaf9fc2d-63cd-450a-b098-5ef8f624df47') }}
-        </button>
+        <div v-else>
+          <button class='alt in-active' @click='onPurchaseClick' disabled>
+            {{ t('MSG_SOLD_OUT') }}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -42,6 +42,10 @@
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { useAdminAppGoodStore } from 'npool-cli-v4'
+import { useI18n } from 'vue-i18n'
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 const router = useRouter()
 const onPurchaseClick = () => {
@@ -49,30 +53,5 @@ const onPurchaseClick = () => {
 }
 
 const good = useAdminAppGoodStore()
-const goods = computed(() => good.AppGoods.AppGoods)
-const recommends = computed(() => good.AppGoods.AppGoods.filter((el) => el?.RecommenderID))
-console.log('recommends: ', recommends.value)
-
-const goodAction = (id: string) => {
-  const good = goods.value.find((el) => el.GoodID === id)
-  if (!good) {
-    return 'Sold Out'
-  }
-  if (good.SaleEndAt < Math.floor(Date.now() / 1000)) {
-    return 'Sold Out'
-  }
-  return 'Purchase'
-}
-
-const purchasable = (id: string) => {
-  const good = goods.value.find((el) => el.GoodID === id)
-  if (!good) {
-    return false
-  }
-  if (good.SaleEndAt < Math.floor(Date.now() / 1000)) {
-    return false
-  }
-  return true
-}
-
+const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
 </script>
