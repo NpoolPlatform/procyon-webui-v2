@@ -4,7 +4,8 @@
 
     <div class='products'>
       <div
-        class='product content-glass dark-glass project-aleo project-aleo-platinum'
+        class='product content-glass dark-glass project-aleo'
+        :style='"background-image: " + "url(" + _good.GoodBanner + ")"'
         v-for='_good in goods' :key='_good.ID'
       >
         <div class='product-heading'>
@@ -22,16 +23,12 @@
           <!-- Aleo Mining Platinum let's you receive FULL testnet incentive rewards! -->
           {{ _good?.Descriptions?.[2] ? t(_good?.Descriptions?.[2]) : '' }}
         </span>
-        <div v-if='good.haveSale(_good)'>
-          <button class='alt' @click='onPurchaseClick'>
-            {{ t('MSG_PURCHASE') }}
-          </button>
-        </div>
-        <div v-else>
-          <button class='alt in-active' @click='onPurchaseClick' disabled>
-            {{ t('MSG_SOLD_OUT') }}
-          </button>
-        </div>
+        <button class='alt' @click='onPurchaseClick' v-if='good.haveSale(_good)'>
+          {{ t('MSG_PURCHASE') }}
+        </button>
+        <button class='alt in-active' @click='onPurchaseClick' disabled v-else>
+          {{ t('MSG_SOLD_OUT') }}
+        </button>
       </div>
     </div>
 
