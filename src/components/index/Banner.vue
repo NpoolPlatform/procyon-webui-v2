@@ -12,7 +12,9 @@
           <span v-html='$t("MSG_AVAILABLE_NOW")' />
         </button>
       </div>
-      <img class='hero-image' src='product/aleo/aleo-design.png'>
+      <img
+        class='hero-image' src='product/aleo/aleo-design.png'
+      >
     </div>
     <div class='content'>
       <div class='logo-feature'>

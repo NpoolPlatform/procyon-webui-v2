@@ -67,7 +67,7 @@
                 label='MSG_ALEO_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
+                :disabled='!good.haveSale(target) || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
