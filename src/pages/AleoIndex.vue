@@ -1,11 +1,6 @@
 <template>
   <Banner />
-  <div v-if='locale === "en-US"'>
-    <ProductSummaryUS />
-  </div>
-  <div v-else>
-    <ProductSummaryJP />
-  </div>
+  <ProductSummary />
   <MixProducts />
   <WhyMe />
   <div v-if='locale === "en-US"'>
@@ -26,8 +21,7 @@ import { useI18n } from 'vue-i18n'
 const { locale } = useI18n({ useScope: 'global' })
 
 const Banner = defineAsyncComponent(() => import('src/components/index/Banner.vue'))
-const ProductSummaryUS = defineAsyncComponent(() => import('src/components/index/en-US/ProductSummary.vue'))
-const ProductSummaryJP = defineAsyncComponent(() => import('src/components/index/ja-JP/ProductSummary.vue'))
+const ProductSummary = defineAsyncComponent(() => import('src/components/index/ProductSummary.vue'))
 const MixProducts = defineAsyncComponent(() => import('src/components/index/MixProducts.vue'))
 const WhyMe = defineAsyncComponent(() => import('src/components/index/WhyMeV2.vue'))
 const WhatWeKnowUS = defineAsyncComponent(() => import('src/components/index/en-US/WhatWeKnow.vue'))
