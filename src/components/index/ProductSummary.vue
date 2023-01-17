@@ -5,22 +5,19 @@
     <div class='products'>
       <div
         class='product content-glass dark-glass project-aleo'
-        :style='"background-image: " + "url(" + _good.GoodBanner + ")"'
         v-for='_good in goods' :key='_good.ID'
       >
+        <!-- <div class='product good-banner' :style='{"background-image": _good.Descriptions?.[0]?.length > 0 ? "url(" + _good.GoodBanner + ")" : ""}' /> -->
         <div class='product-heading'>
           <img class='icon' :src='_good.CoinLogo'>
           <h3 class='product-title'>
-            {{ _good?.Descriptions?.[0] ? t(_good?.Descriptions?.[0]) : '' }}
-            <!-- <span class='project-name'>Aleo </span>First Batch Mining: <span class='label-platinum'>Platinum</span> -->
+            <span v-html='_good?.Descriptions?.[0] ? t(_good?.Descriptions?.[0]) : ""' />
           </h3>
         </div>
         <h4 class='product-tagline'>
-          <!-- A revolutionary Zero Knowledge-powered Layer 1 smartchain -->
           {{ _good?.Descriptions?.[1] ? t(_good?.Descriptions?.[1]) : '' }}
         </h4>
         <span class='product-note'>
-          <!-- Aleo Mining Platinum let's you receive FULL testnet incentive rewards! -->
           {{ _good?.Descriptions?.[2] ? t(_good?.Descriptions?.[2]) : '' }}
         </span>
         <button class='alt' @click='onPurchaseClick' v-if='good.haveSale(_good)'>
@@ -51,4 +48,13 @@ const onPurchaseClick = () => {
 
 const good = useAdminAppGoodStore()
 const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
+
+// const goodBannerClass = computed(() => (goodBanner: string) => ({
+//   'background-image': 'url(' + goodBanner + ')'
+// }))
 </script>
+
+<style lang='sass' scoped>
+.product .good-banner::before
+  background: ''
+</style>
