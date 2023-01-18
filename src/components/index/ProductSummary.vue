@@ -12,9 +12,7 @@
         />
         <div class='product-heading'>
           <img class='icon' :src='_good.CoinLogo'>
-          <h3 class='product-title'>
-            <span v-html='_good?.Descriptions?.[0] ? t(_good?.Descriptions?.[0]) : ""' />
-          </h3>
+          <div v-html='_good?.Descriptions?.[0] ? t(_good?.Descriptions?.[0]) : ""' />
         </div>
         <h4 class='product-tagline'>
           <span v-html='_good?.Descriptions?.[1] ? t(_good?.Descriptions?.[1]) : ""' />
