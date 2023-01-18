@@ -1,17 +1,15 @@
 <template>
   <div class='content'>
     <h2>Premiere Products</h2>
-
     <div class='products'>
       <div
         class='product content-glass dark-glass project-aleo'
         v-for='_good in goods' :key='_good.ID'
       >
-        <!-- <div
-          class='product good-banner'
+        <div
+          class='good-banner'
           :style='{"background-image": _good.Descriptions?.[0]?.length > 0 ? "url(" + _good.GoodBanner + ")" : ""}'
-          style='height: 120px background-position: center background-size: 100% auto top: 0'
-        > -->
+        />
         <div class='product-heading'>
           <img class='icon' :src='_good.CoinLogo'>
           <h3 class='product-title'>
@@ -31,10 +29,8 @@
           {{ t('MSG_SOLD_OUT') }}
         </button>
       </div>
-      <!-- </div> -->
+      <div class='hr' />
     </div>
-
-    <div class='hr' />
   </div>
 </template>
 <script setup lang='ts'>
@@ -54,36 +50,4 @@ const onPurchaseClick = () => {
 const good = useAdminAppGoodStore()
 const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
 
-// const goodBannerClass = computed(() => (goodBanner: string) => ({
-//   'background-image': 'url(' + goodBanner + ')'
-// }))
 </script>
-
-<style lang='sass' scoped>
-.product .good-banner::before
-  height: 120px
-  background-position: center
-  background-size: 100% auto
-  border-radius: 12px 12px 0 0
-  box-shadow: 0 0 10px var(--dark-blue-3)
-  content: ""
-  display: block
-  position: absolute
-  top: 0
-  left: 0
-  width: 100%
-
-.test-good
-  border-right: 1px solid var(--dark-blue-2)
-  display: flex
-  flex-wrap: wrap
-  justify-content: center
-  padding: 32px
-  position: relative
-  margin: 0 3% 3% 0
-  overflow: hidden
-  text-align: center
-  // transition: all ease-in-out 0.5s
-  min-width: 320px
-  width: 30%
-</style>
