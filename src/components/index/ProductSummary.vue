@@ -17,10 +17,10 @@
           </h3>
         </div>
         <h4 class='product-tagline'>
-          {{ _good?.Descriptions?.[1] ? t(_good?.Descriptions?.[1]) : '' }}
+          <span v-html='_good?.Descriptions?.[1] ? t(_good?.Descriptions?.[1]) : ""' />
         </h4>
         <span class='product-note'>
-          {{ _good?.Descriptions?.[2] ? t(_good?.Descriptions?.[2]) : '' }}
+          <span v-html='_good?.Descriptions?.[2] ? t(_good?.Descriptions?.[2]) : ""' />
         </span>
         <button class='alt' @click='onPurchaseClick' v-if='good.haveSale(_good)'>
           {{ t('MSG_PURCHASE') }}
