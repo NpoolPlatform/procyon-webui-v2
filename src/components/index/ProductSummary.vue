@@ -12,11 +12,13 @@
         />
         <div class='product-heading'>
           <img class='icon' :src='_good.CoinLogo'>
-          <div v-html='_good?.Descriptions?.[0] ? t(_good?.Descriptions?.[0]) : ""' />
+          <div v-for='(title,index) in _good?.DisplayNames' :key='index'>
+            <span v-html='t(title)' />
+          </div>
         </div>
-        <template v-for='(desc,idx) in _good?.Descriptions?.slice(1, _good.Descriptions?.length)' :key='idx'>
-          <div v-html='desc? t(desc) : ""' />
-        </template>
+        <div v-for='(desc,idx) in _good?.Descriptions' :key='idx'>
+          <span v-html='t(desc)' />
+        </div>
         <button class='alt' @click='onPurchaseClick' v-if='good.haveSale(_good)'>
           {{ t('MSG_PURCHASE') }}
         </button>
