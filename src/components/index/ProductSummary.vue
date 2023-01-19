@@ -3,23 +3,20 @@
     <h2>Premiere Products</h2>
     <div class='products'>
       <div
-        class='product content-glass dark-glass project-aleo'
+        class='product content-glass dark-glass'
         v-for='_good in goods' :key='_good.ID'
       >
         <div
           class='good-banner'
-          :style='{"background-image": _good.Descriptions?.[0]?.length > 0 ? "url(" + _good.GoodBanner + ")" : ""}'
+          :style='{"background-image": "url(" + _good.GoodBanner + ")"}'
         />
         <div class='product-heading'>
           <img class='icon' :src='_good.CoinLogo'>
           <div v-html='_good?.Descriptions?.[0] ? t(_good?.Descriptions?.[0]) : ""' />
         </div>
-        <h4 class='product-tagline'>
-          <span v-html='_good?.Descriptions?.[1] ? t(_good?.Descriptions?.[1]) : ""' />
-        </h4>
-        <span class='product-note'>
-          <span v-html='_good?.Descriptions?.[2] ? t(_good?.Descriptions?.[2]) : ""' />
-        </span>
+        <template v-for='(desc,idx) in _good?.Descriptions?.slice(1, _good.Descriptions?.length)' :key='idx'>
+          <div v-html='desc? t(desc) : ""' />
+        </template>
         <button class='alt' @click='onPurchaseClick' v-if='good.haveSale(_good)'>
           {{ t('MSG_PURCHASE') }}
         </button>
