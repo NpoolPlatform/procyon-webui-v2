@@ -12,12 +12,14 @@
         />
         <div class='product-heading'>
           <img class='icon' :src='_good.CoinLogo'>
-          <div v-for='(title,index) in _good?.DisplayNames' :key='index'>
-            <span v-html='t(title)' />
-          </div>
+          <template v-for='(title,index) in _good?.DisplayNames' :key='index'>
+            <div v-html='t(title)' />
+          </template>
         </div>
-        <div v-for='(desc,idx) in _good?.Descriptions' :key='idx'>
-          <span v-html='t(desc)' />
+        <div class='card-content-container'>
+          <template v-for='(desc,idx) in _good?.Descriptions' :key='idx'>
+            <div v-html='t(desc)' />
+          </template>
         </div>
         <button class='alt' @click='onPurchaseClick' v-if='good.haveSale(_good)'>
           {{ t('MSG_PURCHASE') }}
@@ -52,4 +54,9 @@ const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
 .card-container
   height: 600px
   max-height: 600px
+
+.card-content-container
+  height: 180px
+  max-height: 180px
+  overflow: auto
 </style>
