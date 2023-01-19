@@ -3,7 +3,7 @@
     <h2>Premiere Products</h2>
     <div class='products'>
       <div
-        class='product content-glass dark-glass'
+        class='product content-glass dark-glass card-container'
         v-for='_good in goods' :key='_good.ID'
       >
         <div
@@ -48,3 +48,8 @@ const good = useAdminAppGoodStore()
 const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
 
 </script>
+<style lang='sass' scoped>
+.card-container
+  height: 600px
+  max-height: 600px
+</style>
