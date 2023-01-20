@@ -30,7 +30,7 @@
                   id='amount'
                   required
                   :error='amountError'
-                  :message='$t("MSG_WITHDRAW_AMOUNT_TIP", {MAX: balance})'
+                  :message='$t("MSG_WITHDRAW_AMOUNT_TIP", {MAX: parseFloat(target?.MaxAmountPerWithdraw as string)})'
                   placeholder='MSG_AMOUNT_PLACEHOLDER'
                   :min='feeAmount'
                   :max='balance'
@@ -247,7 +247,9 @@ const onAmountFocusIn = () => {
   amountError.value = false
 }
 const onAmountFocusOut = () => {
-  amountError.value = !amount.value || amount.value > balance.value || (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0)
+  amountError.value = !amount.value || amount.value > balance.value ||
+                      (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0) ||
+                      (withdrawType.value === 'ExternalAddress' ? amount.value > parseFloat(target.value?.MaxAmountPerWithdraw as string) : amount.value === 0)
 }
 
 const route = useRoute()
@@ -288,7 +290,9 @@ const onCancelClick = () => {
 }
 
 const onSubmit = () => {
-  amountError.value = !amount.value || amount.value > balance.value || (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0)
+  amountError.value = !amount.value || amount.value > balance.value ||
+                      (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0) ||
+                      (withdrawType.value === 'ExternalAddress' ? amount.value > parseFloat(target.value?.MaxAmountPerWithdraw as string) : amount.value === 0)
   if (amountError.value) {
     return
   }
