@@ -242,8 +242,10 @@ const showReviewing = ref(false)
 const showWaiting = ref(true)
 
 const message = computed(() => {
-  if (amount.value > Number(target.value?.MaxAmountPerWithdraw)) {
-    return t('MSG_WITHDRAW_LIMIT_TIP', { LIMIT: parseFloat(target?.value?.MaxAmountPerWithdraw as string) })
+  if (withdrawType.value === 'ExternalAddress') {
+    if (amount.value > Number(target.value?.MaxAmountPerWithdraw)) {
+      return t('MSG_WITHDRAW_LIMIT_TIP', { LIMIT: parseFloat(target?.value?.MaxAmountPerWithdraw as string) })
+    }
   }
   return t('MSG_WITHDRAW_AMOUNT_TIP', { LOW: feeAmount.value, HIGH: balance.value })
 })
