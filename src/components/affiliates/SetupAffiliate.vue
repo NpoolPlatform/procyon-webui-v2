@@ -9,7 +9,12 @@
       </p>
       <div v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
-        <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' ignore-style />
+        <KolOption
+          v-model:percent='_good.CommissionPercent'
+          :max='getGoodPercent(_good.GoodID)'
+          ignore-style
+          :disabled='!good.haveSale(good.getGoodByID(_good.GoodID) as AppGood)'
+        />
       </div>
     </template>
     <template #append-submit>
@@ -30,7 +35,8 @@ import {
   NotifyType,
   useFrontendUserStore,
   SettleType,
-  useFrontendCommissionStore
+  useFrontendCommissionStore,
+  AppGood
 } from 'npool-cli-v4'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
