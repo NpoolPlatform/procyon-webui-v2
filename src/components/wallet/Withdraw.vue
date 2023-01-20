@@ -30,7 +30,7 @@
                   id='amount'
                   required
                   :error='amountError'
-                  :message='$t("MSG_WITHDRAW_AMOUNT_TIP", {MAX: balance})'
+                  :message='message'
                   placeholder='MSG_AMOUNT_PLACEHOLDER'
                   :min='feeAmount'
                   :max='balance'
@@ -241,13 +241,24 @@ const verifying = ref(false)
 const showReviewing = ref(false)
 const showWaiting = ref(true)
 
+const message = computed(() => {
+  if (withdrawType.value === 'ExternalAddress') {
+    if (amount.value > Number(target.value?.MaxAmountPerWithdraw)) {
+      return t('MSG_WITHDRAW_LIMIT_TIP', { LIMIT: parseFloat(target?.value?.MaxAmountPerWithdraw as string) })
+    }
+  }
+  return t('MSG_WITHDRAW_AMOUNT_TIP', { LOW: feeAmount.value, HIGH: balance.value })
+})
+
 const amount = ref(0)
 const amountError = ref(false)
 const onAmountFocusIn = () => {
   amountError.value = false
 }
 const onAmountFocusOut = () => {
-  amountError.value = !amount.value || amount.value > balance.value || (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0)
+  amountError.value = !amount.value || amount.value > balance.value ||
+                      (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0) ||
+                      (withdrawType.value === 'ExternalAddress' ? amount.value > parseFloat(target.value?.MaxAmountPerWithdraw as string) : amount.value === 0)
 }
 
 const route = useRoute()
@@ -288,7 +299,9 @@ const onCancelClick = () => {
 }
 
 const onSubmit = () => {
-  amountError.value = !amount.value || amount.value > balance.value || (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0)
+  amountError.value = !amount.value || amount.value > balance.value ||
+                      (withdrawType.value === 'ExternalAddress' ? amount.value <= feeAmount.value : amount.value === 0) ||
+                      (withdrawType.value === 'ExternalAddress' ? amount.value > parseFloat(target.value?.MaxAmountPerWithdraw as string) : amount.value === 0)
   if (amountError.value) {
     return
   }
