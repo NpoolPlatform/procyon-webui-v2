@@ -15,8 +15,8 @@
         </thead>
         <tbody>
           <tr>
-            <td>Purchased BEFORE 2023-01-26</td>
-            <td>Purchased AFTER  2023-01-26</td>
+            <td><strong>Purchased BEFORE 2023-01-26 23:59 UTC</strong><br><em>(2023-01-27 8:59 Japan Standard Time)</em></td>
+            <td><strong>Purchased AFTER 2023-01-26 23:59 UTC</strong><br><em>(2023-01-27 8:59 Japan Standard Time)</em></td>
           </tr>
           <tr>
             <td>Will receive Prover Incentives</td>
