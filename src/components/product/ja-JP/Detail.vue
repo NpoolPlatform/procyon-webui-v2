@@ -25,7 +25,7 @@
         </tbody>
       </table>
       <p class='info-table-note'>
-        ※<a href='#Aleo Prover Incentive Program'>Aleoプルーバーインセンティブプログラム</a>の詳細を閲覧
+        ※<a @click='scrollTo("Aleo Prover Incentive Program")'>Aleoプルーバーインセンティブプログラム</a>の詳細を閲覧
       </p>
     </div>
 
@@ -313,3 +313,7 @@
     <p>とはいえ、一般的なルールとして、ユーザー様はご自分がよく知り、そのリスクを理解しているプロダクトを選択すべきです。これらのプロダクトは、政府の政策、経済状況、市場動向の変化など様々な要因により価値が変動する可能性があります。また、当該プロダクトは、関連する法域の適用法令の対象となります。最後に、オンラインプラットフォーム上で取引を行う場合、当社のコントロール外の状況により、ハードウェア及びソフトウェアの予測不可能な故障を含むシステムに関連するリスクにさらされる可能性があります。</p>
   </div>
 </template>
+
+<script setup lang='ts'>
+import { scrollTo } from 'src/utils/scroll'
+</script>

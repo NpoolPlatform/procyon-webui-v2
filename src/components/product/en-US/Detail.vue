@@ -25,7 +25,7 @@
         </tbody>
       </table>
       <p class='info-table-note'>
-        *See <a href='#Aleo Prover Incentive Program'>Aleo Prover Incentive Program</a> for a full explanation of the incentives.
+        *See <a @click='scrollTo("Aleo Prover Incentive Program")'>Aleo Prover Incentive Program</a> for a full explanation of the incentives.
       </p>
     </div>
 
@@ -314,3 +314,7 @@
     <p>That said, as a general rule, one should only select products that they are familiar with and understand the risk associated with them. Value of such products may fluctuate due to a variety of factors, such as changes in government policies, economic conditions, or market trends. Further, such products are subject to the applicable laws and regulations of the relevant overseas jurisdiction in which these products are held. Lastly, if one undertakes transactions on an online platform, they may be exposed to risks associated with the system including the unpredictable failure of hardware and software due to circumstances outside of our control.</p>
   </div>
 </template>
+
+<script setup lang='ts'>
+import { scrollTo } from 'src/utils/scroll'
+</script>
