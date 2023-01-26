@@ -15,8 +15,8 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Purchased BEFORE 2023-01-26 23:59 UTC</strong><br><em>(2023-01-27 8:59 Japan Standard Time)</em></td>
-            <td><strong>Purchased AFTER 2023-01-26 23:59 UTC</strong><br><em>(2023-01-27 8:59 Japan Standard Time)</em></td>
+            <td>Purchased BEFORE <strong>2023-02-03 23:59 JST</strong></td>
+            <td>Purchased AFTER <strong>2023-02-03 23:59 JST</strong></td>
           </tr>
           <tr>
             <td>Will receive Prover Incentives</td>
@@ -207,6 +207,10 @@
         </p>
       </div>
     </div>
+
+    <h3>Project Roadmap</h3>
+
+    <p><img class='project-promo-content' src='product/aleo/aleo-roadmap-en.png'></p>
 
     <h3>Media Coverage</h3>
 
