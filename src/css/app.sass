@@ -542,7 +542,7 @@ img.content-image
   z-index: 2
 
 .logo-feature-title
-  border-bottom: 1px solid #e1eeef33
+  border-bottom: 1px solid var(--white-77)
   font-size: 18px
   font-weight: 400
   margin: 0 2% 16px 2%
@@ -553,10 +553,14 @@ img.content-image
   line-height: 1.2
 
 .logo-feature img
-  filter: invert(100%) opacity(.8)
+  filter: invert(1) opacity(.9) drop-shadow(0 0 4px var(--white-77))
   height: 100%
   margin: 0 5%
   max-width: 10%
+  transition: all ease-in-out .2s
+
+.logo-feature img:hover
+  filter: invert(1) opacity(1) drop-shadow(0 0 8px var(--white))
 
 .highlight
   align-items: center
