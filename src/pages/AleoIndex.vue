@@ -4,13 +4,13 @@
   <MixProducts />
   <WhyMe />
   <div v-if='locale === "en-US"'>
-    <WhatWeKnowUS />
     <PartnersUS />
     <WhatMakesUS />
+    <WhatWeKnowUS />
   </div>
   <div v-else>
-    <WhatMakesJP />
     <PartnersJP />
+    <WhatMakesJP />
     <WhatWeKnowJP />
   </div>
   <SupportCenter id='support' />
