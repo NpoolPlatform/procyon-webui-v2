@@ -22,10 +22,10 @@
           </template>
         </div>
         <button class='alt' @click='onPurchaseClick' v-if='good.haveSale(_good)'>
-          {{ t('MSG_PURCHASE') }}
+          {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
         <button class='alt in-active' @click='onPurchaseClick' disabled v-else>
-          {{ t('MSG_SOLD_OUT') }}
+          {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
       </div>
       <div class='hr' />
