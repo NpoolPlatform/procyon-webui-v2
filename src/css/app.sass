@@ -1183,12 +1183,21 @@ input[type="checkbox"]
   width: 50%
 
 .info-table #aqua span
+.info-table #aqua::before
   color: var(--aqua-3)
   filter: contrast(1.5)
 
-.info-table #pink span
+.info-table td#aqua::before
+  content: "\2713"
+
+
+.info-table #pink span,
+.info-table td#pink::before
   color: var(--pink)
   filter: contrast(1.25)
+
+.info-table td#pink::before 
+  content: "\2717"
 
 .info-table th
   border-bottom: 3px solid var(--white-77)
@@ -1203,11 +1212,16 @@ input[type="checkbox"]
   border-bottom: 1px dashed var(--white-77)
   height: 48px
   padding: 8px 16px
+  position: relative
   text-align: left
 
 .q-table tbody td
   font-size: 16px
-
+  
+.info-table td::before
+  display: block
+  position: absolute
+  left: -4px
 .info-table th.table-highlight
   border-top: 6px solid var(--orange-2)
   border-left: 6px solid var(--orange-2)

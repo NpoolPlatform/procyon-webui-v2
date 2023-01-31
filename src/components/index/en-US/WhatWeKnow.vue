@@ -16,32 +16,60 @@
         </thead>
         <tbody>
           <tr>
-            <td>Produce great innovations</td>
-            <td>Add no value to the industry</td>
+            <td id='aqua'>
+              Produce great innovations
+            </td>
+            <td id='pink'>
+              Add no value to the industry
+            </td>
           </tr>
           <tr>
-            <td>Are more public about their code and progress</td>
-            <td>Hide code and keep quiet</td>
+            <td id='aqua'>
+              Are more public about their code and progress
+            </td>
+            <td id='pink'>
+              Hide code and keep quiet
+            </td>
           </tr>
           <tr>
-            <td>Get investments from famous large institutions</td>
-            <td>Do ICO and sell tokens directly to individuals before going on exchanges</td>
+            <td id='aqua'>
+              Get investments from famous large institutions
+            </td>
+            <td id='pink'>
+              Do ICO and sell tokens directly to individuals before going on exchanges
+            </td>
           </tr>
           <tr>
-            <td>Have teams with top education, work experience from well-known enterprises, and experience in blockchain, not just crypto</td>
-            <td>Do not disclose the team</td>
+            <td id='aqua'>
+              Have teams with top education, work experience from well-known enterprises, and experience in blockchain, not just crypto
+            </td>
+            <td id='pink'>
+              Do not disclose the team
+            </td>
           </tr>
           <tr>
-            <td>Invest time into development of its tech: always check the R&amp;D time!</td>
-            <td>Launch fast and poorly</td>
+            <td id='aqua'>
+              Invest time into development of its tech: always check the R&amp;D time!
+            </td>
+            <td id='pink'>
+              Launch fast and poorly
+            </td>
           </tr>
           <tr>
-            <td>Clearly communicate the token distribution, future road map, and backers</td>
-            <td>Promise fixed returns and look like Ponzi schemes</td>
+            <td id='aqua'>
+              Clearly communicate the token distribution, future road map, and backers
+            </td>
+            <td id='pink'>
+              Promise fixed returns and look like Ponzi schemes
+            </td>
           </tr>
           <tr>
-            <td>Foster active communities</td>
-            <td>Use bots and low quality conversations</td>
+            <td id='aqua'>
+              Foster active communities
+            </td>
+            <td id='pink'>
+              Use bots and low quality conversations
+            </td>
           </tr>
         </tbody>
       </table>
