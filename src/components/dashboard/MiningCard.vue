@@ -5,7 +5,7 @@
         <img :src='goodProfit?.CoinLogo'>
       </div>
       <h3 class='mining-title'>
-        {{ goodProfit?.CoinName }}
+        {{ goodProfit?.GoodName }}
       </h3>
     </div>
     <div class='top-line-summary'>
