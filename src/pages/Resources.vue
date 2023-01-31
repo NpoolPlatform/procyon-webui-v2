@@ -2,7 +2,7 @@
   <div v-if='locale === "en-US"'>
     <ResourcesEN />
   </div>
-  <div else>
+  <div v-else>
     <ResourcesJP />
   </div>
 </template>
