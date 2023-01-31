@@ -64,7 +64,7 @@
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
-          <span class='value'>{{ goodProfit.TotalEstimatedDailyReward }} <span class='unit'>Credits {{ $t('MSG_CREDITS') }}</span></span>
+          <span class='value'>{{ goodProfit.TotalEstimatedDailyReward }} <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
         </div>
         <div class='warning' v-if='$t(cardTip(goodProfit?.GoodName))?.trim()?.length > 0'>
           <img src='font-awesome/warning.svg'>
