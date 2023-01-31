@@ -2368,6 +2368,61 @@ img.faq-product
   margin: 0
   text-align: center
 
+/* RESOURCES */
+
+ul.resource-center
+  margin: 0 0 60px 0
+  padding: 0
+
+ul.resource-center li
+  border-radius: 4px
+  display: block
+  margin: 0 0 9px 0
+  position: relative
+  transition: all ease-in-out .5s
+
+.content ul.resource-center li::before
+  content: ""
+  display: none
+
+ul.resource-center li:hover
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
+
+ul.resource-center li::after
+  border-bottom: 1px solid var(--aqua-2-77)
+  content: ""
+  display: block
+  opacity: .5
+  position: absolute
+  left: 0
+  bottom: -5px
+  height: 1px
+  width: 100%
+
+ul.resource-center li a
+  color: var(--light-green-1)
+  display: block
+  font-size: 24px
+  padding: 8px 8px 8px 36px
+  width: 100%
+
+.content ul.resource-center li::before
+  display: block
+  margin: 0 0 0 10px
+  position: absolute
+  top: 50%
+  left: 0
+  transform: translateY(-50%)
+  width: 18px
+
+.content ul.resource-center li.pdf-icon::before
+  content: url('../../public/font-awesome/pdf.svg')
+  filter: contrast(1.5)
+
+.content ul.resource-center li.vid-icon::before
+  content: url('../../public/font-awesome/video.svg')
+  filter: brightness(1.2) contrast(1.2)
+
 /* MINING PAGE - EARNINGS SUMMARY */
 
 .earnings-summary
