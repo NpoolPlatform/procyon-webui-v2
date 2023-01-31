@@ -8,6 +8,7 @@ export interface MyGoodProfit extends GoodProfit {
   Last24HoursUSDInComing: number;
   Last30DaysInComing: number;
   Last30DaysUSDInComing: number;
+  TotalEstimatedDailyReward: number;
 }
 
 export interface MyGoodArchivement extends GoodArchivement {
