@@ -296,7 +296,7 @@
 
     <ul>
       <li>Aleo has set aside 25 million Aleo credits for Testnet 3 incentives. The initial part of the Aleo Incentives program will be focused on Provers. Prover Incentives account for <strong>7.5 million credits (30% of 25 million total Aleo credits)</strong>.</li>
-      <!-- <li>The <strong>"Prover Incentives" period will last until January 26th, 2023 at 23:59 UTC</strong>, or until all 7.5 million credits are exhausted — whichever comes first.</li> -->
+      <li>The <strong>"Prover Incentives" period will last until January 26th, 2023 at 23:59 UTC</strong>, or until all 7.5 million credits are exhausted — whichever comes first.</li>
       <li>At mainnet launch, <strong>Aleo credits will be redeemable at a rate of 5:1 (20%)</strong>. A bonus for first-batch miners!</li>
       <li>Aleo credits to be redeemed for Aleo tokens at a ratio of 5:1 upon mainnet launch.</li>
     </ul>
