@@ -24,7 +24,7 @@
         <button class='alt' @click='onPurchaseClick' v-if='good.haveSale(_good)'>
           {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
-        <button class='alt in-active' @click='onPurchaseClick' disabled v-else>
+        <button class='alt in-active card-btn' v-else>
           {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
       </div>
@@ -52,11 +52,17 @@ const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
 </script>
 <style lang='sass' scoped>
 .card-container
-  height: 600px
-  max-height: 600px
+  height: 540px
+  max-height: 540px
 
 .card-content-container
-  height: 180px
-  max-height: 180px
+  height: 150px
+  max-height: 150px
   overflow: auto
+
+.card-btn
+  background: none
+  border: 1px solid var(--white-77)
+  color: white
+  filter: saturate(0) contrast(.7)
 </style>
