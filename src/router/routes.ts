@@ -229,6 +229,19 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        path: 'resource',
+        component: () => import('pages/Resources.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: true
+        }
+      }, {
         path: 'purchase',
         component: () => import('pages/Purchase.vue'),
         meta: {

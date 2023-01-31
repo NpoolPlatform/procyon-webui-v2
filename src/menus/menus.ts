@@ -84,6 +84,14 @@ const BaseMenu = {
       target: '/kyc',
       level: 0,
       children: []
+    }, {
+      menuId: uid(),
+      label: 'MSG_RESOURCES',
+      caption: '',
+      icon: kyc,
+      target: '/resource',
+      level: 0,
+      children: []
     }
   ]
 }
