@@ -12,7 +12,7 @@
         />
         <div class='product-heading'>
           <img class='icon' :src='_good.CoinLogo'>
-          <template v-for='(title,index) in _good?.DisplayNames' :key='index'>
+          <template v-for='(title,index) in _good?.DisplayNames.slice(0, 1)' :key='index'>
             <div v-html='t(title)' />
           </template>
         </div>
@@ -21,7 +21,7 @@
             <div v-html='t(desc)' />
           </template>
         </div>
-        <button class='alt' @click='onPurchaseClick' v-if='good.haveSale(_good)'>
+        <button class='alt' @click='onPurchaseClick(_good)' v-if='good.haveSale(_good)'>
           {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
         <button class='alt in-active card-btn' v-else>
@@ -35,15 +35,20 @@
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
-import { useAdminAppGoodStore } from 'npool-cli-v4'
+import { AppGood, useAdminAppGoodStore } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const router = useRouter()
-const onPurchaseClick = () => {
-  void router.push({ path: '/product/aleo' })
+const onPurchaseClick = (good: AppGood) => {
+  void router.push({
+    path: '/product/aleo',
+    query: {
+      goodId: good.GoodID
+    }
+  })
 }
 
 const good = useAdminAppGoodStore()
