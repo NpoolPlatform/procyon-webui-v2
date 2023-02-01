@@ -134,7 +134,7 @@
                   label='MSG_PURCHASE'
                   type='submit'
                   class='submit-btn'
-                  :disabled='submitting'
+                  :disabled='submitting || !good.haveSale(target)'
                   :waiting='submitting'
                   @click='onPurchaseClick'
                 />

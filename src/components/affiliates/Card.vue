@@ -48,7 +48,7 @@
               <button
                 v-if='child'
                 :class='[ "alt", good.online(_good.GoodID) ? "" : "in-active" ]'
-                :disabled='!good.online(_good.GoodID)'
+                :disabled='!good.online(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood)'
                 @click='(_good.Editing = true)'
               >
                 {{ $t('MSG_SET') }}
@@ -80,10 +80,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr class='aff-info' v-for='setting in settings' :key='setting.ID'>
-                <td><span class='aff-product'>{{ good.getGoodByID(setting.GoodID)?.GoodName }}</span></td>
-                <td><span class='aff-number'>{{ settingDate(setting) }}<span class='unit'>{{ settingTime(setting) }}</span></span></td>
-                <td><span class='aff-number'>{{ setting.Percent }}<span class='unit'>%</span></span></td>
+              <tr class='aff-info' v-for='_commission in commissions' :key='_commission.ID'>
+                <td><span class='aff-product'>{{ good.getGoodByID(_commission.GoodID)?.GoodName }}</span></td>
+                <td><span class='aff-number'>{{ commission.settingDate(_commission) }}<span class='unit'>{{ commission.settingTime(_commission) }}</span></span></td>
+                <td><span class='aff-number'>{{ _commission.Percent }}<span class='unit'>%</span></span></td>
               </tr>
             </tbody>
           </table>
@@ -100,11 +100,7 @@
 
 <script setup lang='ts'>
 import {
-  PriceCoinName,
-  useInspireStore,
-  PurchaseAmountSetting,
-  formatTime,
-  NotificationType
+  PriceCoinName
 } from 'npool-cli-v2'
 import { ref, toRef, defineProps, computed, defineAsyncComponent } from 'vue'
 import chevrons from '../../assets/chevrons.svg'
@@ -114,10 +110,15 @@ import {
   User,
   useAdminAppGoodStore,
   useFrontendArchivementStore,
-  UserArchivement
+  UserArchivement,
+  NotifyType,
+  SettleType,
+  useFrontendCommissionStore,
+  AppGood
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 import { MyGoodArchivement } from 'src/localstore/ledger/types'
+
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
 
@@ -147,7 +148,8 @@ const logined = useLocalUserStore()
 const good = useAdminAppGoodStore()
 
 const archivement = useFrontendArchivementStore()
-const goodArchivements = computed(() => Array.from(referral.value.Archivements.filter((el) => good.visible(el.GoodID))).map((el) => {
+const goodArchivements = computed(() => Array.from(referral.value?.Archivements.filter((el) => good.visible(el.GoodID))).map((el) => {
+  console.log('Editing: ', good.haveSale(good.getGoodByID(el.GoodID) as AppGood))
   return {
     ...el,
     Editing: false
@@ -165,43 +167,32 @@ const onShowMoreClick = () => {
   showDetailSummary.value = !showDetailSummary.value
 }
 
-const inspire = useInspireStore()
-const settings = computed(() => inspire.PurchaseAmountSettings.filter((el) => {
+const commission = useFrontendCommissionStore()
+const commissions = computed(() => commission.Commissions.Commissions.filter((el) => {
   return el.UserID === referral.value.UserID
 }).sort((a, b) => {
-  return a.Start < b.Start ? 1 : -1
+  return a.StartAt < b.StartAt ? 1 : -1
 }))
-const settingDate = computed(() => (setting: PurchaseAmountSetting) => {
-  return formatTime(setting.Start, true)
-})
-const settingTime = computed(() => (setting: PurchaseAmountSetting) => {
-  return formatTime(setting.Start, false).split(' ')[1]
-})
 
-const onSaveCommissionClick = (good: MyGoodArchivement) => {
-  if (good.CommissionPercent > getGoodPercent.value(good.GoodID)) {
-    good.CommissionPercent = getGoodPercent.value(good.GoodID)
+const onSaveCommissionClick = (row: MyGoodArchivement) => {
+  if (row.CommissionPercent > getGoodPercent.value(row.GoodID)) {
+    row.CommissionPercent = getGoodPercent.value(row.GoodID)
   }
-  if (good.CommissionPercent < 0) {
-    good.CommissionPercent = 0
+  if (row.CommissionPercent < 0) {
+    row.CommissionPercent = 0
   }
-  good.Editing = false
-  inspire.createPurchaseAmountSetting({
+  row.Editing = false
+  commission.createCommission({
     TargetUserID: referral.value.UserID,
-    InviterName: baseUser.displayName(logined.User, locale.value as string),
-    InviteeName: username.value,
-    Info: {
-      GoodID: good.GoodID,
-      CoinTypeID: good.CoinTypeID,
-      Percent: good.CommissionPercent,
-      Start: Math.ceil(Date.now() / 1000),
-      End: 0
-    },
+    GoodID: row.GoodID,
+    SettleType: good.settleType(row.GoodID) as SettleType,
+    Value: `${row.CommissionPercent}`,
+    StartAt: Math.ceil(Date.now() / 1000),
     Message: {
       Error: {
         Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
         Popup: true,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
   }, () => {
