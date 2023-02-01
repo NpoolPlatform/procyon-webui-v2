@@ -62,7 +62,7 @@
             <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
           </span>
         </div>
-        <div class='line'>
+        <div class='line' v-if='goodProfit.GoodID === "de420061-e878-4a8b-986a-805cadd59233"'>
           <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
           <span class='value'>
             {{ goodProfit.TotalEstimatedDailyReward === 0 ? '*' : goodProfit.TotalEstimatedDailyReward }}
@@ -124,5 +124,8 @@ const onExpandClick = () => {
   short.value = !short.value
 }
 
-const cardTip = computed(() => (goodName: string) => 'MSG_' + goodName?.toUpperCase() + '_MINING_DASHBOARD_TIP')
+const cardTip = computed(() => (goodName: string) => {
+  const msg = 'MSG_' + goodName?.toUpperCase() + '_MINING_DASHBOARD_TIP'
+  return msg.replace(/ /g, '_')
+})
 </script>
