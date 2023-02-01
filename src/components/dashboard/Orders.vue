@@ -17,7 +17,7 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { formatTime, PriceCoinName } from 'npool-cli-v2'
+import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useFrontendOrderStore, Order } from 'npool-cli-v4'
 
@@ -52,7 +52,7 @@ const table = computed(() => [
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: Order) => (Number(row.PaymentAmount) + Number(row.PayWithBalanceAmount)).toString() + ' ' + PriceCoinName
+    field: (row: Order) => (Number(row.PaymentAmount) + Number(row.PayWithBalanceAmount)).toString() + ' ' + row.PaymentCoinUnit
   },
   {
     name: 'Period',
