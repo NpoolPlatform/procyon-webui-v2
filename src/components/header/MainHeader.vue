@@ -6,6 +6,7 @@
         <li><a class='nav-link' href='#'>{{ $t('MSG_HOME') }}</a></li>
         <li><a class='nav-link' target='_blank' href='https://procyon-vip.medium.com'>{{ $t('MSG_BLOG') }}</a></li>
         <li><a class='nav-link' href='#/faqs'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
+        <li><a class='nav-link' href='#partners'>{{ $t('MSG_PARTNERS') }}</a></li>
         <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
         <SignHelper v-if='!localUser.logined' />
@@ -79,6 +80,7 @@
         <li><a class='nav-link' target='_blank' href='https://procyon-vip.medium.com'>{{ $t('MSG_BLOG') }}</a></li>
         <li><a class='nav-link' href='#/faqs'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
         <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
+        <li><a class='nav-link' href='#partners'>{{ $t('MSG_PARTNERS') }}</a></li>
       </ul>
     </div>
   </header>

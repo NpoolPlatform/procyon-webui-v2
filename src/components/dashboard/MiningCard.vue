@@ -5,7 +5,7 @@
         <img :src='goodProfit?.CoinLogo'>
       </div>
       <h3 class='mining-title'>
-        {{ goodProfit?.CoinName }}
+        {{ goodProfit?.GoodName }}
       </h3>
     </div>
     <div class='top-line-summary'>
@@ -16,35 +16,61 @@
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }} {{ goodProfit?.CoinUnit }}</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }}{{ goodProfit?.CoinUnit }}</span>
         <span class='sub-value'>({{ goodProfit.Last24HoursUSDInComing }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
-        <span class='value'>{{ goodProfit?.Units }} {{ goodProfit ? $t(goodProfit?.GoodUnit) : '' }}</span>
+        <span class='value'>{{ goodProfit?.Units }}</span>
+        <span class='sub-value'> {{ goodProfit ? $t(goodProfit?.GoodUnit) : '' }}</span>
       </div>
     </div>
     <q-slide-transition>
       <div class='detailed-summary' v-show='!short'>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
-          <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last30DaysInComing / 30 }} {{ goodProfit?.CoinUnit }}</span>
+          <span class='value'>
+            {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last30DaysInComing / 30 }}
+            <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
+          </span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
-          <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last24HoursInComing * 0.2 }} {{ goodProfit?.CoinUnit }} (20%)</span>
+          <span class='value'>
+            {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last24HoursInComing * 0.2 }}
+            <span class='unit'>{{ goodProfit?.CoinUnit }} (20%)</span>
+          </span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-          <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last30DaysInComing / 30 * 0.8 }} {{ goodProfit?.CoinUnit }}</span>
+          <span class='value'>
+            {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last30DaysInComing / 30 * 0.8 }}
+            <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
+          </span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
-          <span class='value'>{{ goodProfit?.GoodServicePeriodDays }} {{ $t('MSG_DAYS') }}</span>
+          <span class='value'>
+            {{ goodProfit?.GoodServicePeriodDays }}
+            <span class='unit'>{{ $t('MSG_DAYS') }}</span>
+          </span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
-          <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : 1000 }} {{ goodProfit?.CoinUnit }}</span>
+          <span class='value'>
+            {{ goodProfit?.CoinPreSale ? '*' : 1000 }}
+            <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
+          </span>
+        </div>
+        <div class='line' v-if='goodProfit.GoodID === "de420061-e878-4a8b-986a-805cadd59233"'>
+          <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
+          <span class='value'>
+            {{ goodProfit.TotalEstimatedDailyReward === 0 ? '*' : goodProfit.TotalEstimatedDailyReward }}
+            <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
+        </div>
+        <div class='warning' v-if='$t(cardTip(goodProfit?.GoodName))?.trim()?.length > 0'>
+          <img src='font-awesome/warning.svg'>
+          <span v-html='$t(cardTip(goodProfit?.GoodName))' />
         </div>
       </div>
     </q-slide-transition>
@@ -98,4 +124,8 @@ const onExpandClick = () => {
   short.value = !short.value
 }
 
+const cardTip = computed(() => (goodName: string) => {
+  const msg = 'MSG_' + goodName?.toUpperCase() + '_MINING_DASHBOARD_TIP'
+  return msg.replace(/ /g, '_')
+})
 </script>

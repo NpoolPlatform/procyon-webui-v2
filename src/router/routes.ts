@@ -138,6 +138,18 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        path: 'partners',
+        component: () => import('pages/Partners.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false
+        }
+      }, {
         path: 'dashboard',
         component: () => import('pages/Dashboard.vue'),
         meta: {
@@ -218,6 +230,19 @@ const routes: RouteRecordRaw[] = [
       }, {
         path: 'kyc',
         component: () => import('pages/KYC.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: true
+        }
+      }, {
+        path: 'resource',
+        component: () => import('pages/Resources.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
           ShowMainHeader: true,

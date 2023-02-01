@@ -18,12 +18,16 @@
       </h4>
     </div>
   </div>
+  <button class='alt' @click='goWallet'>
+    {{ $t('MSG_GO_WALLET') }} &roarr;
+  </button>
 </template>
 
 <script setup lang="ts">
 import { PriceCoinName, useAdminCurrencyStore, useFrontendProfitStore } from 'npool-cli-v4'
 import { IntervalKey } from 'src/const/const'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 const currency = useAdminCurrencyStore()
 
@@ -47,4 +51,8 @@ const last24HoursEarning = computed(() => {
   return total.toFixed(4)
 })
 
+const router = useRouter()
+const goWallet = () => {
+  void router.push({ path: '/wallet' })
+}
 </script>

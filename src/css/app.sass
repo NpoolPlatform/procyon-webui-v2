@@ -542,7 +542,7 @@ img.content-image
   z-index: 2
 
 .logo-feature-title
-  border-bottom: 1px solid #e1eeef33
+  border-bottom: 1px solid var(--white-77)
   font-size: 18px
   font-weight: 400
   margin: 0 2% 16px 2%
@@ -553,10 +553,14 @@ img.content-image
   line-height: 1.2
 
 .logo-feature img
-  filter: invert(100%) opacity(.8)
+  filter: invert(1) opacity(.9) drop-shadow(0 0 4px var(--white-77))
   height: 100%
   margin: 0 5%
   max-width: 10%
+  transition: all ease-in-out .2s
+
+.logo-feature img:hover
+  filter: invert(1) opacity(1) drop-shadow(0 0 8px var(--white))
 
 .highlight
   align-items: center
@@ -768,29 +772,6 @@ h3.feature-title::after
   min-width: 320px
   width: 30%
 
-// .product::before
-//   background-position: center
-//   background-size: 100% auto
-//   border-radius: 12px 12px 0 0
-//   box-shadow: 0 0 10px var(--dark-blue-3)
-//   content: ""
-//   display: block
-//   position: absolute
-//   top: 0
-//   left: 0
-//   width: 100%
-//   height: 120px
-
-// .product
-//   padding: 36px
-//   margin: 0 5% 5% 0
-//   text-align: center
-//   transition: all ease-in-out .5s
-//   min-width: 320px
-//   width: 30%
-
-// .product:last-of-type
-//   margin-right: 0
 
 .product:hover
   transition: all ease-in-out .5s
@@ -800,7 +781,7 @@ h3.feature-title::after
   padding: 0 0 12px 0
   position: relative
   width: 100%
-  height: 290px
+  height: 255px
 
 .product-heading::after
   background: linear-gradient(to right, transparent 0, var(--light-green-2) 50%, transparent 100%)
@@ -822,6 +803,7 @@ h3.product-title
   color: #e1eeef
   font-size: 28px
   font-weight: 400
+  line-height: 1.2
   margin: 0
   text-transform: uppercase
 
@@ -851,11 +833,13 @@ h3.product-title span.project-name
 h4.product-tagline
   font-size: 20px
   font-weight: 400
+  line-height: 1.2
   text-transform: none
 
 .product-note
   font-size: 14px
   font-weight: 700
+  line-height: 1.2
 
 .product .price
   color: #1ec498
@@ -1176,13 +1160,21 @@ input[type="checkbox"]
 .table-2-columns td
   width: 50%
 
-.info-table #aqua span
+.info-table #aqua span,
+.info-table #aqua::before
   color: var(--aqua-3)
   filter: contrast(1.5)
 
-.info-table #pink span
+.info-table td#aqua::before
+  content: "\2713"
+
+.info-table #pink span,
+.info-table td#pink::before
   color: var(--pink)
   filter: contrast(1.25)
+
+.info-table td#pink::before
+  content: "\2717"
 
 .info-table th
   border-bottom: 3px solid var(--white-77)
@@ -1197,8 +1189,16 @@ input[type="checkbox"]
   border-bottom: 1px dashed var(--white-77)
   height: 48px
   padding: 8px 16px
+  position: relative
   text-align: left
 
+.q-table tbody td
+  font-size: 16px
+  
+.info-table td::before
+  display: block
+  position: absolute
+  left: -4px
 .info-table th.table-highlight
   border-top: 6px solid var(--orange-2)
   border-left: 6px solid var(--orange-2)
@@ -2368,12 +2368,71 @@ img.faq-product
   margin: 0
   text-align: center
 
+/* RESOURCES */
+
+ul.resource-center
+  margin: 0 0 60px 0
+  padding: 0
+
+ul.resource-center li
+  border-radius: 4px
+  display: block
+  margin: 0 0 9px 0
+  position: relative
+  transition: all ease-in-out .5s
+
+.content ul.resource-center li::before
+  content: ""
+  display: none
+
+ul.resource-center li:hover
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
+
+ul.resource-center li::after
+  border-bottom: 1px solid var(--aqua-2-77)
+  content: ""
+  display: block
+  opacity: .5
+  position: absolute
+  left: 0
+  bottom: -5px
+  height: 1px
+  width: 100%
+
+ul.resource-center li a
+  color: var(--light-green-1)
+  display: block
+  font-size: 24px
+  padding: 8px 8px 8px 36px
+  width: 100%
+
+.content ul.resource-center li::before
+  display: block
+  margin: 0 0 0 10px
+  position: absolute
+  top: 50%
+  left: 0
+  transform: translateY(-50%)
+  width: 18px
+
+.content ul.resource-center li.pdf-icon::before
+  content: url('../../public/font-awesome/pdf.svg')
+  filter: contrast(1.5)
+
+.content ul.resource-center li.vid-icon::before
+  content: url('../../public/font-awesome/video.svg')
+  filter: brightness(1.2) contrast(1.2)
+
 /* MINING PAGE - EARNINGS SUMMARY */
 
 .earnings-summary
   display: flex
   flex-wrap: wrap
   justify-content: center
+
+.earnings-summary + button
+  margin: 24px 10%
+  width: 80%
 
 .earnings-figure
   margin: 0 5% 0 0
@@ -2429,16 +2488,16 @@ h3.mining-title
   margin: 0
   text-transform: uppercase
 
-.mining-summary .warning
-  background: #fc4468
-  border: 0
-  font-size: 20px
-  padding: 12px
-  margin: 24px 0
+// .mining-summary .warning
+//   background: #fc4468
+//   border: 0
+//   font-size: 20px
+//   padding: 12px
+//   margin: 24px 0
 
-.mining-summary .warning span
-  font-size: 16px
-  line-height: 24px
+// .mining-summary .warning span
+//   font-size: 16px
+//   line-height: 24px
 
 .top-line-summary
   display: flex
@@ -2491,12 +2550,23 @@ h3.mining-title
   padding: 8px 0
 
 .detailed-summary .label
-  font-weight: 200
+  font-weight: 400
 
 .detailed-summary .value
   color: #1ec498
   filter: contrast(1.5)
   font-weight: 500
+
+.detailed-summary .unit
+  color: var(--light-green-1)
+  filter: none
+  font-size: inherit
+  font-weight: 700
+  margin: 0
+  text-transform: unset
+
+.detailed-summary .warning
+  margin: 12px 0 0 0
 
 /* AFFILIATES PAGE */
 
