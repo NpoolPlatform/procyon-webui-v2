@@ -33,7 +33,7 @@ const goodProfits = computed(() => Array.from(profit.GoodProfits.GoodProfits).ma
     Last24HoursUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
     Last30DaysInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID),
     Last30DaysUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID),
-    TotalEstimatedDailyReward: el.Units * Number(good.getGoodByID(el.GoodID)?.EstimatedDailyReward)
+    TotalEstimatedDailyReward: el.Units * Number(good.getGoodByID(el.GoodID)?.DailyRewardAmount)
   } as MyGoodProfit
 }))
 </script>

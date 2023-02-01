@@ -64,16 +64,14 @@
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
-          <span class='value'>{{ goodProfit.TotalEstimatedDailyReward }} <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
+          <span class='value'>
+            {{ goodProfit.TotalEstimatedDailyReward === 0 ? '*' : goodProfit.TotalEstimatedDailyReward }}
+            <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
         </div>
         <div class='warning' v-if='$t(cardTip(goodProfit?.GoodName))?.trim()?.length > 0'>
           <img src='font-awesome/warning.svg'>
           <span v-html='$t(cardTip(goodProfit?.GoodName))' />
         </div>
-        <!-- <div class='warning waring-gap'>
-          <img src='font-awesome/warning.svg'>
-          <span v-html='$t("MSG_EXTERNAL_TRANSFER_ADDRESS_WARNING")' />
-        </div> -->
       </div>
     </q-slide-transition>
     <div class='buttons'>
@@ -126,5 +124,5 @@ const onExpandClick = () => {
   short.value = !short.value
 }
 
-const cardTip = computed(() => (goodName: string) => 'MSG_' + goodName + '_MINING_DASHBOARD_TIP')
+const cardTip = computed(() => (goodName: string) => 'MSG_' + goodName?.toUpperCase() + '_MINING_DASHBOARD_TIP')
 </script>
