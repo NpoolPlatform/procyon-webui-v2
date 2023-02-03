@@ -48,7 +48,7 @@
               <button
                 v-if='child'
                 :class='[ "alt", good.online(_good.GoodID) ? "" : "in-active" ]'
-                :disabled='!good.online(_good.GoodID)'
+                :disabled='!good.online(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood)'
                 @click='(_good.Editing = true)'
               >
                 {{ $t('MSG_SET') }}
@@ -113,7 +113,8 @@ import {
   UserArchivement,
   NotifyType,
   SettleType,
-  useFrontendCommissionStore
+  useFrontendCommissionStore,
+  AppGood
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 import { MyGoodArchivement } from 'src/localstore/ledger/types'
@@ -148,6 +149,7 @@ const good = useAdminAppGoodStore()
 
 const archivement = useFrontendArchivementStore()
 const goodArchivements = computed(() => Array.from(referral.value?.Archivements.filter((el) => good.visible(el.GoodID))).map((el) => {
+  console.log('Editing: ', good.haveSale(good.getGoodByID(el.GoodID) as AppGood))
   return {
     ...el,
     Editing: false

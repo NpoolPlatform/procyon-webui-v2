@@ -115,8 +115,8 @@ interface MyGeneral extends General {
 
 const assetLabel = (asset: General) => {
   let label = asset.CoinName
-  if (asset.DisplayNames.length > 2 && asset.DisplayNames[2].length > 0) {
-    label = asset.DisplayNames[2]
+  if (asset.DisplayNames?.length > 2 && asset.DisplayNames?.[2]?.length > 0) {
+    label = asset.DisplayNames?.[2]
   }
   return label
 }
