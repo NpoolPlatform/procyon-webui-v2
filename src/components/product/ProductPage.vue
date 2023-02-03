@@ -7,7 +7,7 @@
             <div class='product-page-icon'>
               <img :src='target?.CoinLogo'>
             </div>
-            <h1>{{ target?.GoodName }} {{ $t('MSG_MINING') }}</h1>
+            <h1>{{ target?.GoodName }}</h1>
           </div>
         </div>
         <!-- mobile start -->
