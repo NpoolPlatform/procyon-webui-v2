@@ -1,17 +1,88 @@
 <template>
-  <BackPage>
-    <div class='content order-page'>
-      <div :class='[ "product-container content-glass project", projectClass ]'>
-        <div class='product-title-section project-title-section' :style='{"background-image": "url(" + bgImg + ")"}'>
-          <div class='product-title-container'>
-            <div class='product-page-icon'>
-              <img :src='target?.CoinLogo'>
-            </div>
-            <h1>{{ $t(target?.DisplayNames?.[1]) }}</h1>
+  <div class='content order-page'>
+    <div :class='[ "product-container content-glass project", projectClass ]'>
+      <div class='product-title-section project-title-section' :style='{"background-image": "url(" + bgImg + ")"}'>
+        <div class='product-title-container'>
+          <div class='product-page-icon'>
+            <img :src='target?.CoinLogo'>
+          </div>
+          <h1>{{ $t(target?.DisplayNames?.[1]) }}</h1>
+        </div>
+      </div>
+      <!-- mobile start -->
+      <div id='product-form' class='product-sidebar-section mobile'>
+        <h3 class='form-title'>
+          {{ $t('MSG_MINING_PURCHASE') }}
+        </h3>
+        <form action='javascript:void(0)' id='purchase'>
+          <div class='full-section' v-if='good.haveSale(target)'>
+            <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
+            <span class='number'>{{ remainDays }}</span>
+            <span class='unit'> {{ $t("MSG_DAYS") }} </span>
+            <span class='number'>{{ remainHours }}</span>
+            <span class='unit'>{{ $t("MSG_HOURS") }} </span>
+            <span class='number'>{{ remainMinutes }}</span>
+
+            <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
+          </div>
+          <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
+          <Input
+            v-model:value='myPurchaseAmount'
+            type='number'
+            id='amount'
+            required
+            :error='purchaseAmountError'
+            :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
+            placeholder='MSG_AMOUNT_PLACEHOLDER'
+            :min='1'
+            :max='total'
+            @focus='onPurchaseAmountFocusIn'
+            @blur='onPurchaseAmountFocusOut'
+          />
+          <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
+          <CoinSelector
+            v-model:id='selectedCoinID'
+            :coins='coins'
+            label=''
+            hide-label
+            default
+            :tip-index='1'
+            :name-index='1'
+          />
+          <div class='warning' v-if='showRateTip'>
+            <img :src='warning'>
+            <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
+          </div>
+          <div class='warning' v-if='showBUSDTip'>
+            <img :src='warning'>
+            <span>{{ $t('MSG_COIN_BUSD_PAYMENT_TIP') }}</span>
+          </div>
+          <div class='submit-container'>
+            <WaitingBtn
+              label='MSG_PURCHASE'
+              type='submit'
+              class='submit-btn'
+              :disabled='submitting'
+              :waiting='submitting'
+              @click='onPurchaseClick'
+            />
+          </div>
+        </form>
+      </div>
+      <div class='info'>
+        <h3 class='form-title'>
+          {{ $t('MSG_PRODUCT_DETAILS') }}
+        </h3>
+        <div v-if='customizeInfo' class='info-flex'>
+          <slot name='product-info' />
+          <div class='product-detail-text'>
+            <slot name='product-detail' />
           </div>
         </div>
-        <!-- mobile start -->
-        <div id='product-form' class='product-sidebar-section mobile'>
+      </div>
+      <!-- mobile end -->
+      <div class='product-sidebar'>
+        <div id='product-form' class='product-sidebar-section'>
           <h3 class='form-title'>
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
@@ -23,7 +94,6 @@
               <span class='number'>{{ remainHours }}</span>
               <span class='unit'>{{ $t("MSG_HOURS") }} </span>
               <span class='number'>{{ remainMinutes }}</span>
-
               <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
             </div>
             <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
@@ -63,90 +133,18 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting'
+                :disabled='submitting || !good.haveSale(target)'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
             </div>
           </form>
         </div>
-        <div class='info'>
-          <h3 class='form-title'>
-            {{ $t('MSG_PRODUCT_DETAILS') }}
-          </h3>
-          <div v-if='customizeInfo' class='info-flex'>
-            <slot name='product-info' />
-            <div class='product-detail-text'>
-              <slot name='product-detail' />
-            </div>
-          </div>
-        </div>
-        <!-- mobile end -->
-        <div class='product-sidebar'>
-          <div id='product-form' class='product-sidebar-section'>
-            <h3 class='form-title'>
-              {{ $t('MSG_MINING_PURCHASE') }}
-            </h3>
-            <form action='javascript:void(0)' id='purchase'>
-              <div class='full-section' v-if='good.haveSale(target)'>
-                <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
-                <span class='number'>{{ remainDays }}</span>
-                <span class='unit'> {{ $t("MSG_DAYS") }} </span>
-                <span class='number'>{{ remainHours }}</span>
-                <span class='unit'>{{ $t("MSG_HOURS") }} </span>
-                <span class='number'>{{ remainMinutes }}</span>
-                <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
-              </div>
-              <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
-              <Input
-                v-model:value='myPurchaseAmount'
-                type='number'
-                id='amount'
-                required
-                :error='purchaseAmountError'
-                :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
-                placeholder='MSG_AMOUNT_PLACEHOLDER'
-                :min='1'
-                :max='total'
-                @focus='onPurchaseAmountFocusIn'
-                @blur='onPurchaseAmountFocusOut'
-              />
-              <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
-              <CoinSelector
-                v-model:id='selectedCoinID'
-                :coins='coins'
-                label=''
-                hide-label
-                default
-                :tip-index='1'
-                :name-index='1'
-              />
-              <div class='warning' v-if='showRateTip'>
-                <img :src='warning'>
-                <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
-              </div>
-              <div class='warning' v-if='showBUSDTip'>
-                <img :src='warning'>
-                <span>{{ $t('MSG_COIN_BUSD_PAYMENT_TIP') }}</span>
-              </div>
-              <div class='submit-container'>
-                <WaitingBtn
-                  label='MSG_PURCHASE'
-                  type='submit'
-                  class='submit-btn'
-                  :disabled='submitting || !good.haveSale(target)'
-                  :waiting='submitting'
-                  @click='onPurchaseClick'
-                />
-              </div>
-            </form>
-          </div>
-          <slot name='sidebar' />
-        </div>
+        <slot name='sidebar' />
       </div>
-      <div class='hr' />
     </div>
-  </BackPage>
+    <div class='hr' />
+  </div>
 </template>
 
 <script setup lang='ts'>
@@ -165,7 +163,7 @@ import { getCoins } from 'src/api/chain'
 
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
-const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
+// const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 interface Props {
