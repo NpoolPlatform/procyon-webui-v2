@@ -56,10 +56,6 @@ const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
 
 </script>
 <style lang='sass' scoped>
-.card-container
-  height: 540px
-  max-height: 540px
-
 .card-content-container
   height: 150px
   max-height: 150px
