@@ -15,12 +15,32 @@
         </thead>
         <tbody>
           <tr>
-            <td>Purchased BEFORE <strong>2023-02-03 23:59 JST</strong></td>
-            <td>Purchased AFTER <strong>2023-02-03 23:59 JST</strong></td>
+            <td>First Batch Mining</td>
+            <td>First Batch Mining</td>
           </tr>
           <tr>
-            <td>Will receive Prover Incentives</td>
-            <td>Will NOT receive Prover Inventives</td>
+            <td>Purchased <strong>before</strong> February 3, 2023</td>
+            <td>Purchased <strong>after</strong> February 3, 2023, <strong>before</strong> March 31st, 2023</td>
+          </tr>
+          <tr>
+            <td>You will receive Prover Testnet Rewards<br>*7.5 million credits (30% of total)</td>
+            <td>You will <strong>not receive</strong> Prover testnet rewards</td>
+          </tr>
+          <tr>
+            <td>Verifier Testnet Rewards may ALSO be received.<br>*17.5 million credits (70% of total projected)</td>
+            <td><strong>Verifier Testnet Rewards projected to be<br>*17.5 million credits (70% of total projected)</strong></td>
+          </tr>
+          <tr>
+            <td>Hashpower per unit: <strong>90 proofs / second</strong></td>
+            <td>TBD</td>
+          </tr>
+          <tr>
+            <td>Time period: <strong>December 10 to January 25</strong></td>
+            <td>Duration: <strong>From early March to early May</strong> (from Aleo's latest roadmap)</td>
+          </tr>
+          <tr>
+            <td>Aleo credits earned per unit:<br><strong>Still in the process of accounting, please refer to your account for the final number of credits earned</strong></td>
+            <td>TBD</td>
           </tr>
         </tbody>
       </table>
@@ -28,6 +48,16 @@
         *See <a @click='scrollTo("Aleo Prover Incentive Program")'>Aleo Prover Incentive Program</a> for a full explanation of the incentives.
       </p>
     </div>
+
+    <h3>Aleo GOLD - Earn Aleo tokens before the mainnet launches!</h3>
+
+    <p>Aleo’s Prover Incentive program is over, which means Procyon users can now buy Aleo Gold</p>
+
+    <p><strong>Aleo still has 17.5 million testnet credits that need to be distributed</strong>. We expect the next incentive program to be announced for testnet verifiers: stay tuned for updates!</p>
+
+    <p>Procyon’s Aleo Platinum earned early rewards for early buyers. <strong>If you haven’t yet bought this first-batch mining, don’t miss this next chance!</strong></p>
+
+    <p>These testnet incentives are eligible for partial conversion to mainnet Aleo tokens, and our partner Hpool continues to participate for all of our Aleo buyers.</p>
 
     <h3>Procyon’s Project Selection</h3>
 
@@ -296,12 +326,11 @@
 
     <ul>
       <li>Aleo has set aside 25 million Aleo credits for Testnet 3 incentives. The initial part of the Aleo Incentives program will be focused on Provers. Prover Incentives account for <strong>7.5 million credits (30% of 25 million total Aleo credits)</strong>.</li>
-      <!-- <li>The <strong>"Prover Incentives" period will last until January 26th, 2023 at 23:59 UTC</strong>, or until all 7.5 million credits are exhausted — whichever comes first.</li> -->
       <li>At mainnet launch, <strong>Aleo credits will be redeemable at a rate of 5:1 (20%)</strong>. A bonus for first-batch miners!</li>
       <li>Aleo credits to be redeemed for Aleo tokens at a ratio of 5:1 upon mainnet launch.</li>
     </ul>
 
-    <p>Again, the 5:1 ratio refers to the fact that 20% of Aleo testnet rewards can be redeemed for Aleo tokens upon mainnet launch. Testnet rewards can be earned by participating in the Testnet Provers Incentive Program.</p>
+    <p>Again, the 5:1 ratio refers to the fact that 20% of Aleo testnet rewards can be redeemed for Aleo tokens upon mainnet launch. Testnet rewards can be earned by participating in the Testnet Prover Incentive Program.</p>
 
     <p><strong>e.g. if 1 unit mines 100 testnet rewards, they will be eligible to receive 20 Aleo tokens upon mainnet launch.</strong></p>
 
