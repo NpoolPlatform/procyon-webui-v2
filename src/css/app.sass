@@ -1368,11 +1368,17 @@ h4#signature
   display: inline-block
   margin: 0 8px 0 0
   text-align: center
+  @media (max-width: $breakpoint-sm-max)
+    display: block
+    margin: -38px 0 6px 0
+    text-align: left
+  
 
 .product-page-icon img
   vertical-align: middle
   height: 48px
   width: 48px
+  filter: drop-shadow(0 0 20px var(--light-green-2-33))
 
 .product-container h1
   display: inline-block
@@ -3209,11 +3215,9 @@ footer .copyright
     width: calc(100% + 48px)
 
   .project .product-title-container
-    border-radius: 12px
-    top: 12px
-    left: 12px
-    bottom: unset
-    padding: 12px
+    border-radius: 0
+    left: 0
+    width: 100%
 
   .project .product-title-container::before,
   .project .product-title-container::after
