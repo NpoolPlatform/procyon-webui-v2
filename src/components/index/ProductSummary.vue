@@ -59,7 +59,7 @@ const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
 .card-content-container
   height: 170px
   max-height: 170px
-  overflow-y: scroll
+  overflow-y: hidden
 
 .card-btn
   background: none
