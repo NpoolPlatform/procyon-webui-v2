@@ -51,8 +51,12 @@
 .faq-menu-item img,
 div.up-button a img,
 .logo-display div,
+.logo-display img,
 .logo-feature img
   user-select: none
+
+.logo-display img:hover
+  filter: invert(1) opacity(1) drop-shadow(0 0 8px var(--white-77))
 
 html,
 body
@@ -772,7 +776,6 @@ h3.feature-title::after
   min-width: 320px
   width: 30%
 
-
 .product:hover
   transition: all ease-in-out .5s
   box-shadow: 8px 8px 20px 0 #051319
@@ -1194,7 +1197,7 @@ input[type="checkbox"]
 
 .q-table tbody td
   font-size: 16px
-  
+
 .info-table td::before
   display: block
   position: absolute
