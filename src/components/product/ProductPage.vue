@@ -80,7 +80,7 @@
           </div>
         </div>
       </div>
-      <!-- mobile end -->
+      <!-- pc start -->
       <div class='product-sidebar'>
         <div id='product-form' class='product-sidebar-section'>
           <h3 class='form-title'>
