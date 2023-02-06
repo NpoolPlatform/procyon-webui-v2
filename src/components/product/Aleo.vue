@@ -115,7 +115,7 @@
           </li>
         </ul>
       </div>
-      <div id='help' class='product-sidebar-section'>
+      <!-- <div id='help' class='product-sidebar-section'>
         <h3 class='form-title'>
           {{ $t('MSG_PRODUCT_FAQ') }}
         </h3>
@@ -127,7 +127,7 @@
             </a>
           </li>
         </ul>
-      </div>
+      </div> -->
     </template>
   </ProductPage>
 </template>
@@ -139,7 +139,7 @@ import { PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
-import lightbulb from '../../assets/lightbulb.svg'
+// import lightbulb from '../../assets/lightbulb.svg'
 import { DefaultGoodID } from 'src/const/const'
 import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
 import { getCurrencies, getDescriptions } from 'src/api/chain'
