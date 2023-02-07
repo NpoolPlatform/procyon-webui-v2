@@ -164,9 +164,6 @@ const verify = () => {
     }
   }, () => {
     _verify()
-    if (notifications.value?.length === 0) {
-      getNotifs(0, 500)
-    }
   })
 }
 
@@ -181,6 +178,9 @@ const _verify = () => {
     }
     void router.push({ path: '/' })
     remainder()
+    if (notifications.value?.length === 0) {
+      getNotifs(0, 500)
+    }
     return
   }
 
@@ -236,6 +236,9 @@ const onCodeVerify = (code: string) => {
       return
     }
     remainder()
+    if (notifications.value?.length === 0) {
+      getNotifs(0, 500)
+    }
   })
 }
 
