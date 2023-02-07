@@ -18,6 +18,7 @@ import affiliates from '../assets/icon-affiliates.svg'
 import security from '../assets/shield-half.svg'
 // import account from '../assets/icon-account.svg'
 import kyc from '../assets/user.svg'
+import notification from '../assets/notifications.svg'
 
 const BaseMenu = {
   menuId: uid(),
@@ -42,6 +43,14 @@ const BaseMenu = {
       caption: '',
       icon: dashboard,
       target: '/dashboard',
+      level: 0,
+      children: []
+    }, {
+      menuId: uid(),
+      label: 'MSG_NOTIFICATION',
+      caption: '',
+      icon: notification,
+      target: '/notification',
       level: 0,
       children: []
     }, {
