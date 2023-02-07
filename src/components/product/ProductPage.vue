@@ -6,7 +6,7 @@
           <div class='product-page-icon'>
             <img :src='target?.CoinLogo'>
           </div>
-          <h1>{{ target?.DisplayNames?.[1]? $t(target?.DisplayNames?.[1]) : "" }}</h1>
+          <h1 v-html='target?.DisplayNames?.[1]? $t(target?.DisplayNames?.[1]) : ""' />
         </div>
       </div>
       <!-- mobile start -->
