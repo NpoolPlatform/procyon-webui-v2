@@ -9,6 +9,14 @@ export interface GetNotifResponse {
   Info: Notif;
 }
 
+export interface UpdateNotifRequest extends BaseRequest{
+  ID: string;
+  AlreadyRead: boolean;
+}
+
+export interface UpdateNotifResponse {
+  Info: Notif;
+}
 export interface GetNotifsRequest extends BaseRequest {
   /** @format int64 */
   Offset: number;
