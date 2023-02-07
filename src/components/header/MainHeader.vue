@@ -18,12 +18,12 @@
                 <span class='number'>{{ unread?.length }}</span>
                 {{ $t('MSG_NEW_NOTIFICATIONS') }}
                 <span class='clear-all'>
-                  <a @click='onMark'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+                  <a @click='onMarkAll(unread)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
                 </span>
               </span>
               <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
             </li>
-            <li v-for='row in unread' :key='row.ID'>
+            <li v-for='row in unread' :key='row.ID' @click='onMarkAll([row])'>
               <span class='top'>
                 <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
                 <span class='title'>{{ row.EventType }}</span>
@@ -80,12 +80,12 @@
               <span class='number'>{{ unread?.length }}</span>
               {{ $t('MSG_NEW_NOTIFICATIONS') }}
               <span class='clear-all'>
-                <a @click='onMark'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+                <a @click='onMarkAll(unread)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
               </span>
             </span>
             <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
           </li>
-          <li v-for='row in unread' :key='row.ID'>
+          <li v-for='row in unread' :key='row.ID' @click='onMarkAll([row])'>
             <span class='top'>
               <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
               <span class='title'>{{ row.EventType }}</span>
@@ -143,6 +143,7 @@ import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
 import { useFrontendNotifStore } from 'src/teststore/mock/notify'
+import { Notif } from 'src/teststore/mock/notify/const'
 
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
@@ -239,9 +240,25 @@ onMounted(() => {
   }
 })
 
-const onMark = () => {
-  // TODO
-  console.log('onMark: ')
+const onMarkAll = (rows: Array<Notif>) => {
+  if (rows?.length === 0) {
+    return
+  }
+  const ids = Array.from(rows).map((el) => el.ID)
+  notif.updateNotif({
+    IDs: ids,
+    AlreadyRead: true,
+    Message: {
+      Info: {
+        Title: t('MSG_UPDATE_NOTIFICATION'),
+        Message: t('MSG_UPDATE_NOTIFICATION_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
 }
 </script>
 
