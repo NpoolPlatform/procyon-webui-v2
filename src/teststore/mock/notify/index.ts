@@ -52,7 +52,11 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
         req,
         req.Message,
         (resp: GetNotifsResponse): void => {
-          this.Notifs.Notifs.push(...resp.Infos)
+          resp.Infos.forEach((el) => {
+            if (!this.getNotifByID(el.ID)) {
+              this.Notifs.Notifs.push(el)
+            }
+          })
           this.Notifs.Total = resp.Total
           done(resp.Infos, false)
         }, () => {

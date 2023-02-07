@@ -12,7 +12,7 @@
         />
         <div class='product-heading'>
           <img class='icon' :src='_good.CoinLogo'>
-          <template v-for='(title,index) in _good?.DisplayNames.slice(0, 1)' :key='index'>
+          <template v-for='(title,index) in _good?.DisplayNames?.slice(0, 1)' :key='index'>
             <div v-html='t(title)' />
           </template>
         </div>

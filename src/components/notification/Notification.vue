@@ -18,10 +18,16 @@
 
 <script lang='ts' setup>
 import { useFrontendNotifStore } from 'src/teststore/mock/notify'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { formatTime } from 'npool-cli-v4/utils'
+import { getNotifs } from 'src/api/notif'
 
 const notif = useFrontendNotifStore()
 const notifications = computed(() => notif.Notifs.Notifs)
 
+onMounted(() => {
+  if (notifications.value?.length === 0) {
+    getNotifs(0, 500)
+  }
+})
 </script>
