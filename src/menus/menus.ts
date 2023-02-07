@@ -48,7 +48,7 @@ const BaseMenu = {
       children: []
     }, {
       menuId: uid(),
-      label: 'MSG_NOTIFICATION',
+      label: 'MSG_NOTIFICATIONS',
       caption: '',
       icon: notification,
       target: '/notification',
