@@ -5,7 +5,9 @@ import {
   GetNotifRequest,
   GetNotifResponse,
   GetNotifsRequest,
-  GetNotifsResponse
+  GetNotifsResponse,
+  UpdateNotifRequest,
+  UpdateNotifResponse
 } from './types'
 
 export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
@@ -70,6 +72,19 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
         req,
         req.Message,
         (resp: GetNotifResponse): void => {
+          done(resp.Info, false)
+        }, () => {
+          done({} as Notif, true)
+        })
+    },
+    updateNotif (req: UpdateNotifRequest, done: (row: Notif, error: boolean) => void) {
+      doActionWithError<UpdateNotifRequest, UpdateNotifResponse>(
+        API.UPDATE_NOTIF,
+        req,
+        req.Message,
+        (resp: UpdateNotifResponse): void => {
+          const index = this.Notifs.Notifs.findIndex((el) => el.ID === resp.Info.ID)
+          this.Notifs.Notifs.splice(index < 0 ? 0 : index, index < 0 ? 0 : 1, resp.Info)
           done(resp.Info, false)
         }, () => {
           done({} as Notif, true)
