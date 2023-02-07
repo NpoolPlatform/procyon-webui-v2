@@ -51,8 +51,12 @@
 .faq-menu-item img,
 div.up-button a img,
 .logo-display div,
+.logo-display img,
 .logo-feature img
   user-select: none
+
+.logo-display img:hover
+  filter: invert(1) opacity(1) drop-shadow(0 0 8px var(--white-77))
 
 html,
 body
@@ -346,7 +350,7 @@ ul.language-picker li.selected
 .content p:not([class]) em
   background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
   background-clip: border-box
-  font-weight: 500
+  font-weight: 700
   -webkit-background-clip: text
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
@@ -354,7 +358,7 @@ ul.language-picker li.selected
 .content p:not([class]) strong
   background: linear-gradient(to left, #ff964a 0, #ffcc4a 50%)
   background-clip: border-box
-  font-weight: 500
+  font-weight: 700
   -webkit-background-clip: text
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
@@ -729,7 +733,7 @@ h3.feature-title::after
   justify-content: center
   padding: 32px
   position: relative
-  margin: 0 5% 5% 0
+  margin: 0 3% 3% 0
   overflow: hidden
   text-align: center
   transition: all ease-in-out .5s
@@ -771,7 +775,6 @@ h3.feature-title::after
   transition: all ease-in-out .5s
   min-width: 320px
   width: 30%
-
 
 .product:hover
   transition: all ease-in-out .5s
@@ -1138,6 +1141,8 @@ input[type="checkbox"]
   border-radius: 20px
   box-shadow: 16px 16px 20px 0 var(--dark-blue-3-66)
   padding: 24px
+  @media (max-width: $breakpoint-sm-max)
+    overflow-x: scroll
 
   .info-table-title
     font-size: 24px
@@ -1155,6 +1160,7 @@ input[type="checkbox"]
   border-collapse: collapse
   font-size: 18px
   width: 100%
+  min-width: 480px
 
 .table-2-columns th,
 .table-2-columns td
@@ -1194,7 +1200,7 @@ input[type="checkbox"]
 
 .q-table tbody td
   font-size: 16px
-  
+
 .info-table td::before
   display: block
   position: absolute
@@ -1365,11 +1371,16 @@ h4#signature
   display: inline-block
   margin: 0 8px 0 0
   text-align: center
+  @media (max-width: $breakpoint-sm-max)
+    display: block
+    margin: -38px 0 6px 0
+    text-align: left
 
 .product-page-icon img
   vertical-align: middle
   height: 48px
   width: 48px
+  filter: drop-shadow(0 0 20px var(--light-green-2-33))
 
 .product-container h1
   display: inline-block
@@ -1465,13 +1476,17 @@ h4#signature
   width: 100%
 
 .product-detail-text
-  margin: 30px 0
+  margin: 0
+  width: 100%
 
 .product-detail-text h3
   margin: 48px 0 24px 0
 
 .product-detail-text h3::after
   width: 60%
+
+.product-detail-text h3:first-of-type
+  margin-top: 0
 
 .product-container h4
   font-size: 18px
@@ -1490,6 +1505,7 @@ h4#signature
 
 .content .product-container .info-table-container
   box-shadow: none
+  // overflow-x: scroll
 
 .product-container span
   font-size: 28px
@@ -3204,11 +3220,9 @@ footer .copyright
     width: calc(100% + 48px)
 
   .project .product-title-container
-    border-radius: 12px
-    top: 12px
-    left: 12px
-    bottom: unset
-    padding: 12px
+    border-radius: 0
+    left: 0
+    width: 100%
 
   .project .product-title-container::before,
   .project .product-title-container::after
