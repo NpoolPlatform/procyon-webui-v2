@@ -9,8 +9,8 @@
       <table class='info-table table-2-columns'>
         <thead>
           <tr>
-            <th><span class='label-platinum'>Platinum</span></th>
-            <th><span class='label-gold'>Gold</span></th>
+            <th><span class='label-platinum'>Aleo Platinum</span></th>
+            <th><span class='label-gold'>Aleo Gold</span></th>
           </tr>
         </thead>
         <tbody>
