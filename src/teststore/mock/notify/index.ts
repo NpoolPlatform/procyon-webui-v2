@@ -22,11 +22,6 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
         return !data ? {} as Notif : data
       }
     },
-    getNotifsByName (): (name: string) => Array<Notif> {
-      return (name: string) => this.Notifs.Notifs.filter((el) => el.ID?.toLowerCase()?.includes(name.toLowerCase()) ||
-                                                            el.EmailAddress?.toLowerCase()?.includes(name.toLowerCase()) ||
-                                                            el.PhoneNO?.toLowerCase()?.includes(name.toLocaleLowerCase()))
-    },
     unread () : Array<Notif> {
       return this.Notifs.Notifs.filter((el) => !el.AlreadyRead)
     },
