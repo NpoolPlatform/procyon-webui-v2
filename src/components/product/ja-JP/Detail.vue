@@ -138,7 +138,7 @@
 
     <h4>Aleoは、史上初の、完全に分散型のプライベートアプリケーションのためのレイヤー1ブロックチェーンです。</h4>
 
-    <p><img class='project-promo-content' src='project-aleo/aleo-privacy-prog-jp.png'></p>
+    <p><img class='project-promo-content' src='product/aleo/aleo-privacy-prog-jp.png'></p>
 
     <p>ほとんどのブロックチェーンは、プライバシーを犠牲にしてプログラミング性を優先しているか、その逆になっています。今のところ、両方の利点をもつプロジェクトはありません。</p>
 
