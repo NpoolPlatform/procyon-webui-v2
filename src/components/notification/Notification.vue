@@ -1,28 +1,27 @@
 <template>
   <div class='content'>
-    <h2>Notifications</h2>
-
+    <h2>{{ $t('MSG_NOTIFICATIONS') }}</h2>
     <ul class='notification-center'>
-      <li>
-        <span class='top'><span class='date'>2023-01-10</span><span class='title'>Withdrawal Completed</span></span>
-        You have withdrawn 1000 USDT. See your <a href=''>Wallet</a> for details.
-      </li>
-      <li>
-        <span class='top'><span class='date'>2023-01-09</span><span class='title'>KYC Approved</span></span>
-        Your KYC has been approved! See your verified documents on the <a href=''>Personal Info</a> page.
-      </li>
-      <li>
-        <span class='top'><span class='date'>2023-01-07</span><span class='title'>Deposit Completed</span></span>
-        You have received 5500 USDT. See your <a href=''>Wallet</a> for details.
-      </li>
-      <li>
-        <span class='top'><span class='date'>2023-01-05</span><span class='title'>Withdrawal Completed</span></span>
-        You have withdrawn 1000 USDT. See your <a href=''>Wallet</a> for details.
-      </li>
-      <li>
-        <span class='top'><span class='date'>2023-01-01</span><span class='title'>KYC Approved</span></span>
-        Your KYC has been approved! See your verified documents on the <a href=''>Personal Info</a> page.
+      <li v-for='row in notifications' :key='row.ID'>
+        <span class='top'>
+          <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
+          <span class='title'>{{ row.EventType }}</span>
+        </span>
+        {{ row.Content }}
+        <a v-if='notif.goWalletPage(row)' href='#/wallet'>{{ $t('MSG_WALLET') }}</a>
+        <a v-if='notif.goPersonPage(row)' href='#/person'>{{ $t('MSG_PERSONAL_INFO') }}</a>
+        {{ $t('MSG_FOR_DETAILS') }}.
       </li>
     </ul>
   </div>
 </template>
+
+<script lang='ts' setup>
+import { useFrontendNotifStore } from 'src/teststore/mock/notify'
+import { computed } from 'vue'
+import { formatTime } from 'npool-cli-v4/utils'
+
+const notif = useFrontendNotifStore()
+const notifications = computed(() => notif.Notifs.Notifs)
+
+</script>

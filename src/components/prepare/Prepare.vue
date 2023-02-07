@@ -2,18 +2,28 @@
 import { AppID } from 'src/const/const'
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { AppGood, NotifyType, useAdminAppGoodStore, useFrontendAppStore } from 'npool-cli-v4'
+import { AppGood, NotifyType, useAdminAppGoodStore, useFrontendAppStore, useLocalUserStore } from 'npool-cli-v4'
+import { useFrontendNotifStore } from 'src/teststore/mock/notify'
+import { getNotifs } from 'src/api/notif'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const good = useAdminAppGoodStore()
 const application = useFrontendAppStore()
 
+const logined = useLocalUserStore()
+
+const notif = useFrontendNotifStore()
+
 onMounted(() => {
   if (good.AppGoods.AppGoods.length === 0) {
     getAppGoods(0, 500)
   }
   getApplication()
+
+  if (logined.logined && notif.Notifs.Notifs.length === 0) {
+    getNotifs(0, 500)
+  }
 })
 
 const getAppGoods = (offset: number, limit: number) => {

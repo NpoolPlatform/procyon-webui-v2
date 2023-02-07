@@ -11,31 +11,27 @@
         <LangSwitcher />
         <li id='notifications' v-if='localUser.logined'>
           <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
-          <span class='notification-dot'>17</span>
+          <span v-if='unread.length > 0' class='notification-dot'>{{ unread?.length }}</span>
           <ul class='notifications'>
             <li class='first'>
-              <span><span class='number'>17</span> new notifications<span class='clear-all'><a href=''>Mark all as read</a></span></span>
-              <span><a href=''>Notification center >></a></span>
+              <span>
+                <span class='number'>{{ unread?.length }}</span>
+                {{ $t('MSG_NEW_NOTIFICATIONS') }}
+                <span class='clear-all'>
+                  <a @click='onMark'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+                </span>
+              </span>
+              <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
             </li>
-            <li>
-              <span class='top'><span class='date'>2023-01-10</span><span class='title'>Withdrawal Completed</span></span>
-              You have withdrawn 1000 USDT. See your <a href=''>Wallet</a> for details.
-            </li>
-            <li>
-              <span class='top'><span class='date'>2023-01-09</span><span class='title'>KYC Approved</span></span>
-              Your KYC has been approved! See your verified documents on the <a href=''>Personal Info</a> page.
-            </li>
-            <li>
-              <span class='top'><span class='date'>2023-01-07</span><span class='title'>Deposit Completed</span></span>
-              You have received 5500 USDT. See your <a href=''>Wallet</a> for details.
-            </li>
-            <li>
-              <span class='top'><span class='date'>2023-01-05</span><span class='title'>Withdrawal Completed</span></span>
-              You have withdrawn 1000 USDT. See your <a href=''>Wallet</a> for details.
-            </li>
-            <li>
-              <span class='top'><span class='date'>2023-01-01</span><span class='title'>KYC Approved</span></span>
-              Your KYC has been approved! See your verified documents on the <a href=''>Personal Info</a> page.
+            <li v-for='row in unread' :key='row.ID'>
+              <span class='top'>
+                <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
+                <span class='title'>{{ row.EventType }}</span>
+              </span>
+              {{ row.Content }}
+              <a v-if='notif.goWalletPage(row)' href='#/wallet'>{{ $t('MSG_WALLET') }}</a>
+              <a v-if='notif.goPersonPage(row)' href='#/person'>{{ $t('MSG_PERSONAL_INFO') }}</a>
+              {{ $t('MSG_FOR_DETAILS') }}.
             </li>
           </ul>
         </li>
@@ -75,6 +71,32 @@
 
     <div class='header-inner'>
       <LangSwitcher />
+      <li id='notifications' v-if='localUser.logined'>
+        <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
+        <span v-if='unread.length > 0' class='notification-dot'>{{ unread?.length }}</span>
+        <ul class='notifications'>
+          <li class='first'>
+            <span>
+              <span class='number'>{{ unread?.length }}</span>
+              {{ $t('MSG_NEW_NOTIFICATIONS') }}
+              <span class='clear-all'>
+                <a @click='onMark'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+              </span>
+            </span>
+            <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
+          </li>
+          <li v-for='row in unread' :key='row.ID'>
+            <span class='top'>
+              <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
+              <span class='title'>{{ row.EventType }}</span>
+            </span>
+            {{ row.Content }}
+            <a v-if='notif.goWalletPage(row)' href='#/wallet'>{{ $t('MSG_WALLET') }}</a>
+            <a v-if='notif.goPersonPage(row)' href='#/person'>{{ $t('MSG_PERSONAL_INFO') }}</a>
+            {{ $t('MSG_FOR_DETAILS') }}.
+          </li>
+        </ul>
+      </li>
       <SignHelper v-if='!localUser.logined' />
       <q-btn
         v-else
@@ -120,6 +142,7 @@
 import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
+import { useFrontendNotifStore } from 'src/teststore/mock/notify'
 
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
@@ -127,6 +150,7 @@ import { useI18n } from 'vue-i18n'
 
 import userAvatar from '../../assets/icon-user.svg'
 import {
+  formatTime,
   NotifyType,
   useFrontendUserStore,
   useLocalUserStore
@@ -197,6 +221,9 @@ const initialize = () => {
   }
 }
 
+const notif = useFrontendNotifStore()
+const unread = computed(() => notif.unread)
+
 onMounted(() => {
   if (logined.value) {
     setTimeout(() => {
@@ -205,6 +232,10 @@ onMounted(() => {
   }
 })
 
+const onMark = () => {
+  // TODO
+  console.log('onMark: ')
+}
 </script>
 
 <style lang='sass' scoped>

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { API, Notif } from './const'
+import { API, EventType, Notif } from './const'
 import { doActionWithError } from 'npool-cli-v4'
 import {
   GetNotifRequest,
@@ -26,6 +26,28 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
       return (name: string) => this.Notifs.Notifs.filter((el) => el.ID?.toLowerCase()?.includes(name.toLowerCase()) ||
                                                             el.EmailAddress?.toLowerCase()?.includes(name.toLowerCase()) ||
                                                             el.PhoneNO?.toLowerCase()?.includes(name.toLocaleLowerCase()))
+    },
+    unread () : Array<Notif> {
+      return this.Notifs.Notifs.filter((el) => !el.AlreadyRead)
+    },
+    goWalletPage (): (row: Notif) => boolean {
+      return (row: Notif) => {
+        if (!row) {
+          return false
+        }
+        return row.EventType === EventType.DepositReceived ||
+              row.EventType === EventType.WithdrawalCompleted ||
+              row.EventType === EventType.WithdrawalRequest
+      }
+    },
+    goPersonPage (): (row: Notif) => boolean {
+      return (row: Notif) => {
+        if (!row) {
+          return false
+        }
+        return row.EventType === EventType.KYCApproved ||
+              row.EventType === EventType.KYCRejected
+      }
     }
   },
   actions: {

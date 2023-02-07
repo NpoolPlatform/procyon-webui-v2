@@ -8,6 +8,14 @@ export enum EventType {
   KYCRejected = 'KYCRejected',
 }
 
+export const EventTypes = [
+  EventType.WithdrawalRequest,
+  EventType.WithdrawalCompleted,
+  EventType.DepositReceived,
+  EventType.KYCApproved,
+  EventType.KYCRejected
+]
+
 /** @default "DefaultChannel" */
 export enum NotifChannel {
   DefaultChannel = 'DefaultChannel',
@@ -29,6 +37,7 @@ export interface Notif {
   Content: string;
   Channels: NotifChannel[];
   AlreadyRead: boolean;
+  CreatedAt: number;
 }
 
 export enum API {
