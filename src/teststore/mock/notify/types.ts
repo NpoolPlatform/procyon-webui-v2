@@ -9,13 +9,13 @@ export interface GetNotifResponse {
   Info: Notif;
 }
 
-export interface UpdateNotifRequest extends BaseRequest{
+export interface UpdateNotifsRequest extends BaseRequest{
   IDs: string[];
   AlreadyRead: boolean;
 }
 
-export interface UpdateNotifResponse {
-  Info: Notif;
+export interface UpdateNotifsResponse {
+  Infos: Notif[];
 }
 export interface GetNotifsRequest extends BaseRequest {
   /** @format int64 */

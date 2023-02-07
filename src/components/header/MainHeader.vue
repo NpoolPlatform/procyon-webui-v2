@@ -245,7 +245,7 @@ const onMarkAll = (rows: Array<Notif>) => {
     return
   }
   const ids = Array.from(rows).map((el) => el.ID)
-  notif.updateNotif({
+  notif.updateNotifs({
     IDs: ids,
     AlreadyRead: true,
     Message: {
