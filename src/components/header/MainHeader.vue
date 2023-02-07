@@ -155,6 +155,7 @@ import {
   useFrontendUserStore,
   useLocalUserStore
 } from 'npool-cli-v4'
+import { getNotifs } from 'src/api/notif'
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
@@ -229,6 +230,12 @@ onMounted(() => {
     setTimeout(() => {
       initialize()
     }, 2000)
+  }
+})
+
+onMounted(() => {
+  if (notif.Notifs.Notifs.length === 0) {
+    getNotifs(0, 500)
   }
 })
 

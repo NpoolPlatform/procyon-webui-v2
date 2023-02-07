@@ -1,9 +1,7 @@
 <script setup lang='ts'>
 import { onMounted, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useLocaleStore, useAdminAppLangStore, AppLang, NotifyType, useFrontendMessageStore, Message, useLocalUserStore } from 'npool-cli-v4'
-import { useFrontendNotifStore } from 'src/teststore/mock/notify'
-import { getNotifs } from 'src/api/notif'
+import { useLocaleStore, useAdminAppLangStore, AppLang, NotifyType, useFrontendMessageStore, Message } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -21,16 +19,9 @@ watch(langID, () => {
 
 const lang = useAdminAppLangStore()
 
-const logined = useLocalUserStore()
-
-const notif = useFrontendNotifStore()
-
 onMounted(() => {
   if (lang.AppLangs.AppLangs.length === 0) {
     getAppLangs(0, 100)
-  }
-  if (logined.logined && notif.Notifs.Notifs.length === 0) {
-    getNotifs(0, 500)
   }
 })
 
