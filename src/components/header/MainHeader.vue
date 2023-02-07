@@ -9,6 +9,36 @@
         <li><a class='nav-link' href='#partners'>{{ $t('MSG_PARTNERS') }}</a></li>
         <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
+        <li id='notifications' v-if='localUser.logined'>
+          <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
+          <span class='notification-dot'>17</span>
+          <ul class='notifications'>
+            <li class='first'>
+              <span><span class='number'>17</span> new notifications<span class='clear-all'><a href=''>Mark all as read</a></span></span>
+              <span><a href=''>Notification center >></a></span>
+            </li>
+            <li>
+              <span class='top'><span class='date'>2023-01-10</span><span class='title'>Withdrawal Completed</span></span>
+              You have withdrawn 1000 USDT. See your <a href=''>Wallet</a> for details.
+            </li>
+            <li>
+              <span class='top'><span class='date'>2023-01-09</span><span class='title'>KYC Approved</span></span>
+              Your KYC has been approved! See your verified documents on the <a href=''>Personal Info</a> page.
+            </li>
+            <li>
+              <span class='top'><span class='date'>2023-01-07</span><span class='title'>Deposit Completed</span></span>
+              You have received 5500 USDT. See your <a href=''>Wallet</a> for details.
+            </li>
+            <li>
+              <span class='top'><span class='date'>2023-01-05</span><span class='title'>Withdrawal Completed</span></span>
+              You have withdrawn 1000 USDT. See your <a href=''>Wallet</a> for details.
+            </li>
+            <li>
+              <span class='top'><span class='date'>2023-01-01</span><span class='title'>KYC Approved</span></span>
+              Your KYC has been approved! See your verified documents on the <a href=''>Personal Info</a> page.
+            </li>
+          </ul>
+        </li>
         <SignHelper v-if='!localUser.logined' />
         <q-btn
           v-else
