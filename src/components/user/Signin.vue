@@ -67,6 +67,8 @@ import { useI18n } from 'vue-i18n'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { useRoute, useRouter } from 'vue-router'
 import { throttle } from 'quasar'
+import { useFrontendNotifStore } from 'src/teststore/mock/notify'
+import { getNotifs } from 'src/api/notif'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
@@ -147,6 +149,9 @@ const onSubmit = throttle(() => {
   return false
 }, 1000)
 
+const notif = useFrontendNotifStore()
+const notifications = computed(() => notif.Notifs.Notifs)
+
 const verify = () => {
   app.getApp({
     AppID: AppID,
@@ -159,6 +164,9 @@ const verify = () => {
     }
   }, () => {
     _verify()
+    if (notifications.value?.length === 0) {
+      getNotifs(0, 500)
+    }
   })
 }
 
