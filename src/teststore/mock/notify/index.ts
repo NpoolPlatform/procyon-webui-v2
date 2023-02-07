@@ -16,9 +16,9 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
     }
   }),
   getters: {
-    getNotifByID (): (ID:string) => Notif {
-      return (ID: string) => {
-        const data = this.Notifs.Notifs.find((el) => el.ID === ID)
+    getNotifByID (): (id: string) => Notif {
+      return (id: string) => {
+        const data = this.Notifs.Notifs.find((el) => el.ID === id)
         return !data ? {} as Notif : data
       }
     },
@@ -53,7 +53,8 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
         req.Message,
         (resp: GetNotifsResponse): void => {
           resp.Infos.forEach((el) => {
-            if (!this.getNotifByID(el.ID)) {
+            const index = this.Notifs.Notifs.findIndex((al) => al.ID === el.ID)
+            if (index === -1) {
               this.Notifs.Notifs.push(el)
             }
           })
