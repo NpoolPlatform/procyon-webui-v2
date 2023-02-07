@@ -1,6 +1,6 @@
 <template>
   <div class='back-button content-glass' @click='onBackClick'>
-    ⭠
+    &loarr;
   </div>
   <slot />
 </template>
