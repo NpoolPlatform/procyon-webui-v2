@@ -235,7 +235,7 @@ onMounted(() => {
 })
 
 onMounted(() => {
-  if (notif.Notifs.Notifs.length === 0) {
+  if (localUser.logined && notif.Notifs.Notifs.length === 0) {
     getNotifs(0, 500)
   }
 })
