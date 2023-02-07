@@ -18,6 +18,7 @@ import affiliates from '../assets/icon-affiliates.svg'
 import security from '../assets/shield-half.svg'
 // import account from '../assets/icon-account.svg'
 import kyc from '../assets/user.svg'
+import manual from '../assets/manual.svg'
 
 const BaseMenu = {
   menuId: uid(),
@@ -88,7 +89,7 @@ const BaseMenu = {
       menuId: uid(),
       label: 'MSG_RESOURCES',
       caption: '',
-      icon: kyc,
+      icon: manual,
       target: '/resource',
       level: 0,
       children: []
