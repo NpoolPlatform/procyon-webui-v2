@@ -11,19 +11,19 @@
         <LangSwitcher />
         <li id='notifications' v-if='localUser.logined'>
           <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
-          <span v-if='unread.length > 0' class='notification-dot'>{{ unread?.length }}</span>
+          <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
           <ul class='notifications'>
             <li class='first'>
               <span>
-                <span class='number'>{{ unread?.length }}</span>
+                <span class='number'>{{ unReads?.length }}</span>
                 {{ $t('MSG_NEW_NOTIFICATIONS') }}
                 <span class='clear-all'>
-                  <a @click='onMarkAll(unread)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+                  <a @click='onMark(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
                 </span>
               </span>
               <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
             </li>
-            <li v-for='row in unread' :key='row.ID' @click='onMarkAll([row])'>
+            <li v-for='row in unReads' :key='row.ID' @click='onMark([row])'>
               <span class='top'>
                 <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
                 <span class='title'>{{ row.EventType }}</span>
@@ -73,19 +73,19 @@
       <LangSwitcher />
       <li id='notifications' v-if='localUser.logined'>
         <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
-        <span v-if='unread.length > 0' class='notification-dot'>{{ unread?.length }}</span>
+        <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
         <ul class='notifications'>
           <li class='first'>
             <span>
-              <span class='number'>{{ unread?.length }}</span>
+              <span class='number'>{{ unReads?.length }}</span>
               {{ $t('MSG_NEW_NOTIFICATIONS') }}
               <span class='clear-all'>
-                <a @click='onMarkAll(unread)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+                <a @click='onMark(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
               </span>
             </span>
             <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
           </li>
-          <li v-for='row in unread' :key='row.ID' @click='onMarkAll([row])'>
+          <li v-for='row in unReads' :key='row.ID' @click='onMark([row])'>
             <span class='top'>
               <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
               <span class='title'>{{ row.EventType }}</span>
@@ -147,8 +147,6 @@ import { Notif } from 'src/teststore/mock/notify/const'
 
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
-import { useI18n } from 'vue-i18n'
-
 import userAvatar from '../../assets/icon-user.svg'
 import {
   formatTime,
@@ -158,12 +156,14 @@ import {
 } from 'npool-cli-v4'
 import { getNotifs } from 'src/api/notif'
 
-const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
-const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
-const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
+import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
+
+const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
+const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
+const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
 
 const user = useFrontendUserStore()
 const localUser = useLocalUserStore()
@@ -224,7 +224,7 @@ const initialize = () => {
 }
 
 const notif = useFrontendNotifStore()
-const unread = computed(() => notif.unread)
+const unReads = computed(() => notif.unReads)
 
 onMounted(() => {
   if (logined.value) {
@@ -240,7 +240,7 @@ onMounted(() => {
   }
 })
 
-const onMarkAll = (rows: Array<Notif>) => {
+const onMark = (rows: Array<Notif>) => {
   if (rows?.length === 0) {
     return
   }
@@ -249,7 +249,7 @@ const onMarkAll = (rows: Array<Notif>) => {
     IDs: ids,
     AlreadyRead: true,
     Message: {
-      Info: {
+      Error: {
         Title: t('MSG_UPDATE_NOTIFICATION'),
         Message: t('MSG_UPDATE_NOTIFICATION_FAIL'),
         Popup: true,

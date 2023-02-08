@@ -24,7 +24,7 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
         return !data ? {} as Notif : data
       }
     },
-    unread () : Array<Notif> {
+    unReads () : Array<Notif> {
       return this.Notifs.Notifs.filter((el) => !el.AlreadyRead)
     },
     goWalletPage (): (row: Notif) => boolean {
