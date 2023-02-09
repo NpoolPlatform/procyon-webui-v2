@@ -149,7 +149,6 @@ const good = useAdminAppGoodStore()
 
 const archivement = useFrontendArchivementStore()
 const goodArchivements = computed(() => Array.from(referral.value?.Archivements.filter((el) => good.visible(el.GoodID))).map((el) => {
-  console.log('Editing: ', good.haveSale(good.getGoodByID(el.GoodID) as AppGood))
   return {
     ...el,
     Editing: false
