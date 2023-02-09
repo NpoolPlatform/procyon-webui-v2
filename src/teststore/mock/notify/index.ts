@@ -25,7 +25,10 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
       }
     },
     unReads () : Array<Notif> {
-      return this.Notifs.Notifs.filter((el) => !el.AlreadyRead)
+      return this.Notifs.Notifs.filter((el) => !el.AlreadyRead).sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 0)
+    },
+    notifs () : Array<Notif> {
+      return this.Notifs.Notifs.sort((a, b) => a.CreatedAt > b.CreatedAt ? -1 : 0)
     },
     goWalletPage (): (row: Notif) => boolean {
       return (row: Notif) => {

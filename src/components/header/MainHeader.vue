@@ -18,12 +18,12 @@
                 <span class='number'>{{ unReads?.length }}</span>
                 {{ $t('MSG_NEW_NOTIFICATIONS') }}
                 <span class='clear-all'>
-                  <a @click='onMark(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+                  <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
                 </span>
               </span>
               <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
             </li>
-            <li v-for='row in unReads' :key='row.ID' @click='onMark([row])'>
+            <li v-for='row in unReads' :key='row.ID' @click='onMarkAll([row])'>
               <span class='top'>
                 <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
                 <span class='title'>{{ row.EventType }}</span>
@@ -80,12 +80,12 @@
               <span class='number'>{{ unReads?.length }}</span>
               {{ $t('MSG_NEW_NOTIFICATIONS') }}
               <span class='clear-all'>
-                <a @click='onMark(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+                <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
               </span>
             </span>
             <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
           </li>
-          <li v-for='row in unReads' :key='row.ID' @click='onMark([row])'>
+          <li v-for='row in unReads' :key='row.ID' @click='onMarkAll([row])'>
             <span class='top'>
               <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
               <span class='title'>{{ row.EventType }}</span>
@@ -237,7 +237,7 @@ onMounted(() => {
   }
 })
 
-const onMark = (rows: Array<Notif>) => {
+const onMarkAll = (rows: Array<Notif>) => {
   if (rows?.length === 0) {
     return
   }
