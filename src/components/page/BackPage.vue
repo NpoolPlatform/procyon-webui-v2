@@ -1,6 +1,6 @@
 <template>
   <div class='back-button content-glass' @click='onBackClick'>
-    &loarr;
+    <a href='javascript:history.back()'><img src='font-awesome/back-arrow.svg'></a>
   </div>
   <slot />
 </template>
