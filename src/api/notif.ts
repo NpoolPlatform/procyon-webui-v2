@@ -7,7 +7,7 @@ export const getNotifs = (offset: number, limit: number) => {
     Offset: offset,
     Limit: limit,
     Message: {}
-  }, (rows: Array<Notif>, error: boolean) => {
+  }, (error: boolean, rows: Array<Notif>) => {
     if (error || rows.length < limit) {
       return
     }

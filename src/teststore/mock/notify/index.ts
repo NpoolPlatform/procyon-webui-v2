@@ -48,7 +48,7 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
     }
   },
   actions: {
-    getNotifs (req: GetNotifsRequest, done: (rows: Array<Notif>, error: boolean) => void) {
+    getNotifs (req: GetNotifsRequest, done: (error: boolean, rows: Array<Notif>) => void) {
       doActionWithError<GetNotifsRequest, GetNotifsResponse>(
         API.GET_NOTIFS,
         req,
@@ -61,23 +61,23 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
             }
           })
           this.Notifs.Total = resp.Total
-          done(resp.Infos, false)
+          done(false, resp.Infos)
         }, () => {
-          done([], true)
+          done(true, [])
         })
     },
-    getNotif (req: GetNotifRequest, done: (row: Notif, error: boolean) => void) {
+    getNotif (req: GetNotifRequest, done: (error: boolean, row: Notif) => void) {
       doActionWithError<GetNotifRequest, GetNotifResponse>(
         API.GET_NOTIF,
         req,
         req.Message,
         (resp: GetNotifResponse): void => {
-          done(resp.Info, false)
+          done(false, resp.Info)
         }, () => {
-          done({} as Notif, true)
+          done(true, {} as Notif)
         })
     },
-    updateNotifs (req: UpdateNotifsRequest, done: (rows: Notif[], error: boolean) => void) {
+    updateNotifs (req: UpdateNotifsRequest, done: (error: boolean, rows: Notif[]) => void) {
       doActionWithError<UpdateNotifsRequest, UpdateNotifsResponse>(
         API.UPDATE_NOTIFS,
         req,
@@ -87,9 +87,9 @@ export const useFrontendNotifStore = defineStore('frontend-notif-v4', {
             const index = this.Notifs.Notifs.findIndex((el) => el.ID === rl.ID)
             this.Notifs.Notifs.splice(index < 0 ? 0 : index, index < 0 ? 0 : 1, rl)
           })
-          done(resp.Infos, false)
+          done(false, resp.Infos)
         }, () => {
-          done([] as Notif[], true)
+          done(true, [] as Notif[])
         })
     }
   }
