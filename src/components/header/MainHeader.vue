@@ -28,10 +28,10 @@
                 <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
                 <span class='title'>{{ row.EventType }}</span>
               </span>
-              {{ row.Content }}
-              <a v-if='notif.goWalletPage(row)' href='#/wallet'>{{ $t('MSG_WALLET') }}</a>
+              <span v-html='row.Content' />
+              <!-- <a v-if='notif.goWalletPage(row)' href='#/wallet'>{{ $t('MSG_WALLET') }}</a>
               <a v-if='notif.goPersonPage(row)' href='#/kyc'>{{ $t('MSG_PERSONAL_INFO') }}</a>
-              {{ $t('MSG_FOR_DETAILS') }}.
+              {{ $t('MSG_FOR_DETAILS') }}. -->
             </li>
           </ul>
         </li>
