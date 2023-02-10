@@ -58,7 +58,8 @@ import {
   UsedFor,
   useFrontendVerifyStore,
   encryptPassword,
-  GoogleTokenType
+  GoogleTokenType,
+  useFrontendNotifStore
 } from 'npool-cli-v4'
 
 import { AppID } from 'src/const/const'
@@ -67,6 +68,7 @@ import { useI18n } from 'vue-i18n'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { useRoute, useRouter } from 'vue-router'
 import { throttle } from 'quasar'
+import { getNotifs } from 'src/api/notif'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
@@ -147,6 +149,9 @@ const onSubmit = throttle(() => {
   return false
 }, 1000)
 
+const notif = useFrontendNotifStore()
+const notifications = computed(() => notif.Notifs.Notifs)
+
 const verify = () => {
   app.getApp({
     AppID: AppID,
@@ -173,6 +178,9 @@ const _verify = () => {
     }
     void router.push({ path: '/' })
     remainder()
+    if (notifications.value?.length === 0) {
+      getNotifs(0, 500)
+    }
     return
   }
 
@@ -228,6 +236,9 @@ const onCodeVerify = (code: string) => {
       return
     }
     remainder()
+    if (notifications.value?.length === 0) {
+      getNotifs(0, 500)
+    }
   })
 }
 

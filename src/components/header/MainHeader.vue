@@ -9,6 +9,32 @@
         <li><a class='nav-link' href='#partners'>{{ $t('MSG_PARTNERS') }}</a></li>
         <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
+        <li id='notifications' v-if='localUser.logined'>
+          <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
+          <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
+          <ul class='notifications'>
+            <li class='first'>
+              <span>
+                <span class='number'>{{ unReads?.length }}</span>
+                {{ $t('MSG_NEW_NOTIFICATIONS') }}
+                <span class='clear-all'>
+                  <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+                </span>
+              </span>
+              <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
+            </li>
+            <li v-for='row in unReads' :key='row.ID' @click='onMarkAll([row])'>
+              <span class='top'>
+                <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
+                <span class='title'>{{ row.EventType }}</span>
+              </span>
+              <span v-html='row.Content' />
+              <!-- <a v-if='notif.goWalletPage(row)' href='#/wallet'>{{ $t('MSG_WALLET') }}</a>
+              <a v-if='notif.goPersonPage(row)' href='#/kyc'>{{ $t('MSG_PERSONAL_INFO') }}</a>
+              {{ $t('MSG_FOR_DETAILS') }}. -->
+            </li>
+          </ul>
+        </li>
         <SignHelper v-if='!localUser.logined' />
         <q-btn
           v-else
@@ -45,6 +71,29 @@
 
     <div class='header-inner'>
       <LangSwitcher />
+      <li id='notifications' v-if='localUser.logined'>
+        <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
+        <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
+        <ul class='notifications'>
+          <li class='first'>
+            <span>
+              <span class='number'>{{ unReads?.length }}</span>
+              {{ $t('MSG_NEW_NOTIFICATIONS') }}
+              <span class='clear-all'>
+                <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+              </span>
+            </span>
+            <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
+          </li>
+          <li v-for='row in unReads' :key='row.ID' @click='onMarkAll([row])'>
+            <span class='top'>
+              <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
+              <span class='title'>{{ row.EventType }}</span>
+            </span>
+            <span v-html='row.Content' />
+          </li>
+        </ul>
+      </li>
       <SignHelper v-if='!localUser.logined' />
       <q-btn
         v-else
@@ -90,24 +139,27 @@
 import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
-
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
-import { useI18n } from 'vue-i18n'
-
 import userAvatar from '../../assets/icon-user.svg'
 import {
+  formatTime,
   NotifyType,
   useFrontendUserStore,
-  useLocalUserStore
+  useLocalUserStore,
+  Notif,
+  useFrontendNotifStore
 } from 'npool-cli-v4'
+import { getNotifs } from 'src/api/notif'
+
+import { useI18n } from 'vue-i18n'
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
 const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 
 const user = useFrontendUserStore()
 const localUser = useLocalUserStore()
@@ -167,6 +219,9 @@ const initialize = () => {
   }
 }
 
+const notif = useFrontendNotifStore()
+const unReads = computed(() => notif.unReads)
+
 onMounted(() => {
   if (logined.value) {
     setTimeout(() => {
@@ -175,6 +230,32 @@ onMounted(() => {
   }
 })
 
+onMounted(() => {
+  if (localUser.logined && notif.Notifs.Notifs.length === 0) {
+    getNotifs(0, 500)
+  }
+})
+
+const onMarkAll = (rows: Array<Notif>) => {
+  if (rows?.length === 0) {
+    return
+  }
+  const ids = Array.from(rows).map((el) => el.ID)
+  notif.updateNotifs({
+    IDs: ids,
+    AlreadyRead: true,
+    Message: {
+      Error: {
+        Title: t('MSG_UPDATE_NOTIFICATION'),
+        Message: t('MSG_UPDATE_NOTIFICATION_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
+}
 </script>
 
 <style lang='sass' scoped>

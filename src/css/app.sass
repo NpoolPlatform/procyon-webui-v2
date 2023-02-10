@@ -266,6 +266,7 @@ header
   display: inline
   list-style: none
   padding: 0 12px
+  position: relative
 
 .nav li a.nav-link
   color: #e1eeef
@@ -296,6 +297,146 @@ header
 
 .user-icon:hover
   filter: hue-rotate(20deg) contrast(2)
+
+/* NOTIFICATIONS DROPDOWN */
+
+.notification-icon
+  cursor: pointer
+  filter: contrast(2)
+  opacity: .7
+  transition: all ease-in-out .3s
+  vertical-align: middle
+  width: 32px
+
+.notification-icon:hover
+  filter: hue-rotate(20deg) contrast(2)
+  opacity: 1
+
+.notification-dot
+  background: var(--pink)
+  border-radius: 7px
+  font-size: 10px
+  height: 14px
+  line-height: 1
+  padding: 2px 8px
+  position: absolute
+  top: 0
+  right: 0
+  text-align: center
+
+ul.notifications
+  background: linear-gradient(to bottom right, var(--gray-2) 0, var(--dark-green-3) 100%)
+  border: 1px solid var(--light-green-2-33)
+  border-radius: 8px
+  box-shadow: 16px 16px 20px 0 var(--dark-blue-3)
+  display: none
+  padding: 12px
+  position: absolute
+  top: 100%
+  right: 0
+  z-index: 100
+
+#notifications:hover > ul.notifications,
+ul.notifications:hover
+  display: block
+
+ul.notifications li
+  border-radius: 4px
+  display: block
+  margin: 0 0 9px 0
+  padding: 8px
+  position: relative
+  width: 480px
+  transition: all ease-in-out .5s
+
+ul.notifications li:hover
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
+
+ul.notifications li::after
+  border-bottom: 1px solid var(--aqua-2-77)
+  content: ""
+  display: block
+  opacity: .5
+  position: absolute
+  left: 0
+  bottom: -5px
+  height: 1px
+  width: 100%
+
+ul.notifications li.first
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
+  border: 0
+  border-radius: 4px
+  display: flex
+  justify-content: space-between
+  margin: 0 0 8px 0
+
+ul.notifications li.first::after
+  display: none
+
+ul.notifications li.first span.number
+  font-size: 16px
+  font-weight: 700
+
+ul.notifications li.first span.clear-all
+  margin: 0 0 0 8px
+
+ul.notifications li span.top
+  display: block
+  margin: 0 0 4px 0
+
+ul.notifications li span.date
+  color: var(--green-2)
+  filter: contrast(1.5)
+  font-weight: 700
+  margin: 0 4px 0 0
+
+ul.notifications li span.title
+  font-weight: 700
+
+/* NOTIFICATIONS PAGE */
+ul.notification-center
+  margin: 0
+  padding: 0
+
+ul.notification-center li
+  border-radius: 4px
+  display: block
+  margin: 0 0 9px 0
+  padding: 8px
+  position: relative
+  transition: all ease-in-out .5s
+
+.content ul.notification-center li::before
+  content: ""
+  display: none
+
+ul.notification-center li:hover
+  background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
+
+ul.notification-center li::after
+  border-bottom: 1px solid var(--aqua-2-77)
+  content: ""
+  display: block
+  opacity: .5
+  position: absolute
+  left: 0
+  bottom: -5px
+  height: 1px
+  width: 100%
+
+ul.notification-center li span.top
+  display: block
+  margin: 0 0 4px 0
+
+ul.notification-center li span.date
+  color: var(--green-2)
+  filter: contrast(1.5)
+  font-weight: 700
+  margin: 0 8px 0 0
+
+ul.notification-center li span.title
+  font-weight: 700
 
 /* LANGUAGE PICKER */
 
@@ -388,46 +529,63 @@ div.hr
   opacity: .7
   height: 2px
   width: 100%
-
-div.back-button
-  box-shadow: 8px 8px 20px 0 #05131966
+  
+div.back-button 
+  box-shadow: 8px 8px 20px 0 var(--dark-blue-3-66)
   border-radius: 0 12px 12px 0
   cursor: pointer
   display: inline-block
   font-size: 24px
   margin: 24px 0
   opacity: .7
-  padding: 16px 24px
-  text-transform: uppercase
+  padding: 0
   transition: all ease-in-out .2s
 
-div.up-button
-  box-shadow: 8px 8px 20px 0 #05131966
+
+div.back-button a 
+  border-radius: 0 12px 12px 0
+  display: block
+  opacity: .7
+  padding: 18px
+
+
+div.back-button a img 
+  filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
+  height: 24px
+  width: 24px
+
+
+div.up-button 
+  box-shadow: 8px 8px 20px 0 var(--dark-blue-3-66)
   border-radius: 12px 12px 0 0
   cursor: pointer
   display: inline-block
   font-size: 24px
   margin: 0
   opacity: .7
-  padding: 12px 0 0 0
+  padding: 0
   position: fixed
   bottom: 0
   left: 24px
-  text-transform: uppercase
   transition: all ease-in-out .2s
   z-index: 10
 
-div.up-button a
+
+div.up-button a 
+  border-radius: 12px 12px 0 0
+  display: block
   opacity: .7
-  padding: 0 12px
+  padding: 18px
+
 
 div.up-button a img
   filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
   height: 32px
   width: 32px
 
+div.back-button a:hover,
 div.up-button a:hover
-  color: #e1eeef
+  color: var(--light-green-2)
   text-decoration: none
 
 div.back-button:hover,

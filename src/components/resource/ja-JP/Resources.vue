@@ -146,7 +146,7 @@
       </li>
 
       <li class='pdf-icon'>
-        <a href='https://drive.google.com/file/d/1dgOkWLpPTdiku6M3M3O0JDciUrwvEYTi/view?usp=share_link' target='_blank'>電話番号の設定</a>
+        <a href='https://drive.google.com/file/d/1dgOkWLpPTdiku6M3M3O0JDciUrwvEYTi/view?usp=share_link' target='_blank'>メールアドレスの変更方法</a>
       </li>
 
       <li class='pdf-icon'>
