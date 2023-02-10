@@ -1,5 +1,4 @@
-import { useFrontendNotifStore } from 'src/teststore/mock/notify'
-import { Notif } from 'src/teststore/mock/notify/const'
+import { useFrontendNotifStore, Notif } from 'npool-cli-v4'
 
 const notif = useFrontendNotifStore()
 export const getNotifs = (offset: number, limit: number) => {

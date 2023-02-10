@@ -14,12 +14,10 @@
 </template>
 
 <script lang='ts' setup>
-import { useFrontendNotifStore } from 'src/teststore/mock/notify'
 import { computed, onMounted } from 'vue'
 import { formatTime } from 'npool-cli-v4/utils'
-import { Notif } from 'src/teststore/mock/notify/const'
 import { useI18n } from 'vue-i18n'
-import { NotifyType } from 'npool-cli-v4'
+import { NotifyType, useFrontendNotifStore, Notif } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })

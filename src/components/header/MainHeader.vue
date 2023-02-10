@@ -139,9 +139,6 @@
 import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
-import { useFrontendNotifStore } from 'src/teststore/mock/notify'
-import { Notif } from 'src/teststore/mock/notify/const'
-
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
 import userAvatar from '../../assets/icon-user.svg'
@@ -149,7 +146,9 @@ import {
   formatTime,
   NotifyType,
   useFrontendUserStore,
-  useLocalUserStore
+  useLocalUserStore,
+  Notif,
+  useFrontendNotifStore
 } from 'npool-cli-v4'
 import { getNotifs } from 'src/api/notif'
 

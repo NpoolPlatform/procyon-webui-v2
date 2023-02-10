@@ -58,7 +58,8 @@ import {
   UsedFor,
   useFrontendVerifyStore,
   encryptPassword,
-  GoogleTokenType
+  GoogleTokenType,
+  useFrontendNotifStore
 } from 'npool-cli-v4'
 
 import { AppID } from 'src/const/const'
@@ -67,7 +68,6 @@ import { useI18n } from 'vue-i18n'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { useRoute, useRouter } from 'vue-router'
 import { throttle } from 'quasar'
-import { useFrontendNotifStore } from 'src/teststore/mock/notify'
 import { getNotifs } from 'src/api/notif'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
