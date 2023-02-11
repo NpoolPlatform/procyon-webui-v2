@@ -25,7 +25,7 @@
             </li>
             <li v-for='row in unReads' :key='row.ID' @click='onMarkAll([row])'>
               <span class='top'>
-                <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
+                <span class='date'>{{ date.formatDate(row?.CreatedAt * 1000, 'YYYY-MM-DD') }}</span>
                 <span class='title'>{{ row.EventType }}</span>
               </span>
               <span v-html='row.Content' />
@@ -87,7 +87,7 @@
           </li>
           <li v-for='row in unReads' :key='row.ID' @click='onMarkAll([row])'>
             <span class='top'>
-              <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
+              <span class='date'>{{ date.formatDate(row?.CreatedAt * 1000, 'YYYY-MM-DD') }}</span>
               <span class='title'>{{ row.EventType }}</span>
             </span>
             <span v-html='row.Content' />
@@ -143,7 +143,6 @@ import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
 import userAvatar from '../../assets/icon-user.svg'
 import {
-  formatTime,
   NotifyType,
   useFrontendUserStore,
   useLocalUserStore,
@@ -151,7 +150,7 @@ import {
   useFrontendNotifStore
 } from 'npool-cli-v4'
 import { getNotifs } from 'src/api/notif'
-
+import { date } from 'quasar'
 import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
