@@ -4,7 +4,7 @@
     <ul class='notification-center'>
       <li v-for='row in notifications' :key='row.ID'>
         <span class='top'>
-          <span class='date'>{{ formatTime(row?.CreatedAt, true) }}</span>
+          <span class='date'>{{ date.formatDate(row?.CreatedAt * 1000, 'YYYY-MM-DD') }}</span>
           <span class='title'>{{ row.EventType }}</span>
         </span>
         <span v-html='row.Content' />
@@ -15,7 +15,7 @@
 
 <script lang='ts' setup>
 import { computed, onMounted } from 'vue'
-import { formatTime } from 'npool-cli-v4/utils'
+import { date } from 'quasar'
 import { useI18n } from 'vue-i18n'
 import { NotifyType, useFrontendNotifStore, Notif } from 'npool-cli-v4'
 
