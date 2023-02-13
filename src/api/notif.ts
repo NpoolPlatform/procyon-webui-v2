@@ -13,3 +13,18 @@ export const getNotifs = (offset: number, limit: number) => {
     getNotifs(offset + limit, limit)
   })
 }
+
+export const onMarkAll = (rows: Array<Notif>) => {
+  if (rows.length === 0) {
+    return
+  }
+  const ids = Array.from(rows).map((el) => el.ID)
+  notif.updateNotifs({
+    IDs: ids,
+    AlreadyRead: true,
+    Message: {
+    }
+  }, () => {
+    // TODO
+  })
+}

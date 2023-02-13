@@ -1,0 +1,46 @@
+<template>
+  <li :class='[row.AlreadyRead ? "" : "unread"]' @click='onMark([row])'>
+    <span class='top'>
+      <span class='date'>{{ formatTime(row?.CreatedAt, false, 'YYYY-MM-DD') }}</span>
+      <span class='title'>{{ row.EventType }}</span>
+    </span>
+    <span v-html='row.Content' />
+  </li>
+</template>
+<script lang='ts' setup>
+import { formatTime, Notif, NotifyType, useFrontendNotifStore } from 'npool-cli-v4'
+import { defineProps, toRef } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
+
+interface Props {
+  notif: Notif;
+}
+
+const props = defineProps<Props>()
+const row = toRef(props, 'notif')
+
+const notif = useFrontendNotifStore()
+const onMark = (rows: Array<Notif>) => {
+  if (rows?.[0]?.AlreadyRead) {
+    return
+  }
+  const ids = Array.from(rows).map((el) => el.ID)
+  notif.updateNotifs({
+    IDs: ids,
+    AlreadyRead: true,
+    Message: {
+      Error: {
+        Title: t('MSG_UPDATE_NOTIFICATION'),
+        Message: t('MSG_UPDATE_NOTIFICATION_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
+}
+</script>
