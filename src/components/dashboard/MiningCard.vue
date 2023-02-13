@@ -5,7 +5,7 @@
         <img :src='goodProfit?.CoinLogo'>
       </div>
       <h3 class='mining-title'>
-        <div v-html='target?.DisplayNames?.[2]? $t(target?.DisplayNames?.[2]) : ""' />
+        <div v-html='target?.DisplayNames?.[2]? $t(target?.DisplayNames?.[2]) : goodProfit.GoodName' />
       </h3>
     </div>
     <div class='top-line-summary'>
