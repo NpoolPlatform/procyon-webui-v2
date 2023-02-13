@@ -5,7 +5,7 @@
         <img :src='goodProfit?.CoinLogo'>
       </div>
       <h3 class='mining-title'>
-        {{ goodProfit?.GoodName }}
+        <div v-html='target?.DisplayNames?.[2]? $t(target?.DisplayNames?.[2]) : ""' />
       </h3>
     </div>
     <div class='top-line-summary'>
@@ -106,6 +106,7 @@ const goodProfit = toRef(props, 'profit')
 const short = ref(true)
 
 const good = useAdminAppGoodStore()
+const target = computed(() => good.getGoodByID(goodProfit.value?.GoodID))
 
 const coin = useAdminAppCoinStore()
 const productInfo = computed(() => coin.getCoinByID(goodProfit.value?.CoinTypeID))
