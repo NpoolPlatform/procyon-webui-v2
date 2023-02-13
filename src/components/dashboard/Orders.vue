@@ -19,7 +19,7 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useFrontendOrderStore, Order } from 'npool-cli-v4'
+import { useFrontendOrderStore, Order, useAdminAppGoodStore } from 'npool-cli-v4'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
@@ -28,6 +28,8 @@ const { t } = useI18n({ useScope: 'global' })
 
 const order = useFrontendOrderStore()
 const orders = computed(() => order.orders)
+
+const good = useAdminAppGoodStore()
 
 const table = computed(() => [
   {
@@ -40,7 +42,7 @@ const table = computed(() => [
     name: 'Product',
     label: t('MSG_PRODUCT'),
     align: 'center',
-    field: (row: Order) => row.GoodName
+    field: (row: Order) => good.getGoodByID(row?.GoodID)?.DisplayNames?.[3] ? t(good.getGoodByID(row?.GoodID)?.DisplayNames?.[3] as string) : row.GoodName
   },
   {
     name: 'Total',

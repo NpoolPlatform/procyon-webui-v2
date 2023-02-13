@@ -21,18 +21,9 @@
                   <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
                 </span>
               </span>
-              <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
+              <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
             </li>
-            <li v-for='row in unReads' :key='row.ID' @click='onMarkAll([row])'>
-              <span class='top'>
-                <span class='date'>{{ date.formatDate(row?.CreatedAt * 1000, 'YYYY-MM-DD') }}</span>
-                <span class='title'>{{ row.EventType }}</span>
-              </span>
-              <span v-html='row.Content' />
-              <!-- <a v-if='notif.goWalletPage(row)' href='#/wallet'>{{ $t('MSG_WALLET') }}</a>
-              <a v-if='notif.goPersonPage(row)' href='#/kyc'>{{ $t('MSG_PERSONAL_INFO') }}</a>
-              {{ $t('MSG_FOR_DETAILS') }}. -->
-            </li>
+            <NotifCard v-for='row in unReads' :key='row.ID' :notif='row' />
           </ul>
         </li>
         <SignHelper v-if='!localUser.logined' />
@@ -83,15 +74,9 @@
                 <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
               </span>
             </span>
-            <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} >></a></span>
+            <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
           </li>
-          <li v-for='row in unReads' :key='row.ID' @click='onMarkAll([row])'>
-            <span class='top'>
-              <span class='date'>{{ date.formatDate(row?.CreatedAt * 1000, 'YYYY-MM-DD') }}</span>
-              <span class='title'>{{ row.EventType }}</span>
-            </span>
-            <span v-html='row.Content' />
-          </li>
+          <NotifCard v-for='row in unReads' :key='row.ID' :notif='row' />
         </ul>
       </li>
       <SignHelper v-if='!localUser.logined' />
@@ -146,11 +131,9 @@ import {
   NotifyType,
   useFrontendUserStore,
   useLocalUserStore,
-  Notif,
   useFrontendNotifStore
 } from 'npool-cli-v4'
-import { getNotifs } from 'src/api/notif'
-import { date } from 'quasar'
+import { getNotifs, onMarkAll } from 'src/api/notif'
 import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -159,6 +142,7 @@ const { t } = useI18n({ useScope: 'global' })
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
 const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
+const NotifCard = defineAsyncComponent(() => import('src/components/notification/NotifCard.vue'))
 
 const user = useFrontendUserStore()
 const localUser = useLocalUserStore()
@@ -234,27 +218,6 @@ onMounted(() => {
     getNotifs(0, 500)
   }
 })
-
-const onMarkAll = (rows: Array<Notif>) => {
-  if (rows?.length === 0) {
-    return
-  }
-  const ids = Array.from(rows).map((el) => el.ID)
-  notif.updateNotifs({
-    IDs: ids,
-    AlreadyRead: true,
-    Message: {
-      Error: {
-        Title: t('MSG_UPDATE_NOTIFICATION'),
-        Message: t('MSG_UPDATE_NOTIFICATION_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
-}
 </script>
 
 <style lang='sass' scoped>

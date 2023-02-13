@@ -394,6 +394,19 @@ ul.notifications li span.date
 ul.notifications li span.title
   font-weight: 700
 
+ul.notifications .unread::before,
+.content ul.notification-center .unread::before
+  background: var(--pink)
+  border-radius: 4px 0 0 4px
+  content: ""
+  display: block
+  margin: 0
+  position: absolute
+  top: 0
+  left: 0
+  height: 100%
+  width: 3px
+
 /* NOTIFICATIONS PAGE */
 ul.notification-center
   margin: 0
