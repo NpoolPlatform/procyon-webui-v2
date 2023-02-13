@@ -74,7 +74,7 @@
                 <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
               </span>
             </span>
-            <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr; >></a></span>
+            <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
           </li>
           <NotifCard v-for='row in unReads' :key='row.ID' :notif='row' />
         </ul>
