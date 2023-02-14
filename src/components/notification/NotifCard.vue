@@ -1,5 +1,5 @@
 <template>
-  <li :class='[row.AlreadyRead ? "" : "unread"]' @click='onMark([row])'>
+  <li :class='[row.Notified ? "" : "unread"]' @click='onMark([row])'>
     <span class='top'>
       <span class='date'>{{ formatTime(row?.CreatedAt, false, 'YYYY-MM-DD') }}</span>
       <span class='title'>{{ row.EventType }}</span>
@@ -24,13 +24,13 @@ const row = toRef(props, 'notif')
 
 const notif = useFrontendNotifStore()
 const onMark = (rows: Array<Notif>) => {
-  if (rows?.[0]?.AlreadyRead) {
+  if (rows?.[0]?.Notified) {
     return
   }
   const ids = Array.from(rows).map((el) => el.ID)
   notif.updateNotifs({
     IDs: ids,
-    AlreadyRead: true,
+    Notified: true,
     Message: {
       Error: {
         Title: t('MSG_UPDATE_NOTIFICATION'),
