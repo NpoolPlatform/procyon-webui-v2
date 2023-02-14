@@ -2,7 +2,7 @@
   <li :class='[row.Notified ? "" : "unread"]' @click='onMark([row])'>
     <span class='top'>
       <span class='date'>{{ formatTime(row?.CreatedAt, false, 'YYYY-MM-DD') }}</span>
-      <span class='title'>{{ row.EventType }}</span>
+      <span class='title'>{{ row.Title }}</span>
     </span>
     <span v-html='row.Content' />
   </li>
