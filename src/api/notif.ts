@@ -21,7 +21,7 @@ export const onMarkAll = (rows: Array<Notif>) => {
   const ids = Array.from(rows).map((el) => el.ID)
   notif.updateNotifs({
     IDs: ids,
-    AlreadyRead: true,
+    Notified: true,
     Message: {
     }
   }, () => {
