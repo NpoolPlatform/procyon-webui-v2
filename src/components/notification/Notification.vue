@@ -1,13 +1,12 @@
 <template>
   <div class='content'>
-    <h2>{{ $t('MSG_NOTIFICATIONS') }}</h2>
+    <h2>{{ $t('MSG_NOTIFICATION_CENTER') }}</h2>
     <ul class='notification-center'>
       <li class='first'>
         <span>
-          <span class='number'>{{ unReads?.length }}</span>
-          {{ $t('MSG_NEW_NOTIFICATIONS') }}
+          <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: unReads.length})' />
           <span class='clear-all'>
-            <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+            <a @click='onMarkAll(unReads)'>&nbsp; {{ $t('MSG_MARK_ALL_AS_READ') }}</a>
           </span>
         </span>
       </li>
