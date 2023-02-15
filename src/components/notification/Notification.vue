@@ -4,9 +4,7 @@
     <ul class='notification-center'>
       <li class='first'>
         <span>
-          <!-- <span class='number'>{{ unReads?.length }}</span> -->
           <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: unReads.length})' />
-          <!-- {{ $t('MSG_NEW_NOTIFICATIONS',{TOTAL: unReads.length}) }} -->
           <span class='clear-all'>
             <a @click='onMarkAll(unReads)'>&nbsp; {{ $t('MSG_MARK_ALL_AS_READ') }}</a>
           </span>
