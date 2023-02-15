@@ -15,8 +15,7 @@
           <ul class='notifications'>
             <li class='first'>
               <span>
-                <span class='number'>{{ unReads?.length }}</span>
-                {{ $t('MSG_NEW_NOTIFICATIONS') }}
+                <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: unReads.length})' />
                 <span class='clear-all'>
                   <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
                 </span>
@@ -68,8 +67,7 @@
         <ul class='notifications'>
           <li class='first'>
             <span>
-              <span class='number'>{{ unReads?.length }}</span>
-              {{ $t('MSG_NEW_NOTIFICATIONS') }}
+              <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: unReads.length})' />
               <span class='clear-all'>
                 <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
               </span>
