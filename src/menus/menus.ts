@@ -48,6 +48,14 @@ const BaseMenu = {
       children: []
     }, {
       menuId: uid(),
+      label: 'MSG_WALLET',
+      caption: '',
+      icon: wallet,
+      target: '/wallet',
+      level: 0,
+      children: []
+    }, {
+      menuId: uid(),
       label: 'MSG_NOTIFICATIONS',
       caption: '',
       icon: notification,
@@ -60,14 +68,6 @@ const BaseMenu = {
       caption: '',
       icon: affiliates,
       target: '/affiliates',
-      level: 0,
-      children: []
-    }, {
-      menuId: uid(),
-      label: 'MSG_WALLET',
-      caption: '',
-      icon: wallet,
-      target: '/wallet',
       level: 0,
       children: []
     }, {
