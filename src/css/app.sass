@@ -97,6 +97,8 @@ body.jp
 .mobile
   display: none
 
+.special
+  font-family: 'Noto Sans JP' !important
 /* HEADINGS */
 
 h1
@@ -318,7 +320,7 @@ header
   font-size: 10px
   height: 14px
   line-height: 1
-  padding: 2px 8px
+  padding: 0 8px
   position: absolute
   top: 0
   right: 0
@@ -438,6 +440,11 @@ ul.notification-center li::after
   height: 1px
   width: 100%
 
+ul.notification-center li.first,
+ul.notification-center li.first:hover
+  background: none
+  margin: 0 0 8px 0
+
 ul.notification-center li span.top
   display: block
   margin: 0 0 4px 0
@@ -450,6 +457,9 @@ ul.notification-center li span.date
 
 ul.notification-center li span.title
   font-weight: 700
+
+.clear-all
+  margin: 0 0 0 8px
 
 /* LANGUAGE PICKER */
 
@@ -542,8 +552,8 @@ div.hr
   opacity: .7
   height: 2px
   width: 100%
-  
-div.back-button 
+
+div.back-button
   box-shadow: 8px 8px 20px 0 var(--dark-blue-3-66)
   border-radius: 0 12px 12px 0
   cursor: pointer
@@ -554,21 +564,18 @@ div.back-button
   padding: 0
   transition: all ease-in-out .2s
 
-
-div.back-button a 
+div.back-button a
   border-radius: 0 12px 12px 0
   display: block
   opacity: .7
   padding: 18px
 
-
-div.back-button a img 
+div.back-button a img
   filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
   height: 24px
   width: 24px
 
-
-div.up-button 
+div.up-button
   box-shadow: 8px 8px 20px 0 var(--dark-blue-3-66)
   border-radius: 12px 12px 0 0
   cursor: pointer
@@ -583,13 +590,11 @@ div.up-button
   transition: all ease-in-out .2s
   z-index: 10
 
-
-div.up-button a 
+div.up-button a
   border-radius: 12px 12px 0 0
   display: block
   opacity: .7
   padding: 18px
-
 
 div.up-button a img
   filter: invert(10%) sepia(17%) saturate(137%) hue-rotate(103deg) brightness(107%) contrast(91%)
@@ -3176,6 +3181,8 @@ footer .copyright
     padding: 0
     text-align: center
     width: 100%
+    @media (max-width: 1023.98px)
+      flex-wrap: wrap
 
   header.mobile .nav ul li
     padding: 0 0 0 12px

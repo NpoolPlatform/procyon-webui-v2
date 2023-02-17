@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div class='content'>
+    <div class='content' :class='[ special ? "special" : "" ]'>
       <div class='columns-4'>
         <div class='column-4'>
           <img class='logo' :src='lightLogo'>
@@ -40,9 +40,12 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent } from 'vue'
+import { useLocaleStore } from 'npool-cli-v4'
+import { computed, defineAsyncComponent } from 'vue'
 
 import lightLogo from '../../assets/procyon-light.svg'
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 
+const locale = useLocaleStore()
+const special = computed(() => locale.AppLang?.Lang === 'ja-JP')
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <header class='desktop1'>
+  <header class='desktop1' :class='[ special ? "special" : "" ]'>
     <img :src='lightLogo' class='attachment-large size-large logo cursor-pointer' @click='onLogoClick'>
     <div class='nav'>
       <ul>
@@ -22,7 +22,7 @@
               </span>
               <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
             </li>
-            <NotifCard v-for='row in unReads' :key='row.ID' :notif='row' />
+            <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
           </ul>
         </li>
         <SignHelper v-if='!localUser.logined' />
@@ -56,7 +56,7 @@
     </div>
   </header>
 
-  <header class='mobile'>
+  <header class='mobile' :class='[ special ? "special" : "" ]'>
     <img :src='logo' class='attachment-large size-large logo'>
 
     <div class='header-inner'>
@@ -74,7 +74,7 @@
             </span>
             <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
           </li>
-          <NotifCard v-for='row in unReads' :key='row.ID' :notif='row' />
+          <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
         </ul>
       </li>
       <SignHelper v-if='!localUser.logined' />
@@ -129,7 +129,8 @@ import {
   NotifyType,
   useFrontendUserStore,
   useLocalUserStore,
-  useFrontendNotifStore
+  useFrontendNotifStore,
+  useLocaleStore
 } from 'npool-cli-v4'
 import { getNotifs, onMarkAll } from 'src/api/notif'
 import { useI18n } from 'vue-i18n'
@@ -141,6 +142,9 @@ const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/Lang
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
 const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
 const NotifCard = defineAsyncComponent(() => import('src/components/notification/NotifCard.vue'))
+
+const locale = useLocaleStore()
+const special = computed(() => locale.AppLang?.Lang === 'ja-JP')
 
 const user = useFrontendUserStore()
 const localUser = useLocalUserStore()
@@ -202,12 +206,20 @@ const initialize = () => {
 
 const notif = useFrontendNotifStore()
 const unReads = computed(() => notif.unReads)
+const lastFiveNotifs = computed(() => notif.notifs?.length >= 5 ? notif.notifs?.slice(0, 5) : notif.notifs)
 
 onMounted(() => {
   if (logined.value) {
     setTimeout(() => {
       initialize()
     }, 2000)
+  }
+
+  if (logined.value) {
+    setInterval(() => {
+      notif.$reset()
+      getNotifs(0, 500)
+    }, 120000)
   }
 })
 
@@ -216,9 +228,13 @@ onMounted(() => {
     getNotifs(0, 500)
   }
 })
+
 </script>
 
 <style lang='sass' scoped>
 .dropdown
   min-width: 200px
+
+li#notifications::marker
+  content: ''
 </style>
