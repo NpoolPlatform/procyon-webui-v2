@@ -209,6 +209,13 @@ onMounted(() => {
       initialize()
     }, 2000)
   }
+
+  if (logined.value) {
+    setInterval(() => {
+      notif.$reset()
+      getNotifs(0, 500)
+    }, 120000)
+  }
 })
 
 onMounted(() => {
@@ -216,6 +223,7 @@ onMounted(() => {
     getNotifs(0, 500)
   }
 })
+
 </script>
 
 <style lang='sass' scoped>
