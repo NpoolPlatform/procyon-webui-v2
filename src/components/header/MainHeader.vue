@@ -234,4 +234,7 @@ onMounted(() => {
 <style lang='sass' scoped>
 .dropdown
   min-width: 200px
+
+li#notifications::marker
+  content: ''
 </style>
