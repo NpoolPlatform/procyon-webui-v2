@@ -1,5 +1,5 @@
 <template>
-  <header class='desktop1'>
+  <header class='desktop1' :class='[ special ? "special" : "" ]'>
     <img :src='lightLogo' class='attachment-large size-large logo cursor-pointer' @click='onLogoClick'>
     <div class='nav'>
       <ul>
@@ -56,7 +56,7 @@
     </div>
   </header>
 
-  <header class='mobile'>
+  <header class='mobile' :class='[ special ? "special" : "" ]'>
     <img :src='logo' class='attachment-large size-large logo'>
 
     <div class='header-inner'>
@@ -129,7 +129,8 @@ import {
   NotifyType,
   useFrontendUserStore,
   useLocalUserStore,
-  useFrontendNotifStore
+  useFrontendNotifStore,
+  useLocaleStore
 } from 'npool-cli-v4'
 import { getNotifs, onMarkAll } from 'src/api/notif'
 import { useI18n } from 'vue-i18n'
@@ -141,6 +142,9 @@ const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/Lang
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
 const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
 const NotifCard = defineAsyncComponent(() => import('src/components/notification/NotifCard.vue'))
+
+const locale = useLocaleStore()
+const special = computed(() => locale.AppLang?.Lang === 'ja-JP')
 
 const user = useFrontendUserStore()
 const localUser = useLocalUserStore()

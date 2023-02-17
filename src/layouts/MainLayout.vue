@@ -1,6 +1,6 @@
 <template>
   <div class='page column'>
-    <MainHeader v-if='setting.ShowMainHeader' :class='[ special ? "special" : "" ]' />
+    <MainHeader v-if='setting.ShowMainHeader' />
     <div :class='[ "main row", special ? "special" : "" ]'>
       <SideMenu />
       <div id='main'>
@@ -111,9 +111,6 @@ onMounted(() => {
 .main
   min-height: 400px
   width: 100%
-
-.special
-  font-family: 'Noto Sans JP'
 
 .page
   min-height: 100vh
