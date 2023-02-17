@@ -6,7 +6,7 @@
         <span>
           <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: unReads.length})' />
           <span class='clear-all'>
-            <a @click='onMarkAll(unReads)'>&nbsp; {{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+            <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
           </span>
         </span>
       </li>
