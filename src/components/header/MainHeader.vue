@@ -22,7 +22,7 @@
               </span>
               <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
             </li>
-            <NotifCard v-for='row in unReads' :key='row.ID' :notif='row' />
+            <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
           </ul>
         </li>
         <SignHelper v-if='!localUser.logined' />
@@ -74,7 +74,7 @@
             </span>
             <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
           </li>
-          <NotifCard v-for='row in unReads' :key='row.ID' :notif='row' />
+          <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
         </ul>
       </li>
       <SignHelper v-if='!localUser.logined' />
@@ -202,6 +202,7 @@ const initialize = () => {
 
 const notif = useFrontendNotifStore()
 const unReads = computed(() => notif.unReads)
+const lastFiveNotifs = computed(() => notif.notifs?.length >= 5 ? notif.notifs?.slice(0, 5) : notif.notifs)
 
 onMounted(() => {
   if (logined.value) {
