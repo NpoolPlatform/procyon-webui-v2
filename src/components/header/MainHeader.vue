@@ -31,7 +31,7 @@
           size='1.1rem'
           flat dense round rounded
           :icon='"img:" + userAvatar'
-          class='user-icon logined'
+          class='user-icon icon-logined'
         >
           <q-menu
             self='top right'
@@ -83,7 +83,7 @@
         size='1.1rem'
         flat dense round rounded
         :icon='"img:" + userAvatar'
-        class='user-icon'
+        class='user-icon icon-logined'
       >
         <q-menu
           self='top right'
@@ -242,14 +242,16 @@ onMounted(() => {
 li#notifications::marker
   content: ''
 
-.logined
-  margin-left: 0
-
-.desktop1 > .nav
+.desktop1,.mobile > .nav
   ::v-deep .q-hoverable:hover > .q-focus-helper
     background: none
   ::v-deep .q-focus-helper:before
     background: none
   ::v-deep .q-focus-helper:after
     background: none
+.icon-logined
+  margin-left: 0
+.mobile
+  ::v-deep .user-icon:hover
+    filter: none
 </style>
