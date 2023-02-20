@@ -61,7 +61,7 @@
 
     <div class='header-inner'>
       <LangSwitcher />
-      <li id='notifications' v-if='localUser.logined'>
+      <li id='notifications' v-if='localUser.logined' @click='onBellClick'>
         <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
         <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
         <ul class='notifications'>
@@ -185,6 +185,10 @@ const menu = computed(() => {
 
 const onLogoClick = () => {
   void router.push({ path: '/' })
+}
+
+const onBellClick = () => {
+  void router.push({ path: '/notification' })
 }
 
 const logined = computed(() => localUser.logined)
