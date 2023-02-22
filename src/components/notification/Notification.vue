@@ -1,17 +1,19 @@
 <template>
   <div class='content'>
-    <h2>{{ $t('MSG_NOTIFICATION_CENTER') }}</h2>
-    <ul class='notification-center'>
-      <li class='first'>
-        <span>
-          <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: unReads.length})' />
-          <span class='clear-all'>
-            <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+    <div class='content-container'>
+      <h2>{{ $t('MSG_NOTIFICATION_CENTER') }}</h2>
+      <ul class='notification-center'>
+        <li class='first'>
+          <span>
+            <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: unReads.length})' />
+            <span class='clear-all'>
+              <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
+            </span>
           </span>
-        </span>
-      </li>
-      <NotifCard v-for='row in notifications' :key='row.ID' :notif='row' />
-    </ul>
+        </li>
+        <NotifCard v-for='row in notifications' :key='row.ID' :notif='row' />
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -33,3 +35,7 @@ onMounted(() => {
 })
 
 </script>
+<style lang='sass' scoped>
+.content-container
+  min-height: 410px
+</style>
