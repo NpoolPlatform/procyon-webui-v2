@@ -22,7 +22,6 @@ import { useI18n } from 'vue-i18n'
 import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, useFrontendDetailStore } from 'npool-cli-v4'
 import { stringify } from 'csv-stringify/sync'
 import saveAs from 'file-saver'
-
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
