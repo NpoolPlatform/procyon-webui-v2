@@ -7,7 +7,7 @@
   >
     <template #top-right>
       <div class='buttons'>
-        <button disabled class='alt last'>
+        <button class='alt last' :disabled='exportOrders.length === 0' @click='onExportClick'>
           {{ $t('MSG_EXPORT_ORDER_CSV') }}
         </button>
       </div>
@@ -19,7 +19,9 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useFrontendOrderStore, Order, useAdminAppGoodStore } from 'npool-cli-v4'
+import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState } from 'npool-cli-v4'
+import { stringify } from 'csv-stringify/sync'
+import saveAs from 'file-saver'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
@@ -69,6 +71,59 @@ const table = computed(() => [
     field: (row: Order) => order.getOrderState(row)?.startsWith('MSG') ? t(order.getOrderState(row)) : t('MSG_AWAITING_CONFIRMATION')
   }
 ])
+
+interface ExportOrder {
+  CreatedAt: string;
+  ProductType: string;
+  ProductName: string;
+  PurchaseAmount: number;
+  UnitType: string;
+  Price: number;
+  Currency: string;
+  TotalCost: string;
+  MiningPeriod: number;
+  ProverIncentive?: string;
+  VerifierIncentive?: string;
+  OrderStatus: OrderState;
+}
+
+const exportOrders = computed(() => Array.from(orders.value).map((el) => {
+  return {
+    CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
+    ProductType: good.getGoodByID(el.GoodID)?.GoodType,
+    ProductName: good.getGoodByID(el?.GoodID)?.DisplayNames?.[3] ? t(good.getGoodByID(el?.GoodID)?.DisplayNames?.[3] as string) : el.GoodName,
+    PurchaseAmount: el.Units,
+    UnitType: el.GoodUnit,
+    Price: parseFloat(good.getGoodByID(el.GoodID)?.Price as string),
+    Currency: 'USDT',
+    TotalCost: (Number(el.PaymentAmount) + Number(el.PayWithBalanceAmount)).toString() + '' + el.PaymentCoinUnit,
+    MiningPeriod: el.GoodServicePeriodDays,
+    // ProverIncentive: '',
+    // VerifierIncentive: '',
+    OrderStatus: el.State
+  } as ExportOrder
+}))
+
+const onExportClick = () => {
+  const output = stringify(exportOrders.value, {
+    header: true,
+    columns: {
+      CreatedAt: 'Order Date',
+      ProductType: 'Product Type',
+      ProductName: 'Product Name',
+      PurchaseAmount: 'Purchase Amount',
+      UnitType: 'Unit Type',
+      Price: 'Price',
+      Currency: 'Currency',
+      TotalCost: 'Total Cost',
+      MiningPeriod: 'Mining Period',
+      OrderStatus: 'Order Status'
+    }
+  })
+  const blob = new Blob([output], { type: 'text/plain;charset=utf-8' })
+  const filename = 'orders-' + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
+  saveAs(blob, filename)
+}
 
 </script>
 
