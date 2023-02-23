@@ -15,7 +15,7 @@
 
 <script setup lang='ts'>
 
-import { useLocaleStore, useAdminAppLangStore, AppLang, useFrontendNotifStore } from 'npool-cli-v4'
+import { useLocaleStore, useAdminAppLangStore, AppLang, useFrontendNotifStore, useLocalUserStore } from 'npool-cli-v4'
 import { getNotifs } from 'src/api/notif'
 import { computed } from 'vue'
 
@@ -25,12 +25,16 @@ const langs = computed(() => lang.AppLangs.AppLangs)
 const locale = useLocaleStore()
 const curLang = computed(() => locale.AppLang?.Lang)
 
+const logined = useLocalUserStore()
+
 const notif = useFrontendNotifStore()
 
 const onLangClick = (language: AppLang) => {
   locale.setLang(language)
-  notif.$reset()
-  getNotifs(0, 500)
+  if (logined.logined) {
+    notif.$reset()
+    getNotifs(0, 500)
+  }
 }
 
 </script>

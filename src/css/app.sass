@@ -313,6 +313,8 @@ header
 .notification-icon:hover
   filter: hue-rotate(20deg) contrast(2)
   opacity: 1
+  @media (max-width: $breakpoint-sm-max)
+    filter: none
 
 .notification-dot
   background: var(--pink)
@@ -341,6 +343,8 @@ ul.notifications
 #notifications:hover > ul.notifications,
 ul.notifications:hover
   display: block
+  @media (max-width: $breakpoint-sm-max)
+    display: none
 
 ul.notifications li
   border-radius: 4px
@@ -3163,6 +3167,13 @@ footer .copyright
   header.mobile .header-inner
     display: flex
     justify-content: flex-end
+    align-items: center
+
+  header.mobile .header-inner > li
+    display: inline
+    list-style: none
+    padding: 0 12px
+    position: relative
 
   header.mobile .logo
     width: 40px
@@ -3185,7 +3196,7 @@ footer .copyright
       flex-wrap: wrap
 
   header.mobile .nav ul li
-    padding: 0 0 0 12px
+    padding: 0 0 0 8px
 
   header.mobile button
     font-size: 12px

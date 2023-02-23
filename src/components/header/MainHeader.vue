@@ -31,7 +31,7 @@
           size='1.1rem'
           flat dense round rounded
           :icon='"img:" + userAvatar'
-          class='user-icon'
+          class='user-icon icon-logined'
         >
           <q-menu
             self='top right'
@@ -61,7 +61,7 @@
 
     <div class='header-inner'>
       <LangSwitcher />
-      <li id='notifications' v-if='localUser.logined'>
+      <li id='notifications' v-if='localUser.logined' @click='onBellClick'>
         <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
         <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
         <ul class='notifications'>
@@ -83,7 +83,7 @@
         size='1.1rem'
         flat dense round rounded
         :icon='"img:" + userAvatar'
-        class='user-icon'
+        class='user-icon icon-logined'
       >
         <q-menu
           self='top right'
@@ -187,6 +187,10 @@ const onLogoClick = () => {
   void router.push({ path: '/' })
 }
 
+const onBellClick = () => {
+  void router.push({ path: '/notification' })
+}
+
 const logined = computed(() => localUser.logined)
 
 watch(logined, () => {
@@ -237,4 +241,17 @@ onMounted(() => {
 
 li#notifications::marker
   content: ''
+
+.desktop1,.mobile > .nav
+  ::v-deep .q-hoverable:hover > .q-focus-helper
+    background: none
+  ::v-deep .q-focus-helper:before
+    background: none
+  ::v-deep .q-focus-helper:after
+    background: none
+.icon-logined
+  margin-left: 0
+.mobile
+  ::v-deep .user-icon:hover
+    filter: none
 </style>
