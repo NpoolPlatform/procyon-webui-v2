@@ -34,7 +34,7 @@
               id='amount'
               required
               :error='purchaseAmountError'
-              :message='$t("MSG_AMOUNT_TIP", {MAX: total})'
+              :message='message'
               placeholder='MSG_AMOUNT_PLACEHOLDER'
               :min='1'
               :max='total'
@@ -138,12 +138,23 @@ const usdToOtherAmount = computed(() => parseFloat((Math.ceil(paymentAmount.valu
 const usedToOtherAmountISNaN = computed(() => isNaN(usdToOtherAmount.value))
 const insufficientFunds = computed(() => balance.value < paymentAmount.value)
 
+const message = computed(() => {
+  if (purchaseAmount.value <= 0 || purchaseAmount.value > total.value) {
+    return t('MSG_AMOUNT_TIP', { MAX: total })
+  }
+  if (purchaseAmount.value?.toString().includes('.')) {
+    return t('MSG_NOT_SUPPORT_FLOAT_VALUE')
+  }
+  return t('MSG_UNKNOWN_ERROR')
+})
+
 const purchaseAmountError = ref(false)
 const onPurchaseAmountFocusIn = () => {
   purchaseAmountError.value = false
 }
 const onPurchaseAmountFocusOut = () => {
-  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > total.value
+  console.log('amount: ', purchaseAmount.value)
+  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > total.value || purchaseAmount.value?.toString().includes('.')
 }
 
 const order = useFrontendOrderStore()
