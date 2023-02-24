@@ -157,7 +157,7 @@ const onPurchaseClick = () => {
   submitting.value = true
   order.createOrder({
     GoodID: goodID.value,
-    Units: purchaseAmount.value,
+    Units: `${purchaseAmount.value}`,
     PaymentCoinID: coinTypeID.value,
     PayWithBalanceAmount: `${usdToOtherAmount.value}`,
     Message: {
