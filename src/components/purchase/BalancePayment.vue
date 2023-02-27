@@ -140,7 +140,7 @@ const insufficientFunds = computed(() => balance.value < paymentAmount.value)
 
 const message = computed(() => {
   if (purchaseAmount.value <= 0 || purchaseAmount.value > total.value) {
-    return t('MSG_AMOUNT_TIP', { MAX: total })
+    return t('MSG_AMOUNT_TIP', { MAX: total.value })
   }
   if (purchaseAmount.value?.toString().includes('.')) {
     return t('MSG_NOT_SUPPORT_FLOAT_VALUE')
