@@ -64,10 +64,10 @@
             </div>
             <div class='submit-container'>
               <WaitingBtn
-                label='MSG_ALEO_PURCHASE'
+                :label='purchaseBtnLabel'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='!good.haveSale(target) || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
+                :disabled='!good.haveSale(target) || !target?.EnablePurchase || purchaseLimitable || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -128,6 +128,11 @@ const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 const total = computed(() => good.getPurchaseLimit(target.value))
 
+const order = useFrontendOrderStore()
+const purchaseLimitable = computed(() => order.getPurchasedAmount >= Number(target?.value?.UserPurchaseLimit))
+
+const purchaseBtnLabel = computed(() => target.value?.EnablePurchase ? 'MSG_ALEO_PURCHASE' : 'MSG_PURCHASE_NOT_ENABLE')
+
 const selectedCoinCurrency = ref(1) // 币种汇率
 const general = useFrontendGeneralStore()
 const balance = computed(() => parseFloat((Number(general.getBalanceByID(coinTypeID.value)) * selectedCoinCurrency.value).toFixed(4)))
@@ -145,7 +150,10 @@ const message = computed(() => {
   if (purchaseAmount.value?.toString().includes('.')) {
     return t('MSG_NOT_SUPPORT_FLOAT_VALUE')
   }
-  return t('MSG_UNKNOWN_ERROR')
+  if (purchaseLimitable.value) {
+    return t('MSG_USER_TOTAL_PURCHASE_LIMIT', { MAX: target.value.UserPurchaseLimit })
+  }
+  return ''
 })
 
 const purchaseAmountError = ref(false)
@@ -153,11 +161,8 @@ const onPurchaseAmountFocusIn = () => {
   purchaseAmountError.value = false
 }
 const onPurchaseAmountFocusOut = () => {
-  console.log('amount: ', purchaseAmount.value)
-  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > total.value || purchaseAmount.value?.toString().includes('.')
+  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > total.value || purchaseAmount.value?.toString().includes('.') || purchaseLimitable.value
 }
-
-const order = useFrontendOrderStore()
 
 const submitting = ref(false)
 const onPurchaseClick = () => {
@@ -252,7 +257,30 @@ onMounted(() => {
     currency.$reset()
     getCurrencies(0, 500)
   }
+
+  if (order.Orders.Orders.length === 0) {
+    getOrders(0, 500)
+  }
 })
+
+const getOrders = (offset:number, limit: number) => {
+  order.getOrders({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_ORDERS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (rows: Array<Order>, error: boolean) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getOrders(offset + limit, limit)
+  })
+}
 
 const getGenerals = (offset:number, limit: number) => {
   general.getGenerals({
