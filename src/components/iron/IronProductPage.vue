@@ -59,10 +59,10 @@
           </div>
           <div class='submit-container'>
             <WaitingBtn
-              label='MSG_PURCHASE'
+              :label='purchaseBtnLabel'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target.EnablePurchase || !good.haveSale(target)'
+              :disabled='submitting || !target.EnablePurchase'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -130,10 +130,10 @@
             </div>
             <div class='submit-container'>
               <WaitingBtn
-                label='MSG_PURCHASE'
+                :label='purchaseBtnLabel'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !target.EnablePurchase || !good.haveSale(target)'
+                :disabled='submitting || !target.EnablePurchase'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -190,6 +190,7 @@ const general = useFrontendGeneralStore()
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 const total = computed(() => good.getPurchaseLimit(target?.value))
+const purchaseBtnLabel = computed(() => target.value?.EnablePurchase ? 'MSG_ALEO_PURCHASE' : 'MSG_PURCHASE_NOT_ENABLE')
 
 const coin = useAdminAppCoinStore()
 const coins = computed(() => coin.getAvailableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
@@ -228,7 +229,7 @@ const onPurchaseClick = () => {
     void router.push({
       path: '/signin',
       query: {
-        target: '/product/aleo',
+        target: '/product/iron',
         goodId: target.value.GoodID,
         purchaseAmount: myPurchaseAmount.value
       }
@@ -243,6 +244,7 @@ const onPurchaseClick = () => {
   void router.push({
     path: '/payment',
     query: {
+      goodID: target.value?.GoodID,
       coinTypeID: selectedCoinID.value,
       purchaseAmount: myPurchaseAmount.value
     }
