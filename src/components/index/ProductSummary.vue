@@ -23,7 +23,7 @@
             <div v-html='t(desc)' />
           </template>
         </div>
-        <button class='alt' @click='onPurchaseClick(_good)' v-if='_good.EnablePurchase'>
+        <button class='alt' @click='onPurchaseClick(_good)' v-if='good.haveSale(_good)' :disabled='_good.EnablePurchase'>
           {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
         <button class='alt in-active card-btn' v-else>
@@ -46,6 +46,9 @@ const { t } = useI18n({ useScope: 'global' })
 
 const router = useRouter()
 const onPurchaseClick = (good: AppGood) => {
+  if (!good.EnableProductPage) {
+    return
+  }
   if (good.GoodID !== DefaultGoodID) {
     void router.push({
       path: '/product/iron',
