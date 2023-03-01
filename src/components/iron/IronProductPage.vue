@@ -4,7 +4,7 @@
       <div class='product-title-section project-title-section' :style='{"background-image": "url(" + bgImg + ")"}'>
         <div class='product-title-container'>
           <div class='product-page-icon'>
-            <img src='product/iron/product-iron-fish.svg'>
+            <img :src='target?.CoinLogo'>
           </div>
           <h1 v-html='target?.DisplayNames?.[1]? $t(target?.DisplayNames?.[1]) : target?.GoodName' />
         </div>
@@ -62,7 +62,7 @@
               label='MSG_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting'
+              :disabled='submitting || !target.EnablePurchase || !good.haveSale(target)'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -133,7 +133,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !good.haveSale(target)'
+                :disabled='submitting || !target.EnablePurchase || !good.haveSale(target)'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />

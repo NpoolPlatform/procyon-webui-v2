@@ -108,7 +108,6 @@ import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
-import { DefaultGoodID } from 'src/const/const'
 import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
 import { getCurrencies, getDescriptions } from 'src/api/chain'
 
@@ -126,7 +125,7 @@ interface Query {
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : DefaultGoodID)
+const goodID = computed(() => query.value.goodId)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = useAdminAppGoodStore()

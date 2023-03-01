@@ -5,6 +5,7 @@
       <div
         class='product content-glass dark-glass card-container'
         v-for='_good in goods' :key='_good.ID'
+        :class='[_good.GoodName?.toLowerCase().includes("iron")? "project-iron-fish" : ""]'
       >
         <div
           class='good-banner'
@@ -16,12 +17,13 @@
             <div v-html='t(title)' />
           </template>
         </div>
+
         <div class='card-content-container'>
           <template v-for='(desc,idx) in _good?.Descriptions' :key='idx'>
             <div v-html='t(desc)' />
           </template>
         </div>
-        <button class='alt' @click='onPurchaseClick(_good)' v-if='good.haveSale(_good)'>
+        <button class='alt' @click='onPurchaseClick(_good)' v-if='_good.EnablePurchase'>
           {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
         <button class='alt in-active card-btn' v-else>
@@ -37,12 +39,22 @@ import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { AppGood, useAdminAppGoodStore } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
+import { DefaultGoodID } from 'src/const/const'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const router = useRouter()
 const onPurchaseClick = (good: AppGood) => {
+  if (good.GoodID !== DefaultGoodID) {
+    void router.push({
+      path: '/product/iron',
+      query: {
+        goodId: good.GoodID
+      }
+    })
+    return
+  }
   void router.push({
     path: '/product/aleo',
     query: {
