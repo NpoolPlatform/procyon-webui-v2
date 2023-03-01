@@ -23,7 +23,7 @@
             <div v-html='t(desc)' />
           </template>
         </div>
-        <button class='alt' @click='onPurchaseClick(_good)' v-if='good.haveSale(_good)' :disabled='_good.EnablePurchase'>
+        <button class='alt' @click='onPurchaseClick(_good)' v-if='good.haveSale(_good)'>
           {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
         <button class='alt in-active card-btn' v-else>
