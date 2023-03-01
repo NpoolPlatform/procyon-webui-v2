@@ -501,6 +501,19 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        path: 'product/iron',
+        component: () => import('pages/product/Iron.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false,
+          ShowSideMenu: false
+        }
+      }, {
         path: 'product/spacemesh',
         component: () => import('pages/product/Spacemesh.vue'),
         meta: {
