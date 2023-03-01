@@ -151,7 +151,7 @@
 
     <p>その後のラウンドでは、<strong>a16zが主導し、Sequoia、MetaStable、Electric Capital、Arrington Capital</strong>といった世界有数のVCや、Dylan Field (Figmaの共同創業者) 、Alan Howard (イギリスのビリオネア、ヘッジファンドマネージャー)、Jeff Weiner (LinkedIn役員)、Divesh Makan (Iconiq Capitalパートナー) などのエンジェル投資家と一緒に<strong>$27ミリオン (約37億円) 、推定評価額$150-300ミリオン (約290億ー400億円) を調達</strong>strong>しました。</p>
 
-    <p>a16zは、アイアン・フィッシュへの投資を強く信じ、<a href='https://a16z.com/2021/11/30/investing-in-iron-fish/' target='_blank'>Iron Fishの優れた点と成功の理由を解説する記事</a>を書きました。.</p>
+    <p>a16zは、アイアン・フィッシュへの投資を強く信じ、<a href='https://a16z.com/2021/11/30/investing-in-iron-fish/' target='_blank'>Iron Fishの優れた点と成功の理由を解説する記事</a>を書きました。</p>
 
     <div class='logo-display'>
       <div><img src='product/iron/logos/slow-ventures.png'></div>
@@ -209,7 +209,7 @@
       <li>公開ブロックエクスプローラーサイト</li>
     </ul>
 
-    <p>最終テストネットは非常に順調で、当初予定していた3月7日ではなく、予定より早く2月25日に終了することができました。<strong>公式ブログより、メインネットのローンチは3月14日に予定されております。</strong>.</p>
+    <p>最終テストネットは非常に順調で、当初予定していた3月7日ではなく、予定より早く2月25日に終了することができました。<strong>公式ブログより、メインネットのローンチは3月14日に予定されております。</strong></p>
 
     <ul>
       <li><a href='https://airtable.com/shrNxbu0YxXL0G1qt/tblreltJK2Vez1xOJ' target='_blank'>公式ロードマップ</a></li>
