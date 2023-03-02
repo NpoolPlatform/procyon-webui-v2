@@ -1,7 +1,7 @@
 <template>
   <div class='content'>
     <h2>Premiere Products</h2>
-    <div class='products'>
+    <div class='products' id='index-premiere-container'>
       <div
         class='product content-glass dark-glass card-container'
         v-for='_good in goods' :key='_good.ID'
@@ -57,7 +57,6 @@ const onPurchaseClick = (good: AppGood) => {
 
 const good = useAdminAppGoodStore()
 const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
-
 </script>
 <style lang='sass' scoped>
 .card-content-container
