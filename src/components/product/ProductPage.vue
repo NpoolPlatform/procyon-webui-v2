@@ -62,7 +62,7 @@
               label='MSG_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting'
+              :disabled='submitting || !target.EnablePurchase'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -133,7 +133,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !good.haveSale(target)'
+                :disabled='submitting || !target?.EnablePurchase'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
