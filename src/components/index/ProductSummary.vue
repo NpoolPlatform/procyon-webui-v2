@@ -50,8 +50,16 @@ const onPurchaseClick = (_good: AppGood) => {
   if (!_good.EnableProductPage) {
     return
   }
+
+  if (_good.ProductPage.length === 0) {
+    void router.push({
+      path: '/product/aleo'
+    })
+    return
+  }
+
   void router.push({
-    path: _good?.ProductPage?.length > 0 ? _good?.ProductPage : '/product/aleo',
+    path: _good?.ProductPage,
     query: {
       goodId: _good.GoodID
     }
