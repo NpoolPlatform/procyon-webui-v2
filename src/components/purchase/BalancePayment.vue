@@ -60,7 +60,7 @@
             </div>
             <div class='warning warning-pink' v-if='target.Descriptions?.[2]'>
               <img src='font-awesome/warning.svg'>
-              <span>{{ $t("MSG_IRON_FISH_PURCHASE_WARNING") }}</span>
+              <span>{{ $t(target.Descriptions?.[2]) }}</span>
             </div>
             <div class='warning warning-pink' v-if='insufficientFunds'>
               <img src='font-awesome/warning.svg'>
