@@ -135,7 +135,7 @@ const total = computed(() => good.getPurchaseLimit(target.value))
 const order = useFrontendOrderStore()
 const purchaseLimitable = computed(() => order.getPurchasedAmount >= Number(target?.value?.UserPurchaseLimit))
 
-const purchaseBtnLabel = computed(() => target.value?.EnablePurchase ? 'MSG_ALEO_PURCHASE' : 'MSG_PURCHASE_NOT_ENABLE')
+const purchaseBtnLabel = computed(() => target.value?.EnablePurchase ? 'MSG_PURCHASE' : 'MSG_PURCHASE_NOT_ENABLE')
 
 const selectedCoinCurrency = ref(1) // 币种汇率
 const general = useFrontendGeneralStore()
