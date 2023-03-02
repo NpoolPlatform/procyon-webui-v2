@@ -12,9 +12,9 @@
         <span class='number'>{{ good.getPrice(goodID) }}</span>
         <span class='unit'>{{ PriceCoinName }} / UNIT</span>
         <div class='tooltip'>
-          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_PRICE_TIP') }}
+            {{ $t('MSG_IRON_FISH_PRICE_TIP') }}
           </p>
         </div>
       </div>
@@ -23,9 +23,9 @@
         <span class='number'>*</span>
         <span class='unit'>{{ target?.CoinUnit }} / {{ $t('MSG_DAY') }}</span>
         <div class='tooltip'>
-          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_DAILY_REWARD_TIP') }}
+            {{ $t('MSG_IRON_FISH_DAILY_REWARD_TIP') }}
           </p>
         </div>
       </div>
@@ -34,9 +34,9 @@
         <span class='number'>{{ target?.DurationDays }}</span>
         <span class='unit'>{{ $t('MSG_DAYS') }}</span>
         <div class='tooltip'>
-          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_SERVICE_PERIOD_TIP') }}
+            {{ $t('MSG_IRON_FISH_SERVICE_PERIOD_TIP') }}
           </p>
         </div>
       </div>
@@ -45,9 +45,9 @@
         <span class='number'>20</span>
         <span class='unit'>%</span>
         <div class='tooltip'>
-          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_TECHNIQUE_SERVICE_FEE_TIP') }}
+            {{ $t('MSG_IRON_FISH_TECHNIQUE_SERVICE_FEE_TIP') }}
           </p>
         </div>
       </div>
@@ -55,21 +55,21 @@
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
         <span class='number'>{{ true ? 'TBD*' : good.getFormatTime(target?.StartAt) }}</span>
         <div class='tooltip'>
-          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_ORDER_EFFECTIVE_TIP') }}
+            {{ $t('MSG_IRON_FISH_ORDER_EFFECTIVE_TIP') }}
           </p>
         </div>
       </div>
       <div class='three-section' v-if='good.haveSale(target)'>
-        <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
+        <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE") }}</h4>
         <span class='number'>{{ good.getSaleEndDate(target) }}</span>
         <br>
         <span class='unit'>{{ good.getSaleEndTime(target) }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
-          <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_LEARN_MORE') }}</span>
+          <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_SALE_END_DATE_TIP') }}
+            {{ $t('MSG_IRON_FISH_SALE_END_TIP') }}
           </p>
         </div>
       </div>

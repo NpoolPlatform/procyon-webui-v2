@@ -16,7 +16,7 @@
         </h3>
         <form action='javascript:void(0)' id='purchase'>
           <div class='full-section' v-if='good.haveSale(target)'>
-            <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
+            <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE2") }}</h4>
             <span class='number'>{{ remainDays }}</span>
             <span class='unit'> {{ $t("MSG_DAYS") }} </span>
             <span class='number'>{{ remainHours }}</span>
@@ -88,7 +88,7 @@
           </h3>
           <form action='javascript:void(0)' id='purchase'>
             <div class='full-section' v-if='good.haveSale(target)'>
-              <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
+              <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE2") }}</h4>
               <span class='number'>{{ remainDays }}</span>
               <span class='unit'> {{ $t("MSG_DAYS") }} </span>
               <span class='number'>{{ remainHours }}</span>
