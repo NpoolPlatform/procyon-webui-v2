@@ -45,12 +45,13 @@ const { t } = useI18n({ useScope: 'global' })
 
 const router = useRouter()
 const onPurchaseClick = (_good: AppGood) => {
-  console.log('ProductPage: ', _good.EnableProductPage)
+  console.log('EnableProductPage: ', _good.EnableProductPage)
+  console.log('ProductPage: ', _good.ProductPage)
   if (!_good.EnableProductPage) {
     return
   }
   void router.push({
-    path: _good?.ProductPage,
+    path: _good?.ProductPage?.length > 0 ? _good?.ProductPage : '/product/aleo',
     query: {
       goodId: _good.GoodID
     }
