@@ -39,9 +39,9 @@
             @focus='onPurchaseAmountFocusIn'
             @blur='onPurchaseAmountFocusOut'
           />
-          <div class='warning' v-if='target.Descriptions?.[2]' style='margin: 24px 0 0 0'>
+          <div class='warning' v-if='target?.Descriptions?.[2]' style='margin-top: 24px'>
             <img src='font-awesome/warning.svg'>
-            <span>{{ $t(target.Descriptions?.[2]) }}</span>
+            <span>{{ $t(target?.Descriptions?.[2]) }}</span>
           </div>
           <br>
           <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
@@ -116,9 +116,9 @@
               @blur='onPurchaseAmountFocusOut'
               style='margin: 8px 0 24px 0'
             />
-            <div class='warning' v-if='target.Descriptions?.[2]' style='margin: 24px 0 0 0'>
+            <div class='warning' v-if='target?.Descriptions?.[2]' style='margin-top: 24px'>
               <img src='font-awesome/warning.svg'>
-              <span>{{ $t(target.Descriptions?.[2]) }}</span>
+              <span>{{ $t(target?.Descriptions?.[2]) }}</span>
             </div>
             <br>
             <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
