@@ -136,6 +136,9 @@ const currency = useAdminCurrencyStore()
 const description = useAdminCoinDescriptionStore()
 
 onMounted(() => {
+  if (goodID.value?.length === 0) {
+    return
+  }
   good.getAppGood({
     GoodID: goodID.value,
     Message: {

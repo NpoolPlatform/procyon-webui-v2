@@ -1,7 +1,7 @@
 <template>
   <div class='content'>
     <h2>Premiere Products</h2>
-    <div class='products' id='index-premiere-container'>
+    <div class='products' id='premiere-product-container'>
       <div
         class='product content-glass dark-glass card-container'
         v-for='_good in goods' :key='_good.ID'
@@ -18,7 +18,7 @@
         </div>
 
         <div class='card-content-container'>
-          <template v-for='(desc,idx) in _good?.Descriptions' :key='idx'>
+          <template v-for='(desc,idx) in _good?.Descriptions?.slice(0, 2)' :key='idx'>
             <div v-html='t(desc)' />
           </template>
         </div>

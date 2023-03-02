@@ -58,6 +58,10 @@
               <img src='font-awesome/warning.svg'>
               <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
             </div>
+            <div class='warning warning-pink' v-if='target.Descriptions?.[2]'>
+              <img src='font-awesome/warning.svg'>
+              <span>{{ $t("MSG_IRON_FISH_PURCHASE_WARNING") }}</span>
+            </div>
             <div class='warning warning-pink' v-if='insufficientFunds'>
               <img src='font-awesome/warning.svg'>
               <span>{{ $t("MSG_INSUFFICIENT_FUNDS") }} {{ $t("MSG_INSUFFICIENT_FUNDS_INFO") }}</span>
