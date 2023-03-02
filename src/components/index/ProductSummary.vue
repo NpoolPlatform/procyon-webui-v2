@@ -5,7 +5,6 @@
       <div
         class='product content-glass dark-glass card-container'
         v-for='_good in goods' :key='_good.ID'
-        :class='[_good.GoodName?.toLowerCase().includes("iron")? "project-iron-fish" : ""]'
       >
         <div
           class='good-banner'
@@ -39,7 +38,6 @@ import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { AppGood, useAdminAppGoodStore } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
-import { DefaultGoodID } from 'src/const/const'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -49,17 +47,8 @@ const onPurchaseClick = (good: AppGood) => {
   if (!good.EnableProductPage) {
     return
   }
-  if (good.GoodID !== DefaultGoodID) {
-    void router.push({
-      path: '/product/iron',
-      query: {
-        goodId: good.GoodID
-      }
-    })
-    return
-  }
   void router.push({
-    path: '/product/aleo',
+    path: good.ProductPage,
     query: {
       goodId: good.GoodID
     }
