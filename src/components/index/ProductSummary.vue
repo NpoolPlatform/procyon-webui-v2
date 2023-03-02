@@ -1,10 +1,11 @@
 <template>
   <div class='content'>
     <h2>Premiere Products</h2>
-    <div class='products' id='premiere-product-container'>
+    <div class='products'>
       <div
-        class='product content-glass dark-glass card-container'
         v-for='_good in goods' :key='_good.ID'
+        class='product content-glass dark-glass card-container'
+        :class='[_good.DisplayColors?.[0] ? _good.DisplayColors?.[0]: ""]'
       >
         <div
           class='good-banner'
@@ -25,7 +26,7 @@
         <button class='alt' @click='onPurchaseClick(_good)' v-if='good.haveSale(_good)'>
           {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
-        <button class='alt in-active card-btn' v-else>
+        <button class='alt in-active' v-else>
           {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
       </div>
@@ -43,14 +44,15 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ useScope: 'global' })
 
 const router = useRouter()
-const onPurchaseClick = (good: AppGood) => {
-  if (!good.EnableProductPage) {
+const onPurchaseClick = (_good: AppGood) => {
+  console.log('ProductPage: ', _good.EnableProductPage)
+  if (!_good.EnableProductPage) {
     return
   }
   void router.push({
-    path: good.ProductPage,
+    path: _good?.ProductPage,
     query: {
-      goodId: good.GoodID
+      goodId: _good.GoodID
     }
   })
 }
@@ -63,10 +65,4 @@ const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
   height: 170px
   max-height: 170px
   overflow-y: hidden
-
-.card-btn
-  background: none
-  border: 1px solid var(--white-77)
-  color: white
-  filter: saturate(0) contrast(.7)
 </style>
