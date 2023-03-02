@@ -262,6 +262,7 @@ onMounted(() => {
     getCurrencies(0, 500)
   }
 
+  order.$reset()
   if (order.Orders.Orders.length === 0) {
     getOrders(0, 500)
   }
