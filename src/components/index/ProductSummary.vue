@@ -51,7 +51,7 @@ const onPurchaseClick = (_good: AppGood) => {
     return
   }
 
-  if (_good.ProductPage.length === 0) {
+  if (_good.ProductPage?.length === 0) {
     void router.push({
       path: '/product/aleo'
     })
