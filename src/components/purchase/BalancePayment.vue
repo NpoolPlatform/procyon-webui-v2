@@ -2,7 +2,7 @@
   <BackPage>
     <div class='content'>
       <div class='form-container content-glass'>
-        <h3>{{ target?.GoodID === DefaultGoodID? $t('MSG_ALEO_MINING_PURCHASE') : $t('MSG_IRON_FISH_MINING_PURCHASE') }}</h3>
+        <h3>{{ $t('MSG_MINING_PURCHASE') }}</h3>
         <div class='info-flex'>
           <form action='javascript:void(0)'>
             <label>{{ $t('MSG_SELECT_PAYMENT_CURRENCY') }}</label>
@@ -41,7 +41,7 @@
               @focus='onPurchaseAmountFocusIn'
               @blur='onPurchaseAmountFocusOut'
             />
-            <label>{{ $t('MSG_ALEO_DUE_AMOUNT') }}</label>
+            <label>{{ $t('MSG_DUE_AMOUNT') }}</label>
             <div class='three-section' v-if='paymentCoin?.StableUSD'>
               <span class='number'>{{ paymentAmount }}</span>
               <span class='unit'>USDT</span>
