@@ -147,7 +147,7 @@ const logined = useLocalUserStore()
 const good = useAdminAppGoodStore()
 
 const archivement = useFrontendArchivementStore()
-const goodArchivements = computed(() => Array.from(referral.value?.Archivements.filter((el) => good.visible(el.GoodID))).map((el) => {
+const goodArchivements = computed(() => Array.from(referral.value?.Archivements.filter((el) => good.visible(el.GoodID))).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
   return {
     ...el,
     Editing: false
