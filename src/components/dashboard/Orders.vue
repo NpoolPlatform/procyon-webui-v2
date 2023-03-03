@@ -48,7 +48,7 @@ const table = computed(() => [
     name: 'Total',
     label: t('MSG_PURCHASE_AMOUNT'),
     align: 'center',
-    field: (row: Order) => row.Units + t(row.GoodUnit)
+    field: (row: Order) => `${parseFloat(row.Units)} ${t(row.GoodUnit)}`
   },
   {
     name: 'Price',

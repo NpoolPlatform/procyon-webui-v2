@@ -47,8 +47,8 @@
               <span class='aff-number'>{{ _good.CommissionPercent }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
-                :class='[ "alt", good.online(_good.GoodID) ? "" : "in-active" ]'
-                :disabled='!good.online(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood)'
+                :class='[ "alt", good.enableSetCommission(_good.GoodID) ? "" : "in-active" ]'
+                :disabled='!good.enableSetCommission(_good.GoodID)'
                 @click='(_good.Editing = true)'
               >
                 {{ $t('MSG_SET') }}
@@ -113,8 +113,7 @@ import {
   UserArchivement,
   NotifyType,
   SettleType,
-  useFrontendCommissionStore,
-  AppGood
+  useFrontendCommissionStore
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 import { MyGoodArchivement } from 'src/localstore/ledger/types'
@@ -148,7 +147,7 @@ const logined = useLocalUserStore()
 const good = useAdminAppGoodStore()
 
 const archivement = useFrontendArchivementStore()
-const goodArchivements = computed(() => Array.from(referral.value?.Archivements.filter((el) => good.visible(el.GoodID))).map((el) => {
+const goodArchivements = computed(() => Array.from(referral.value?.Archivements.filter((el) => good.visible(el.GoodID))).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
   return {
     ...el,
     Editing: false

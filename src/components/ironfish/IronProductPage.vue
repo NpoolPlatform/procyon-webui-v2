@@ -16,7 +16,7 @@
         </h3>
         <form action='javascript:void(0)' id='purchase'>
           <div class='full-section' v-if='good.haveSale(target)'>
-            <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
+            <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE2") }}</h4>
             <span class='number'>{{ remainDays }}</span>
             <span class='unit'> {{ $t("MSG_DAYS") }} </span>
             <span class='number'>{{ remainHours }}</span>
@@ -25,6 +25,7 @@
 
             <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
           </div>
+          <br>
           <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
           <Input
             v-model:value='myPurchaseAmount'
@@ -39,6 +40,11 @@
             @focus='onPurchaseAmountFocusIn'
             @blur='onPurchaseAmountFocusOut'
           />
+          <div class='warning iron-fish-warning' v-if='showIronFishWarning'>
+            <img src='font-awesome/warning.svg'>
+            <span v-html='$t(target.Descriptions[2])' />
+          </div>
+          <br>
           <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
           <CoinSelector
             v-model:id='selectedCoinID'
@@ -59,10 +65,10 @@
           </div>
           <div class='submit-container'>
             <WaitingBtn
-              label='MSG_PURCHASE'
+              :label='purchaseBtnLabel'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target.EnablePurchase || !good.haveSale(target) || good.getPurchaseLimit(target) <= 0'
+              :disabled='submitting || !target?.EnablePurchase || !good.haveSale(target) || good.getPurchaseLimit(target) <= 0'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -88,7 +94,7 @@
           </h3>
           <form action='javascript:void(0)' id='purchase'>
             <div class='full-section' v-if='good.haveSale(target)'>
-              <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
+              <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE2") }}</h4>
               <span class='number'>{{ remainDays }}</span>
               <span class='unit'> {{ $t("MSG_DAYS") }} </span>
               <span class='number'>{{ remainHours }}</span>
@@ -96,6 +102,7 @@
               <span class='number'>{{ remainMinutes }}</span>
               <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
             </div>
+            <br>
             <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
             <Input
               v-model:value='myPurchaseAmount'
@@ -110,6 +117,11 @@
               @focus='onPurchaseAmountFocusIn'
               @blur='onPurchaseAmountFocusOut'
             />
+            <div class='warning' v-if='showIronFishWarning'>
+              <img src='font-awesome/warning.svg'>
+              <span v-html='$t(target.Descriptions[2])' />
+            </div>
+            <br>
             <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
             <CoinSelector
               v-model:id='selectedCoinID'
@@ -130,7 +142,7 @@
             </div>
             <div class='submit-container'>
               <WaitingBtn
-                label='MSG_PURCHASE'
+                :label='purchaseBtnLabel'
                 type='submit'
                 class='submit-btn'
                 :disabled='submitting || !target?.EnablePurchase || !good.haveSale(target) || good.getPurchaseLimit(target) <= 0'
@@ -190,6 +202,7 @@ const general = useFrontendGeneralStore()
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 const total = computed(() => good.getPurchaseLimit(target?.value))
+const purchaseBtnLabel = computed(() => target.value?.EnablePurchase ? 'MSG_IRON_FISH_PURCHASE' : 'MSG_PURCHASE_NOT_ENABLE')
 
 const coin = useAdminAppCoinStore()
 const coins = computed(() => coin.getAvailableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
@@ -200,6 +213,7 @@ const defaultCoinTypeID = computed(() => {
 const selectedCoinID = ref(defaultCoinTypeID.value)
 const paymentCoin = computed(() => coin.getCoinByID(selectedCoinID.value))
 
+const showIronFishWarning = computed(() => target?.value?.Descriptions?.length >= 2)
 const showRateTip = computed(() => {
   return paymentCoin.value?.Unit?.length &&
         !paymentCoin.value?.Unit?.includes(PriceCoinName) &&
@@ -228,7 +242,7 @@ const onPurchaseClick = () => {
     void router.push({
       path: '/signin',
       query: {
-        target: '/product/aleo',
+        target: '/product/ironfish',
         goodId: target.value.GoodID,
         purchaseAmount: myPurchaseAmount.value
       }

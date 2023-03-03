@@ -964,7 +964,6 @@ h3.feature-title::after
   padding: 0 0 12px 0
   position: relative
   width: 100%
-  height: 255px
 
 .product-heading::after
   background: linear-gradient(to right, transparent 0, var(--light-green-2) 50%, transparent 100%)
@@ -1020,7 +1019,7 @@ h4.product-tagline
   text-transform: none
 
 .product-note
-  font-size: 14px
+  font-size: 16px
   font-weight: 700
   line-height: 1.2
 
@@ -2063,6 +2062,134 @@ img.product-banner
 
 .project-spacemesh .team-member h5.title
   color: #3affa7
+
+/* IRON FISH BRAND COLORS */
+
+/* #1d0070 #ffa8de #f8eb2d #5073fd #f0cc86 #e7a527 #63981e #09071c */
+.content > .project-iron-fish,
+.content > .project-iron-fish .product-title-container
+  background: #09071c
+
+.content > .project-iron-fish .project-title-section,
+.content > .project-iron-fish .product-title-container::before,
+.content > .project-iron-fish .product-title-container::after
+  box-shadow: 0 20px 0 0 #09071c
+
+.content > .project-iron-fish
+  color: #ffffff
+
+.project-iron-fish h1
+  background: #f8eb2d
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.project-iron-fish h3:not(.form-title)
+  background: #f8eb2d
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.project-iron-fish a:not([class])
+  color: #5073fd
+  font-weight: 500
+  transition: all ease-in-out .3s
+
+.project-iron-fish a:not([class]):hover
+  filter: contrast(1.5)
+  text-decoration: underline 1px solid #f8eb2d
+
+.project-iron-fish button,
+.project-iron-fish input[type="submit"]
+  background: #ffa8de
+  color: #1d0070
+  text-shadow: none
+
+.project-iron-fish button:hover,
+.project-iron-fish input[type="submit"]:hover
+  background: #5073fd
+  filter: none
+
+.project-iron-fish button.alt
+  background: none
+  border-color: #ffa8de
+  color: #ffa8de
+
+.project-iron-fish button.in-active
+  background: none
+  border: 1px solid var(--white-77)
+  color: white
+  filter: saturate(0) contrast(.7)
+
+.project-iron-fish .number
+  background: #ffa8de
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.project-iron-fish .warning
+  border: 1px solid #f8eb2d
+
+.content .project-iron-fish ul li::before
+  color: #f8eb2d
+
+.content .project-iron-fish p:not([class]) strong,
+.content .project-iron-fish ul li strong
+  background: none
+  color: #ffa8de
+  font-weight: 500
+  -webkit-text-fill-color: unset
+
+.project-iron-fish .ido-progress
+  background: #f8eb2d
+  filter: saturate(1.5)
+
+.project-iron-fish .team-member h5.title
+  color: #e7a527
+
+.project-iron-fish .info-table-container
+  background: none
+  padding: 20px 0
+
+.project-iron-fish .info-table th
+  color: #f8eb2d
+
+.project-iron-fish .info-table th.table-highlight
+  background: #ffa8de
+  border-top: 6px solid #ffa8de
+  border-left: 6px solid #ffa8de
+  border-right: 6px solid #ffa8de
+  border-bottom-color: #ffa8de
+  color: #1d0070
+
+.project-iron-fish .info-table td.table-highlight
+  border-left: 6px solid #ffa8de
+  border-right: 6px solid #ffa8de
+
+.project-iron-fish .info-table tr:last-of-type td.table-highlight
+  border-left: 6px solid #ffa8de
+  border-right: 6px solid #ffa8de
+  border-bottom: 6px solid #ffa8de
+
+// .products .project-iron-fish::before 
+//   background-image: url('../../public/product/iron/icon-fish-product-back.jpg')
+
+.products .project-iron-fish h3.product-title
+  background: #ffa8de
+  background-clip: text
+  filter: none
+  -webkit-background-clip: text
+  -webkit-box-decoration-break: clone
+  -webkit-text-fill-color: transparent
+
+.products .project-iron-fish .product-note
+  color: #f8eb2d
 
 /* ALEO BRAND COLORS */
 
