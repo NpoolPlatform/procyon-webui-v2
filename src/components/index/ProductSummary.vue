@@ -43,7 +43,7 @@ import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
-const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || good.getPurchaseLimit(_good) <= 0)
+const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
 
 const router = useRouter()
 const onPurchaseClick = (_good: AppGood) => {
