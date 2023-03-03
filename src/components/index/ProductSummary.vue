@@ -4,7 +4,7 @@
     <div class='products'>
       <div
         v-for='_good in goods' :key='_good.ID'
-        class='product content-glass dark-glass card-container'
+        class='product content-glass dark-glass'
         :class='[_good.DisplayColors?.[0] ? _good.DisplayColors?.[0]: ""]'
       >
         <div
@@ -17,12 +17,9 @@
             <div v-html='t(title)' />
           </template>
         </div>
-
-        <div class='card-content-container'>
-          <template v-for='(desc,idx) in _good?.Descriptions?.slice(0, 2)' :key='idx'>
-            <div v-html='t(desc)' />
-          </template>
-        </div>
+        <template v-for='(desc,idx) in _good?.Descriptions?.slice(0, 2)' :key='idx'>
+          <div v-html='t(desc)' />
+        </template>
         <button
           :class='["alt", getStatus(_good) ? "in-active" : ""]'
           @click='onPurchaseClick(_good)'
@@ -72,8 +69,5 @@ const good = useAdminAppGoodStore()
 const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
 </script>
 <style lang='sass' scoped>
-.card-content-container
-  height: 170px
-  max-height: 170px
-  overflow-y: hidden
+
 </style>
