@@ -155,7 +155,7 @@ const message = computed(() => {
     return t('MSG_NOT_SUPPORT_FLOAT_VALUE')
   }
   if (purchaseLimitable.value) {
-    return t('MSG_USER_TOTAL_PURCHASE_LIMIT', { MAX: target.value.UserPurchaseLimit })
+    return t('MSG_USER_TOTAL_PURCHASE_LIMIT', { MAX: parseFloat(target.value?.UserPurchaseLimit) })
   }
   return ''
 })
