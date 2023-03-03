@@ -58,9 +58,9 @@
               <img src='font-awesome/warning.svg'>
               <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
             </div>
-            <div class='warning warning-pink' v-if='target.Descriptions?.[2]'>
+            <div class='warning warning-pink' v-if='target?.Descriptions?.length >= 2'>
               <img src='font-awesome/warning.svg'>
-              <span>{{ $t(target.Descriptions?.[2]) }}</span>
+              <span v-html='$t(target.Descriptions[2])' />
             </div>
             <div class='warning warning-pink' v-if='insufficientFunds'>
               <img src='font-awesome/warning.svg'>

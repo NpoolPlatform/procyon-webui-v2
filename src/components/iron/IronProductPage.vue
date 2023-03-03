@@ -39,7 +39,7 @@
             @focus='onPurchaseAmountFocusIn'
             @blur='onPurchaseAmountFocusOut'
           />
-          <div class='warning iron-fish-warning' v-if='target?.Descriptions?.length >= 2'>
+          <div class='warning iron-fish-warning' v-if='showIronFishWarning'>
             <img src='font-awesome/warning.svg'>
             <span v-html='$t(target.Descriptions[2])' />
           </div>
