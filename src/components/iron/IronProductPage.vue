@@ -39,9 +39,9 @@
             @focus='onPurchaseAmountFocusIn'
             @blur='onPurchaseAmountFocusOut'
           />
-          <div class='warning' v-if='target?.Descriptions?.[2]' style='margin-top: 20px'>
+          <div class='warning iron-fish-warning' v-if='target?.Descriptions?.length >= 2'>
             <img src='font-awesome/warning.svg'>
-            <span>{{ $t(target?.Descriptions?.[2]) }}</span>
+            <span v-html='$t(target.Descriptions[2])' />
           </div>
           <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
           <CoinSelector
@@ -113,11 +113,10 @@
               :max='total'
               @focus='onPurchaseAmountFocusIn'
               @blur='onPurchaseAmountFocusOut'
-              style='margin: 8px 0 24px 0'
             />
-            <div class='warning' v-if='target?.Descriptions?.[2]' style='margin-top: 20px'>
+            <div class='warning iron-fish-warning' v-if='showIronFishWarning'>
               <img src='font-awesome/warning.svg'>
-              <span>{{ $t(target?.Descriptions?.[2]) }}</span>
+              <span v-html='$t(target.Descriptions[2])' />
             </div>
             <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
             <CoinSelector
@@ -210,6 +209,7 @@ const defaultCoinTypeID = computed(() => {
 const selectedCoinID = ref(defaultCoinTypeID.value)
 const paymentCoin = computed(() => coin.getCoinByID(selectedCoinID.value))
 
+const showIronFishWarning = computed(() => target?.value?.Descriptions?.length >= 2)
 const showRateTip = computed(() => {
   return paymentCoin.value?.Unit?.length &&
         !paymentCoin.value?.Unit?.includes(PriceCoinName) &&
@@ -293,4 +293,6 @@ onUnmounted(() => {
 </script>
 
 <style lang='sass' scoped>
+.iron-fish-warning
+  margin-top: 20px
 </style>
