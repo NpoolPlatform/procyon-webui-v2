@@ -99,7 +99,7 @@ const onInvalid = (str: string) => {
 
 <style lang='sass' scoped>
 input
-  margin: 8px 0 4px 0
+  // margin: 8px 0 4px 0
 
 .caption
   font-size: 12px

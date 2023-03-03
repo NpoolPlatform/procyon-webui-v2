@@ -294,5 +294,5 @@ onUnmounted(() => {
 
 <style lang='sass' scoped>
 .iron-fish-warning
-  margin-top: 20px
+  margin-bottom: 24px
 </style>
