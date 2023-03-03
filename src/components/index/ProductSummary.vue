@@ -1,6 +1,6 @@
 <template>
   <div class='content'>
-    <h2>Premiere Products</h2>
+    <h2>{{ $t('MSG_PREMIERE_PRODUCTS') }}</h2>
     <div class='products'>
       <div
         v-for='_good in goods' :key='_good.ID'
