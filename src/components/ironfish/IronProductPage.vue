@@ -238,7 +238,7 @@ const onPurchaseClick = () => {
     void router.push({
       path: '/signin',
       query: {
-        target: '/product/iron',
+        target: '/product/ironfish',
         goodId: target.value.GoodID,
         purchaseAmount: myPurchaseAmount.value
       }

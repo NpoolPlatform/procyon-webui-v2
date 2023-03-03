@@ -501,8 +501,8 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
-        path: 'product/iron',
-        component: () => import('pages/product/Iron.vue'),
+        path: 'product/ironfish',
+        component: () => import('pages/product/IronFish.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
           ShowMainHeader: true,

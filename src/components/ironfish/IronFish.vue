@@ -1,5 +1,5 @@
 <template>
-  <ProductPage
+  <IronProductPage
     :good-id='goodID'
     :purchase-amount='purchaseAmount'
     project-class='project-iron-fish'
@@ -97,7 +97,7 @@
         </ul>
       </div>
     </template>
-  </ProductPage>
+  </IronProductPage>
 </template>
 
 <script setup lang='ts'>
@@ -114,9 +114,9 @@ import { getCurrencies, getDescriptions } from 'src/api/chain'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t, locale } = useI18n({ useScope: 'global' })
 
-const ProductPage = defineAsyncComponent(() => import('src/components/iron/IronProductPage.vue'))
-const ProductDetailUS = defineAsyncComponent(() => import('src/components/iron/en-US/Detail.vue'))
-const ProductDetailJP = defineAsyncComponent(() => import('src/components/iron/ja-JP/Detail.vue'))
+const IronProductPage = defineAsyncComponent(() => import('src/components/ironfish/IronProductPage.vue'))
+const ProductDetailUS = defineAsyncComponent(() => import('src/components/ironfish/en-US/Detail.vue'))
+const ProductDetailJP = defineAsyncComponent(() => import('src/components/ironfish/ja-JP/Detail.vue'))
 
 interface Query {
   goodId: string;
