@@ -23,10 +23,11 @@
             <div v-html='t(desc)' />
           </template>
         </div>
-        <button class='alt' @click='onPurchaseClick(_good)' v-if='good.haveSale(_good)'>
-          {{ $t(good.getGoodBtnMsg(_good)) }}
-        </button>
-        <button class='alt in-active' v-else>
+        <button
+          :class='["alt", getStatus(_good) ? "in-active" : ""]'
+          @click='onPurchaseClick(_good)'
+          :disabled='getStatus(_good)'
+        >
           {{ $t(good.getGoodBtnMsg(_good)) }}
         </button>
       </div>
@@ -42,12 +43,13 @@ import { useI18n } from 'vue-i18n'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
+const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || good.getPurchaseLimit(_good) <= 0)
 
 const router = useRouter()
 const onPurchaseClick = (_good: AppGood) => {
   console.log('EnableProductPage: ', _good.EnableProductPage)
   console.log('ProductPage: ', _good.ProductPage)
-  if (!_good.EnableProductPage) {
+  if (getStatus.value(_good)) {
     return
   }
 
