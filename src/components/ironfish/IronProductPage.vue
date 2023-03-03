@@ -66,7 +66,7 @@
               :label='purchaseBtnLabel'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target?.EnablePurchase'
+              :disabled='submitting || !target?.EnablePurchase || !good.haveSale(target)'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -141,7 +141,7 @@
                 :label='purchaseBtnLabel'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !target?.EnablePurchase'
+                :disabled='submitting || !target?.EnablePurchase || !good.haveSale(target)'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />

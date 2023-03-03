@@ -71,7 +71,7 @@
                 :label='purchaseBtnLabel'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='!target?.EnablePurchase || purchaseLimitable || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
+                :disabled='!target?.EnablePurchase || !good.haveSale(target) || purchaseLimitable || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
