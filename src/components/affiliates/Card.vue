@@ -114,7 +114,7 @@ import {
   NotifyType,
   SettleType,
   useFrontendCommissionStore,
-AppGood
+  AppGood
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 import { MyGoodArchivement } from 'src/localstore/ledger/types'
