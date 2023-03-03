@@ -133,7 +133,7 @@ const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 const total = computed(() => good.getPurchaseLimit(target.value))
 
 const order = useFrontendOrderStore()
-const purchaseLimitable = computed(() => order.getPurchasedAmount(goodID.value) >= Number(target?.value?.UserPurchaseLimit))
+const purchaseLimitable = computed(() => order.getPurchasedAmount(goodID.value) >= Number(target?.value?.UserPurchaseLimit) || (order.getPurchasedAmount(goodID.value) + purchaseAmount.value) > Number(target?.value?.UserPurchaseLimit))
 
 const purchaseBtnLabel = computed(() => target.value?.EnablePurchase ? 'MSG_PURCHASE' : 'MSG_PURCHASE_NOT_ENABLE')
 
