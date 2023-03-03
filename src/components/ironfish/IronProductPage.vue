@@ -25,6 +25,7 @@
 
             <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
           </div>
+          <br>
           <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
           <Input
             v-model:value='myPurchaseAmount'
@@ -43,6 +44,7 @@
             <img src='font-awesome/warning.svg'>
             <span v-html='$t(target.Descriptions[2])' />
           </div>
+          <br>
           <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
           <CoinSelector
             v-model:id='selectedCoinID'
@@ -100,6 +102,7 @@
               <span class='number'>{{ remainMinutes }}</span>
               <span class='unit'>{{ $t("MSG_MINUTES") }} </span>
             </div>
+            <br>
             <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}</h4>
             <Input
               v-model:value='myPurchaseAmount'
@@ -114,10 +117,11 @@
               @focus='onPurchaseAmountFocusIn'
               @blur='onPurchaseAmountFocusOut'
             />
-            <div class='warning iron-fish-warning' v-if='showIronFishWarning'>
+            <div class='warning' v-if='showIronFishWarning'>
               <img src='font-awesome/warning.svg'>
               <span v-html='$t(target.Descriptions[2])' />
             </div>
+            <br>
             <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
             <CoinSelector
               v-model:id='selectedCoinID'
@@ -293,6 +297,4 @@ onUnmounted(() => {
 </script>
 
 <style lang='sass' scoped>
-.iron-fish-warning
-  margin-bottom: 24px
 </style>
