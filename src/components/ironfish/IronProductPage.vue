@@ -42,7 +42,7 @@
           />
           <div class='warning iron-fish-warning' v-if='showIronFishWarning'>
             <img src='font-awesome/warning.svg'>
-            <span v-html='$t(target.Descriptions[2])' />
+            <span v-html='$t(target?.Descriptions?.[2])' />
           </div>
           <br>
           <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
@@ -119,7 +119,7 @@
             />
             <div class='warning' v-if='showIronFishWarning'>
               <img src='font-awesome/warning.svg'>
-              <span v-html='$t(target.Descriptions[2])' />
+              <span v-html='$t(target?.Descriptions?.[2])' />
             </div>
             <br>
             <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
@@ -213,7 +213,7 @@ const defaultCoinTypeID = computed(() => {
 const selectedCoinID = ref(defaultCoinTypeID.value)
 const paymentCoin = computed(() => coin.getCoinByID(selectedCoinID.value))
 
-const showIronFishWarning = computed(() => target?.value?.Descriptions?.length >= 2)
+const showIronFishWarning = computed(() => target?.value?.Descriptions?.length > 2)
 const showRateTip = computed(() => {
   return paymentCoin.value?.Unit?.length &&
         !paymentCoin.value?.Unit?.includes(PriceCoinName) &&
