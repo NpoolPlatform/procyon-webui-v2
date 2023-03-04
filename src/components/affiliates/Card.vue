@@ -47,8 +47,8 @@
               <span class='aff-number'>{{ _good.CommissionPercent }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
-                :class='[ "alt", good.enableSetCommission(_good.GoodID) ? "" : "in-active" ]'
-                :disabled='!good.enableSetCommission(_good.GoodID)'
+                :class='[ "alt", good.enableSetCommission(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood) ? "" : "in-active" ]'
+                :disabled='!good.enableSetCommission(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood)'
                 @click='(_good.Editing = true)'
               >
                 {{ $t('MSG_SET') }}
@@ -113,7 +113,8 @@ import {
   UserArchivement,
   NotifyType,
   SettleType,
-  useFrontendCommissionStore
+  useFrontendCommissionStore,
+  AppGood
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 import { MyGoodArchivement } from 'src/localstore/ledger/types'
