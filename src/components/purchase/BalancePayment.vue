@@ -58,7 +58,7 @@
               <img src='font-awesome/warning.svg'>
               <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
             </div>
-            <div class='warning warning-pink' v-if='target?.Descriptions?.length > 2'>
+            <div class='warning warning-pink' v-if='target?.Descriptions?.length > 2 && target?.Descriptions?.[2]?.length > 0'>
               <img src='font-awesome/warning.svg'>
               <span v-html='$t(target.Descriptions?.[2])' />
             </div>

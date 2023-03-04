@@ -213,7 +213,7 @@ const defaultCoinTypeID = computed(() => {
 const selectedCoinID = ref(defaultCoinTypeID.value)
 const paymentCoin = computed(() => coin.getCoinByID(selectedCoinID.value))
 
-const showIronFishWarning = computed(() => target?.value?.Descriptions?.length > 2)
+const showIronFishWarning = computed(() => target?.value?.Descriptions?.length > 2 && target?.value?.Descriptions?.[2]?.length > 0)
 const showRateTip = computed(() => {
   return paymentCoin.value?.Unit?.length &&
         !paymentCoin.value?.Unit?.includes(PriceCoinName) &&
