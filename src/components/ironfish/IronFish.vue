@@ -10,7 +10,7 @@
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
         <span class='number'>{{ good.getPrice(goodID) }}</span>
-        <span class='unit'>{{ PriceCoinName }} / UNIT</span>
+        <span class='unit'>{{ PriceCoinName }} / {{ $t(target?.Unit) }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -53,7 +53,9 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span class='number'>{{ true ? 'TBD*' : good.getFormatTime(target?.StartAt) }}</span>
+        <span class='number'>{{ target?.ServiceStartAt === 0 ? 'TBD*' : good.getJSTDate(target?.ServiceStartAt, 'YYYY-MM-DD') }}</span>
+        <br>
+        <span class='unit'>{{ good.getJSTDate(target?.ServiceStartAt, 'HH:mm') }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -110,6 +112,7 @@ import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
 import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
 import { getCurrencies, getDescriptions } from 'src/api/chain'
+import { IronFishGoodID } from 'src/const/const'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t, locale } = useI18n({ useScope: 'global' })
@@ -125,7 +128,7 @@ interface Query {
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodID = computed(() => query.value.goodId)
+const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : IronFishGoodID)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = useAdminAppGoodStore()
@@ -136,9 +139,6 @@ const currency = useAdminCurrencyStore()
 const description = useAdminCoinDescriptionStore()
 
 onMounted(() => {
-  if (goodID.value?.length === 0) {
-    return
-  }
   good.getAppGood({
     GoodID: goodID.value,
     Message: {
