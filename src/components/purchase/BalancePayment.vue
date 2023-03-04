@@ -58,9 +58,9 @@
               <img src='font-awesome/warning.svg'>
               <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
             </div>
-            <div class='warning warning-pink' v-if='target?.Descriptions?.length >= 2'>
+            <div class='warning warning-pink' v-if='target?.Descriptions?.length > 2 && target?.Descriptions?.[2]?.length > 0'>
               <img src='font-awesome/warning.svg'>
-              <span v-html='$t(target.Descriptions[2])' />
+              <span v-html='$t(target.Descriptions?.[2])' />
             </div>
             <div class='warning warning-pink' v-if='insufficientFunds'>
               <img src='font-awesome/warning.svg'>
@@ -133,7 +133,7 @@ const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 const total = computed(() => good.getPurchaseLimit(target.value))
 
 const order = useFrontendOrderStore()
-const purchaseLimitable = computed(() => order.getPurchasedAmount(goodID.value) >= Number(target?.value?.UserPurchaseLimit) || (order.getPurchasedAmount(goodID.value) + purchaseAmount.value) > Number(target?.value?.UserPurchaseLimit))
+const purchaseLimitable = computed(() => order.getPurchasedAmount(goodID.value) >= Number(target?.value?.UserPurchaseLimit) || (order.getPurchasedAmount(goodID.value) + Number(purchaseAmount.value)) > Number(target?.value?.UserPurchaseLimit))
 
 const purchaseBtnLabel = computed(() => target.value?.EnablePurchase ? 'MSG_PURCHASE' : 'MSG_PURCHASE_NOT_ENABLE')
 
@@ -246,6 +246,7 @@ onMounted(() => {
       }
     }, () => {
     // TODO
+      onPurchaseAmountFocusOut()
     })
   }
 

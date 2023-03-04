@@ -62,7 +62,7 @@
               label='MSG_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target.EnablePurchase || !good.haveSale(target) || good.getPurchaseLimit(target) <= 0'
+              :disabled='submitting || !target?.EnablePurchase || !good.haveSale(target) || good.getPurchaseLimit(target) <= 0'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
