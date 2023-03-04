@@ -68,7 +68,7 @@
             </div>
             <div class='submit-container'>
               <WaitingBtn
-                :label='purchaseBtnLabel'
+                label='MSG_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
                 :disabled='!target?.EnablePurchase || !good.haveSale(target) || purchaseLimitable || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
@@ -134,8 +134,6 @@ const total = computed(() => good.getPurchaseLimit(target.value))
 
 const order = useFrontendOrderStore()
 const purchaseLimitable = computed(() => order.getPurchasedAmount(goodID.value) >= Number(target?.value?.UserPurchaseLimit) || (order.getPurchasedAmount(goodID.value) + Number(purchaseAmount.value)) > Number(target?.value?.UserPurchaseLimit))
-
-const purchaseBtnLabel = computed(() => target.value?.EnablePurchase ? 'MSG_PURCHASE' : 'MSG_PURCHASE_NOT_ENABLE')
 
 const selectedCoinCurrency = ref(1) // 币种汇率
 const general = useFrontendGeneralStore()
