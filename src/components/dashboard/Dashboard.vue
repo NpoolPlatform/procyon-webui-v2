@@ -16,13 +16,14 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, onMounted } from 'vue'
+import { defineAsyncComponent, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { IntervalKey } from 'src/const/const'
 import { QAjaxBar } from 'quasar'
 import {
   AppGood,
   GoodProfit,
+  MiningReward,
   NotifyType,
   Order,
   Profit,
@@ -30,6 +31,7 @@ import {
   useAdminAppCoinStore,
   useAdminAppGoodStore,
   useAdminCurrencyStore,
+  useFrontendDetailStore,
   useFrontendOrderStore,
   useFrontendProfitStore
 } from 'npool-cli-v4'
@@ -47,6 +49,9 @@ const coin = useAdminAppCoinStore()
 const order = useFrontendOrderStore()
 const good = useAdminAppGoodStore()
 const currency = useAdminCurrencyStore()
+
+const detail = useFrontendDetailStore()
+const miningRewards = computed(() => detail.MiningRewards.MiningRewards)
 
 onMounted(() => {
   if (profit.Profits.Profits.length === 0) {
@@ -92,6 +97,10 @@ onMounted(() => {
   if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
     currency.$reset()
     getCurrencies(0, 10)
+  }
+
+  if (miningRewards.value?.length === 0) {
+    getMiningRewards(0, 100)
   }
 })
 
@@ -214,6 +223,27 @@ const getAppGoods = (offset: number, limit: number) => {
     getAppGoods(offset + limit, limit)
   })
 }
+
+const getMiningRewards = (offset: number, limit: number) => {
+  detail.getMiningRewards({
+    Offset: offset,
+    Limit: limit,
+    EndAt: Math.ceil(Date.now() / 1000),
+    Message: {
+      Error: {
+        Title: t('MSG_REWARD_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (error: boolean, rows: Array<MiningReward>) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getMiningRewards(limit + offset, limit)
+  })
+}
+
 </script>
 
 <style lang='sass' scoped>
