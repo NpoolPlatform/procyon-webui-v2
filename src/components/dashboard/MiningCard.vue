@@ -122,30 +122,6 @@ const miningDetails = computed(() => detail.MiningRewards.MiningRewards.filter((
 
 const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
 
-const router = useRouter()
-const onPurchaseClick = (_good: AppGood) => {
-  if (_good.ProductPage?.length === 0 || !_good.ProductPage) {
-    void router.push({
-      path: '/product/aleo',
-      query: {
-        goodId: _good.GoodID
-      }
-    })
-    return
-  }
-
-  void router.push({
-    path: _good?.ProductPage,
-    query: {
-      goodId: _good.GoodID
-    }
-  })
-}
-
-const onExpandClick = () => {
-  short.value = !short.value
-}
-
 interface ExportMiningReward {
   CreatedAt: string;
   Units: string;
@@ -184,6 +160,30 @@ const onExportClick = (row: MyGoodProfit) => {
   const filename = name + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)
 }
+const router = useRouter()
+const onPurchaseClick = (_good: AppGood) => {
+  if (_good.ProductPage?.length === 0 || !_good.ProductPage) {
+    void router.push({
+      path: '/product/aleo',
+      query: {
+        goodId: _good.GoodID
+      }
+    })
+    return
+  }
+
+  void router.push({
+    path: _good?.ProductPage,
+    query: {
+      goodId: _good.GoodID
+    }
+  })
+}
+
+const onExpandClick = () => {
+  short.value = !short.value
+}
+
 </script>
 <style lang='sass' scoped>
   .top-line-item .value
