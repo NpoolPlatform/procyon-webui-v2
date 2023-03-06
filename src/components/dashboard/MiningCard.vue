@@ -149,7 +149,7 @@ interface ExportMiningReward {
 const exportMiningRewards = computed(() => Array.from(miningDetails.value).map((el) => {
   return {
     CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
-    Units: `${el.Units}` + t(goodProfit.value?.GoodUnit),
+    Units: `${parseFloat(el.Units)}` + t(goodProfit.value?.GoodUnit),
     RewardAmount: el.RewardAmount,
     RewardAmountPerUnit: el.RewardAmountPerUnit,
     ProverIncentive: Number(good.getGoodByID(el.GoodID)?.DailyRewardAmount) * Number(el.Units)
@@ -169,7 +169,8 @@ const onExportClick = () => {
   })
 
   const blob = new Blob([output], { type: 'text/plain;charset=utf-8' })
-  const filename = 'orders-' + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
+  const name = target?.value?.DisplayNames?.[2] ? t(target?.value?.DisplayNames?.[2]) : goodProfit.value?.GoodName
+  const filename = name + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)
 }
 </script>
