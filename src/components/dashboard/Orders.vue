@@ -19,7 +19,7 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState } from 'npool-cli-v4'
+import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, PriceCoinName } from 'npool-cli-v4'
 import { stringify } from 'csv-stringify/sync'
 import saveAs from 'file-saver'
 
@@ -76,13 +76,13 @@ interface ExportOrder {
   CreatedAt: string;
   ProductType: string;
   ProductName: string;
-  PurchaseAmount: number;
+  PurchaseAmount: string;
   UnitType: string;
   Price: number;
   Currency: string;
   TotalCost: string;
   MiningPeriod: number;
-  ProverIncentive?: string;
+  ProverIncentive?: number;
   VerifierIncentive?: string;
   OrderStatus: OrderState;
 }
@@ -95,10 +95,10 @@ const exportOrders = computed(() => Array.from(orders.value).map((el) => {
     PurchaseAmount: el.Units,
     UnitType: el.GoodUnit,
     Price: parseFloat(good.getGoodByID(el.GoodID)?.Price as string),
-    Currency: 'USDT',
+    Currency: PriceCoinName,
     TotalCost: (Number(el.PaymentAmount) + Number(el.PayWithBalanceAmount)).toString() + '' + el.PaymentCoinUnit,
     MiningPeriod: el.GoodServicePeriodDays,
-    // ProverIncentive: '',
+    ProverIncentive: Number(good.getGoodByID(el.GoodID)?.DailyRewardAmount) * Number(el.Units),
     // VerifierIncentive: '',
     OrderStatus: el.State
   } as ExportOrder
@@ -117,9 +117,11 @@ const onExportClick = () => {
       Currency: 'Currency',
       TotalCost: 'Total Cost',
       MiningPeriod: 'Mining Period',
+      ProverIncentive: 'Prover Incentive',
       OrderStatus: 'Order Status'
     }
   })
+
   const blob = new Blob([output], { type: 'text/plain;charset=utf-8' })
   const filename = 'orders-' + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)
