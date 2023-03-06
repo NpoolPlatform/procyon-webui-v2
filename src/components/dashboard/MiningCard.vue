@@ -78,7 +78,7 @@
       <button :class='[ "alt show-more", short ? "" : "open" ]' @click='onExpandClick'>
         <img :src='chevrons'>
       </button>
-      <button class='alt' disabled>
+      <button class='alt' @click='onExportClick' :disabled='exportMiningRewards?.length === 0'>
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
       <button @click='onPurchaseClick' :disabled='good.canBuy(goodProfit.GoodID, goodProfit.CoinTypeID)'>
@@ -89,12 +89,17 @@
 </template>
 
 <script setup lang='ts'>
-import { useAdminAppCoinStore, useAdminAppGoodStore, PriceCoinName } from 'npool-cli-v4'
+import saveAs from 'file-saver'
+import { useAdminAppCoinStore, useAdminAppGoodStore, PriceCoinName, useFrontendDetailStore, formatTime } from 'npool-cli-v4'
 import { MyGoodProfit } from 'src/localstore/ledger/types'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { stringify } from 'csv-stringify/sync'
+import { useI18n } from 'vue-i18n'
 
 import chevrons from '../../assets/chevrons.svg'
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
   profit: MyGoodProfit;
@@ -107,6 +112,9 @@ const short = ref(true)
 
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodProfit.value?.GoodID))
+
+const detail = useFrontendDetailStore()
+const miningDetails = computed(() => detail.MiningRewards.MiningRewards.filter((el) => el.GoodID === goodProfit?.value?.GoodID))
 
 const coin = useAdminAppCoinStore()
 const productInfo = computed(() => coin.getCoinByID(goodProfit.value?.CoinTypeID))
@@ -129,4 +137,39 @@ const cardTip = computed(() => (goodName: string) => {
   const msg = 'MSG_' + goodName?.toUpperCase() + '_MINING_DASHBOARD_TIP'
   return msg.replace(/ /g, '_')
 })
+
+interface ExportMiningReward {
+  CreatedAt: string;
+  Units: string;
+  RewardAmount: string;
+  RewardAmountPerUnit: string;
+  ProverIncentive: number;
+}
+
+const exportMiningRewards = computed(() => Array.from(miningDetails.value).map((el) => {
+  return {
+    CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
+    Units: `${el.Units}` + t(goodProfit.value?.GoodUnit),
+    RewardAmount: el.RewardAmount,
+    RewardAmountPerUnit: el.RewardAmountPerUnit,
+    ProverIncentive: Number(good.getGoodByID(el.GoodID)?.DailyRewardAmount) * Number(el.Units)
+  } as ExportMiningReward
+}))
+
+const onExportClick = () => {
+  const output = stringify(exportMiningRewards.value, {
+    header: true,
+    columns: {
+      CreatedAt: 'Date',
+      Units: 'Mining Unit Amount',
+      RewardAmount: 'Mining Rewards',
+      RewardAmountPerUnit: 'Mining Rewards per 1 Unit',
+      ProverIncentive: 'Prover Incentive'
+    }
+  })
+
+  const blob = new Blob([output], { type: 'text/plain;charset=utf-8' })
+  const filename = 'orders-' + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
+  saveAs(blob, filename)
+}
 </script>
