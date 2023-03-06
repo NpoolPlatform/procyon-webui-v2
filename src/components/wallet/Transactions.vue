@@ -65,6 +65,8 @@ const transactionType = (tx: Detail) => {
           return 'MSG_TECHNIQUE_FEE_COMMISSION'
         case IOSubType.Deposit:
           return 'MSG_DEPOSIT'
+        case IOSubType.OrderRevoke:
+          return 'MSG_ORDER_REVOKE'
         default:
           return 'MSG_UNKNOWN'
       }
@@ -76,6 +78,8 @@ const transactionType = (tx: Detail) => {
           return 'MSG_WITHDRAWAL'
         case IOSubType.Transfer:
           return 'MSG_WITHDRAWAL'
+        case IOSubType.CommissionRevoke:
+          return 'MSG_COMMISSION_REVOKE'
         default:
           return 'MSG_UNKNOWN'
       }

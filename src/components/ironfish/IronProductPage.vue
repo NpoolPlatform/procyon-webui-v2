@@ -65,7 +65,7 @@
           </div>
           <div class='submit-container'>
             <WaitingBtn
-              :label='purchaseBtnLabel'
+              label='MSG_IRON_FISH_PURCHASE'
               type='submit'
               class='submit-btn'
               :disabled='submitting || !target?.EnablePurchase || !good.haveSale(target) || good.getPurchaseLimit(target) <= 0'
@@ -142,7 +142,7 @@
             </div>
             <div class='submit-container'>
               <WaitingBtn
-                :label='purchaseBtnLabel'
+                label='MSG_IRON_FISH_PURCHASE'
                 type='submit'
                 class='submit-btn'
                 :disabled='submitting || !target?.EnablePurchase || !good.haveSale(target) || good.getPurchaseLimit(target) <= 0'
@@ -202,7 +202,6 @@ const general = useFrontendGeneralStore()
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 const total = computed(() => good.getPurchaseLimit(target?.value))
-const purchaseBtnLabel = computed(() => target.value?.EnablePurchase ? 'MSG_IRON_FISH_PURCHASE' : 'MSG_PURCHASE_NOT_ENABLE')
 
 const coin = useAdminAppCoinStore()
 const coins = computed(() => coin.getAvailableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
