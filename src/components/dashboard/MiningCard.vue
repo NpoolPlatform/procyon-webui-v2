@@ -11,12 +11,12 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.TotalInComing }}</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : parseFloat(goodProfit?.TotalInComing?.toFixed(4)) }}</span>
         <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}: </span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }}</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : parseFloat(goodProfit?.Last24HoursInComing?.toFixed(4)) }}</span>
         <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
       </div>
       <div class='top-line-item'>
@@ -44,8 +44,8 @@
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
           <span class='value'>
-            {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last24HoursInComing * 0.2 }}
-            <span class='unit'>{{ goodProfit?.CoinUnit }} (20%)</span>
+            {{ goodProfit?.CoinPreSale ? '*' : parseFloat((goodProfit.Last24HoursInComing / deservedRatio * techServiceFee)?.toFixed(4)) }}
+            <span class='unit'>{{ goodProfit?.CoinUnit }} ({{ target?.TechnicalFeeRatio }}%)</span>
           </span>
         </div>
         <!-- <div class='line'>
@@ -120,10 +120,10 @@ const coinUnit = computed(() => good.getGoodByID(goodProfit.value?.GoodID)?.Coin
 const techServiceFee = computed(() => Number(target?.value?.TechnicalFeeRatio) / 100)
 const deservedRatio = computed(() => 1 - techServiceFee.value)
 
+const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
+
 const detail = useFrontendDetailStore()
 const miningDetails = computed(() => detail.MiningRewards.MiningRewards.filter((el) => el.GoodID === goodProfit?.value?.GoodID))
-
-const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
 
 const router = useRouter()
 const onPurchaseClick = (_good: AppGood) => {
@@ -161,7 +161,6 @@ interface ExportMiningReward {
 const exportMiningRewards = computed(() => {
   const rowMap = new Map<string, Array<MiningReward>>()
   const keys = [] as Array<string>
-
   miningDetails.value.forEach((el) => {
     const benefitDate = new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC')?.split(' ')[0]
     if (!rowMap.get(benefitDate)) {
@@ -178,8 +177,13 @@ const exportMiningRewards = computed(() => {
   keys.sort().forEach((key) => {
     let units = 0
     let netRewardAmount = 0
+    const orderIDs = [] as Array<string>
     rowMap.get(key)?.forEach((el) => {
-      units += Number(el.Units)
+      const result = orderIDs.find((item) => item === el.OrderID)
+      if (!result) {
+        units += Number(el.Units)
+        orderIDs.push(el.OrderID)
+      }
       netRewardAmount += Number(el.RewardAmount)
       cumulativeTotal += Number(el.RewardAmount) / deservedRatio.value
     })
