@@ -110,6 +110,10 @@ onMounted(() => {
   if (miningRewards.value?.length === 0) {
     getMiningRewards(0, 100)
   }
+
+  if (miningRewards.value?.length === 0) {
+    getMiningRewards(0, 100)
+  }
 })
 
 const getProfits = (offset:number, limit: number) => {
