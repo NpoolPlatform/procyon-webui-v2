@@ -300,5 +300,5 @@ onUnmounted(() => {
   margin-top: 10px
 .product-title-container
   ::v-deep br
-    display: none
+    line-height: 0.1
 </style>
