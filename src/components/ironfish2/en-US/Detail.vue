@@ -33,12 +33,12 @@
           </tr>
           <tr>
             <td><strong>March 23 ~ April 10</strong></td>
-            <td>Withdrawals Open / Refunds Close*</td>
+            <td>Withdrawals Open</td>
           </tr>
         </tbody>
       </table>
       <p class='info-table-note'>
-        *Withdrawals of mining rewards will be available from April 10th at the latest, giving us time to implement the Iron Fish blockchain on the Procyon.vip platform. You can refund any time BEFORE this date.
+        *Withdrawals of mining rewards will be available from April 10th at the latest, giving us time to implement the Iron Fish blockchain on the Procyon.vip platform.
       </p>
     </div>
 
