@@ -117,9 +117,9 @@ import { IronFishGoodID } from 'src/const/const'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t, locale } = useI18n({ useScope: 'global' })
 
-const IronProductPage = defineAsyncComponent(() => import('src/components/ironfish/IronProductPage.vue'))
-const ProductDetailUS = defineAsyncComponent(() => import('src/components/ironfish/en-US/Detail.vue'))
-const ProductDetailJP = defineAsyncComponent(() => import('src/components/ironfish/ja-JP/Detail.vue'))
+const IronProductPage = defineAsyncComponent(() => import('src/components/ironfish2/IronProductPage.vue'))
+const ProductDetailUS = defineAsyncComponent(() => import('src/components/ironfish2/en-US/Detail.vue'))
+const ProductDetailJP = defineAsyncComponent(() => import('src/components/ironfish2/ja-JP/Detail.vue'))
 
 interface Query {
   goodId: string;

@@ -2,13 +2,13 @@
   <div class='product-detail-text'>
     <h3>Exclusive Limited Time Offer!</h3>
 
-    <p>As a token of appreciation to you, our community, for your continued support and patience, we are excited to announce this limited time <strong>special offer with a money back guarantee!</strong></p>
+    <p>We are so happy and excited to announce that the first 500 ‘Early Bird’ units of Iron Fish First Batch Mining <strong>sold out in under two hours!</strong> We are extremely thankful to you, our community, for your overwhelming support and patience, and we cannot express our gratitude enough.</p>
 
-    <p><strong>We have a special opportunity to participate in Iron Fish first batch mining.</strong></p>
+    <p>We have received tons of requests for more inventory, but under normal circumstances it takes 15 days to start mining Iron Fish after payment because the mining machines require initial setup.</p>
 
-    <p>We believe so strongly in this product that we are taking all the initial risk for you by pre-purchasing all units. Thus, <strong>all orders are fully refundable even after the mainnet launch until April 9th 23:59:59 JST</strong>. If you are unsatisfied with the initial mining rewards you still have the option for a full refund.</p>
+    <p>However, thanks to our relationship with Hpool and due to the overwhelmingly positive response from the community <strong>we were able to negotiate for additional units from their own limited reserve that will mine from day 1 of mainnet!</strong></p>
 
-    <p>The <strong>mainnet launch is scheduled for March 14th</strong> (direct internal confirmation from Iron Fish), with up to a 3x ROI for our first batch mining product. <strong>Once mainnet launches, sales will close and supplies are limited to only 500 units!</strong></p>
+    <p>Ulike the ‘Early Bird’ batch, since additional units will come from <strong>Hpool’s own limited reserve, they will NOT be refundable.</strong></p>
 
     <div class='info-table-container table-2-columns'>
       <table class='info-table'>
@@ -20,7 +20,7 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>March 3 ~ 5</strong></td>
+            <td><strong>March 8, 14:00 JST</strong></td>
             <td>Sales Open</td>
           </tr>
           <tr>
@@ -247,9 +247,9 @@
 
     <ul>
       <li><strong>Product: </strong>Iron Fish First Batch GPU Mining</li>
-      <li><strong>Price: </strong>380 USDT / unit (fully refundable until withdrawals are available)</li>
+      <li><strong>Price: </strong>380 USDT / unit</li>
       <li><strong>Order Limit: </strong>One Order per Investor, Max. 5 Units per Order</li>
-      <li><strong>Sales Period: </strong>2023, March 3~5 - March 13, 23:59 JST</li>
+      <li><strong>Sales Period: </strong>2023, March 8 - March 13, 23:59 JST</li>
       <li><strong>Withdrawal Period: </strong>2023, starting from March 23 ~ April 10 (at the latest)</li>
       <li><strong>Technical Service Fee: </strong>20%</li>
       <li><strong>Mining Start Time: </strong>Immediately Upon Mainnet Launch</li>
@@ -270,5 +270,4 @@
 </template>
 
 <script setup lang='ts'>
-// import { scrollTo } from 'src/utils/scroll'
 </script>

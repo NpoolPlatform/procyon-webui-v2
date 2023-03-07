@@ -2,13 +2,11 @@
   <div class='product-detail-text'>
     <h3>期間限定キャンペーン!</h3>
 
-    <p>プロシオンコミュニティの皆様へ、日頃のサポートとご愛顧に対する感謝の気持ちとして、<strong>返金保証付きの期間限定スペシャルキャンペーン</strong>を発表させていただきます。</p>
+    <p>この度、<strong>アイアン・フィッシュ ファーストバッチマイニングの「早期購入特典付き」初回限定500口が2時間弱で完売</strong>したことを、とても嬉しく、興奮してお知らせいたします。私たちは、コミュニティの皆様の日頃からの温かいサポートとご愛顧に大変感謝しており、感謝の気持ちを言い尽くすことができません。プロシオンは、コミュニティの皆様のご支援とご協力に心から感謝いたします。</p>
 
-    <p><strong>アイアン・フィッシュのファーストバッチマイニングという非常に特別な機会です。</strong></p>
+    <p>在庫を増やしてほしいという要望を多くにいただきました。通常であれば、マイニングマシンの初期設定が必要なため、お支払い後からアイアン・フィッシュのマイニングを開始するまでに15日程度かかってしまいます。しかし、Hpool社と弊社の関係性やコミュニティからの圧倒的な反響もあり、<strong>メインネットの初日からマイニング可能な追加購入枠を交渉することができました。</strong></p>
 
-    <p>プロシオンはこのプロジェクトを強く信じておりますのでリスクを負い、全ての在庫を事前購入しましたので、<strong>メインネットローンチから、マイニング報酬を確認することができ、もしお気に召さない場合は、出金可能日までは注文分は全額返金可能となります</strong>。</p>
-
-    <p><strong>メインネットのローンチは3月14日に予定</strong>されており、（アイアン・フィッシュチームから直接確認）ROIは最大3倍と予測しております。<strong>メインネットのローンチ後に販売は終了し、在庫は500口のみ</strong>に限られます。</p>
+    <p>先日完売いたしました『早期購入特典付き』は、プロシオンの在庫として確保していたため全額返金保証付きで販売が可能でしたが、追加枠は異なり、<strong>今回はHpool独自の限られた在庫から提供されるため、返金保証はございません。</strong></p>
 
     <div class='info-table-container table-2-columns'>
       <table class='info-table'>
@@ -20,7 +18,7 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>3月3日〜5日</strong></td>
+            <td><strong>3月8日 14:00:00 日本時間</strong></td>
             <td>販売開始</td>
           </tr>
           <tr>
@@ -151,7 +149,7 @@
 
     <p>その後のラウンドでは、<strong>a16zが主導し、Sequoia、MetaStable、Electric Capital、Arrington Capital</strong>といった世界有数のVCや、Dylan Field (Figmaの共同創業者) 、Alan Howard (イギリスのビリオネア、ヘッジファンドマネージャー)、Jeff Weiner (LinkedIn役員)、Divesh Makan (Iconiq Capitalパートナー) などのエンジェル投資家と一緒に<strong>$27ミリオン (約37億円) 、推定評価額$150-300ミリオン (約290億ー400億円) を調達</strong>strong>しました。</p>
 
-    <p>a16zは、アイアン・フィッシュへの投資を強く信じ、<a href='https://a16z.com/2021/11/30/investing-in-iron-fish/' target='_blank'>Iron Fishの優れた点と成功の理由を解説する記事</a>を書きました。</p>
+    <p>a16zは、アイアン・フィッシュへの投資を強く信じ、<a href='https://a16z.com/2021/11/30/investing-in-iron-fish/' target='_blank'>Iron Fishの優れた点と成功の理由を解説する記事</a>を書きました。.</p>
 
     <div class='logo-display'>
       <div><img src='product/iron/logos/slow-ventures.png'></div>
@@ -209,7 +207,7 @@
       <li>公開ブロックエクスプローラーサイト</li>
     </ul>
 
-    <p>最終テストネットは非常に順調で、当初予定していた3月7日ではなく、予定より早く2月25日に終了することができました。<strong>公式ブログより、メインネットのローンチは3月14日に予定されております。</strong></p>
+    <p>最終テストネットは非常に順調で、当初予定していた3月7日ではなく、予定より早く2月25日に終了することができました。<strong>公式ブログより、メインネットのローンチは3月14日に予定されております。</strong>.</p>
 
     <ul>
       <li><a href='https://airtable.com/shrNxbu0YxXL0G1qt/tblreltJK2Vez1xOJ' target='_blank'>公式ロードマップ</a></li>
@@ -245,9 +243,9 @@
 
     <ul>
       <li><strong>製品名: </strong>アイアン・フィッシュ ファーストバッチ GPUマイニング</li>
-      <li><strong>価格: </strong>380USDT / 口（出金可能日までは注文分は全額返金可能）</li>
+      <li><strong>価格: </strong>380USDT / 口</li>
       <li><strong>注文数制限: </strong>1ユーザー様1注文まで、1注文最大5口</li>
-      <li><strong>販売期間: </strong>2023年3月3日～3月5日  〜 2023年3月14日 23:59:59 日本時間</li>
+      <li><strong>販売期間: </strong>2023年3月8日 〜 2023年3月14日 23:59:59 日本時間</li>
       <li><strong>マイニング報酬出金可能日: </strong>2023年3月23日〜2023年4月10日（遅くても）より開始</li>
       <li><strong>技術サービス料: </strong>20%</li>
       <li><strong>マイニング開始時期: </strong>メインネットローンチ直後</li>
@@ -268,5 +266,4 @@
 </template>
 
 <script setup lang='ts'>
-// import { scrollTo } from 'src/utils/scroll'
 </script>
