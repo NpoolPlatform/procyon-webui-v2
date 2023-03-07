@@ -55,22 +55,22 @@
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
-        <div class='line'>
+        <!-- <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
           <span class='value'>
-            {{ goodProfit?.CoinPreSale ? '*' : 1000 }}
+            {{ '*' }}
             <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
           </span>
-        </div>
+        </div> -->
         <div class='line' v-if='goodProfit.GoodID === "de420061-e878-4a8b-986a-805cadd59233"'>
           <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
           <span class='value'>
             {{ goodProfit.TotalEstimatedDailyReward === 0 ? '*' : goodProfit.TotalEstimatedDailyReward }}
             <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
         </div>
-        <div class='warning' v-if='$t(cardTip(goodProfit?.GoodName))?.trim()?.length > 0'>
+        <div class='warning' v-if='target?.Descriptions?.[3] && target?.Descriptions?.[3]?.length > 0'>
           <img src='font-awesome/warning.svg'>
-          <span v-html='$t(cardTip(goodProfit?.GoodName))' />
+          <span v-html='$t(target?.Descriptions?.[3])' />
         </div>
       </div>
     </q-slide-transition>
@@ -125,8 +125,4 @@ const onExpandClick = () => {
   short.value = !short.value
 }
 
-const cardTip = computed(() => (goodName: string) => {
-  const msg = 'MSG_' + goodName?.toUpperCase() + '_MINING_DASHBOARD_TIP'
-  return msg.replace(/ /g, '_')
-})
 </script>
