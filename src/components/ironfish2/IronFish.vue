@@ -112,7 +112,7 @@ import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
 import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
 import { getCurrencies, getDescriptions } from 'src/api/chain'
-import { IronFishGoodID } from 'src/const/const'
+import { IronFishGoodID2 } from 'src/const/const'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t, locale } = useI18n({ useScope: 'global' })
@@ -128,7 +128,7 @@ interface Query {
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : IronFishGoodID)
+const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : IronFishGoodID2)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = useAdminAppGoodStore()
