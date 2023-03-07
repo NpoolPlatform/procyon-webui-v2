@@ -55,13 +55,13 @@
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
-        <div class='line'>
+        <!-- <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
           <span class='value'>
             {{ '*' }}
             <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
           </span>
-        </div>
+        </div> -->
         <div class='line' v-if='goodProfit.GoodID === "de420061-e878-4a8b-986a-805cadd59233"'>
           <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
           <span class='value'>
