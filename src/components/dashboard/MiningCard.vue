@@ -12,12 +12,12 @@
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
         <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.TotalInComing }} {{ goodProfit?.CoinUnit }}</span>
-        <span class='sub-value'>({{ goodProfit.TotalUSDInComing }} {{ PriceCoinName }})</span>
+        <span class='sub-value'> ({{ goodProfit.TotalUSDInComing }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }}{{ goodProfit?.CoinUnit }}</span>
-        <span class='sub-value'>({{ goodProfit.Last24HoursUSDInComing }} {{ PriceCoinName }})</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }} {{ goodProfit?.CoinUnit }}</span>
+        <span class='sub-value'> ({{ goodProfit.Last24HoursUSDInComing }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
