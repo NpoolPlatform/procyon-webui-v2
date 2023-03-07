@@ -117,7 +117,7 @@
               @focus='onPurchaseAmountFocusIn'
               @blur='onPurchaseAmountFocusOut'
             />
-            <div class='warning' v-if='showIronFishWarning'>
+            <div class='warning iron-fish-warning' v-if='showIronFishWarning'>
               <img src='font-awesome/warning.svg'>
               <span v-html='$t(target?.Descriptions?.[2])' />
             </div>
@@ -296,4 +296,6 @@ onUnmounted(() => {
 </script>
 
 <style lang='sass' scoped>
+.iron-fish-warning
+  margin-top: 10px
 </style>
