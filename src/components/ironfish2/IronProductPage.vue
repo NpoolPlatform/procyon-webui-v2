@@ -298,4 +298,7 @@ onUnmounted(() => {
 <style lang='sass' scoped>
 .iron-fish-warning
   margin-top: 10px
+.product-title-container
+  ::v-deep br
+    display: none
 </style>
