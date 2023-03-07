@@ -392,6 +392,7 @@ onMounted(() => {
     getGenerals(0, 20)
   }
 
+  userAccount.$reset()
   if (userAccount.UserAccounts.UserAccounts.length === 0) {
     getUserAccounts(0, 20)
   }
