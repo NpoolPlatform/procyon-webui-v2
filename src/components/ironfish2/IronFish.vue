@@ -55,7 +55,7 @@
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
         <span class='number'>{{ target?.ServiceStartAt === 0 ? 'TBD*' : good.getJSTDate(target?.ServiceStartAt, 'YYYY-MM-DD') }}</span>
         <br>
-        <span class='unit'>{{ good.getJSTDate(target?.ServiceStartAt, 'HH:mm') }} {{ $t("MSG_JST") }}</span>
+        <!-- <span class='unit'>{{ good.getJSTDate(target?.ServiceStartAt, 'HH:mm') }} {{ $t("MSG_JST") }}</span> -->
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
