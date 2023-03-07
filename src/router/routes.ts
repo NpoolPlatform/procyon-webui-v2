@@ -502,6 +502,19 @@ const routes: RouteRecordRaw[] = [
         }
       }, {
         path: 'product/ironfish',
+        component: () => import('pages/product/IronFish2.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false,
+          ShowSideMenu: false
+        }
+      }, {
+        path: 'product/old/ironfish',
         component: () => import('pages/product/IronFish.vue'),
         meta: {
           ShowHeaderAnnouncement: true,
