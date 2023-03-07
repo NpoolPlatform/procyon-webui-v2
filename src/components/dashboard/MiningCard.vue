@@ -58,7 +58,7 @@
         <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
           <span class='value'>
-            {{ goodProfit?.CoinPreSale ? '*' : 1000 }}
+            {{ goodProfit?.CoinPreSale ? '*' : parseFloat(target?.DailyRewardAmount as string) }}
             <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
           </span>
         </div>
