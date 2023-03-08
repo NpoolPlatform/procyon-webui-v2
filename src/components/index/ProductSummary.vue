@@ -14,11 +14,11 @@
         <div class='product-heading'>
           <img class='icon' :src='_good.CoinLogo'>
           <template v-for='(title,index) in _good?.DisplayNames?.slice(0, 1)' :key='index'>
-            <div v-html='t(title)' />
+            <div v-html='t(title)' class='inner-container' />
           </template>
         </div>
         <template v-for='(desc,idx) in _good?.Descriptions?.slice(0, 2)' :key='idx'>
-          <div v-html='t(desc)' />
+          <div v-html='t(desc)' class='inner-container' />
         </template>
         <button
           :class='["alt", getStatus(_good) ? "in-active" : ""]'
@@ -72,5 +72,6 @@ const good = useAdminAppGoodStore()
 const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
 </script>
 <style lang='sass' scoped>
-
+.inner-container
+  width: 100%
 </style>
