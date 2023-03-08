@@ -278,4 +278,7 @@ const table = computed(() => [
   margin-right: 9px
 .word-wrapper
   word-wrap: break-word
+
+.qr-code
+  border-radius: 0 0 12px 12px
 </style>
