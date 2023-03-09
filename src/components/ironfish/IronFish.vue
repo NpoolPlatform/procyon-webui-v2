@@ -110,9 +110,8 @@ import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
-import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
+import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore, useAdminAppDefaultGoodStore } from 'npool-cli-v4'
 import { getCurrencies, getDescriptions } from 'src/api/chain'
-import { useAdminAppDefaultGoodStore } from 'src/teststore/mock/appdefaultgood'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t, locale } = useI18n({ useScope: 'global' })
