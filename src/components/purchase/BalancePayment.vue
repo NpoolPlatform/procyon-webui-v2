@@ -99,7 +99,6 @@ import {
   useAdminCurrencyStore,
   Currency
 } from 'npool-cli-v4'
-import { DefaultGoodID } from 'src/const/const'
 import { defineAsyncComponent, onMounted, ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -121,7 +120,7 @@ const router = useRouter()
 const route = useRoute()
 
 const query = computed(() => route.query as unknown as Query)
-const goodID = computed(() => query.value.goodID?.length ? query.value.goodID : DefaultGoodID)
+const goodID = computed(() => query.value.goodID)
 const coinTypeID = ref(query.value.coinTypeID)
 
 const coin = useAdminAppCoinStore()
