@@ -163,6 +163,8 @@ const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 const currency = useAdminCurrencyStore()
 
 onMounted(() => {
+  console.log('CoinUnit: ', coinUnit)
+
   if (goodID.value?.length > 0) {
     good.getAppGood({
       GoodID: goodID.value,
