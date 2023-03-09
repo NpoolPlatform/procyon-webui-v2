@@ -112,7 +112,7 @@ import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
 import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
 import { getCurrencies, getDescriptions } from 'src/api/chain'
-import { IronFishGoodID } from 'src/const/const'
+import { useAdminAppDefaultGoodStore } from 'src/teststore/mock/appdefaultgood'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t, locale } = useI18n({ useScope: 'global' })
@@ -128,7 +128,14 @@ interface Query {
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : IronFishGoodID)
+
+const appDefaultGood = useAdminAppDefaultGoodStore()
+
+// Use CoinUnit to find GoodID from AppDefaultGood
+const coinUnit = 'IRON'
+const defaultGoodID = computed(() => appDefaultGood.getGoodIDByCoinUnit(coinUnit))
+
+const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : defaultGoodID.value)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = useAdminAppGoodStore()
@@ -139,19 +146,23 @@ const currency = useAdminCurrencyStore()
 const description = useAdminCoinDescriptionStore()
 
 onMounted(() => {
-  good.getAppGood({
-    GoodID: goodID.value,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GOOD'),
-        Message: t('MSG_GET_GOOD_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
+  console.log('CoinUnit: ', coinUnit)
+
+  if (goodID.value?.length > 0) {
+    good.getAppGood({
+      GoodID: goodID.value,
+      Message: {
+        Error: {
+          Title: t('MSG_GET_GOOD'),
+          Message: t('MSG_GET_GOOD_FAIL'),
+          Popup: true,
+          Type: NotifyType.Error
+        }
       }
-    }
-  }, () => {
+    }, () => {
     // TODO
-  })
+    })
+  }
 
   if (description.CoinDescriptions.CoinDescriptions.length === 0) {
     getDescriptions(0, 100)
