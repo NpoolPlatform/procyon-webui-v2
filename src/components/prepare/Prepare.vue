@@ -1,18 +1,23 @@
 <script setup lang='ts'>
 import { AppID } from 'src/const/const'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { AppGood, NotifyType, useAdminAppGoodStore, useFrontendAppStore } from 'npool-cli-v4'
+import { AppDefaultGood, AppGood, NotifyType, useAdminAppDefaultGoodStore, useAdminAppGoodStore, useFrontendAppStore } from 'npool-cli-v4'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const good = useAdminAppGoodStore()
 const application = useFrontendAppStore()
+const appDefaultGood = useAdminAppDefaultGoodStore()
+const appDefaultGoods = computed(() => appDefaultGood.AppDefaultGoods.AppDefaultGoods)
 
 onMounted(() => {
   if (good.AppGoods.AppGoods.length === 0) {
     getAppGoods(0, 500)
+  }
+  if (appDefaultGoods.value?.length === 0) {
+    getAppDefaultGoods(0, 500)
   }
   getApplication()
 })
@@ -33,6 +38,25 @@ const getAppGoods = (offset: number, limit: number) => {
       return
     }
     getAppGoods(offset + limit, limit)
+  })
+}
+
+const getAppDefaultGoods = (offset: number, limit: number) => {
+  appDefaultGood.getAppDefaultGoods({
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_APP_DEFAULT_GOODS_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, (rows: Array<AppDefaultGood>, error: boolean) => {
+    if (error || rows.length < limit) {
+      return
+    }
+    getAppDefaultGoods(offset + limit, limit)
   })
 }
 
