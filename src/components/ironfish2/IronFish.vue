@@ -110,7 +110,7 @@ import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
-import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore, useAdminAppCoinStore } from 'npool-cli-v4'
+import { AppGood, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
 import { getCurrencies, getDescriptions } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
