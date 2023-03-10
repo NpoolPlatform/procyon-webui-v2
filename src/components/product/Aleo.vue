@@ -128,7 +128,7 @@ import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
-import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCurrencyStore, useAdminAppDefaultGoodStore } from 'npool-cli-v4'
+import { AppGood, NotifyType, useAdminAppGoodStore, useAdminCurrencyStore, useAdminAppCoinStore } from 'npool-cli-v4'
 import { getCurrencies } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -146,11 +146,11 @@ interface Query {
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 
-const appDefaultGood = useAdminAppDefaultGoodStore()
+const coin = useAdminAppCoinStore()
 
-// Use CoinUnit to find GoodID from AppDefaultGood
+// Use CoinUnit to find GoodID from AppCoin
 const coinUnit = 'ALEO'
-const defaultGoodID = computed(() => appDefaultGood.getGoodIDByCoinUnit(coinUnit))
+const defaultGoodID = computed(() => coin.getGoodIDByCoinUnit(coinUnit))
 
 const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : defaultGoodID.value)
 
