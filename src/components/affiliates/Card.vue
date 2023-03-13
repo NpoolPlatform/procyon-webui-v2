@@ -36,7 +36,7 @@
         </thead>
         <tbody>
           <tr class='aff-info' v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
-            <td><span class='aff-product'>{{ getDisplayNames(_good.GoodID)?.[0]? $t(getDisplayNames(_good.GoodID)?.[0] as string) : _good.GoodName }}</span></td>
+            <td><span class='aff-product' v-html='getDisplayNames(_good.GoodID)?.[4]? $t(getDisplayNames(_good.GoodID)?.[4] as string) : _good.GoodName' /></td>
             <td v-if='_good.Editing'>
               <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' />
               <button @click='onSaveCommissionClick(_good)'>
@@ -81,7 +81,7 @@
             </thead>
             <tbody>
               <tr class='aff-info' v-for='_commission in commissions' :key='_commission.ID'>
-                <td><span class='aff-product'>{{ getDisplayNames(_commission.GoodID)?.[0]? $t(getDisplayNames(_commission.GoodID)?.[0] as string) : good.getGoodByID(_commission.GoodID)?.GoodName }}</span></td>
+                <td><span class='aff-product' v-html='getDisplayNames(_commission.GoodID)?.[4]? $t(getDisplayNames(_commission.GoodID)?.[4] as string) : good.getGoodByID(_commission.GoodID)?.GoodName' /></td>
                 <td><span class='aff-number'>{{ commission.settingDate(_commission) }}<span class='unit'>{{ commission.settingTime(_commission) }}</span></span></td>
                 <td><span class='aff-number'>{{ _commission.Percent }}<span class='unit'>%</span></span></td>
               </tr>
