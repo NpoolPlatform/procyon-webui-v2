@@ -36,5 +36,11 @@ const goodProfits = computed(() => Array.from(profit.GoodProfits.GoodProfits).ma
     TotalEstimatedDailyReward: Number(el.Units) * parseFloat(good.getGoodByID(el.GoodID)?.DailyRewardAmount as string),
     GoodCreatedAt: good.getGoodByID(el.GoodID)?.CreatedAt
   } as MyGoodProfit
-}).sort((a, b) => a.GoodUnit.localeCompare(b.GoodUnit, 'zh-CN')).sort((a, b) => a.GoodCreatedAt > b.GoodCreatedAt ? -1 : 1))
+}).sort((a, b) => {
+  if (a.GoodUnit.localeCompare(b.GoodUnit, 'zh-CN')) {
+    return a.GoodUnit.localeCompare(b.GoodUnit, 'zh-CN')
+  } else {
+    return a.Units > b.Units ? -1 : 1
+  }
+}))
 </script>
