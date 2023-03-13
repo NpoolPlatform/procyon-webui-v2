@@ -10,28 +10,35 @@
     </div>
     <div class='top-line-summary'>
       <div class='top-line-item'>
-        <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.TotalInComing }} {{ goodProfit?.CoinUnit }}</span>
-        <span class='sub-value'> ({{ goodProfit.TotalUSDInComing }} {{ PriceCoinName }})</span>
+        <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.TotalInComing }}</span>
+        <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
       </div>
       <div class='top-line-item'>
-        <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }} {{ goodProfit?.CoinUnit }}</span>
-        <span class='sub-value'> ({{ goodProfit.Last24HoursUSDInComing }} {{ PriceCoinName }})</span>
+        <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}: </span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }}</span>
+        <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
       </div>
       <div class='top-line-item'>
-        <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
+        <span class='label'>{{ $t('MSG_CAPACITY') }}: </span>
         <span class='value'>{{ goodProfit?.Units }}</span>
-        <span class='sub-value'> {{ goodProfit ? $t(goodProfit?.GoodUnit) : '' }}</span>
+        <span class='sub-value'>{{ goodProfit ? $t(goodProfit?.GoodUnit) : '' }}</span>
       </div>
     </div>
     <q-slide-transition>
       <div class='detailed-summary' v-show='!short'>
-        <div class='line'>
+        <!-- <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
           <span class='value'>
             {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last30DaysInComing / 30 }}
             <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
+          </span>
+        </div> -->
+        <div class='line'>
+          <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
+          <span class='value'>
+            {{ goodProfit?.GoodServicePeriodDays }}
+            <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
         <div class='line'>
@@ -41,20 +48,13 @@
             <span class='unit'>{{ goodProfit?.CoinUnit }} (20%)</span>
           </span>
         </div>
-        <div class='line'>
+        <!-- <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
           <span class='value'>
             {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last30DaysInComing / 30 * 0.8 }}
             <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
           </span>
-        </div>
-        <div class='line'>
-          <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
-          <span class='value'>
-            {{ goodProfit?.GoodServicePeriodDays }}
-            <span class='unit'>{{ $t('MSG_DAYS') }}</span>
-          </span>
-        </div>
+        </div> -->
         <!-- <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
           <span class='value'>
@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useAdminAppCoinStore, useAdminAppGoodStore, PriceCoinName } from 'npool-cli-v4'
+import { useAdminAppCoinStore, useAdminAppGoodStore } from 'npool-cli-v4'
 import { MyGoodProfit } from 'src/localstore/ledger/types'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -126,3 +126,7 @@ const onExpandClick = () => {
 }
 
 </script>
+<style lang='sass' scoped>
+  .top-line-item .value
+    padding-right: 5px
+</style>

@@ -1,7 +1,7 @@
 <template>
   <div class='content'>
     <!-- <MiningSummary /> -->
-    <div class='hr' />
+    <!-- <div class='hr' /> -->
     <MiningCards />
     <div class='hr' />
     <Orders />
