@@ -78,7 +78,7 @@
       <button :class='[ "alt show-more", short ? "" : "open" ]' @click='onExpandClick'>
         <img :src='chevrons'>
       </button>
-      <button class='alt' @click='onExportClick' :disabled='exportMiningRewards?.length === 0'>
+      <button class='alt' @click='onExportClick(goodProfit)' :disabled='exportMiningRewards?.length === 0'>
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
       <button
@@ -164,16 +164,19 @@ const exportMiningRewards = computed(() => Array.from(miningDetails.value).map((
   } as ExportMiningReward
 }))
 
-const onExportClick = () => {
+const onExportClick = (row: MyGoodProfit) => {
+  const columns = {
+    CreatedAt: 'Date',
+    Units: 'Mining Unit Amount',
+    RewardAmount: 'Mining Rewards',
+    RewardAmountPerUnit: 'Mining Rewards per 1 Unit'
+  } as Record<string, string>
+  if (row.GoodID === 'de420061-e878-4a8b-986a-805cadd59233') {
+    columns.ProverIncentive = 'Prover Incentive'
+  }
   const output = stringify(exportMiningRewards.value, {
     header: true,
-    columns: {
-      CreatedAt: 'Date',
-      Units: 'Mining Unit Amount',
-      RewardAmount: 'Mining Rewards',
-      RewardAmountPerUnit: 'Mining Rewards per 1 Unit',
-      ProverIncentive: 'Prover Incentive'
-    }
+    columns: columns
   })
 
   const blob = new Blob([output], { type: 'text/plain;charset=utf-8' })
