@@ -81,7 +81,11 @@
       <button class='alt' disabled>
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
-      <button @click='onPurchaseClick' :disabled='good.canBuy(goodProfit.GoodID, goodProfit.CoinTypeID)'>
+      <button
+        :class='["alt", getStatus(target as AppGood) ? "in-active" : ""]'
+        :disabled='getStatus(target as AppGood)'
+        @click='onPurchaseClick'
+      >
         {{ $t('MSG_PURCHASE_CAPACITY') }}
       </button>
     </div>
@@ -89,7 +93,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useAdminAppCoinStore, useAdminAppGoodStore } from 'npool-cli-v4'
+import { AppGood, useAdminAppCoinStore, useAdminAppGoodStore } from 'npool-cli-v4'
 import { MyGoodProfit } from 'src/localstore/ledger/types'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -107,6 +111,8 @@ const short = ref(true)
 
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodProfit.value?.GoodID))
+
+const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
 
 const coin = useAdminAppCoinStore()
 const productInfo = computed(() => coin.getCoinByID(goodProfit.value?.CoinTypeID))
