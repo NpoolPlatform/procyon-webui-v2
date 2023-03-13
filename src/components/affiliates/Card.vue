@@ -36,7 +36,7 @@
         </thead>
         <tbody>
           <tr class='aff-info' v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
-            <td><span class='aff-product'>{{ _good.GoodName }}</span></td>
+            <td><span class='aff-product'>{{ getDisplayNames(_good.GoodID)?.[0]? $t(getDisplayNames(_good.GoodID)?.[0] as string) : _good.GoodName }}</span></td>
             <td v-if='_good.Editing'>
               <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' />
               <button @click='onSaveCommissionClick(_good)'>
@@ -81,7 +81,7 @@
             </thead>
             <tbody>
               <tr class='aff-info' v-for='_commission in commissions' :key='_commission.ID'>
-                <td><span class='aff-product'>{{ good.getGoodByID(_commission.GoodID)?.GoodName }}</span></td>
+                <td><span class='aff-product'>{{ getDisplayNames(_commission.GoodID)?.[0]? $t(getDisplayNames(_commission.GoodID)?.[0] as string) : good.getGoodByID(_commission.GoodID)?.GoodName }}</span></td>
                 <td><span class='aff-number'>{{ commission.settingDate(_commission) }}<span class='unit'>{{ commission.settingTime(_commission) }}</span></span></td>
                 <td><span class='aff-number'>{{ _commission.Percent }}<span class='unit'>%</span></span></td>
               </tr>
@@ -145,7 +145,9 @@ const username = computed(() => baseUser.displayName({
 } as User, locale.value as string))
 
 const logined = useLocalUserStore()
+
 const good = useAdminAppGoodStore()
+const getDisplayNames = computed(() => (goodID: string) => good.getGoodByID(goodID)?.DisplayNames)
 
 const archivement = useFrontendArchivementStore()
 const goodArchivements = computed(() => Array.from(referral.value?.Archivements.filter((el) => good.visible(el.GoodID))).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
