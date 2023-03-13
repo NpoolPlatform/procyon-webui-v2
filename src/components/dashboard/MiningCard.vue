@@ -78,7 +78,7 @@
       <button :class='[ "alt show-more", short ? "" : "open" ]' @click='onExpandClick'>
         <img :src='chevrons'>
       </button>
-      <button class='alt' @click='onExportClick()' :disabled='exportMiningRewards?.length === 0'>
+      <button class='alt' @click='onExportClick' :disabled='exportMiningRewards?.length === 0'>
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
       <button
