@@ -1,6 +1,6 @@
 <template>
   <div class='content'>
-    <MiningSummary />
+    <!-- <MiningSummary /> -->
     <div class='hr' />
     <MiningCards />
     <div class='hr' />
@@ -35,7 +35,7 @@ import {
 } from 'npool-cli-v4'
 import { getCoins, getCurrencies } from 'src/api/chain'
 
-const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
+// const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
 const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/MiningCards.vue'))
 const Orders = defineAsyncComponent(() => import('src/components/dashboard/Orders.vue'))
 
