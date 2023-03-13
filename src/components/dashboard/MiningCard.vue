@@ -84,7 +84,7 @@
       <button
         :class='["alt", getStatus(target as AppGood) ? "in-active" : ""]'
         :disabled='getStatus(target as AppGood)'
-        @click='onPurchaseClick'
+        @click='onPurchaseClick(target as AppGood)'
       >
         {{ $t('MSG_PURCHASE_CAPACITY') }}
       </button>
@@ -93,7 +93,7 @@
 </template>
 
 <script setup lang='ts'>
-import { AppGood, useAdminAppCoinStore, useAdminAppGoodStore } from 'npool-cli-v4'
+import { AppGood, useAdminAppGoodStore } from 'npool-cli-v4'
 import { MyGoodProfit } from 'src/localstore/ledger/types'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -114,17 +114,24 @@ const target = computed(() => good.getGoodByID(goodProfit.value?.GoodID))
 
 const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
 
-const coin = useAdminAppCoinStore()
-const productInfo = computed(() => coin.getCoinByID(goodProfit.value?.CoinTypeID))
-const productPage = computed(() => productInfo.value?.ProductPage)
-
 const router = useRouter()
-const onPurchaseClick = () => {
-  let target = '/#'
-  if (productPage.value) {
-    target = productPage.value
+const onPurchaseClick = (_good: AppGood) => {
+  if (_good.ProductPage?.length === 0 || !_good.ProductPage) {
+    void router.push({
+      path: '/product/aleo',
+      query: {
+        goodId: _good.GoodID
+      }
+    })
+    return
   }
-  void router.push({ path: target })
+
+  void router.push({
+    path: _good?.ProductPage,
+    query: {
+      goodId: _good.GoodID
+    }
+  })
 }
 
 const onExpandClick = () => {
