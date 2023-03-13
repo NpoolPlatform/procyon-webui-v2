@@ -20,12 +20,21 @@
 
 <script setup lang='ts'>
 import {
+  computed,
   defineAsyncComponent,
   defineEmits,
   defineProps,
   toRef
 } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+
+interface Query {
+  path: string;
+}
+
+const route = useRoute()
+const query = computed(() => route.query as unknown as Query)
+const _path = computed(() => query.value.path)
 
 interface Props {
   label: string;
@@ -47,6 +56,10 @@ const onSubmit = () => {
 const router = useRouter()
 
 const onCancel = () => {
+  if (_path.value && _path.value?.length > 0) {
+    void router.push({ path: _path.value })
+    return
+  }
   void router.push({ path: '/dashboard' })
 }
 
