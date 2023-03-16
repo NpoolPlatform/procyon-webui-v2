@@ -281,19 +281,10 @@ onMounted(() => {
     goIndexPage()
     return
   }
-
-  ticker.value = window.setInterval(() => {
-    const now = Math.floor(Date.now() / 1000)
-    const remain = endTime.value - now >= 0 ? endTime.value - now : 0
-    remainDays.value = Math.floor(remain / 24 / 60 / 60)
-    remainHours.value = Math.floor((remain - remainDays.value * 24 * 60 * 60) / 60 / 60)
-    remainMinutes.value = Math.floor((remain - remainDays.value * 24 * 60 * 60 - remainHours.value * 60 * 60) / 60)
-    remainSeconds.value = remain - remainDays.value * 24 * 60 * 60 - remainHours.value * 60 * 60 - remainMinutes.value * 60
-    if (remainDays.value > 99) {
-      remainDays.value = 99
-    }
-    goIndexPage()
-  }, 1000)
+  
+  if (target.value && target.value.EnableProductPage) {
+    showMe.value = true
+  }
 
   if (coin.AppCoins.AppCoins.length === 0) {
     getCoins(0, 100)
