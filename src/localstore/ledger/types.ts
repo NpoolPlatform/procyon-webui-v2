@@ -1,7 +1,7 @@
 import { GoodArchivement, GoodProfit, UserArchivement } from 'npool-cli-v4'
 
 export interface MyGoodProfit extends GoodProfit {
-  GoodCreatedAt: number;
+  GoodSaleEndAt: number;
   CoinPreSale: boolean;
   TotalInComing: number;
   TotalUSDInComing: number;
