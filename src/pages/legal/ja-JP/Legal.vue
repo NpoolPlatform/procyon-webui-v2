@@ -1,7 +1,7 @@
 <template>
   <div class='content legal'>
     <div id='hero'>
-      <h1>Procyon — PRCN Technology</h1>
+      <h1>Procyon — PROCYON LABS PTE. LTD.</h1>
 
       <h2>利用規約</h2>
     </div>

@@ -187,11 +187,21 @@ const onWithdrawClick = (row: MyGeneral) => {
   }, (error: boolean) => {
     submitting.value = false
     if (error) {
-      void router.push({ path: '/kyc' })
+      void router.push({
+        path: '/remainder/kyc',
+        query: {
+          path: '/wallet'
+        }
+      })
       return
     }
     if (kyc.KYC?.State !== KYCState.Approved) {
-      void router.push({ path: '/kyc' })
+      void router.push({
+        path: '/remainder/kyc',
+        query: {
+          path: '/wallet'
+        }
+      })
       return
     }
 

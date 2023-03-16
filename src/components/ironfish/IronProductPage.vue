@@ -1,5 +1,5 @@
 <template>
-  <div class='content order-page'>
+  <div class='content order-page' v-if='showMe'>
     <div :class='[ "product-container content-glass project", projectClass ]'>
       <div class='product-title-section project-title-section' :style='{"background-image": "url(" + bgImg + ")"}'>
         <div class='product-title-container'>
@@ -161,7 +161,7 @@
 
 <script setup lang='ts'>
 import { PriceCoinName } from 'npool-cli-v2'
-import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted, onUnmounted } from 'vue'
+import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import warning from 'src/assets/warning.svg'
 import {
@@ -263,6 +263,12 @@ const onPurchaseClick = () => {
   })
 }
 
+const goIndexPage = () => {
+  if (!target.value?.EnableProductPage) {
+    void router.push({ path: '/' })
+  }
+}
+
 const endTime = computed(() => target.value?.SaleEndAt)
 const ticker = ref(-1)
 const remainDays = ref(27)
@@ -270,7 +276,25 @@ const remainHours = ref(23)
 const remainMinutes = ref(59)
 const remainSeconds = ref(59)
 
+const showMe = ref(false)
+
+watch(target, () => {
+  if (!target.value) {
+    return
+  }
+  if (target.value && !target.value.EnableProductPage) {
+    goIndexPage()
+    return
+  }
+  showMe.value = true
+})
+
 onMounted(() => {
+  if (target.value && !target.value.EnableProductPage) {
+    goIndexPage()
+    return
+  }
+
   ticker.value = window.setInterval(() => {
     const now = Math.floor(Date.now() / 1000)
     const remain = endTime.value - now >= 0 ? endTime.value - now : 0
@@ -281,6 +305,7 @@ onMounted(() => {
     if (remainDays.value > 99) {
       remainDays.value = 99
     }
+    goIndexPage()
   }, 1000)
 
   if (coin.AppCoins.AppCoins.length === 0) {
