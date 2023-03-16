@@ -250,6 +250,12 @@ const onPurchaseClick = () => {
   })
 }
 
+const goIndexPage = () => {
+  if (!target.value?.EnableProductPage) {
+    void router.push({ path: '/' })
+  }
+}
+
 const endTime = computed(() => target.value?.SaleEndAt)
 const ticker = ref(-1)
 const remainDays = ref(27)
@@ -268,6 +274,7 @@ onMounted(() => {
     if (remainDays.value > 99) {
       remainDays.value = 99
     }
+    goIndexPage()
   }, 1000)
 
   if (coin.AppCoins.AppCoins.length === 0) {
