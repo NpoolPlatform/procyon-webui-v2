@@ -6,9 +6,9 @@
     :customize-info='false'
   >
     <template #product-detail>
-      <div v-show='description'>
-        <h3>{{ description ? $t(description?.Title) : '' }}</h3>
-        <p v-html='description ? $t(description?.Message) : ""' />
+      <div v-show='coinDescription'>
+        <h3>{{ coinDescription ? $t(coinDescription?.Title) : '' }}</h3>
+        <p v-html='coinDescription ? $t(coinDescription?.Message) : ""' />
       </div>
       <h3>
         <span v-html='$t("MSG_WHY_TITLE")' />
@@ -81,11 +81,11 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, ref, onMounted } from 'vue'
+import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { CoinDescriptionUsedFor, NotificationType, useCoinStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { NotifyType, useAdminAppGoodStore } from 'npool-cli-v4'
+import { CoinDescriptionUsedFor, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore } from 'npool-cli-v4'
+import { getDescriptions } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -96,15 +96,16 @@ interface Query {
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodId = computed(() => query.value.goodId)
+const goodId = computed(() => query.value.goodId?.length > 0 ? query.value.goodId : 'eaf9fc2d-63cd-450a-b098-5ef8f624df47')
 
 const appGood = useAdminAppGoodStore()
 const good = computed(() => appGood.getGoodByID(goodId.value))
-const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
 
-const coin = useCoinStore()
+const coin = useAdminAppCoinStore()
 const targetCoin = computed(() => coin.getCoinByID(good.value?.CoinTypeID as string))
-const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.CoinTypeID as string, usedFor.value))
+
+const description = useAdminCoinDescriptionStore()
+const coinDescription = computed(() => description.getCoinDescriptionByCoinUsedFor(good.value?.CoinTypeID as string, CoinDescriptionUsedFor.ProductPage))
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 
@@ -125,30 +126,8 @@ onMounted(() => {
     })
   }
 
-  if (!description.value) {
-    coin.getCoinDescriptions({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COIN_DESCRIPTIONS'),
-          Message: t('MSG_GET_COIN_DESCRIPTIONS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    })
-  }
-  if (coin.Coins.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    }, () => {
-      // TODO
-    })
+  if (description.CoinDescriptions.CoinDescriptions.length === 0) {
+    getDescriptions(0, 100)
   }
 })
 
