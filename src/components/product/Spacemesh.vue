@@ -96,7 +96,12 @@ interface Query {
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodId = computed(() => query.value.goodId?.length > 0 ? query.value.goodId : 'eaf9fc2d-63cd-450a-b098-5ef8f624df47')
+
+// Use CoinUnit to find GoodID from AppDefaultGood
+const coinUnit = 'SMH'
+const defaultGoodID = computed(() => coin.getGoodIDByCoinUnit(coinUnit))
+
+const goodId = computed(() => query.value.goodId?.length > 0 ? query.value.goodId : defaultGoodID.value)
 
 const appGood = useAdminAppGoodStore()
 const good = computed(() => appGood.getGoodByID(goodId.value))
