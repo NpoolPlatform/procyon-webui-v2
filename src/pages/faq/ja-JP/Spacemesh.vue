@@ -8,7 +8,7 @@
           <h3>目次</h3>
 
           <ul class='faq-nav-links'>
-            <li><a @click='scrollTo("Spacemesh マイニング製品")'>Spacemesh マイニング製品</a></li>
+            <li><a @click='scrollTo("Spacemeshマイニング製品")'>Spacemeshマイニング製品</a></li>
             <li><a @click='scrollTo("Spacemeshとは")'>Spacemeshとは</a></li>
             <li><a @click='scrollTo("Spacemeshの技術概要 (DAG構造)")'>Spacemeshの技術概要 (DAG構造)</a></li>
             <li><a @click='scrollTo("なぜProcyonはSpacemeshを選定したか？")'>なぜProcyonはSpacemeshを選定したか？</a></li>
@@ -18,13 +18,13 @@
         </div>
 
         <div class='faq-content-main'>
-          <h3 id='Spacemesh マイニング製品'>
-            Spacemesh マイニング製品
+          <h3 id='Spacemeshマイニング製品'>
+            Spacemeshマイニング製品
           </h3>
 
-          <h4>製品詳細</h4>
+          <h4>Product Detail</h4>
 
-          <p><strong>製品詳細：</strong>マイニング開始時期: メインネットでローンチ時 (2023年1月末予定)</p>
+          <p><strong>製品詳細：</strong>Spacemeshのプロジェクトチームによる正式決定・発表時。最新情報に関しましては、毎週日曜日に開催されるProcyon公式セミナーにご参加ください。</p>
 
           <p><strong>マイニング期間：</strong>365日間 (メインネットでローンチ後)</p>
 
@@ -48,7 +48,7 @@
             <li><strong>創設日：</strong>2018年3月20日</li>
             <li><strong>プロジェクト始動日：</strong>2017年第4四半期</li>
             <li><strong>テストネット開始日：</strong>2019年第3四半期</li>
-            <li><strong>メインネットローンチ日：</strong>2022年12月5日〜12日<a href='https://procyon-vip.medium.com/spacemesh%E9%80%B2%E6%8D%97%E6%83%85%E5%A0%B1%E3%81%BE%E3%81%A8%E3%82%81-vol-5-197a9b424a87' target='_blank'>(Spacemesh公式からの発表)</a></li>
+            <li><strong>メインネットローンチ日：</strong>2022年第3-4四半期予定</li>
             <li><a href='https://spacemesh.io/blog/spacemesh-white-paper-1/' target='_blank'>Spacemeshホワイトペーパー</a></li>
           </ul>
 

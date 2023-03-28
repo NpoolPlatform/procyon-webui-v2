@@ -34,6 +34,13 @@
           <span>{{ $t('MSG_ALEO_FAQ_MENU_SUBTITLE') }}</span>
         </div>
       </a>
+      <a class='faq-menu-item' @click='onIronFishClick'>
+        <img class='faq-product' src='product/iron/product-iron-fish.svg'>
+        <div class='faq-menu-item-info'>
+          <h2>{{ $t('MSG_IRON_FISH_FAQ_MENU_TITLE') }}</h2>
+          <span>{{ $t('MSG_IRON_FISH_FAQ_MENU_SUBTITLE') }}</span>
+        </div>
+      </a>
       <a class='faq-menu-item' @click='onSpacemeshClick'>
         <img class='faq-product' src='product/spacemesh/product-spacemesh.svg'>
         <div class='faq-menu-item-info'>
@@ -89,12 +96,12 @@ const faqs = computed(() => [
     topic: 'Dashboard',
     title: 'MSG_DASHBOARD_FAQ_MENU_TITLE',
     subtitle: 'MSG_DASHBOARD_FAQ_MENU_SUBTITLE'
-  }, /* {
+  }, {
     icon: 'font-awesome/bitcoin.svg',
-    topic: 'Payments',
+    topic: 'Transaction',
     title: 'MSG_PAYMENTS_FAQ_MENU_TITLE',
     subtitle: 'MSG_PAYMENTS_FAQ_MENU_SUBTITLE'
-  }, */ {
+  }, {
     icon: 'font-awesome/user-check.svg',
     topic: 'KYC',
     title: 'MSG_KYC_FAQ_MENU_TITLE',
@@ -137,6 +144,15 @@ const onAleoClick = () => {
     path: '/faq',
     query: {
       topic: 'Aleo'
+    }
+  })
+}
+
+const onIronFishClick = () => {
+  void router.push({
+    path: '/faq',
+    query: {
+      topic: 'IronFish'
     }
   })
 }
