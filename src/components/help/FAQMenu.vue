@@ -98,9 +98,9 @@ const faqs = computed(() => [
     subtitle: 'MSG_DASHBOARD_FAQ_MENU_SUBTITLE'
   }, {
     icon: 'font-awesome/bitcoin.svg',
-    topic: 'Transaction',
-    title: 'MSG_PAYMENTS_FAQ_MENU_TITLE',
-    subtitle: 'MSG_PAYMENTS_FAQ_MENU_SUBTITLE'
+    topic: 'Transactions',
+    title: 'MSG_TRANSACTIONS_FAQ_MENU_TITLE',
+    subtitle: 'MSG_TRANSACTIONS_FAQ_MENU_SUBTITLE'
   }, {
     icon: 'font-awesome/user-check.svg',
     topic: 'KYC',
