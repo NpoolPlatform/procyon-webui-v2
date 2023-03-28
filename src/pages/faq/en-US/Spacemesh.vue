@@ -16,8 +16,8 @@
           <div class='hr' />
         </div>
 
-        <div class='faq-content-main")'>
-          <h3 id='Spacemesh Mining")'>
+        <div class='faq-content-main'>
+          <h3 id='Spacemesh Mining'>
             Spacemesh mining
           </h3>
 
@@ -31,7 +31,7 @@
 
           <p><strong>Mining Algorithms: </strong>PoST Mining (rewards are distributed based on the amount of unused hard drive space and time provided)</p>
 
-          <h3 id='About Spacemesh")'>
+          <h3 id='About Spacemesh'>
             About Spacemesh
           </h3>
 

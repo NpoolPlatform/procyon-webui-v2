@@ -30,7 +30,7 @@
           <div class='hr' />
         </div>
 
-        <div class='faq-content-main")'>
+        <div class='faq-content-main'>
           <h3 id='Aleo Mining'>
             Aleo Mining
           </h3>
