@@ -32,11 +32,16 @@
 </template>
 
 <script setup lang='ts'>
+import { useFrontendAppStore } from 'npool-cli-v4'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+
+const app = useFrontendAppStore()
+const jumpPath = computed(() => app.App?.CommitButtonTargets?.[0]?.length > 0 ? app.App?.CommitButtonTargets?.[0] : '/product/aleo')
 
 const router = useRouter()
 const onAvailableNowClick = () => {
-  void router.push({ path: '/product/aleo' })
+  void router.push({ path: jumpPath.value })
 }
 
 </script>
