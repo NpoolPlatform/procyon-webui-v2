@@ -62,15 +62,6 @@ export default route(function (/* { store, ssrContext } */) {
     const app = useLocalAppStore()
     console.log('app: ', app.App)
 
-    // const constRoutes = routes
-
-    if (!app.App?.Maintaining) {
-      router.addRoute({
-        path: '/',
-        component: () => import('pages/Maintenance.vue')
-      })
-    }
-
     if (!app.App?.Maintaining) {
       if (!to.path.startsWith('/testing') && to.path !== '/') {
         next({ path: '/', replace: true })
