@@ -98,7 +98,7 @@ const exportOrders = computed(() => Array.from(orders.value).map((el) => {
     Currency: PriceCoinName,
     TotalCost: (Number(el.PaymentAmount) + Number(el.PayWithBalanceAmount)).toString() + '' + el.PaymentCoinUnit,
     MiningPeriod: el.GoodServicePeriodDays,
-    ProverIncentive: Number(good.getGoodByID(el.GoodID)?.DailyRewardAmount) * Number(el.Units),
+    // ProverIncentive: Number(good.getGoodByID(el.GoodID)?.DailyRewardAmount) * Number(el.Units),
     // VerifierIncentive: '',
     OrderStatus: el.State
   } as ExportOrder
@@ -117,7 +117,7 @@ const onExportClick = () => {
       Currency: 'Currency',
       TotalCost: 'Total Cost',
       MiningPeriod: 'Mining Period',
-      ProverIncentive: 'Prover Incentive',
+      // ProverIncentive: 'Prover Incentive',
       OrderStatus: 'Order Status'
     }
   })

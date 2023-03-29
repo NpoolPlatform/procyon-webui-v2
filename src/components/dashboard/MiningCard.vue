@@ -78,7 +78,7 @@
       <button :class='[ "alt show-more", short ? "" : "open" ]' @click='onExpandClick'>
         <img :src='chevrons'>
       </button>
-      <button class='alt' @click='onExportClick(goodProfit)' :disabled='exportMiningRewards?.length === 0'>
+      <button class='alt' @click='onExportClick()' :disabled='exportMiningRewards?.length === 0'>
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
       <button @click='onPurchaseClick' :disabled='good.canBuy(goodProfit.GoodID, goodProfit.CoinTypeID)'>
@@ -90,7 +90,7 @@
 
 <script setup lang='ts'>
 import saveAs from 'file-saver'
-import { useAdminAppCoinStore, useAdminAppGoodStore, PriceCoinName, useFrontendDetailStore, formatTime } from 'npool-cli-v4'
+import { useAdminAppCoinStore, useAdminAppGoodStore, PriceCoinName, useFrontendDetailStore, formatTime, MiningReward } from 'npool-cli-v4'
 import { MyGoodProfit } from 'src/localstore/ledger/types'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -112,6 +112,7 @@ const short = ref(true)
 
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodProfit.value?.GoodID))
+const coinUnit = computed(() => good.getGoodByID(goodProfit.value?.GoodID)?.CoinUnit as string)
 
 const detail = useFrontendDetailStore()
 const miningDetails = computed(() => detail.MiningRewards.MiningRewards.filter((el) => el.GoodID === goodProfit?.value?.GoodID))
@@ -143,27 +144,53 @@ interface ExportMiningReward {
   CumulativeTotal: number;
 }
 
-const exportMiningRewards = computed(() => Array.from(miningDetails.value).map((el) => {
-  return {
-    CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
-    Units: el.Units,
-    RewardAmount: el.RewardAmount,
-    TechServiceFee: Number(el.RewardAmount) * 0.2,
-    NetRewards: Number(el.RewardAmount) - Number(el.RewardAmount) * 0.2,
-    RewardAmountPerUnit: (Number(el.RewardAmount) - Number(el.RewardAmount) * 0.2) / Number(el.Units),
-    CumulativeTotal: 0
-  } as ExportMiningReward
-}).sort((a, b) => a.CreatedAt > b.CreatedAt ? 1 : -1))
+const exportMiningRewards = computed(() => {
+  const rowMap = new Map<string, Array<MiningReward>>()
+  const keys = [] as Array<string>
 
-const onExportClick = (row: MyGoodProfit) => {
+  miningDetails.value.forEach((el) => {
+    const benefitDate = new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC')?.split(' ')[0]
+    if (!rowMap.get(benefitDate)) {
+      keys.push(benefitDate)
+      rowMap.set(benefitDate, [el])
+    } else {
+      rowMap.get(benefitDate)?.push(el)
+    }
+  })
+
+  const rows = [] as Array<ExportMiningReward>
+  let cumulativeTotal = 0
+
+  keys.sort().forEach((key) => {
+    let units = 0
+    let rewardAmount = 0
+    rowMap.get(key)?.forEach((el) => {
+      units += Number(el.Units)
+      rewardAmount += Number(el.RewardAmount)
+      cumulativeTotal += Number(el.RewardAmount)
+    })
+    rows.push({
+      CreatedAt: new Date(Number(rowMap.get(key)?.[0]?.CreatedAt) * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
+      Units: `${units}`,
+      RewardAmount: `${rewardAmount}`,
+      TechServiceFee: rewardAmount * 0.2,
+      NetRewards: rewardAmount - rewardAmount * 0.2,
+      RewardAmountPerUnit: (rewardAmount - rewardAmount * 0.2) / units,
+      CumulativeTotal: cumulativeTotal
+    })
+  })
+  return rows
+})
+
+const onExportClick = () => {
   const columns = {
     CreatedAt: '日付 / Date',
     Units: '保有口数 / Mining Unit Amount',
-    RewardAmount: `マイニング報酬 (${row.CoinUnit}) / Mining Rewards (${row.CoinUnit})`,
-    TechServiceFee: `技術サービス料20% (${row.CoinUnit}) / Tech Service Fee 20% (${row.CoinUnit})`,
-    NetRewards: `純マイニング報酬 (${row.CoinUnit}) / Net Rewards (${row.CoinUnit})`,
-    RewardAmountPerUnit: `1口あたりのマイニング報酬 (${row.CoinUnit}) / Mining Rewards per 1 Unit (${row.CoinUnit})`,
-    CumulativeTotal: `累計 (${row.CoinUnit}) / Cumulative Total (${row.CoinUnit})`
+    RewardAmount: `マイニング報酬 (${coinUnit.value}) / Mining Rewards (${coinUnit.value})`,
+    TechServiceFee: `技術サービス料20% (${coinUnit.value}) / Tech Service Fee 20% (${coinUnit.value})`,
+    NetRewards: `純マイニング報酬 (${coinUnit.value}) / Net Rewards (${coinUnit.value})`,
+    RewardAmountPerUnit: `1口あたりのマイニング報酬 (${coinUnit.value}) / Mining Rewards per 1 Unit (${coinUnit.value})`,
+    CumulativeTotal: `累計 (${coinUnit.value}) / Cumulative Total (${coinUnit.value})`
   } as Record<string, string>
   const output = stringify(exportMiningRewards.value, {
     header: true,
