@@ -120,6 +120,7 @@ const coinUnit = computed(() => good.getGoodByID(goodProfit.value?.GoodID)?.Coin
 const techServiceFee = computed(() => Number(target?.value?.TechnicalFeeRatio) / 100)
 const deservedRatio = computed(() => 1 - techServiceFee.value)
 
+
 const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
 
 const detail = useFrontendDetailStore()
