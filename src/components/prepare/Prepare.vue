@@ -14,6 +14,8 @@ const good = useAdminAppGoodStore()
 const application = useFrontendAppStore()
 const newRoutes = ref([] as Array<RouteRecordRaw>)
 
+const app = useLocalAppStore()
+
 watch(() => app.App?.Maintaining, () => {
   // TODO
 })
@@ -56,7 +58,6 @@ const getAppGoods = (offset: number, limit: number) => {
   })
 }
 
-const app = useLocalAppStore()
 const getApplication = () => {
   application.getApp({
     AppID: AppID,
