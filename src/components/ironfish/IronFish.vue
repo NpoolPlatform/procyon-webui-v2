@@ -162,7 +162,6 @@ onMounted(() => {
     // TODO
     })
   }
-
   if (description.CoinDescriptions.CoinDescriptions.length === 0) {
     getDescriptions(0, 100)
   }

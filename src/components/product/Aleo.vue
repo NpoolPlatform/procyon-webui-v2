@@ -128,8 +128,8 @@ import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
-import { AppGood, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCurrencyStore } from 'npool-cli-v4'
-import { getCurrencies } from 'src/api/chain'
+import { AppGood, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
+import { getCurrencies, getDescriptions } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t, locale } = useI18n({ useScope: 'global' })
@@ -160,6 +160,7 @@ const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
 
 const currency = useAdminCurrencyStore()
+const description = useAdminCoinDescriptionStore()
 
 onMounted(() => {
   console.log('CoinUnit: ', coinUnit)
@@ -179,7 +180,9 @@ onMounted(() => {
     // TODO
     })
   }
-
+  if (description.CoinDescriptions.CoinDescriptions.length === 0) {
+    getDescriptions(0, 100)
+  }
   if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
     currency.$reset()
     getCurrencies(0, 10)
