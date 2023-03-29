@@ -137,30 +137,34 @@ interface ExportMiningReward {
   CreatedAt: string;
   Units: string;
   RewardAmount: string;
-  RewardAmountPerUnit: string;
-  ProverIncentive: number;
+  TechServiceFee: number;
+  NetRewards: number;
+  RewardAmountPerUnit: number;
+  CumulativeTotal: number;
 }
 
 const exportMiningRewards = computed(() => Array.from(miningDetails.value).map((el) => {
   return {
     CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
-    Units: `${parseFloat(el.Units)}` + t(goodProfit.value?.GoodUnit),
+    Units: el.Units,
     RewardAmount: el.RewardAmount,
-    RewardAmountPerUnit: el.RewardAmountPerUnit,
-    ProverIncentive: Number(good.getGoodByID(el.GoodID)?.DailyRewardAmount) * Number(el.Units)
+    TechServiceFee: Number(el.RewardAmount) * 0.2,
+    NetRewards: Number(el.RewardAmount) - Number(el.RewardAmount) * 0.2,
+    RewardAmountPerUnit: (Number(el.RewardAmount) - Number(el.RewardAmount) * 0.2) / Number(el.Units),
+    CumulativeTotal: 0
   } as ExportMiningReward
-}))
+}).sort((a, b) => a.CreatedAt > b.CreatedAt ? 1 : -1))
 
 const onExportClick = (row: MyGoodProfit) => {
   const columns = {
-    CreatedAt: 'Date',
-    Units: 'Mining Unit Amount',
-    RewardAmount: 'Mining Rewards',
-    RewardAmountPerUnit: 'Mining Rewards per 1 Unit'
+    CreatedAt: '日付 / Date',
+    Units: '保有口数 / Mining Unit Amount',
+    RewardAmount: `マイニング報酬 (${row.CoinUnit}) / Mining Rewards (${row.CoinUnit})`,
+    TechServiceFee: `技術サービス料20% (${row.CoinUnit}) / Tech Service Fee 20% (${row.CoinUnit})`,
+    NetRewards: `純マイニング報酬 (${row.CoinUnit}) / Net Rewards (${row.CoinUnit})`,
+    RewardAmountPerUnit: `1口あたりのマイニング報酬 (${row.CoinUnit}) / Mining Rewards per 1 Unit (${row.CoinUnit})`,
+    CumulativeTotal: `累計 (${row.CoinUnit}) / Cumulative Total (${row.CoinUnit})`
   } as Record<string, string>
-  if (row.GoodID === 'de420061-e878-4a8b-986a-805cadd59233') {
-    columns.ProverIncentive = 'Prover Incentive'
-  }
   const output = stringify(exportMiningRewards.value, {
     header: true,
     columns: columns
