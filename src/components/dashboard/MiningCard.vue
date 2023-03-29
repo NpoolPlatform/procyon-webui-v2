@@ -10,35 +10,28 @@
     </div>
     <div class='top-line-summary'>
       <div class='top-line-item'>
-        <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.TotalInComing }}</span>
-        <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
+        <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.TotalInComing }} {{ goodProfit?.CoinUnit }}</span>
+        <span class='sub-value'> ({{ goodProfit.TotalUSDInComing }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
-        <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}: </span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }}</span>
-        <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
+        <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }} {{ goodProfit?.CoinUnit }}</span>
+        <span class='sub-value'> ({{ goodProfit.Last24HoursUSDInComing }} {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
-        <span class='label'>{{ $t('MSG_CAPACITY') }}: </span>
+        <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
         <span class='value'>{{ goodProfit?.Units }}</span>
-        <span class='sub-value'>{{ goodProfit ? $t(goodProfit?.GoodUnit) : '' }}</span>
+        <span class='sub-value'> {{ goodProfit ? $t(goodProfit?.GoodUnit) : '' }}</span>
       </div>
     </div>
     <q-slide-transition>
       <div class='detailed-summary' v-show='!short'>
-        <!-- <div class='line'>
+        <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
           <span class='value'>
             {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last30DaysInComing / 30 }}
             <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
-          </span>
-        </div> -->
-        <div class='line'>
-          <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
-          <span class='value'>
-            {{ goodProfit?.GoodServicePeriodDays }}
-            <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
         <div class='line'>
@@ -48,13 +41,20 @@
             <span class='unit'>{{ goodProfit?.CoinUnit }} (20%)</span>
           </span>
         </div>
-        <!-- <div class='line'>
+        <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
           <span class='value'>
             {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last30DaysInComing / 30 * 0.8 }}
             <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
           </span>
-        </div> -->
+        </div>
+        <div class='line'>
+          <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
+          <span class='value'>
+            {{ goodProfit?.GoodServicePeriodDays }}
+            <span class='unit'>{{ $t('MSG_DAYS') }}</span>
+          </span>
+        </div>
         <!-- <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
           <span class='value'>
@@ -81,11 +81,7 @@
       <button class='alt' @click='onExportClick(goodProfit)' :disabled='exportMiningRewards?.length === 0'>
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
-      <button
-        :class='["alt", getStatus(target as AppGood) ? "in-active" : ""]'
-        :disabled='getStatus(target as AppGood)'
-        @click='onPurchaseClick(target as AppGood)'
-      >
+      <button @click='onPurchaseClick' :disabled='good.canBuy(goodProfit.GoodID, goodProfit.CoinTypeID)'>
         {{ $t('MSG_PURCHASE_CAPACITY') }}
       </button>
     </div>
@@ -94,7 +90,7 @@
 
 <script setup lang='ts'>
 import saveAs from 'file-saver'
-import { useAdminAppGoodStore, useFrontendDetailStore, formatTime, AppGood } from 'npool-cli-v4'
+import { useAdminAppCoinStore, useAdminAppGoodStore, PriceCoinName, useFrontendDetailStore, formatTime } from 'npool-cli-v4'
 import { MyGoodProfit } from 'src/localstore/ledger/types'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -120,7 +116,22 @@ const target = computed(() => good.getGoodByID(goodProfit.value?.GoodID))
 const detail = useFrontendDetailStore()
 const miningDetails = computed(() => detail.MiningRewards.MiningRewards.filter((el) => el.GoodID === goodProfit?.value?.GoodID))
 
-const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
+const coin = useAdminAppCoinStore()
+const productInfo = computed(() => coin.getCoinByID(goodProfit.value?.CoinTypeID))
+const productPage = computed(() => productInfo.value?.ProductPage)
+
+const router = useRouter()
+const onPurchaseClick = () => {
+  let target = '/#'
+  if (productPage.value) {
+    target = productPage.value
+  }
+  void router.push({ path: target })
+}
+
+const onExpandClick = () => {
+  short.value = !short.value
+}
 
 interface ExportMiningReward {
   CreatedAt: string;
@@ -160,32 +171,4 @@ const onExportClick = (row: MyGoodProfit) => {
   const filename = name + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)
 }
-const router = useRouter()
-const onPurchaseClick = (_good: AppGood) => {
-  if (_good.ProductPage?.length === 0 || !_good.ProductPage) {
-    void router.push({
-      path: '/product/aleo',
-      query: {
-        goodId: _good.GoodID
-      }
-    })
-    return
-  }
-
-  void router.push({
-    path: _good?.ProductPage,
-    query: {
-      goodId: _good.GoodID
-    }
-  })
-}
-
-const onExpandClick = () => {
-  short.value = !short.value
-}
-
 </script>
-<style lang='sass' scoped>
-  .top-line-item .value
-    padding-right: 5px
-</style>
