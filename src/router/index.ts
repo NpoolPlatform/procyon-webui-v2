@@ -9,6 +9,7 @@ import routes from './routes'
 import { loginInterceptor } from 'npool-cli-v4/utils'
 import { useSettingStore } from 'src/localstore'
 import { BaseMenu } from 'src/menus/menus'
+import { useLocalAppStore } from 'src/localstore/app'
 
 /*
  * If not building with SSR mode, you can
@@ -20,6 +21,10 @@ import { BaseMenu } from 'src/menus/menus'
  */
 
 // TODO here can invoke global store
+
+// const app = useLocalAppStore()
+// console.log('app: ', app)
+
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
@@ -54,12 +59,24 @@ export default route(function (/* { store, ssrContext } */) {
     setting.ShowMainHeader = to.meta.ShowMainHeader ? to.meta.ShowMainHeader : false
     setting.ShowFooterTop = to.meta.ShowMainHeader ? to.meta.ShowMainHeader : false
 
-    /*
-    if (!to.path.startsWith('/testing') && to.path !== '/') {
-      next({ path: '/', replace: true })
-      return
+    const app = useLocalAppStore()
+    console.log('app: ', app.App)
+
+    // const constRoutes = routes
+
+    if (!app.App?.Maintaining) {
+      router.addRoute({
+        path: '/',
+        component: () => import('pages/Maintenance.vue')
+      })
     }
-    */
+
+    if (!app.App?.Maintaining) {
+      if (!to.path.startsWith('/testing') && to.path !== '/') {
+        next({ path: '/', replace: true })
+        return
+      }
+    }
 
     BaseMenu.children.forEach((menu) => {
       if (to.path.includes(menu.target)) {

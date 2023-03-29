@@ -3,6 +3,7 @@ import { AppID } from 'src/const/const'
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { AppGood, NotifyType, useAdminAppGoodStore, useFrontendAppStore } from 'npool-cli-v4'
+import { useLocalAppStore } from 'src/localstore/app'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -36,6 +37,7 @@ const getAppGoods = (offset: number, limit: number) => {
   })
 }
 
+const app = useLocalAppStore()
 const getApplication = () => {
   application.getApp({
     AppID: AppID,
@@ -47,7 +49,7 @@ const getApplication = () => {
       }
     }
   }, () => {
-    // TODO
+    app.setApp(application.App)
   })
 }
 </script>
