@@ -8,6 +8,7 @@
           <h3>Navigation</h3>
 
           <ul class='faq-nav-links'>
+            <li><a @click='scrollTo("How can I to register a new account with Procyon.vip?")'>How can I to register a new account with Procyon.vip?</a></li>
             <li><a @click='scrollTo("Does Procyon have a mobile app?")'>Does Procyon have a mobile app?</a></li>
             <li><a @click='scrollTo("About Procyon Blog")'>About Procyon Blog</a></li>
           </ul>
@@ -16,6 +17,14 @@
         </div>
 
         <div class='faq-content-main'>
+          <h3 id='How can I to register a new account with Procyon.vip?'>
+            How can I to register a new account with Procyon.vip?
+          </h3>
+
+          <p>Please receive your account registration link from the person who referred you to Procyon. If your referral does not have a registration link, please contact our Customer Support team for assistance.</p>
+
+          <p>Customer Support: <a href='mailto:support@procyon.vip'>support@procyon.vip</a></p>
+
           <h3 id='Does Procyon have a mobile app?'>
             Does Procyon have a mobile app?
           </h3>

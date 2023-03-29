@@ -15,6 +15,16 @@
             <li><a @click='scrollTo("When is the deadline to purchase Aleo Mining?")'>When is the deadline to purchase Aleo Mining?</a></li>
             <li><a @click='scrollTo("Is the mainnet launch date confirmed?")'>Is the mainnet launch date confirmed?</a></li>
             <li><a @click='scrollTo("Why is there an extra 10% fee added when I purchase Aleo Mining with BTC?")'>Why is there an extra 10% fee added when I purchase Aleo Mining with BTC?</a></li>
+            <li><a @click='scrollTo("What is the Aleo Prover Incentive Program? ")'>What is the Aleo Prover Incentive Program? </a></li>
+            <li><a @click='scrollTo("How to join the Aleo Prover Incentive Program? ")'>How to join the Aleo Prover Incentive Program? </a></li>
+            <li><a @click='scrollTo("How many testnet credits can I receive from the Aleo Prover Incentive Program? ")'>How many testnet credits can I receive from the Aleo Prover Incentive Program? </a></li>
+            <li><a @click='scrollTo("How much hash power does one unit of Aleo First Batch Mining provide?")'>How much hash power does one unit of Aleo First Batch Mining provide?</a></li>
+            <li><a @click='scrollTo("Can I see my mining rewards on Procyon.vip starting the day after mining starts?")'>Can I see my mining rewards on Procyon.vip starting the day after mining starts?</a></li>
+            <li><a @click='scrollTo("Will the mining machine stop functioning due to power outages or other problems?")'>Will the mining machine stop functioning due to power outages or other problems?</a></li>
+            <li><a @click='scrollTo("Can I see my testnet mining rewards on Procyon.vip?")'>Can I see my testnet mining rewards on Procyon.vip?</a></li>
+            <li><a @click='scrollTo("How much test-net reward can I earn?")'>How much test-net reward can I earn?</a></li>
+            <li><a @click='scrollTo("When can I withdraw my mining rewards?")'>When can I withdraw my mining rewards?</a></li>
+            <li><a @click='scrollTo("Are there withdrawal limits for mining rewards and balances?")'>Are there withdrawal limits for mining rewards and balances?</a></li>
           </ul>
 
           <div class='hr' />
@@ -27,7 +37,7 @@
 
           <h4>Product Details</h4>
 
-          <p><strong>Start of Mining: </strong> At the launch of the mainnet (scheduled at Q1 2023)</p>
+          <p><strong>Start of Mining: </strong>Officially decided and announced by Aleo Team. For the latest updates, please join our Sunday Weekly Seminars.</p>
 
           <p><strong>Mining Period: </strong>365 days (after mainnet launch)</p>
 
@@ -106,7 +116,7 @@
             When is the deadline to purchase Aleo Mining?
           </h3>
 
-          <p>As of 2022-09-20, the Aleo First Batch Mining purchase deadline is 2022-11-20.</p>
+          <p>The Aleo First Batch Mining will close sales before mainnet launch. For latest updates, please join our Sunday Weekly Seminars.</p>
 
           <h3 id='Is the mainnet launch date confirmed?'>
             Is the mainnet launch date confirmed?
@@ -125,6 +135,82 @@
           <p>Since we pay for all hardware and staff costs in USD, we set the price of our mining products in a stable coin (USDT).</p>
 
           <p>If payment are received in BTC, the BTC price may experience large fluctuations before it can be converted to USDT, which may results in singnificant losses. Therefore, we accept payments in BTC for our clients' convenience but, <strong>we encourage all buyers to make purchases with USDT</strong>.</p>
+
+          <h3 id='' />
+
+          <p>As of December 2nd, 2022, Aleo started the “Prover Incentives Program” for its testnet participants. This is significant news for our first-batch mining investors, as it means the Aleo credits Hpool mines during this phase of the testnet will become redeemable for Aleo tokens at a 5 to 1 ratio (20%) upon mainnet launch. In other words, your Aleo purchase is already generating ROI for you even before mainnet launch. This is official news from the Aleo team.</p>
+
+          <h4 id='What is the Aleo Prover Incentive Program? '>
+            What you need to know about the Aleo incentives program:
+          </h4>
+
+          <ul>
+            <li>Aleo has set aside 25 million Aleo credits for the Testnet 3 incentives program. The initial part of the Aleo Incentives program will be focused on Provers — that’s our miners! "Prover Incentives" account for 7.5 million credits, or 30% of the 25 million total Aleo credits.</li>
+            <li>The Prover Incentives period will last until January 26th, 2023 at 23:59 UTC, or until all 7.5 million credits have been mined — whichever comes first.</li>
+            <li>And of course, at mainnet launch, Aleo credits will be redeemable at a rate of 5 to 1 (20%)</li>
+          </ul>
+
+          <h3 id='How to join the Aleo Prover Incentive Program? '>
+            How to join the Aleo Prover Incentive Program?
+          </h3>
+
+          <p>If you purchase or have purchased our Procyon Aleo first-batch mining product before January 26th, 2023 at 23:59 UTC, or or until all 7.5 million credits have been mined, you will receive additional ROI for your investment.</p>
+
+          <h3 id='How many testnet credits can I receive from the Aleo Prover Incentive Program? '>
+            How many testnet credits can I receive from the Aleo Prover Incentive Program?
+          </h3>
+
+          <p>Because 20% of the Aleo credits generated during testnet will be redeemable, you will receive extra mining rewards on top of our simulated ROI for your investment.</p>
+
+          <h3 id='How much hash power does one unit of Aleo First Batch Mining provide?'>
+            How much hash power does one unit of Aleo First Batch Mining provide?
+          </h3>
+
+          <p>The specific hash power per unit will not be known until the main net starts. This is due to fluctuations in hash power due to machine optimization and other factors.</p>
+
+          <p>Also, because Aleo uses GPU mining, unlike hard disk mining, hash power is not fixed even after the main network is up and running, as is the case with the above hardware. However, our mining pool partner Hpool is superior to other mining pools based on its past performance, so we expect to achieve high figures.</p>
+
+          <p>Hpool is in the top 5 in Aleo's testnet ranking, where many well-known mining pools are competing. (as of January 26, 2023).</p>
+
+          <h3 id='Can I see my mining rewards on Procyon.vip starting the day after mining starts?'>
+            Can I see my mining rewards on Procyon.vip starting the day after mining starts?
+          </h3>
+
+          <p>Yes, you can check it on the dashboard. <a href='/#/dashboard'>Click here to access your dashboard</a>.</p>
+
+          <h3 id='Will the mining machine stop functioning due to power outages or other problems?'>
+            Will the mining machine stop functioning due to power outages or other problems?
+          </h3>
+
+          <p>We checked with our partner, Hpool, and they told us that there is a backup in place and that the system will not stop in the event of a power outage. We have redundancy in place for other risks as well.</p>
+
+          <p>We will also notify you in the event of an actual power outage.</p>
+
+          <h3 id='Can I see my testnet mining rewards on Procyon.vip?'>
+            Can I see my testnet mining rewards on Procyon.vip?
+          </h3>
+
+          <p>Yes, once the testnet incentive program is over and the testnet rewards are ready for calculation,  it can be viewed on the Procyon.vip Mining Dashboard.</p>
+
+          <p>For testnet rewards that have not yet completed the testnet incentive program, we will update all users once Aleo officials announces further details.</p>
+
+          <h3 id='How much test-net reward can I earn?'>
+            How much test-net reward can I earn?
+          </h3>
+
+          <p>The number of test net rewards will be calculated once the 'Incentive Program' is completed, as announced by Aleo officials. We will inform you of the results when they are available.</p>
+
+          <h3 id='When can I withdraw my mining rewards?'>
+            When can I withdraw my mining rewards?
+          </h3>
+
+          <p>Withdrawals can be made at any time once the mining rewards have been deposited into your account and Aleo is listed on an external exchange.</p>
+
+          <h3 id='Are there withdrawal limits for mining rewards and balances?'>
+            Are there withdrawal limits for mining rewards and balances?
+          </h3>
+
+          <p>There is a withdrawal limit. Please check the pop-up that will be displayed when you make a withdrawal.</p>
 
           <div class='hr' />
         </div>

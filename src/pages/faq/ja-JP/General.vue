@@ -8,6 +8,7 @@
           <h3>目次</h3>
 
           <ul class='faq-nav-links'>
+            <li><a @click='scrollTo("Procyon.vipへ新規登録をしたいのですが、どうすればいいですか？")'>Procyon.vipへ新規登録をしたいのですが、どうすればいいですか？</a></li>
             <li><a @click='scrollTo("Procyonはスマホアプリもありますか？")'>Procyonはスマホアプリもありますか？</a></li>
             <li><a @click='scrollTo("ブログの確認方法")'>ブログの確認方法</a></li>
           </ul>
@@ -16,6 +17,16 @@
         </div>
 
         <div class='faq-content-main'>
+          <h3 id='Procyon.vipへ新規登録をしたいのですが、どうすればいいですか？'>
+            Procyon.vipへ新規登録をしたいのですが、どうすればいいですか？
+          </h3>
+
+          <p>Procyonをお知りになったきっかけの紹介者様からアカウント登録リンクのお受け取りください。</p>
+
+          <p>紹介者様が登録リンクをお持ちでない場合、カスタマーサポートまでお問い合わせのほどお願い申し上げます。</p>
+
+          <p>カスタマーサポート:<a href='mailto:support@procyon.vip'>support@procyon.vip</a></p>
+
           <h3 id='Procyonはスマホアプリもありますか？'>
             Procyonはスマホアプリもありますか？
           </h3>
