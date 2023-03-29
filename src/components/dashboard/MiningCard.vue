@@ -175,19 +175,19 @@ const exportMiningRewards = computed(() => {
 
   keys.sort().forEach((key) => {
     let units = 0
-    let rewardAmount = 0
+    let netRewardAmount = 0
     rowMap.get(key)?.forEach((el) => {
       units += Number(el.Units)
-      rewardAmount += Number(el.RewardAmount)
-      cumulativeTotal += Number(el.RewardAmount)
+      netRewardAmount += Number(el.RewardAmount)
+      cumulativeTotal += Number(el.RewardAmount) / 0.8
     })
     rows.push({
       CreatedAt: new Date(Number(rowMap.get(key)?.[0]?.CreatedAt) * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
       Units: `${units}`,
-      RewardAmount: `${rewardAmount}`,
-      TechServiceFee: rewardAmount * 0.2,
-      NetRewards: rewardAmount - rewardAmount * 0.2,
-      RewardAmountPerUnit: (rewardAmount - rewardAmount * 0.2) / units,
+      RewardAmount: `${netRewardAmount / 0.8}`,
+      TechServiceFee: (netRewardAmount / 0.8) * 0.2,
+      NetRewards: netRewardAmount,
+      RewardAmountPerUnit: netRewardAmount / units,
       CumulativeTotal: cumulativeTotal
     })
   })
