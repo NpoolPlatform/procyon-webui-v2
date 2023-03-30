@@ -34,6 +34,8 @@ const orders = computed(() => order.orders)
 const detail = useFrontendDetailStore()
 
 const good = useAdminAppGoodStore()
+const techServiceFee = computed(() => (goodID: string) => Number(good.getGoodByID(goodID)?.TechnicalFeeRatio) / 100)
+const deservedRatio = computed(() => 1 - Number(techServiceFee.value))
 
 const table = computed(() => [
   {
@@ -100,7 +102,7 @@ const exportOrders = computed(() => Array.from(orders.value).map((el) => {
     PaymentCurrency: el.PaymentCoinUnit,
     TotalCost: (Number(el.PaymentAmount) + Number(el.PayWithBalanceAmount)).toString(),
     MiningPeriod: el.GoodServicePeriodDays,
-    CumulativeProfit: detail.getMiningRewardsByOrderID(el.ID) / 0.8,
+    CumulativeProfit: detail.getMiningRewardsByOrderID(el.ID) / deservedRatio.value,
     ProfitCurrency: good.getGoodByID(el.GoodID)?.CoinUnit,
     OrderStatus: el.State
   } as ExportOrder

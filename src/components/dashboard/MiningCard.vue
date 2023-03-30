@@ -117,6 +117,8 @@ const short = ref(true)
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodProfit.value?.GoodID))
 const coinUnit = computed(() => good.getGoodByID(goodProfit.value?.GoodID)?.CoinUnit as string)
+const techServiceFee = computed(() => Number(target?.value?.TechnicalFeeRatio) / 100)
+const deservedRatio = computed(() => 1 - techServiceFee.value)
 
 const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
 
@@ -179,13 +181,13 @@ const exportMiningRewards = computed(() => {
     rowMap.get(key)?.forEach((el) => {
       units += Number(el.Units)
       netRewardAmount += Number(el.RewardAmount)
-      cumulativeTotal += Number(el.RewardAmount) / 0.8
+      cumulativeTotal += Number(el.RewardAmount) / deservedRatio.value
     })
     rows.push({
       CreatedAt: new Date(Number(rowMap.get(key)?.[0]?.CreatedAt) * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
       Units: `${units}`,
-      RewardAmount: `${netRewardAmount / 0.8}`,
-      TechServiceFee: (netRewardAmount / 0.8) * 0.2,
+      RewardAmount: `${netRewardAmount / deservedRatio.value}`,
+      TechServiceFee: (netRewardAmount / deservedRatio.value) * techServiceFee.value,
       NetRewards: netRewardAmount,
       RewardAmountPerUnit: netRewardAmount / units,
       CumulativeTotal: cumulativeTotal
