@@ -19,7 +19,7 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, PriceCoinName } from 'npool-cli-v4'
+import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, useFrontendDetailStore } from 'npool-cli-v4'
 import { stringify } from 'csv-stringify/sync'
 import saveAs from 'file-saver'
 
@@ -30,6 +30,8 @@ const { t } = useI18n({ useScope: 'global' })
 
 const order = useFrontendOrderStore()
 const orders = computed(() => order.orders)
+
+const detail = useFrontendDetailStore()
 
 const good = useAdminAppGoodStore()
 
@@ -79,11 +81,11 @@ interface ExportOrder {
   PurchaseAmount: string;
   UnitType: string;
   Price: number;
-  Currency: string;
+  PaymentCurrency: string;
   TotalCost: string;
   MiningPeriod: number;
-  ProverIncentive?: number;
-  VerifierIncentive?: string;
+  CumulativeProfit: number;
+  ProfitCurrency: string;
   OrderStatus: OrderState;
 }
 
@@ -93,13 +95,13 @@ const exportOrders = computed(() => Array.from(orders.value).map((el) => {
     ProductType: good.getGoodByID(el.GoodID)?.GoodType,
     ProductName: good.getGoodByID(el?.GoodID)?.DisplayNames?.[3] ? t(good.getGoodByID(el?.GoodID)?.DisplayNames?.[3] as string) : el.GoodName,
     PurchaseAmount: el.Units,
-    UnitType: el.GoodUnit,
+    UnitType: t(el.GoodUnit),
     Price: parseFloat(good.getGoodByID(el.GoodID)?.Price as string),
-    Currency: PriceCoinName,
-    TotalCost: (Number(el.PaymentAmount) + Number(el.PayWithBalanceAmount)).toString() + '' + el.PaymentCoinUnit,
+    PaymentCurrency: el.PaymentCoinUnit,
+    TotalCost: (Number(el.PaymentAmount) + Number(el.PayWithBalanceAmount)).toString(),
     MiningPeriod: el.GoodServicePeriodDays,
-    // ProverIncentive: Number(good.getGoodByID(el.GoodID)?.DailyRewardAmount) * Number(el.Units),
-    // VerifierIncentive: '',
+    CumulativeProfit: detail.getMiningRewardsByOrderID(el.ID) / 0.8,
+    ProfitCurrency: good.getGoodByID(el.GoodID)?.CoinUnit,
     OrderStatus: el.State
   } as ExportOrder
 }))
@@ -108,22 +110,23 @@ const onExportClick = () => {
   const output = stringify(exportOrders.value, {
     header: true,
     columns: {
-      CreatedAt: 'Order Date',
-      ProductType: 'Product Type',
-      ProductName: 'Product Name',
-      PurchaseAmount: 'Purchase Amount',
-      UnitType: 'Unit Type',
-      Price: 'Price',
-      Currency: 'Currency',
-      TotalCost: 'Total Cost',
-      MiningPeriod: 'Mining Period',
-      // ProverIncentive: 'Prover Incentive',
-      OrderStatus: 'Order Status'
+      CreatedAt: `${t('MSG_DATE_IN_TEMPLATE')}`,
+      ProductType: `${t('MSG_PRODUCT_TYPE_IN_TEMPLATE')}`,
+      ProductName: `${t('MSG_PRODUCT_NAME_IN_TEMPLATE')}`,
+      PurchaseAmount: `${t('MSG_PURCHASE_AMOUNT_IN_TEMPLATE')}`,
+      UnitType: `${t('MSG_UNIT_TYPE_IN_TEMPLATE')}`,
+      Price: `${t('MSG_PRICE_IN_TEMPLATE')}`,
+      PaymentCurrency: `${t('MSG_PAYMENT_CURRENCY_IN_TEMPLATE')}`,
+      TotalCost: `${t('MSG_TOTAL_COST_IN_TEMPLATE')}`,
+      MiningPeriod: `${t('MSG_MINING_PERIOD_IN_TEMPLATE')}`,
+      CumulativeProfit: `${t('MSG_CUMULATIVE_PROFIT_IN_TEMPLATE')}`,
+      ProfitCurrency: `${t('MSG_PROFIT_CURRENCY_IN_TEMPLATE')}`,
+      OrderStatus: `${t('MSG_ORDER_STATUS_IN_TEMPLATE')}`
     }
   })
 
   const blob = new Blob([output], { type: 'text/plain;charset=utf-8' })
-  const filename = 'orders-' + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
+  const filename = 'orders-' + formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)
 }
 
