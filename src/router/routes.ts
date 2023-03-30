@@ -10,12 +10,10 @@ declare module 'vue-router' {
 const routes: RouteRecordRaw[] = [
   {
     path: '/maintenance',
-    name: 'maintenance',
     component: () => import('pages/Maintenance.vue')
   },
   {
     path: '/',
-    name: 'index',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
