@@ -196,13 +196,13 @@ const exportMiningRewards = computed(() => {
 
 const onExportClick = () => {
   const columns = {
-    CreatedAt: '日付 / Date',
-    Units: '保有口数 / Mining Unit Amount',
-    RewardAmount: `マイニング報酬 (${coinUnit.value}) / Mining Rewards (${coinUnit.value})`,
-    TechServiceFee: `技術サービス料20% (${coinUnit.value}) / Tech Service Fee 20% (${coinUnit.value})`,
-    NetRewards: `純マイニング報酬 (${coinUnit.value}) / Net Rewards (${coinUnit.value})`,
-    RewardAmountPerUnit: `1口あたりのマイニング報酬 (${coinUnit.value}) / Mining Rewards per 1 Unit (${coinUnit.value})`,
-    CumulativeTotal: `累計 (${coinUnit.value}) / Cumulative Total (${coinUnit.value})`
+    CreatedAt: `${t('MSG_DATE_IN_TEMPLATE')}`,
+    Units: `${t('MSG_UNITS_IN_TEMPLATE')}`,
+    RewardAmount: `${t('MSG_REWARDS_IN_TEMPLATE')} (${coinUnit.value})`,
+    TechServiceFee: `${t('MSG_TECH_SERVICE_FEE_IN_TEMPLATE')} (${coinUnit.value})`,
+    NetRewards: `${t('NSG_NET_REWARDS_IN_TEMPLATE')} (${coinUnit.value})`,
+    RewardAmountPerUnit: `${t('MSG_REWARDS_AMOUNT_PER_UNIT_IN_TEMPLATE')} (${coinUnit.value})`,
+    CumulativeTotal: `${t('MSG_CUMULATIVE_TOTAL_IN_TEMPLATE')} (${coinUnit.value})`
   } as Record<string, string>
   const output = stringify(exportMiningRewards.value, {
     header: true,
