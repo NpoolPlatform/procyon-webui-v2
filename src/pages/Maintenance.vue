@@ -1,6 +1,6 @@
 <template>
   <header class='desktop1'>
-    <img :src='lightLogo' class='attachment-large size-large logo cursor-pointer'>
+    <img :src='lightLogo' class='attachment-large size-large logo cursor-pointer' @click='onLogoClick'>
     <div class='nav'>
       <ul class='language-picker'>
         <li :class='[ locale === "ja-JP" ? "selected" : "" ]'>
@@ -24,9 +24,14 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, watch, ref, Component, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { NotifyType, useFrontendAppStore } from 'npool-cli-v4'
 import lightLogo from 'src/assets/procyon-light.svg'
+import { useLocalAppStore } from 'src/localstore/app'
+import { AppID } from 'src/const/const'
+import { useRouter } from 'vue-router'
 
-const { locale } = useI18n({ useScope: 'global' })
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t, locale } = useI18n({ useScope: 'global' })
 const Maintenance = ref<Component>()
 
 watch(locale, () => {
@@ -39,6 +44,32 @@ onMounted(() => {
   Maintenance.value = defineAsyncComponent(() => import(`src/pages/maintenance/${locale.value}/Maintenance.vue`))
 })
 
+const app = useLocalAppStore()
+const application = useFrontendAppStore()
+
+const getApplication = () => {
+  application.getApp({
+    AppID: AppID,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_APP_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    app.setApp(application.App)
+  })
+}
+
+onMounted(() => {
+  getApplication()
+})
+
+const router = useRouter()
+const onLogoClick = () => {
+  void router.push({ path: '/' })
+}
 </script>
 
 <style lang='sass' scoped>
