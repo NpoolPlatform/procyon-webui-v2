@@ -130,7 +130,8 @@ import {
   useFrontendUserStore,
   useLocalUserStore,
   useFrontendNotifStore,
-  useLocaleStore
+  useLocaleStore,
+  useFrontendAppStore
 } from 'npool-cli-v4'
 import { getNotifs, onMarkAll } from 'src/api/notif'
 import { useI18n } from 'vue-i18n'
@@ -233,6 +234,18 @@ onMounted(() => {
   }
 })
 
+const app = useFrontendAppStore()
+watch(() => app.App?.Maintaining, () => {
+  if (app.App?.Maintaining) {
+    void router.push({ path: '/maintenance' })
+  }
+})
+
+onMounted(() => {
+  if (app.App?.Maintaining) {
+    void router.push({ path: '/maintenance' })
+  }
+})
 </script>
 
 <style lang='sass' scoped>
