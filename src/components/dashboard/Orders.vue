@@ -110,7 +110,7 @@ const onExportClick = () => {
   const output = stringify(exportOrders.value, {
     header: true,
     columns: {
-      CreatedAt: `${t('MSG_DATE_IN_TEMPLATE')}`,
+      CreatedAt: `${t('MSG_ORDER_DATE_IN_TEMPLATE')}`,
       ProductType: `${t('MSG_PRODUCT_TYPE_IN_TEMPLATE')}`,
       ProductName: `${t('MSG_PRODUCT_NAME_IN_TEMPLATE')}`,
       PurchaseAmount: `${t('MSG_PURCHASE_AMOUNT_IN_TEMPLATE')}`,
