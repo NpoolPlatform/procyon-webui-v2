@@ -103,8 +103,8 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { defineAsyncComponent, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
@@ -144,13 +144,6 @@ const currency = useAdminCurrencyStore()
 
 const description = useAdminCoinDescriptionStore()
 
-const router = useRouter()
-watch(goodID, () => {
-  if (!goodID.value || goodID.value?.length === 0) {
-    void router.push({ path: '/' })
-  }
-})
-
 onMounted(() => {
   console.log('CoinUnit: ', coinUnit)
 
@@ -177,10 +170,6 @@ onMounted(() => {
   if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
     currency.$reset()
     getCurrencies(0, 10)
-  }
-
-  if (!goodID.value || goodID.value?.length === 0) {
-    void router.push({ path: '/' })
   }
 })
 
