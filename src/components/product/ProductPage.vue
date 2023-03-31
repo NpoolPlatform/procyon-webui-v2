@@ -273,10 +273,15 @@ watch(target, () => {
     goIndexPage()
     return
   }
+
   showMe.value = true
 })
 
 onMounted(() => {
+  if (coin.AppCoins.AppCoins.length === 0) {
+    getCoins(0, 100)
+  }
+
   if (target.value && !target.value.EnableProductPage) {
     goIndexPage()
     return
@@ -297,10 +302,6 @@ onMounted(() => {
       remainDays.value = 99
     }
   }, 1000)
-
-  if (coin.AppCoins.AppCoins.length === 0) {
-    getCoins(0, 100)
-  }
 })
 
 onUnmounted(() => {
