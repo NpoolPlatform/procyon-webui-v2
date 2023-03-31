@@ -81,8 +81,8 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { defineAsyncComponent, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { CoinDescriptionUsedFor, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore } from 'npool-cli-v4'
 import { getDescriptions } from 'src/api/chain'
@@ -114,15 +114,10 @@ const coinDescription = computed(() => description.getCoinDescriptionByCoinUsedF
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 
-const router = useRouter()
-watch(goodID, () => {
-  if (!goodID.value || goodID.value?.length === 0) {
-    void router.push({ path: '/' })
-  }
-})
-
 onMounted(() => {
-  if (!good.value) {
+  console.log('CoinUnit: ', coinUnit)
+
+  if (goodID.value?.length > 0) {
     appGood.getAppGood({
       GoodID: goodID.value,
       Message: {
@@ -134,16 +129,12 @@ onMounted(() => {
         }
       }
     }, () => {
-      // TODO
+    // TODO
     })
   }
 
   if (description.CoinDescriptions.CoinDescriptions.length === 0) {
     getDescriptions(0, 100)
-  }
-
-  if (!goodID.value || goodID.value?.length === 0) {
-    void router.push({ path: '/' })
   }
 })
 
