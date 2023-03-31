@@ -103,14 +103,14 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { defineAsyncComponent, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
-import { AppGood, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
+import { AppGood, InvalidID, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
 import { getCurrencies, getDescriptions } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -132,7 +132,16 @@ const coin = useAdminAppCoinStore()
 
 // Use CoinUnit to find GoodID from AppDefaultGood
 const coinUnit = 'IRON'
-const defaultGoodID = computed(() => coin.getGoodIDByCoinUnit(coinUnit))
+const defaultGoodID = computed(() => {
+  if (coin.AppCoins.AppCoins?.length === 0) {
+    return `${InvalidID}_`
+  }
+  const goodID = coin.getGoodIDByCoinUnit(coinUnit)
+  if (!goodID) {
+    return InvalidID
+  }
+  return goodID
+})
 
 const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : defaultGoodID.value)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
@@ -144,24 +153,16 @@ const currency = useAdminCurrencyStore()
 
 const description = useAdminCoinDescriptionStore()
 
+const router = useRouter()
+
+watch(defaultGoodID, () => {
+  if (defaultGoodID.value === InvalidID) {
+    void router.push({ path: '/' })
+  }
+})
+
 onMounted(() => {
   console.log('CoinUnit: ', coinUnit)
-
-  if (goodID.value?.length > 0) {
-    good.getAppGood({
-      GoodID: goodID.value,
-      Message: {
-        Error: {
-          Title: t('MSG_GET_GOOD'),
-          Message: t('MSG_GET_GOOD_FAIL'),
-          Popup: true,
-          Type: NotifyType.Error
-        }
-      }
-    }, () => {
-    // TODO
-    })
-  }
 
   if (description.CoinDescriptions.CoinDescriptions.length === 0) {
     getDescriptions(0, 100)
@@ -171,6 +172,29 @@ onMounted(() => {
     currency.$reset()
     getCurrencies(0, 10)
   }
+
+  if (defaultGoodID.value === InvalidID) {
+    void router.push({ path: '/' })
+    return
+  }
+
+  if (defaultGoodID.value === `${InvalidID}_`) {
+    return
+  }
+
+  good.getAppGood({
+    GoodID: goodID.value,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GOOD'),
+        Message: t('MSG_GET_GOOD_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
 })
 
 </script>

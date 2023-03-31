@@ -286,9 +286,6 @@ watch(target, () => {
     goIndexPage()
     return
   }
-  if (!target.value?.GoodID) {
-    void router.push({ path: '/' })
-  }
   showMe.value = true
 })
 
@@ -300,10 +297,6 @@ onMounted(() => {
   if (target.value && !target.value.EnableProductPage) {
     goIndexPage()
     return
-  }
-
-  if (target.value && !target.value?.GoodID) {
-    void router.push({ path: '/' })
   }
 
   if (target.value && target.value.EnableProductPage) {
