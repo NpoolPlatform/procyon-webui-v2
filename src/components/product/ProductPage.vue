@@ -290,7 +290,7 @@ onMounted(() => {
     return
   }
 
-  if (!target.value || (target.value && !target.value?.GoodID)) {
+  if (target.value && !target.value?.GoodID) {
     void router.push({ path: '/' })
   }
 

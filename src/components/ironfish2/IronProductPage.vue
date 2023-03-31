@@ -308,6 +308,10 @@ onMounted(() => {
     void router.push({ path: '/' })
   }
 
+  if (target.value && target.value.EnableProductPage) {
+    showMe.value = true
+  }
+
   ticker.value = window.setInterval(() => {
     const now = Math.floor(Date.now() / 1000)
     const remain = endTime.value - now >= 0 ? endTime.value - now : 0
