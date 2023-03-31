@@ -1,6 +1,6 @@
 <template>
   <ProductPage
-    :good-id='goodId'
+    :good-id='goodID'
     project-class='project-spacemesh'
     bg-img='product/spacemesh/spacemesh-banner.jpg'
     :customize-info='false'
@@ -81,8 +81,8 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { defineAsyncComponent, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { CoinDescriptionUsedFor, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore } from 'npool-cli-v4'
 import { getDescriptions } from 'src/api/chain'
@@ -101,10 +101,10 @@ const query = computed(() => route.query as unknown as Query)
 const coinUnit = 'SMH'
 const defaultGoodID = computed(() => coin.getGoodIDByCoinUnit(coinUnit))
 
-const goodId = computed(() => query.value.goodId?.length > 0 ? query.value.goodId : defaultGoodID.value)
+const goodID = computed(() => query.value.goodId?.length > 0 ? query.value.goodId : defaultGoodID.value)
 
 const appGood = useAdminAppGoodStore()
-const good = computed(() => appGood.getGoodByID(goodId.value))
+const good = computed(() => appGood.getGoodByID(goodID.value))
 
 const coin = useAdminAppCoinStore()
 const targetCoin = computed(() => coin.getCoinByID(good.value?.CoinTypeID as string))
@@ -114,10 +114,17 @@ const coinDescription = computed(() => description.getCoinDescriptionByCoinUsedF
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 
+const router = useRouter()
+watch(goodID, () => {
+  if (!goodID.value || goodID.value?.length === 0) {
+    void router.push({ path: '/' })
+  }
+})
+
 onMounted(() => {
   if (!good.value) {
     appGood.getAppGood({
-      GoodID: goodId.value,
+      GoodID: goodID.value,
       Message: {
         Error: {
           Title: t('MSG_GET_GOOD'),
@@ -133,6 +140,10 @@ onMounted(() => {
 
   if (description.CoinDescriptions.CoinDescriptions.length === 0) {
     getDescriptions(0, 100)
+  }
+
+  if (!goodID.value || goodID.value?.length === 0) {
+    void router.push({ path: '/' })
   }
 })
 
