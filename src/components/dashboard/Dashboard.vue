@@ -102,25 +102,6 @@ onMounted(() => {
   if (miningRewards.value?.length === 0) {
     getMiningRewards(0, 100)
   }
-<<<<<<< HEAD
-
-  if (miningRewards.value?.length === 0) {
-    getMiningRewards(0, 100)
-  }
-
-  if (miningRewards.value?.length === 0) {
-    getMiningRewards(0, 100)
-  }
-
-  if (miningRewards.value?.length === 0) {
-    getMiningRewards(0, 100)
-  }
-
-  if (miningRewards.value?.length === 0) {
-    getMiningRewards(0, 100)
-  }
-=======
->>>>>>> 1992348 (update template)
 })
 
 const getProfits = (offset:number, limit: number) => {
