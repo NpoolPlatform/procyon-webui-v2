@@ -245,8 +245,8 @@
       <li><strong>製品名: </strong>アイアン・フィッシュ ファーストバッチ GPUマイニング</li>
       <li><strong>価格: </strong>380USDT / 口</li>
       <li><strong>注文数制限: </strong>1ユーザー様1注文まで、1注文最大5口</li>
-      <li><strong>販売期間: </strong><span v-html='$t("MSG_IRONFISH2_SALES_PERIOD")' /></li>
-      <li><strong>マイニング報酬出金可能日: </strong><span v-html='$t("MSG_IRONFISH2_WITHDRAWAL_PERIOD")' /></li>
+      <li><strong>販売期間: </strong>{{ $t("MSG_IRONFISH2_SALES_PERIOD") }}</li>
+      <li><strong>マイニング報酬出金可能日: </strong>{{ $t("MSG_IRONFISH2_WITHDRAWAL_PERIOD") }}</li>
       <li><strong>技術サービス料: </strong>20%</li>
       <li><strong>マイニング開始時期: </strong>メインネットローンチ直後</li>
       <li><strong>マイニング期間: </strong>1年間</li>
