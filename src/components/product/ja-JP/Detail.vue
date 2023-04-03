@@ -35,8 +35,8 @@
             <td>未定</td>
           </tr>
           <tr>
-            <td>期間：<span v-html='$t("MSG_ALEO_TIME_PERIOD")' /></td>
-            <td>期間：<span v-html='$t("MSG_ALEO_GOLD_TIME_PERIOD")' /></td>
+            <td>期間：{{ $t("MSG_ALEO_TIME_PERIOD") }}</td>
+            <td>期間：{{ $t("MSG_ALEO_GOLD_TIME_PERIOD") }}</td>
           </tr>
           <tr>
             <td>1口あたりのAleoクレジット獲得枚数:<br><strong>まだ計測中、最終的な獲得クレジット数は、アカウントにてご確認ください。</strong></td>
