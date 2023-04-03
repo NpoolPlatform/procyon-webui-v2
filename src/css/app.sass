@@ -204,7 +204,7 @@ button,
 input[type="submit"]
   background: linear-gradient(to bottom right, #ff964a 0, #ce5417 100%)
   border: 0
-  border-radius: 18px
+  border-radius: 8px
   color: #e4f4f0
   cursor: pointer
   font-family: 'Barlow', sans-serif
@@ -244,6 +244,8 @@ button.in-active
 button.in-active:hover
   border-radius: 18px
 
+button.small:hover
+  border-radius: 2px
 /* HEADER & NAVIGATION */
 
 header.mobile
@@ -1389,6 +1391,8 @@ input[type="checkbox"]
 
 .q-table tbody td
   font-size: 16px
+  @media (max-width: $breakpoint-sm-max)
+    font-size: 12px
 
 .info-table td::before
   display: block
@@ -3170,6 +3174,8 @@ h3.mining-title
   display: flex
   justify-content: flex-end
   flex-wrap: wrap
+  @media (max-width: $breakpoint-sm-max)
+    margin: 24px 0
 
 .buttons button,
 .buttons button.alt
