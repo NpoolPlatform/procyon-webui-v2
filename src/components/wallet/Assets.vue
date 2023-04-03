@@ -26,11 +26,11 @@
           {{ myProps.row.TotalJPYValue?.toFixed(4) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps'>
-          <button class='small' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled'>
+          <button :class='["small", "alt", (myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled) ? "in-active" : ""]' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
-          <button class='small' @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick'>
+          <button :class='["small", "alt", (myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled) ? "in-active" : ""]' @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick'>
             {{ $t('MSG_DEPOSIT') }}
           </button>
         </q-td>

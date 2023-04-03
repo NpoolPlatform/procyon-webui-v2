@@ -37,7 +37,7 @@
             {{ formatTime(myProps.row?.CreatedAt) }}
           </q-td>
           <q-td key='ActionButtons' :props='myProps'>
-            <button class='small' @click='onRemove(myProps.row)'>
+            <button class='small alt' @click='onRemove(myProps.row)'>
               {{ $t('MSG_REMOVE') }}
             </button>
           </q-td>
@@ -194,4 +194,6 @@ const table = computed(() => [
 </script>
 
 <style lang='sass' scoped>
+.warning-text-nowrap
+  white-space: nowrap
 </style>
