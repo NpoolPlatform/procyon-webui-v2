@@ -3,7 +3,7 @@
     <h2 class='title'>
       {{ $t(label) }}
     </h2>
-    <div class='column justify-center'>
+    <div class='column justify-center row'>
       <slot name='top-right' />
     </div>
   </div>
@@ -104,7 +104,8 @@ h2
 
 .title
   min-width: 240px
-
+  @media (max-width: $breakpoint-sm-max)
+    margin: 36px 0 0 0
 .title::after
   background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%) !important
 
