@@ -19,8 +19,8 @@
             <td>ファーストバッチマイニング</td>
           </tr>
           <tr>
-            <td v-html='$t("MSG_ALEO_PURCHASED")' />
-            <td v-html='$t("MSG_ALEO_GOLD_PURCHASED")' />
+            <td v-html='$t("MSG_ALEO_PURCHASE_DURATION")' />
+            <td v-html='$t("MSG_ALEO_GOLD_PURCHASE_DURATION")' />
           </tr>
           <tr>
             <td>プルーバーテストネット報酬をもらえる<br>*750万クレジット(全体の30％)</td>
