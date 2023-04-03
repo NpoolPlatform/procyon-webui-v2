@@ -19,8 +19,8 @@
             <td>First Batch Mining</td>
           </tr>
           <tr>
-            <td v-html='$t("MSG_ALEO_PURCHASED")' />
-            <td v-html='$t("MSG_ALEO_GOLD_PURCHASED")' />
+            <td v-html='$t("MSG_ALEO_PURCHASE_DURATION")' />
+            <td v-html='$t("MSG_ALEO_GOLD_PURCHASE_DURATION")' />
             <!-- <td>Purchased <strong>before</strong> February 3, 2023</td> -->
             <!-- <td>Purchased <strong>after</strong> February 3, 2023, <strong>before</strong> March 31st, 2023</td> -->
           </tr>
