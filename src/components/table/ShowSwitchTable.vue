@@ -50,7 +50,7 @@ const rows = toRef(props, 'rows')
 const table = toRef(props, 'table')
 const customizeBody = toRef(props, 'customizeBody')
 
-const countPerPage = ref(2)
+const countPerPage = ref(5)
 const showMore = ref(false)
 
 const emit = defineEmits<{(e: 'row-click', row: never): void}>()
@@ -61,7 +61,7 @@ const onRowClick = (row: never) => {
 
 const onShowSwitchClick = () => {
   showMore.value = !showMore.value
-  countPerPage.value = showMore.value ? 10 : 2
+  countPerPage.value = showMore.value ? 10 : 5
 }
 
 </script>

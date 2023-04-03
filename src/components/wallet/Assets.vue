@@ -16,9 +16,9 @@
         <q-td key='Balance' :props='myProps'>
           {{ myProps.row.Balance?.toFixed(4) }} {{ myProps.row.CoinUnit }}
         </q-td>
-        <q-td key='Last24HoursBalance' :props='myProps'>
+        <!-- <q-td key='Last24HoursBalance' :props='myProps'>
           {{ myProps.row.Last24HoursBalance?.toFixed(4) }}{{ myProps.row.CoinUnit }}
-        </q-td>
+        </q-td> -->
         <q-td key='TotalUSDTValue' :props='myProps'>
           {{ myProps.row.TotalUSDValue?.toFixed(4) }}
         </q-td>
