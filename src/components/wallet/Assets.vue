@@ -25,7 +25,7 @@
         <q-td key='TotalJPYValue' :props='myProps'>
           {{ myProps.row.TotalJPYValue?.toFixed(4) }}
         </q-td>
-        <q-td key='ActionButtons' :props='myProps'>
+        <q-td key='ActionButtons' :props='myProps' class='asset-button'>
           <button :class='["small", "alt", (myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled) ? "in-active" : ""]' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
@@ -291,4 +291,6 @@ const table = computed(() => [
 
 .qr-code
   border-radius: 0 0 12px 12px
+.asset-button button
+  border-radius: 8px
 </style>
