@@ -20,19 +20,19 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>March 8, 14:00 JST</strong></td>
+            <td v-html='$t("MSG_IRONFISH2_SALES_OPEN")' />
             <td>Sales Open</td>
           </tr>
           <tr>
-            <td><strong>March 13, 23:59 JST</strong></td>
+            <td v-html='$t("MSG_IRONFISH2_SALES_CLOSED")' />
             <td>Sales Close</td>
           </tr>
           <tr>
-            <td><strong>March 14</strong></td>
+            <td v-html='$t("MSG_IRONFISH2_MAINNET_LAUNCH")' />
             <td>Mainnet Launch</td>
           </tr>
           <tr>
-            <td><strong>March 23 ~ April 10</strong></td>
+            <td v-html='$t("MSG_IRONFISH2_WITHDRAWALS_OPEN")' />
             <td>Withdrawals Open</td>
           </tr>
         </tbody>
@@ -249,8 +249,8 @@
       <li><strong>Product: </strong>Iron Fish First Batch GPU Mining</li>
       <li><strong>Price: </strong>380 USDT / unit</li>
       <li><strong>Order Limit: </strong>One Order per Investor, Max. 5 Units per Order</li>
-      <li><strong>Sales Period: </strong>2023, March 8 - March 13, 23:59 JST</li>
-      <li><strong>Withdrawal Period: </strong>2023, starting from March 23 ~ April 10 (at the latest)</li>
+      <li><strong>Sales Period: </strong><span v-html='$t("MSG_IRONFISH2_SALES_PERIOD")' /></li>
+      <li><strong>Withdrawal Period: </strong><span v-html='$t("MSG_IRONFISH2_WITHDRAWAL_PERIOD")' /></li>
       <li><strong>Technical Service Fee: </strong>20%</li>
       <li><strong>Mining Start Time: </strong>Immediately Upon Mainnet Launch</li>
       <li><strong>Mining Period: </strong> 1 Year</li>
