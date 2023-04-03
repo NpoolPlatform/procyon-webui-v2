@@ -135,6 +135,9 @@ const emit = defineEmits<{(e: 'update:accountType', type: string): void;
 const signupMethod = ref(AccountType.Email)
 
 const onSwitcherClick = (flag: boolean) => {
+  if (flag === loginWithEmail.value) {
+    return
+  }
   loginWithEmail.value = flag
   switch (signupMethod.value) {
     case AccountType.Email:
