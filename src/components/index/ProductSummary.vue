@@ -81,7 +81,8 @@ const good = useAdminAppGoodStore()
 const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
 
 const onLearnMoreClick = (url: string) => {
-  window.location.href = url
+  console.log('url: ', url)
+  window.open(url, '_blank')
 }
 
 </script>
