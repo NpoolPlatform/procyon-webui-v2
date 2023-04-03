@@ -249,8 +249,8 @@
       <li><strong>Product: </strong>Iron Fish First Batch GPU Mining</li>
       <li><strong>Price: </strong>380 USDT / unit</li>
       <li><strong>Order Limit: </strong>One Order per Investor, Max. 5 Units per Order</li>
-      <li><strong>Sales Period: </strong><span v-html='$t("MSG_IRONFISH2_SALES_PERIOD")' /></li>
-      <li><strong>Withdrawal Period: </strong><span v-html='$t("MSG_IRONFISH2_WITHDRAWAL_PERIOD")' /></li>
+      <li><strong>Sales Period: </strong>{{ $t("MSG_IRONFISH2_SALES_PERIOD") }}</li>
+      <li><strong>Withdrawal Period: </strong>{{ $t("MSG_IRONFISH2_WITHDRAWAL_PERIOD") }}</li>
       <li><strong>Technical Service Fee: </strong>20%</li>
       <li><strong>Mining Start Time: </strong>Immediately Upon Mainnet Launch</li>
       <li><strong>Mining Period: </strong> 1 Year</li>
