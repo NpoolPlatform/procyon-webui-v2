@@ -1467,6 +1467,70 @@ p.skip-registration
 .confirmation button:last-child
   margin: 0
 
+/* SIGN IN */
+input.sign-in
+  margin: 24px 0 0 0
+  width: 100%
+  
+.sign-in-sub-box
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+  width: 100%
+  & p
+    margin: 14px 0 0 0
+
+.email-phone-selector
+  background: var(--light-green-2-11)
+  border: 1px solid var(--light-green-2-33)
+  border-radius: 18px
+  margin: 12px 0 24px 0
+
+  & .divider
+    background: linear-gradient(to left, transparent -50%, var(--light-green-2) 50%, transparent 150%)
+    box-shadow: 0 2px 2px 0 var(--dark-blue-1)
+    opacity: .5
+    height: 1px
+    width: 100%
+
+  & .top
+    border-radius: 18px 18px 0 0
+
+  & .bottom
+    border-radius: 0 0 18px 18px
+
+.email-phone-selector .top,
+.email-phone-selector .bottom
+  align-items: center
+  cursor: pointer
+  display: flex
+  flex-wrap: wrap
+  justify-content: flex-start
+  padding: 16px
+  transition: all ease-in-out .1s
+
+.email-phone-selector .top:hover,
+.email-phone-selector .bottom:hover
+  background: var(--light-green-2-33)
+
+.email-phone-selector .selected
+  background: var(--light-green-2-33)
+
+  & span
+    filter: contrast(2) opacity(1)
+
+.email-phone-selector span
+  filter: opacity(.7)
+  font-size: 18px
+  font-weight: 500
+  margin: 0 8px
+
+.email-phone-selector .top img,
+.email-phone-selector .bottom img
+  filter: invert(35%) sepia(45%) saturate(600%) hue-rotate(114deg) brightness(100%) contrast(95%)
+  max-height: 24px
+  max-width: 24px
+
 /* CONTACT FORM */
 
 .contact-page
