@@ -37,8 +37,8 @@
             <td>TBD</td>
           </tr>
           <tr>
-            <td>Time period: {{ $t("MSG_ALEO_TIME_PERIOD") }}</td>
-            <td>Duration: {{ $t("MSG_ALEO_GOLD_TIME_PERIOD") }}</td>
+            <td v-html='$t("MSG_ALEO_TIME_PERIOD")' />
+            <td v-html='$t("MSG_ALEO_GOLD_TIME_PERIOD")' />
           </tr>
           <tr>
             <td>Aleo credits earned per unit:<br><strong>Still in the process of accounting, please refer to your account for the final number of credits earned</strong></td>
