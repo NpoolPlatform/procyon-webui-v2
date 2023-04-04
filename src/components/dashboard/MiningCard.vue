@@ -44,7 +44,7 @@
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
           <span class='value'>
-            {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last24HoursInComing * 0.2 }}
+            {{ goodProfit?.CoinPreSale ? '*' : parseFloat((goodProfit.Last24HoursInComing * 0.2)?.toFixed(4)) }}
             <span class='unit'>{{ goodProfit?.CoinUnit }} (20%)</span>
           </span>
         </div>
