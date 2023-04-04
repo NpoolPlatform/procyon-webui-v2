@@ -11,12 +11,12 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.TotalInComing }}</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : parseFloat(goodProfit?.TotalInComing?.toFixed(4)) }}</span>
         <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}: </span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : goodProfit?.Last24HoursInComing }}</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : parseFloat(goodProfit?.Last24HoursInComing?.toFixed(4)) }}</span>
         <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
       </div>
       <div class='top-line-item'>
