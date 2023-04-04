@@ -104,7 +104,11 @@ const exportOrders = computed(() => Array.from(orders.value).map((el) => {
     ProfitCurrency: good.getGoodByID(el.GoodID)?.CoinUnit,
     OrderStatus: el.State
   } as ExportOrder
-}))
+}).filter((el) => el.OrderStatus === OrderState.PAID ||
+  el.OrderStatus === OrderState.IN_SERVICE ||
+  el.OrderStatus === OrderState.EXPIRED ||
+  el.OrderStatus === OrderState.WAIT_START
+))
 
 const onExportClick = () => {
   const output = stringify(exportOrders.value, {
