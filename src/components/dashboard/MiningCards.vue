@@ -27,12 +27,12 @@ const goodProfits = computed(() => Array.from(profit.GoodProfits.GoodProfits).ma
     ...el,
     Units: el.Units,
     CoinPreSale: coin.preSale(el.CoinTypeID),
-    TotalInComing: profit.getTotalIncoming(el.CoinTypeID),
-    TotalUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getTotalIncoming(el.CoinTypeID),
-    Last24HoursInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
-    Last24HoursUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getIntervalGoodProfitInComing(IntervalKey.LastDay, el.CoinTypeID),
-    Last30DaysInComing: profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID),
-    Last30DaysUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getIntervalGoodProfitInComing(IntervalKey.LastMonth, el.CoinTypeID),
+    TotalInComing: profit.getGoodTotalIncoming(el.CoinTypeID, el.GoodID),
+    TotalUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getGoodTotalIncoming(el.CoinTypeID, el.GoodID),
+    Last24HoursInComing: profit.getGoodIntervalProfitInComing(IntervalKey.LastDay, el.CoinTypeID, el.GoodID),
+    Last24HoursUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getGoodIntervalProfitInComing(IntervalKey.LastDay, el.CoinTypeID, el.GoodID),
+    Last30DaysInComing: profit.getGoodIntervalProfitInComing(IntervalKey.LastMonth, el.CoinTypeID, el.GoodID),
+    Last30DaysUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getGoodIntervalProfitInComing(IntervalKey.LastMonth, el.CoinTypeID, el.GoodID),
     TotalEstimatedDailyReward: Number(el.Units) * parseFloat(good.getGoodByID(el.GoodID)?.DailyRewardAmount as string),
     GoodSaleEndAt: good.getGoodByID(el.GoodID)?.SaleEndAt
   } as MyGoodProfit

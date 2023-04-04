@@ -19,7 +19,7 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, useFrontendDetailStore } from 'npool-cli-v4'
+import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, useFrontendDetailStore, GoodType } from 'npool-cli-v4'
 import { stringify } from 'csv-stringify/sync'
 import saveAs from 'file-saver'
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
@@ -89,6 +89,11 @@ interface ExportOrder {
   OrderStatus: OrderState;
 }
 
+const getGoodType = computed(() => (goodID:string) => {
+  const _good = good.getGoodByID(goodID)
+  return _good?.GoodType === GoodType.GoodTypeClassicMining || _good?.GoodType === GoodType.GoodTypeUnionMining ? 'Mining' : _good?.GoodType
+})
+
 const exportOrders = computed(() => Array.from(orders.value.filter((el) => el.State === OrderState.PAID ||
   el.State === OrderState.IN_SERVICE ||
   el.State === OrderState.EXPIRED ||
@@ -96,7 +101,7 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => el.St
 )).map((el) => {
   return {
     CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
-    ProductType: good.getGoodByID(el.GoodID)?.GoodType,
+    ProductType: getGoodType.value(el.GoodID),
     ProductName: good.getGoodByID(el?.GoodID)?.DisplayNames?.[3] ? t(good.getGoodByID(el?.GoodID)?.DisplayNames?.[3] as string) : el.GoodName,
     PurchaseAmount: el.Units,
     UnitType: t(el.GoodUnit),
