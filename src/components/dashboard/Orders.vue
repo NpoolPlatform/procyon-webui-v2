@@ -107,7 +107,7 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => el.St
     MiningPeriod: el.GoodServicePeriodDays,
     CumulativeProfit: detail.getMiningRewardsByOrderID(el.ID) / getDeservedRatio.value(el.GoodID),
     ProfitCurrency: good.getGoodByID(el.GoodID)?.CoinUnit,
-    OrderStatus: el.State
+    OrderStatus: order.getOrderState(el)?.startsWith('MSG') ? t(order.getOrderState(el)) : t('MSG_AWAITING_CONFIRMATION')
   } as ExportOrder
 }))
 
