@@ -175,9 +175,15 @@ const exportMiningRewards = computed(() => {
   let cumulativeTotal = 0
 
   keys.sort().forEach((key) => {
-    const units = Number(goodProfit?.value?.Units)
+    let units = 0
     let netRewardAmount = 0
+    const orderIDs = [] as Array<string>
     rowMap.get(key)?.forEach((el) => {
+      const result = orderIDs.find((item) => item === el.OrderID)
+      if (!result) {
+        units += Number(el.Units)
+        orderIDs.push(el.OrderID)
+      }
       netRewardAmount += Number(el.RewardAmount)
       cumulativeTotal += Number(el.RewardAmount) / deservedRatio.value
     })
