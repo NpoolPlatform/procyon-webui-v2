@@ -90,7 +90,11 @@ interface ExportOrder {
   OrderStatus: OrderState;
 }
 
-const exportOrders = computed(() => Array.from(orders.value).map((el) => {
+const exportOrders = computed(() => Array.from(orders.value.filter((el) => el.State === OrderState.PAID ||
+  el.State === OrderState.IN_SERVICE ||
+  el.State === OrderState.EXPIRED ||
+  el.State === OrderState.WAIT_START
+)).map((el) => {
   return {
     CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
     ProductType: good.getGoodByID(el.GoodID)?.GoodType,
@@ -105,11 +109,7 @@ const exportOrders = computed(() => Array.from(orders.value).map((el) => {
     ProfitCurrency: good.getGoodByID(el.GoodID)?.CoinUnit,
     OrderStatus: el.State
   } as ExportOrder
-}).filter((el) => el.OrderStatus === OrderState.PAID ||
-  el.OrderStatus === OrderState.IN_SERVICE ||
-  el.OrderStatus === OrderState.EXPIRED ||
-  el.OrderStatus === OrderState.WAIT_START
-))
+}))
 
 const onExportClick = () => {
   const output = stringify(exportOrders.value, {
