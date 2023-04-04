@@ -161,7 +161,6 @@ interface ExportMiningReward {
 const exportMiningRewards = computed(() => {
   const rowMap = new Map<string, Array<MiningReward>>()
   const keys = [] as Array<string>
-
   miningDetails.value.forEach((el) => {
     const benefitDate = new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC')?.split(' ')[0]
     if (!rowMap.get(benefitDate)) {
@@ -176,10 +175,9 @@ const exportMiningRewards = computed(() => {
   let cumulativeTotal = 0
 
   keys.sort().forEach((key) => {
-    let units = 0
+    const units = Number(goodProfit?.value?.Units)
     let netRewardAmount = 0
     rowMap.get(key)?.forEach((el) => {
-      units += Number(el.Units)
       netRewardAmount += Number(el.RewardAmount)
       cumulativeTotal += Number(el.RewardAmount) / deservedRatio.value
     })
