@@ -30,7 +30,7 @@
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
-          <button :class='["small", "alt", (myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled) ? "in-active" : ""]' @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick'>
+          <button :class='["small", "alt", (!coin.forPay(myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick) ? "in-active" : ""]' @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick'>
             {{ $t('MSG_DEPOSIT') }}
           </button>
         </q-td>

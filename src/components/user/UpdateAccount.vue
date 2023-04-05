@@ -9,13 +9,13 @@
     v-model:verification-code-error='oldVerificationCodeError'
   >
     <template #top-right>
-      <div class='switcher'>
+      <!-- <div class='switcher'>
         <q-icon
           class='icon'
           size='1.5em'
           :name='accountType === AccountType.Mobile ? "smartphone" : "email"'
         />
-      </div>
+      </div> -->
     </template>
     <template #body>
       <PhoneNO

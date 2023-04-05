@@ -222,6 +222,9 @@ onMounted(() => {
 
   if (logined.value) {
     setInterval(() => {
+      if (!logined.value) {
+        return
+      }
       notif.$reset()
       getNotifs(0, 500)
     }, 120000)
