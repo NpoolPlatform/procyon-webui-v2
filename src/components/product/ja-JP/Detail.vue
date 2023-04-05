@@ -19,8 +19,8 @@
             <td>ファーストバッチマイニング</td>
           </tr>
           <tr>
-            <td>2023年2月3日までに購入</td>
-            <td>2023年2月3日～2023年3月31日まで購入</td>
+            <td v-html='$t("MSG_ALEO_PURCHASE_DURATION")' />
+            <td v-html='$t("MSG_ALEO_GOLD_PURCHASE_DURATION")' />
           </tr>
           <tr>
             <td>プルーバーテストネット報酬をもらえる<br>*750万クレジット(全体の30％)</td>
@@ -35,8 +35,8 @@
             <td>未定</td>
           </tr>
           <tr>
-            <td>期間：<strong>2022年12月10日～2023年1月25日</strong></td>
-            <td>期間：<strong>3月初旬から5月初旬まで</strong>（Aleoの最新ロードマップより）</td>
+            <td v-html='$t("MSG_ALEO_TIME_PERIOD")' />
+            <td v-html='$t("MSG_ALEO_GOLD_TIME_PERIOD")' />
           </tr>
           <tr>
             <td>1口あたりのAleoクレジット獲得枚数:<br><strong>まだ計測中、最終的な獲得クレジット数は、アカウントにてご確認ください。</strong></td>

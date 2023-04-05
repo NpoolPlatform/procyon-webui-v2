@@ -29,8 +29,8 @@
         <q-td key='TargetPhoneNO' :props='myProps'>
           {{ myProps.row.TargetPhoneNO }}
         </q-td>
-        <q-td key='ActionButtons' :props='myProps'>
-          <button class='small' @click='onDeleteTransferAddressClick(myProps.row)'>
+        <q-td key='ActionButtons' :props='myProps' class='asset-button'>
+          <button class='small alt' @click='onDeleteTransferAddressClick(myProps.row)'>
             {{ $t('MSG_DELETE_ACCOUNT') }}
           </button>
         </q-td>
@@ -154,4 +154,6 @@ const table = computed(() => [
 <style lang='sass' scoped>
   .btn-gap
     margin-right: 9px
+  .asset-button button
+    border-radius: 8px
 </style>

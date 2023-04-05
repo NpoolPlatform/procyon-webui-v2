@@ -3,7 +3,7 @@
     <h2 class='title'>
       {{ $t(label) }}
     </h2>
-    <div class='column justify-center'>
+    <div class='column justify-center row'>
       <slot name='top-right' />
     </div>
   </div>
@@ -34,11 +34,15 @@
       <div class='pagination'>
         <q-pagination
           dense
-          color='white'
-          active-color='orange-1'
           v-model='page'
           :max='pages'
           :max-pages='5'
+          unelevated
+          outline
+          color='white'
+          active-design='unelevated'
+          active-color='brown'
+          active-text-color='white'
           boundary-links
           direction-links
         />
@@ -104,7 +108,8 @@ h2
 
 .title
   min-width: 240px
-
+  @media (max-width: $breakpoint-sm-max)
+    margin: 36px 0 0 0
 .title::after
   background: linear-gradient(to right, transparent 0, #e1eeef 10%, transparent 100%) !important
 
@@ -120,7 +125,12 @@ input[type='submit']
   max-width: 70%
   @media (max-width: $breakpoint-sm-max)
     max-width: 100%
-
+  .q-pagination
+    ::v-deep .q-btn--outline:before
+      border: 1px solid var(--green-2)
+    ::v-deep .q-hoverable:hover > .q-focus-helper
+      background: none
+      opacity: 0
 .no-wrap
   white-space: nowrap
 </style>

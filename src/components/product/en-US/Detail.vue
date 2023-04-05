@@ -19,8 +19,10 @@
             <td>First Batch Mining</td>
           </tr>
           <tr>
-            <td>Purchased <strong>before</strong> February 3, 2023</td>
-            <td>Purchased <strong>after</strong> February 3, 2023, <strong>before</strong> March 31st, 2023</td>
+            <td v-html='$t("MSG_ALEO_PURCHASE_DURATION")' />
+            <td v-html='$t("MSG_ALEO_GOLD_PURCHASE_DURATION")' />
+            <!-- <td>Purchased <strong>before</strong> February 3, 2023</td> -->
+            <!-- <td>Purchased <strong>after</strong> February 3, 2023, <strong>before</strong> March 31st, 2023</td> -->
           </tr>
           <tr>
             <td>You will receive Prover Testnet Rewards<br>*7.5 million credits (30% of total)</td>
@@ -35,8 +37,8 @@
             <td>TBD</td>
           </tr>
           <tr>
-            <td>Time period: <strong>December 10 to January 25</strong></td>
-            <td>Duration: <strong>From early March to early May</strong> (from Aleo's latest roadmap)</td>
+            <td v-html='$t("MSG_ALEO_TIME_PERIOD")' />
+            <td v-html='$t("MSG_ALEO_GOLD_TIME_PERIOD")' />
           </tr>
           <tr>
             <td>Aleo credits earned per unit:<br><strong>Still in the process of accounting, please refer to your account for the final number of credits earned</strong></td>

@@ -20,13 +20,22 @@
         <template v-for='(desc,idx) in _good?.Descriptions?.slice(0, 2)' :key='idx'>
           <div v-html='t(desc)' class='inner-container' />
         </template>
-        <button
-          :class='["alt", getStatus(_good) ? "in-active" : ""]'
-          @click='onPurchaseClick(_good)'
-          :disabled='getStatus(_good)'
-        >
-          {{ $t(good.getGoodBtnMsg(_good)) }}
-        </button>
+        <div class='product-button-box'>
+          <button
+            :class='["alt", getStatus(_good) ? "in-active" : ""]'
+            @click='onPurchaseClick(_good)'
+            :disabled='getStatus(_good)'
+          >
+            {{ $t(good.getGoodBtnMsg(_good)) }}
+          </button>
+          <button
+            :class='["alt", _good?.Descriptions?.[4]?.length > 0 ? "" : "in-active"]'
+            @click='onLearnMoreClick($t(_good?.Descriptions?.[4]))'
+            :disabled='_good?.Descriptions?.[4]?.length === 0'
+          >
+            {{ $t('MSG_LEARN_MORE_ON_OUR_BLOG') }}
+          </button>
+        </div>
       </div>
       <div class='hr' />
     </div>
@@ -70,8 +79,16 @@ const onPurchaseClick = (_good: AppGood) => {
 
 const good = useAdminAppGoodStore()
 const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
+
+const onLearnMoreClick = (url: string) => {
+  console.log('url: ', url)
+  window.open(url, '_blank')
+}
+
 </script>
 <style lang='sass' scoped>
 .inner-container
   width: 100%
+.product-button-box
+  align-self: flex-end
 </style>
