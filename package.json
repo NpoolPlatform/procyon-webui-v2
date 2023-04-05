@@ -33,7 +33,7 @@
     "csv-stringify": "^6.2.4",
     "file-saver": "^2.0.5",
     "npool-cli-v2": "^0.2.303",
-    "npool-cli-v4": "^0.3.727",
+    "npool-cli-v4": "^0.3.739",
     "pinia": "^2.0.13",
     "qrcode.vue": "^3.3.3",
     "quasar": "^2.0.0",
