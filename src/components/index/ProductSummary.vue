@@ -22,7 +22,7 @@
         </template>
         <div class='product-button-box'>
           <button
-            :class='["alt", getStatus(_good) ? "in-active" : ""]'
+            :class='[getStatus(_good) ? "in-active" : ""]'
             @click='onPurchaseClick(_good)'
             :disabled='getStatus(_good)'
           >
