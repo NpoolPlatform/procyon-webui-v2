@@ -7,7 +7,7 @@
       <slot name='top-right' />
     </div>
   </div>
-  <div class='no-wrap'>
+  <div>
     <slot name='top' />
   </div>
   <div class='minning-summary content-glass'>
@@ -131,6 +131,4 @@ input[type='submit']
     ::v-deep .q-hoverable:hover > .q-focus-helper
       background: none
       opacity: 0
-.no-wrap
-  white-space: nowrap
 </style>
