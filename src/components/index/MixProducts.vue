@@ -11,7 +11,7 @@
       </div>
       <div class='column-2'>
         <div class='highlight-image'>
-          <img src='project-iron-fish/procyon-product-iron-fish-homepage.jpg'>
+          <img src='product/iron/procyon-product-iron-fish-homepage.jpg'>
           <span class='caption'>{{ $t('MSG_IRON_FISH_FIRST_BATCH_MINING_TIP') }}</span>
         </div>
       </div>
@@ -45,7 +45,7 @@
       </div>
       <div class='column-2'>
         <div class='highlight-image'>
-          <img src='product/mixmob/procyon-ido-mixmob-homepage.png'>
+          <img src='product/mixmob/procyon-ido-mixmob-homepage.jpg'>
           <span class='caption'>{{ $t('MSG_EXCLUSIVE_IDO_TIP') }}</span>
         </div>
       </div>
