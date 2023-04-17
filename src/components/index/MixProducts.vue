@@ -21,7 +21,7 @@
       <div class='column-2'>
         <h1 v-html='$t("MSG_PROCYON_ACADEMY_TITLE")' />
         <h2 v-html='$t("MSG_PROCYON_ACADEMY_SUB_TITLE")' />
-        <p v-html='$t("MSG_PROCYON_ACADEMY_CONTENT")' />
+        <ul v-html='$t("MSG_PROCYON_ACADEMY_CONTENT")' />
         <button class='in-active' disabled>
           {{ $t('MSG_COMING_SOON') }}
         </button>
