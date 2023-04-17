@@ -54,12 +54,16 @@
 </template>
 
 <script setup lang='ts'>
+import { useFrontendAppStore } from 'npool-cli-v4'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
-const router = useRouter()
+const app = useFrontendAppStore()
+const path = computed(() => app.App?.CommitButtonTargets?.[1]?.length > 0 ? app.App?.CommitButtonTargets?.[1] : '/product/ironfish')
 
+const router = useRouter()
 const onIronFishClick = () => {
-  void router.push({ path: '/product/ironfish' })
+  void router.push({ path: path.value })
 }
 
 </script>
