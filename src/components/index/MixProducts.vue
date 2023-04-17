@@ -12,7 +12,7 @@
       <div class='column-2'>
         <div class='highlight-image'>
           <img src='project-iron-fish/procyon-product-iron-fish-homepage.jpg'>
-          <span class='caption'>{{ $t('MSG_FIRST_BATCH_MINING_TIP') }}</span>
+          <span class='caption'>{{ $t('MSG_IRON_FISH_FIRST_BATCH_MINING_TIP') }}</span>
         </div>
       </div>
     </div>
