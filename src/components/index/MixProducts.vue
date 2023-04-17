@@ -10,7 +10,6 @@
         </button>
       </div>
       <div class='column-2'>
-        <img src='product/aleo/procyon-product-aleo-homepage.png'>
         <div class='highlight-image'>
           <img src='project-iron-fish/procyon-product-iron-fish-homepage.jpg'>
           <span class='caption'>{{ $t('MSG_FIRST_BATCH_MINING_TIP') }}</span>
