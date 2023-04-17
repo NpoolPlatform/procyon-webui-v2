@@ -36,8 +36,8 @@
 
     <div class='columns-2 highlight'>
       <div class='column-2'>
-        <h1><span v-html='$t("MSG_EXCLUSIVE_IDO_TITLE")' /></h1>
-        <h2><span v-html='$t("MSG_EXCLUSIVE_IDO_SUBTITLE")' /></h2>
+        <h1 v-html='$t("MSG_EXCLUSIVE_IDO_TITLE")' />
+        <h2 v-html='$t("MSG_EXCLUSIVE_IDO_SUBTITLE")' />
         <p v-html='$t("MSG_EXCLUSIVE_IDO_CONTENT")' />
         <button class='in-active' disabled>
           {{ $t('MSG_COMING_SOON') }}
