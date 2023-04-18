@@ -1,4 +1,4 @@
-import { doActionWithError, doGet, SecondsEachDay } from 'npool-cli-v4'
+import { doGet, doGetWithError, SecondsEachDay } from 'npool-cli-v4'
 import { defineStore } from 'pinia'
 import { API, DEVNET_PATTERN } from './const'
 import {
@@ -27,24 +27,24 @@ export const useMockSpacemeshStore = defineStore('mockspacemesh', {
     },
     genesis () : number {
       const row = this.latestEpoch
-      return row.end - ((row.end - row.start) * this.Epochs.Total)
+      return row?.end - ((row?.end - row?.start) * this.Epochs.Total)
     },
     accounts () : number {
       const row = this.latestEpoch
-      return !row ? 0 : row.stats.current.accounts
+      return !row ? 0 : row.stats?.current?.accounts
     },
     getLastDaysAvgOutput (): (ratio: number, accounts: number) => number {
       return (ratio: number, accounts: number) => {
-        ratio = accounts / (accounts + this.latestEpoch.stats.current.accounts) * ratio * 20
+        ratio = accounts / (accounts + this.latestEpoch?.stats?.current?.accounts) * ratio * 20
         const days = (new Date().getTime() / 1000 - this.genesis) / SecondsEachDay
         const scale = Math.random() / 10 * 2 + 0.9
-        return this.latestEpoch.stats.cumulative.circulation / days * ratio / 1000000000000 * scale
+        return this.latestEpoch?.stats?.cumulative?.circulation / days * ratio / 1000000000000 * scale
       }
     },
     getEarning (): (ratio: number, accounts: number) => number {
       return (ratio: number, accounts: number) => {
-        ratio = accounts / (accounts + this.latestEpoch.stats.current.accounts) * ratio * 20
-        return this.latestEpoch.stats.cumulative.circulation * ratio / 1000000000000
+        ratio = accounts / (accounts + this.latestEpoch?.stats?.current?.accounts) * ratio * 20
+        return this.latestEpoch?.stats?.cumulative?.circulation * ratio / 1000000000000
       }
     },
     get30DaysAvgOutput (): (ratio: number, accounts: number) => number {
@@ -60,7 +60,7 @@ export const useMockSpacemeshStore = defineStore('mockspacemesh', {
   },
   actions: {
     getNetworks (req: GetNetworksRequest, done: (error: boolean, rows: Array<DevNet>) => void) {
-      doActionWithError<GetNetworksRequest, Array<DevNet>>(
+      doGetWithError<GetNetworksRequest, Array<DevNet>>(
         API.GET_NETWORKS,
         req,
         req.Message,
