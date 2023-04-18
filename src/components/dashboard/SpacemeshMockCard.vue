@@ -67,10 +67,7 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  NotificationType
-} from 'npool-cli-v2'
-import { AppCoin, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendProfitStore, PriceCoinName } from 'npool-cli-v4'
+import { AppCoin, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendProfitStore, PriceCoinName, NotifyType } from 'npool-cli-v4'
 import { useMockSpacemeshStore } from 'src/teststore'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -101,13 +98,13 @@ const short = ref(true)
 
 const spacemesh = useMockSpacemeshStore()
 const _last24HoursEarningCoin = computed(() => {
-  return spacemesh.getLastDaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3)
+  return spacemesh.getLastDaysAvgOutput(unitsRatio.value, spacemesh.accounts * 1.3)
 })
 const _last30DaysDailyEarningCoin = computed(() => {
-  return spacemesh.get30DaysAvgOutput(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3)
+  return spacemesh.get30DaysAvgOutput(unitsRatio.value, spacemesh.accounts * 1.3)
 })
 const _totalEarningCoin = computed(() => {
-  return spacemesh.getEarning(unitsRatio.value, spacemesh.NetworkInfo?.epoch?.stats?.current?.accounts * 1.3)
+  return spacemesh.getEarning(unitsRatio.value, spacemesh.accounts * 1.3)
 })
 
 const ticker = ref(-1)
@@ -141,17 +138,20 @@ const updater = () => {
         Title: t('MSG_GET_SPACEMESH_NETWORKS'),
         Message: t('MSG_GET_SPACEMESH_NETWORKS_FAIL'),
         Popup: false,
-        Type: NotificationType.Error
+        Type: NotifyType.Error
       }
     }
-  }, () => {
-    spacemesh.getNetworkInfo({
+  }, (error: boolean) => {
+    if (error) {
+      return
+    }
+    spacemesh.getEpochs({
       Message: {
         Error: {
           Title: t('MSG_GET_SPACEMESH_NETWORK_INFOS'),
           Message: t('MSG_GET_SPACEMESH_NETWORK_INFOS_FAIL'),
           Popup: false,
-          Type: NotificationType.Error
+          Type: NotifyType.Error
         }
       }
     }, () => {
