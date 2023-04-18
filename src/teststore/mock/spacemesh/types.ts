@@ -48,20 +48,6 @@ export interface Epoch {
   stats: Stats;
 }
 
-export interface Layer {
-  number: number;
-  atxnumunits: number;
-  blocksnumber: number;
-  end: number;
-  epoch: number;
-  hash: string;
-  rewards: number;
-  smeshers: number;
-  start: number;
-  status: number;
-  txs: number;
-  txsamount: number;
-}
 export interface Pagination {
   totalCount: number;
   pageCount: number;
@@ -78,11 +64,5 @@ export type GetNetworksRequest = BaseRequest
 export type GetEpochsRequest = BaseRequest
 export interface GetEpochsResponse {
   data: Array<Epoch>;
-  pagination: Pagination;
-}
-
-export type GetLayersRequest = BaseRequest
-export interface GetLayersResponse {
-  data: Array<Layer>;
   pagination: Pagination;
 }
