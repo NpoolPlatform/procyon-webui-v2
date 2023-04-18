@@ -3,23 +3,16 @@ import { defineStore } from 'pinia'
 import { API, DEVNET_PATTERN } from './const'
 import {
   DevNet,
-  Layer,
   Epoch,
   GetNetworksRequest,
   GetEpochsRequest,
-  GetEpochsResponse,
-  GetLayersRequest,
-  GetLayersResponse
+  GetEpochsResponse
 } from './types'
 
 export const useMockSpacemeshStore = defineStore('mockspacemesh', {
   state: () => ({
     Networks: {
       Networks: [] as Array<DevNet>,
-      Total: 0
-    },
-    Layers: {
-      Layers: [] as Array<Layer>,
       Total: 0
     },
     Epochs: {
@@ -90,19 +83,6 @@ export const useMockSpacemeshStore = defineStore('mockspacemesh', {
         (resp: GetEpochsResponse): void => {
           this.Epochs.Epochs = resp.data
           this.Epochs.Total = resp.pagination.totalCount
-          done(false)
-        }
-      )
-    },
-    getLayers (req: GetLayersRequest, done: (error: boolean) => void) {
-      const url = API.GET_EPOCHS.replace(DEVNET_PATTERN, this.Networks.Networks?.[0]?.netName)
-      doGet<GetLayersRequest, GetLayersResponse>(
-        url,
-        req,
-        req.Message,
-        (resp: GetLayersResponse): void => {
-          this.Layers.Layers = resp.data
-          this.Layers.Total = resp.pagination.totalCount
           done(false)
         }
       )
