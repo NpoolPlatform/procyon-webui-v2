@@ -22,7 +22,6 @@ export const useMockSpacemeshStore = defineStore('mockspacemesh', {
   }),
   getters: {
     latestEpoch () : Epoch {
-      console.log('latestEpoch: ', this.Epochs.Epochs?.[0])
       return this.Epochs.Epochs?.[0]
     },
     genesis () : number {
