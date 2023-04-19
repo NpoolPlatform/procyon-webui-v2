@@ -15,12 +15,12 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
-        <span class='value'>{{ _totalEarningCoin?.toFixed(2) }} {{ target?.Unit }}</span>
+        <span class='value'>{{ _totalEarningCoin?.toFixed(4) }} {{ target?.Unit }}</span>
         <span class='sub-value'>(* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
-        <span class='value'>{{ _last24HoursEarningCoin?.toFixed(2) }} {{ target?.Unit }}</span>
+        <span class='value'>{{ _last24HoursEarningCoin?.toFixed(4) }} {{ target?.Unit }}</span>
         <span class='sub-value'>(* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
@@ -32,15 +32,15 @@
       <div class='detailed-summary' v-show='!short'>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
-          <span class='value'>{{ _last30DaysDailyEarningCoin?.toFixed(2) }} {{ target?.Unit }}</span>
+          <span class='value'>{{ _last30DaysDailyEarningCoin?.toFixed(4) }} {{ target?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
-          <span class='value'>{{ (_last24HoursEarningCoin * 0.2)?.toFixed(2) }} {{ target?.Unit }} (20%)</span>
+          <span class='value'>{{ (_last24HoursEarningCoin * 0.2)?.toFixed(4) }} {{ target?.Unit }} (20%)</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-          <span class='value'>{{ (_last30DaysDailyEarningCoin * 0.8)?.toFixed(2) }} {{ target?.Unit }}</span>
+          <span class='value'>{{ (_last30DaysDailyEarningCoin * 0.8)?.toFixed(4) }} {{ target?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
