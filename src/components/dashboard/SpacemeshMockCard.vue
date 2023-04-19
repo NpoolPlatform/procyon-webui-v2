@@ -80,7 +80,7 @@ import warning from '../../assets/warning.svg'
 const { t } = useI18n({ useScope: 'global' })
 
 const coin = useAdminAppCoinStore()
-const target = computed(() => coin.getAvailableCoins().find((el) => el.Name?.toLowerCase()?.includes('spacemesh')) as AppCoin)
+const target = computed(() => coin.AppCoins.AppCoins.find((el) => el.Name?.toLowerCase()?.includes('spacemesh')) as AppCoin)
 
 const profit = useFrontendProfitStore()
 const goodProfits = computed(() => {
