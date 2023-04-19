@@ -6,7 +6,7 @@
         <h2 v-html='$t("MSG_FIRST_BATCH_MINING_SUBTITLE")' />
         <p v-html='$t("MSG_FIRST_BATCH_MINING_CONTENT")' />
         <button @click='onIronFishClick'>
-          {{ $t('MSG_LEARN_MORE') }}
+          {{ $t('MSG_IRON_FISH_BUTTON_LEARN_MORE') }}
         </button>
       </div>
       <div class='column-2'>
