@@ -83,31 +83,15 @@ const coin = useAdminAppCoinStore()
 const target = computed(() => coin.AppCoins.AppCoins.find((el) => el.Name?.toLowerCase()?.includes('spacemesh')) as AppCoin)
 
 const profit = useFrontendProfitStore()
-const goodProfits = computed(() => {
-  console.log('CoinTypeID: ', target.value?.CoinTypeID)
-  const _goods = profit.GoodProfits.GoodProfits.filter((el) => el.CoinTypeID === target?.value?.CoinTypeID)
-  console.log('_goods: ', _goods)
-  return _goods
-})
+const goodProfits = computed(() => profit.GoodProfits.GoodProfits.filter((el) => el.CoinTypeID === target?.value?.CoinTypeID))
 
 const goodUnit = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodUnit : '')
 const goodPeriod = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodServicePeriodDays : '')
 const totalUnits = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].Units : 0)
 
 const good = useAdminAppGoodStore()
-const total = computed(() => {
-  const _total = goodProfits.value?.length ? good.getGoodByID(goodProfits.value?.[0].GoodID)?.Total : 0
-  console.log('total: ', _total)
-  return _total
-})
-const unitsRatio = computed(() => {
-  console.log('GoodID: ', goodProfits.value?.[0]?.GoodID)
-  const ratio = goodProfits.value?.length && total.value ? Number(totalUnits.value) / Number(total.value) : 0
-  console.log('TotalUnits: ', Number(totalUnits.value))
-  console.log('TotalStock: ', Number(total.value))
-  console.log('ratio: ', ratio)
-  return ratio
-})
+const total = computed(() => goodProfits.value?.length ? good.getGoodByID(goodProfits.value?.[0].GoodID)?.Total : 0)
+const unitsRatio = computed(() => goodProfits.value?.length && total.value ? Number(totalUnits.value) / Number(total.value) : 0)
 const daily = computed(() => spacemesh.getNetworkDailyOutput)
 
 const short = ref(true)
