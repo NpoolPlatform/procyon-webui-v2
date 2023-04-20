@@ -160,3 +160,15 @@ const updater = () => {
   })
 }
 </script>
+<style lang='sass' scoped>
+.mining-summary .warning
+  background: #fc4468
+  border: 0
+  font-size: 20px
+  padding: 12px
+  margin: 24px 0
+
+.mining-summary .warning span
+  font-size: 16px
+  line-height: 24px
+</style>
