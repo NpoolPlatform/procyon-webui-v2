@@ -811,6 +811,94 @@ img.content-image
   border-radius: 20px
   width: 100%
 
+/* HOMEPAGE HIGHLIGHTS SECTION */
+
+.highlight
+  align-items: center
+  display: flex
+  margin: 36px 0
+  position: relative
+
+  & .column-2
+    margin: 48px 0
+    min-width: 45%
+    position: relative
+
+  &::before
+    background: var(--dark-blue-3)
+    border: 1px solid var(--light-green-2)
+    border-radius: 50px
+    content: ""
+    display: block
+    opacity: .7
+    position: absolute
+    top: -20px
+    left: -60px
+    height: 100%
+    width: 100%
+    mask-image: linear-gradient(to bottom right, black 0, transparent 50%)
+    -webkit-mask-image: linear-gradient(to bottom right, black 0, transparent 50%)
+    z-index: -1
+
+  &::after
+    border: 1px solid var(--light-green-2)
+    border-radius: 50px
+    content: ""
+    display: block
+    opacity: .7
+    position: absolute
+    right: -60px
+    bottom: -17px
+    height: 100%
+    width: 100%
+    mask-image: linear-gradient(to top left, black 0, transparent 50%)
+    -webkit-mask-image: linear-gradient(to top left, black 0, transparent 50%)
+    z-index: -1
+
+  & h1
+    font-size: 50px
+
+  & h2
+    background: linear-gradient(to left, var(--green-1) 0, var(--green-2) 50%)
+    background-clip: border-box
+    border-radius: 20px
+    color: var(--dark-green-1)
+    font-size: 32px
+    font-weight: 200
+    line-height: 1.5
+    margin: 12px 24px 12px -12px
+    opacity: .9
+    padding: 8px 12px
+    -webkit-background-clip: unset
+    -webkit-text-fill-color: unset
+
+  & h2::after
+    display: none
+
+  & ul
+    margin: 24px 0
+
+  & li
+    font-size: 28px
+    padding: 12px 0
+
+.highlight-image
+  background: linear-gradient(to left, var(--green-1) 0, var(--green-2) 50%)
+  border-radius: 24px
+  box-shadow: 16px 16px 20px 0 var(--dark-blue-3-66)
+  padding: 8px
+  position: relative
+  width: 100%
+
+  & img
+    border-radius: 20px
+    width: 100%
+
+  & .caption
+    color: var(--dark-blue-2)
+    display: block
+    padding: 6px 4px 2px 4px
+
 /* FEATURE SECTION */
 
 .feature

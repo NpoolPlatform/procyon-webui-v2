@@ -1,71 +1,87 @@
-import { doGet, SecondsEachDay } from 'npool-cli-v2'
+import { doGet, doGetWithError, SecondsEachDay } from 'npool-cli-v4'
 import { defineStore } from 'pinia'
 import { API, DEVNET_PATTERN } from './const'
-import { DevNet, GetNetworkInfoRequest, GetNetworksRequest, MockSpacemeshState, NetworkInfo } from './types'
+import {
+  DevNet,
+  Epoch,
+  GetNetworksRequest,
+  GetEpochsRequest,
+  GetEpochsResponse
+} from './types'
 
 export const useMockSpacemeshStore = defineStore('mockspacemesh', {
-  state: (): MockSpacemeshState => ({
-    NetworkInfo: undefined as unknown as NetworkInfo,
-    Networks: []
+  state: () => ({
+    Networks: {
+      Networks: [] as Array<DevNet>,
+      Total: 0
+    },
+    Epochs: {
+      Epochs: [] as Array<Epoch>,
+      Total: 0
+    }
   }),
   getters: {
+    latestEpoch () : Epoch {
+      return this.Epochs.Epochs?.[0]
+    },
+    genesis () : number {
+      const row = this.latestEpoch
+      return row?.end - ((row?.end - row?.start) * this.Epochs.Total)
+    },
+    accounts () : number {
+      const row = this.latestEpoch
+      return !row ? 0 : row.stats?.current?.accounts
+    },
     getLastDaysAvgOutput (): (ratio: number, accounts: number) => number {
       return (ratio: number, accounts: number) => {
-        if (!this.NetworkInfo) {
-          return 0
-        }
-        ratio = accounts / (accounts + this.NetworkInfo.epoch.stats.current.accounts) * ratio * 20
-        const days = (new Date().getTime() / 1000 - this.NetworkInfo?.network?.genesis) / SecondsEachDay
+        ratio = accounts / (accounts + this.latestEpoch?.stats?.current?.accounts) * ratio * 20
+        const days = (new Date().getTime() / 1000 - this.genesis) / SecondsEachDay
         const scale = Math.random() / 10 * 2 + 0.9
-        return this.NetworkInfo.epoch.stats.cumulative.circulation / days * ratio / 1000000000000 * scale
+        return this.latestEpoch?.stats?.cumulative?.circulation / days * ratio / 1000000000000 * scale
       }
     },
     getEarning (): (ratio: number, accounts: number) => number {
       return (ratio: number, accounts: number) => {
-        if (!this.NetworkInfo) {
-          return 0
-        }
-        ratio = accounts / (accounts + this.NetworkInfo.epoch.stats.current.accounts) * ratio * 20
-        return this.NetworkInfo.epoch.stats.cumulative.circulation * ratio / 1000000000000
+        ratio = accounts / (accounts + this.latestEpoch?.stats?.current?.accounts) * ratio * 20
+        return this.latestEpoch?.stats?.cumulative?.circulation * ratio / 1000000000000
       }
     },
     get30DaysAvgOutput (): (ratio: number, accounts: number) => number {
       return (ratio: number, accounts: number) => {
-        const days = (new Date().getTime() / 1000 - this.NetworkInfo?.network?.genesis) / SecondsEachDay
+        const days = (new Date().getTime() / 1000 - this.genesis) / SecondsEachDay
         return this.getEarning(ratio, accounts) / days
       }
     },
     getNetworkDailyOutput (): number {
-      const days = (new Date().getTime() / 1000 - this.NetworkInfo?.network?.genesis) / SecondsEachDay
-      return this.NetworkInfo?.epoch?.stats?.cumulative?.circulation / days / 1000000000000
+      const days = (new Date().getTime() / 1000 - this.genesis) / SecondsEachDay
+      return this.latestEpoch?.stats?.cumulative?.circulation / days / 1000000000000
     }
   },
   actions: {
-    getNetworks (req: GetNetworksRequest, done: () => void) {
-      doGet<GetNetworksRequest, Array<DevNet>>(
+    getNetworks (req: GetNetworksRequest, done: (error: boolean, rows: Array<DevNet>) => void) {
+      doGetWithError<GetNetworksRequest, Array<DevNet>>(
         API.GET_NETWORKS,
         req,
         req.Message,
         (resp: Array<DevNet>): void => {
-          this.Networks = resp
-          done()
+          this.Networks.Networks = resp
+          this.Networks.Total = resp.length
+          done(false, resp)
+        },
+        () => {
+          done(true, [] as Array<DevNet>)
         }
       )
     },
-    getNetworkInfo (req: GetNetworkInfoRequest, done: (error: boolean) => void) {
-      if (this.Networks.length === 0) {
-        done(true)
-        return
-      }
-
-      const url = API.GET_NETWORK_INFO.replace(DEVNET_PATTERN, this.Networks[0].netName)
-
-      doGet<GetNetworksRequest, NetworkInfo>(
+    getEpochs (req: GetEpochsRequest, done: (error: boolean) => void) {
+      const url = API.GET_EPOCHS.replace(DEVNET_PATTERN, this.Networks.Networks?.[0]?.netName)
+      doGet<GetEpochsRequest, GetEpochsResponse>(
         url,
         req,
         req.Message,
-        (resp: NetworkInfo): void => {
-          this.NetworkInfo = resp
+        (resp: GetEpochsResponse): void => {
+          this.Epochs.Epochs = resp.data
+          this.Epochs.Total = resp.pagination.totalCount
           done(false)
         }
       )
