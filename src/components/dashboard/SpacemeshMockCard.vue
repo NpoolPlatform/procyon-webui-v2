@@ -14,14 +14,14 @@
     </div>
     <div class='top-line-summary'>
       <div class='top-line-item'>
-        <span class='label'>{{ $t('MSG_EARNINGS') }}:</span>
+        <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
         <span class='value'>{{ _totalEarningCoin?.toFixed(4) }} {{ target?.Unit }}</span>
-        <span class='sub-value'>(* {{ PriceCoinName }})</span>
+        <span class='sub-value'> (* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
-        <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}:</span>
+        <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}: </span>
         <span class='value'>{{ _last24HoursEarningCoin?.toFixed(4) }} {{ target?.Unit }}</span>
-        <span class='sub-value'>(* {{ PriceCoinName }})</span>
+        <span class='sub-value'> (* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
