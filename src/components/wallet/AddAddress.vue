@@ -151,11 +151,12 @@ const submitting = ref(false)
 
 const onCodeVerify = (code: string) => {
   submitting.value = true
+  const _memo = memo.value === '' ? undefined : memo.value
   userAccount.createUserAccount({
     CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
     Account: account.value,
-    Memo: memo.value,
+    Memo: _memo,
     AccountType: accountType.value as unknown as SignMethodType,
     VerificationCode: code,
     Labels: labels.value?.split(','),
