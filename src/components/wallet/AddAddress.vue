@@ -21,6 +21,18 @@
           @focus='onAddressFocusIn'
           @blur='onAddressFocusOut'
         />
+        <Input
+          v-model:value='memo'
+          label='MSG_MEMO'
+          type='text'
+          id='memo'
+          required
+          placeholder='MSG_MEMO_PLACEHOLDER'
+          message='MSG_MEMO_TIP'
+          :error='memoError'
+          @focus='onMemoFocusIn'
+          @blur='onMemoFocusOut'
+        />
         <div class='warning waring-gap'>
           <img src='font-awesome/warning.svg'>
           <span v-html='$t("MSG_WITHDRAW_ADDRESS_WARNING")' />
@@ -99,6 +111,16 @@ const onAddressFocusOut = () => {
   addressError.value = !address.value.length
 }
 
+const memo = ref('')
+const memoError = ref(false)
+
+const onMemoFocusIn = () => {
+  memoError.value = false
+}
+const onMemoFocusOut = () => {
+  // TODO
+}
+
 const labels = ref('')
 const labelsError = ref(false)
 
@@ -133,6 +155,7 @@ const onCodeVerify = (code: string) => {
     CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
     Account: account.value,
+    Memo: memo.value,
     AccountType: accountType.value as unknown as SignMethodType,
     VerificationCode: code,
     Labels: labels.value?.split(','),
