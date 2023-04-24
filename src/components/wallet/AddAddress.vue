@@ -26,12 +26,10 @@
           label='MSG_MEMO'
           type='text'
           id='memo'
-          required
+          :required='false'
           placeholder='MSG_MEMO_PLACEHOLDER'
-          message='MSG_MEMO_TIP'
+          message=''
           :error='memoError'
-          @focus='onMemoFocusIn'
-          @blur='onMemoFocusOut'
         />
         <div class='warning waring-gap'>
           <img src='font-awesome/warning.svg'>
@@ -113,13 +111,6 @@ const onAddressFocusOut = () => {
 
 const memo = ref('')
 const memoError = ref(false)
-
-const onMemoFocusIn = () => {
-  memoError.value = false
-}
-const onMemoFocusOut = () => {
-  // TODO
-}
 
 const labels = ref('')
 const labelsError = ref(false)
