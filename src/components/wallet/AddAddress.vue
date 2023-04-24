@@ -26,6 +26,20 @@
           <span v-html='$t("MSG_WITHDRAW_ADDRESS_WARNING")' />
         </div>
         <Input
+          v-model:value='memo'
+          label='MSG_MEMO'
+          type='text'
+          id='memo'
+          :required='false'
+          placeholder='MSG_MEMO_PLACEHOLDER'
+          message=''
+          :error='memoError'
+        />
+        <div class='warning waring-gap'>
+          <img src='font-awesome/warning.svg'>
+          <span v-html='$t("MSG_WITHDRAW_MEMO_WARNING")' />
+        </div>
+        <Input
           v-model:value='labels'
           label='MSG_WALLET_ADDRESS_LABELS'
           caption='MSG_WALLET_ADDRESS_LABELS_TIP'
@@ -99,6 +113,9 @@ const onAddressFocusOut = () => {
   addressError.value = !address.value.length
 }
 
+const memo = ref('')
+const memoError = ref(false)
+
 const labels = ref('')
 const labelsError = ref(false)
 
@@ -129,10 +146,12 @@ const submitting = ref(false)
 
 const onCodeVerify = (code: string) => {
   submitting.value = true
+  const _memo = memo.value === '' ? undefined : memo.value
   userAccount.createUserAccount({
     CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
     Account: account.value,
+    Memo: _memo,
     AccountType: accountType.value as unknown as SignMethodType,
     VerificationCode: code,
     Labels: labels.value?.split(','),
@@ -166,5 +185,6 @@ const onCodeVerify = (code: string) => {
 
 <style lang='sass' scoped>
 .waring-gap
-  margin: 24px 0
+  margin-top: 8px
+  margin-bottom: 24px
 </style>

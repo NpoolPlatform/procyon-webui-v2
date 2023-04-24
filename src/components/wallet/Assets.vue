@@ -257,12 +257,12 @@ const table = computed(() => [
     align: 'center',
     field: 'Balance'
   },
-  {
+  /* {
     name: 'Last24HoursBalance',
     label: t('MSG_24_HOUR_CHANGE'),
     align: 'center',
     field: 'Last24HoursBalance'
-  },
+  } */
   {
     name: 'TotalUSDTValue',
     label: t('MSG_MARKET_VALUE_USDT'),

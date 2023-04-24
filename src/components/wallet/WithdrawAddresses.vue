@@ -30,6 +30,9 @@
           <q-td key='Address' :props='myProps'>
             {{ myProps.row?.Address }}
           </q-td>
+          <q-td key='Memo' :props='myProps'>
+            {{ myProps.row?.Memo }}
+          </q-td>
           <q-td key='Label' :props='myProps'>
             {{ myProps.row.Labels?.join(',') }}
           </q-td>
@@ -171,6 +174,12 @@ const table = computed(() => [
     label: t('MSG_ADDRESS'),
     align: 'center',
     field: (row: Account) => row.Address
+  },
+  {
+    name: 'Memo',
+    label: t('MSG_MEMO'),
+    align: 'center',
+    field: (row: Account) => row?.Memo
   },
   {
     name: 'Label',
