@@ -21,6 +21,10 @@
           @focus='onAddressFocusIn'
           @blur='onAddressFocusOut'
         />
+        <div class='warning waring-gap'>
+          <img src='font-awesome/warning.svg'>
+          <span v-html='$t("MSG_WITHDRAW_ADDRESS_WARNING")' />
+        </div>
         <Input
           v-model:value='memo'
           label='MSG_MEMO'
@@ -33,7 +37,7 @@
         />
         <div class='warning waring-gap'>
           <img src='font-awesome/warning.svg'>
-          <span v-html='$t("MSG_WITHDRAW_ADDRESS_WARNING")' />
+          <span v-html='$t("MSG_WITHDRAW_MEMO_WARNING")' />
         </div>
         <Input
           v-model:value='labels'
@@ -181,5 +185,6 @@ const onCodeVerify = (code: string) => {
 
 <style lang='sass' scoped>
 .waring-gap
-  margin: 24px 0
+  margin-top: 8px
+  margin-bottom: 24px
 </style>
