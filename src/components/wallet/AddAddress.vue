@@ -25,20 +25,22 @@
           <img src='font-awesome/warning.svg'>
           <span v-html='$t("MSG_WITHDRAW_ADDRESS_WARNING")' />
         </div>
-        <Input
-          v-model:value='memo'
-          label='MSG_MEMO'
-          type='text'
-          id='memo'
-          :required='false'
-          placeholder='MSG_MEMO_PLACEHOLDER'
-          message=''
-          :error='memoError'
-        />
-        <div class='warning waring-gap'>
-          <img src='font-awesome/warning.svg'>
-          <span v-html='$t("MSG_WITHDRAW_MEMO_WARNING")' />
-        </div>
+        <template v-if='needMemo'>
+          <Input
+            v-model:value='memo'
+            label='MSG_MEMO'
+            type='text'
+            id='memo'
+            :required='false'
+            placeholder='MSG_MEMO_PLACEHOLDER'
+            message=''
+            :error='memoError'
+          />
+          <div class='warning waring-gap'>
+            <img src='font-awesome/warning.svg'>
+            <span v-html='$t("MSG_WITHDRAW_MEMO_WARNING")' />
+          </div>
+        </template>
         <Input
           v-model:value='labels'
           label='MSG_WALLET_ADDRESS_LABELS'
@@ -80,7 +82,7 @@
 import { ref, defineAsyncComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { UsedFor, AccountType, NotifyType, useFrontendUserAccountStore, SignMethodType, AccountUsedFor } from 'npool-cli-v4'
+import { UsedFor, AccountType, NotifyType, useFrontendUserAccountStore, SignMethodType, AccountUsedFor, useAdminAppCoinStore } from 'npool-cli-v4'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
@@ -103,6 +105,9 @@ const coinTypeID = computed(() => query.value.coinTypeID)
 const gotoWithdraw = computed(() => query.value.gotoWithdraw !== undefined)
 
 const selectedCoinTypeID = ref(coinTypeID.value)
+
+const coin = useAdminAppCoinStore()
+const needMemo = computed(() => coin.needMemo(selectedCoinTypeID.value))
 
 const address = ref('')
 const addressError = ref(false)
