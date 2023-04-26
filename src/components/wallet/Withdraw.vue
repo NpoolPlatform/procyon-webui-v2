@@ -155,7 +155,7 @@
     <div class='product-container content-glass popup-container'>
       <div class='popup'>
         <div class='form-container content-glass'>
-          <div class='confirmation'>
+          <div class='confirmation content'>
             <h3>{{ $t('MSG_WITHDRAW_WAITING_TITLE') }}</h3>
             <p v-html='$t("MSG_WITHDRAW_WAITING_CONTENT_1")' />
             <p v-html='$t("MSG_WITHDRAW_WAITING_CONTENT_2")' />
