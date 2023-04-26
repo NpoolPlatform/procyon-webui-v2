@@ -215,7 +215,7 @@ const onExportClick = () => {
     columns: columns
   })
 
-  const blob = new Blob([output], { type: 'text/plain;charset=utf-8' })
+  const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), output], { type: 'text/plain;charset=utf-8' })
   const name = target?.value?.DisplayNames?.[2] ? t(target?.value?.DisplayNames?.[2]) : goodProfit.value?.GoodName
   const filename = name + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)
