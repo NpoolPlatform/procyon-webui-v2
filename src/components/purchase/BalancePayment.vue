@@ -16,14 +16,14 @@
             />
             <label>{{ $t('MSG_BALANCE') }}</label>
             <div class='three-section' v-if='paymentCoin?.StableUSD'>
-              <span class='number'>{{ balance }}</span>
+              <span class='number'>{{ getLocaleString(balance) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
             <div class='three-section' v-else>
-              <span class='number'>{{ general.getBalanceByID(coinTypeID) }}</span>
+              <span class='number'>{{ getLocaleString(general.getBalanceByID(coinTypeID)) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
               <span>&nbsp;({{ $t("MSG_APPROX") }}</span>
-              <span class='small number'>{{ balance }}</span>
+              <span class='small number'>{{ getLocaleString(balance) }}</span>
               <span class='small unit'>USDT</span>
               <span>)</span>
             </div>
@@ -43,14 +43,14 @@
             />
             <label>{{ $t('MSG_DUE_AMOUNT') }}</label>
             <div class='three-section' v-if='paymentCoin?.StableUSD'>
-              <span class='number'>{{ paymentAmount }}</span>
+              <span class='number'>{{ getLocaleString(paymentAmount) }}</span>
               <span class='unit'>USDT</span>
             </div>
             <div class='three-section' v-else>
-              <span class='number'>{{ usdToOtherAmount }}</span>
+              <span class='number'>{{ getLocaleString(usdToOtherAmount) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
               <span>&nbsp;(</span>
-              <span class='number small'>{{ paymentAmount }}</span>
+              <span class='number small'>{{ getLocaleString(paymentAmount) }}</span>
               <span class='unit small'>USDT</span>
               <span>)</span>
             </div>
@@ -97,7 +97,8 @@ import {
   useAdminAppCoinStore,
   AppCoin,
   useAdminCurrencyStore,
-  Currency
+  Currency,
+  getLocaleString
 } from 'npool-cli-v4'
 import { defineAsyncComponent, onMounted, ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
