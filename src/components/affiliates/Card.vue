@@ -5,7 +5,7 @@
         {{ username }}
       </h3>
       <span class='aff-email'>{{ archivement.subUsername(referral) }}</span>
-      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ referral.TotalInvitees }}</span></span>
+      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ getLocaleString(referral.TotalInvitees) }}</span></span>
     </div>
     <div class='aff-table'>
       <table id='commission-table'>
@@ -55,10 +55,10 @@
               </button>
             </td>
             <td><span class='aff-number'>{{ _good.TotalUnits }}<span class='unit'>{{ _good.GoodUnit?.length ? $t(_good.GoodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ Number(_good.TotalAmount).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ getLocaleString(Number(_good.TotalAmount).toFixed(4)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
             <td>
               <span class='aff-number'>
-                {{ child ? (_good.SuperiorCommission ? Number(_good.SuperiorCommission).toFixed(4) : 0.0000) : Number(_good.TotalCommission).toFixed(4) }}
+                {{ child ? (_good.SuperiorCommission ? getLocaleString(Number(_good.SuperiorCommission).toFixed(4)) : 0.0000) : getLocaleString(Number(_good.TotalCommission).toFixed(4)) }}
                 <span class='unit'>{{ PriceCoinName }}</span>
               </span>
             </td>
@@ -114,7 +114,8 @@ import {
   NotifyType,
   SettleType,
   useFrontendCommissionStore,
-  AppGood
+  AppGood,
+  getLocaleString
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 import { MyGoodArchivement } from 'src/localstore/ledger/types'

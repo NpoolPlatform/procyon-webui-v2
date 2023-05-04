@@ -2,7 +2,7 @@
   <h2>{{ $t('MSG_COMMISSION') }}</h2>
   <div class='earnings-summary'>
     <div class='earnings-figure'>
-      <span class='amount'>{{ totalCommission.toFixed(4) }}</span>
+      <span class='amount'>{{ getLocaleString(totalCommission.toFixed(4), true) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -10,7 +10,7 @@
       </h4>
     </div>
     <div class='earnings-figure'>
-      <span class='amount'>{{ commissionJPY.toFixed(4) }}</span>
+      <span class='amount'>{{ getLocaleString(commissionJPY.toFixed(4), true) }}</span>
       <span class='unit'>JPY</span>
       <div class='hr' />
       <h4 class='description'>
@@ -22,7 +22,7 @@
 
 <script setup lang='ts'>
 import { computed } from 'vue'
-import { useFrontendArchivementStore, useLocalUserStore, PriceCoinName, useAdminFiatCurrencyStore } from 'npool-cli-v4'
+import { useFrontendArchivementStore, useLocalUserStore, PriceCoinName, useAdminFiatCurrencyStore, getLocaleString } from 'npool-cli-v4'
 
 const logined = useLocalUserStore()
 
