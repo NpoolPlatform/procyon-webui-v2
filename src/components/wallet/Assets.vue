@@ -14,16 +14,16 @@
           />
         </q-td>
         <q-td key='Balance' :props='myProps'>
-          {{ myProps.row.Balance?.toFixed(4) }} {{ myProps.row.CoinUnit }}
+          {{ getLocaleString(myProps.row.Balance?.toFixed(4), true) }} {{ myProps.row.CoinUnit }}
         </q-td>
         <!-- <q-td key='Last24HoursBalance' :props='myProps'>
           {{ myProps.row.Last24HoursBalance?.toFixed(4) }}{{ myProps.row.CoinUnit }}
         </q-td> -->
         <q-td key='TotalUSDTValue' :props='myProps'>
-          {{ myProps.row.TotalUSDValue?.toFixed(4) }}
+          {{ getLocaleString(myProps.row.TotalUSDValue?.toFixed(4), true) }}
         </q-td>
         <q-td key='TotalJPYValue' :props='myProps'>
-          {{ myProps.row.TotalJPYValue?.toFixed(4) }}
+          {{ getLocaleString(myProps.row.TotalJPYValue?.toFixed(4), true) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps' class='asset-button'>
           <!-- CoinDisabled from AppGood, see ledger-gateway -->
@@ -96,7 +96,8 @@ import {
   useFrontendTransferAccountStore,
   useFrontendUserAccountStore,
   useNotificationStore,
-  useAdminFiatCurrencyStore
+  useAdminFiatCurrencyStore,
+  getLocaleString
 } from 'npool-cli-v4'
 import { IntervalKey } from 'src/const/const'
 import { useI18n } from 'vue-i18n'
