@@ -19,7 +19,7 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, useFrontendDetailStore, GoodType } from 'npool-cli-v4'
+import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, useFrontendDetailStore, GoodType, getLocaleString } from 'npool-cli-v4'
 import { stringify } from 'csv-stringify/sync'
 import saveAs from 'file-saver'
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
@@ -52,19 +52,19 @@ const table = computed(() => [
     name: 'Total',
     label: t('MSG_PURCHASE_AMOUNT'),
     align: 'center',
-    field: (row: Order) => `${parseFloat(row.Units)} ${t(row.GoodUnit)}`
+    field: (row: Order) => `${getLocaleString.value(parseFloat(row.Units))} ${t(row.GoodUnit)}`
   },
   {
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: Order) => (Number(row.PaymentAmount) + Number(row.PayWithBalanceAmount)).toString() + ' ' + row.PaymentCoinUnit
+    field: (row: Order) => getLocaleString.value(Number(row.PaymentAmount) + Number(row.PayWithBalanceAmount)) + ' ' + row.PaymentCoinUnit
   },
   {
     name: 'Period',
     label: t('MSG_PERIOD'),
     align: 'center',
-    field: (row: Order) => row.GoodServicePeriodDays.toString() + t('MSG_DAY')
+    field: (row: Order) => getLocaleString.value(row.GoodServicePeriodDays) + t('MSG_DAY')
   },
   {
     name: 'State',
