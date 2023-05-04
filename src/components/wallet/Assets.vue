@@ -26,6 +26,7 @@
           {{ myProps.row.TotalJPYValue?.toFixed(4) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps' class='asset-button'>
+          <!-- CoinDisabled from AppGood, see ledger-gateway -->
           <button :class='["small", "alt", (myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled) ? "in-active" : ""]' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
