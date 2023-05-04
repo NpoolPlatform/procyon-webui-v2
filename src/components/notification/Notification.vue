@@ -5,7 +5,7 @@
       <ul class='notification-center'>
         <li class='first'>
           <span>
-            <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: unReads.length})' />
+            <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: getLocaleString(unReads.length)})' />
             <span class='clear-all'>
               <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
             </span>
@@ -19,7 +19,7 @@
 
 <script lang='ts' setup>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
-import { useFrontendNotifStore } from 'npool-cli-v4'
+import { getLocaleString, useFrontendNotifStore } from 'npool-cli-v4'
 import { getNotifs, onMarkAll } from 'src/api/notif'
 
 const NotifCard = defineAsyncComponent(() => import('src/components/notification/NotifCard.vue'))
