@@ -10,6 +10,9 @@ export interface MyGoodProfit extends GoodProfit {
   Last30DaysInComing: number;
   Last30DaysUSDInComing: number;
   TotalEstimatedDailyReward: number;
+  MiningStartDate: string;
+  DaysMined: number;
+  DaysRemaining: number;
 }
 
 export interface MyGoodArchivement extends GoodArchivement {

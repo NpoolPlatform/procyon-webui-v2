@@ -27,17 +27,30 @@
     </div>
     <q-slide-transition>
       <div class='detailed-summary' v-show='!short'>
-        <!-- <div class='line'>
-          <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
+        <div class='line'>
+          <span class='label'>{{ $t('MSG_MINING_START_DATE') }}:</span>
           <span class='value'>
-            {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last30DaysInComing / 30 }}
-            <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
+            {{ goodProfit?.MiningStartDate ? goodProfit?.MiningStartDate : '*' }}
           </span>
-        </div> -->
+        </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
           <span class='value'>
             {{ goodProfit?.GoodServicePeriodDays }}
+            <span class='unit'>{{ $t('MSG_DAYS') }}</span>
+          </span>
+        </div>
+        <div class='line'>
+          <span class='label'>{{ $t('MSG_DAYS_MINED') }}:</span>
+          <span class='value'>
+            {{ goodProfit?.DaysMined }}
+            <span class='unit'>{{ $t('MSG_DAYS') }}</span>
+          </span>
+        </div>
+        <div class='line'>
+          <span class='label'>{{ $t('MSG_DAYS_REMAINING') }}:</span>
+          <span class='value'>
+            {{ goodProfit?.DaysRemaining }}
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
@@ -48,20 +61,6 @@
             <span class='unit'>{{ goodProfit?.CoinUnit }} ({{ target?.TechnicalFeeRatio }}%)</span>
           </span>
         </div>
-        <!-- <div class='line'>
-          <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-          <span class='value'>
-            {{ goodProfit?.CoinPreSale ? '*' : goodProfit.Last30DaysInComing / 30 * 0.8 }}
-            <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
-          </span>
-        </div> -->
-        <!-- <div class='line'>
-          <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
-          <span class='value'>
-            {{ '*' }}
-            <span class='unit'>{{ goodProfit?.CoinUnit }}</span>
-          </span>
-        </div> -->
         <div class='line' v-if='goodProfit.GoodID === "de420061-e878-4a8b-986a-805cadd59233"'>
           <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
           <span class='value'>
