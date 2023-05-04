@@ -44,9 +44,9 @@
           <tr class='aff-info total-row'>
             <td><span class='aff-product'>{{ $t('MSG_TOTAL') }}</span></td>
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
-            <td><span class='aff-number'>{{ totalUnits.toFixed(0) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ totalAmount.toFixed(0) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ totalSuperiorCommission.toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ getLocaleString(totalUnits.toFixed(0)) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
+            <td><span class='aff-number'>{{ getLocaleString(totalAmount.toFixed(0)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ getLocaleString(totalSuperiorCommission.toFixed(4)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
           <!-- summary end -->
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
@@ -55,9 +55,9 @@
               <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
-            <td><span class='aff-number'>{{ userTotalUnits(referral) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ userTotalAmount(referral) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ userSuperiorCommission(referral).toFixed(4) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ getLocaleString(userTotalUnits(referral)) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
+            <td><span class='aff-number'>{{ getLocaleString(userTotalAmount(referral)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ getLocaleString(userSuperiorCommission(referral).toFixed(4)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -88,7 +88,8 @@ import {
   useAdminAppCoinStore,
   useFrontendArchivementStore,
   UserArchivement,
-  PriceCoinName
+  PriceCoinName,
+  getLocaleString
 } from 'npool-cli-v4'
 
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
