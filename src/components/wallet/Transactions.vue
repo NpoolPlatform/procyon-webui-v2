@@ -17,7 +17,7 @@
           {{ formatTime(myProps.row.CreatedAt) }}
         </q-td>
         <q-td key='Amount' :props='myProps'>
-          {{ transactionSign(myProps.row) }} {{ myProps.row.Amount }} {{ myProps.row.CoinUnit }}
+          {{ transactionSign(myProps.row) }} {{ getLocaleString(myProps.row.Amount) }} {{ myProps.row.CoinUnit }}
         </q-td>
         <q-td key='IOType' :props='myProps'>
           {{ $t(transactionType(myProps.row)) }}
@@ -30,7 +30,7 @@
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Detail, formatTime, IOSubType, IOType, NotifyType, useFrontendDetailStore } from 'npool-cli-v4'
+import { Detail, formatTime, getLocaleString, IOSubType, IOType, NotifyType, useFrontendDetailStore } from 'npool-cli-v4'
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
