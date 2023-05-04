@@ -291,6 +291,8 @@ const table = computed(() => [
 
 .qr-code
   border-radius: 0 0 12px 12px
-.asset-button button
-  border-radius: 8px
+.asset-button
+  text-align: right
+  & button
+    border-radius: 8px
 </style>
