@@ -16,14 +16,14 @@
             />
             <label>{{ $t('MSG_BALANCE') }}</label>
             <div class='three-section' v-if='paymentCoin?.StableUSD'>
-              <span class='number'>{{ getLocaleString(balance) }}</span>
+              <span class='number'>{{ util.getLocaleString(balance) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
             <div class='three-section' v-else>
-              <span class='number'>{{ getLocaleString(general.getBalanceByID(coinTypeID)) }}</span>
+              <span class='number'>{{ util.getLocaleString(general.getBalanceByID(coinTypeID)) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
               <span>&nbsp;({{ $t("MSG_APPROX") }}</span>
-              <span class='small number'>{{ getLocaleString(balance) }}</span>
+              <span class='small number'>{{ util.getLocaleString(balance) }}</span>
               <span class='small unit'>USDT</span>
               <span>)</span>
             </div>
@@ -43,14 +43,14 @@
             />
             <label>{{ $t('MSG_DUE_AMOUNT') }}</label>
             <div class='three-section' v-if='paymentCoin?.StableUSD'>
-              <span class='number'>{{ getLocaleString(paymentAmount) }}</span>
+              <span class='number'>{{ util.getLocaleString(paymentAmount) }}</span>
               <span class='unit'>USDT</span>
             </div>
             <div class='three-section' v-else>
-              <span class='number'>{{ getLocaleString(usdToOtherAmount) }}</span>
+              <span class='number'>{{ util.getLocaleString(usdToOtherAmount) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
               <span>&nbsp;(</span>
-              <span class='number small'>{{ getLocaleString(paymentAmount) }}</span>
+              <span class='number small'>{{ util.getLocaleString(paymentAmount) }}</span>
               <span class='unit small'>USDT</span>
               <span>)</span>
             </div>
@@ -98,7 +98,7 @@ import {
   AppCoin,
   useAdminCurrencyStore,
   Currency,
-  getLocaleString
+  useLocaleStringStore
 } from 'npool-cli-v4'
 import { defineAsyncComponent, onMounted, ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -123,6 +123,8 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const goodID = computed(() => query.value.goodID)
 const coinTypeID = ref(query.value.coinTypeID)
+
+const util = useLocaleStringStore()
 
 const coin = useAdminAppCoinStore()
 const coins = computed(() => coin.getAvailableCoins().filter((el) => el.ENV === target.value?.CoinEnv))

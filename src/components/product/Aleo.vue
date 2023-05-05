@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ getLocaleString(good.getPrice(goodID)) }}</span>
+        <span class='number'>{{ util.getLocaleString(good.getPrice(goodID)) }}</span>
         <span class='unit'>{{ PriceCoinName }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -31,7 +31,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
-        <span class='number'>{{ getLocaleString(target?.DurationDays) }}</span>
+        <span class='number'>{{ util.getLocaleString(target?.DurationDays) }}</span>
         <span class='unit'>{{ $t('MSG_DAYS') }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -128,7 +128,7 @@ import { useI18n } from 'vue-i18n'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
-import { AppGood, InvalidID, NotifyType, getLocaleString, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
+import { AppGood, InvalidID, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore, useLocaleStringStore } from 'npool-cli-v4'
 import { getCurrencies, getDescriptions } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -145,6 +145,8 @@ interface Query {
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
+
+const util = useLocaleStringStore()
 
 const coin = useAdminAppCoinStore()
 

@@ -15,40 +15,40 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
-        <span class='value'>{{ getLocaleString(_totalEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
+        <span class='value'>{{ util.getLocaleString(_totalEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
         <span class='sub-value'> (* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}: </span>
-        <span class='value'>{{ getLocaleString(_last24HoursEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
+        <span class='value'>{{ util.getLocaleString(_last24HoursEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
         <span class='sub-value'> (* {{ PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
-        <span class='value'>{{ getLocaleString(totalUnits) }} {{ $t(goodUnit) }}</span>
+        <span class='value'>{{ util.getLocaleString(totalUnits) }} {{ $t(goodUnit) }}</span>
       </div>
     </div>
     <q-slide-transition>
       <div class='detailed-summary' v-show='!short'>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
-          <span class='value'>{{ getLocaleString(_last30DaysDailyEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
+          <span class='value'>{{ util.getLocaleString(_last30DaysDailyEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
-          <span class='value'>{{ getLocaleString((_last24HoursEarningCoin * 0.2)?.toFixed(4)) }} {{ target?.Unit }} (20%)</span>
+          <span class='value'>{{ util.getLocaleString((_last24HoursEarningCoin * 0.2)?.toFixed(4)) }} {{ target?.Unit }} (20%)</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-          <span class='value'>{{ getLocaleString((_last30DaysDailyEarningCoin * 0.8)?.toFixed(4)) }} {{ target?.Unit }}</span>
+          <span class='value'>{{ util.getLocaleString((_last30DaysDailyEarningCoin * 0.8)?.toFixed(4)) }} {{ target?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
-          <span class='value'>{{ getLocaleString(goodPeriod) }} {{ $t('MSG_DAYS') }}</span>
+          <span class='value'>{{ util.getLocaleString(goodPeriod) }} {{ $t('MSG_DAYS') }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
-          <span class='value'>{{ getLocaleString(daily?.toFixed(2)) }} {{ target?.Unit }}</span>
+          <span class='value'>{{ util.getLocaleString(daily?.toFixed(2)) }} {{ target?.Unit }}</span>
         </div>
       </div>
     </q-slide-transition>
@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang='ts'>
-import { AppCoin, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendProfitStore, PriceCoinName, NotifyType, getLocaleString } from 'npool-cli-v4'
+import { AppCoin, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendProfitStore, PriceCoinName, NotifyType, useLocaleStringStore } from 'npool-cli-v4'
 import { useMockSpacemeshStore } from 'src/teststore'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -78,6 +78,8 @@ import warning from '../../assets/warning.svg'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
+
+const util = useLocaleStringStore()
 
 const coin = useAdminAppCoinStore()
 const target = computed(() => coin.AppCoins.AppCoins.find((el) => el.Name?.toLowerCase()?.includes('spacemesh')) as AppCoin)

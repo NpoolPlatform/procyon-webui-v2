@@ -19,13 +19,15 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, useFrontendDetailStore, GoodType, getLocaleString } from 'npool-cli-v4'
+import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, useFrontendDetailStore, GoodType, useLocaleStringStore } from 'npool-cli-v4'
 import { stringify } from 'csv-stringify/sync'
 import saveAs from 'file-saver'
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
+
+const util = useLocaleStringStore()
 
 const order = useFrontendOrderStore()
 const orders = computed(() => order.orders)
@@ -52,19 +54,19 @@ const table = computed(() => [
     name: 'Total',
     label: t('MSG_PURCHASE_AMOUNT'),
     align: 'center',
-    field: (row: Order) => `${getLocaleString.value(parseFloat(row.Units))} ${t(row.GoodUnit)}`
+    field: (row: Order) => `${util.getLocaleString(parseFloat(row.Units))} ${t(row.GoodUnit)}`
   },
   {
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: Order) => getLocaleString.value(Number(row.PaymentAmount) + Number(row.PayWithBalanceAmount)) + ' ' + row.PaymentCoinUnit
+    field: (row: Order) => util.getLocaleString(Number(row.PaymentAmount) + Number(row.PayWithBalanceAmount)) + ' ' + row.PaymentCoinUnit
   },
   {
     name: 'Period',
     label: t('MSG_PERIOD'),
     align: 'center',
-    field: (row: Order) => getLocaleString.value(row.GoodServicePeriodDays) + t('MSG_DAY')
+    field: (row: Order) => util.getLocaleString(row.GoodServicePeriodDays) + t('MSG_DAY')
   },
   {
     name: 'State',
