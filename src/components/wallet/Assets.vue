@@ -14,16 +14,16 @@
           />
         </q-td>
         <q-td key='Balance' :props='myProps'>
-          {{ getLocaleString(myProps.row.Balance?.toFixed(4)) }} {{ myProps.row.CoinUnit }}
+          {{ util.getLocaleString(myProps.row.Balance?.toFixed(4)) }} {{ myProps.row.CoinUnit }}
         </q-td>
         <!-- <q-td key='Last24HoursBalance' :props='myProps'>
           {{ myProps.row.Last24HoursBalance?.toFixed(4) }}{{ myProps.row.CoinUnit }}
         </q-td> -->
         <q-td key='TotalUSDTValue' :props='myProps'>
-          {{ getLocaleString(myProps.row.TotalUSDValue?.toFixed(4)) }}
+          {{ util.getLocaleString(myProps.row.TotalUSDValue?.toFixed(4)) }}
         </q-td>
         <q-td key='TotalJPYValue' :props='myProps'>
-          {{ getLocaleString(myProps.row.TotalJPYValue?.toFixed(4)) }}
+          {{ util.getLocaleString(myProps.row.TotalJPYValue?.toFixed(4)) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps' class='asset-button'>
           <!-- CoinDisabled from AppGood, see ledger-gateway -->
@@ -97,7 +97,7 @@ import {
   useFrontendUserAccountStore,
   useNotificationStore,
   useAdminFiatCurrencyStore,
-  getLocaleString
+  useLocaleStringStore
 } from 'npool-cli-v4'
 import { IntervalKey } from 'src/const/const'
 import { useI18n } from 'vue-i18n'
@@ -114,6 +114,8 @@ interface MyGeneral extends General {
   TotalUSDValue: number;
   TotalJPYValue: number;
 }
+
+const util = useLocaleStringStore()
 
 const assetLabel = (asset: General) => {
   let label = asset.CoinName

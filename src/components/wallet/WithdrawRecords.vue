@@ -17,7 +17,7 @@
           {{ formatTime(myProps.row.CreatedAt) }}
         </q-td>
         <q-td key='Amount' :props='myProps'>
-          {{ getLocaleString(myProps.row.Amount) }}{{ myProps.row.CoinUnit }}
+          {{ util.getLocaleString(myProps.row.Amount) }}{{ myProps.row.CoinUnit }}
         </q-td>
         <q-td key='Status' :props='myProps'>
           {{ $t(withdrawStatus(myProps.row)) }}
@@ -32,13 +32,15 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
-import { formatTime, getLocaleString, NotifyType, useFrontendWithdrawStore, Withdraw, WithdrawState } from 'npool-cli-v4'
+import { formatTime, NotifyType, useFrontendWithdrawStore, useLocaleStringStore, Withdraw, WithdrawState } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
+
+const util = useLocaleStringStore()
 
 const withdraw = useFrontendWithdrawStore()
 const withdraws = computed(() => withdraw.withdraws)

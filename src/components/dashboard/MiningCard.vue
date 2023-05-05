@@ -11,17 +11,17 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : getLocaleString(parseFloat(goodProfit?.TotalInComing?.toFixed(4))) }}</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : util.getLocaleString(parseFloat(goodProfit?.TotalInComing?.toFixed(4))) }}</span>
         <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}: </span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : getLocaleString(parseFloat(goodProfit?.Last24HoursInComing?.toFixed(4))) }}</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : util.getLocaleString(parseFloat(goodProfit?.Last24HoursInComing?.toFixed(4))) }}</span>
         <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}: </span>
-        <span class='value'>{{ getLocaleString(goodProfit?.Units) }}</span>
+        <span class='value'>{{ util.getLocaleString(goodProfit?.Units) }}</span>
         <span class='sub-value'>{{ goodProfit ? $t(goodProfit?.GoodUnit) : '' }}</span>
       </div>
     </div>
@@ -36,35 +36,35 @@
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
           <span class='value'>
-            {{ getLocaleString(goodProfit?.GoodServicePeriodDays) }}
+            {{ util.getLocaleString(goodProfit?.GoodServicePeriodDays) }}
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_DAYS_MINED') }}:</span>
           <span class='value'>
-            {{ getLocaleString(goodProfit?.DaysMined) }}
+            {{ util.getLocaleString(goodProfit?.DaysMined) }}
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_DAYS_REMAINING') }}:</span>
           <span class='value'>
-            {{ getLocaleString(goodProfit?.DaysRemaining) }}
+            {{ util.getLocaleString(goodProfit?.DaysRemaining) }}
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
           <span class='value'>
-            {{ goodProfit?.CoinPreSale ? '*' : getLocaleString(parseFloat((goodProfit.Last24HoursInComing / deservedRatio * techServiceFee)?.toFixed(4))) }}
+            {{ goodProfit?.CoinPreSale ? '*' : util.getLocaleString(parseFloat((goodProfit.Last24HoursInComing / deservedRatio * techServiceFee)?.toFixed(4))) }}
             <span class='unit'>{{ goodProfit?.CoinUnit }} ({{ target?.TechnicalFeeRatio }}%)</span>
           </span>
         </div>
         <div class='line' v-if='goodProfit.GoodID === "de420061-e878-4a8b-986a-805cadd59233"'>
           <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
           <span class='value'>
-            {{ goodProfit.TotalEstimatedDailyReward === 0 ? '*' : goodProfit.TotalEstimatedDailyReward }}
+            {{ goodProfit.TotalEstimatedDailyReward === 0 ? '*' : util.getLocaleString(goodProfit.TotalEstimatedDailyReward) }}
             <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
         </div>
         <div class='warning' v-if='target?.Descriptions?.[3] && target?.Descriptions?.[3]?.length > 0'>
@@ -93,7 +93,7 @@
 
 <script setup lang='ts'>
 import saveAs from 'file-saver'
-import { useAdminAppGoodStore, useFrontendDetailStore, formatTime, MiningReward, AppGood, getLocaleString } from 'npool-cli-v4'
+import { useAdminAppGoodStore, useFrontendDetailStore, formatTime, MiningReward, AppGood, useLocaleStringStore } from 'npool-cli-v4'
 import { MyGoodProfit } from 'src/localstore/ledger/types'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -112,6 +112,8 @@ const props = defineProps<Props>()
 const goodProfit = toRef(props, 'profit')
 
 const short = ref(true)
+
+const util = useLocaleStringStore()
 
 const good = useAdminAppGoodStore()
 const target = computed(() => good.getGoodByID(goodProfit.value?.GoodID))
