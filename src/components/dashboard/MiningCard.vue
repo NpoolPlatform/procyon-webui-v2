@@ -186,7 +186,7 @@ const exportMiningRewards = computed(() => {
         orderIDs.push(el.OrderID)
       }
       netRewardAmount += Number(el.RewardAmount)
-      cumulativeTotal += Number(el.RewardAmount) / deservedRatio.value
+      cumulativeTotal += Number(el.RewardAmount)
     })
     rows.push({
       CreatedAt: new Date(Number(rowMap.get(key)?.[0]?.CreatedAt) * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
