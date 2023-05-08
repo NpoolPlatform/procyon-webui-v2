@@ -150,14 +150,21 @@
         />
       </div>
     </div>
-    <input type='submit' :value='$t("MSG_SAVE_CHANGES")' class='account-field'>
+    <!-- <input type='submit' :value='$t("MSG_SAVE_CHANGES")' class='account-field'> -->
+    <div class='save-changes'>
+      <WaitingBtn
+        label='MSG_SAVE_CHANGES'
+        type='submit'
+        :disabled='submitting'
+        :waiting='submitting'
+        @click='onSubmit'
+      />
+    </div>
   </form>
 </template>
 
 <script setup lang='ts'>
 import { NotifyType, useFrontendUserStore, useLocalUserStore, validateUsername } from 'npool-cli-v4'
-import { throttle } from 'quasar'
-import { ThrottleSeconds } from 'src/const/const'
 import { defineAsyncComponent, ref, computed } from 'vue'
 
 import { useI18n } from 'vue-i18n'
@@ -168,6 +175,7 @@ import warning from '../../assets/warning.svg'
 const { t } = useI18n({ useScope: 'global' })
 
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
+const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 
 const user = useLocalUserStore()
 
@@ -250,12 +258,16 @@ const street2 = computed({
 const street2Error = ref(false)
 
 const fuser = useFrontendUserStore()
-const onSubmit = throttle(() => {
+
+const submitting = ref(false)
+const onSubmit = () => {
+  submitting.value = true
   usernameError.value = !username.value?.length
   firstNameError.value = !firstName.value?.length
   lastNameError.value = !lastName.value?.length
 
   if (usernameError.value || firstNameError.value || lastNameError.value) {
+    submitting.value = false
     return
   }
 
@@ -281,10 +293,9 @@ const onSubmit = throttle(() => {
       }
     }
   }, () => {
-    // TODO
+    submitting.value = false
   })
-  return false
-}, ThrottleSeconds * 1000)
+}
 
 </script>
 
@@ -297,4 +308,7 @@ const onSubmit = throttle(() => {
 .alignment
   margin-left: 0px !important
   margin-right: 0px !important
+
+.save-changes button
+  width: 49%
 </style>
