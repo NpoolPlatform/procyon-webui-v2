@@ -43,7 +43,7 @@ const goodProfits = computed(() => Array.from(profit.GoodProfits.GoodProfits).ma
     TotalEstimatedDailyReward: Number(el.Units) * parseFloat(good.getGoodByID(el.GoodID)?.DailyRewardAmount as string),
     GoodSaleEndAt: _good?.SaleEndAt,
     MiningStartDate: good.getJSTDate(_good?.ServiceStartAt, 'YYYY-MM-DD'),
-    DaysMined: daysMined,
+    DaysMined: daysMined > el.GoodServicePeriodDays ? el.GoodServicePeriodDays : daysMined,
     DaysRemaining: daysRemaining
   } as MyGoodProfit
 }).sort((a, b) => {
