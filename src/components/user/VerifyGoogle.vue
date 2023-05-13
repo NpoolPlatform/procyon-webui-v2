@@ -30,7 +30,6 @@ import {
   useFrontendUserStore,
   AccountType,
   NotifyType,
-  useLocalUserStore,
   User,
   SignMethodType,
   validateVerificationCode
@@ -61,15 +60,23 @@ const onVerificationCodeFocusOut = () => {
 
 const router = useRouter()
 const user = useFrontendUserStore()
-const logined = useLocalUserStore()
 
 const onSubmit = () => {
   if (verificationCodeError.value || oldVerificationCodeError.value) {
     return
   }
+  let _oldAccountType = SignMethodType.Email
+  switch (oldAccountType.value) {
+    case AccountType.Mobile:
+      _oldAccountType = SignMethodType.Mobile
+      break
+    case AccountType.Google:
+      _oldAccountType = SignMethodType.Google
+      break
+  }
   user.updateUser({
-    Account: logined.User.LoginAccount,
-    AccountType: logined.User.LoginAccountType,
+    Account: oldAccount.value,
+    AccountType: _oldAccountType,
     VerificationCode: oldVerificationCode.value,
     NewAccountType: AccountType.Google as unknown as SignMethodType,
     NewVerificationCode: myVerificationCode.value,
