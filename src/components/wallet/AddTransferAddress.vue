@@ -1,6 +1,6 @@
 <template>
   <div :class='[ verifying ? "blur" : "" ]'>
-    <FormPage @submit='onSubmit' label='MSG_TRANSFER_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS'>
+    <FormPage @submit='onSubmit' label='MSG_TRANSFER_REGISTRATION' submit-text='MSG_REGISTER_ADDRESS' :submitting='submitting'>
       <template #form-body>
         <Input
           v-model:value='address'
@@ -67,6 +67,8 @@ const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
 
+const submitting = ref(false)
+
 const address = ref('')
 const submitAddress = computed(() => address.value.replace(/ /g, ''))
 const addressError = ref(false)
@@ -110,6 +112,7 @@ const onCancelClick = () => {
 }
 
 const onCodeVerify = (code: string) => {
+  submitting.value = true
   transferAccount.createTransfer({
     Account: account.value,
     AccountType: accountType.value,
@@ -126,10 +129,12 @@ const onCodeVerify = (code: string) => {
     }
   }, (address: TransferAccount, error: boolean) => {
     if (error) {
+      submitting.value = false
+      onMenuHide()
       return
     }
-    onMenuHide()
     void router.back()
+    submitting.value = false
   })
 }
 
