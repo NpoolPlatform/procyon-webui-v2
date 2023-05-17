@@ -10,7 +10,7 @@
       </h4>
     </div>
     <div class='earnings-figure'>
-      <span class='amount'>{{ util.getLocaleString(commissionJPY.toFixed(4), true) }}</span>
+      <span class='amount'>{{ util.getLocaleString(Math.floor(commissionJPY), false) }}</span>
       <span class='unit'>JPY</span>
       <div class='hr' />
       <h4 class='description'>
