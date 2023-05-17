@@ -2,7 +2,7 @@
   <h2>{{ $t('MSG_COMMISSION') }}</h2>
   <div class='earnings-summary'>
     <div class='earnings-figure'>
-      <span class='amount'>{{ util.getLocaleString(totalCommission.toFixed(4), true) }}</span>
+      <span class='amount'>{{ util.getLocaleString(Math.floor(totalCommission), false, 4) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -10,7 +10,7 @@
       </h4>
     </div>
     <div class='earnings-figure'>
-      <span class='amount'>{{ util.getLocaleString(Math.floor(commissionJPY), false) }}</span>
+      <span class='amount'>{{ util.getLocaleString(Math.floor(commissionJPY)) }}</span>
       <span class='unit'>JPY</span>
       <div class='hr' />
       <h4 class='description'>
