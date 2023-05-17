@@ -82,7 +82,7 @@
 import { ref, defineAsyncComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { UsedFor, AccountType, NotifyType, useFrontendUserAccountStore, SignMethodType, AccountUsedFor, useAdminAppCoinStore } from 'npool-cli-v4'
+import { UsedFor, AccountType, NotifyType, useFrontendUserAccountStore, SignMethodType, AccountUsedFor, useAdminAppCoinStore, Account } from 'npool-cli-v4'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
@@ -127,7 +127,6 @@ const labelsError = ref(false)
 const verifying = ref(false)
 const onSubmit = () => {
   verifying.value = true
-  submitting.value = true
 }
 
 const onMenuHide = () => {
@@ -135,7 +134,6 @@ const onMenuHide = () => {
     return
   }
   verifying.value = false
-  submitting.value = false
 }
 
 const onCancelClick = () => {
@@ -169,21 +167,26 @@ const onCodeVerify = (code: string) => {
         Type: NotifyType.Error
       }
     }
-  }, () => {
-    if (gotoWithdraw.value) {
+  }, (_:Account, error: boolean) => {
+    if (error) {
       submitting.value = false
+      onMenuHide()
+      return
+    }
+
+    if (gotoWithdraw.value) {
       void router.push({
         path: '/withdraw',
         query: {
           coinTypeID: selectedCoinTypeID.value
         }
       })
+      submitting.value = false
       return
     }
-    submitting.value = false
     void router.back()
+    submitting.value = false
   })
-  onMenuHide()
 }
 
 </script>
