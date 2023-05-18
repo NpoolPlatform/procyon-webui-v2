@@ -138,8 +138,8 @@ const onSubmit = throttle(() => {
         }
       }
     }, (u: User, error: boolean) => {
-      logging.value = false
       if (error) {
+        logging.value = false
         return
       }
       verify()
@@ -199,6 +199,12 @@ const _verify = () => {
 
 const submitting = ref(false)
 
+const resetStatus = () => {
+  submitting.value = false
+  verifying.value = false
+  logging.value = false
+}
+
 const onCodeVerify = (code: string) => {
   submitting.value = true
 
@@ -217,8 +223,6 @@ const onCodeVerify = (code: string) => {
       }
     }
   }, (u: User, error: boolean) => {
-    submitting.value = false
-    verifying.value = false
     if (error) {
       user.logout({
         Token: logined.User?.LoginToken,
@@ -226,6 +230,7 @@ const onCodeVerify = (code: string) => {
       }, () => {
         // TODO
       })
+      resetStatus()
       return
     }
     if (target.value?.length) {
@@ -233,9 +238,11 @@ const onCodeVerify = (code: string) => {
         path: target.value,
         query: route.query
       })
+      resetStatus()
       return
     }
     remainder()
+    resetStatus()
     if (logined.logined && notifications.value?.length === 0) {
       getNotifs(0, 500)
     }
