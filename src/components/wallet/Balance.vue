@@ -2,7 +2,7 @@
   <h2>{{ $t('MSG_ACCOUNT_BALANCE') }}</h2>
   <div class='earnings-summary'>
     <div class='earnings-figure'>
-      <span class='amount'>{{ util.getLocaleString(totalUSDTBalance.toFixed(4)) }}</span>
+      <span class='amount'>{{ util.getLocaleString(totalUSDTBalance) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -10,7 +10,7 @@
       </h4>
     </div>
     <div class='earnings-figure'>
-      <span class='amount'>{{ util.getLocaleString(totalJPYBalance.toFixed(4)) }}</span>
+      <span class='amount'>{{ util.getLocaleString(totalJPYBalance) }}</span>
       <span class='unit'>JPY</span>
       <div class='hr' />
       <h4 class='description'>
@@ -35,7 +35,7 @@ const totalUSDTBalance = computed(() => {
   general.Generals.Generals.forEach((el) => {
     total += Number(el.Spendable) * currency.getUSDCurrency(el.CoinTypeID)
   })
-  return total
+  return Math.round(total)
 })
-const totalJPYBalance = computed(() => totalUSDTBalance.value * fiat.getJPYCurrency())
+const totalJPYBalance = computed(() => Math.round(totalUSDTBalance.value * fiat.getJPYCurrency()))
 </script>
