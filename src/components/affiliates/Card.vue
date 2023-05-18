@@ -55,10 +55,10 @@
               </button>
             </td>
             <td><span class='aff-number'>{{ util.getLocaleString(_good.TotalUnits) }}<span class='unit'>{{ _good.GoodUnit?.length ? $t(_good.GoodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(Number(_good.TotalAmount))) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(Number(_good.TotalAmount) * 100) / 100, 2) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
             <td>
               <span class='aff-number'>
-                {{ child ? (_good.SuperiorCommission ? util.getLocaleString(Math.floor(Number(_good.SuperiorCommission))) : 0.0000) : util.getLocaleString(Math.floor(Number(_good.TotalCommission))) }}
+                {{ child ? (_good.SuperiorCommission ? util.getLocaleString(Math.floor(Number(_good.SuperiorCommission) * 100) / 100, 2) : "0.00") : util.getLocaleString(Math.floor(Number(_good.TotalCommission) * 100) / 100, 2) }}
                 <span class='unit'>{{ PriceCoinName }}</span>
               </span>
             </td>
