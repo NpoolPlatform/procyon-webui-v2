@@ -207,6 +207,7 @@ const resetStatus = () => {
 
 const onCodeVerify = (code: string) => {
   submitting.value = true
+  verifying.value = true
 
   user.loginVerify({
     Account: verifyAccount.value,
