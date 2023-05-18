@@ -45,8 +45,8 @@
             <td><span class='aff-product'>{{ $t('MSG_TOTAL') }}</span></td>
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
             <td><span class='aff-number'>{{ util.getLocaleString(totalUnits.toFixed(0)) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(totalAmount.toFixed(0)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(totalSuperiorCommission.toFixed(4)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(totalAmount)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(totalSuperiorCommission)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
           <!-- summary end -->
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
@@ -56,8 +56,8 @@
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
             <td><span class='aff-number'>{{ util.getLocaleString(userTotalUnits(referral)) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(userTotalAmount(referral)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(userSuperiorCommission(referral).toFixed(4)) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(userTotalAmount(referral))) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(userSuperiorCommission(referral))) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>

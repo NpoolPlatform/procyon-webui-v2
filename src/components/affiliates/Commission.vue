@@ -2,7 +2,7 @@
   <h2>{{ $t('MSG_COMMISSION') }}</h2>
   <div class='earnings-summary'>
     <div class='earnings-figure'>
-      <span class='amount'>{{ util.getLocaleString(Math.floor(totalCommission), false, 4) }}</span>
+      <span class='amount'>{{ util.getLocaleString(Math.floor(totalCommission)) }}</span>
       <span class='unit'>{{ PriceCoinName }}</span>
       <div class='hr' />
       <h4 class='description'>
@@ -10,7 +10,7 @@
       </h4>
     </div>
     <div class='earnings-figure'>
-      <span class='amount'>{{ util.getLocaleString(Math.floor(commissionJPY)) }}</span>
+      <span class='amount'>{{ util.getLocaleString(commissionJPY, 2) }}</span>
       <span class='unit'>JPY</span>
       <div class='hr' />
       <h4 class='description'>
@@ -40,6 +40,9 @@ const totalCommission = computed(() => {
 })
 
 const fiat = useAdminFiatCurrencyStore()
-const commissionJPY = computed(() => totalCommission.value * fiat.getJPYCurrency())
+const commissionJPY = computed(() => {
+  const total = totalCommission.value * fiat.getJPYCurrency()
+  return Math.floor((total * 100)) / 100
+})
 
 </script>
