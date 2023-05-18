@@ -243,10 +243,6 @@ const onCodeVerify = (code: string) => {
       return
     }
     remainder()
-    resetStatus()
-    if (logined.logined && notifications.value?.length === 0) {
-      getNotifs(0, 500)
-    }
   })
 }
 
@@ -271,8 +267,13 @@ const remainder = () => {
       void router.push({ path: '/remainder/ga' })
       return
     }
+    resetStatus()
     void router.push({ path: '/' })
   })
+
+  if (logined.logined && notifications.value?.length === 0) {
+    getNotifs(0, 500)
+  }
 }
 </script>
 
