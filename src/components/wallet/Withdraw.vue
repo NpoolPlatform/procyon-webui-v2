@@ -63,32 +63,24 @@
                   <div
                     v-for='_withdraw in withdraws'
                     :key='_withdraw.ID'
+                    :class='[ "address-option", selectedAccount?.ID === _withdraw.ID ? "address-selected" : "" , "address-line"]'
+                    @click='onAddressSelected(_withdraw)'
                   >
-                    <span
-                      :class='[ "address-option", selectedAccount?.ID === _withdraw.ID ? "address-selected" : "" ]'
-                      @click='onAddressSelected(_withdraw)'
-                    >
-                      <span class='wallet-type'>{{ _withdraw.Labels?.join(',') }}</span>
-                      <span class='wallet-type coin-type'>{{ target?.Name }}</span>
-                      <span class='number'>{{ _withdraw?.Address }}</span>
-                      <img class='checkmark' :src='checkmark'>
-                    </span>
+                    <span :class='[_withdraw.Labels?.join(",")?.length > 0? "wallet-type": ""]'>{{ _withdraw.Labels?.join(',') }}</span>
+                    <span class='wallet-type coin-type'>{{ target?.Name }}</span>
+                    <span class='number'>{{ _withdraw?.Address }}<img class='checkmark address-checkmark' :src='checkmark'></span>
                   </div>
                 </div>
                 <div v-else>
                   <div
                     v-for='_account in transferAccounts'
                     :key='_account.TargetUserID'
+                    :class='[ "address-option", selectedTransferAccount?.TargetUserID === _account.TargetUserID ? "address-selected" : "" , "address-line"]'
+                    @click='onTransferAccountSelected(_account)'
                   >
-                    <span
-                      :class='[ "address-option", selectedTransferAccount?.TargetUserID === _account.TargetUserID ? "address-selected" : "" ]'
-                      @click='onTransferAccountSelected(_account)'
-                    >
-                      <span class='wallet-type'>{{ baseUser.displayName1(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string) }}</span>
-                      <span class='wallet-type coin-type'>{{ $t('MSG_INTERNAL') }}</span>
-                      <span class='number'>{{ _account.TargetEmailAddress.length ? _account.TargetEmailAddress : _account.TargetPhoneNO }}</span>
-                      <img class='checkmark' :src='checkmark'>
-                    </span>
+                    <span :class='[baseUser.displayName1(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string)?.length > 0 ? "wallet-type": ""]'>{{ baseUser.displayName1(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string) }}</span>
+                    <span class='wallet-type coin-type'>{{ $t('MSG_INTERNAL') }}</span>
+                    <span class='number'>{{ _account.TargetEmailAddress.length ? _account.TargetEmailAddress : _account.TargetPhoneNO }}<img class='checkmark address-checkmark' :src='checkmark'></span>
                   </div>
                 </div>
               </div>
@@ -475,10 +467,13 @@ const getGenerals = (offset: number, limit: number) => {
 <style lang='sass' scoped>
 .wallet-type
   margin-right: 10px
-
+.address-line
+  line-height: 1.7
+  margin-top: 10px
 .coin-type
   text-transform: uppercase !important
-
+.address-checkmark
+  margin-left: 10px
 .one-one-line
   display: inline-block
   margin-right: 15px
