@@ -34,7 +34,8 @@ import {
   User,
   SwitchTarget,
   ErrorTarget,
-  useLocaleStore
+  useLocaleStore,
+  useAdminAppLangStore
 } from 'npool-cli-v4'
 import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
@@ -56,6 +57,20 @@ const errorswitcher = useOldErrorSwitcherStore()
 const trigger = computed(() => errorswitcher.ErrorTrigger)
 
 const logined = useLocalUserStore()
+
+const user = useLocalUserStore()
+const lang = useAdminAppLangStore()
+
+watch(() => user.User?.SelectedLangID, () => {
+  if (user.User && user.User.SelectedLangID?.length > 0) {
+    const _lang = lang.AppLangs.AppLangs.find((el) => el.LangID === user.User?.SelectedLangID)
+    if (!_lang) {
+      console.log('LangID Not Found', user.User?.SelectedLangID)
+      return
+    }
+    locale.setLang(_lang)
+  }
+})
 
 const router = useRouter()
 
