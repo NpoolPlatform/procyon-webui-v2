@@ -4,7 +4,7 @@
       <div class='content order-page'>
         <div class='product-container content-glass'>
           <div class='product-title-section'>
-            <div class='product-page-icon'>
+            <div class='product-page-icon one-one-line'>
               <img :src='target?.Logo'>
             </div>
             <h1>{{ target ? coinLabel(target) : '' }}</h1>
@@ -478,4 +478,8 @@ const getGenerals = (offset: number, limit: number) => {
 
 .coin-type
   text-transform: uppercase !important
+
+.one-one-line
+  display: inline-block
+  margin-right: 15px
 </style>
