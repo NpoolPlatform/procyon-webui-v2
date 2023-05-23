@@ -1796,6 +1796,9 @@ h4#signature
   display: inline-block
   margin: 12px 0 24px 0
   transition: all ease-in-out .1s
+  @media (max-width: $breakpoint-sm-max)
+    display: flex
+    flex-wrap: wrap
 
 .product-container .address-option::after
   background: linear-gradient(to right, transparent 0, var(--light-green-2) 30%, transparent 90%)
@@ -1810,6 +1813,8 @@ h4#signature
 
 .product-container .address-option .number
   filter: contrast(.5)
+  @media (max-width: $breakpoint-sm-max)
+    font-size: 20px
 
 .product-container .checkmark
   opacity: 0
@@ -1820,6 +1825,10 @@ h4#signature
 .product-container .address-option:hover .checkmark
   display: inline
   opacity: .8
+
+.product-container .address-option .wallet-type
+  @media (max-width: $breakpoint-sm-max)
+    width: 100%
 
 .product-container .address-selected .number
   background: linear-gradient(to left, var(--green-1) 0, var(--green-2) 50%)
