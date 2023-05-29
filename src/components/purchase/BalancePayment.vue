@@ -211,15 +211,17 @@ const currency = useAdminCurrencyStore()
 const setCurrency = () => {
   if (coin.stableCoin(coinTypeID.value)) {
     selectedCoinCurrency.value = 1
+    console.log('stable coin: ', selectedCoinCurrency.value)
     return
   }
   if (coin.haveCurrency(coinTypeID.value)) {
     selectedCoinCurrency.value = coin.getCurrency(coinTypeID.value)
-    console.log('AppCoin: ', selectedCoinCurrency.value)
+    console.log('AppCoin Currency: ', selectedCoinCurrency.value)
     return
   }
   if (currency.haveCurrency(coinTypeID.value)) {
     selectedCoinCurrency.value = parseFloat(currency.getCurrency(coinTypeID.value)?.MarketValueLow as string)
+    console.log('Currency MarketValueLow: ', selectedCoinCurrency.value)
     return
   }
   selectedCoinCurrency.value = undefined as unknown as number // can't buy
@@ -258,8 +260,7 @@ onMounted(() => {
     setCurrency()
   }
 
-  if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
-    currency.$reset()
+  if (currency.Currencies.Currencies.length === 0) {
     getCurrencies(0, 10)
   }
 

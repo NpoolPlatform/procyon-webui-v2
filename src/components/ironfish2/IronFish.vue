@@ -170,10 +170,8 @@ onMounted(() => {
     getDescriptions(0, 100)
   }
 
-  if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
-    currency.$reset()
-    getCurrencies(0, 10)
-  }
+  currency.$reset()
+  getCurrencies(0, 10)
 
   if (defaultGoodID.value === InvalidID) {
     void router.push({ path: '/' })
