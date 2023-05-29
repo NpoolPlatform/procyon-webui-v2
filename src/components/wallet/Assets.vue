@@ -16,17 +16,13 @@
         <q-td key='Balance' :props='myProps'>
           {{ util.getLocaleString(myProps.row.Balance?.toFixed(4)) }} {{ myProps.row.CoinUnit }}
         </q-td>
-        <!-- <q-td key='Last24HoursBalance' :props='myProps'>
-          {{ myProps.row.Last24HoursBalance?.toFixed(4) }}{{ myProps.row.CoinUnit }}
-        </q-td> -->
         <q-td key='TotalUSDTValue' :props='myProps'>
-          {{ util.getLocaleString(myProps.row.TotalUSDValue?.toFixed(4)) }}
+          {{ !currency.getCurrency(myProps.row.CoinTypeID) ? '-' : util.getLocaleString(myProps.row.TotalUSDValue?.toFixed(4)) }}
         </q-td>
         <q-td key='TotalJPYValue' :props='myProps'>
-          {{ util.getLocaleString(myProps.row.TotalJPYValue?.toFixed(4)) }}
+          {{ !currency.getCurrency(myProps.row.CoinTypeID) ? '-' : util.getLocaleString(myProps.row.TotalJPYValue?.toFixed(4)) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps' class='asset-button'>
-          <!-- CoinDisabled from AppGood, see ledger-gateway -->
           <button :class='["small", "alt", (myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled) ? "in-active" : ""]' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
