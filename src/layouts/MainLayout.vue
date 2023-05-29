@@ -61,7 +61,7 @@ const logined = useLocalUserStore()
 const user = useLocalUserStore()
 const lang = useAdminAppLangStore()
 
-watch(() => user.User?.SelectedLangID, () => {
+watch([() => user.User?.SelectedLangID, lang.AppLangs.AppLangs], () => {
   if (user.User && user.User.SelectedLangID?.length > 0) {
     const _lang = lang.AppLangs.AppLangs.find((el) => el.LangID === user.User?.SelectedLangID)
     if (!_lang) {
