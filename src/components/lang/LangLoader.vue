@@ -38,7 +38,7 @@ const getAppLangs = (offset: number, limit: number) => {
       }
     }
   }, (error: boolean, rows: Array<AppLang>) => {
-    if (error || rows.length === 0) {
+    if (error || rows.length < limit) {
       return
     }
     getAppLangs(offset + limit, limit)
