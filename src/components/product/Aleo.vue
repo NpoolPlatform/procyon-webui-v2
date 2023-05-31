@@ -153,6 +153,9 @@ const coin = useAdminAppCoinStore()
 // Use CoinUnit to find GoodID from AppCoin
 const coinUnit = 'ALEO'
 const defaultGoodID = computed(() => {
+  if (query.value?.goodId?.length > 0) {
+    return query.value?.goodId
+  }
   if (coin.AppCoins.AppCoins?.length === 0) {
     return `${InvalidID}_`
   }
