@@ -41,6 +41,7 @@ const jumpPath = computed(() => app.App?.CommitButtonTargets?.[0]?.length > 0 ? 
 
 const router = useRouter()
 const onAvailableNowClick = () => {
+  console.log('path: ', jumpPath.value)
   void router.push({ path: jumpPath.value })
 }
 
