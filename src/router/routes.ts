@@ -501,6 +501,19 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        path: 'product/aleosilver',
+        component: () => import('pages/product/AleoSilver.vue'),
+        meta: {
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false,
+          ShowSideMenu: false
+        }
+      }, {
         path: 'product/ironfish',
         component: () => import('pages/product/IronFish2.vue'),
         meta: {
