@@ -54,7 +54,7 @@
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
         <!-- <span class='number'>{{ true ? 'TBD*' : good.getFormatTime(target?.StartAt) }}</span> -->
-        <span class='number'>{{ $t("MSG_WAIT_CONFIRM") }}</span>
+        <span class='number'>{{ $t("MSG_SALE_START_WAIT_CONFIRM") }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -64,7 +64,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
-        <span class='number'>{{ $t("MSG_WAIT_CONFIRM") }}</span>
+        <span class='number'>{{ $t("MSG_SALE_END_WAIT_CONFIRM") }}</span>
         <br>
         <div class='tooltip'>
           <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_LEARN_MORE') }}</span>
