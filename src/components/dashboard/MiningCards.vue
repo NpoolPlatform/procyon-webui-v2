@@ -42,7 +42,7 @@ const goodProfits = computed(() => Array.from(profit.GoodProfits.GoodProfits).ma
     Last30DaysUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getGoodIntervalProfitInComing(IntervalKey.LastMonth, el.CoinTypeID, el.GoodID),
     TotalEstimatedDailyReward: Number(el.Units) * parseFloat(good.getGoodByID(el.GoodID)?.DailyRewardAmount as string),
     GoodSaleEndAt: _good?.SaleEndAt,
-    MiningStartDate: good.getJSTDate(_good?.ServiceStartAt, 'YYYY-MM-DD'),
+    MiningStartDate: _good?.ServiceStartAt > Math.ceil(Date.now() / 1000) ? '*' : good.getJSTDate(_good?.ServiceStartAt, 'YYYY-MM-DD'),
     DaysMined: daysMined > el.GoodServicePeriodDays ? el.GoodServicePeriodDays : daysMined,
     DaysRemaining: daysRemaining
   } as MyGoodProfit
@@ -53,4 +53,5 @@ const goodProfits = computed(() => Array.from(profit.GoodProfits.GoodProfits).ma
     return a.GoodSaleEndAt > b.GoodSaleEndAt ? -1 : 1
   }
 }))
+console.log(Math.ceil(Date.now() / 1000))
 </script>
