@@ -30,7 +30,7 @@
         <div class='line'>
           <span class='label'>{{ $t('MSG_MINING_START_DATE') }}:</span>
           <span class='value'>
-            {{ goodProfit?.MiningStartDate ? goodProfit?.MiningStartDate : '*' }}
+            {{ goodProfit?.MiningStartDate ? $t(goodProfit?.MiningStartDate) : '*' }}
           </span>
         </div>
         <div class='line'>
