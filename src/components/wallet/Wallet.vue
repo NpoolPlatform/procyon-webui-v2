@@ -168,7 +168,7 @@ const getUserAccounts = (offset: number, limit: number) => {
 
 const getFiatCurrency = () => {
   fiat.getFiatCurrency({
-    FiatCurrencyTypeName: FiatType.JPY,
+    FiatName: FiatType.JPY,
     Message: {
     }
   }, () => {
