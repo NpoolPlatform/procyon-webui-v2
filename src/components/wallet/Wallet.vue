@@ -79,9 +79,8 @@ onMounted(() => {
   if (transfer.TransferAccounts.TransferAccounts.length === 0) {
     getTransfers(0, 100)
   }
-  if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
-    currency.$reset()
-    getCurrencies(0, 10)
+  if (currency.Currencies.Currencies.length === 0) {
+    getCurrencies(0, 100)
   }
 
   if (fiat.CoinFiatCurrencies.CoinFiatCurrencies.length === 0) {

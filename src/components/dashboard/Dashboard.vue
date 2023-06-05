@@ -94,9 +94,8 @@ onMounted(() => {
   if (coin.AppCoins.AppCoins.length === 0) {
     getCoins(0, 100)
   }
-  if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
-    currency.$reset()
-    getCurrencies(0, 10)
+  if (currency.Currencies.Currencies.length === 0) {
+    getCurrencies(0, 100)
   }
 
   if (miningRewards.value?.length === 0) {
