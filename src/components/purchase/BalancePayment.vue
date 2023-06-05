@@ -97,8 +97,8 @@ import {
   useAdminAppCoinStore,
   AppCoin,
   useAdminCurrencyStore,
-  Currency,
-  useLocaleStringStore
+  useLocaleStringStore,
+  CoinCurrency
 } from 'npool-cli-v4'
 import { defineAsyncComponent, onMounted, ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -228,7 +228,7 @@ const setCurrency = () => {
 }
 
 watch(coinTypeID, () => {
-  setCurrency()
+  getCurrency(coinTypeID.value)
 })
 
 onMounted(() => {
@@ -329,16 +329,29 @@ const getCoins = (offset: number, limit: number) => {
 }
 
 const getCurrencies = (offset: number, limit: number) => {
-  currency.getCoinCurrencies({
+  currency.getCurrencies({
     Offset: offset,
     Limit: limit,
     Message: {}
-  }, (error: boolean, rows: Array<Currency>) => {
+  }, (error: boolean, rows: Array<CoinCurrency>) => {
     if (error || rows.length <= 0) {
       if (!error) setCurrency()
       return
     }
     getCurrencies(offset + limit, limit)
+  })
+}
+
+const getCurrency = (coinTypeID: string) => {
+  currency.getCurrency({
+    CoinTypeID: coinTypeID,
+    Message: {}
+  }, (error: boolean) => {
+    if (error) {
+      selectedCoinCurrency.value = undefined as unknown as number
+      return
+    }
+    setCurrency()
   })
 }
 </script>
