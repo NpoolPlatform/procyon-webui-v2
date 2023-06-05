@@ -95,7 +95,7 @@ onMounted(() => {
     getCoins(0, 100)
   }
   if (currency.Currencies.Currencies.length === 0) {
-    getCurrencies(0, 100)
+    getCurrencies(0, 500)
   }
 
   if (miningRewards.value?.length === 0) {
