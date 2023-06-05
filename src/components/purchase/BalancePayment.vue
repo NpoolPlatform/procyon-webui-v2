@@ -228,7 +228,7 @@ const setCurrency = () => {
 }
 
 watch(coinTypeID, () => {
-  getCurrency(coinTypeID.value)
+  getCoinCurrency(coinTypeID.value)
 })
 
 onMounted(() => {
@@ -268,6 +268,8 @@ onMounted(() => {
   if (order.Orders.Orders.length === 0) {
     getOrders(0, 500)
   }
+
+  getCoinCurrency(coinTypeID.value)
 })
 
 const getOrders = (offset:number, limit: number) => {
@@ -342,8 +344,8 @@ const getCurrencies = (offset: number, limit: number) => {
   })
 }
 
-const getCurrency = (coinTypeID: string) => {
-  currency.getCurrency({
+const getCoinCurrency = (coinTypeID: string) => {
+  currency.getCoinCurrency({
     CoinTypeID: coinTypeID,
     Message: {}
   }, (error: boolean) => {
