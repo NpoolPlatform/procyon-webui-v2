@@ -191,9 +191,8 @@ onMounted(() => {
     getDescriptions(0, 100)
   }
 
-  if (currency.Currencies.Currencies.length === 0 || currency.expired()) {
-    currency.$reset()
-    getCurrencies(0, 100)
+  if (currency.Currencies.Currencies.length === 0) {
+    getCurrencies(0, 500)
   }
 
   if (defaultGoodID.value === InvalidID) {

@@ -261,7 +261,7 @@ onMounted(() => {
   }
 
   if (currency.Currencies.Currencies.length === 0) {
-    getCurrencies(0, 100)
+    getCurrencies(0, 500)
   }
 
   order.$reset()

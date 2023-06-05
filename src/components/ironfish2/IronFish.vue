@@ -174,7 +174,7 @@ onMounted(() => {
   }
 
   currency.$reset()
-  getCurrencies(0, 100)
+  getCurrencies(0, 500)
 
   if (defaultGoodID.value === InvalidID) {
     void router.push({ path: '/' })
