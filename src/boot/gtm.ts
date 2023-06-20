@@ -7,7 +7,7 @@ export default boot(({ app, router }) => {
     VueGtag,
     {
       config: {
-        id: 'G-WMDW59ENZM'
+        id: 'G-5QW76XNF2Q'
       }
     },
     router
