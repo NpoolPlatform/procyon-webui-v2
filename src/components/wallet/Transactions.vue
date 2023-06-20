@@ -23,9 +23,12 @@
           {{ $t(transactionType(myProps.row)) }}
         </q-td>
         <q-td key='TransactionID' :props='myProps'>
-          <span>{{ myProps.row.TransactionID }}</span>
           <span v-if='myProps.row.IOSubType === IOSubType.Withdrawal'>
+            {{ myProps.row.ShortTransactionID }}
             <img class='copy-button copy-btn' src='font-awesome/copy.svg' @click='onCopyTxIDClick(myProps.row)'>
+          </span>
+          <span v-else>
+            {{ t('MSG_TXID_NA') }}
           </span>
         </q-td>
       </q-tr>
@@ -60,6 +63,7 @@ interface IOExtra {
 
 interface MyDetail extends Detail {
   TransactionID: string;
+  ShortTransactionID: string;
 }
 
 const notification = useNotificationStore()
@@ -77,11 +81,11 @@ const details = computed(() => {
   const rows = [] as Array<MyDetail>
   _details.value?.forEach((el) => {
     let row = {} as MyDetail
-    row = { ...el, ...{ TransactionID: t('MSG_TXID_NA') } }
+    row = { ...el, ...{ TransactionID: '', ShortTransactionID: '' } }
     if (el.IOSubType === IOSubType.Withdrawal) {
       const extra = JSON.parse(el.IOExtra) as IOExtra
       row.TransactionID = extra.CID
-      row = { ...el, ...{ TransactionID: extra.CID } }
+      row = { ...el, ...{ TransactionID: extra.CID, ShortTransactionID: row.TransactionID?.substring(0, 15) } }
     }
     rows.push(row)
   })
@@ -175,7 +179,6 @@ const table = computed(() => [
     name: 'TransactionID',
     label: t('MSG_TRANSACTION_ID'),
     align: 'center',
-    style: 'max-width:180px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;',
     field: () => (row: Detail) => transactionType(row)
   }
 ])
@@ -208,6 +211,4 @@ const getDetails = (offset: number, limit: number) => {
 </script>
 
 <style lang='sass' scoped>
-.copy-btn
-  display: inline-block
 </style>
