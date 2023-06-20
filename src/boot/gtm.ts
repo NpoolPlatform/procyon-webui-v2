@@ -6,6 +6,7 @@ export default boot(({ app, router }) => {
   app.use(
     VueGtag,
     {
+      pageTrackerScreenviewEnabled: true,
       config: {
         id: 'G-5QW76XNF2Q'
       }
