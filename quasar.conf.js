@@ -31,6 +31,10 @@ module.exports = configure(function (ctx) {
     boot: [
       'pinia',
       'i18n',
+      {
+        server: false,
+        path: 'gtm'
+      },
       'axios',
       'notify-defaults',
       'recaptcha'
