@@ -9,10 +9,12 @@ declare module 'vue-router' {
 
 const routes: RouteRecordRaw[] = [
   {
+    name: 'Maintenance',
     path: '/maintenance',
     component: () => import('pages/Maintenance.vue')
   },
   {
+    name: 'index',
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
@@ -30,6 +32,7 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
+        name: 'AleoIndex',
         path: 'aleoindex',
         component: () => import('pages/AleoIndex.vue'),
         meta: {
@@ -54,6 +57,7 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        name: 'Contact',
         path: 'contact',
         component: () => import('pages/Contact.vue'),
         meta: {
@@ -66,6 +70,7 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        name: 'Registration',
         path: 'registration',
         component: () => import('pages/Registration.vue'),
         meta: {
@@ -90,6 +95,7 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        name: 'Signin',
         path: 'signin',
         component: () => import('pages/Signin.vue'),
         meta: {
@@ -102,6 +108,7 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        name: 'Legal',
         path: 'legal',
         component: () => import('pages/Legal.vue'),
         meta: {
@@ -114,6 +121,7 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        name: 'FAQ',
         path: 'faq',
         component: () => import('pages/faq/FAQ.vue'),
         meta: {
@@ -126,6 +134,7 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        name: 'FAQMenu',
         path: 'faqs',
         component: () => import('pages/faq/FAQMenu.vue'),
         meta: {
@@ -138,6 +147,7 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        name: 'Partners',
         path: 'partners',
         component: () => import('pages/Partners.vue'),
         meta: {
@@ -150,6 +160,7 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        name: 'Dashboard',
         path: 'dashboard',
         component: () => import('pages/Dashboard.vue'),
         meta: {
@@ -163,6 +174,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        name: 'Wallet',
         path: 'wallet',
         component: () => import('pages/Wallet.vue'),
         meta: {
@@ -176,6 +188,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        name: 'Notification',
         path: 'notification',
         component: () => import('pages/Notification.vue'),
         meta: {
@@ -189,6 +202,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        name: 'Affiliates',
         path: 'affiliates',
         component: () => import('pages/Affiliates.vue'),
         meta: {
@@ -202,6 +216,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        name: 'SetupAffiliate',
         path: 'setup/affiliate',
         component: () => import('pages/SetupAffiliate.vue'),
         meta: {
@@ -215,6 +230,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'Account',
         path: 'account',
         component: () => import('pages/Account.vue'),
         meta: {
@@ -228,6 +244,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        name: 'Security',
         path: 'security',
         component: () => import('pages/Security.vue'),
         meta: {
@@ -241,6 +258,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        name: 'KYC',
         path: 'kyc',
         component: () => import('pages/KYC.vue'),
         meta: {
@@ -254,6 +272,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        name: 'Resources',
         path: 'resource',
         component: () => import('pages/Resources.vue'),
         meta: {
@@ -267,6 +286,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: true
         }
       }, {
+        name: 'Purchase',
         path: 'purchase',
         component: () => import('pages/Purchase.vue'),
         meta: {
@@ -280,6 +300,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'BalancePayment',
         path: 'payment',
         component: () => import('pages/BalancePayment.vue'),
         meta: {
@@ -293,6 +314,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'Payment',
         path: 'extrapayment',
         component: () => import('pages/Payment.vue'),
         meta: {
@@ -306,6 +328,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'OrderDetail',
         path: 'detail',
         component: () => import('pages/OrderDetail.vue'),
         meta: {
@@ -319,6 +342,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'UpdatePassword',
         path: 'update/password',
         component: () => import('pages/UpdatePassword.vue'),
         meta: {
@@ -332,6 +356,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'UpdateEmail',
         path: 'update/email',
         component: () => import('pages/UpdateEmail.vue'),
         meta: {
@@ -345,6 +370,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'UpdateMobile',
         path: 'update/mobile',
         component: () => import('pages/UpdateMobile.vue'),
         meta: {
@@ -358,6 +384,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'EnableGoogle',
         path: 'enable/google',
         component: () => import('pages/EnableGoogle.vue'),
         meta: {
@@ -371,6 +398,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'VerifyGoogle',
         path: 'verify/google',
         component: () => import('pages/VerifyGoogle.vue'),
         meta: {
@@ -384,6 +412,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'AddAddress',
         path: 'add/address',
         component: () => import('pages/AddAddress.vue'),
         meta: {
@@ -397,6 +426,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'AddTransferAddress',
         path: 'add/transferaccount',
         component: () => import('pages/AddTransferAddress.vue'),
         meta: {
@@ -410,6 +440,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'Withdraw',
         path: 'withdraw',
         component: () => import('pages/Withdraw.vue'),
         meta: {
@@ -475,6 +506,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'ResetPassword',
         path: 'reset/password',
         component: () => import('pages/ResetPassword.vue'),
         meta: {
@@ -488,6 +520,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'Aleo',
         path: 'product/aleo',
         component: () => import('pages/product/Aleo.vue'),
         meta: {
@@ -501,6 +534,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'AleoSilver',
         path: 'product/aleosilver',
         component: () => import('pages/product/AleoSilver.vue'),
         meta: {
@@ -514,6 +548,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'IronFish2',
         path: 'product/ironfish',
         component: () => import('pages/product/IronFish2.vue'),
         meta: {
@@ -527,6 +562,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'IronFish',
         path: 'product/old/ironfish',
         component: () => import('pages/product/IronFish.vue'),
         meta: {
@@ -540,6 +576,7 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'Spacemesh',
         path: 'product/spacemesh',
         component: () => import('pages/product/Spacemesh.vue'),
         meta: {
