@@ -10,7 +10,7 @@ export default boot(({ app, router }) => {
       appName: 'Procyon',
       pageTrackerScreenviewEnabled: true,
       config: {
-        id: 'G-5QW76XNF2Q'
+        id: 'G-WMDW59ENZM'
       },
       pageTrackerTemplate (to: RouteLocationNormalized) {
         return {
