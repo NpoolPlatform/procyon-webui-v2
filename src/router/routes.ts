@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
         path: '',
         component: () => import('pages/AleoIndex.vue'),
         meta: {
-          Title: 'index',
+          Title: 'Index',
           ShowHeaderAnnouncement: true,
           ShowMainHeader: true,
           ShowBigLogo: true,
