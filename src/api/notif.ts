@@ -18,10 +18,12 @@ export const onMarkAll = (rows: Array<Notif>) => {
   if (rows.length === 0) {
     return
   }
-  const ids = Array.from(rows).map((el) => el.ID)
+  const reqs = []
+  for (let i = 0; i < rows.length; i++) {
+    reqs.push({ ID: rows[i].ID, Notified: true })
+  }
   notif.updateNotifs({
-    IDs: ids,
-    Notified: true,
+    Infos: reqs,
     Message: {
     }
   }, () => {
