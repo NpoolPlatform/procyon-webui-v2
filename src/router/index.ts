@@ -24,10 +24,13 @@ export default route(function (/* { store, ssrContext } */) {
 
   const router = createRouter({
     scrollBehavior: (to, from, savedPosition) => {
-      if (to.path === from.path) {
-        return
-      }
       return new Promise((resolve) => {
+        if (to.hash) {
+          setTimeout(() => {
+            resolve({ el: to.hash })
+          }, 3000)
+          return
+        }
         setTimeout(() => {
           if (savedPosition) {
             resolve({ top: savedPosition.top })
