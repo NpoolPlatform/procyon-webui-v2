@@ -27,10 +27,12 @@ const onMark = (rows: Array<Notif>) => {
   if (rows?.[0]?.Notified) {
     return
   }
-  const ids = Array.from(rows).map((el) => el.ID)
+  const reqs = []
+  for (let i = 0; i < rows.length; i++) {
+    reqs.push({ ID: rows[i].ID, Notified: true })
+  }
   notif.updateNotifs({
-    IDs: ids,
-    Notified: true,
+    Infos: reqs,
     Message: {
       Error: {
         Title: t('MSG_UPDATE_NOTIFICATION'),
