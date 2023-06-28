@@ -35,7 +35,7 @@ export default route(function (/* { store, ssrContext } */) {
           } else {
             resolve({ top: 0 })
           }
-        }, 50)
+        }, 100)
       })
     },
     routes,
