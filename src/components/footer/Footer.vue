@@ -19,7 +19,7 @@
           <h4>{{ $t('MSG_LINKS') }}</h4>
           <ul>
             <li><a class='footer-link' href='#'>{{ $t('MSG_HOME') }}</a></li>
-            <li><a class='footer-link' href='#'>{{ $t('MSG_PRODUCTS') }}</a></li>
+            <li><a class='footer-link' href='/#products'>{{ $t('MSG_PRODUCTS') }}</a></li>
             <li><a class='footer-link' target='_blank' href='https://procyon-vip.medium.com/'>{{ $t('MSG_BLOG') }}</a></li>
           </ul>
         </div>

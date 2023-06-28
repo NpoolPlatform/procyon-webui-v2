@@ -1,6 +1,8 @@
 <template>
   <Banner />
-  <ProductSummary />
+  <div id='products'>
+    <ProductSummary />
+  </div>
   <MixProducts />
   <WhyMe />
   <div id='partners'>
