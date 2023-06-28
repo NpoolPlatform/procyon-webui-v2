@@ -19,14 +19,14 @@
           <h4>{{ $t('MSG_LINKS') }}</h4>
           <ul>
             <li><a class='footer-link' href='#'>{{ $t('MSG_HOME') }}</a></li>
-            <li><a class='footer-link' href='#products'>{{ $t('MSG_PRODUCTS') }}</a></li>
+            <li><a class='footer-link' target='_blank' @click='router.push({ path: "/", hash: "#products" })'>{{ $t('MSG_PRODUCTS') }}</a></li>
             <li><a class='footer-link' target='_blank' href='https://procyon-vip.medium.com/'>{{ $t('MSG_BLOG') }}</a></li>
           </ul>
         </div>
         <div class='column-4'>
           <h4>{{ $t('MSG_HELP') }}</h4>
           <ul>
-            <li><a class='footer-link' href='#support'>{{ $t('MSG_FAQ') }}</a></li>
+            <li><a class='footer-link' target='_blank' @click='router.push({ path: "/", hash: "#support" })'>{{ $t('MSG_FAQ') }}</a></li>
             <li><a class='footer-link' href='contact'>{{ $t('MSG_CONTACT') }}</a></li>
             <li><a class='footer-link' href='legal'>{{ $t('MSG_LEGAL') }}</a></li>
           </ul>
@@ -42,10 +42,13 @@
 <script setup lang='ts'>
 import { useLocaleStore } from 'npool-cli-v4'
 import { computed, defineAsyncComponent } from 'vue'
+import { useRouter } from 'vue-router'
 
 import lightLogo from '../../assets/procyon-light.svg'
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 
 const locale = useLocaleStore()
 const special = computed(() => locale.AppLang?.Lang === 'ja-JP')
+const router = useRouter()
+
 </script>
