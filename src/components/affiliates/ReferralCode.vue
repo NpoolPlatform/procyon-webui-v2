@@ -24,7 +24,7 @@ import { useLocalUserStore } from 'npool-cli-v4'
 const { t } = useI18n({ useScope: 'global' })
 
 const logined = useLocalUserStore()
-const inviteLink = computed(() => 'https://procyon.vip/#/invitation?code=' + (logined.User?.InvitationCode))
+const inviteLink = computed(() => 'https://procyon.vip/invitation?code=' + (logined.User?.InvitationCode))
 const notification = useNotificationStore()
 
 function onCopyCodeClick () {

@@ -3,15 +3,17 @@
   <ProductSummary />
   <MixProducts />
   <WhyMe />
-  <div v-if='locale === "en-US"'>
-    <PartnersUS />
-    <WhatMakesUS />
-    <WhatWeKnowUS />
-  </div>
-  <div v-else>
-    <PartnersJP />
-    <WhatMakesJP />
-    <WhatWeKnowJP />
+  <div id='partners'>
+    <div v-if='locale === "en-US"'>
+      <PartnersUS />
+      <WhatMakesUS />
+      <WhatWeKnowUS />
+    </div>
+    <div v-else>
+      <PartnersJP />
+      <WhatMakesJP />
+      <WhatWeKnowJP />
+    </div>
   </div>
   <SupportCenter id='support' />
 </template>

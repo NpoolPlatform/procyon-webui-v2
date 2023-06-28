@@ -71,7 +71,7 @@
         </div>
       </template>
       <template #append-submit>
-        <p class='skip-registration' v-html='$t("MSG_GOTO_SIGNIN", { SIGNIN_PATH: "#/signin" })' />
+        <p class='skip-registration' v-html='$t("MSG_GOTO_SIGNIN", { SIGNIN_PATH: "signin" })' />
       </template>
     </SignPage>
   </div>

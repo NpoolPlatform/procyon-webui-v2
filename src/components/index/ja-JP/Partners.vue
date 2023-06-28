@@ -1,6 +1,6 @@
 <template>
   <div class='content'>
-    <h1 id='partners'>
+    <h1>
       プロシオンのパートナー
     </h1>
 

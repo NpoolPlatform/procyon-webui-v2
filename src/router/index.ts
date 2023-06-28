@@ -1,8 +1,6 @@
 import { route } from 'quasar/wrappers'
 import {
-  createMemoryHistory,
   createRouter,
-  createWebHashHistory,
   createWebHistory
 } from 'vue-router'
 import routes from './routes'
@@ -22,12 +20,13 @@ import { useLocalAppStore } from 'src/localstore/app'
 
 // TODO here can invoke global store
 export default route(function (/* { store, ssrContext } */) {
-  const createHistory = process.env.SERVER
-    ? createMemoryHistory
-    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
+  const createHistory = createWebHistory
 
   const router = createRouter({
     scrollBehavior: (to, from, savedPosition) => {
+      if (to.path === from.path) {
+        return
+      }
       return new Promise((resolve) => {
         setTimeout(() => {
           if (savedPosition) {
@@ -43,9 +42,7 @@ export default route(function (/* { store, ssrContext } */) {
     // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
-    history: createHistory(
-      process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE
-    )
+    history: createHistory(process.env.BASE_URL)
   })
 
   router.beforeEach((to, _, next) => {

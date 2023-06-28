@@ -5,9 +5,9 @@
       <ul>
         <li><a class='nav-link' href='#'>{{ $t('MSG_HOME') }}</a></li>
         <li><a class='nav-link' target='_blank' href='https://procyon-vip.medium.com'>{{ $t('MSG_BLOG') }}</a></li>
-        <li><a class='nav-link' href='#/faqs'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
-        <li><a class='nav-link' href='#partners'>{{ $t('MSG_PARTNERS') }}</a></li>
-        <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
+        <li><a class='nav-link' href='faqs'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
+        <li><a class='nav-link' href='/#partners'>{{ $t('MSG_PARTNERS') }}</a></li>
+        <li><a class='nav-link' href='contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
         <li id='notifications' v-if='localUser.logined'>
           <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
@@ -20,7 +20,7 @@
                   <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
                 </span>
               </span>
-              <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
+              <span><a href='notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
             </li>
             <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
           </ul>
@@ -72,7 +72,7 @@
                 <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
               </span>
             </span>
-            <span><a href='#/notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
+            <span><a href='notification'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
           </li>
           <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
         </ul>
@@ -110,8 +110,8 @@
       <ul>
         <li><a class='nav-link' href='#'>{{ $t('MSG_HOME') }}</a></li>
         <li><a class='nav-link' target='_blank' href='https://procyon-vip.medium.com'>{{ $t('MSG_BLOG') }}</a></li>
-        <li><a class='nav-link' href='#/faqs'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
-        <li><a class='nav-link' href='#/contact'>{{ $t('MSG_CONTACT') }}</a></li>
+        <li><a class='nav-link' href='faqs'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
+        <li><a class='nav-link' href='contact'>{{ $t('MSG_CONTACT') }}</a></li>
         <li><a class='nav-link' href='#partners'>{{ $t('MSG_PARTNERS') }}</a></li>
       </ul>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div class='content'>
-    <h1 id='partners'>
+    <h1>
       Who are Procyon's Partners?
     </h1>
 
