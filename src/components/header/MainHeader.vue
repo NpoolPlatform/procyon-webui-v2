@@ -12,7 +12,7 @@
         <li id='notifications' v-if='localUser.logined'>
           <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
           <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
-          <ul class='notifications'>
+          <ul class='notifications' :style='{maxHeight: "700px", overflow: "scroll"}'>
             <li class='first'>
               <span>
                 <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: unReads.length})' />
@@ -22,7 +22,9 @@
               </span>
               <span><a target='_blank' @click='router.push({ path: "notification" })'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
             </li>
-            <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
+            <div :style='{overflow: "hidden"}' class='cursor-pointer'>
+              <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
+            </div>
           </ul>
         </li>
         <SignHelper v-if='!localUser.logined' />
@@ -64,7 +66,7 @@
       <li id='notifications' v-if='localUser.logined' @click='onBellClick'>
         <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
         <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
-        <ul class='notifications'>
+        <ul class='notifications' :style='{maxHeight: "700px", overflow: "scroll"}'>
           <li class='first'>
             <span>
               <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: unReads.length})' />
@@ -74,7 +76,9 @@
             </span>
             <span><a target='_blank' @click='router.push({ path: "notification" })'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
           </li>
-          <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
+          <div :style='{overflow: "hidden"}' class='cursor-pointer'>
+            <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
+          </div>
         </ul>
       </li>
       <SignHelper v-if='!localUser.logined' />
@@ -270,4 +274,7 @@ li#notifications::marker
 .mobile
   ::v-deep .user-icon:hover
     filter: none
+
+.notifications::-webkit-scrollbar
+  display: none
 </style>
