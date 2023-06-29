@@ -181,7 +181,7 @@
             マイニング報酬は、マイニングが開始された日の翌日からProcyon.vipで確認できますか？
           </h3>
 
-          <p>はい、ダッシュボードにてご確認が可能です。<a href='dashboard'>ダッシュボードへのアクセスはこちらから</a>。</p>
+          <p>はい、ダッシュボードにてご確認が可能です。<a target='_blank' @click='router.push({ path: "dashboard" })'>ダッシュボードへのアクセスはこちらから</a>。</p>
 
           <h3 id='マイニングマシンが停電などのトラブルで機能停止することはないでしょうか？'>
             マイニングマシンが停電などのトラブルで機能停止することはないでしょうか？
@@ -231,7 +231,9 @@
 <script setup lang='ts'>
 import { defineAsyncComponent } from 'vue'
 import { scrollTo } from 'src/utils/scroll'
+import { useRouter } from 'vue-router'
 
 const Page = defineAsyncComponent(() => import('src/pages/faq/Page.vue'))
+const router = useRouter()
 
 </script>

@@ -176,7 +176,7 @@
             Can I see my mining rewards on Procyon.vip starting the day after mining starts?
           </h3>
 
-          <p>Yes, you can check it on the dashboard. <a href='dashboard'>Click here to access your dashboard</a>.</p>
+          <p>Yes, you can check it on the dashboard. <a target='_blank' @click='router.push({ path: "dashboard" })'>Click here to access your dashboard</a>.</p>
 
           <h3 id='Will the mining machine stop functioning due to power outages or other problems?'>
             Will the mining machine stop functioning due to power outages or other problems?
@@ -222,7 +222,9 @@
 <script setup lang='ts'>
 import { defineAsyncComponent } from 'vue'
 import { scrollTo } from 'src/utils/scroll'
+import { useRouter } from 'vue-router'
 
 const Page = defineAsyncComponent(() => import('src/pages/faq/Page.vue'))
+const router = useRouter()
 
 </script>
