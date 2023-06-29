@@ -13,7 +13,7 @@ const message = useFrontendMessageStore()
 const messages = computed(() => message.getMessagesByLangID(langID.value))
 watch(langID, () => {
   if (messages.value.length === 0) {
-    getMessages(0, 500)
+    getMessages(0, 500, langID.value)
   }
 })
 
@@ -45,9 +45,9 @@ const getAppLangs = (offset: number, limit: number) => {
   })
 }
 
-const getMessages = (offset: number, limit: number) => {
+const getMessages = (offset: number, limit: number, langID: string) => {
   message.getMessages({
-    LangID: langID.value,
+    LangID: langID,
     Disabled: false,
     Offset: offset,
     Limit: limit,
@@ -63,7 +63,7 @@ const getMessages = (offset: number, limit: number) => {
     if (error || rows.length === 0) {
       return
     }
-    getMessages(offset + limit, limit)
+    getMessages(offset + limit, limit, langID)
   })
 }
 </script>
