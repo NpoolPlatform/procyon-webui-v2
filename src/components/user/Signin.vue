@@ -13,7 +13,7 @@
       <template #append-submit>
         <div class='row'>
           <p class='skip-registration'>
-            <a target='_blank' @click='router.push({ path: "reset/password" })'>{{ $t('MSG_FORGOT_PASSWORD') }}</a>
+            <a target='_blank' @click='router.push({ path: "/reset/password" })'>{{ $t('MSG_FORGOT_PASSWORD') }}</a>
           </p>
           <q-space />
           <p class='skip-registration'>
