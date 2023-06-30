@@ -48,7 +48,8 @@ export default route(function (/* { store, ssrContext } */) {
 
   router.beforeEach((to, _, next) => {
     if (to.fullPath.startsWith('/#/') && !to.fullPath.includes('?')) {
-      window.location = (to.fullPath + '?a=1') as Location | (string & Location)
+      to.fullPath = to.path = to.fullPath.replace('/#', '')
+      window.location = to.fullPath as Location | (string & Location)
     }
 
     const setting = useSettingStore()
