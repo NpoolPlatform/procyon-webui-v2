@@ -7,7 +7,7 @@
         <li><a class='nav-link' target='_blank' href='https://procyon-vip.medium.com'>{{ $t('MSG_BLOG') }}</a></li>
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/", hash: "#support" })'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/", hash: "#partners" })'>{{ $t('MSG_PARTNERS') }}</a></li>
-        <li><a class='nav-link' target='_blank' @click='router.push({ path: "contact" })'>{{ $t('MSG_CONTACT') }}</a></li>
+        <li><a class='nav-link' target='_blank' @click='router.push({ path: "/contact" })'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
         <li id='notifications' v-if='localUser.logined'>
           <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
@@ -20,7 +20,7 @@
                   <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
                 </span>
               </span>
-              <span><a target='_blank' @click='router.push({ path: "notification" })'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
+              <span><a target='_blank' @click='router.push({ path: "/notification" })'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
             </li>
             <div :style='{overflow: "hidden"}' class='cursor-pointer'>
               <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
@@ -74,7 +74,7 @@
                 <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
               </span>
             </span>
-            <span><a target='_blank' @click='router.push({ path: "notification" })'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
+            <span><a target='_blank' @click='router.push({ path: "/notification" })'>{{ $t('MSG_NOTIFICATION_CENTER') }} &roarr;</a></span>
           </li>
           <div :style='{overflow: "hidden"}' class='cursor-pointer'>
             <NotifCard v-for='row in lastFiveNotifs' :key='row.ID' :notif='row' />
@@ -115,7 +115,7 @@
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/" })'>{{ $t('MSG_HOME') }}</a></li>
         <li><a class='nav-link' target='_blank' href='https://procyon-vip.medium.com'>{{ $t('MSG_BLOG') }}</a></li>
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/", hash: "#support" })'>{{ $t('MSG_SUPPORT_AND_FAQ') }}</a></li>
-        <li><a class='nav-link' target='_blank' @click='router.push({ path: "contact" })'>{{ $t('MSG_CONTACT') }}</a></li>
+        <li><a class='nav-link' target='_blank' @click='router.push({ path: "/contact" })'>{{ $t('MSG_CONTACT') }}</a></li>
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/", hash: "#partners" })'>{{ $t('MSG_PARTNERS') }}</a></li>
       </ul>
     </div>

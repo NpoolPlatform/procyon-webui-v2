@@ -33,7 +33,7 @@
           </div>
 
           <ul>
-            <li>(1) After logging in, access the <a target='_blank' @click='router.push({ path: "kyc" })'>Personal Info</a> page.</li>
+            <li>(1) After logging in, access the <a target='_blank' @click='router.push({ path: "/kyc" })'>Personal Info</a> page.</li>
             <li>(2) Select the "Document Type" you wish to use for KYC submission.</li>
             <ul>
               <li>Passport</li>
@@ -48,7 +48,7 @@
           </h3>
 
           <ul>
-            <li>(1) After logging in, access the <a target='_blank' @click='router.push({ path: "kyc" })'>Personal Info</a> page.</li>
+            <li>(1) After logging in, access the <a target='_blank' @click='router.push({ path: "/kyc" })'>Personal Info</a> page.</li>
             <li>(2) Confirm the submission status in the "KYC Verification Status" section of the page.</li>
           </ul>
 

@@ -29,7 +29,7 @@
           </div>
 
           <ul>
-            <li>(1)ログイン後、<a target='_blank' @click='router.push({ path: "kyc" })'>個人情報ページ</a>へアクセスします。</li>
+            <li>(1)ログイン後、<a target='_blank' @click='router.push({ path: "/kyc" })'>個人情報ページ</a>へアクセスします。</li>
             <li>(2)身分証明書一覧からKYCに使用する身分証明書を選択します。</li>
             <ul>
               <li>パスポート</li>
@@ -46,7 +46,7 @@
           </h3>
 
           <ul>
-            <li>(1)ログイン後、<a target='_blank' @click='router.push({ path: "kyc" })'>個人情報ページ</a>へアクセスします。</li>
+            <li>(1)ログイン後、<a target='_blank' @click='router.push({ path: "/kyc" })'>個人情報ページ</a>へアクセスします。</li>
             <li>(2)身分証明の認証ステータスの記載内容から確認をします。</li>
           </ul>
 
