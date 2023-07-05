@@ -229,6 +229,20 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        name: 'FAQSearch',
+        path: 'faq/search',
+        component: () => import('pages/faq/Search.vue'),
+        meta: {
+          Title: 'FAQ',
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false
+        }
+      }, {
         name: 'FAQ',
         path: 'faq',
         component: () => import('pages/faq/FAQ.vue'),
