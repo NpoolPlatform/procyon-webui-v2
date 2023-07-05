@@ -35,6 +35,7 @@ module.exports = configure(function (ctx) {
         server: false,
         path: 'gtm'
       },
+      'algolia',
       'axios',
       'notify-defaults',
       'recaptcha'
