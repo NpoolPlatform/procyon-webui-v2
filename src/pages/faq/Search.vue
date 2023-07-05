@@ -1,9 +1,9 @@
 <template>
-  <ais-instant-search :search-client='searchClient' index-name='demo_ecommerce'>
+  <ais-instant-search :search-client='searchClient' index-name='faq'>
     <ais-search-box />
     <ais-hits>
       <template #item='{ item }'>
-        <h2>{{ item.name }}</h2>
+        <h4>{{ item.name }}</h4>
       </template>
     </ais-hits>
   </ais-instant-search>
@@ -17,17 +17,10 @@ export default {
   data () {
     return {
       searchClient: algoliasearch(
-        'B1G2GM9NG0',
-        'aadef574be1f9252bb48d4ea09b5cfe5'
+        'GPEKD5F4G0',
+        'c0e022782eabbf3af2582e2968827b1e'
       )
     }
   }
 }
 </script>
-
-<style>
-body {
-  font-family: sans-serif;
-  padding: 1em;
-}
-</style>
