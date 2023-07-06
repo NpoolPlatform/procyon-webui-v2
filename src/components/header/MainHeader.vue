@@ -9,6 +9,7 @@
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/", hash: "#partners" })'>{{ $t('MSG_PARTNERS') }}</a></li>
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/contact" })'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
+        <div><q-icon name='search' size='2rem' style='margin-top: 4px' @click='onSearchClick' /></div>
         <li id='notifications' v-if='localUser.logined'>
           <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
           <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
@@ -120,10 +121,16 @@
       </ul>
     </div>
   </header>
+  <!-- Search Dialog -->
+  <q-dialog v-model='showSearchDialog' position='top'>
+    <q-card style='width: 700px; max-width: 80vw;min-height: 200px;margin-top: 60px'>
+      <SearchCard />
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
+import { defineAsyncComponent, computed, watch, onMounted, ref } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
 import lightLogo from '../../assets/procyon-light.svg'
@@ -147,6 +154,7 @@ const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/Lang
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
 const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
 const NotifCard = defineAsyncComponent(() => import('src/components/notification/NotifCard.vue'))
+const SearchCard = defineAsyncComponent(() => import('src/pages/faq/Search.vue'))
 
 const locale = useLocaleStore()
 const special = computed(() => locale.AppLang?.Lang === 'ja-JP')
@@ -253,6 +261,11 @@ onMounted(() => {
     void router.push({ path: '/maintenance' })
   }
 })
+
+const showSearchDialog = ref(false)
+const onSearchClick = () => {
+  showSearchDialog.value = true
+}
 </script>
 
 <style lang='sass' scoped>
