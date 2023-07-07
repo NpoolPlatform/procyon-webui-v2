@@ -9,7 +9,26 @@
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/", hash: "#partners" })'>{{ $t('MSG_PARTNERS') }}</a></li>
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/contact" })'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
-        <div><q-icon name='search' size='2rem' style='margin-top: 4px' @click='onSearchClick' /></div>
+        <div class='header-search'>
+          <q-input
+            ref='headerSearch'
+            rounded
+            dense
+            standout
+            outlined
+            v-model='text'
+            @click='onSearchClick'
+            class='header-input'
+            placeholder='Search'
+            @keyup.ctrl.q='onSearchClick'
+          >
+            <template #prepend>
+              <q-icon name='search' />
+            </template>
+          </q-input>
+        </div>
+
+        <!-- <div><q-icon name='search' size='2rem' style='margin-top: 4px' @click='onSearchClick' /></div> -->
         <li id='notifications' v-if='localUser.logined'>
           <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
           <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
@@ -261,9 +280,11 @@ onMounted(() => {
     void router.push({ path: '/maintenance' })
   }
 })
-
+const headerSearch = ref<HTMLInputElement>()
+const text = ref('')
 const showSearchDialog = ref(false)
 const onSearchClick = () => {
+  headerSearch.value?.blur()
   showSearchDialog.value = true
 }
 </script>
@@ -290,4 +311,14 @@ li#notifications::marker
 
 .notifications::-webkit-scrollbar
   display: none
+
+.header-search
+  width: 150px
+  ::v-deep .q-field__control
+    background: white
+  ::v-deep input
+    background: none
+    box-shadow: none
+    margin: 0
+    outline: none
 </style>
