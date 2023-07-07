@@ -4,7 +4,7 @@
       <ais-instant-search :search-client='searchClient' index-name='faq' id='search-box2'>
         <q-page-container>
           <q-page-sticky expand position='top'>
-            <ais-search-box style='width: 100%;'>
+            <ais-search-box style='width: 98%; padding-left: 13px;'>
               <template #default='{ currentRefinement, refine }'>
                 <input
                   type='search'
@@ -72,9 +72,11 @@ export default {
 </script>
 <style lang='sass' scoped>
 .searchbox-container
-  width: 95%
+  width: 100%
   margin: 0 auto
   margin-top: 14px
+  ::v-deep .scroll
+    width: calc(100% + 38px) !important
   .searchbox
     border-radius: 4px
     box-shadow: none
@@ -94,7 +96,7 @@ export default {
 .dialog-footer
   width: 100%
   background: #ffffff
-  box-shadow: 0 -1px 0 0 #e0e3e8,0 -3px 6px 0 rgba(69,98,155,.12)
+  box-shadow: 0 -1px 0 0 rgba(35,38,59,.05)
   justify-content: flex-end
   padding-right: 15px
   .right-logo
