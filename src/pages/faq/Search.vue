@@ -1,7 +1,7 @@
 <template>
   <div class='searchbox-container'>
     <ais-instant-search :search-client='searchClient' index-name='faq' id='search-box2'>
-      <ais-search-box>
+      <ais-search-box searchable>
         <template #default='{ currentRefinement, refine }'>
           <input
             type='search'
@@ -18,23 +18,23 @@
       </ais-search-box>
       <ais-hits>
         <!-- <template #default='{ items }'>
-        <ul>
-          <li v-for='item in items' :key='item.objectID'>
-            <h1>{{ item.name }}</h1>
-            <button
-              type='button'
-              @click='sendEvent(&apos;click&apos;, item, &apos;Item Added&apos;)'
-            >
-              Add to cart
-            </button>
-            <ais-highlight
-              attribute='name'
-              :hit='item'
-              highlighted-tag-name='mark'
-            />
-          </li>
-        </ul>
-      </template> -->
+          <ul>
+            <li v-for='item in items' :key='item.objectID'>
+              <h1>{{ item.name }}</h1>
+              <button
+                type='button'
+                @click='sendEvent(&apos;click&apos;, item, &apos;Item Added&apos;)'
+              >
+                Add to cart
+              </button>
+              <ais-highlight
+                attribute='name'
+                :hit='item'
+                highlighted-tag-name='mark'
+              />
+            </li>
+          </ul>
+        </template> -->
         <template #item='{ item }'>
           <ais-highlight
             attribute='name'
@@ -43,6 +43,14 @@
           />
         </template>
       </ais-hits>
+      <ais-panel :class-names='{"margin-bottom": "1.2rem"}' style='margin-bottom:0;padding: 10px 0'>
+        <div class='dialog-footer row'>
+          <div class='footer-right' />
+          <div class='right-logo'>
+            <ais-powered-by />
+          </div>
+        </div>
+      </ais-panel>
     </ais-instant-search>
   </div>
 </template>
@@ -88,4 +96,8 @@ export default {
     color: black
     &:hover
       background: #1ec498
+.dialog-footer
+  justify-content: flex-end
+  .right-logo
+    margin-top: 10px
 </style>
