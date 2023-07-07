@@ -34,7 +34,7 @@
             </ais-hits>
           </q-page>
           <q-page-sticky expand position='bottom' class='dialog-footer'>
-            <ais-panel>
+            <ais-panel style='margin-right: -17px;'>
               <div class='row fit'>
                 <div class='footer-right' />
                 <div class='right-logo'>
