@@ -1,6 +1,6 @@
 <template>
   <div class='searchbox-container'>
-    <q-layout view='lHh Lpr lFf' container style='height: 450px' class='shadow-2 rounded-borders'>
+    <q-layout view='lHh Lpr lFf' container style='height: 450px;' class='shadow-2 rounded-borders'>
       <ais-instant-search :search-client='searchClient' index-name='faq' id='search-box2'>
         <q-page-container>
           <q-page-sticky expand position='top'>
@@ -21,8 +21,8 @@
             </ais-search-box>
           </q-page-sticky>
           <div style='height: 40px;' />
-          <q-page padding style='padding-top: 66px;z-index:-100;padding:0'>
-            <ais-hits>
+          <q-page padding style='padding-top: 66px;z-index:-100;padding:0;'>
+            <ais-hits style='overflow-y: hidden'>
               <template #item='{ item }'>
                 <ais-highlight
                   attribute='name'
