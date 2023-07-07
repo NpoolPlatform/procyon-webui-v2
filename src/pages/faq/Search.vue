@@ -1,57 +1,51 @@
 <template>
   <div class='searchbox-container'>
-    <ais-instant-search :search-client='searchClient' index-name='faq' id='search-box2'>
-      <ais-search-box searchable>
-        <template #default='{ currentRefinement, refine }'>
-          <input
-            type='search'
-            :value='currentRefinement'
-            @input='refine($event.currentTarget.value)'
-            placeholder='Search here...'
-            autofocus
-            :autocomplete='false'
-            :autocorrect='false'
-            on-submit='searchbox'
-            class='searchbox'
-          >
-        </template>
-      </ais-search-box>
-      <ais-hits>
-        <!-- <template #default='{ items }'>
-          <ul>
-            <li v-for='item in items' :key='item.objectID'>
-              <h1>{{ item.name }}</h1>
-              <button
-                type='button'
-                @click='sendEvent(&apos;click&apos;, item, &apos;Item Added&apos;)'
-              >
-                Add to cart
-              </button>
-              <ais-highlight
-                attribute='name'
-                :hit='item'
-                highlighted-tag-name='mark'
-              />
-            </li>
-          </ul>
-        </template> -->
-        <template #item='{ item }'>
-          <ais-highlight
-            attribute='name'
-            :hit='item'
-            highlighted-tag-name='mark'
-          />
-        </template>
-      </ais-hits>
-      <ais-panel :class-names='{"margin-bottom": "1.2rem"}' style='margin-bottom:0;padding: 10px 0'>
-        <div class='dialog-footer row'>
-          <div class='footer-right' />
-          <div class='right-logo'>
-            <ais-powered-by />
-          </div>
-        </div>
-      </ais-panel>
-    </ais-instant-search>
+    <q-layout view='lHh Lpr lFf' container style='height: 450px' class='shadow-2 rounded-borders'>
+      <ais-instant-search :search-client='searchClient' index-name='faq' id='search-box2'>
+        <q-page-container>
+          <q-page-sticky expand position='top'>
+            <ais-search-box style='width: 100%;'>
+              <template #default='{ currentRefinement, refine }'>
+                <input
+                  type='search'
+                  :value='currentRefinement'
+                  @input='refine($event.currentTarget.value)'
+                  placeholder='Search here...'
+                  autofocus
+                  :autocomplete='false'
+                  :autocorrect='false'
+                  on-submit='searchbox'
+                  class='searchbox'
+                >
+              </template>
+            </ais-search-box>
+          </q-page-sticky>
+          <div style='height: 40px;' />
+          <q-page padding style='padding-top: 66px;z-index:-100;padding:0'>
+            <ais-hits>
+              <template #item='{ item }'>
+                <ais-highlight
+                  attribute='name'
+                  :hit='item'
+                  highlighted-tag-name='mark'
+                />
+                <div style='height: 20px;' />
+              </template>
+            </ais-hits>
+          </q-page>
+          <q-page-sticky expand position='bottom' class='dialog-footer'>
+            <ais-panel>
+              <div class='row fit'>
+                <div class='footer-right' />
+                <div class='right-logo'>
+                  <ais-powered-by />
+                </div>
+              </div>
+            </ais-panel>
+          </q-page-sticky>
+        </q-page-container>
+      </ais-instant-search>
+    </q-layout>
   </div>
 </template>
 
@@ -90,6 +84,7 @@ export default {
     width: 100%
     border: 2px solid #1ec498
     background: white
+    margin: 0
     &:focus
       outline: none
   ::v-deep .ais-Hits-item
@@ -97,7 +92,11 @@ export default {
     &:hover
       background: #1ec498
 .dialog-footer
+  width: 100%
+  background: #ffffff
+  box-shadow: 0 -1px 0 0 #e0e3e8,0 -3px 6px 0 rgba(69,98,155,.12)
   justify-content: flex-end
+  padding-right: 15px
   .right-logo
-    margin-top: 10px
+    margin-top: 20px
 </style>

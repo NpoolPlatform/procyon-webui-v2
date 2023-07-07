@@ -142,7 +142,7 @@
   </header>
   <!-- Search Dialog -->
   <q-dialog v-model='showSearchDialog' position='top'>
-    <q-card style='width: 500px; max-width: 80vw;min-height: 200px; max-height: 500px;margin-top: 60px;border-radius: 8px;'>
+    <q-card style='width: 500px; max-width: 80vw;min-height: 450px; max-height: 450px;margin-top: 60px;border-radius: 8px;'>
       <SearchCard />
     </q-card>
   </q-dialog>
