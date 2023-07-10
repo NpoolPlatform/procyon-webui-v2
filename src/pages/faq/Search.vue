@@ -25,9 +25,10 @@
             <ais-hits style='overflow-y: hidden'>
               <template #item='{ item }'>
                 <ais-highlight
-                  attribute='name'
+                  attribute='Description'
                   :hit='item'
                   highlighted-tag-name='mark'
+                  @click='handleResultClick'
                 />
                 <div style='height: 20px;' />
               </template>
@@ -66,6 +67,9 @@ export default {
   methods: {
     onButtonClick () {
       console.log('button')
+    },
+    handleResultClick () {
+      console.log('click')
     }
   }
 }

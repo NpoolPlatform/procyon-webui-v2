@@ -141,9 +141,9 @@
     </div>
   </header>
   <!-- Search Dialog -->
-  <q-dialog v-model='showSearchDialog' position='top'>
-    <q-card style='width: 500px; max-width: 80vw;min-height: 450px; max-height: 450px;margin-top: 60px;border-radius: 8px;overflow: hidden;'>
-      <SearchCard />
+  <q-dialog v-model='showSearchDialog'>
+    <q-card>
+      <Card />
     </q-card>
   </q-dialog>
 </template>
@@ -171,9 +171,10 @@ const { t } = useI18n({ useScope: 'global' })
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
+const Card = defineAsyncComponent(() => import('src/components/header/Card.vue'))
 const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
 const NotifCard = defineAsyncComponent(() => import('src/components/notification/NotifCard.vue'))
-const SearchCard = defineAsyncComponent(() => import('src/pages/faq/Search.vue'))
+// const SearchCard = defineAsyncComponent(() => import('src/pages/faq/Search.vue'))
 
 const locale = useLocaleStore()
 const special = computed(() => locale.AppLang?.Lang === 'ja-JP')
