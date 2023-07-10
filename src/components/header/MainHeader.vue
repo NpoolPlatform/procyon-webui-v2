@@ -141,8 +141,8 @@
     </div>
   </header>
   <!-- Search Dialog -->
-  <q-dialog v-model='showSearchDialog'>
-    <q-card>
+  <q-dialog v-model='showSearchDialog' position='top'>
+    <q-card style='margin: 60px auto auto; width: 700px; max-width: 80vw;border-radius: 6px;'>
       <Card />
     </q-card>
   </q-dialog>

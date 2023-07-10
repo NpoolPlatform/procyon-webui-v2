@@ -13,7 +13,9 @@
         reset-title='Remove the query'
         :class-names='{
           "ais-SearchBox-form": "searchbox-form",
-          "ais-SearchBox-input": "searchbox-input"
+          "ais-SearchBox-input": "searchbox-input",
+          "ais-SearchBox-submitIcon": "searchbox-submit-icon",
+          "ais-SearchBox-reset": "searchbox-icon-reset"
         }'
       />
     </q-card-section>
@@ -80,15 +82,30 @@ const handleClick = (item: MyData) => {
   padding: 12px 12px 0 12px
 .searchbox-form
   height: 56px
+  .ais-SearchBox-form::before
+    background: no-repeat
+    height: 1rem
+    left: 1rem
+    margin-top: -0.5rem
+    position: absolute
+    top: 50%
+    width: 1rem
 .searchbox-input
-  border-radius: 4px !important
+  border-radius: 6px !important
   background: none !important
   margin: 0 !important
   box-shadow: rgba(119,122,175,.3) 0 1px 4px 0 inset !important
   padding-left: 2.5rem !important
   border: 2px solid #1ec498 !important
+  font-size: 1.2rem !important
   &:focus
     outline: none !important
+.searchbox-icon-reset
+  top: 8%
+
+.searchbox-submit-icon
+  width: 24px
+  height: 24px
 .searchbox-content
   max-height: 50vh
   padding-right: 0px
