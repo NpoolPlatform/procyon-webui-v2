@@ -63,14 +63,14 @@ const handleClick = (item: MyData) => {
   let path = item.Url?.split('topic=')?.[1]
   if (path.includes('#')) {
     path = path.split('#')?.[0]
-    console.log('path')
   }
 
   const hash = item.Url.split('#')[1]
-  console.log('path: ', path)
-  console.log('hash: ', hash)
   if (item.Url?.length > 0) {
-    void router.push({ path: 'faq', query: { topic: path }, hash: `#${hash}` })
+    void router.push({ path: 'faq', query: { topic: path } })
+    if (hash?.length > 0) {
+      void router.push({ path: 'faq', query: { topic: path }, hash: `#${hash}` })
+    }
   }
 }
 
