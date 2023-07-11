@@ -116,9 +116,16 @@ const handleClick = (item: MyData) => {
 .searchbox-submit-icon
   width: 24px
   height: 24px
+::webkit-scrollbar
+  display: none
+.searchbox-content::-webkit-scrollbar
+  display: none
+
 .searchbox-content
   max-height: 50vh
-  padding-right: 0px
+  overflow-y: scroll
+  ::-webkit-overflow-scrolling
+    display: none
   .searchbox-hits-item
     padding: 0
     overflow: hidden
