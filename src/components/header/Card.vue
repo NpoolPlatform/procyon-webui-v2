@@ -1,7 +1,7 @@
 <template>
   <ais-instant-search
     :search-client='searchClient'
-    index-name='faq'
+    :index-name='indexName'
     id='instant-searchbox'
     class='instant-searchbox'
   >
@@ -46,7 +46,8 @@
 <script lang='ts' setup>
 import algoliasearch from 'algoliasearch/lite'
 import 'instantsearch.css/themes/satellite-min.css'
-import { ref } from 'vue'
+import { useLocaleStore } from 'npool-cli-v4'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 interface MyData {
@@ -59,6 +60,15 @@ const searchClient = ref(algoliasearch(
   'GPEKD5F4G0',
   'c0e022782eabbf3af2582e2968827b1e'
 ))
+
+const locale = useLocaleStore()
+const indexName = computed(() => {
+  const short = locale.AppLang?.Short
+  if (!short.includes('JP') && !short.includes('EN')) {
+    return 'JP'
+  }
+  return short
+})
 
 const router = useRouter()
 const handleClick = (item: MyData) => {
