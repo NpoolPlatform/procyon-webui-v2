@@ -65,9 +65,9 @@ const locale = useLocaleStore()
 const indexName = computed(() => {
   const short = locale.AppLang?.Short
   if (!short.includes('JP') && !short.includes('EN')) {
-    return 'JP'
+    return 'jp'
   }
-  return short
+  return short.toLowerCase()
 })
 
 const router = useRouter()
