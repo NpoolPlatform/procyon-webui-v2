@@ -148,6 +148,7 @@ const userAccount = useFrontendUserAccountStore()
 const submitting = ref(false)
 
 const onCodeVerify = (code: string) => {
+  console.log('Add Address')
   submitting.value = true
   const _memo = memo.value === '' ? undefined : memo.value
   userAccount.createUserAccount({
