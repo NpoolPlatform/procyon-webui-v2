@@ -153,7 +153,7 @@ const onCodeVerify = (code: string) => {
   userAccount.createUserAccount({
     CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
-    Account: account.value,
+    Account: accountType.value === AccountType.Google ? undefined as unknown as string : account.value,
     Memo: _memo,
     AccountType: accountType.value as unknown as SignMethodType,
     VerificationCode: code,
