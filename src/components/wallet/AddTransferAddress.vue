@@ -112,7 +112,6 @@ const onCancelClick = () => {
 }
 
 const onCodeVerify = (code: string) => {
-  console.log('Add Address')
   submitting.value = true
   transferAccount.createTransfer({
     Account: accountType.value === AccountType.Google ? undefined as unknown as string : account.value,
