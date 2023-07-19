@@ -35,7 +35,7 @@
                 v-for='child in item.children'
                 :key='child.objectID'
               >
-                <a :href='child.url_without_variables'>
+                <a :href='getUrl(child)'>
                   <div class='docsearch-hit-container'>
                     <div class='docsearch-hit-content-wrapper'>
                       <template v-if='child.type==="content"'>
@@ -67,6 +67,7 @@
 <script lang='ts' setup>
 import 'instantsearch.css/themes/satellite-min.css'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
+import { computed } from 'vue'
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
@@ -83,7 +84,8 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   //  So you can pass any parameters supported by the search endpoint below.
   //  queryBy is required.
   additionalSearchParameters: {
-    query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,content'
+    query_by: 'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,content',
+    group_by: 'url'
   }
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -135,6 +137,12 @@ interface Parent {
   children: Children[];
 }
 
+const getUrl = computed(() => (record: Record) => {
+  if (record.type === 'lvl0') {
+    return record.url_without_anchor
+  }
+  return record.url_without_variables
+})
 const transformItems = (items: Record[]) => {
   const parents = [] as Array<Parent>
   items.forEach((el) => {
@@ -251,6 +259,7 @@ const transformItems = (items: Record[]) => {
       })
     }
   })
+  console.log('parents: ', parents)
   return parents
 }
 </script>
@@ -343,7 +352,7 @@ const transformItems = (items: Record[]) => {
           position: relative
           text-overflow: ellipsis
           white-space: nowrap
-          width: 80%
+          width: 100%
           .docsearch-hit-title
             font-size: 0.9rem
 
