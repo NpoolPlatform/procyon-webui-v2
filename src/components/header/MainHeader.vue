@@ -318,6 +318,7 @@ li#notifications::marker
     box-shadow: none
     margin: 0
     outline: none
+<<<<<<< HEAD
 .popup-card-container
   margin: 60px auto auto
   width: 700px
@@ -326,4 +327,6 @@ li#notifications::marker
   background: linear-gradient(to bottom right, var(--gray-2) 0, var(--dark-violet) 100%)
   border: 1px solid var(--light-green-2-33)
   box-shadow: 16px 16px 20px 0 var(--dark-blue-3)
+=======
+>>>>>>> ea7f5f1c (add search ui)
 </style>
