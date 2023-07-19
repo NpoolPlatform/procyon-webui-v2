@@ -7,7 +7,7 @@
   >
     <q-card-section class='searchbox-top'>
       <ais-search-box
-        placeholder='Search here...'
+        :placeholder='$t("MSG_SEARCH_HERE")'
         autofocus
         show-loading-indicator
         reset-title='Remove the query'
@@ -25,28 +25,25 @@
         :transform-items='transformItems'
       >
         <template #item='{ item }'>
-          <div class='DocSearch-Hits docsearch-hits-container'>
-            <div class='DocSearch-Hit-source'>
+          <div class='docsearch-hits-container'>
+            <div class='hit-group'>
               {{ item.group }}
             </div>
             <ul role='listbox' id='docsearch-list'>
               <li
-                class='DocSearch-Hit'
-                id='docsearch-item-0'
-                role='option'
+                class='docsearch-hit'
                 v-for='child in item.children'
                 :key='child.objectID'
-                :style='item.children?.length === 1? "padding-bottom:0" : ""'
               >
-                <a :href='child.url_without_variables' class='docsearch-a'>
-                  <div class='DocSearch-Hit-Container docsearch-hit-container'>
-                    <div class='DocSearch-Hit-content-wrapper'>
+                <a :href='child.url_without_variables'>
+                  <div class='docsearch-hit-container'>
+                    <div class='docsearch-hit-content-wrapper'>
                       <template v-if='child.type==="content"'>
-                        <span class='DocSearch-Hit-title' v-html='child._highlightResult["content"]?.value' />
-                        <span class='DocSearch-Hit-path' v-html='child._highlightResult["hierarchy.lvl1"].value' />
+                        <span class='docsearch-hit-title' v-html='child._highlightResult["content"]?.value' />
+                        <span class='docsearch-hit-path' v-html='child._highlightResult["hierarchy.lvl1"].value' />
                       </template>
-                      <span v-if='child.type==="lvl0"' class='DocSearch-Hit-title' v-html='child._highlightResult["hierarchy.lvl0"]?.value' />
-                      <span v-if='child.type==="lvl1"' class='DocSearch-Hit-title' v-html='child._highlightResult["hierarchy.lvl1"]?.value' />
+                      <span v-if='child.type==="lvl0"' class='docsearch-hit-title' v-html='child._highlightResult["hierarchy.lvl0"]?.value' />
+                      <span v-if='child.type==="lvl1"' class='docsearch-hit-title' v-html='child._highlightResult["hierarchy.lvl1"]?.value' />
                     </div>
                   </div>
                 </a>
@@ -259,9 +256,11 @@ const transformItems = (items: Record[]) => {
 </script>
 <style lang='sass'>
 .searchbox-top
-  padding: 12px 12px 0 12px
+  padding: 12px
 .searchbox-form
-  height: 56px
+  height: 46px
+  background:  #e1eeef
+  border-radius: 12px
   .ais-SearchBox-form::before
     background: no-repeat
     height: 1rem
@@ -271,18 +270,13 @@ const transformItems = (items: Record[]) => {
     top: 50%
     width: 1rem
 .searchbox-input
-  border-radius: 6px !important
-  background: none !important
   margin: 0 !important
-  box-shadow: rgba(119,122,175,.3) 0 1px 4px 0 inset !important
   padding-left: 2.5rem !important
-  border: 2px solid #1ec498 !important
   font-size: 1.2rem !important
   &:focus
     outline: none !important
 .searchbox-icon-reset
-  top: 8%
-
+  top: 0%
 .searchbox-submit-icon
   width: 24px
   height: 24px
@@ -290,17 +284,7 @@ const transformItems = (items: Record[]) => {
   display: none
 .searchbox-content::-webkit-scrollbar
   display: none
-.docsearch-hits-container
-  width: 100%
-  margin-bottom: 0 !important
-  ul#docsearch-list
-    padding-left: 0
-    .docsearch-a
-      &:hover
-        background: #1035bc
-    .docsearch-hit-container
-      &:hover
-        color: #ffffff
+
 .searchbox-content
   max-height: 50vh
   overflow-y: scroll
@@ -308,36 +292,59 @@ const transformItems = (items: Record[]) => {
   ::-webkit-overflow-scrolling
     display: none
   .searchbox-hits-item
+    color: #e1eeef
     padding: 0
     overflow: hidden
     text-overflow: ellipsis
     white-space: nowrap
     box-shadow: none
-    &::hover
-        background: #1035bc
-    &:hover
-      // background: #25c2a0
-      // cursor: pointer
-  // .ais-highlight
-  //   color: #444950
-  //   padding: 1rem
-  //   width: 100%
-  //   &:hover
-  //     color: #FFFFFF
-// .searchbox-footer-container
-//   align-items: center
-//   background: #fff
-//   border-radius: 0 0 8px 8px
-//   box-shadow: 0 -1px 0 0 #e0e3e8,0 -3px 6px 0 rgba(69,98,155,.12)
-//   display: flex
-//   flex-direction: row-reverse
-//   flex-shrink: 0
-//   height: 44px
-//   justify-content: space-between
-//   padding: 0 12px
-//   position: relative
-//   -webkit-user-select: none
-//   user-select: none
-//   width: 100%
-//   z-index: 300
+    border-radius: 8px
+    background: none !important
+.docsearch-hits-container
+  width: 100%
+  .hit-group
+    font-size: .85em
+    font-weight: 600
+    line-height: 32px
+    margin: 0 -4px
+    padding: 0 4px 0
+    position: sticky
+    top: 0
+    z-index: 10
+    background-color: transparent
+  ul#docsearch-list
+    padding-left: 0
+    .docsearch-hit
+      padding-bottom: 10px
+    .docsearch-hit a
+      text-decoration: none
+      background: linear-gradient(to bottom right, rgba(225, 238, 239, 0.2) 0, rgba(161, 208, 208, 0.1) 100%)
+      opacity: .7
+      border-radius: 8px
+      display: block
+      padding-left: 12px
+      color: #ffffff
+      &:hover
+        opacity: 1
+      .docsearch-hit-container
+        align-items: center
+        display: flex
+        flex-direction: row
+        height: 56px !important
+        padding: 0 12px 0 0
+        .docsearch-hit-content-wrapper
+          display: flex
+          flex-direction: column
+          font-weight: 500
+          justify-content: center
+          line-height: 1.2em
+          margin: 0 8px
+          overflow-x: hidden
+          position: relative
+          text-overflow: ellipsis
+          white-space: nowrap
+          width: 80%
+          .docsearch-hit-title
+            font-size: 0.9rem
+
 </style>
