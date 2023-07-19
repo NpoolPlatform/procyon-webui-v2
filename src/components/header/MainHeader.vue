@@ -140,7 +140,7 @@
   </header>
   <!-- Search Dialog -->
   <q-dialog v-model='showSearchDialog' position='top'>
-    <q-card style='margin: 60px auto auto; width: 700px; max-width: 80vw;border-radius: 6px;background: #f5f6f7;'>
+    <q-card class='popup-card-container'>
       <SearchCard />
     </q-card>
   </q-dialog>
@@ -318,4 +318,12 @@ li#notifications::marker
     box-shadow: none
     margin: 0
     outline: none
+.popup-card-container
+  margin: 60px auto auto
+  width: 700px
+  max-width: 80vw
+  border-radius: 6px
+  background: linear-gradient(to bottom right, var(--gray-2) 0, var(--dark-violet) 100%)
+  border: 1px solid var(--light-green-2-33)
+  box-shadow: 16px 16px 20px 0 var(--dark-blue-3)
 </style>
