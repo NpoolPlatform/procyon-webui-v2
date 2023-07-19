@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: typesense-scraper
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: typesense-scraper
+  template:
+    metadata:
+      labels:
+        app: typesense-scraper
+    spec:
+      containers:
+        - name: typesense-scraper
+          image: typesense/docsearch-scraper:0.7.0
+          env:
+            - name: TYPESENSE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: typesense-secret
+                  key: apikey
+            - name: TYPESENSE_HOST
+              value: typesense
+            - name: TYPESENSE_PORT
+              value: 8108
+            - name: TYPESENSE_PROTOCOL
+              value: http
+
