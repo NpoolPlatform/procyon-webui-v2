@@ -41,7 +41,13 @@
     "vue-gtag": "^2.0.1",
     "vue-i18n": "^9.0.0",
     "vue-recaptcha-v3": "^2.0.1",
-    "vue-router": "4.0.11"
+    "vue-router": "4.0.11",
+    "algoliasearch": "4.12.1",
+    "instantsearch.css": "^8.0.0",
+    "instantsearch.js": "4.7.0",
+    "typesense-docsearch.js": "^3.4.0",
+    "typesense-instantsearch-adapter": "^2.7.0",
+    "vue-instantsearch": "4.8.8"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
