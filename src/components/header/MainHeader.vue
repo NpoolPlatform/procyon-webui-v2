@@ -322,7 +322,7 @@ li#notifications::marker
   margin: 60px auto auto
   width: 700px
   max-width: 80vw
-  border-radius: 6px
+  border-radius: 6px !important
   background: linear-gradient(to bottom right, var(--gray-2) 0, var(--dark-violet) 100%)
   border: 1px solid var(--light-green-2-33)
   box-shadow: 16px 16px 20px 0 var(--dark-blue-3)
