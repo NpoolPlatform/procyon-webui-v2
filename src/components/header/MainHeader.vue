@@ -9,6 +9,24 @@
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/", hash: "#partners" })'>{{ $t('MSG_PARTNERS') }}</a></li>
         <li><a class='nav-link' target='_blank' @click='router.push({ path: "/contact" })'>{{ $t('MSG_CONTACT') }}</a></li>
         <LangSwitcher />
+        <div class='header-search'>
+          <q-input
+            ref='headerSearch'
+            rounded
+            dense
+            standout
+            outlined
+            v-model='text'
+            @click='onSearchClick'
+            class='header-input'
+            placeholder='Search'
+            @keyup.ctrl.q='onSearchClick'
+          >
+            <template #prepend>
+              <q-icon name='search' />
+            </template>
+          </q-input>
+        </div>
         <li id='notifications' v-if='localUser.logined'>
           <img class='notification-icon notification-icon-inactive' src='font-awesome/bell.svg'>
           <span v-if='unReads?.length > 0' class='notification-dot'>{{ unReads?.length }}</span>
@@ -120,10 +138,16 @@
       </ul>
     </div>
   </header>
+  <!-- Search Dialog -->
+  <q-dialog v-model='showSearchDialog' position='top'>
+    <q-card style='margin: 60px auto auto; width: 700px; max-width: 80vw;border-radius: 6px;background: #f5f6f7;'>
+      <SearchCard />
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
+import { defineAsyncComponent, computed, watch, onMounted, ref } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
 import lightLogo from '../../assets/procyon-light.svg'
@@ -139,12 +163,12 @@ import {
 } from 'npool-cli-v4'
 import { getNotifs, onMarkAll } from 'src/api/notif'
 import { useI18n } from 'vue-i18n'
-
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
+const SearchCard = defineAsyncComponent(() => import('src/components/header/SearchCard.vue'))
 const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
 const NotifCard = defineAsyncComponent(() => import('src/components/notification/NotifCard.vue'))
 
@@ -253,6 +277,13 @@ onMounted(() => {
     void router.push({ path: '/maintenance' })
   }
 })
+const headerSearch = ref<HTMLInputElement>()
+const text = ref('')
+const showSearchDialog = ref(false)
+const onSearchClick = () => {
+  headerSearch.value?.blur()
+  showSearchDialog.value = true
+}
 </script>
 
 <style lang='sass' scoped>
@@ -277,4 +308,14 @@ li#notifications::marker
 
 .notifications::-webkit-scrollbar
   display: none
+
+.header-search
+  width: 150px
+  ::v-deep .q-field__control
+    background: white
+  ::v-deep input
+    background: none
+    box-shadow: none
+    margin: 0
+    outline: none
 </style>
