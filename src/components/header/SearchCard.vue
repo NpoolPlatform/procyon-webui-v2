@@ -268,7 +268,6 @@ const transformItems = (items: Record[]) => {
       })
     }
   })
-  console.log('parents: ', parents)
   return parents
 }
 </script>
