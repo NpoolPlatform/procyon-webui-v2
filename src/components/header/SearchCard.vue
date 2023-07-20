@@ -66,7 +66,7 @@
 
 <script lang='ts' setup>
 import 'instantsearch.css/themes/satellite-min.css'
-import { TypesenseApiKey } from 'src/const/const'
+import { AppID, TypesenseApiKey } from 'src/const/const'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import { computed } from 'vue'
 
@@ -84,7 +84,10 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
     apiKey: TypesenseApiKey,
     nodes: [
       { url: `${baseURL}/typesense` }
-    ]
+    ],
+    additionalHeaders: {
+      'X-App-Id': AppID
+    }
   },
   // The following parameters are directly passed to Typesense's search API endpoint.
   //  So you can pass any parameters supported by the search endpoint below.
