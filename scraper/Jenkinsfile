@@ -1,0 +1,88 @@
+pipeline {
+  agent any
+  stages {
+    stage('Clone') {
+      steps {
+        git(url: scm.userRemoteConfigs[0].url, branch: '$BRANCH_NAME', changelog: true, credentialsId: 'KK-github-key', poll: true)
+      }
+    }
+
+    stage('Scraper') {
+      when {
+        expression { TYPESENSE_HOST == '172.16.31.87' }
+        expression { TYPESENSE_PORT == '8108' }
+        expression { TYPESENSE_PROTOCOL == 'http' }
+        expression { TYPESENSE_API_KEY == 'c5deba40-4214-469e-ba6b-5583e9e53e6b' }
+        expression { WEBSITE == 'https://www.procyon.vip' }
+      }
+      steps {
+        sh (returnStdout: false, script: '''
+          set +e
+          sed s#https://www.procyon.vip#https://procyon.npool.top#g $(pwd)/typesense_scraper.json
+          docker run -it \
+            -e "TYPESENSE_HOST=$(TYPESENSE_HOST)" \
+            -e "TYPESENSE_API_KEY=$(TYPESENSE_API_KEY)" \
+            -e "TYPESENSE_PORT=$(TYPESENSE_PORT)" \
+            -e "TYPESENSE_PROTOCOL=$(TYPESENSE_PROTOCOL)" \
+            -v "$(pwd):/tmp/search" \
+            -e "CONFIG=/tmp/search/typesense_scraper.json" \
+            typesense/docsearch-scraper:0.7.0
+        '''.stripIndent())
+      }
+    }
+  }
+  post('Report') {
+    fixed {
+      script {
+        sh(script: 'bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh fixed')
+    }
+      script {
+        // env.ForEmailPlugin = env.WORKSPACE
+        emailext attachmentsPattern: 'TestResults\\*.trx',
+        body: '${FILE,path="$JENKINS_HOME/email-templates/success_email_tmp.html"}',
+        mimeType: 'text/html',
+        subject: currentBuild.currentResult + " : " + env.JOB_NAME,
+        to: '$DEFAULT_RECIPIENTS'
+      }
+    }
+    success {
+      script {
+        sh(script: 'bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh successful')
+    }
+      script {
+        // env.ForEmailPlugin = env.WORKSPACE
+        emailext attachmentsPattern: 'TestResults\\*.trx',
+        body: '${FILE,path="$JENKINS_HOME/email-templates/success_email_tmp.html"}',
+        mimeType: 'text/html',
+        subject: currentBuild.currentResult + " : " + env.JOB_NAME,
+        to: '$DEFAULT_RECIPIENTS'
+      }
+    }
+    failure {
+      script {
+        sh(script: 'bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh failure')
+    }
+      script {
+        // env.ForEmailPlugin = env.WORKSPACE
+        emailext attachmentsPattern: 'TestResults\\*.trx',
+        body: '${FILE,path="$JENKINS_HOME/email-templates/fail_email_tmp.html"}',
+        mimeType: 'text/html',
+        subject: currentBuild.currentResult + " : " + env.JOB_NAME,
+        to: '$DEFAULT_RECIPIENTS'
+      }
+    }
+    aborted {
+      script {
+        sh(script: 'bash $JENKINS_HOME/wechat-templates/send_wxmsg.sh aborted')
+    }
+      script {
+        // env.ForEmailPlugin = env.WORKSPACE
+        emailext attachmentsPattern: 'TestResults\\*.trx',
+        body: '${FILE,path="$JENKINS_HOME/email-templates/fail_email_tmp.html"}',
+        mimeType: 'text/html',
+        subject: currentBuild.currentResult + " : " + env.JOB_NAME,
+        to: '$DEFAULT_RECIPIENTS'
+      }
+    }
+  }
+}

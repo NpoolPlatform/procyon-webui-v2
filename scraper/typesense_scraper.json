@@ -50,6 +50,5 @@
             "text": ".faq-content-main h4, .faq-content-main ul, .faq-content-main p"
         }
     },
-    "js_render": true,
-    "nb_hits": 321
+    "js_render": true
 }
