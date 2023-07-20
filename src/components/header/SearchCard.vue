@@ -66,27 +66,24 @@
 
 <script lang='ts' setup>
 import 'instantsearch.css/themes/satellite-min.css'
+import { TypesenseApiKey } from 'src/const/const'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import { computed } from 'vue'
 
-let baseURL = window.location.protocol + '//api.' + window.location.hostname + '/api/typesense'
+let baseURL = window.location.protocol + '//api.' + window.location.hostname + '/api'
 if (window.location.hostname.startsWith('www.')) {
   baseURL = window.location.origin.replace('www', 'api') + '/api/typesense'
 }
 if (window.location.hostname.includes('.npool.top')) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  baseURL = window.location.protocol + '//api.npool.top' + (window.location.port.length ? ':' + window.location.port : '') + '/api/typesense'
+  baseURL = window.location.protocol + '//api.npool.top' + (window.location.port.length ? ':' + window.location.port : '') + '/api'
 }
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
-    apiKey: 'c5deba40-4214-469e-ba6b-5583e9e53e6b',
+    apiKey: TypesenseApiKey,
     nodes: [
-      {
-        host: baseURL?.split('://')?.[1],
-        port: 80,
-        protocol: 'http'
-      }
+      { url: `${baseURL}/typesense` }
     ]
   },
   // The following parameters are directly passed to Typesense's search API endpoint.
