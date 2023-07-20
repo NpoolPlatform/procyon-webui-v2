@@ -18,13 +18,14 @@ pipeline {
       steps {
         sh (returnStdout: false, script: '''
           set +e
-          sed s#https://www.procyon.vip#https://procyon.npool.top#g $(pwd)/typesense_scraper.json
+          sed s#https://www.procyon.vip#https://procyon.npool.top#g $(pwd)/scraper/typesense_scraper.json
+          cat $(pwd)/scraper/typesense_scraper.json
           docker run -it \
             -e "TYPESENSE_HOST=$(TYPESENSE_HOST)" \
             -e "TYPESENSE_API_KEY=$(TYPESENSE_API_KEY)" \
             -e "TYPESENSE_PORT=$(TYPESENSE_PORT)" \
             -e "TYPESENSE_PROTOCOL=$(TYPESENSE_PROTOCOL)" \
-            -v "$(pwd):/tmp/search" \
+            -v "$(pwd)/scraper:/tmp/search" \
             -e "CONFIG=/tmp/search/typesense_scraper.json" \
             typesense/docsearch-scraper:0.7.0
         '''.stripIndent())
