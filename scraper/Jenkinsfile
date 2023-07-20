@@ -18,7 +18,7 @@ pipeline {
       steps {
         sh (returnStdout: false, script: '''
           set +e
-          sed s#https://www.procyon.vip#https://procyon.npool.top#g $(pwd)/scraper/typesense_scraper.json
+          sed -i s#https://www.procyon.vip#https://procyon.npool.top#g $(pwd)/scraper/typesense_scraper.json
           cat $(pwd)/scraper/typesense_scraper.json
           docker run -it \
             -e "TYPESENSE_HOST=$(TYPESENSE_HOST)" \
