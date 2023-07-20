@@ -69,13 +69,22 @@ import 'instantsearch.css/themes/satellite-min.css'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import { computed } from 'vue'
 
+let baseURL = window.location.protocol + '//api.' + window.location.hostname + '/api/typesense'
+if (window.location.hostname.startsWith('www.')) {
+  baseURL = window.location.origin.replace('www', 'api') + '/api/typesense'
+}
+if (window.location.hostname.includes('.npool.top')) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  baseURL = window.location.protocol + '//api.npool.top' + (window.location.port.length ? ':' + window.location.port : '') + '/api/typesense'
+}
+
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
-    apiKey: 'xyz', // Be sure to use the search-only-api-key
+    apiKey: 'c5deba40-4214-469e-ba6b-5583e9e53e6b',
     nodes: [
       {
-        host: '172.16.31.87',
-        port: 8108,
+        host: baseURL?.split('://')?.[1],
+        port: 80,
         protocol: 'http'
       }
     ]
