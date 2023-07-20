@@ -20,7 +20,7 @@ pipeline {
           set +e
           sed -i s#https://www.procyon.vip#$SCRAPE_WEBSITE#g $(pwd)/scraper/typesense_scraper.json
           cat $(pwd)/scraper/typesense_scraper.json
-          docker run -it --rm \
+          docker run -i --rm \
             -e "TYPESENSE_HOST=$TYPESENSE_HOST" \
             -e "TYPESENSE_API_KEY=$TYPESENSE_API_KEY" \
             -e "TYPESENSE_PORT=$TYPESENSE_PORT" \
