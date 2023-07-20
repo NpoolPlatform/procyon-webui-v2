@@ -2,11 +2,7 @@ const LogoText = 'PROCYON'
 
 const AppID = 'ff2c5d50-be56-413e-aba5-9c7ad888a769'
 const ThrottleSeconds = 10
-<<<<<<< HEAD
 const TypesenseApiKey = 'c5deba40-4214-469e-ba6b-5583e9e53e6b'
-=======
-const TypesenseApiKey = 'ff2c5d50-be56-413e-aba5-9c7ad888a769'
->>>>>>> cebf7e58 (fix wrong host)
 
 enum IntervalKey {
   All = 'All',
