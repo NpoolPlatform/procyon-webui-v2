@@ -5,7 +5,7 @@
     :key='goodProfit.CoinTypeID'
     :profit='goodProfit'
   />
-  <SpaceMeshMockCard />
+  <!-- <SpaceMeshMockCard /> -->
 </template>
 
 <script setup lang='ts'>
@@ -15,7 +15,7 @@ import { IntervalKey } from 'src/const/const'
 import { MyGoodProfit } from 'src/localstore/ledger/types'
 
 const MiningCard = defineAsyncComponent(() => import('src/components/dashboard/MiningCard.vue'))
-const SpaceMeshMockCard = defineAsyncComponent(() => import('src/components/dashboard/SpacemeshMockCard.vue'))
+// const SpaceMeshMockCard = defineAsyncComponent(() => import('src/components/dashboard/SpacemeshMockCard.vue'))
 
 const currency = useAdminCurrencyStore()
 const coin = useAdminAppCoinStore()
