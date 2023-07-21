@@ -6,29 +6,40 @@ pipeline {
         git(url: scm.userRemoteConfigs[0].url, branch: '$BRANCH_NAME', changelog: true, credentialsId: 'KK-github-key', poll: true)
       }
     }
+    stage('Switch to current cluster') {
+      when {
+        anyOf {
+          expression { BUILD_TARGET == 'true' }
+          expression { DEPLOY_TARGET == 'true' }
+        }
+      }
+      steps {
+        sh 'cd /etc/kubeasz; ./ezctl checkout $TARGET_ENV'
+      }
+    }
 
+    stage('Config target') {
+      when {
+        anyOf {
+          expression { BUILD_TARGET == 'true' }
+          expression { DEPLOY_TARGET == 'true' }
+        }
+      }
+      steps {
+        sh (returnStdout: false, script: '''
+          kubectl -n kube-system apply -f $(pwd)/scraper/typesense-scraper.yaml
+        '''.stripIndent())
+      }
+    }
     stage('Scraper') {
       when {
-        expression { TYPESENSE_HOST != null }
-        expression { TYPESENSE_PORT != null }
-        expression { TYPESENSE_PROTOCOL != null }
-        expression { TYPESENSE_API_KEY != null }
         expression { SCRAPE_WEBSITE != null }
       }
       steps {
         sh (returnStdout: false, script: '''
           set +e
-          sed -i s#https://www.procyon.vip#$SCRAPE_WEBSITE#g $(pwd)/scraper/typesense_scraper.json
-          cat $(pwd)/scraper/typesense_scraper.json
-          docker run -i --rm \
-            -e "TYPESENSE_HOST=$TYPESENSE_HOST" \
-            -e "TYPESENSE_API_KEY=$TYPESENSE_API_KEY" \
-            -e "TYPESENSE_PORT=$TYPESENSE_PORT" \
-            -e "TYPESENSE_PROTOCOL=$TYPESENSE_PROTOCOL" \
-            -v /dev/shm:/dev/shm \
-            -v "$(pwd)/scraper:/tmp/search" \
-            -e "CONFIG=/tmp/search/typesense_scraper.json" \
-            typesense/docsearch-scraper:0.7.0
+          sed -i s#https://www.procyon.vip#$SCRAPE_WEBSITE#g $(pwd)/scraper/typesense-scraper.yaml
+          cat $(pwd)/scraper/typesense-scraper.yaml
         '''.stripIndent())
       }
     }

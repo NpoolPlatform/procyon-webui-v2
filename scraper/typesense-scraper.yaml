@@ -60,33 +60,43 @@ data:
         "js_render": true                     
     } 
 ---
-apiVersion: v1
-kind: Pod
-metadata:
-  name: typesense-scraper
-  namespace: kube-system
-spec:
-  containers:
-  - name: scraper
-    image: typesense/docsearch-scraper:0.7.0
-    env:
-    - name: CONFIG
-      value: /tmp/search/typesense-scraper.json
-    - name: TYPESENSE_HOST
-      value: typesense-svc
-    - name: TYPESENSE_PORT
-      value: "8108"
-    - name: TYPESENSE_PROTOCOL
-      value: https
-    - name: TYPESENSE_API_KEY
-      valueFrom:
-        configMapKeyRef:
-          name: typesense-configmap
-          key: apikey
-    volumeMounts:
-      - name: config
-        mountPath: /tmp/search
-  volumes:
-    - name: config
-      configMap:
-        name: typesense-scraper-configmap
+apiVersion: batch/v1                                                                                                                 
+kind: Job                                                                                                               
+metadata:                                                                                                               
+  name: typesense-scraper-job                                                                                           
+  namespace: kube-system                                                                                                
+spec:                                                                                                                   
+  ttlSecondsAfterFinished: 10                                                                                           
+  parallelism: 1                                                                                                        
+  template:                                                                                                             
+    spec:                                                                                                               
+      containers:                                                                                                       
+      - name: scraper                                                                                                   
+        image: typesense/docsearch-scraper:0.7.0                                                                        
+        env:                                                                                                            
+        - name: CONFIG                                                                                                  
+          value: /tmp/search/typesense-scraper.json                                                                     
+        - name: TYPESENSE_HOST                                                                                          
+          value: typesense-svc                                                                                          
+        - name: TYPESENSE_PORT                                                                                          
+          value: "8108"                                                                                                 
+        - name: TYPESENSE_PROTOCOL                                                                                      
+          value: http                                                                                                   
+        - name: TYPESENSE_API_KEY                                                                                       
+          valueFrom:                                                                                                    
+            configMapKeyRef:                                                                                            
+              name: typesense-configmap                                                                                 
+              key: apikey                                                                                               
+        volumeMounts:                                                                                                   
+          - name: config                                                                                                
+            mountPath: /tmp/search                                                                                      
+          - name: shm-                                                                                                  
+            mountPath: /dev/shm                                                                                         
+      restartPolicy: Never                                                                                              
+      volumes:                                                                                                          
+        - name: config                                                                                                  
+          configMap:                                                                                                    
+            name: typesense-scraper-configmap                                                                           
+        - name: shm                                                                                                     
+          hostPath:                                                                                                     
+              path: /dev/shm 
