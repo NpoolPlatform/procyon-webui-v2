@@ -90,7 +90,7 @@ spec:
         volumeMounts:                                                                                                   
           - name: config                                                                                                
             mountPath: /tmp/search                                                                                      
-          - name: shm-                                                                                                  
+          - name: shm                                                                                                 
             mountPath: /dev/shm                                                                                         
       restartPolicy: Never                                                                                              
       volumes:                                                                                                          
@@ -99,4 +99,4 @@ spec:
             name: typesense-scraper-configmap                                                                           
         - name: shm                                                                                                     
           hostPath:                                                                                                     
-              path: /dev/shm 
+            path: /dev/shm 
