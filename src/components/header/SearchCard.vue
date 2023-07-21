@@ -72,7 +72,7 @@ import { computed } from 'vue'
 
 let baseURL = window.location.protocol + '//api.' + window.location.hostname + '/api'
 if (window.location.hostname.startsWith('www.')) {
-  baseURL = window.location.origin.replace('www', 'api') + '/api/typesense'
+  baseURL = window.location.origin.replace('www', 'api') + '/api'
 }
 if (window.location.hostname.includes('.npool.top')) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
