@@ -12,6 +12,19 @@ pipeline {
       }
     }
 
+    stage('Config target') {
+      when {
+        anyOf {
+          expression { BUILD_TARGET == 'true' }
+          expression { DEPLOY_TARGET == 'true' }
+        }
+      }
+      steps {
+        sh (returnStdout: false, script: '''
+          kubectl -n kube-system apply -f $(pwd)/scraper/typesense-scraper.yaml
+        '''.stripIndent())
+      }
+    }
     stage('Scraper') {
       when {
         expression { SCRAPE_WEBSITE != null }
