@@ -7,30 +7,11 @@ pipeline {
       }
     }
     stage('Switch to current cluster') {
-      when {
-        anyOf {
-          expression { BUILD_TARGET == 'true' }
-          expression { DEPLOY_TARGET == 'true' }
-        }
-      }
       steps {
         sh 'cd /etc/kubeasz; ./ezctl checkout $TARGET_ENV'
       }
     }
 
-    stage('Config target') {
-      when {
-        anyOf {
-          expression { BUILD_TARGET == 'true' }
-          expression { DEPLOY_TARGET == 'true' }
-        }
-      }
-      steps {
-        sh (returnStdout: false, script: '''
-          kubectl -n kube-system apply -f $(pwd)/scraper/typesense-scraper.yaml
-        '''.stripIndent())
-      }
-    }
     stage('Scraper') {
       when {
         expression { SCRAPE_WEBSITE != null }
@@ -40,6 +21,7 @@ pipeline {
           set +e
           sed -i s#https://www.procyon.vip#$SCRAPE_WEBSITE#g $(pwd)/scraper/typesense-scraper.yaml
           cat $(pwd)/scraper/typesense-scraper.yaml
+          kubectl -n kube-system apply -f $(pwd)/scraper/typesense-scraper.yaml
         '''.stripIndent())
       }
     }
