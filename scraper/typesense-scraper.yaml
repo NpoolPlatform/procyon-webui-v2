@@ -1,102 +1,102 @@
-apiVersion: v1              
-kind: ConfigMap                               
-metadata:                     
-  name: typesense-scraper-configmap                     
-  namespace: kube-system                                                                                                                                       
-data:                     
-  typesense-scraper.json: |-                                     
-    {                                                                                          
-        "index_name": "faq",                                                                     
-        "start_urls": [                                                                        
-            "https://www.procyon.vip",                     
-            {                                                                               
-                "url": "https://www.procyon.vip/faq?topic=Login",                     
-                "selectors_key": "login"                                                         
-            },                                                                                
-            {                                                                                   
-                "url": "https://www.procyon.vip/faq?topic=AccountSettings",                     
-                "selectors_key": "accountsettings"                     
-            },                                                                                  
-            {                                                                           
-                "url": "https://www.procyon.vip/faq?topic=Dashboard",                           
-                "selectors_key": "dashboard"                     
-            },                                                                         
-            {                                                                          
-                "url": "https://www.procyon.vip/faq?topic=Transactions",                     
-                "selectors_key": "transaction"                                               
-            },                                                                             
-            {                                                                                
-                "url": "https://www.procyon.vip/faq?topic=KYC",                         
-                "selectors_key": "kyc"                                                           
-            },                                                                          
-            {                                                                                  
-                "url": "https://www.procyon.vip/faq?topic=Security",                     
-                "selectors_key": "security"                                                
-            },                                                   
-            {                                                               
-                "url": "https://www.procyon.vip/faq?topic=General",                     
-                "selectors_key": "general"                                                         
-            },                                                                                                         
-            {                                                  
-                "url": "https://www.procyon.vip/faq?topic=Aleo",                     
-                "selectors_key": "aleo"                     
-            },                                                                       
-            {                                               
-                "url": "https://www.procyon.vip/faq?topic=IronFish",                     
-                "selectors_key": "ironfish"                     
-            },                                                                           
-            {                                                   
-                "url": "https://www.procyon.vip/faq?topic=Spacemesh",                     
-                "selectors_key": "spacemesh"                     
-            }                                                                             
-        ],                                                       
-        "selectors": {                     
-            "default": {                     
-                "lvl0": ".content.faq h2",                     
-                "lvl1": ".faq-content-main h3",                     
-                "text": ".faq-content-main h4, .faq-content-main ul, .faq-content-main p"                     
-            }                                                       
-        },                                                                                                    
-        "js_render": true                     
-    } 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: typesense-scraper-configmap
+  namespace: kube-system
+data:
+  typesense-scraper.json: |-
+    {
+        "index_name": "faq",
+        "start_urls": [
+            "https://www.procyon.vip",
+            {
+                "url": "https://www.procyon.vip/faq?topic=Login",
+                "selectors_key": "login"
+            },
+            {
+                "url": "https://www.procyon.vip/faq?topic=AccountSettings",
+                "selectors_key": "accountsettings"
+            },
+            {
+                "url": "https://www.procyon.vip/faq?topic=Dashboard",
+                "selectors_key": "dashboard"
+            },
+            {
+                "url": "https://www.procyon.vip/faq?topic=Transactions",
+                "selectors_key": "transaction"
+            },
+            {
+                "url": "https://www.procyon.vip/faq?topic=KYC",
+                "selectors_key": "kyc"
+            },
+            {
+                "url": "https://www.procyon.vip/faq?topic=Security",
+                "selectors_key": "security"
+            },
+            {
+                "url": "https://www.procyon.vip/faq?topic=General",
+                "selectors_key": "general"
+            },
+            {
+                "url": "https://www.procyon.vip/faq?topic=Aleo",
+                "selectors_key": "aleo"
+            },
+            {
+                "url": "https://www.procyon.vip/faq?topic=IronFish",
+                "selectors_key": "ironfish"
+            },
+            {
+                "url": "https://www.procyon.vip/faq?topic=Spacemesh",
+                "selectors_key": "spacemesh"
+            }
+        ],
+        "selectors": {
+            "default": {
+                "lvl0": ".content.faq h2",
+                "lvl1": ".faq-content-main h3",
+                "text": ".faq-content-main h4, .faq-content-main ul, .faq-content-main p"
+            }
+        },
+        "js_render": true
+    }
 ---
-apiVersion: batch/v1                                                                                                                 
-kind: Job                                                                                                               
-metadata:                                                                                                               
-  name: typesense-scraper-job                                                                                           
-  namespace: kube-system                                                                                                
-spec:                                                                                                                   
-  ttlSecondsAfterFinished: 10                                                                                           
-  parallelism: 1                                                                                                        
-  template:                                                                                                             
-    spec:                                                                                                               
-      containers:                                                                                                       
-      - name: scraper                                                                                                   
-        image: typesense/docsearch-scraper:0.7.0                                                                        
-        env:                                                                                                            
-        - name: CONFIG                                                                                                  
-          value: /tmp/search/typesense-scraper.json                                                                     
-        - name: TYPESENSE_HOST                                                                                          
-          value: typesense-svc                                                                                          
-        - name: TYPESENSE_PORT                                                                                          
-          value: "8108"                                                                                                 
-        - name: TYPESENSE_PROTOCOL                                                                                      
-          value: http                                                                                                   
-        - name: TYPESENSE_API_KEY                                                                                       
-          valueFrom:                                                                                                    
-            configMapKeyRef:                                                                                            
-              name: typesense-configmap                                                                                 
-              key: apikey                                                                                               
-        volumeMounts:                                                                                                   
-          - name: config                                                                                                
-            mountPath: /tmp/search                                                                                      
-          - name: shm                                                                                                 
-            mountPath: /dev/shm                                                                                         
-      restartPolicy: Never                                                                                              
-      volumes:                                                                                                          
-        - name: config                                                                                                  
-          configMap:                                                                                                    
-            name: typesense-scraper-configmap                                                                           
-        - name: shm                                                                                                     
-          hostPath:                                                                                                     
-            path: /dev/shm 
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: typesense-scraper-job
+  namespace: kube-system
+spec:
+  ttlSecondsAfterFinished: 10
+  parallelism: 1
+  template:
+    spec:
+      containers:
+      - name: scraper
+        image: typesense/docsearch-scraper:0.7.0
+        env:
+        - name: CONFIG
+          value: /tmp/search/typesense-scraper.json
+        - name: TYPESENSE_HOST
+          value: typesense-svc
+        - name: TYPESENSE_PORT
+          value: "8108"
+        - name: TYPESENSE_PROTOCOL
+          value: http
+        - name: TYPESENSE_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: typesense-configmap
+              key: apikey
+        volumeMounts:
+          - name: config
+            mountPath: /tmp/search
+          - name: shm
+            mountPath: /dev/shm
+      restartPolicy: Never
+      volumes:
+        - name: config
+          configMap:
+            name: typesense-scraper-configmap
+        - name: shm
+          hostPath:
+            path: /dev/shm
