@@ -4,9 +4,9 @@
       <h1>
         <span v-html='$t("MSG_SUPPORT_CENTER")' />
       </h1>
-      <div v-show='false' id='search-box'>
-        <form>
-          <input id='search-field' type='text'>
+      <div id='search-box'>
+        <form action='javascript: void(0)'>
+          <input id='search-field' type='text' @click='onSearchClick'>
           <input id='search-button' type='submit' value='Search'>
         </form>
       </div>
@@ -49,17 +49,6 @@
         </div>
       </a>
     </div>
-    <!--
-    <h2>Learning Center</h2>
-    <div class='faq-menu-cointainer'>
-      <a class='faq-menu-item'>
-        <img src='font-awesome/tools.svg'>
-        <div class='faq-menu-item-info'>
-          <h2>Mining</h2>
-          <span>Learn all about crypto mining</span>
-        </div>
-      </a>
-    </div>-->
     <div class='hr' />
 
     <h2>{{ $t('MSG_CANT_FIND_LOOKING_FOR') }}</h2>
@@ -67,11 +56,26 @@
       {{ $t('MSG_CONTANT_SUPPORT') }}
     </button>
   </div>
+  <!-- Search Dialog -->
+  <q-dialog v-model='showing'>
+    <q-card class='popup-card-container'>
+      <Search />
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
-import { computed } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
+
+const Search = defineAsyncComponent(() => import('src/components/help/Search.vue'))
+
+const showing = ref(false)
+
+const onSearchClick = () => {
+  showing.value = true
+  console.log('showing: ', showing.value)
+}
 
 interface FaqItem {
   icon: string;
