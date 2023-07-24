@@ -65,7 +65,7 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: typesense-scraper-job-<domain>
+  name: typesense-scraper-job-domain-suffix
   namespace: kube-system
   labels:
     domain: https://www.procyon.vip
