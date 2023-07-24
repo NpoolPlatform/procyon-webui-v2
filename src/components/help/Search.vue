@@ -320,10 +320,6 @@ const transformItems = (items: Record[]) => {
   display: none
 .searchbox-content::-webkit-scrollbar
   display: none
-<<<<<<< HEAD
-=======
-
->>>>>>> 13bb2f14 (bugfix: http://47.116.78.131:10083/issues/1590)
 .searchbox-content
   max-height: 50vh
   overflow-y: scroll
