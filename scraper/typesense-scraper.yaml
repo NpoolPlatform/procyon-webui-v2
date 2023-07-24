@@ -100,7 +100,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: typesense-scraper-configmap
+          name: typesense-scraper-configmap-<domain>
       - name: shm
         hostPath:
           path: /dev/shm
