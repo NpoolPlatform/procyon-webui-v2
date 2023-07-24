@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: typesense-scraper-configmap-domain-prefix
+  name: typesense-scraper-configmap-<domain>
   namespace: kube-system
   labels:
     domain: https://www.procyon.vip
@@ -65,7 +65,7 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: typesense-scraper-job-${domain}
+  name: typesense-scraper-job-<domain>
   namespace: kube-system
   labels:
     domain: https://www.procyon.vip
