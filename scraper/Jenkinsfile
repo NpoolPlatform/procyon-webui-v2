@@ -20,7 +20,7 @@ pipeline {
         sh (returnStdout: false, script: '''
           set +e
           sed -i s#https://www.procyon.vip#$SCRAPE_WEBSITE#g $(pwd)/scraper/typesense-scraper.yaml
-          sed -i s#<domain>#$(echo ${SCRAPE_WEBSITE##*/})#g $(pwd)/scraper/typesense-scraper.yaml
+          sed -i s#\<domain\>#$(echo ${SCRAPE_WEBSITE##*/})#g $(pwd)/scraper/typesense-scraper.yaml
           cat $(pwd)/scraper/typesense-scraper.yaml
           kubectl -n kube-system apply -f $(pwd)/scraper/typesense-scraper.yaml
         '''.stripIndent())
