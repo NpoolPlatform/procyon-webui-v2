@@ -12,16 +12,29 @@ pipeline {
       }
     }
 
-    stage('Deploy Scraper for development and testing') {
+    stage('Deploy Scraper for development') {
       when {
         expression { DEPLOY_TARGET == 'true' }
-        expression { TARGET_ENV !=~ /.*production.*/ }
+        expression { TARGET_ENV ==~ /.*development.*/ }
       }
       steps {
         sh (returnStdout: false, script: '''
           set +e
           sed -i s#https://www.procyon.vip#$SCRAPE_WEBSITE#g $(pwd)/scraper/typesense-scraper.yaml
-          cat $(pwd)/scraper/typesense-scraper.yaml
+          kubectl -n kube-system apply -f $(pwd)/scraper/typesense-scraper.yaml
+        '''.stripIndent())
+      }
+    }
+
+    stage('Deploy Scraper for testing') {
+      when {
+        expression { DEPLOY_TARGET == 'true' }
+        expression { TARGET_ENV ==~ /.*testing.*/ }
+      }
+      steps {
+        sh (returnStdout: false, script: '''
+          set +e
+          sed -i s#https://www.procyon.vip#$SCRAPE_WEBSITE#g $(pwd)/scraper/typesense-scraper.yaml
           kubectl -n kube-system apply -f $(pwd)/scraper/typesense-scraper.yaml
         '''.stripIndent())
       }
