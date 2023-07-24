@@ -12,9 +12,10 @@ pipeline {
       }
     }
 
-    stage('Scraper') {
+    stage('Deploy Scraper for development and testing') {
       when {
-        expression { SCRAPE_WEBSITE != null }
+        expression { DEPLOY_TARGET == 'true' }
+        expression { TARGET_ENV !=~ /.*production.*/ }
       }
       steps {
         sh (returnStdout: false, script: '''
@@ -25,7 +26,20 @@ pipeline {
         '''.stripIndent())
       }
     }
+
+    stage('Deploy Scraper for production') {
+      when {
+        expression { DEPLOY_TARGET == 'true' }
+        expression { TARGET_ENV ==~ /.*production.*/ }
+      }
+      steps {
+        sh (returnStdout: false, script: '''
+          kubectl -n kube-system apply -f $(pwd)/scraper/typesense-scraper.yaml
+        '''.stripIndent())
+      }
+    }
   }
+
   post('Report') {
     fixed {
       script {
