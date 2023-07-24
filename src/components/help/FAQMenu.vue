@@ -1,5 +1,5 @@
 <template>
-  <div class='content faq'>
+  <div class='content faq' id='support'>
     <div id='hero'>
       <h1>
         <span v-html='$t("MSG_SUPPORT_CENTER")' />
