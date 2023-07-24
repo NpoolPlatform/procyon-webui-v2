@@ -15,12 +15,7 @@
 
     <slot name='body' />
   </div>
-  <!-- Search Dialog -->
-  <q-dialog v-model='showing'>
-    <q-card class='popup-card-container'>
-      <Search />
-    </q-card>
-  </q-dialog>
+  <Search v-model:visible='showing' />
 </template>
 
 <script setup lang='ts'>

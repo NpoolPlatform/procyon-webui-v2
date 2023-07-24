@@ -1,66 +1,85 @@
 <template>
-  <ais-instant-search
-    :search-client='searchClient'
-    index-name='faq'
-    id='instant-searchbox'
-    class='instant-searchbox'
-  >
-    <q-card-section class='searchbox-top'>
-      <ais-search-box
-        :placeholder='$t("MSG_SEARCH_HERE")'
-        autofocus
-        show-loading-indicator
-        reset-title='Remove the query'
-        :class-names='{
-          "ais-SearchBox-form": "searchbox-form",
-          "ais-SearchBox-input": "searchbox-input",
-          "ais-SearchBox-submitIcon": "searchbox-submit-icon",
-          "ais-SearchBox-reset": "searchbox-icon-reset"
-        }'
-      />
-    </q-card-section>
-    <q-card-section class='scroll searchbox-content'>
-      <ais-hits
-        :class-names='{"ais-Hits": "searchbox-hits", "ais-Hits-list": "", "ais-Hits-item": "searchbox-hits-item"}'
-        :transform-items='transformItems'
+  <q-dialog v-model='showing' @update:model-value='onUpdate'>
+    <q-card class='popup-card-container'>
+      <ais-instant-search
+        :search-client='searchClient'
+        index-name='faq'
+        id='instant-searchbox'
+        class='instant-searchbox'
       >
-        <template #item='{ item }'>
-          <div class='docsearch-hits-container'>
-            <div class='hit-group'>
-              {{ item.group }}
-            </div>
-            <ul role='listbox' id='docsearch-list'>
-              <li
-                class='docsearch-hit'
-                v-for='child in item.children'
-                :key='child.objectID'
-              >
-                <a :href='getUrl(child)'>
-                  <div class='docsearch-hit-container'>
-                    <div class='docsearch-hit-content-wrapper'>
-                      <template v-if='child.type==="content"'>
-                        <span class='docsearch-hit-title' v-html='child._highlightResult["content"]?.value' />
-                        <span class='docsearch-hit-path' v-html='child._highlightResult["hierarchy.lvl1"].value' />
-                      </template>
-                      <span v-if='child.type==="lvl0"' class='docsearch-hit-title' v-html='child._highlightResult["hierarchy.lvl0"]?.value' />
-                      <span v-if='child.type==="lvl1"' class='docsearch-hit-title' v-html='child._highlightResult["hierarchy.lvl1"]?.value' />
-                    </div>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </template>
-      </ais-hits>
-    </q-card-section>
-  </ais-instant-search>
+        <q-card-section class='searchbox-top'>
+          <ais-search-box
+            :placeholder='$t("MSG_SEARCH_HERE")'
+            autofocus
+            show-loading-indicator
+            reset-title='Remove the query'
+            :class-names='{
+              "ais-SearchBox-form": "searchbox-form",
+              "ais-SearchBox-input": "searchbox-input",
+              "ais-SearchBox-submitIcon": "searchbox-submit-icon",
+              "ais-SearchBox-reset": "searchbox-icon-reset"
+            }'
+          />
+        </q-card-section>
+        <q-card-section class='scroll searchbox-content'>
+          <ais-hits
+            :class-names='{"ais-Hits": "searchbox-hits", "ais-Hits-list": "", "ais-Hits-item": "searchbox-hits-item"}'
+            :transform-items='transformItems'
+          >
+            <template #item='{ item }'>
+              <div class='docsearch-hits-container'>
+                <div class='hit-group'>
+                  {{ item.group }}
+                </div>
+                <ul role='listbox' id='docsearch-list'>
+                  <li
+                    class='docsearch-hit'
+                    v-for='child in item.children'
+                    :key='child.objectID'
+                  >
+                    <a :href='getUrl(child)'>
+                      <div class='docsearch-hit-container'>
+                        <div class='docsearch-hit-content-wrapper'>
+                          <template v-if='child.type==="content"'>
+                            <span class='docsearch-hit-title' v-html='child._highlightResult["content"]?.value' />
+                            <span class='docsearch-hit-path' v-html='child._highlightResult["hierarchy.lvl1"].value' />
+                          </template>
+                          <span v-if='child.type==="lvl0"' class='docsearch-hit-title' v-html='child._highlightResult["hierarchy.lvl0"]?.value' />
+                          <span v-if='child.type==="lvl1"' class='docsearch-hit-title' v-html='child._highlightResult["hierarchy.lvl1"]?.value' />
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </template>
+          </ais-hits>
+        </q-card-section>
+      </ais-instant-search>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang='ts' setup>
 import 'instantsearch.css/themes/satellite-min.css'
 import { AppID, TypesenseApiKey } from 'src/const/const'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
-import { computed } from 'vue'
+import { computed, defineProps, toRef, defineEmits, ref } from 'vue'
+
+interface Props {
+  visible: boolean;
+}
+const props = defineProps<Props>()
+const visible = toRef(props, 'visible')
+
+const emit = defineEmits<{(e: 'update:visible', visible: boolean): void}>()
+
+const showing = ref(visible)
+
+const onUpdate = () => {
+  showing.value = false
+  emit('update:visible', false)
+}
 
 let baseURL = window.location.protocol + '//api.' + window.location.hostname + '/api'
 if (window.location.hostname.startsWith('www.')) {
