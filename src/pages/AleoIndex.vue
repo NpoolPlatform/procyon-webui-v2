@@ -17,7 +17,7 @@
       <WhatWeKnowJP />
     </div>
   </div>
-  <SupportCenter id='support' />
+  <SupportCenter />
 </template>
 
 <script setup lang='ts'>
