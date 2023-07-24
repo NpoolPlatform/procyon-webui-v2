@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: typesense-scraper-configmap-${domain}
+  name: typesense-scraper-configmap-domain-prefix
   namespace: kube-system
   labels:
     domain: https://www.procyon.vip
