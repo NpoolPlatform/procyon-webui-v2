@@ -4,7 +4,7 @@ metadata:
   name: typesense-scraper-configmap-domain-suffix
   namespace: kube-system
   labels:
-    domain: https://www.procyon.vip
+    domain: domain-suffix
 data:
   typesense-scraper.json: |-
     {
@@ -68,7 +68,7 @@ metadata:
   name: typesense-scraper-job-domain-suffix
   namespace: kube-system
   labels:
-    domain: https://www.procyon.vip
+    domain: domain-suffix
 spec:
   ttlSecondsAfterFinished: 10
   parallelism: 1
