@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: typesense-scraper-configmap-<domain>
+  name: typesense-scraper-configmap-domain-suffix
   namespace: kube-system
   labels:
     domain: https://www.procyon.vip
@@ -100,7 +100,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: typesense-scraper-configmap-<domain>
+          name: typesense-scraper-configmap-domain-suffix
       - name: shm
         hostPath:
           path: /dev/shm
