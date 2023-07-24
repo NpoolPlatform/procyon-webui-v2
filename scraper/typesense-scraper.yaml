@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: typesense-scraper-configmap
+  name: typesense-scraper-configmap-${domain}
   namespace: kube-system
 data:
   typesense-scraper.json: |-
@@ -63,7 +63,7 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: typesense-scraper-job
+  name: typesense-scraper-job-${domain}
   namespace: kube-system
 spec:
   ttlSecondsAfterFinished: 10
