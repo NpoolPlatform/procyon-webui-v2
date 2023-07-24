@@ -53,14 +53,6 @@
         </template>
       </ais-hits>
     </q-card-section>
-    <q-card-actions align='right' class='searchbox-footer-container'>
-      <div class='searchbox-footer'>
-        <div class='left' />
-        <div class='right'>
-          <!-- <ais-powered-by /> -->
-        </div>
-      </div>
-    </q-card-actions>
   </ais-instant-search>
 </template>
 
@@ -272,6 +264,14 @@ const transformItems = (items: Record[]) => {
 }
 </script>
 <style lang='sass'>
+.popup-card-container
+  margin: 60px auto auto
+  width: 700px
+  max-width: 80vw
+  border-radius: 6px !important
+  background: linear-gradient(to bottom right, var(--gray-2) 0, var(--dark-violet) 100%)
+  border: 1px solid var(--light-green-2-33)
+  box-shadow: 16px 16px 20px 0 var(--dark-blue-3)
 .searchbox-top
   padding: 12px
 .searchbox-form

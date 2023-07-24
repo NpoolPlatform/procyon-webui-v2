@@ -5,9 +5,9 @@
   <div class='content faq'>
     <div id='hero'>
       <h1>{{ $t('MSG_SUPPORT_CENTER') }}</h1>
-      <div v-show='false' id='search-box'>
-        <form>
-          <input id='search-field' type='text'>
+      <div id='search-box'>
+        <form action='javascript: void(0)'>
+          <input id='search-field' type='text' @click='onSearchClick'>
           <input id='search-button' type='submit' value='Search'>
         </form>
       </div>
@@ -15,8 +15,23 @@
 
     <slot name='body' />
   </div>
+  <!-- Search Dialog -->
+  <q-dialog v-model='showing'>
+    <q-card class='popup-card-container'>
+      <Search />
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup lang='ts'>
 import { scrollTo } from 'src/utils/scroll'
+import { defineAsyncComponent, ref } from 'vue'
+
+const Search = defineAsyncComponent(() => import('src/components/help/Search.vue'))
+
+const showing = ref(false)
+const onSearchClick = () => {
+  showing.value = true
+  console.log('showing: ', showing.value)
+}
 </script>
