@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: typesense-scraper-configmap-domain-suffix
+  name: typesense-scraper-configmap-procyon-vip
   namespace: kube-system
   labels:
-    domain: domain-suffix
+    domain: procyon-vip
 data:
   typesense-scraper.json: |-
     {
@@ -65,10 +65,10 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: typesense-scraper-job-domain-suffix
+  name: typesense-scraper-job-procyon-vip
   namespace: kube-system
   labels:
-    domain: domain-suffix
+    domain: procyon-vip
 spec:
   ttlSecondsAfterFinished: 10
   parallelism: 1
@@ -100,7 +100,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: typesense-scraper-configmap-domain-suffix
+          name: typesense-scraper-configmap-procyon-vip
       - name: shm
         hostPath:
           path: /dev/shm
