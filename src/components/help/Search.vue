@@ -381,5 +381,7 @@ const transformItems = (items: Record[]) => {
           width: 100%
           .docsearch-hit-title
             font-size: 0.9rem
+            mark
+              color: var(--green-2) !important
 
 </style>
