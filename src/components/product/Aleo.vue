@@ -148,8 +148,23 @@ const query = computed(() => route.query as unknown as Query)
 
 const util = useLocaleStringStore()
 
-const coin = useAdminAppCoinStore()
+const getGood = (goodID:string) => {
+  good.getAppGood({
+    GoodID: goodID,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GOOD'),
+        Message: t('MSG_GET_GOOD_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
+}
 
+const coin = useAdminAppCoinStore()
 // Use CoinUnit to find GoodID from AppCoin
 const coinUnit = 'ALEO'
 const defaultGoodID = computed(() => {
@@ -186,22 +201,6 @@ watch(defaultGoodID, () => {
     void router.push({ path: '/' })
   }
 })
-
-const getGood = (goodID:string) => {
-  good.getAppGood({
-    GoodID: goodID,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GOOD'),
-        Message: t('MSG_GET_GOOD_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
-}
 
 onMounted(() => {
   console.log('CoinUnit: ', coinUnit)
