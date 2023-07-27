@@ -130,20 +130,39 @@ const query = computed(() => route.query as unknown as Query)
 
 const util = useLocaleStringStore()
 
-const coin = useAdminAppCoinStore()
+const getGood = (goodID:string) => {
+  good.getAppGood({
+    GoodID: goodID,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GOOD'),
+        Message: t('MSG_GET_GOOD_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
+}
 
+const coin = useAdminAppCoinStore()
 // Use CoinUnit to find GoodID from AppDefaultGood
 const coinUnit = 'IRON'
 const defaultGoodID = computed(() => {
   if (query.value?.goodId?.length > 0) {
+    getGood(query.value?.goodId)
     return query.value?.goodId
   }
   if (coin.AppCoins.AppCoins?.length === 0) {
     return `${InvalidID}_`
   }
   const goodID = coin.getGoodIDByCoinUnit(coinUnit)
-  if (!goodID) {
+  if (goodID?.length === 0) {
     return InvalidID
+  }
+  if (goodID?.length > 0) {
+    getGood(goodID)
   }
   return goodID
 })
@@ -176,28 +195,13 @@ onMounted(() => {
   currency.$reset()
   getCurrencies(0, 500)
 
-  if (defaultGoodID.value === InvalidID) {
-    void router.push({ path: '/' })
-    return
-  }
-
   if (defaultGoodID.value === `${InvalidID}_`) {
     return
   }
 
-  good.getAppGood({
-    GoodID: goodID.value,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GOOD'),
-        Message: t('MSG_GET_GOOD_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
+  if (defaultGoodID.value === InvalidID) {
+    void router.push({ path: '/' })
+  }
 })
 
 </script>
