@@ -15,14 +15,14 @@
       </h3>
       <p v-html='$t("MSG_WHY_CONTENT")' />
       <div v-show='targetCoin?.Specs'>
-        <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: good?.CoinName }) }}</h3>
+        <h3>{{ $t('MSG_OFFICIAL_SPECS', { COIN_NAME: target?.CoinName }) }}</h3>
         <p>
           <img class='content-image' :src='targetCoin?.Specs'>
         </p>
       </div>
       <p>
         <a :href='targetCoin?.HomePage'>
-          {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: good?.CoinName }) }}
+          {{ $t('MSG_HOMEPAGE_WITH_RIGHT_ARROW', { COIN_NAME: target?.CoinName }) }}
         </a>
       </p>
     </template>
@@ -97,29 +97,52 @@ interface Query {
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 
+const good = useAdminAppGoodStore()
+const target = computed(() => good.getGoodByID(goodID.value))
+
+const goodID = computed(() => query.value.goodId?.length > 0 ? query.value.goodId : defaultGoodID.value)
+
+const getGood = (goodID:string) => {
+  good.getAppGood({
+    GoodID: goodID,
+    Message: {
+      Error: {
+        Title: t('MSG_GET_GOOD'),
+        Message: t('MSG_GET_GOOD_FAIL'),
+        Popup: true,
+        Type: NotifyType.Error
+      }
+    }
+  }, () => {
+    // TODO
+  })
+}
+
 // Use CoinUnit to find GoodID from AppDefaultGood
 const coinUnit = 'SMH'
 const defaultGoodID = computed(() => {
+  if (query.value?.goodId?.length > 0) {
+    getGood(query.value?.goodId)
+    return query.value?.goodId
+  }
   if (coin.AppCoins.AppCoins?.length === 0) {
     return `${InvalidID}_`
   }
   const goodID = coin.getGoodIDByCoinUnit(coinUnit)
-  if (!goodID) {
+  if (goodID?.length === 0) {
     return InvalidID
+  }
+  if (goodID?.length > 0) {
+    getGood(goodID)
   }
   return goodID
 })
 
-const goodID = computed(() => query.value.goodId?.length > 0 ? query.value.goodId : defaultGoodID.value)
-
-const appGood = useAdminAppGoodStore()
-const good = computed(() => appGood.getGoodByID(goodID.value))
-
 const coin = useAdminAppCoinStore()
-const targetCoin = computed(() => coin.getCoinByID(good.value?.CoinTypeID as string))
+const targetCoin = computed(() => coin.getCoinByID(target.value?.CoinTypeID as string))
 
 const description = useAdminCoinDescriptionStore()
-const coinDescription = computed(() => description.getCoinDescriptionByCoinUsedFor(good.value?.CoinTypeID as string, CoinDescriptionUsedFor.ProductPage))
+const coinDescription = computed(() => description.getCoinDescriptionByCoinUsedFor(target.value?.CoinTypeID as string, CoinDescriptionUsedFor.ProductPage))
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 
@@ -137,28 +160,14 @@ onMounted(() => {
   if (description.CoinDescriptions.CoinDescriptions.length === 0) {
     getDescriptions(0, 100)
   }
-  if (defaultGoodID.value === InvalidID) {
-    void router.push({ path: '/' })
-    return
-  }
 
   if (defaultGoodID.value === `${InvalidID}_`) {
     return
   }
 
-  appGood.getAppGood({
-    GoodID: goodID.value,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GOOD'),
-        Message: t('MSG_GET_GOOD_FAIL'),
-        Popup: true,
-        Type: NotifyType.Error
-      }
-    }
-  }, () => {
-    // TODO
-  })
+  if (defaultGoodID.value === InvalidID) {
+    void router.push({ path: '/' })
+  }
 })
 
 </script>
