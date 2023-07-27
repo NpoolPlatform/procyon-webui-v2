@@ -154,20 +154,23 @@ const coin = useAdminAppCoinStore()
 const coinUnit = 'ALEO'
 const defaultGoodID = computed(() => {
   if (query.value?.goodId?.length > 0) {
+    getGood(query.value?.goodId)
     return query.value?.goodId
   }
   if (coin.AppCoins.AppCoins?.length === 0) {
     return `${InvalidID}_`
   }
   const goodID = coin.getGoodIDByCoinUnit(coinUnit)
-  if (!goodID) {
+  if (goodID?.length === 0) {
     return InvalidID
+  }
+  if (goodID?.length > 0) {
+    getGood(goodID)
   }
   return goodID
 })
 
 const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : defaultGoodID.value)
-
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = useAdminAppGoodStore()
@@ -184,28 +187,9 @@ watch(defaultGoodID, () => {
   }
 })
 
-onMounted(() => {
-  console.log('CoinUnit: ', coinUnit)
-
-  if (description.CoinDescriptions.CoinDescriptions.length === 0) {
-    getDescriptions(0, 100)
-  }
-
-  if (currency.Currencies.Currencies.length === 0) {
-    getCurrencies(0, 500)
-  }
-
-  if (defaultGoodID.value === InvalidID) {
-    void router.push({ path: '/' })
-    return
-  }
-
-  if (defaultGoodID.value === `${InvalidID}_`) {
-    return
-  }
-
+const getGood = (goodID:string) => {
   good.getAppGood({
-    GoodID: goodID.value,
+    GoodID: goodID,
     Message: {
       Error: {
         Title: t('MSG_GET_GOOD'),
@@ -217,6 +201,26 @@ onMounted(() => {
   }, () => {
     // TODO
   })
+}
+
+onMounted(() => {
+  console.log('CoinUnit: ', coinUnit)
+
+  if (description.CoinDescriptions.CoinDescriptions.length === 0) {
+    getDescriptions(0, 100)
+  }
+
+  if (currency.Currencies.Currencies.length === 0) {
+    getCurrencies(0, 500)
+  }
+
+  if (defaultGoodID.value === `${InvalidID}_`) {
+    return
+  }
+
+  if (defaultGoodID.value === InvalidID) {
+    void router.push({ path: '/' })
+  }
 })
 
 </script>
