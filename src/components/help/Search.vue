@@ -379,9 +379,9 @@ const transformItems = (items: Record[]) => {
           text-overflow: ellipsis
           white-space: nowrap
           width: 100%
+          .docsearch-hit-title, .docsearch-hit-path
+            mark
+              background-color: var(--green-2) !important
           .docsearch-hit-title
             font-size: 0.9rem
-            mark
-              color: var(--green-2) !important
-
 </style>
