@@ -158,7 +158,7 @@ const defaultGoodID = computed(() => {
     return `${InvalidID}_`
   }
   const goodID = coin.getGoodIDByCoinUnit(coinUnit)
-  if (goodID?.length === 0) {
+  if (!goodID || goodID?.length === 0) {
     return InvalidID
   }
   if (goodID?.length > 0) {
