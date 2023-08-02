@@ -135,7 +135,8 @@ import {
   useLocalUserStore,
   useFrontendNotifStore,
   useLocaleStore,
-  useFrontendAppStore
+  useFrontendAppStore,
+  useAdminAppLangStore
 } from 'npool-cli-v4'
 import { getNotifs, onMarkAll } from 'src/api/notif'
 import { useI18n } from 'vue-i18n'
@@ -252,6 +253,29 @@ onMounted(() => {
     void router.push({ path: '/maintenance' })
   }
 })
+
+const lang = useAdminAppLangStore()
+const getLangByName = computed(() => (name: string) => {
+  const appLang = lang.AppLangs.AppLangs.find((el) => el.Lang === name)
+  return appLang
+})
+
+const setLocale = computed(() => (path: string) => {
+  const name = path.split('/')?.[1]
+  console.log('locale: ', name)
+  if (name?.length < 2) return
+  const lang = getLangByName.value(name)
+  console.log('lang: ', lang)
+  if (!lang) return
+  const locale = useLocaleStore()
+  locale.setLang(lang)
+})
+
+watch(() => router.currentRoute.value.path, (newValue) => {
+  console.log('newValue: ', newValue)
+  setLocale.value(newValue)
+}, { immediate: true })
+
 </script>
 
 <style lang='sass' scoped>

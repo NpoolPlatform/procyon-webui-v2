@@ -7,7 +7,6 @@ declare module 'vue-router' {
     Title?: string;
   }
 }
-
 const routes: RouteRecordRaw[] = [
   {
     name: 'Maintenance',
@@ -16,7 +15,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     name: 'index',
-    path: '/',
+    path: '/:lang?',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
