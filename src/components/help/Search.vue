@@ -166,10 +166,11 @@ interface Parent {
 
 const getUrl = computed(() => (record: Record) => {
   if (record.type === 'lvl0') {
-    return record.url_without_anchor
+    return record.url_without_anchor?.replace(`/${locale.AppLang.Lang}`, '')
   }
-  return record.url_without_variables
+  return record.url_without_variables?.replace(`/${locale.AppLang.Lang}`, '')
 })
+
 const transformItems = (items: Record[]) => {
   const parents = [] as Array<Parent>
   items.forEach((el) => {

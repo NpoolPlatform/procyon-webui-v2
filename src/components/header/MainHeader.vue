@@ -272,12 +272,10 @@ const setLocale = computed(() => (path: string) => {
 })
 
 watch(() => router.currentRoute.value.path, (newValue) => {
-  console.log('newValue: ', newValue)
   setLocale.value(newValue)
 }, { immediate: true })
 
 watch(lang.AppLangs.AppLangs, () => {
-  console.log('path: ', router.currentRoute.value.path)
   setLocale.value(router.currentRoute.value.path)
 }, { immediate: true })
 
