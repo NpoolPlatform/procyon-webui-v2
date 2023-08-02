@@ -7,6 +7,9 @@
         id='instant-searchbox'
         class='instant-searchbox'
       >
+        <ais-configure
+          :filters='lang'
+        />
         <q-card-section class='searchbox-top'>
           <ais-search-box
             :placeholder='$t("MSG_SEARCH_HERE")'
@@ -62,6 +65,7 @@
 
 <script lang='ts' setup>
 import 'instantsearch.css/themes/satellite-min.css'
+import { useLocaleStore } from 'npool-cli-v4'
 import { AppID, TypesenseApiKey } from 'src/const/const'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import { computed, defineProps, toRef, defineEmits, ref } from 'vue'
@@ -89,6 +93,9 @@ if (window.location.hostname.includes('.npool.top')) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   baseURL = window.location.protocol + '//api.npool.top' + (window.location.port.length ? ':' + window.location.port : '') + '/api'
 }
+
+const locale = useLocaleStore()
+const lang = computed(() => `tags:=[${locale.AppLang.Lang}]`)
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
