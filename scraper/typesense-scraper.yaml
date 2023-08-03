@@ -11,110 +11,110 @@ data:
       "index_name": "faq",
       "start_urls": [
         {
-          "url": "https://www.procyon.xpool.top/ja-JP",
+          "url": "https://www.procyon.vip/ja-JP",
           "tags": ["ja-JP", "login"]
         },
         {
-          "url": "https://www.procyon.xpool.top/ja-JP/faq?topic=Login",
+          "url": "https://www.procyon.vip/ja-JP/faq?topic=Login",
           "selectors_key": "login",
           "tags": ["ja-JP", "login"]
         },
         {
-          "url": "https://www.procyon.xpool.top/ja-JP/faq?topic=AccountSettings",
+          "url": "https://www.procyon.vip/ja-JP/faq?topic=AccountSettings",
           "selectors_key": "accountsettings",
           "tags": ["ja-JP", "accountsettings"]
         },
         {
-          "url": "https://www.procyon.xpool.top/ja-JP/faq?topic=Dashboard",
+          "url": "https://www.procyon.vip/ja-JP/faq?topic=Dashboard",
           "selectors_key": "dashboard",
           "tags": ["ja-JP", "dashboard"]
         },
         {
-          "url": "https://www.procyon.xpool.top/ja-JP/faq?topic=Transactions",
+          "url": "https://www.procyon.vip/ja-JP/faq?topic=Transactions",
           "selectors_key": "transaction",
           "tags": ["ja-JP", "transaction"]
         },
         {
-          "url": "https://www.procyon.xpool.top/ja-JP/faq?topic=KYC",
+          "url": "https://www.procyon.vip/ja-JP/faq?topic=KYC",
           "selectors_key": "kyc",
           "tags": ["ja-JP", "kyc"]
         },
         {
-          "url": "https://www.procyon.xpool.top/ja-JP/faq?topic=Security",
+          "url": "https://www.procyon.vip/ja-JP/faq?topic=Security",
           "selectors_key": "security",
           "tags": ["ja-JP", "security"]
         },
         {
-          "url": "https://www.procyon.xpool.top/ja-JP/faq?topic=General",
+          "url": "https://www.procyon.vip/ja-JP/faq?topic=General",
           "selectors_key": "general",
           "tags": ["ja-JP", "general"]
         },
         {
-          "url": "https://www.procyon.xpool.top/ja-JP/faq?topic=Aleo",
+          "url": "https://www.procyon.vip/ja-JP/faq?topic=Aleo",
           "selectors_key": "aleo",
           "tags": ["ja-JP", "aleo"]
         },
         {
-          "url": "https://www.procyon.xpool.top/ja-JP/faq?topic=IronFish",
+          "url": "https://www.procyon.vip/ja-JP/faq?topic=IronFish",
           "selectors_key": "ironfish",
           "tags": ["ja-JP", "ironfish"]
         },
         {
-          "url": "https://www.procyon.xpool.top/ja-JP/faq?topic=Spacemesh",
+          "url": "https://www.procyon.vip/ja-JP/faq?topic=Spacemesh",
           "selectors_key": "spacemesh",
           "tags": ["ja-JP", "spacemesh"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US",
+          "url": "https://www.procyon.vip/en-US",
           "tags": ["en-US", "login"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US/faq?topic=Login",
+          "url": "https://www.procyon.vip/en-US/faq?topic=Login",
           "selectors_key": "login",
           "tags": ["en-US", "login"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US/faq?topic=AccountSettings",
+          "url": "https://www.procyon.vip/en-US/faq?topic=AccountSettings",
           "selectors_key": "accountsettings",
           "tags": ["en-US", "accountsettings"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US/faq?topic=Dashboard",
+          "url": "https://www.procyon.vip/en-US/faq?topic=Dashboard",
           "selectors_key": "dashboard",
           "tags": ["en-US", "dashboard"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US/faq?topic=Transactions",
+          "url": "https://www.procyon.vip/en-US/faq?topic=Transactions",
           "selectors_key": "transaction",
           "tags": ["en-US", "transaction"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US/faq?topic=KYC",
+          "url": "https://www.procyon.vip/en-US/faq?topic=KYC",
           "selectors_key": "kyc",
           "tags": ["en-US", "kyc"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US/faq?topic=Security",
+          "url": "https://www.procyon.vip/en-US/faq?topic=Security",
           "selectors_key": "security",
           "tags": ["en-US", "security"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US/faq?topic=General",
+          "url": "https://www.procyon.vip/en-US/faq?topic=General",
           "selectors_key": "general",
           "tags": ["en-US", "general"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US/faq?topic=Aleo",
+          "url": "https://www.procyon.vip/en-US/faq?topic=Aleo",
           "selectors_key": "aleo",
           "tags": ["en-US", "aleo"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US/faq?topic=IronFish",
+          "url": "https://www.procyon.vip/en-US/faq?topic=IronFish",
           "selectors_key": "ironfish",
           "tags": ["en-US", "ironfish"]
         },
         {
-          "url": "https://www.procyon.xpool.top/en-US/faq?topic=Spacemesh",
+          "url": "https://www.procyon.vip/en-US/faq?topic=Spacemesh",
           "selectors_key": "spacemesh",
           "tags": ["en-US", "spacemesh"]
         }
