@@ -157,6 +157,8 @@ spec:
           value: "8108"
         - name: TYPESENSE_PROTOCOL
           value: http
+        - name: UPDATE_NB_HITS
+          value: false
         - name: TYPESENSE_API_KEY
           valueFrom:
             configMapKeyRef:
