@@ -123,7 +123,7 @@ data:
         "default": {
           "lvl0": ".content.faq h2",
           "lvl1": ".faq-content-main h3",
-          "text": ".faq-content-main h4, .faq-content-main ul, .faq-content-main p"
+          "text": ".faq-content-main h4, .faq-content-main ul li, .faq-content-main p"
         }
       },
       "js_render": true,
