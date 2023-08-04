@@ -126,6 +126,9 @@ data:
           "text": ".faq-content-main h4, .faq-content-main ul li, .faq-content-main p"
         }
       },
+      "selectors_exclude": [
+        "#support"
+      ],
       "js_render": true,
       "js_wait": 5
     }
