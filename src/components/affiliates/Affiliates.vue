@@ -29,14 +29,14 @@ const Tree = defineAsyncComponent(() => import('src/components/affiliates/Tree.v
 const Table = defineAsyncComponent(() => import('src/components/affiliates/Table.vue'))
 
 const user = useLocalUserStore()
-const _archivement = achievement.useAchievementStore()
+const _achievement = achievement.useAchievementStore()
 const good = useAdminAppGoodStore()
 const coin = useAdminAppCoinStore()
 const fiat = useAdminFiatCurrencyStore()
 
 const _commission = commission.useCommissionStore()
 onMounted(() => {
-  if (_archivement.Achievements.length === 0) {
+  if (_achievement.Achievements.length === 0) {
     getAchievements(0, 100)
   }
   if (good.AppGoods.AppGoods.length === 0) {
@@ -73,12 +73,12 @@ const getAppGoods = (offset: number, limit: number) => {
   })
 }
 const getAchievements = (offset: number, limit: number) => {
-  _archivement.getAchievements({
+  _achievement.getAchievements({
     Offset: offset,
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_COIN_ARCHIVEMENT_FAIL'),
+        Title: t('MSG_GET_COIN_ACHIEVEMENT_FAIL'),
         Popup: true,
         Type: NotifyType.Error
       }

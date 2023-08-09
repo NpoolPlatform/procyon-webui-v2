@@ -27,8 +27,8 @@ import { achievement } from 'src/teststore'
 
 const logined = useLocalUserStore()
 const util = useLocaleStringStore()
-const _archivement = achievement.useAchievementStore()
-const inviter = computed(() => _archivement.achievement(logined?.User.ID))
+const _achievement = achievement.useAchievementStore()
+const inviter = computed(() => _achievement.achievement(logined?.User.ID))
 
 const totalCommission = computed(() => {
   let total = 0
