@@ -6,7 +6,7 @@
       <h3 class='aff-name'>
         {{ username }}
       </h3>
-      <span class='aff-email'>{{ archivement.subUsername(referral) }}</span>
+      <span class='aff-email'>{{ referral?.EmailAddress?.length > 0 ? referral?.EmailAddress : referral?.PhoneNO }}</span>
       <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ util.getLocaleString(referral.TotalInvitees)
       }}</span></span>
     </div>
@@ -38,7 +38,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
+          <tr class='aff-info' v-for='(_good, idx) in visibleGoodAchievements' :key='idx'>
             <td>
               <span
                 class='aff-product'
@@ -133,15 +133,13 @@ import {
   useLocalUserStore,
   User,
   useAdminAppGoodStore,
-  useFrontendArchivementStore,
-  UserArchivement,
   NotifyType,
   AppGood,
   useLocaleStringStore
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
-import { MyGoodArchivement } from 'src/localstore/ledger/types'
-import { commission } from 'src/teststore'
+import { MyGoodAchievement } from 'src/localstore/ledger/types'
+import { commission, achievement } from 'src/teststore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
@@ -152,7 +150,7 @@ interface Props {
   child: boolean
   firstChild: boolean
   lastChild: boolean
-  referral: UserArchivement
+  referral: achievement.Achievement
 }
 
 const props = defineProps<Props>()
@@ -175,18 +173,19 @@ const logined = useLocalUserStore()
 const good = useAdminAppGoodStore()
 const getDisplayNames = computed(() => (goodID: string) => good.getGoodByID(goodID)?.DisplayNames)
 
-const archivement = useFrontendArchivementStore()
-const goodArchivements = computed(() => Array.from(referral.value?.Archivements.filter((el) => good.visible(el.GoodID))).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
+const _archivement = achievement.useAchievementStore()
+const goodAchievements = computed(() => Array.from(referral.value?.Achievements.filter((el) => {
+  return good.visible(el.GoodID)
+})).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
   return {
     ...el,
     Editing: false
-  } as MyGoodArchivement
+  } as MyGoodAchievement
 }))
-const visibleGoodArchivements = ref(goodArchivements.value)
+const visibleGoodAchievements = ref(goodAchievements.value)
 
 const getGoodPercent = computed(() => (goodID: string) => {
-  const inviterArchivement = archivement.getArchivementByUserID(logined?.User.ID)
-  return archivement.getInviterGoodPercent(inviterArchivement as UserArchivement, goodID)
+  return _archivement.inviterGoodPercent(logined?.User.ID, goodID) as number
 })
 
 const showDetailSummary = ref(false)
@@ -201,7 +200,7 @@ const commissions = computed(() => _commission.Commissions.filter((el) => {
   return a.StartAt < b.StartAt ? 1 : -1
 }))
 
-const onSaveCommissionClick = (row: MyGoodArchivement) => {
+const onSaveCommissionClick = (row: MyGoodAchievement) => {
   if (row.CommissionPercent > getGoodPercent.value(row.GoodID)) {
     row.CommissionPercent = getGoodPercent.value(row.GoodID)
   }

@@ -7,7 +7,7 @@
       <p class='aff-email'>
         {{ subUsername }}
       </p>
-      <div v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
+      <div v-for='(_good, idx) in visibleGoodAchievements' :key='idx'>
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
         <KolOption
           v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' ignore-style
@@ -28,8 +28,6 @@ import {
   useBaseUserStore,
   User,
   useAdminAppGoodStore,
-  useFrontendArchivementStore,
-  UserArchivement,
   NotifyType,
   useFrontendUserStore,
   AppGood
@@ -38,7 +36,7 @@ import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getAppGoods } from 'src/api/good'
-import { commission } from 'src/teststore'
+import { commission, achievement } from 'src/teststore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
@@ -54,25 +52,24 @@ const route = useRoute()
 const router = useRouter()
 const query = computed(() => route.query as unknown as Query)
 
-const archivement = useFrontendArchivementStore()
-const referral = computed(() => archivement.getArchivementByUserID(query.value?.userID))
+const _archivement = achievement.useAchievementStore()
+const referral = computed(() => _archivement.achievement(query.value?.userID))
 
 const baseUser = useBaseUserStore()
 const username = computed(() => baseUser.displayName({
   FirstName: referral.value?.FirstName,
   LastName: referral.value?.LastName
 } as User, locale.value as string))
-const subUsername = computed(() => archivement.subUsername(referral.value as UserArchivement))
+const subUsername = computed(() => referral.value?.EmailAddress?.length ? referral.value?.EmailAddress : referral.value?.PhoneNO)
 
 const logined = useLocalUserStore()
 
 const good = useAdminAppGoodStore()
 const getGoodPercent = computed(() => (goodID: string) => {
-  const inviterArchivement = archivement.getArchivementByUserID(logined?.User.ID)
-  return archivement.getInviterGoodPercent(inviterArchivement as UserArchivement, goodID)
+  return _archivement.inviterGoodPercent(logined?.User.ID, goodID) as number
 })
 
-const visibleGoodArchivements = computed(() => referral.value?.Archivements?.filter((el) => good.visible(el.GoodID)))
+const visibleGoodAchievements = computed(() => referral.value?.Achievements?.filter((el) => good.visible(el.GoodID)))
 
 const backTimer = ref(-1)
 const submitting = ref(false)
@@ -81,7 +78,7 @@ const user = useFrontendUserStore()
 const _commission = commission.useCommissionStore()
 const onSubmit = () => {
   submitting.value = true
-  referral.value?.Archivements?.forEach((g) => {
+  referral.value?.Achievements?.forEach((g) => {
     if (g.CommissionPercent > getGoodPercent.value(g.GoodID)) {
       g.CommissionPercent = getGoodPercent.value(g.GoodID)
     }
@@ -105,13 +102,13 @@ const onSubmit = () => {
     if (error) {
       return
     }
-    if (visibleGoodArchivements.value?.length === 0) {
-      archivement.$reset()
+    if (visibleGoodAchievements.value?.length === 0) {
+      _archivement.$reset()
       void router.push({ path: '/affiliates' })
       return
     }
 
-    visibleGoodArchivements?.value?.forEach((row) => {
+    visibleGoodAchievements?.value?.forEach((row) => {
       const myCommission = _commission.Commissions.find((el) => el.GoodID === row.GoodID && el.SettleType === commission.SettleType.GoodOrderPayment)
       if (!myCommission) {
         return
@@ -136,7 +133,7 @@ const onSubmit = () => {
           window.clearTimeout(backTimer.value)
         }
         backTimer.value = window.setTimeout(() => {
-          archivement.$reset()
+          _archivement.$reset()
           void router.push({ path: '/affiliates' })
         }, 1000)
       })
@@ -148,13 +145,13 @@ onMounted(() => {
   if (good.AppGoods.AppGoods.length === 0) {
     getAppGoods(0, 500)
   }
-  if (archivement.Archivements.Archivements.length === 0) {
-    getArchivements(0, 100)
+  if (_archivement.Achievements.length === 0) {
+    getAchievements(0, 100)
   }
 })
 
-const getArchivements = (offset: number, limit: number) => {
-  archivement.getGoodArchivements({
+const getAchievements = (offset: number, limit: number) => {
+  _archivement.getAchievements({
     Offset: offset,
     Limit: limit,
     Message: {
@@ -164,11 +161,11 @@ const getArchivements = (offset: number, limit: number) => {
         Type: NotifyType.Error
       }
     }
-  }, (error: boolean, rows: Array<UserArchivement>) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<achievement.Achievement>) => {
+    if (error || !rows?.length) {
       return
     }
-    getArchivements(offset + limit, limit)
+    getAchievements(offset + limit, limit)
   })
 }
 </script>
