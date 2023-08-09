@@ -52,8 +52,8 @@ const route = useRoute()
 const router = useRouter()
 const query = computed(() => route.query as unknown as Query)
 
-const _archivement = achievement.useAchievementStore()
-const referral = computed(() => _archivement.achievement(query.value?.userID))
+const _achievement = achievement.useAchievementStore()
+const referral = computed(() => _achievement.achievement(query.value?.userID))
 
 const baseUser = useBaseUserStore()
 const username = computed(() => baseUser.displayName({
@@ -66,7 +66,7 @@ const logined = useLocalUserStore()
 
 const good = useAdminAppGoodStore()
 const getGoodPercent = computed(() => (goodID: string) => {
-  return _archivement.inviterGoodPercent(logined?.User.ID, goodID) as number
+  return _achievement.inviterGoodPercent(logined?.User.ID, goodID) as number
 })
 
 const visibleGoodAchievements = computed(() => referral.value?.Achievements?.filter((el) => good.visible(el.GoodID)))
@@ -103,7 +103,7 @@ const onSubmit = () => {
       return
     }
     if (visibleGoodAchievements.value?.length === 0) {
-      _archivement.$reset()
+      _achievement.$reset()
       void router.push({ path: '/affiliates' })
       return
     }
@@ -133,7 +133,7 @@ const onSubmit = () => {
           window.clearTimeout(backTimer.value)
         }
         backTimer.value = window.setTimeout(() => {
-          _archivement.$reset()
+          _achievement.$reset()
           void router.push({ path: '/affiliates' })
         }, 1000)
       })
@@ -145,18 +145,18 @@ onMounted(() => {
   if (good.AppGoods.AppGoods.length === 0) {
     getAppGoods(0, 500)
   }
-  if (_archivement.Achievements.length === 0) {
+  if (_achievement.Achievements.length === 0) {
     getAchievements(0, 100)
   }
 })
 
 const getAchievements = (offset: number, limit: number) => {
-  _archivement.getAchievements({
+  _achievement.getAchievements({
     Offset: offset,
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_COIN_ARCHIVEMENT_FAIL'),
+        Title: t('MSG_GET_COIN_ACHIEVEMENT_FAIL'),
         Popup: true,
         Type: NotifyType.Error
       }

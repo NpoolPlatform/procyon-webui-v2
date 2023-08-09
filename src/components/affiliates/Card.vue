@@ -173,7 +173,7 @@ const logined = useLocalUserStore()
 const good = useAdminAppGoodStore()
 const getDisplayNames = computed(() => (goodID: string) => good.getGoodByID(goodID)?.DisplayNames)
 
-const _archivement = achievement.useAchievementStore()
+const _achievement = achievement.useAchievementStore()
 const goodAchievements = computed(() => Array.from(referral.value?.Achievements.filter((el) => {
   return good.visible(el.GoodID)
 })).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
@@ -185,7 +185,7 @@ const goodAchievements = computed(() => Array.from(referral.value?.Achievements.
 const visibleGoodAchievements = ref(goodAchievements.value)
 
 const getGoodPercent = computed(() => (goodID: string) => {
-  return _archivement.inviterGoodPercent(logined?.User.ID, goodID) as number
+  return _achievement.inviterGoodPercent(logined?.User.ID, goodID) as number
 })
 
 const showDetailSummary = ref(false)

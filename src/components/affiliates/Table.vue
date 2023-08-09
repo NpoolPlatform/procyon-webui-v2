@@ -51,7 +51,7 @@
           <!-- summary end -->
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
             <td>
-              <span class='aff-product'>{{ archivement.subUsername(referral) }}</span>
+              <span class='aff-product'>{{ referral.EmailAddress?.length ? referral.EmailAddress : referral.PhoneNO }}</span>
               <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
@@ -86,23 +86,22 @@ import { computed, defineAsyncComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   useAdminAppCoinStore,
-  useFrontendArchivementStore,
-  UserArchivement,
   PriceCoinName,
   useLocaleStringStore
 } from 'npool-cli-v4'
+import { achievement } from 'src/teststore'
 
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 
 const util = useLocaleStringStore()
 
-const archivement = useFrontendArchivementStore()
-const referrals = computed(() => archivement.notKolUsers())
+const _achievement = achievement.useAchievementStore()
+const referrals = computed(() => _achievement.Achievements.filter((el) => !el.Kol))
 
 const coin = useAdminAppCoinStore()
 const coins = computed(() => coin.AppCoins.AppCoins.filter((el) => {
   const rfs = referrals.value?.filter((rel) => {
-    for (const g of rel?.Archivements) {
+    for (const g of rel?.Achievements) {
       if (g.CoinTypeID === el.CoinTypeID) return true
     }
     return false
@@ -111,12 +110,12 @@ const coins = computed(() => coin.AppCoins.AppCoins.filter((el) => {
 }))
 const selectedCoinID = ref(undefined as unknown as string)
 
-const joinDate = computed(() => (referral: UserArchivement) => archivement.getJoinDate(referral))
-const joinTime = computed(() => (referral: UserArchivement) => archivement.getJoinTime(referral))
+const joinDate = computed(() => (referral: achievement.Achievement) => _achievement.joinDate(referral))
+const joinTime = computed(() => (referral: achievement.Achievement) => _achievement.joinTime(referral))
 
 const goodUnit = computed(() => {
   for (const rf of referrals.value) {
-    for (const good of rf?.Archivements) {
+    for (const good of rf?.Achievements) {
       if (good.CoinTypeID === selectedCoinID.value) {
         return good.GoodUnit
       }
@@ -124,13 +123,13 @@ const goodUnit = computed(() => {
   }
   return ''
 })
-const totalUnits = computed(() => archivement.totalUnits(referrals.value, selectedCoinID.value))
-const totalAmount = computed(() => archivement.totalAmount(referrals.value, selectedCoinID.value))
-const totalSuperiorCommission = computed(() => archivement.totalSuperiorCommission(referrals.value, selectedCoinID.value))
+const totalUnits = computed(() => _achievement.totalUnits(referrals.value, selectedCoinID.value))
+const totalAmount = computed(() => _achievement.totalAmount(referrals.value, selectedCoinID.value))
+const totalSuperiorCommission = computed(() => _achievement.totalSuperiorCommission(referrals.value, selectedCoinID.value))
 
-const userTotalUnits = computed(() => (referral: UserArchivement) => archivement.userTotalUnits(referral?.Archivements, selectedCoinID.value))
-const userTotalAmount = computed(() => (referral: UserArchivement) => archivement.userTotalAmount(referral?.Archivements, selectedCoinID.value))
-const userSuperiorCommission = computed(() => (referral: UserArchivement) => archivement.userSuperiorCommission(referral?.Archivements, selectedCoinID.value))
+const userTotalUnits = computed(() => (referral: achievement.Achievement) => _achievement.userTotalUnits(referral.UserID, selectedCoinID.value))
+const userTotalAmount = computed(() => (referral: achievement.Achievement) => _achievement.userTotalAmount(referral.UserID, selectedCoinID.value))
+const userSuperiorCommission = computed(() => (referral: achievement.Achievement) => _achievement.userSuperiorCommission(referral.UserID, selectedCoinID.value))
 
 const searchStr = ref('')
 const displayReferrals = computed(() => referrals.value.filter((el) => {
@@ -153,7 +152,7 @@ const pageReferrals = computed(() => displayReferrals.value.filter((el, index) =
 }))
 
 const router = useRouter()
-const onSetKolClick = (referral: UserArchivement) => {
+const onSetKolClick = (referral: achievement.Achievement) => {
   void router.push({
     path: '/setup/affiliate',
     query: {
