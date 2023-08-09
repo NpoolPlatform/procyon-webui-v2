@@ -1,11 +1,14 @@
 <template>
-  <div :class='[ "affiliate content-glass", child ? "child" : "", firstChild ? "first-child" : "", lastChild ? "last-child" : "" ]'>
+  <div
+    :class='["affiliate content-glass", child ? "child" : "", firstChild ? "first-child" : "", lastChild ? "last-child" : ""]'
+  >
     <div class='aff-top'>
       <h3 class='aff-name'>
         {{ username }}
       </h3>
       <span class='aff-email'>{{ archivement.subUsername(referral) }}</span>
-      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ util.getLocaleString(referral.TotalInvitees) }}</span></span>
+      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ util.getLocaleString(referral.TotalInvitees)
+      }}</span></span>
     </div>
     <div class='aff-table'>
       <table id='commission-table'>
@@ -36,7 +39,12 @@
         </thead>
         <tbody>
           <tr class='aff-info' v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
-            <td><span class='aff-product' v-html='getDisplayNames(_good.GoodID)?.[4]? $t(getDisplayNames(_good.GoodID)?.[4] as string) : _good.GoodName' /></td>
+            <td>
+              <span
+                class='aff-product'
+                v-html='getDisplayNames(_good.GoodID)?.[4] ? $t(getDisplayNames(_good.GoodID)?.[4] as string) : _good.GoodName'
+              />
+            </td>
             <td v-if='_good.Editing'>
               <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' />
               <button @click='onSaveCommissionClick(_good)'>
@@ -47,18 +55,26 @@
               <span class='aff-number'>{{ _good.CommissionPercent }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
-                :class='[ "alt", !good.enableSetCommission(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood) ? "in-active" : "" ]'
+                :class='["alt", !good.enableSetCommission(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood) ? "in-active" : ""]'
                 :disabled='!good.enableSetCommission(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood)'
                 @click='(_good.Editing = true)'
               >
                 {{ $t('MSG_SET') }}
               </button>
             </td>
-            <td><span class='aff-number'>{{ util.getLocaleString(_good.TotalUnits) }}<span class='unit'>{{ _good.GoodUnit?.length ? $t(_good.GoodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(Number(_good.TotalAmount) * 100) / 100, 2) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td>
+              <span class='aff-number'>{{ util.getLocaleString(_good.TotalUnits) }}<span class='unit'>{{
+                _good.GoodUnit?.length ? $t(_good.GoodUnit) : '' }}</span></span>
+            </td>
+            <td>
+              <span class='aff-number'>{{ util.getLocaleString(Math.floor(Number(_good.TotalAmount) * 100) / 100, 2)
+              }}<span class='unit'>{{ PriceCoinName }}</span></span>
+            </td>
             <td>
               <span class='aff-number'>
-                {{ child ? (_good.SuperiorCommission ? util.getLocaleString(Math.floor(Number(_good.SuperiorCommission) * 100) / 100, 2) : "0.00") : util.getLocaleString(Math.floor(Number(_good.TotalCommission) * 100) / 100, 2) }}
+                {{ child ? (_good.SuperiorCommission ? util.getLocaleString(Math.floor(Number(_good.SuperiorCommission) *
+                  100) / 100, 2) : "0.00") : util.getLocaleString(Math.floor(Number(_good.TotalCommission) * 100) / 100, 2)
+                }}
                 <span class='unit'>{{ PriceCoinName }}</span>
               </span>
             </td>
@@ -80,10 +96,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr class='aff-info' v-for='_commission in commissions' :key='_commission.ID'>
-                <td><span class='aff-product' v-html='getDisplayNames(_commission.GoodID)?.[4]? $t(getDisplayNames(_commission.GoodID)?.[4] as string) : good.getGoodByID(_commission.GoodID)?.GoodName' /></td>
-                <td><span class='aff-number'>{{ commission.settingDate(_commission) }}<span class='unit'>{{ commission.settingTime(_commission) }}</span></span></td>
-                <td><span class='aff-number'>{{ _commission.Percent }}<span class='unit'>%</span></span></td>
+              <tr class='aff-info' v-for='__commission in commissions' :key='__commission.ID'>
+                <td>
+                  <span
+                    class='aff-product'
+                    v-html='getDisplayNames(__commission.GoodID)?.[4] ? $t(getDisplayNames(__commission.GoodID)?.[4] as string) : good.getGoodByID(__commission.GoodID)?.GoodName'
+                  />
+                </td>
+                <td>
+                  <span class='aff-number'>{{ _commission.settingDate(__commission) }}<span class='unit'>{{
+                    _commission.settingTime(__commission) }}</span></span>
+                </td>
+                <td><span class='aff-number'>{{ __commission.AmountOrPercent }}<span class='unit'>%</span></span></td>
               </tr>
             </tbody>
           </table>
@@ -91,7 +115,7 @@
       </div>
     </q-slide-transition>
     <div class='buttons'>
-      <button :class='[ "alt show-more", showDetailSummary ? "open" : "" ]' @click='onShowMoreClick'>
+      <button :class='["alt show-more", showDetailSummary ? "open" : ""]' @click='onShowMoreClick'>
         <img :src='chevrons'>
       </button>
     </div>
@@ -112,13 +136,12 @@ import {
   useFrontendArchivementStore,
   UserArchivement,
   NotifyType,
-  SettleType,
-  useFrontendCommissionStore,
   AppGood,
   useLocaleStringStore
 } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
 import { MyGoodArchivement } from 'src/localstore/ledger/types'
+import { commission } from 'src/teststore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
@@ -126,10 +149,10 @@ const { locale, t } = useI18n({ useScope: 'global' })
 const KolOption = defineAsyncComponent(() => import('src/components/affiliates/KolOption.vue'))
 
 interface Props {
-  child: boolean;
-  firstChild: boolean;
-  lastChild: boolean;
-  referral: UserArchivement;
+  child: boolean
+  firstChild: boolean
+  lastChild: boolean
+  referral: UserArchivement
 }
 
 const props = defineProps<Props>()
@@ -171,8 +194,8 @@ const onShowMoreClick = () => {
   showDetailSummary.value = !showDetailSummary.value
 }
 
-const commission = useFrontendCommissionStore()
-const commissions = computed(() => commission.Commissions.Commissions.filter((el) => {
+const _commission = commission.useCommissionStore()
+const commissions = computed(() => _commission.Commissions.filter((el) => {
   return el.UserID === referral.value.UserID
 }).sort((a, b) => {
   return a.StartAt < b.StartAt ? 1 : -1
@@ -185,16 +208,24 @@ const onSaveCommissionClick = (row: MyGoodArchivement) => {
   if (row.CommissionPercent < 0) {
     row.CommissionPercent = 0
   }
+
+  const myCommission = commissions.value.find((el) => el.GoodID === row.GoodID && el.SettleType === commission.SettleType.GoodOrderPayment)
+  if (!myCommission) {
+    return
+  }
+
   row.Editing = false
-  commission.createCommission({
+  _commission.createCommission({
     TargetUserID: referral.value.UserID,
     GoodID: row.GoodID,
-    SettleType: good.settleType(row.GoodID) as SettleType,
-    Value: `${row.CommissionPercent}`,
+    SettleType: commission.SettleType.GoodOrderPayment,
+    SettleAmountType: myCommission.SettleAmountType,
+    SettleMode: myCommission.SettleMode,
+    AmountOrPercent: `${row.CommissionPercent}`,
     StartAt: Math.ceil(Date.now() / 1000),
     Message: {
       Error: {
-        Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
+        Title: t('MSG_CREATE_COMMISSION_FAIL'),
         Popup: true,
         Type: NotifyType.Error
       }

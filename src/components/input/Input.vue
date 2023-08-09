@@ -34,20 +34,20 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
-  value: string | number;
-  label?: string;
-  type: string;
-  name?: string;
-  id: string;
-  required: boolean;
-  error: boolean;
-  message: string;
-  placeholder: string;
-  caption?: string;
-  max?: number;
-  min?: number;
-  autocomplete?: boolean;
-  disabled?: boolean;
+  value: string | number
+  label?: string
+  type: string
+  name?: string
+  id: string
+  required: boolean
+  error: boolean
+  message: string
+  placeholder: string
+  caption?: string
+  max?: number
+  min?: number
+  autocomplete?: boolean
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {

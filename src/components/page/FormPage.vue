@@ -33,9 +33,9 @@ import {
 } from 'vue'
 
 interface Props {
-  label: string;
-  submitText: string;
-  submitting?: boolean;
+  label: string
+  submitText: string
+  submitting?: boolean
 }
 
 const props = defineProps<Props>()
@@ -43,7 +43,7 @@ const label = toRef(props, 'label')
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
-const emit = defineEmits<{(e: 'submit'): void}>()
+const emit = defineEmits<{(e: 'submit'): void;}>()
 const onSubmit = () => {
   emit('submit')
 }

@@ -105,10 +105,10 @@ const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 
 interface MyGeneral extends General {
-  Balance: number;
-  Last24HoursBalance: number;
-  TotalUSDValue: number;
-  TotalJPYValue: number;
+  Balance: number
+  Last24HoursBalance: number
+  TotalUSDValue: number
+  TotalJPYValue: number
 }
 
 const util = useLocaleStringStore()

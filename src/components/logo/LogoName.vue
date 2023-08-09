@@ -13,8 +13,8 @@
 import { defineProps, toRef } from 'vue'
 
 interface Props {
-  logo: string;
-  name: string;
+  logo: string
+  name: string
 }
 
 const props = defineProps<Props>()

@@ -24,9 +24,9 @@ import { defineProps, toRef, defineEmits, watch, ref, defineAsyncComponent } fro
 import { AppCountry } from 'npool-cli-v4'
 
 interface Props {
-  value: string;
-  error: boolean;
-  required: boolean;
+  value: string
+  error: boolean
+  required: boolean
 }
 
 const CountrySelector = defineAsyncComponent(() => import('src/components/lang/CountrySelector.vue'))

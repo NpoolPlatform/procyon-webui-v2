@@ -91,7 +91,7 @@ import { getDescriptions } from 'src/api/chain'
 const { t } = useI18n({ useScope: 'global' })
 
 interface Query {
-  goodId: string;
+  goodId: string
 }
 
 const route = useRoute()

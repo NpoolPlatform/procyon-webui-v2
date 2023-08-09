@@ -197,8 +197,8 @@ const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 
 interface Query {
-  coinTypeID: string;
-  type: string;
+  coinTypeID: string
+  type: string
 }
 
 const query = computed(() => route.query as unknown as Query)

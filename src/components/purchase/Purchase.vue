@@ -181,7 +181,7 @@ const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'
 const { t } = useI18n({ useScope: 'global' })
 
 interface Query {
-  goodID: string;
+  goodID: string
 }
 
 const route = useRoute()

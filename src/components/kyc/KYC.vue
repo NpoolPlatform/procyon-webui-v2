@@ -168,8 +168,8 @@ const selfieSelected = ref(false)
 
 const submitting = ref(false)
 interface DocTypeItem {
-  label: string;
-  value: DocumentType;
+  label: string
+  value: DocumentType
 }
 
 const types = ref([

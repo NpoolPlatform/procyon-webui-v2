@@ -16,7 +16,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
-  notif: Notif;
+  notif: Notif
 }
 
 const props = defineProps<Props>()

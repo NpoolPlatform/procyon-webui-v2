@@ -139,8 +139,8 @@ const ProductDetailUS = defineAsyncComponent(() => import('src/components/produc
 const ProductDetailJP = defineAsyncComponent(() => import('src/components/product/ja-JP/Detail.vue'))
 
 interface Query {
-  goodId: string;
-  purchaseAmount: number;
+  goodId: string
+  purchaseAmount: number
 }
 
 const route = useRoute()

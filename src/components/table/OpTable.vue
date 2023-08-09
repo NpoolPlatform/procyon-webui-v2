@@ -55,12 +55,12 @@
 import { defineProps, toRef, ref, computed, defineEmits, withDefaults, watch } from 'vue'
 
 interface Props {
-  label: string;
-  rows: Array<never>;
-  table: never;
-  countPerPage: number;
-  customizeBody: boolean;
-  loading?: boolean;
+  label: string
+  rows: Array<never>
+  table: never
+  countPerPage: number
+  customizeBody: boolean
+  loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -85,7 +85,7 @@ watch(countPerPage, () => {
   page.value = 1
 })
 
-const emit = defineEmits<{(e: 'row-click', row: never): void}>()
+const emit = defineEmits<{(e: 'row-click', row: never): void;}>()
 
 const onRowClick = (row: never) => {
   emit('row-click', row)

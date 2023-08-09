@@ -112,9 +112,9 @@ const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 
 interface Query {
-  goodID: string;
-  purchaseAmount: number;
-  coinTypeID: string;
+  goodID: string
+  purchaseAmount: number
+  coinTypeID: string
 }
 
 const router = useRouter()

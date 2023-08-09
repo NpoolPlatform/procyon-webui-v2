@@ -1,15 +1,15 @@
 import { uid } from 'quasar'
 
 interface MenuItem {
-  menuId: string;
-  label: string;
-  caption: string;
-  icon: string;
-  iconRight?: string;
-  target: string;
-  level: number;
-  sectionBegin?: boolean;
-  children: Array<MenuItem>;
+  menuId: string
+  label: string
+  caption: string
+  icon: string
+  iconRight?: string
+  target: string
+  level: number
+  sectionBegin?: boolean
+  children: Array<MenuItem>
 }
 
 import dashboard from '../assets/chart-line.svg'

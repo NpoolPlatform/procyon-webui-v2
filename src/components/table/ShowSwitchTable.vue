@@ -36,10 +36,10 @@ import chevrons from '../../assets/chevrons.svg'
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
 interface Props {
-  label: string;
-  rows: Array<never>;
-  table: never;
-  customizeBody: boolean;
+  label: string
+  rows: Array<never>
+  table: never
+  customizeBody: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -53,7 +53,7 @@ const customizeBody = toRef(props, 'customizeBody')
 const countPerPage = ref(5)
 const showMore = ref(false)
 
-const emit = defineEmits<{(e: 'row-click', row: never): void}>()
+const emit = defineEmits<{(e: 'row-click', row: never): void;}>()
 
 const onRowClick = (row: never) => {
   emit('row-click', row)

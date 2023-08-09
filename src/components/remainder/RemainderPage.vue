@@ -29,7 +29,7 @@ import {
 import { useRoute, useRouter } from 'vue-router'
 
 interface Query {
-  path: string;
+  path: string
 }
 
 const route = useRoute()
@@ -37,10 +37,10 @@ const query = computed(() => route.query as unknown as Query)
 const _path = computed(() => query.value.path)
 
 interface Props {
-  label: string;
-  caption: string;
-  submitText: string;
-  cancelText: string;
+  label: string
+  caption: string
+  submitText: string
+  cancelText: string
 }
 
 const props = defineProps<Props>()
@@ -48,7 +48,7 @@ const label = toRef(props, 'label')
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
-const emit = defineEmits<{(e: 'submit'): void}>()
+const emit = defineEmits<{(e: 'submit'): void;}>()
 const onSubmit = () => {
   emit('submit')
 }
