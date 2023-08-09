@@ -20,7 +20,7 @@ import { AppGood } from 'npool-cli-v4'
 import { defineAsyncComponent, defineProps, toRef } from 'vue'
 
 interface Props {
-  good: AppGood;
+  good: AppGood
 }
 
 const props = defineProps<Props>()

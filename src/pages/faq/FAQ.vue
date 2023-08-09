@@ -11,7 +11,7 @@ const { locale } = useI18n({ useScope: 'global' })
 
 const route = useRoute()
 interface Query {
-  topic: string;
+  topic: string
 }
 const query = ref(route.query as unknown as Query)
 const topic = ref(query.value.topic)

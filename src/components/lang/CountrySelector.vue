@@ -47,7 +47,7 @@ import { useI18n } from 'vue-i18n'
 import { useAdminAppCountryStore, AppCountry, NotifyType } from 'npool-cli-v4'
 
 interface Props {
-  country: AppCountry;
+  country: AppCountry
 }
 
 const props = defineProps<Props>()
@@ -59,7 +59,7 @@ const { t } = useI18n({ useScope: 'global' })
 const _country = useAdminAppCountryStore()
 const countries = computed(() => _country.AppCountries.AppCountries)
 
-const emit = defineEmits<{(e: 'update:country', country: AppCountry): void}>()
+const emit = defineEmits<{(e: 'update:country', country: AppCountry): void;}>()
 
 const onItemClick = (country: AppCountry) => {
   emit('update:country', country)

@@ -54,16 +54,16 @@ const detail = useFrontendDetailStore()
 const _details = computed(() => detail.details)
 
 interface IOExtra {
-  WithdrawID: string;
-  TransactionID: string;
-  CID: string;
-  TransactionFee: string;
-  AccountID: string;
+  WithdrawID: string
+  TransactionID: string
+  CID: string
+  TransactionFee: string
+  AccountID: string
 }
 
 interface MyDetail extends Detail {
-  TransactionID: string;
-  ShortTransactionID: string;
+  TransactionID: string
+  ShortTransactionID: string
 }
 
 const notification = useNotificationStore()

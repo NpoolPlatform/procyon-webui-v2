@@ -121,8 +121,8 @@ const ProductDetailUS = defineAsyncComponent(() => import('src/components/ironfi
 const ProductDetailJP = defineAsyncComponent(() => import('src/components/ironfish/ja-JP/Detail.vue'))
 
 interface Query {
-  goodId: string;
-  purchaseAmount: number;
+  goodId: string
+  purchaseAmount: number
 }
 
 const route = useRoute()

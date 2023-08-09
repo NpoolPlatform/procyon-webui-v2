@@ -24,38 +24,22 @@
     <template #form-body>
       <div v-show='signupMethod === AccountType.Mobile'>
         <PhoneNO
-          v-model:value='phoneNO'
-          :error='accountError'
-          @focus='onPhoneNOFocusIn'
-          @blur='onPhoneNOFocusOut'
+          v-model:value='phoneNO' :error='accountError' @focus='onPhoneNOFocusIn' @blur='onPhoneNOFocusOut'
           :required='signupMethod === AccountType.Mobile'
         />
       </div>
       <div v-show='signupMethod === AccountType.Email'>
         <Input
-          v-model:value='emailAddress'
-          label='MSG_EMAIL_ADDRESS'
-          type='email'
-          id='email'
-          :required='signupMethod === AccountType.Email'
-          :error='accountError'
-          message='MSG_EMAIL_TIP'
-          placeholder='MSG_EMAIL_PLACEHOLDER'
-          @focus='onEmailFocusIn'
-          @blur='onEmailFocusOut'
+          v-model:value='emailAddress' label='MSG_EMAIL_ADDRESS' type='email' id='email'
+          :required='signupMethod === AccountType.Email' :error='accountError' message='MSG_EMAIL_TIP'
+          placeholder='MSG_EMAIL_PLACEHOLDER' @focus='onEmailFocusIn' @blur='onEmailFocusOut'
         />
       </div>
       <slot name='append-account' />
       <Input
-        v-model:value='myPassword'
-        label='MSG_PASSWORD'
-        type='password'
-        id='pass'
-        required
-        :error='pwdError'
-        message='MSG_PASSWORD_TIP'
-        placeholder='MSG_PASSWORD_PLACEHOLDER'
-        @focus='onPasswordFocusIn'
+        v-model:value='myPassword' label='MSG_PASSWORD' type='password' id='pass'
+        required :error='pwdError'
+        message='MSG_PASSWORD_TIP' placeholder='MSG_PASSWORD_PLACEHOLDER' @focus='onPasswordFocusIn'
         @blur='onPasswordFocusOut'
       />
       <slot name='append-password' />
@@ -76,13 +60,13 @@ import { AccountType } from 'npool-cli-v4'
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted } from 'vue'
 
 interface Props {
-  label: string;
-  accountType: string;
-  account: string;
-  accountError: boolean;
-  password: string;
-  submitText: string;
-  submitting?: boolean;
+  label: string
+  accountType: string
+  account: string
+  accountError: boolean
+  password: string
+  submitText: string
+  submitting?: boolean
 }
 
 const props = defineProps<Props>()

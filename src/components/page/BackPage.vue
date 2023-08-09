@@ -10,7 +10,7 @@ import { useRouter } from 'vue-router'
 import { defineProps, toRef } from 'vue'
 
 interface Props {
-  backTarget?: string;
+  backTarget?: string
 }
 
 const props = defineProps<Props>()

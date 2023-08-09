@@ -67,12 +67,12 @@ import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import { computed, defineProps, toRef, defineEmits, ref } from 'vue'
 
 interface Props {
-  visible: boolean;
+  visible: boolean
 }
 const props = defineProps<Props>()
 const visible = toRef(props, 'visible')
 
-const emit = defineEmits<{(e: 'update:visible', visible: boolean): void}>()
+const emit = defineEmits<{(e: 'update:visible', visible: boolean): void;}>()
 
 const showing = ref(visible)
 
@@ -112,49 +112,49 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
 const searchClient = typesenseInstantsearchAdapter.searchClient
 
 interface Hierarchy {
-  lvl0: string;
-  lvl1: string;
-  lvl2: string;
-  lvl3: string;
-  lvl4: string;
-  lvl5: string;
-  lvl6: string;
+  lvl0: string
+  lvl1: string
+  lvl2: string
+  lvl3: string
+  lvl4: string
+  lvl5: string
+  lvl6: string
 }
 
 interface Highlight {
-  value: string; // <mark>highlight text</mark>
+  value: string // <mark>highlight text</mark>
 }
 
 interface HighlightResult {
-  hierarchy: Hierarchy;
-  'hierarchy.lvl0': Highlight;
-  'hierarchy.lvl1': Highlight;
-  content: Highlight;
+  hierarchy: Hierarchy
+  'hierarchy.lvl0': Highlight
+  'hierarchy.lvl1': Highlight
+  content: Highlight
 }
 
 interface Record {
-  anchor: string;
-  type: string;
-  hierarchy: Hierarchy;
-  url: string;
+  anchor: string
+  type: string
+  hierarchy: Hierarchy
+  url: string
   // eslint-disable-next-line camelcase
-  url_without_variables: string;
+  url_without_variables: string
   // eslint-disable-next-line camelcase
-  url_without_anchor: string;
-  id: string;
-  objectID: string;
-  _highlightResult: HighlightResult;
-  content: string;
+  url_without_anchor: string
+  id: string
+  objectID: string
+  _highlightResult: HighlightResult
+  content: string
 }
 
 interface Children extends Record{
-  content: string;
+  content: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Parent {
-  group: string;
-  children: Children[];
+  group: string
+  children: Children[]
 }
 
 const getUrl = computed(() => (record: Record) => {

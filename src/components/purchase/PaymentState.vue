@@ -49,12 +49,12 @@ import { useCurrencyStore } from 'npool-cli-v2'
 import { useFrontendOrderStore } from 'npool-cli-v4'
 
 interface Props {
-  orderId: string;
-  title: string;
-  tipMessage: string;
-  state: string;
-  showType: string;
-  remainTime: string;
+  orderId: string
+  title: string
+  tipMessage: string
+  state: string
+  showType: string
+  remainTime: string
 }
 
 const props = defineProps<Props>()
@@ -66,7 +66,7 @@ const odr = useFrontendOrderStore()
 const order = computed(() => odr.getOrderByID(orderId.value))
 
 const currencies = useCurrencyStore()
-const emit = defineEmits<{(e: 'proceed'): void}>()
+const emit = defineEmits<{(e: 'proceed'): void;}>()
 
 const onProceedClick = () => {
   emit('proceed')

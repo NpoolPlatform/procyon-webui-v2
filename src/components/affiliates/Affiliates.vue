@@ -9,20 +9,16 @@
     <Table />
     <div class='hr' />
   </div>
-  <q-ajax-bar
-    ref='progress'
-    position='top'
-    color='green-2'
-    size='6px'
-  />
+  <q-ajax-bar ref='progress' position='top' color='green-2' size='6px' />
 </template>
 
 <script setup lang='ts'>
-import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useFrontendArchivementStore, UserArchivement, useAdminFiatCurrencyStore, FiatType, useFrontendCommissionStore, Commission, SettleType } from 'npool-cli-v4'
+import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useFrontendArchivementStore, UserArchivement, useAdminFiatCurrencyStore, FiatType } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { getCoins } from 'src/api/chain'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { commission } from 'src/teststore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -38,7 +34,7 @@ const good = useAdminAppGoodStore()
 const coin = useAdminAppCoinStore()
 const fiat = useAdminFiatCurrencyStore()
 
-const commission = useFrontendCommissionStore()
+const _commission = commission.useCommissionStore()
 onMounted(() => {
   if (archivement.Archivements.Archivements.length === 0) {
     getArchivements(0, 100)
@@ -53,7 +49,7 @@ onMounted(() => {
   if (fiat.CoinFiatCurrencies.CoinFiatCurrencies.length === 0) {
     getFiatCurrency()
   }
-  if (commission.Commissions.Commissions.length === 0) {
+  if (_commission.Commissions.length === 0) {
     getCommissions(0, 100)
   }
 })
@@ -106,19 +102,21 @@ const getFiatCurrency = () => {
 }
 
 const getCommissions = (offset: number, limit: number) => {
-  commission.getCommissions({
+  _commission.getCommissions({
     Offset: offset,
     Limit: limit,
-    SettleType: SettleType.GoodOrderPercent,
     Message: {
       Error: {
-        Title: t('MSG_GET_PURCHASE_AMOUNT_SETTINGS_FAIL'),
+        Title: t('MSG_GET_COMMISSIONS_FAIL'),
         Popup: true,
         Type: NotifyType.Error
       }
     }
-  }, (error: boolean, rows: Array<Commission>) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<commission.Commission>) => {
+    if (error) {
+      return
+    }
+    if (!rows?.length) {
       return
     }
     getCommissions(offset + limit, limit)

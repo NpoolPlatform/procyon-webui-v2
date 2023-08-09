@@ -179,11 +179,11 @@ const WaitingBtn = defineAsyncComponent(() => import('src/components/button/Wait
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 interface Props {
-  goodId: string;
-  projectClass: string;
-  bgImg: string;
-  customizeInfo?: boolean;
-  purchaseAmount?: number;
+  goodId: string
+  projectClass: string
+  bgImg: string
+  customizeInfo?: boolean
+  purchaseAmount?: number
 }
 
 const props = defineProps<Props>()

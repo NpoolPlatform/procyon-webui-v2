@@ -1,8 +1,8 @@
 interface SettingState {
-  ShowSideMenu: boolean;
-  ActiveMenuTarget: string;
-  ShowMainHeader: boolean;
-  ShowFooterTop: boolean;
+  ShowSideMenu: boolean
+  ActiveMenuTarget: string
+  ShowMainHeader: boolean
+  ShowFooterTop: boolean
 }
 
 export {

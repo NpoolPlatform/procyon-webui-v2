@@ -77,18 +77,18 @@ const table = computed(() => [
 ])
 
 interface ExportOrder {
-  CreatedAt: string;
-  ProductType: string;
-  ProductName: string;
-  PurchaseAmount: string;
-  UnitType: string;
-  Price: number;
-  PaymentCurrency: string;
-  TotalCost: string;
-  MiningPeriod: number;
-  CumulativeProfit: number;
-  ProfitCurrency: string;
-  OrderStatus: OrderState;
+  CreatedAt: string
+  ProductType: string
+  ProductName: string
+  PurchaseAmount: string
+  UnitType: string
+  Price: number
+  PaymentCurrency: string
+  TotalCost: string
+  MiningPeriod: number
+  CumulativeProfit: number
+  ProfitCurrency: string
+  OrderStatus: OrderState
 }
 
 const getGoodType = computed(() => (goodID:string) => {

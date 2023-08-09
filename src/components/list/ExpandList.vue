@@ -30,12 +30,12 @@ import { MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
 
 interface Props {
-  menu: MenuItem;
-  showIcon: boolean;
-  showIconRight: boolean;
-  showLabel: boolean;
-  handleRouter: boolean;
-  margin: boolean;
+  menu: MenuItem
+  showIcon: boolean
+  showIconRight: boolean
+  showLabel: boolean
+  handleRouter: boolean
+  margin: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -51,7 +51,7 @@ const margin = toRef(props, 'margin')
 
 const router = useRouter()
 
-const emit = defineEmits<{(e: 'switchMenu', menu: MenuItem): void}>()
+const emit = defineEmits<{(e: 'switchMenu', menu: MenuItem): void;}>()
 
 const onMenuClick = (item: MenuItem) => {
   if (handleRouter.value) {

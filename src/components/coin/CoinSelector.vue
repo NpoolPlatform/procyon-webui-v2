@@ -28,14 +28,14 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
-  id: string;
-  label: string;
-  disabled?: boolean;
-  hideLabel?: boolean;
-  coins?: Array<AppCoin>;
-  default?: boolean;
-  nameIndex?: number;
-  tipIndex?: number;
+  id: string
+  label: string
+  disabled?: boolean
+  hideLabel?: boolean
+  coins?: Array<AppCoin>
+  default?: boolean
+  nameIndex?: number
+  tipIndex?: number
 }
 
 const props = defineProps<Props>()
@@ -57,7 +57,7 @@ const coinLabel = (coin: AppCoin) => {
   return label
 }
 
-const emit = defineEmits<{(e: 'update:id', id: string): void}>()
+const emit = defineEmits<{(e: 'update:id', id: string): void;}>()
 
 const coin = useAdminAppCoinStore()
 const displayCoins = computed(() => !coins.value ? coin.AppCoins.AppCoins.filter((el) => !el.Presale && el.Display) : coins.value)

@@ -68,7 +68,7 @@
 
 <script setup lang='ts'>
 import { AppCoin, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendProfitStore, PriceCoinName, NotifyType, useLocaleStringStore } from 'npool-cli-v4'
-import { useMockSpacemeshStore } from 'src/teststore'
+import { spacemesh } from 'src/teststore'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -94,19 +94,19 @@ const totalUnits = computed(() => goodProfits.value?.length ? goodProfits.value?
 const good = useAdminAppGoodStore()
 const total = computed(() => goodProfits.value?.length ? good.getGoodByID(goodProfits.value?.[0].GoodID)?.Total : 0)
 const unitsRatio = computed(() => goodProfits.value?.length && total.value ? Number(totalUnits.value) / Number(total.value) : 0)
-const daily = computed(() => spacemesh.getNetworkDailyOutput)
+const daily = computed(() => _spacemesh.getNetworkDailyOutput)
 
 const short = ref(true)
 
-const spacemesh = useMockSpacemeshStore()
+const _spacemesh = spacemesh.useMockSpacemeshStore()
 const _last24HoursEarningCoin = computed(() => {
-  return spacemesh.getLastDaysAvgOutput(unitsRatio.value, spacemesh.accounts * 1.3)
+  return _spacemesh.getLastDaysAvgOutput(unitsRatio.value, _spacemesh.accounts * 1.3)
 })
 const _last30DaysDailyEarningCoin = computed(() => {
-  return spacemesh.get30DaysAvgOutput(unitsRatio.value, spacemesh.accounts * 1.3)
+  return _spacemesh.get30DaysAvgOutput(unitsRatio.value, _spacemesh.accounts * 1.3)
 })
 const _totalEarningCoin = computed(() => {
-  return spacemesh.getEarning(unitsRatio.value, spacemesh.accounts * 1.3)
+  return _spacemesh.getEarning(unitsRatio.value, _spacemesh.accounts * 1.3)
 })
 
 const ticker = ref(-1)
@@ -134,7 +134,7 @@ onUnmounted(() => {
 })
 
 const updater = () => {
-  spacemesh.getNetworks({
+  _spacemesh.getNetworks({
     Message: {
       Error: {
         Title: t('MSG_GET_SPACEMESH_NETWORKS'),
@@ -147,7 +147,7 @@ const updater = () => {
     if (error) {
       return
     }
-    spacemesh.getEpochs({
+    _spacemesh.getEpochs({
       Message: {
         Error: {
           Title: t('MSG_GET_SPACEMESH_NETWORK_INFOS'),

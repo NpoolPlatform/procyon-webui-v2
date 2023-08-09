@@ -73,10 +73,10 @@ const onSearchClick = () => {
 }
 
 interface FaqItem {
-  icon: string;
-  topic: string;
-  title: string;
-  subtitle: string;
+  icon: string
+  topic: string
+  title: string
+  subtitle: string
 }
 
 const faqs = computed(() => [

@@ -24,10 +24,10 @@ import { useI18n } from 'vue-i18n'
 import addImage from 'src/assets/icon-plus.svg'
 
 interface Props {
-  src: string;
-  placeholder: string;
-  selected: boolean;
-  updatable: boolean;
+  src: string
+  placeholder: string
+  selected: boolean
+  updatable: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {

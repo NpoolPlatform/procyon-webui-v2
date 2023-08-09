@@ -47,7 +47,7 @@ import { AppGood, useAdminAppCoinStore } from 'npool-cli-v4'
 import { getCoins } from 'src/api/chain'
 
 interface Props {
-  good: AppGood;
+  good: AppGood
 }
 
 const props = defineProps<Props>()

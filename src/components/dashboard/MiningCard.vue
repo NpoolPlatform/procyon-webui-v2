@@ -105,7 +105,7 @@ import chevrons from '../../assets/chevrons.svg'
 const { t } = useI18n({ useScope: 'global' })
 
 interface Props {
-  profit: MyGoodProfit;
+  profit: MyGoodProfit
 }
 
 const props = defineProps<Props>()
@@ -150,13 +150,13 @@ const onExpandClick = () => {
 }
 
 interface ExportMiningReward {
-  CreatedAt: string;
-  Units: string;
-  RewardAmount: string;
-  TechServiceFee: number;
-  NetRewards: number;
-  RewardAmountPerUnit: number;
-  CumulativeTotal: number;
+  CreatedAt: string
+  Units: string
+  RewardAmount: string
+  TechServiceFee: number
+  NetRewards: number
+  RewardAmountPerUnit: number
+  CumulativeTotal: number
 }
 
 const exportMiningRewards = computed(() => {

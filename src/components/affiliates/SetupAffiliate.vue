@@ -10,9 +10,7 @@
       <div v-for='(_good, idx) in visibleGoodArchivements' :key='idx'>
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
         <KolOption
-          v-model:percent='_good.CommissionPercent'
-          :max='getGoodPercent(_good.GoodID)'
-          ignore-style
+          v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' ignore-style
           :disabled='!good.haveSale(good.getGoodByID(_good.GoodID) as AppGood)'
         />
       </div>
@@ -34,14 +32,13 @@ import {
   UserArchivement,
   NotifyType,
   useFrontendUserStore,
-  SettleType,
-  useFrontendCommissionStore,
   AppGood
 } from 'npool-cli-v4'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getAppGoods } from 'src/api/good'
+import { commission } from 'src/teststore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
@@ -50,7 +47,7 @@ const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage
 const KolOption = defineAsyncComponent(() => import('src/components/affiliates/KolOption.vue'))
 
 interface Query {
-  userID: string;
+  userID: string
 }
 
 const route = useRoute()
@@ -81,7 +78,7 @@ const backTimer = ref(-1)
 const submitting = ref(false)
 
 const user = useFrontendUserStore()
-const commission = useFrontendCommissionStore()
+const _commission = commission.useCommissionStore()
 const onSubmit = () => {
   submitting.value = true
   referral.value?.Archivements?.forEach((g) => {
@@ -113,16 +110,23 @@ const onSubmit = () => {
       void router.push({ path: '/affiliates' })
       return
     }
+
     visibleGoodArchivements?.value?.forEach((row) => {
-      commission.createCommission({
+      const myCommission = _commission.Commissions.find((el) => el.GoodID === row.GoodID && el.SettleType === commission.SettleType.GoodOrderPayment)
+      if (!myCommission) {
+        return
+      }
+      _commission.createCommission({
         TargetUserID: referral.value?.UserID as string,
         GoodID: row.GoodID,
-        SettleType: good.settleType(row.GoodID) as SettleType,
-        Value: `${row.CommissionPercent}`,
+        SettleType: commission.SettleType.GoodOrderPayment,
+        SettleAmountType: myCommission.SettleAmountType,
+        SettleMode: myCommission.SettleMode,
+        AmountOrPercent: `${row.CommissionPercent}`,
         StartAt: Math.ceil(Date.now() / 1000),
         Message: {
           Error: {
-            Title: t('MSG_CREATE_AMOUNT_SETTING_FAIL'),
+            Title: t('MSG_CREATE_COMMISSION_FAIL'),
             Popup: true,
             Type: NotifyType.Error
           }

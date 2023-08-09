@@ -30,12 +30,12 @@ import { useLocalUserStore, AccountType, useFrontendVerifyStore, UsedFor, valida
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted, computed } from 'vue'
 
 interface Props {
-  label: string;
-  accountType: AccountType;
-  account: string;
-  verificationCode: string;
-  verificationCodeError: boolean;
-  submitText: string;
+  label: string
+  accountType: AccountType
+  account: string
+  verificationCode: string
+  verificationCodeError: boolean
+  submitText: string
 }
 
 const props = defineProps<Props>()
