@@ -1,4 +1,5 @@
-import { GoodArchivement, GoodProfit, UserArchivement } from 'npool-cli-v4'
+import { GoodProfit } from 'npool-cli-v4'
+import { achievement } from 'src/teststore'
 
 export interface MyGoodProfit extends GoodProfit {
   GoodSaleEndAt: number
@@ -15,9 +16,9 @@ export interface MyGoodProfit extends GoodProfit {
   DaysRemaining: number
 }
 
-export interface MyGoodArchivement extends GoodArchivement {
+export interface MyGoodAchievement extends achievement.GoodAchievement {
   Editing: boolean
 }
-export interface MyArchivement extends UserArchivement {
-  Archivements: MyGoodArchivement[]
+export interface MyAchievement extends achievement.Achievement {
+  Achievements: MyGoodAchievement[]
 }

@@ -22,18 +22,17 @@
 
 <script setup lang='ts'>
 import { computed } from 'vue'
-import { useFrontendArchivementStore, useLocalUserStore, PriceCoinName, useAdminFiatCurrencyStore, useLocaleStringStore } from 'npool-cli-v4'
+import { useLocalUserStore, PriceCoinName, useAdminFiatCurrencyStore, useLocaleStringStore } from 'npool-cli-v4'
+import { achievement } from 'src/teststore'
 
 const logined = useLocalUserStore()
-
 const util = useLocaleStringStore()
-
-const archivement = useFrontendArchivementStore()
-const inviter = computed(() => archivement.getArchivementByUserID(logined?.User.ID))
+const _archivement = achievement.useAchievementStore()
+const inviter = computed(() => _archivement.achievement(logined?.User.ID))
 
 const totalCommission = computed(() => {
   let total = 0
-  inviter.value?.Archivements.forEach((el) => {
+  inviter.value?.Achievements.forEach((el) => {
     total += Number(el.TotalCommission)
   })
   return (Math.floor(total * 100)) / 100

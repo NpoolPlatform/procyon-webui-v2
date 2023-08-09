@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang='ts'>
-import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useFrontendArchivementStore, UserArchivement, useAdminFiatCurrencyStore, FiatType } from 'npool-cli-v4'
+import { useLocalUserStore, useAdminAppGoodStore, NotifyType, AppGood, useAdminAppCoinStore, useAdminFiatCurrencyStore, FiatType } from 'npool-cli-v4'
 import { QAjaxBar } from 'quasar'
 import { getCoins } from 'src/api/chain'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { commission } from 'src/teststore'
+import { commission, achievement } from 'src/teststore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -29,15 +29,15 @@ const Tree = defineAsyncComponent(() => import('src/components/affiliates/Tree.v
 const Table = defineAsyncComponent(() => import('src/components/affiliates/Table.vue'))
 
 const user = useLocalUserStore()
-const archivement = useFrontendArchivementStore()
+const _archivement = achievement.useAchievementStore()
 const good = useAdminAppGoodStore()
 const coin = useAdminAppCoinStore()
 const fiat = useAdminFiatCurrencyStore()
 
 const _commission = commission.useCommissionStore()
 onMounted(() => {
-  if (archivement.Archivements.Archivements.length === 0) {
-    getArchivements(0, 100)
+  if (_archivement.Achievements.length === 0) {
+    getAchievements(0, 100)
   }
   if (good.AppGoods.AppGoods.length === 0) {
     getAppGoods(0, 500)
@@ -72,8 +72,8 @@ const getAppGoods = (offset: number, limit: number) => {
     getAppGoods(offset + limit, limit)
   })
 }
-const getArchivements = (offset: number, limit: number) => {
-  archivement.getGoodArchivements({
+const getAchievements = (offset: number, limit: number) => {
+  _archivement.getAchievements({
     Offset: offset,
     Limit: limit,
     Message: {
@@ -83,11 +83,11 @@ const getArchivements = (offset: number, limit: number) => {
         Type: NotifyType.Error
       }
     }
-  }, (error: boolean, rows: Array<UserArchivement>) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<achievement.Achievement>) => {
+    if (error || !rows?.length) {
       return
     }
-    getArchivements(offset + limit, limit)
+    getAchievements(offset + limit, limit)
   })
 }
 

@@ -21,13 +21,14 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { useFrontendArchivementStore, useLocalUserStore } from 'npool-cli-v4'
+import { useLocalUserStore } from 'npool-cli-v4'
+import { achievement } from 'src/teststore'
 
 const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.vue'))
 
 const logined = useLocalUserStore()
 
-const archivement = useFrontendArchivementStore()
-const inviter = computed(() => archivement.getArchivementByUserID(logined?.User?.ID))
-const invitees = computed(() => archivement.getInviteesArchivements(logined.User?.ID).sort((a, b) => a.InvitedAt > b.InvitedAt ? 1 : -1))
+const _archivement = achievement.useAchievementStore()
+const inviter = computed(() => _archivement.achievement(logined?.User?.ID))
+const invitees = computed(() => _archivement.inviteeAchievements(logined.User?.ID).sort((a, b) => a.InvitedAt > b.InvitedAt ? 1 : -1))
 </script>
