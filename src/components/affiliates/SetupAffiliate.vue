@@ -121,6 +121,14 @@ const onSubmit = () => {
     }
 
     visibleGoodAchievements?.value?.forEach((row) => {
+      switch (getGoodCommissionSettleAmountType.value(row.GoodID)) {
+        case commission.SettleAmountType.SettleByAmount:
+          break
+        case commission.SettleAmountType.SettleByPercent:
+          break
+        default:
+          return
+      }
       _commission.createCommission({
         TargetUserID: referral.value?.UserID as string,
         GoodID: row.GoodID,
