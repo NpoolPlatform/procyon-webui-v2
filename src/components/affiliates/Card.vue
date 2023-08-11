@@ -46,13 +46,13 @@
               />
             </td>
             <td v-if='_good.Editing'>
-              <KolOption v-model:percent='_good.CommissionPercent' :max='getGoodPercent(_good.GoodID)' />
+              <KolOption v-model:percent='_good.CommissionValue' :max='getGoodCommissionValue(_good.GoodID)' />
               <button @click='onSaveCommissionClick(_good)'>
                 {{ $t('MSG_SAVE') }}
               </button>
             </td>
             <td v-else>
-              <span class='aff-number'>{{ _good.CommissionPercent }}<span class='unit'>%</span></span>
+              <span class='aff-number'>{{ _good.CommissionValue }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
                 :class='["alt", !good.enableSetCommission(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood) ? "in-active" : ""]'
@@ -183,9 +183,20 @@ const goodAchievements = computed(() => Array.from(referral.value?.Achievements.
   } as MyGoodAchievement
 }))
 const visibleGoodAchievements = ref(goodAchievements.value)
-
-const getGoodPercent = computed(() => (goodID: string) => {
-  return _achievement.inviterGoodPercent(logined?.User.ID, goodID) as number
+const getGoodCommissionValue = computed(() => (goodID: string) => {
+  return Number(_achievement.inviterGoodCommissionValue(logined?.User.ID, goodID))
+})
+const getGoodCommissionSettleMode = computed(() => (goodID: string) => {
+  return _achievement.inviterGoodCommissionSettleMode(logined?.User.ID, goodID) as commission.SettleMode
+})
+const getGoodCommissionSettleAmountType = computed(() => (goodID: string) => {
+  return _achievement.inviterGoodCommissionSettleAmountType(logined?.User.ID, goodID) as commission.SettleAmountType
+})
+const getGoodCommissionSettleInterval = computed(() => (goodID: string) => {
+  return _achievement.inviterGoodCommissionSettleInterval(logined?.User.ID, goodID) as commission.SettleInterval
+})
+const getGoodCommissionThreshold = computed(() => (goodID: string) => {
+  return _achievement.inviterGoodCommissionThreshold(logined?.User.ID, goodID)
 })
 
 const showDetailSummary = ref(false)
@@ -201,11 +212,11 @@ const commissions = computed(() => _commission.Commissions.filter((el) => {
 }))
 
 const onSaveCommissionClick = (row: MyGoodAchievement) => {
-  if (row.CommissionPercent > getGoodPercent.value(row.GoodID)) {
-    row.CommissionPercent = getGoodPercent.value(row.GoodID)
+  if (Number(row.CommissionValue) > getGoodCommissionValue.value(row.GoodID)) {
+    row.CommissionValue = getGoodCommissionValue.value(row.GoodID).toString()
   }
-  if (row.CommissionPercent < 0) {
-    row.CommissionPercent = 0
+  if (Number(row.CommissionValue) < 0) {
+    row.CommissionValue = '0'
   }
 
   row.Editing = false
@@ -213,10 +224,11 @@ const onSaveCommissionClick = (row: MyGoodAchievement) => {
     TargetUserID: referral.value.UserID,
     GoodID: row.GoodID,
     SettleType: commission.SettleType.GoodOrderPayment,
-    SettleAmountType: row.CommissionSettleAmountType,
-    SettleMode: row.CommissionSettleMode,
-    SettleInterval: row.CommissionSettleInterval,
-    AmountOrPercent: `${row.CommissionPercent}`,
+    SettleAmountType: getGoodCommissionSettleAmountType.value(row.GoodID),
+    SettleMode: getGoodCommissionSettleMode.value(row.GoodID),
+    SettleInterval: getGoodCommissionSettleInterval.value(row.GoodID),
+    Threshold: getGoodCommissionThreshold.value(row.GoodID),
+    AmountOrPercent: `${row.CommissionValue}`,
     StartAt: Math.ceil(Date.now() / 1000),
     Message: {
       Error: {
