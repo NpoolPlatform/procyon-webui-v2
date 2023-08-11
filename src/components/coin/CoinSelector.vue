@@ -71,7 +71,7 @@ const selectedCoin = computed({
 })
 
 watch([() => displayCoins.value], () => {
-  if (coins.value && coins.value.length > 0 && setDefaultValue) {
+  if (coins.value?.length && setDefaultValue.value) {
     setDefault()
   }
 })
