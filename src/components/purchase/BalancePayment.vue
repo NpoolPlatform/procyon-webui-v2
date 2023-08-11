@@ -13,6 +13,7 @@
               hide-label
               :tip-index='1'
               :name-index='1'
+              :default='false'
             />
             <label>{{ $t('MSG_BALANCE') }}</label>
             <div class='three-section' v-if='paymentCoin?.StableUSD'>
@@ -211,17 +212,14 @@ const currency = useAdminCurrencyStore()
 const setCurrency = () => {
   if (coin.stableCoin(coinTypeID.value)) {
     selectedCoinCurrency.value = 1
-    console.log('stable coin: ', selectedCoinCurrency.value)
     return
   }
   if (coin.haveCurrency(coinTypeID.value)) {
     selectedCoinCurrency.value = coin.getCurrency(coinTypeID.value)
-    console.log('AppCoin Currency: ', selectedCoinCurrency.value)
     return
   }
   if (currency.haveCurrency(coinTypeID.value)) {
     selectedCoinCurrency.value = parseFloat(currency.getCurrency(coinTypeID.value)?.MarketValueLow as string)
-    console.log('Currency MarketValueLow: ', selectedCoinCurrency.value)
     return
   }
   selectedCoinCurrency.value = undefined as unknown as number // can't buy
