@@ -208,18 +208,14 @@ const onSaveCommissionClick = (row: MyGoodAchievement) => {
     row.CommissionPercent = 0
   }
 
-  const myCommission = commissions.value.find((el) => el.GoodID === row.GoodID && el.SettleType === commission.SettleType.GoodOrderPayment)
-  if (!myCommission) {
-    return
-  }
-
   row.Editing = false
   _commission.createCommission({
     TargetUserID: referral.value.UserID,
     GoodID: row.GoodID,
     SettleType: commission.SettleType.GoodOrderPayment,
-    SettleAmountType: myCommission.SettleAmountType,
-    SettleMode: myCommission.SettleMode,
+    SettleAmountType: row.CommissionSettleAmountType,
+    SettleMode: row.CommissionSettleMode,
+    SettleInterval: row.CommissionSettleInterval,
     AmountOrPercent: `${row.CommissionPercent}`,
     StartAt: Math.ceil(Date.now() / 1000),
     Message: {
