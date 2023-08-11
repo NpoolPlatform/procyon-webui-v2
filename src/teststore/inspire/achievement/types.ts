@@ -9,7 +9,8 @@ export interface GoodAchievement {
   GoodID: string
   GoodName: string
   GoodUnit: string
-  CommissionPercent: number
+  CommissionValue: string
+  CommissionThreshold: string
   CommissionSettleType: SettleType
   CommissionSettleMode: SettleMode
   CommissionSettleAmountType: SettleAmountType

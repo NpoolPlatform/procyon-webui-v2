@@ -3,6 +3,7 @@ import { API } from './const'
 import { doActionWithError } from 'npool-cli-v4'
 import { Achievement, GetAchievementsRequest, GetAchievementsResponse } from './types'
 import { date } from 'quasar'
+import { SettleMode, SettleType, SettleAmountType, SettleInterval } from '../commission'
 
 export const useAchievementStore = defineStore('achievement', {
   state: () => ({
@@ -19,9 +20,34 @@ export const useAchievementStore = defineStore('achievement', {
         return this.Achievements.filter((el) => el.UserID !== userID && el.Kol)
       }
     },
-    inviterGoodPercent (): (inviterID: string, goodID: string) => number | undefined {
+    inviterGoodCommissionValue (): (inviterID: string, goodID: string) => string | undefined {
       return (inviterID: string, goodID: string) => {
-        return this.Achievements.find((el) => el.UserID === inviterID)?.Achievements.find((el) => el.GoodID === goodID)?.CommissionPercent
+        return this.Achievements.find((el) => el.UserID === inviterID)?.Achievements.find((el) => el.GoodID === goodID)?.CommissionValue
+      }
+    },
+    inviterGoodCommissionSettleType (): (inviterID: string, goodID: string) => SettleType | undefined {
+      return (inviterID: string, goodID: string) => {
+        return this.Achievements.find((el) => el.UserID === inviterID)?.Achievements.find((el) => el.GoodID === goodID)?.CommissionSettleType
+      }
+    },
+    inviterGoodCommissionSettleMode (): (inviterID: string, goodID: string) => SettleMode | undefined {
+      return (inviterID: string, goodID: string) => {
+        return this.Achievements.find((el) => el.UserID === inviterID)?.Achievements.find((el) => el.GoodID === goodID)?.CommissionSettleMode
+      }
+    },
+    inviterGoodCommissionSettleAmountType (): (inviterID: string, goodID: string) => SettleAmountType | undefined {
+      return (inviterID: string, goodID: string) => {
+        return this.Achievements.find((el) => el.UserID === inviterID)?.Achievements.find((el) => el.GoodID === goodID)?.CommissionSettleAmountType
+      }
+    },
+    inviterGoodCommissionSettleInterval (): (inviterID: string, goodID: string) => SettleInterval | undefined {
+      return (inviterID: string, goodID: string) => {
+        return this.Achievements.find((el) => el.UserID === inviterID)?.Achievements.find((el) => el.GoodID === goodID)?.CommissionSettleInterval
+      }
+    },
+    inviterGoodCommissionThreshold (): (inviterID: string, goodID: string) => string | undefined {
+      return (inviterID: string, goodID: string) => {
+        return this.Achievements.find((el) => el.UserID === inviterID)?.Achievements.find((el) => el.GoodID === goodID)?.CommissionThreshold
       }
     },
     totalCommission () {

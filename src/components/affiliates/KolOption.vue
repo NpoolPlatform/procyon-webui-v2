@@ -9,7 +9,7 @@
 import { computed, defineProps, ref, toRef, defineEmits } from 'vue'
 
 interface Props {
-  percent: number
+  percent: string
   max: number
   ignoreStyle?: boolean
   disabled?: boolean
@@ -23,7 +23,7 @@ const disabled = toRef(props, 'disabled')
 
 const target = ref(percent.value)
 
-const emit = defineEmits<{(e: 'update:percent', percent: number): void;}>()
+const emit = defineEmits<{(e: 'update:percent', percent: string): void;}>()
 
 const options = computed(() => {
   const percents = [30, 25, 15, 10, 5, 0]
@@ -32,7 +32,7 @@ const options = computed(() => {
 })
 
 const onChange = () => {
-  emit('update:percent', target.value)
+  emit('update:percent', target.value.toString())
 }
 </script>
 <style>
