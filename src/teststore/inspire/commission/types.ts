@@ -67,6 +67,7 @@ export interface CreateCommissionRequest extends BaseRequest {
   StartAt: number
   SettleMode: SettleMode
   Threshold?: string
+  SettleInterval: SettleInterval
 }
 
 export interface CreateCommissionResponse {
