@@ -72,7 +72,6 @@ pipeline {
         expression { BRANCH_NAME != 'master' }
       }
       steps {
-        sh 'make verify-build'
         sh(returnStdout: false, script: '''
           feature_name=`echo $BRANCH_NAME | awk -F '/' '{ print $2 }'`
           docker build -t $DOCKER_REGISTRY/entropypool/procyon-webui-v2:$feature_name .
