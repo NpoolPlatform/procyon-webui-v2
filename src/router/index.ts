@@ -66,7 +66,10 @@ export default route(function (/* { store, ssrContext } */) {
         return
       }
     }
-
+    if (!to.path.startsWith('/testing') && to.path !== '/') {
+      next({ path: '/', replace: true })
+      return
+    }
     BaseMenu.children.forEach((menu) => {
       if (to.path.includes(menu.target)) {
         setting.ActiveMenuTarget = menu.target
