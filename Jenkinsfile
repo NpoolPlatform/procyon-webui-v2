@@ -323,7 +323,6 @@ pipeline {
     stage('Deploy for feature') {
       when {
         expression { DEPLOY_TARGET == 'true' }
-        expression { TARGET_ENV ==~ /.*development.*/ }
         expression { BRANCH_NAME != 'master' }
       }
       steps {
@@ -358,6 +357,7 @@ pipeline {
       when {
         expression { DEPLOY_TARGET == 'true' }
         expression { TARGET_ENV ==~ /.*testing.*/ }
+        expression { BRANCH_NAME == 'master' }
       }
       steps {
         sh(returnStdout: false, script: '''
