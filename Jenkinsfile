@@ -12,7 +12,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
-        sh (returnStdout: false, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
@@ -29,7 +29,7 @@ pipeline {
         '''.stripIndent())
 
         withCredentials([gitUsernamePassword(credentialsId: 'KK-github-key', gitToolName: 'git-tool')]) {
-          sh (returnStdout: false, script: '''
+          sh(returnStdout: false, script: '''
             set +e
             git add package.json
             git commit -m "update package version"
@@ -38,7 +38,7 @@ pipeline {
           '''.stripIndent())
         }
 
-        sh (returnStdout: false, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           PATH=/usr/local/bin:$PATH:./node_modules/@quasar/app/bin command quasar
           rc=$?
@@ -94,7 +94,7 @@ pipeline {
         expression { TAG_PATCH == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
@@ -137,7 +137,7 @@ pipeline {
         expression { TAG_MINOR == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
@@ -172,7 +172,7 @@ pipeline {
         expression { TAG_MAJOR == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           set +e
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
@@ -208,7 +208,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           revlist=`git rev-list --tags --max-count=1`
           tag=`git describe --tags $revlist`
           git reset --hard
@@ -257,8 +257,14 @@ pipeline {
         expression { RELEASE_TARGET == 'true' }
       }
       steps {
-        sh 'docker push $DOCKER_REGISTRY/entropypool/procyon-webui-v2:latest'
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
+          set +e
+          docker images | grep procyon-webui-v2 | grep latest
+          rc=$?
+          set -e
+          if [ 0 -eq $rc ]; then
+            docker push $DOCKER_REGISTRY/entropypool/procyon-webui-v2:latest
+          fi
           images=`docker images | grep entropypool | grep procyon-webui-v2 | grep none | awk '{ print $3 }'`
           for image in $images; do
             docker rmi $image -f
@@ -317,7 +323,6 @@ pipeline {
     stage('Deploy for feature') {
       when {
         expression { DEPLOY_TARGET == 'true' }
-        expression { TARGET_ENV ==~ /.*development.*/ }
         expression { BRANCH_NAME != 'master' }
       }
       steps {
@@ -352,9 +357,10 @@ pipeline {
       when {
         expression { DEPLOY_TARGET == 'true' }
         expression { TARGET_ENV ==~ /.*testing.*/ }
+        expression { BRANCH_NAME == 'master' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           revlist=`git rev-list --tags --max-count=1`
           tag=`git describe --tags $revlist`
 
@@ -376,7 +382,7 @@ pipeline {
         expression { TARGET_ENV ==~ /.*production.*/ }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           revlist=`git rev-list --tags --max-count=1`
           tag=`git describe --tags $revlist`
 
