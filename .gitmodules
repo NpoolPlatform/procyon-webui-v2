@@ -1,0 +1,3 @@
+[submodule "src/npoolstore"]
+	path = src/npoolstore
+	url = https://github.com/NpoolPlatform/npool-cli-v5.git
