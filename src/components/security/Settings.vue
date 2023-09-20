@@ -115,8 +115,8 @@
 
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { ref, computed } from 'vue'
+import { kyc, notify, appuserbase, user } from 'src/npoolstore'
 
 import lock from 'src/assets/lock.svg'
 import mail from 'src/assets/mail.svg'
@@ -126,21 +126,10 @@ import shieldHalf from 'src/assets/shield-half.svg'
 import shieldSolid from 'src/assets/shield-solid.svg'
 import circleDot from 'src/assets/circle-dot.svg'
 import id from 'src/assets/id.svg'
-import {
-  KYCState,
-  NotifyType,
-  SigninVerifyType,
-  useFrontendKYCStore,
-  useFrontendUserStore,
-  useLocalUserStore
-} from 'npool-cli-v4'
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
-const logined = useLocalUserStore()
-const kyc = useFrontendKYCStore()
-const kycVerified = computed(() => kyc.KYC?.State === KYCState.Approved)
+const logined = user.useLocalUserStore()
+const _kyc = kyc.useKYCStore()
+const kycVerified = computed(() => _kyc.kyc(undefined, logined.loginedUserID as string)?.State === kyc.KYCState.Approved)
 
 const router = useRouter()
 
@@ -161,11 +150,11 @@ const onEnableGoogleClick = () => {
 }
 
 const signGoogleVerify = ref(
-  logined.User?.GoogleAuthVerified && logined.User?.SigninVerifyType === SigninVerifyType.Google
+  logined.user()?.GoogleAuthVerified && logined.user()?.SigninVerifyType === appuserbase.SigninVerifyType.Google
 )
 
 const onGoogleSignClick = () => {
-  if (!logined.User?.GoogleAuthVerified) {
+  if (!logined.user()?.GoogleAuthVerified) {
     return
   }
   signGoogleVerify.value = true
@@ -174,18 +163,18 @@ const onGoogleSignClick = () => {
 const onEmailSignClick = () => {
   signGoogleVerify.value = false
 }
-const user = useFrontendUserStore()
+const _user = user.useUserStore()
 const onSignVerifyClick = () => {
   if (!logined.User || !logined.User.GoogleAuthVerified) {
     return
   }
-  user.updateUser({
-    SigninVerifyType: signGoogleVerify.value ? SigninVerifyType.Google : SigninVerifyType.Email,
+  _user.updateUser({
+    SigninVerifyType: signGoogleVerify.value ? appuserbase.SigninVerifyType.Google : appuserbase.SigninVerifyType.Email,
     Message: {
       Error: {
-        Title: t('MSG_UPDATE_USER_CONTROL_FAIL'),
+        Title: 'MSG_UPDATE_USER_CONTROL_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, () => {

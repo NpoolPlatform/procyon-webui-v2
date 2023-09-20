@@ -65,10 +65,10 @@
 
 <script lang='ts' setup>
 import 'instantsearch.css/themes/satellite-min.css'
-import { useLocaleStore } from 'npool-cli-v4'
 import { AppID, TypesenseApiKey } from 'src/const/const'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import { computed, defineProps, toRef, defineEmits, ref } from 'vue'
+import { _locale } from 'src/npoolstore'
 
 interface Props {
   visible: boolean
@@ -94,8 +94,8 @@ if (window.location.hostname.includes('.npool.top')) {
   baseURL = window.location.protocol + '//api.npool.top' + (window.location.port.length ? ':' + window.location.port : '') + '/api'
 }
 
-const locale = useLocaleStore()
-const lang = computed(() => `tags:=[${locale.AppLang.Lang}]`)
+const locale = _locale.useLocaleStore()
+const lang = computed(() => `tags:=[${locale.lang()}]`)
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {

@@ -14,12 +14,12 @@
             <div class='info-flex'>
               <div class='three-section'>
                 <h4>{{ $t('MSG_AVAILABLE_FOR_WITHDRAWAL') }}:</h4>
-                <span class='number'>{{ util.getLocaleString(balance) }}</span>
+                <span class='number'>{{ utils.getLocaleString(balance) }}</span>
                 <span class='unit'>{{ target?.Unit }}</span>
               </div>
               <div v-if='withdrawType === "ExternalAddress"' class='three-section'>
                 <h4>{{ $t('MSG_TRANSACTION_FEE') }}:</h4>
-                <span class='number'>{{ util.getLocaleString(feeAmount) }}</span>
+                <span class='number'>{{ utils.getLocaleString(feeAmount) }}</span>
                 <span class='unit'>{{ target?.Unit }}</span>
               </div>
               <div class='full-section'>
@@ -40,8 +40,8 @@
               </div>
               <div class='three-section'>
                 <h4>{{ $t('MSG_AMOUNT_WILL_RECEIVE') }}:</h4>
-                <span v-if='withdrawType === "ExternalAddress"' class='number'>{{ util.getLocaleString(receiveAmount) }}</span>
-                <span v-else class='number'>{{ amount > 0 ? util.getLocaleString(amount.toFixed(4)) : 0 }}</span>
+                <span v-if='withdrawType === "ExternalAddress"' class='number'>{{ utils.getLocaleString(receiveAmount) }}</span>
+                <span v-else class='number'>{{ amount > 0 ? utils.getLocaleString(amount.toFixed(4)) : 0 }}</span>
                 <span class='unit'>{{ target?.Unit }}</span>
               </div>
 
@@ -78,7 +78,7 @@
                     :class='[ "address-option", selectedTransferAccount?.TargetUserID === _account.TargetUserID ? "address-selected" : "" , "address-line"]'
                     @click='onTransferAccountSelected(_account)'
                   >
-                    <span :class='[baseUser.displayName1(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string)?.length > 0 ? "wallet-type": ""]'>{{ baseUser.displayName1(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string) }}</span>
+                    <span :class='[baseUser.displayName(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string)?.length > 0 ? "wallet-type": ""]'>{{ baseUser.displayName(_account.TargetEmailAddress, _account.TargetPhoneNO, _account.TargetFirstName, _account.TargetLastName, locale as string) }}</span>
                     <span class='wallet-type coin-type'>{{ $t('MSG_INTERNAL') }}</span>
                     <span class='number'>{{ _account.TargetEmailAddress.length ? _account.TargetEmailAddress : _account.TargetPhoneNO }}<img class='checkmark address-checkmark' :src='checkmark'></span>
                   </div>
@@ -112,7 +112,7 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        :used-for='withdrawType === "ExternalAddress" ? UsedFor.Withdraw : UsedFor.Transfer'
+        :used-for='withdrawType === "ExternalAddress" ? basetypes.EventType.Withdraw : basetypes.EventType.Transfer'
         @cancel='onCancelClick'
         show-cancel
       />
@@ -165,29 +165,26 @@
 import { ref, defineAsyncComponent, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import {
-  TransferAccount,
-  useFrontendTransferAccountStore,
-  NotifyType,
-  useBaseUserStore,
-  useFrontendTransferStore,
-  Transfer,
-  UsedFor,
-  AccountType,
-  useFrontendUserAccountStore,
-  AccountUsedFor,
-  Account,
-  useAdminAppCoinStore,
-  useFrontendGeneralStore,
-  useFrontendWithdrawStore,
-  General,
-  useFrontendDetailStore,
-  useAdminCurrencyStore,
-  AppCoin,
-  useLocaleStringStore
-} from 'npool-cli-v4'
 import checkmark from 'src/assets/icon-checkmark.svg'
 import { getCoins, getCurrencies } from 'src/api/chain'
+import {
+  appcoin,
+  utils,
+  transferaccount,
+  useraccount,
+  user,
+  accountbase,
+  ledger,
+  coincurrency,
+  ledgerstatement,
+  ledgerwithdraw,
+  ledgertransfer,
+  notify,
+  appuserbase,
+  useraccountbase,
+  basetypes
+} from 'src/npoolstore'
+
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale, t } = useI18n({ useScope: 'global' })
 
@@ -203,14 +200,12 @@ interface Query {
 
 const query = computed(() => route.query as unknown as Query)
 const type = computed(() => query.value.type)
-
-const util = useLocaleStringStore()
-
-const coin = useAdminAppCoinStore()
+const logined = user.useLocalUserStore()
+const coin = appcoin.useAppCoinStore()
 const coinTypeID = computed(() => query.value.coinTypeID)
-const target = computed(() => coin.getCoinByID(coinTypeID.value))
+const target = computed(() => coin.coin(undefined, coinTypeID.value))
 
-const coinLabel = (asset: AppCoin) => {
+const coinLabel = (asset: appcoin.AppCoin) => {
   let label = asset.Name
   if (asset.DisplayNames?.length > 2 && asset.DisplayNames?.[2]?.length > 0) {
     label = asset.DisplayNames?.[2]
@@ -223,14 +218,14 @@ watch(withdrawType, () => {
   selectedAccountIndex.value = 0
 })
 
-const transferAccount = useFrontendTransferAccountStore()
-const transferAccounts = computed(() => transferAccount.TransferAccounts.TransferAccounts)
-const selectedTransferAccount = computed(() => transferAccounts.value.length > 0 ? transferAccounts.value[selectedAccountIndex.value] : undefined as unknown as TransferAccount)
+const transferAccount = transferaccount.useTransferAccountStore()
+const transferAccounts = computed(() => transferAccount.transferAccounts(undefined, logined.loginedUserID))
+const selectedTransferAccount = computed(() => transferAccounts.value[selectedAccountIndex.value])
 
-const userAccount = useFrontendUserAccountStore()
-const withdraws = computed(() => userAccount.withdrawAddress.filter((el) => el.CoinTypeID === coinTypeID.value).filter((el) => !el.Blocked && el.Active))
+const userAccount = useraccount.useUserAccountStore()
+const withdraws = computed(() => userAccount.accounts(undefined, logined.loginedUserID, coinTypeID.value, accountbase.AccountUsedFor.UserWithdraw))
 const selectedAccountIndex = ref(0)
-const selectedAccount = computed(() => withdraws.value.length > 0 ? withdraws.value[selectedAccountIndex.value] : undefined as unknown as Account)
+const selectedAccount = computed(() => withdraws.value[selectedAccountIndex.value])
 
 const verifying = ref(false)
 const showReviewing = ref(false)
@@ -258,14 +253,14 @@ const onAmountFocusOut = () => {
 
 const route = useRoute()
 
-const balance = computed(() => Number(general.getBalanceByID(coinTypeID.value)))
+const balance = computed(() => Number(general.coinBalance(undefined, logined.loginedUserID, coinTypeID.value)))
 const feeAmount = computed(() => {
   if (withdrawType.value === 'InternalTransfer') {
     return 0
   }
   if (target?.value?.WithdrawFeeByStableUSD) {
     if (target?.value?.WithdrawFeeAmount.length > 0) {
-      return Number(target.value?.WithdrawFeeAmount) / currency.getUSDCurrency(coinTypeID.value)
+      return Number(target.value?.WithdrawFeeAmount) / currency.currency(coinTypeID.value)
     }
   }
   return Math.ceil(Number(target.value?.WithdrawFeeAmount) * 1000000) / 1000000
@@ -276,14 +271,14 @@ const receiveAmount = computed(() => {
 
 const disableTtn = computed(() => (withdrawType.value === 'ExternalAddress' && withdraws.value.length === 0) || (withdrawType.value === 'InternalTransfer' && transferAccounts.value.length === 0))
 
-const general = useFrontendGeneralStore()
-const detail = useFrontendDetailStore()
-const withdraw = useFrontendWithdrawStore()
-const transfer = useFrontendTransferStore()
-const baseUser = useBaseUserStore()
+const general = ledger.useLedgerStore()
+const detail = ledgerstatement.useStatementStore()
+const withdraw = ledgerwithdraw.useWithdrawStore()
+const transfer = ledgertransfer.useTransferStore()
+const baseUser = user.useUserStore()
 
 const account = ref('')
-const accountType = ref(AccountType.Email)
+const accountType = ref(appuserbase.SignMethodType.Email)
 
 const submitting = ref(false)
 const onMenuHide = () => {
@@ -323,7 +318,7 @@ const onCodeVerify = (code: string) => {
         Error: {
           Title: t('MSG_SUBMIT_WITHDRAW_FAIL'),
           Popup: true,
-          Type: NotifyType.Error
+          Type: notify.NotifyType.Error
         }
       }
     }, (error: boolean) => {
@@ -346,10 +341,10 @@ const onCodeVerify = (code: string) => {
         Error: {
           Title: t('MSG_SUBMIT_WITHDRAW_FAIL'),
           Popup: true,
-          Type: NotifyType.Error
+          Type: notify.NotifyType.Error
         }
       }
-    }, (tarns: Transfer, error: boolean) => {
+    }, (error: boolean) => {
       submitting.value = false
       if (error) {
         return
@@ -372,37 +367,37 @@ const onStateTipBtnClick = () => {
   showReviewing.value = false
 }
 
-const onAddressSelected = (row: Account) => {
+const onAddressSelected = (row: useraccountbase.Account) => {
   selectedAccountIndex.value = withdraws.value.findIndex((el) => el.ID === row.ID)
 }
 
-const onTransferAccountSelected = (account: TransferAccount) => {
+const onTransferAccountSelected = (account: transferaccount.TransferAccount) => {
   selectedAccountIndex.value = transferAccounts.value.findIndex((el) => el.ID === account.ID)
 }
 
-const currency = useAdminCurrencyStore()
+const currency = coincurrency.useCurrencyStore()
 
 onMounted(() => {
-  if (general.Generals.Generals.length === 0) {
+  if (!general.ledgers(undefined).length) {
     getGenerals(0, 20)
   }
 
   userAccount.$reset()
-  if (userAccount.UserAccounts.UserAccounts.length === 0) {
+  if (!withdraws.value.length) {
     getUserAccounts(0, 20)
   }
 
-  if (transferAccount.TransferAccounts.TransferAccounts.length === 0) {
+  if (!transferAccounts.value.length) {
     getTransferAccounts(0, 20)
   }
-  if (coin.AppCoins.AppCoins.length === 0) {
+  if (!coin.coins(undefined).length) {
     getCoins(0, 100)
   }
   if (type.value) {
     withdrawType.value = type.value
   }
-  if (currency.Currencies.Currencies.length === 0) {
-    getCurrencies(0, 500)
+  if (!currency.currencies().length) {
+    getCurrencies(0, 100)
   }
 })
 
@@ -410,16 +405,16 @@ const getUserAccounts = (offset: number, limit: number) => {
   userAccount.getUserAccounts({
     Offset: offset,
     Limit: limit,
-    UsedFor: AccountUsedFor.UserWithdraw,
+    UsedFor: accountbase.AccountUsedFor.UserWithdraw,
     Message: {
       Error: {
         Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (accounts: Array<Account>, error: boolean) => {
-    if (error || accounts.length < limit) return
+  }, (error: boolean, accounts?: Array<useraccountbase.Account>) => {
+    if (error || !accounts?.length) return
     getUserAccounts(offset + limit, limit)
   })
 }
@@ -432,11 +427,11 @@ const getTransferAccounts = (offset: number, limit: number) => {
       Error: {
         Title: t('MSG_GET_WITHDRAWS_FAIL'),
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (transfers: Array<TransferAccount>, error: boolean) => {
-    if (error || transfers.length < limit) {
+  }, (error: boolean, transfers?: Array<transferaccount.TransferAccount>) => {
+    if (error || !transfers?.length) {
       return
     }
     getTransferAccounts(limit + offset, limit)
@@ -444,18 +439,18 @@ const getTransferAccounts = (offset: number, limit: number) => {
 }
 
 const getGenerals = (offset: number, limit: number) => {
-  general.getGenerals({
+  general.getLedgers({
     Offset: offset,
     Limit: limit,
     Message: {
       Error: {
         Title: t('MSG_GET_GENERAL_FAIL'),
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (error: boolean, rows: Array<General>) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<ledger.Ledger>) => {
+    if (error || !rows?.length) {
       return
     }
     getGenerals(limit + offset, limit)

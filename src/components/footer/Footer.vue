@@ -40,15 +40,15 @@
 </template>
 
 <script setup lang='ts'>
-import { useLocaleStore } from 'npool-cli-v4'
 import { computed, defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
+import { _locale } from 'src/npoolstore'
 
 import lightLogo from '../../assets/procyon-light.svg'
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 
-const locale = useLocaleStore()
-const special = computed(() => locale.AppLang?.Lang === 'ja-JP')
+const locale = _locale.useLocaleStore()
+const special = computed(() => locale.lang() === 'ja-JP')
 const router = useRouter()
 
 </script>

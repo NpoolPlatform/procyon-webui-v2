@@ -1,7 +1,7 @@
 <template>
   <UpdatePage
     @submit='onSubmit'
-    :label='accountType === AccountType.Email ? "MSG_UPDATE_EMAIL" : "MSG_UPDATE_MOBILE"'
+    :label='accountType === appuserbase.SignMethodType.Email ? "MSG_UPDATE_EMAIL" : "MSG_UPDATE_MOBILE"'
     submit-text='MSG_SUBMIT'
     v-model:account='oldAccount'
     v-model:account-type='oldAccountType'
@@ -19,20 +19,20 @@
     </template>
     <template #body>
       <PhoneNO
-        v-if='accountType === AccountType.Mobile'
+        v-if='accountType === appuserbase.SignMethodType.Mobile'
         v-model:value='phoneNO'
         :error='accountError'
-        :required='accountType === AccountType.Mobile'
+        :required='accountType === appuserbase.SignMethodType.Mobile'
         @focus='onPhoneNOFocusIn'
         @blur='onPhoneNOFocusOut'
       />
       <Input
-        v-if='accountType === AccountType.Email'
+        v-if='accountType === appuserbase.SignMethodType.Email'
         v-model:value='emailAddress'
         label='MSG_EMAIL_ADDRESS'
         type='email'
         id='email'
-        :required='accountType === AccountType.Email'
+        :required='accountType === appuserbase.SignMethodType.Email'
         :error='accountError'
         message='MSG_EMAIL_TIP'
         placeholder='MSG_EMAIL_PLACEHOLDER'
@@ -42,7 +42,7 @@
       <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
       <Input
         v-model:value='myVerificationCode'
-        :label='accountType === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
+        :label='accountType === appuserbase.SignMethodType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
         type='text'
         id='ver-code'
         required
@@ -57,32 +57,16 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  AccountType,
-  NotifyType,
-  SignMethodType,
-  UsedFor,
-  useFrontendUserStore,
-  useLocalUserStore,
-  User,
-  useFrontendVerifyStore,
-  validateEmailAddress,
-  validateMobileNO,
-  validateVerificationCode
-} from 'npool-cli-v4'
+import { notify, appuserbase, user, coderepo, utils, basetypes } from 'src/npoolstore'
 import { defineAsyncComponent, ref, toRef, watch, defineProps } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 interface Props {
-  accountType: AccountType
+  accountType: appuserbase.SignMethodType
 }
 
 const props = defineProps<Props>()
 const accountType = toRef(props, 'accountType')
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 
 const UpdatePage = defineAsyncComponent(() => import('src/components/user/UpdatePage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
@@ -90,7 +74,7 @@ const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
 
 const oldAccount = ref('')
-const oldAccountType = ref(AccountType.Email)
+const oldAccountType = ref(appuserbase.SignMethodType.Email)
 const oldVerificationCode = ref('')
 const oldVerificationCodeError = ref(false)
 
@@ -102,10 +86,10 @@ const onPhoneNOFocusIn = () => {
   accountError.value = false
 }
 const onPhoneNOFocusOut = () => {
-  accountError.value = !validateMobileNO(phoneNO.value)
+  accountError.value = !utils.validateMobileNO(phoneNO.value)
 }
 watch(phoneNO, () => {
-  if (accountType.value === AccountType.Mobile) {
+  if (accountType.value === appuserbase.SignMethodType.Mobile) {
     account.value = phoneNO.value
   }
 })
@@ -115,10 +99,10 @@ const onEmailFocusIn = () => {
   accountError.value = false
 }
 const onEmailFocusOut = () => {
-  accountError.value = !validateEmailAddress(emailAddress.value)
+  accountError.value = !utils.validateEmailAddress(emailAddress.value)
 }
 watch(emailAddress, () => {
-  if (accountType.value === AccountType.Email) {
+  if (accountType.value === appuserbase.SignMethodType.Email) {
     account.value = emailAddress.value
   }
 })
@@ -129,41 +113,41 @@ const onVerificationCodeFocusIn = () => {
   verificationCodeError.value = false
 }
 const onVerificationCodeFocusOut = () => {
-  verificationCodeError.value = !validateVerificationCode(myVerificationCode.value)
+  verificationCodeError.value = !utils.validateVerificationCode(myVerificationCode.value)
 }
 
-const coderepo = useFrontendVerifyStore()
-const user = useFrontendUserStore()
+const _coderepo = coderepo.useCodeRepoStore()
+const _user = user.useUserStore()
 const router = useRouter()
-const logined = useLocalUserStore()
+const logined = user.useLocalUserStore()
 const onSubmit = () => {
   if (accountError.value || verificationCodeError.value || oldVerificationCodeError.value) {
     return
   }
 
   switch (accountType.value) {
-    case AccountType.Email:
-      user.updateUser({
+    case appuserbase.SignMethodType.Email:
+      _user.updateUser({
         Account: oldAccount.value,
-        AccountType: oldAccountType.value as unknown as SignMethodType,
+        AccountType: oldAccountType.value,
         VerificationCode: oldVerificationCode.value,
         NewAccount: account.value,
-        NewAccountType: accountType.value as unknown as SignMethodType,
+        NewAccountType: accountType.value,
         NewVerificationCode: myVerificationCode.value,
         Message: {
           Error: {
-            Title: t('MSG_UPDATE_EMAIL'),
-            Message: t('MSG_UPDATE_EMAIL_FAIL'),
+            Title: 'MSG_UPDATE_EMAIL',
+            Message: 'MSG_UPDATE_EMAIL_FAIL',
             Popup: true,
-            Type: NotifyType.Error
+            Type: notify.NotifyType.Error
           }
         }
-      }, (u: User, error: boolean) => {
+      }, (error: boolean, u?: user.User) => {
         if (error) {
           return
         }
-        if (u.LoginAccountType === accountType.value as unknown as SignMethodType) {
-          user.logout({
+        if (u?.LoginAccountType === accountType.value) {
+          _user.logout({
             Token: logined.User?.LoginToken,
             Message: {}
           }, () => {
@@ -175,28 +159,28 @@ const onSubmit = () => {
         void router.push({ path: '/dashboard' })
       })
       break
-    case AccountType.Mobile:
-      user.updateUser({
+    case appuserbase.SignMethodType.Mobile:
+      _user.updateUser({
         Account: oldAccount.value,
-        AccountType: oldAccountType.value as unknown as SignMethodType,
+        AccountType: oldAccountType.value,
         VerificationCode: oldVerificationCode.value,
         NewAccount: account.value,
-        NewAccountType: accountType.value as unknown as SignMethodType,
+        NewAccountType: accountType.value,
         NewVerificationCode: myVerificationCode.value,
         Message: {
           Error: {
-            Title: t('MSG_UPDATE_MOBILE'),
-            Message: t('MSG_UPDATE_MOBILE_FAIL'),
+            Title: 'MSG_UPDATE_MOBILE',
+            Message: 'MSG_UPDATE_MOBILE_FAIL',
             Popup: true,
-            Type: NotifyType.Error
+            Type: notify.NotifyType.Error
           }
         }
-      }, (u: User, error: boolean) => {
+      }, (error: boolean, u?: user.User) => {
         if (error) {
           return
         }
-        if (u.LoginAccountType === accountType.value as unknown as SignMethodType) {
-          user.logout({
+        if (u?.LoginAccountType === accountType.value) {
+          _user.logout({
             Token: logined.User?.LoginToken,
             Message: {}
           }, () => {
@@ -218,7 +202,11 @@ const onSendCodeClick = () => {
   if (accountError.value) {
     return
   }
-  coderepo.sendVerificationCode(account.value, accountType.value, UsedFor.Update, account.value)
+  _coderepo.sendVerificationCode(
+    account.value,
+    accountType.value as unknown as appuserbase.SigninVerifyType,
+    basetypes.EventType.Update,
+    account.value)
 }
 
 </script>

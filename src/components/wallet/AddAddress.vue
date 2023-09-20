@@ -70,7 +70,7 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        :used-for='UsedFor.SetWithdrawAddress'
+        :used-for='basetypes.EventType.SetWithdrawAddress'
         @cancel='onCancelClick'
         show-cancel
       />
@@ -80,17 +80,13 @@
 
 <script setup lang='ts'>
 import { ref, defineAsyncComponent, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { UsedFor, AccountType, NotifyType, useFrontendUserAccountStore, SignMethodType, AccountUsedFor, useAdminAppCoinStore, Account } from 'npool-cli-v4'
+import { useraccount, basetypes, accountbase, notify, appcoin, appuserbase } from 'src/npoolstore'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const CodeVerifier = defineAsyncComponent(() => import('src/components/verifier/CodeVerifier.vue'))
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 
 interface Query {
   coinTypeID: string
@@ -106,8 +102,8 @@ const gotoWithdraw = computed(() => query.value.gotoWithdraw !== undefined)
 
 const selectedCoinTypeID = ref(coinTypeID.value)
 
-const coin = useAdminAppCoinStore()
-const needMemo = computed(() => coin.needMemo(selectedCoinTypeID.value))
+const coin = appcoin.useAppCoinStore()
+const needMemo = computed(() => coin.needMemo(undefined, selectedCoinTypeID.value))
 
 const address = ref('')
 const addressError = ref(false)
@@ -141,9 +137,8 @@ const onCancelClick = () => {
 }
 
 const account = ref('')
-const accountType = ref(AccountType.Email)
-
-const userAccount = useFrontendUserAccountStore()
+const accountType = ref(appuserbase.SignMethodType.Email)
+const userAccount = useraccount.useUserAccountStore()
 
 const submitting = ref(false)
 
@@ -153,21 +148,21 @@ const onCodeVerify = (code: string) => {
   userAccount.createUserAccount({
     CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
-    Account: accountType.value === AccountType.Google ? undefined as unknown as string : account.value,
+    Account: accountType.value === appuserbase.SignMethodType.Google ? undefined as unknown as string : account.value,
     Memo: _memo,
-    AccountType: accountType.value as unknown as SignMethodType,
+    AccountType: accountType.value as unknown as appuserbase.SignMethodType,
     VerificationCode: code,
     Labels: labels.value?.split(','),
-    UsedFor: AccountUsedFor.UserWithdraw,
+    UsedFor: accountbase.AccountUsedFor.UserWithdraw,
     Message: {
       Error: {
-        Title: t('MSG_SET_WITHDRAW_ADDRESS'),
-        Message: t('MSG_SET_WITHDRAW_ADDRESS_FAIL'),
+        Title: 'MSG_SET_WITHDRAW_ADDRESS',
+        Message: 'MSG_SET_WITHDRAW_ADDRESS_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (_:Account, error: boolean) => {
+  }, (error: boolean) => {
     if (error) {
       submitting.value = false
       onMenuHide()

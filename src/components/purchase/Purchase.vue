@@ -1,6 +1,6 @@
 <template>
   <div :class='[ showBalanceDialog ? "blur" : "" ]'>
-    <PurchasePage :good='good'>
+    <PurchasePage :good='(good as appgood.Good)'>
       <div class='info'>
         <h3 class='form-title'>
           {{ $t('MSG_PRODUCT_DETAILS') }}
@@ -24,16 +24,16 @@
           <div class='three-section'>
             <h4>{{ $t('MSG_MAINTENANCE_FEE') }}:</h4>
             <span class='number'>1.5</span>
-            <span class='unit'>{{ PriceCoinName }} / {{ $t('MSG_DAY') }}</span>
+            <span class='unit'>{{ constant.PriceCoinName }} / {{ $t('MSG_DAY') }}</span>
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-            <span class='number'>{{ formatTime(good?.StartAt, true) }}</span>
+            <span class='number'>{{ utils.formatTime(good?.StartAt as number, true) }}</span>
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_PRICE') }}:</h4>
-            <span class='number'>{{ appGood?.goodPrice(good) }}</span>
-            <span class='unit'>{{ PriceCoinName }}</span>
+            <span class='number'>{{ appGood?.priceFloat(undefined, good?.ID as string) }}</span>
+            <span class='unit'>{{ constant.PriceCoinName }}</span>
           </div>
           <div class='product-detail-text'>
             <div v-show='description'>
@@ -88,7 +88,7 @@
                 :selected='paymentCoin?.ID === myCoin?.ID'
               >
                 <!-- {{ myCoin?.Unit }} ({{ currency.formatCoinName(myCoin?.Name as string) }}) -->
-                {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : currency.formatCoinName(myCoin?.Name as string) }})
+                {{ myCoin?.Unit }} ({{ myCoin?.Name?.toLowerCase().includes('bitcoin') ? $t('MSG_BTC_INFO') : utils.formatCoinName(myCoin?.Name as string) }})
               </option>
             </select>
           </div>
@@ -157,20 +157,12 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  NotificationType,
-  formatTime,
-  useCoinStore,
-  PriceCoinName,
-  CoinDescriptionUsedFor,
-  useCurrencyStore
-} from 'npool-cli-v2'
 import { throttle } from 'quasar'
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ThrottleSeconds } from 'src/const/const'
-import { AppGood, General, NotifyType, Order, useAdminAppGoodStore, useFrontendGeneralStore, useFrontendOrderStore, useLocalUserStore } from 'npool-cli-v4'
+import { appgood, ledger, notify, order, user, appcoindescription, constant, coin, utils } from 'src/npoolstore'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
@@ -188,27 +180,26 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const goodID = computed(() => query.value.goodID)
 
-const appGood = useAdminAppGoodStore()
-const good = computed(() => appGood.getGoodByID(goodID.value) as AppGood)
+const appGood = appgood.useAppGoodStore()
+const good = computed(() => appGood.good(undefined, goodID.value))
 
-const currency = useCurrencyStore()
+const total = computed(() => Math.min(good.value?.PurchaseLimit as number, Number(good.value?.GoodSpotQuantity)))
 
-const total = computed(() => Math.min(good.value?.PurchaseLimit, Number(good.value?.Total)))
+const usedFor = ref(appcoindescription.CoinDescriptionUsedFor.ProductPage)
+const coindescription = appcoindescription.useCoinDescriptionStore()
+const _coin = coin.useCoinStore()
+const targetCoin = computed(() => _coin.coin(good.value?.CoinTypeID as string))
 
-const usedFor = ref(CoinDescriptionUsedFor.ProductDetail)
-const coin = useCoinStore()
-const targetCoin = computed(() => coin.getCoinByID(good.value?.CoinTypeID))
-
-const description = computed(() => coin.getCoinDescriptionByCoinUsedFor(good.value?.CoinTypeID, usedFor.value))
-const coins = computed(() => coin.Coins.filter((coin) => coin.ForPay && !coin.PreSale && coin.ENV === targetCoin.value?.ENV))
+const description = computed(() => coindescription.coinUsedForDescription(undefined, good.value?.CoinTypeID as string, usedFor.value))
+const coins = computed(() => _coin.coins().filter((coin) => coin.ForPay && !coin.Presale && coin.ENV === targetCoin.value?.ENV))
 
 const selectedCoinID = ref(undefined as unknown as string)
 const paymentCoin = computed({
   get: () => {
-    const myCoin = coin.getCoinByID(selectedCoinID.value)
+    const myCoin = _coin.coin(selectedCoinID.value)
     if (!myCoin) {
       for (const scoin of coins.value) {
-        if (scoin.Name?.toLowerCase().includes(PriceCoinName.toLowerCase())) {
+        if (scoin.Name?.toLowerCase().includes(constant.PriceCoinName.toLowerCase())) {
           return scoin
         }
       }
@@ -238,13 +229,14 @@ const submitting = ref(false)
 const router = useRouter()
 
 const showBalanceDialog = ref(false)
-const general = useFrontendGeneralStore()
+const logined = user.useLocalUserStore()
+const general = ledger.useLedgerStore()
 const balance = computed(() => {
-  return Number(general.getBalanceByID(paymentCoin.value?.ID as string))
+  return Number(general.coinBalance(undefined, logined.loginedUserID as string, paymentCoin.value?.ID as string))
 })
 
 const selectedCoinCurrency = ref(1)
-const totalAmount = computed(() => Number(good.value.Price) * purchaseAmount.value / selectedCoinCurrency.value)
+const totalAmount = computed(() => Number(good.value?.Price) * purchaseAmount.value / selectedCoinCurrency.value)
 const inputBalance = ref(0)
 
 const remainOrderAmount = computed(() => {
@@ -254,7 +246,6 @@ const remainOrderAmount = computed(() => {
   }
   return value
 })
-const logined = useLocalUserStore()
 
 const createOrder = () => {
   if (balance.value <= 0) {
@@ -290,22 +281,23 @@ const onPurchaseClick = throttle(() => {
 
 const getGenerals = (offset:number, limit: number) => {
   submitting.value = true
-  general.getGenerals({
+  general.getLedgers({
     Offset: offset,
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_GENERAL_FAIL'),
+        Title: t('MSG_GET_GENERAL'),
+        Message: t('MSG_GET_GENERAL_FAIL'),
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (error: boolean, g: Array<General>) => {
+  }, (error: boolean, g?: Array<ledger.Ledger>) => {
     submitting.value = false
     if (error) {
       return
     }
-    if (g.length < limit) {
+    if (!g?.length) {
       createOrder()
       return
     }
@@ -313,26 +305,27 @@ const getGenerals = (offset:number, limit: number) => {
   })
 }
 
-const odr = useFrontendOrderStore()
+const odr = order.useOrderStore()
 
 const onSubmit = throttle(() => {
   showBalanceDialog.value = false
   submitting.value = true
 
   odr.createOrder({
-    GoodID: goodID.value,
-    Units: purchaseAmount.value,
+    AppGoodID: goodID.value,
+    Units: purchaseAmount.value.toString(),
     PaymentCoinID: paymentCoin.value?.ID as string,
     PayWithBalanceAmount: `${inputBalance.value}`,
+    InvestmentType: order.InvestmentType.FullPayment,
     Message: {
       Error: {
-        Title: t('MSG_CREATE_ORDER'),
-        Message: t('MSG_CREATE_ORDER_FAIL'),
+        Title: 'MSG_CREATE_ORDER',
+        Message: 'MSG_CREATE_ORDER_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (o: Order, error: boolean) => {
+  }, (error: boolean, o?: order.Order) => {
     submitting.value = false
     if (error) {
       return
@@ -341,7 +334,7 @@ const onSubmit = throttle(() => {
     void router.push({
       path: '/extrapayment',
       query: {
-        orderId: o.ID
+        orderId: o?.ID
       }
     })
   })
@@ -353,10 +346,10 @@ onMounted(() => {
       GoodID: goodID.value,
       Message: {
         Error: {
-          Title: t('MSG_GET_GOOD'),
-          Message: t('MSG_GET_GOOD_FAIL'),
+          Title: 'MSG_GET_GOOD',
+          Message: 'MSG_GET_GOOD_FAIL',
           Popup: true,
-          Type: NotifyType.Error
+          Type: notify.NotifyType.Error
         }
       }
     }, () => {
@@ -365,13 +358,15 @@ onMounted(() => {
   }
 
   if (coins.value.length === 0) {
-    coin.getCoins({
+    _coin.getCoins({
+      Offset: 0,
+      Limit: 100,
       Message: {
         Error: {
-          Title: t('MSG_GET_COINS'),
-          Message: t('MSG_GET_COINS_FAIL'),
+          Title: 'MSG_GET_COINS',
+          Message: 'MSG_GET_COINS_FAIL',
           Popup: true,
-          Type: NotificationType.Error
+          Type: notify.NotifyType.Error
         }
       }
     }, () => {
@@ -380,24 +375,15 @@ onMounted(() => {
   }
 
   if (!description.value) {
-    coin.getCoinDescriptions({
+    coindescription.getCoinDescriptions({
+      Offset: 0,
+      Limit: 100,
       Message: {
         Error: {
-          Title: t('MSG_GET_COIN_DESCRIPTIONS'),
-          Message: t('MSG_GET_COIN_DESCRIPTIONS_FAIL'),
+          Title: 'MSG_GET_COIN_DESCRIPTIONS',
+          Message: 'MSG_GET_COIN_DESCRIPTIONS_FAIL',
           Popup: true,
-          Type: NotificationType.Error
-        }
-      }
-    })
-  }
-  if (coins.value.length === 0) {
-    coin.getCoins({
-      Message: {
-        Error: {
-          Title: t('MSG_GET_COINS_FAIL'),
-          Popup: true,
-          Type: NotificationType.Error
+          Type: notify.NotifyType.Error
         }
       }
     }, () => {

@@ -17,14 +17,14 @@
             />
             <label>{{ $t('MSG_BALANCE') }}</label>
             <div class='three-section' v-if='paymentCoin?.StableUSD'>
-              <span class='number'>{{ util.getLocaleString(balance) }}</span>
+              <span class='number'>{{ utils.getLocaleString(balance) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
             </div>
             <div class='three-section' v-else>
-              <span class='number'>{{ util.getLocaleString(general.getBalanceByID(coinTypeID)) }}</span>
+              <span class='number'>{{ utils.getLocaleString(general.coinBalance(undefined, logined.loginedUserID, coinTypeID)) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
               <span>&nbsp;({{ $t("MSG_APPROX") }}</span>
-              <span class='small number'>{{ util.getLocaleString(balance) }}</span>
+              <span class='small number'>{{ utils.getLocaleString(balance) }}</span>
               <span class='small unit'>USDT</span>
               <span>)</span>
             </div>
@@ -38,20 +38,20 @@
               :message='message'
               placeholder='MSG_AMOUNT_PLACEHOLDER'
               :min='1'
-              :max='total'
+              :max='purchaseLimit'
               @focus='onPurchaseAmountFocusIn'
               @blur='onPurchaseAmountFocusOut'
             />
             <label>{{ $t('MSG_DUE_AMOUNT') }}</label>
             <div class='three-section' v-if='paymentCoin?.StableUSD'>
-              <span class='number'>{{ util.getLocaleString(paymentAmount) }}</span>
+              <span class='number'>{{ utils.getLocaleString(paymentAmount) }}</span>
               <span class='unit'>USDT</span>
             </div>
             <div class='three-section' v-else>
-              <span class='number'>{{ util.getLocaleString(usdToOtherAmount) }}</span>
+              <span class='number'>{{ utils.getLocaleString(usdToOtherAmount) }}</span>
               <span class='unit'>{{ paymentCoin?.Unit }}</span>
               <span>&nbsp;(</span>
-              <span class='number small'>{{ util.getLocaleString(paymentAmount) }}</span>
+              <span class='number small'>{{ utils.getLocaleString(paymentAmount) }}</span>
               <span class='unit small'>USDT</span>
               <span>)</span>
             </div>
@@ -59,9 +59,9 @@
               <img src='font-awesome/warning.svg'>
               <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
             </div>
-            <div class='warning warning-pink' v-if='target?.Descriptions?.length > 2 && target?.Descriptions?.[2]?.length > 0'>
+            <div class='warning warning-pink' v-if='target?.Descriptions?.length && target?.Descriptions?.length > 2 && target?.Descriptions?.[2]?.length > 0'>
               <img src='font-awesome/warning.svg'>
-              <span v-html='$t(target.Descriptions?.[2])' />
+              <span v-html='$t(target?.Descriptions?.[2])' />
             </div>
             <div class='warning warning-pink' v-if='insufficientFunds'>
               <img src='font-awesome/warning.svg'>
@@ -72,7 +72,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='!target?.EnablePurchase || !good.haveSale(target) || purchaseLimitable || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
+                :disabled='!target?.EnablePurchase || !good.canBuy(undefined, target?.ID) || purchaseLimited || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -86,21 +86,7 @@
 </template>
 
 <script setup lang='ts'>
-
-import {
-  useFrontendOrderStore,
-  NotifyType,
-  Order,
-  useFrontendGeneralStore,
-  General,
-  useAdminAppGoodStore,
-  AppGood,
-  useAdminAppCoinStore,
-  AppCoin,
-  useAdminCurrencyStore,
-  useLocaleStringStore,
-  CoinCurrency
-} from 'npool-cli-v4'
+import { order, notify, ledger, appgood, appcoin, coincurrency, utils, user, coincurrencybase } from 'src/npoolstore'
 import { defineAsyncComponent, onMounted, ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -125,38 +111,41 @@ const query = computed(() => route.query as unknown as Query)
 const goodID = computed(() => query.value.goodID)
 const coinTypeID = ref(query.value.coinTypeID)
 
-const util = useLocaleStringStore()
+const coin = appcoin.useAppCoinStore()
+const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
+const paymentCoin = computed(() => coin.coin(undefined, coinTypeID.value))
 
-const coin = useAdminAppCoinStore()
-const coins = computed(() => coin.getAvailableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
-const paymentCoin = computed(() => coin.getCoinByID(coinTypeID.value))
+const good = appgood.useAppGoodStore()
+const target = computed(() => good.good(undefined, goodID.value))
+const purchaseLimit = computed(() => good.purchaseLimit(undefined, target.value?.ID as string))
+const logined = user.useLocalUserStore()
 
-const good = useAdminAppGoodStore()
-const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
-const total = computed(() => good.getPurchaseLimit(target.value))
-
-const order = useFrontendOrderStore()
-const purchaseLimitable = computed(() => order.getPurchasedAmount(goodID.value) >= Number(target?.value?.UserPurchaseLimit) || (order.getPurchasedAmount(goodID.value) + Number(purchaseAmount.value)) > Number(target?.value?.UserPurchaseLimit))
+const _order = order.useOrderStore()
+const purchaseLimited = computed(() => {
+  const purchasedUnits = _order.purchasedUnits(undefined, logined.loginedUserID as string, target.value?.CoinTypeID as string, goodID.value)
+  return purchasedUnits >= Number(target?.value?.UserPurchaseLimit) ||
+        (purchasedUnits + Number(purchaseAmount.value)) > Number(target?.value?.UserPurchaseLimit)
+})
 
 const selectedCoinCurrency = ref(1) // 币种汇率
-const general = useFrontendGeneralStore()
-const balance = computed(() => parseFloat((Number(general.getBalanceByID(coinTypeID.value)) * selectedCoinCurrency.value).toFixed(4)))
+const general = ledger.useLedgerStore()
+const balance = computed(() => parseFloat((Number(general.coinBalance(undefined, logined.loginedUserID as string, coinTypeID.value)) * selectedCoinCurrency.value).toFixed(4)))
 
 const purchaseAmount = ref(query.value.purchaseAmount) // 购买数量
-const paymentAmount = computed(() => Number(good.getPrice(goodID.value)) * purchaseAmount.value) // 支付金额
+const paymentAmount = computed(() => Number(good.priceFloat(undefined, goodID.value)) * purchaseAmount.value) // 支付金额
 const usdToOtherAmount = computed(() => parseFloat((Math.ceil(paymentAmount.value / selectedCoinCurrency.value * 10000) / 10000).toFixed(4)))
 const usedToOtherAmountISNaN = computed(() => isNaN(usdToOtherAmount.value))
 const insufficientFunds = computed(() => balance.value < paymentAmount.value)
 
 const message = computed(() => {
-  if (purchaseAmount.value <= 0 || purchaseAmount.value > total.value) {
-    return t('MSG_AMOUNT_TIP', { MAX: total.value })
+  if (purchaseAmount.value <= 0 || purchaseAmount.value > purchaseLimit.value) {
+    return t('MSG_AMOUNT_TIP', { MAX: purchaseLimit.value })
   }
   if (purchaseAmount.value?.toString().includes('.')) {
     return t('MSG_NOT_SUPPORT_FLOAT_VALUE')
   }
-  if (purchaseLimitable.value) {
-    return t('MSG_USER_TOTAL_PURCHASE_LIMIT', { MAX: parseFloat(target.value?.UserPurchaseLimit) })
+  if (purchaseLimited.value) {
+    return t('MSG_USER_TOTAL_PURCHASE_LIMIT', { MAX: parseFloat(target.value?.UserPurchaseLimit || '0') })
   }
   return ''
 })
@@ -166,7 +155,10 @@ const onPurchaseAmountFocusIn = () => {
   purchaseAmountError.value = false
 }
 const onPurchaseAmountFocusOut = () => {
-  purchaseAmountError.value = purchaseAmount.value <= 0 || purchaseAmount.value > total.value || purchaseAmount.value?.toString().includes('.') || purchaseLimitable.value
+  purchaseAmountError.value = purchaseAmount.value <= 0 ||
+                              purchaseAmount.value > purchaseLimit.value ||
+                              purchaseAmount.value?.toString().includes('.') ||
+                              purchaseLimited.value
 }
 
 const submitting = ref(false)
@@ -176,25 +168,26 @@ const onPurchaseClick = () => {
     return
   }
   submitting.value = true
-  order.createOrder({
-    GoodID: goodID.value,
+  _order.createOrder({
+    AppGoodID: goodID.value,
     Units: `${purchaseAmount.value}`,
     PaymentCoinID: coinTypeID.value,
     PayWithBalanceAmount: `${usdToOtherAmount.value}`,
+    InvestmentType: order.InvestmentType.FullPayment,
     Message: {
       Error: {
-        Title: t('MSG_CREATE_ORDER'),
-        Message: t('MSG_CREATE_ORDER_FAIL'),
+        Title: 'MSG_CREATE_ORDER',
+        Message: 'MSG_CREATE_ORDER_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (o: Order, error: boolean) => {
+  }, (error: boolean) => {
     submitting.value = false
     if (error) {
       return
     }
-    order.$reset()
+    _order.$reset()
     general.$reset()
     void router.push({
       path: '/dashboard'
@@ -206,20 +199,20 @@ const goWallet = () => {
   void router.push({ path: '/wallet' })
 }
 
-const currency = useAdminCurrencyStore()
+const currency = coincurrency.useCurrencyStore()
 
 // 币种汇率优先级
 const setCurrency = () => {
-  if (coin.stableCoin(coinTypeID.value)) {
+  if (coin.stableUSD(undefined, coinTypeID.value)) {
     selectedCoinCurrency.value = 1
     return
   }
-  if (coin.haveCurrency(coinTypeID.value)) {
-    selectedCoinCurrency.value = coin.getCurrency(coinTypeID.value)
+  if (coin.getCurrency(undefined, coinTypeID.value) > 0) {
+    selectedCoinCurrency.value = coin.getCurrency(undefined, coinTypeID.value)
     return
   }
-  if (currency.haveCurrency(coinTypeID.value)) {
-    selectedCoinCurrency.value = parseFloat(currency.getCurrency(coinTypeID.value)?.MarketValueLow as string)
+  if (currency.currency(coinTypeID.value) > 0) {
+    selectedCoinCurrency.value = currency.currency(coinTypeID.value)
     return
   }
   selectedCoinCurrency.value = undefined as unknown as number // can't buy
@@ -230,7 +223,7 @@ watch(coinTypeID, () => {
 })
 
 onMounted(() => {
-  if (general.Generals.Generals.length === 0) {
+  if (!general.ledgers(undefined, logined.loginedUserID).length) {
     getGenerals(0, 100)
   }
   if (!target.value) {
@@ -238,10 +231,10 @@ onMounted(() => {
       GoodID: goodID.value,
       Message: {
         Error: {
-          Title: t('MSG_GET_GOOD'),
-          Message: t('MSG_GET_GOOD_FAIL'),
+          Title: 'MSG_GET_GOOD',
+          Message: 'MSG_GET_GOOD_FAIL',
           Popup: true,
-          Type: NotifyType.Error
+          Type: notify.NotifyType.Error
         }
       }
     }, () => {
@@ -250,7 +243,7 @@ onMounted(() => {
     })
   }
 
-  if (coin.AppCoins.AppCoins.length === 0) {
+  if (!coin.coins(undefined).length) {
     getCoins(0, 100)
   }
 
@@ -258,12 +251,12 @@ onMounted(() => {
     setCurrency()
   }
 
-  if (currency.Currencies.Currencies.length === 0) {
+  if (!currency.currencies().length) {
     getCurrencies(0, 500)
   }
 
-  order.$reset()
-  if (order.Orders.Orders.length === 0) {
+  _order.$reset()
+  if (!_order.orders(undefined, logined.loginedUserID).length) {
     getOrders(0, 500)
   }
 
@@ -271,18 +264,19 @@ onMounted(() => {
 })
 
 const getOrders = (offset:number, limit: number) => {
-  order.getOrders({
+  _order.getOrders({
     Offset: offset,
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_ORDERS_FAIL'),
+        Title: 'MSG_GET_ORDERS',
+        Message: 'MSG_GET_ORDERS_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (rows: Array<Order>, error: boolean) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<order.Order>) => {
+    if (error || !rows?.length) {
       return
     }
     getOrders(offset + limit, limit)
@@ -290,18 +284,19 @@ const getOrders = (offset:number, limit: number) => {
 }
 
 const getGenerals = (offset:number, limit: number) => {
-  general.getGenerals({
+  general.getLedgers({
     Offset: offset,
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_GENERAL_FAIL'),
+        Title: t('MSG_GET_GENERAL'),
+        Message: t('MSG_GET_GENERAL_FAIL'),
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (error: boolean, rows: Array<General>) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<ledger.Ledger>) => {
+    if (error || !rows?.length) {
       return
     }
     getGenerals(limit + offset, limit)
@@ -313,14 +308,14 @@ const getCoins = (offset: number, limit: number) => {
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_COINS'),
-        Message: t('MSG_GET_COINS_FAIL'),
+        Title: 'MSG_GET_COINS',
+        Message: 'MSG_GET_COINS_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (error: boolean, rows: Array<AppCoin>) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<appcoin.AppCoin>) => {
+    if (error || !rows?.length) {
       if (!error) setCurrency()
       return
     }
@@ -333,7 +328,7 @@ const getCurrencies = (offset: number, limit: number) => {
     Offset: offset,
     Limit: limit,
     Message: {}
-  }, (error: boolean, rows: Array<CoinCurrency>) => {
+  }, (error: boolean, rows: Array<coincurrencybase.CoinCurrency>) => {
     if (error || rows.length <= 0) {
       if (!error) setCurrency()
       return

@@ -7,7 +7,7 @@
       </h3>
     </div>
     <h4 class='price'>
-      <span>{{ good.Price }}</span> {{ PriceCoinName }} / {{ $t(good.Unit) }}
+      <span>{{ good.Price }}</span> {{ constant.PriceCoinName }} / {{ $t(good.Unit) }}
     </h4>
     <div class='line'>
       <span class='label'>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</span>
@@ -31,7 +31,7 @@
 
     <div class='line'>
       <span class='label'>{{ $t('MSG_ORDER_EFFECTIVE') }}:</span>
-      <span class='value'>{{ formatTime(good.StartAt, true) }}</span>
+      <span class='value'>{{ utils.formatTime(good.StartAt, true) }}</span>
     </div>
     <button class='alt' @click='onPurchaseClick'>
       {{ $t('MSG_PURCHASE') }}
@@ -41,20 +41,19 @@
 
 <script setup lang='ts'>
 import { defineProps, toRef, computed, onMounted } from 'vue'
-import { formatTime, PriceCoinName } from 'npool-cli-v2'
 import { useRouter } from 'vue-router'
-import { AppGood, useAdminAppCoinStore } from 'npool-cli-v4'
+import { appgood, appcoin, utils, constant } from 'src/npoolstore'
 import { getCoins } from 'src/api/chain'
 
 interface Props {
-  good: AppGood
+  good: appgood.Good
 }
 
 const props = defineProps<Props>()
 const good = toRef(props, 'good')
 
-const coin = useAdminAppCoinStore()
-const productInfo = computed(() => coin.getProductPage(good.value?.CoinTypeID))
+const coin = appcoin.useAppCoinStore()
+const productInfo = computed(() => coin.productPage(undefined, good.value?.CoinTypeID))
 
 const router = useRouter()
 const onPurchaseClick = () => {
@@ -72,7 +71,7 @@ const onPurchaseClick = () => {
 }
 
 onMounted(() => {
-  if (coin.AppCoins.AppCoins.length === 0) {
+  if (!coin.coins(undefined).length) {
     getCoins(0, 100)
   }
 })

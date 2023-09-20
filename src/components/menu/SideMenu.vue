@@ -23,15 +23,15 @@ import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
 import { BaseMenu, MenuItem } from 'src/menus/menus'
 import { computed } from 'vue'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { user } from 'src/npoolstore'
 
 const setting = useSettingStore()
-const user = useLocalUserStore()
+const logined = user.useLocalUserStore()
 
 const router = useRouter()
 
 const showMenu = (menu: MenuItem) => {
-  if (menu.label === 'MSG_REFERRAL' && !user.isKol) {
+  if (menu.label === 'MSG_REFERRAL' && !logined.isKol) {
     return false
   }
   if (menu.label === 'MSG_ALEO_PURCHASE') {

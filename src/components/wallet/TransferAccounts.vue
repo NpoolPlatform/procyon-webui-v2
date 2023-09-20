@@ -21,7 +21,7 @@
     <template #table-body='myProps'>
       <q-tr :props='myProps'>
         <q-td key='TargetUsername' :props='myProps'>
-          {{ baseuser.displayName1(myProps.row.TargetEmailAddress, myProps.row.TargetPhoneNO, myProps.row.TargetFirstName, myProps.row.TargetLastName, locale as string) }}
+          {{ baseuser.displayName(myProps.row.TargetEmailAddress, myProps.row.TargetPhoneNO, myProps.row.TargetFirstName, myProps.row.TargetLastName, locale as string) }}
         </q-td>
         <q-td key='TargetEmailAddress' :props='myProps'>
           {{ myProps.row.TargetEmailAddress }}
@@ -74,7 +74,7 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, ref } from 'vue'
-import { NotifyType, TransferAccount, useBaseUserStore, useFrontendTransferAccountStore } from 'npool-cli-v4'
+import { transferaccount, user, notify } from 'src/npoolstore'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -82,22 +82,23 @@ const { locale, t } = useI18n({ useScope: 'global' })
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 
-const baseuser = useBaseUserStore()
+const baseuser = user.useUserStore()
+const logined = user.useLocalUserStore()
 
-const transferAccount = useFrontendTransferAccountStore()
-const transfers = computed(() => transferAccount.TransferAccounts.TransferAccounts)
+const transferAccount = transferaccount.useTransferAccountStore()
+const transfers = computed(() => transferAccount.transferAccounts(undefined, logined.loginedUserID))
 
 const showing = ref(false)
-const target = ref({} as TransferAccount)
+const target = ref({} as transferaccount.TransferAccount)
 
-const onDeleteTransferAddressClick = (row: TransferAccount) => {
+const onDeleteTransferAddressClick = (row: transferaccount.TransferAccount) => {
   target.value = { ...row }
   showing.value = true
 }
 
 const onMenuHide = () => {
   showing.value = false
-  target.value = {} as TransferAccount
+  target.value = {} as transferaccount.TransferAccount
 }
 
 const onCancelClick = () => {
@@ -109,9 +110,9 @@ const onDeleteClick = () => {
     TransferID: target.value.ID,
     Message: {
       Error: {
-        Title: t('MSG_DELETE_TRANSFER_ACCOUNT_FAIL'),
+        Title: 'MSG_DELETE_TRANSFER_ACCOUNT_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, () => {
@@ -129,19 +130,19 @@ const table = computed(() => [
     name: 'TargetUsername',
     label: t('MSG_TARGET_USERNAME'),
     align: 'left',
-    field: (row: TransferAccount) => baseuser.displayName1(row.TargetEmailAddress, row.TargetPhoneNO, row.TargetFirstName, row.TargetLastName, locale.value as string)
+    field: (row: transferaccount.TransferAccount) => baseuser.displayName(row.TargetEmailAddress, row.TargetPhoneNO, row.TargetFirstName, row.TargetLastName, locale.value as string)
   },
   {
     name: 'TargetEmailAddress',
     label: t('MSG_TARGET_EMAIL_ADDRESS'),
     align: 'center',
-    field: (row: TransferAccount) => row.TargetEmailAddress
+    field: (row: transferaccount.TransferAccount) => row.TargetEmailAddress
   },
   {
     name: 'TargetPhoneNO',
     label: t('MSG_TARGET_PHONENO'),
     align: 'center',
-    field: (row: TransferAccount) => row.TargetPhoneNO
+    field: (row: transferaccount.TransferAccount) => row.TargetPhoneNO
   },
   {
     name: 'ActionButtons',

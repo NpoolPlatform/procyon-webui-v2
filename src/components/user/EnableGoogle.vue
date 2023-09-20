@@ -31,26 +31,18 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  NotifyType,
-  useLocalUserStore,
-  useFrontendGoogleAuthStore
-} from 'npool-cli-v4'
+import { notify, user, googleauth } from 'src/npoolstore'
 import { AppID } from 'src/const/const'
 import { onMounted, computed, defineAsyncComponent } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
-const user = useLocalUserStore()
-const ga = useFrontendGoogleAuthStore()
-const googleToken = computed(() => user.User.GoogleOTPAuth)
-const googleSecret = computed(() => user.User.GoogleSecret)
+const logined = user.useLocalUserStore()
+const ga = googleauth.useGoogleAuthStore()
+const googleToken = computed(() => logined.user()?.GoogleOTPAuth)
+const googleSecret = computed(() => logined.user()?.GoogleSecret)
 
 const router = useRouter()
 
@@ -63,16 +55,16 @@ const onCloseClick = () => {
 }
 
 onMounted(() => {
-  if (user.User.GoogleSecret.length === 0) {
+  if (googleSecret.value?.length) {
     ga.setupGoogleAuth({
       AppID: AppID,
-      UserID: user.User.ID,
+      UserID: logined.loginedUserID as string,
       Message: {
         Error: {
-          Title: t('MSG_SETUP_GOOGLE_AUTHENTICATION'),
-          Message: t('MSG_SETUP_GOOGLE_AUTHENTICATION_FAIL'),
+          Title: 'MSG_SETUP_GOOGLE_AUTHENTICATION',
+          Message: 'MSG_SETUP_GOOGLE_AUTHENTICATION_FAIL',
           Popup: true,
-          Type: NotifyType.Error
+          Type: notify.NotifyType.Error
         }
       }
     }, () => {

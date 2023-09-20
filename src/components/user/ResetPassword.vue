@@ -23,20 +23,20 @@
     </template>
     <template #form-body>
       <PhoneNO
-        v-if='signupMethod === AccountType.Mobile'
+        v-if='signupMethod === appuserbase.SignMethodType.Mobile'
         v-model:value='phoneNO'
         :error='accountError'
-        :required='signupMethod === AccountType.Mobile'
+        :required='signupMethod === appuserbase.SignMethodType.Mobile'
         @focus='onPhoneNOFocusIn'
         @blur='onPhoneNOFocusOut'
       />
       <Input
-        v-if='signupMethod === AccountType.Email'
+        v-if='signupMethod === appuserbase.SignMethodType.Email'
         v-model:value='emailAddress'
         label='MSG_EMAIL_ADDRESS'
         type='email'
         id='email'
-        :required='signupMethod === AccountType.Email'
+        :required='signupMethod === appuserbase.SignMethodType.Email'
         :error='accountError'
         message='MSG_EMAIL_TIP'
         placeholder='MSG_EMAIL_PLACEHOLDER'
@@ -46,7 +46,7 @@
       <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
       <Input
         v-model:value='verificationCode'
-        :label='signupMethod === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
+        :label='signupMethod === appuserbase.SignMethodType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
         type='text'
         id='ver-code'
         required
@@ -89,32 +89,17 @@
 
 <script setup lang='ts'>
 import { defineAsyncComponent, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import {
-  AccountType,
-  NotifyType,
-  SignMethodType,
-  useFrontendUserStore,
-  UsedFor,
-  useFrontendVerifyStore,
-  validateEmailAddress,
-  validatePassword,
-  validateMobileNO,
-  validateVerificationCode,
-  encryptPassword
-} from 'npool-cli-v4'
+import { appuserbase, notify, user, coderepo, utils, basetypes } from 'src/npoolstore'
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
 const accountError = ref(false)
 const onAccountError = () => {
-  accountError.value = signupMethod.value === AccountType.Email ? !validateEmailAddress(emailAddress.value) : !validateMobileNO(phoneNO.value)
+  accountError.value = signupMethod.value === appuserbase.SignMethodType.Email
+    ? !utils.validateEmailAddress(emailAddress.value) : !utils.validateMobileNO(phoneNO.value)
 }
 
 const phoneNO = ref('')
@@ -139,7 +124,7 @@ const onVerificationCodeFocusIn = () => {
   verificationCodeError.value = false
 }
 const onVerificationCodeFocusOut = () => {
-  verificationCodeError.value = !validateVerificationCode(verificationCode.value)
+  verificationCodeError.value = !utils.validateVerificationCode(verificationCode.value)
 }
 
 const password = ref('')
@@ -148,7 +133,7 @@ const onPasswordFocusIn = () => {
   pwdError.value = false
 }
 const onPasswordFocusOut = () => {
-  pwdError.value = !validatePassword(password.value)
+  pwdError.value = !utils.validatePassword(password.value)
 }
 
 const confirmPassword = ref('')
@@ -157,10 +142,10 @@ const onConfirmPasswordFocusIn = () => {
   confirmPwdError.value = false
 }
 const onConfirmPasswordFocusOut = () => {
-  confirmPwdError.value = !validatePassword(confirmPassword.value) || confirmPassword.value !== password.value
+  confirmPwdError.value = !utils.validatePassword(confirmPassword.value) || confirmPassword.value !== password.value
 }
 
-const signupMethod = ref(AccountType.Email)
+const signupMethod = ref(appuserbase.SignMethodType.Email)
 
 const loginWithEmail = ref(true)
 const onSwitcherClick = (flag: boolean) => {
@@ -169,18 +154,18 @@ const onSwitcherClick = (flag: boolean) => {
   }
   loginWithEmail.value = flag
   switch (signupMethod.value) {
-    case AccountType.Email:
-      signupMethod.value = AccountType.Mobile
+    case appuserbase.SignMethodType.Email:
+      signupMethod.value = appuserbase.SignMethodType.Mobile
       break
-    case AccountType.Mobile:
-      signupMethod.value = AccountType.Email
+    case appuserbase.SignMethodType.Mobile:
+      signupMethod.value = appuserbase.SignMethodType.Email
       break
   }
   accountError.value = false
 }
 
-const coderepo = useFrontendVerifyStore()
-const user = useFrontendUserStore()
+const _coderepo = coderepo.useCodeRepoStore()
+const _user = user.useUserStore()
 const router = useRouter()
 
 const onSubmit = () => {
@@ -193,18 +178,18 @@ const onSubmit = () => {
     return
   }
 
-  const account = signupMethod.value === AccountType.Email ? emailAddress.value : phoneNO.value
-  user.resetUser({
+  const account = signupMethod.value === appuserbase.SignMethodType.Email ? emailAddress.value : phoneNO.value
+  _user.resetUser({
     Account: account,
-    AccountType: signupMethod.value as unknown as SignMethodType,
+    AccountType: signupMethod.value,
     VerificationCode: verificationCode.value,
-    PasswordHash: encryptPassword(password.value),
+    PasswordHash: utils.encryptPassword(password.value),
     Message: {
       Error: {
-        Title: t('MSG_RESET_PASSWORD'),
-        Message: t('MSG_RESET_PASSWORD_FAIL'),
+        Title: 'MSG_RESET_PASSWORD',
+        Message: 'MSG_RESET_PASSWORD_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, (error: boolean) => {
@@ -223,8 +208,8 @@ const onSendCodeClick = () => {
     return
   }
 
-  const account = signupMethod.value === AccountType.Email ? emailAddress.value : phoneNO.value
-  coderepo.sendVerificationCode(account, signupMethod.value, UsedFor.Update, account)
+  const account = signupMethod.value === appuserbase.SignMethodType.Email ? emailAddress.value : phoneNO.value
+  _coderepo.sendVerificationCode(account, signupMethod.value as unknown as appuserbase.SigninVerifyType, basetypes.EventType.Update, account)
 }
 
 </script>

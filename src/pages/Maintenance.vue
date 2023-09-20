@@ -24,10 +24,8 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, watch, ref, Component, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NotifyType, useFrontendAppStore } from 'npool-cli-v4'
+import { app, notify } from 'src/npoolstore'
 import lightLogo from 'src/assets/procyon-light.svg'
-import { useLocalAppStore } from 'src/localstore/app'
-import { AppID } from 'src/const/const'
 import { useRouter } from 'vue-router'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -44,21 +42,19 @@ onMounted(() => {
   Maintenance.value = defineAsyncComponent(() => import(`src/pages/maintenance/${locale.value}/Maintenance.vue`))
 })
 
-const app = useLocalAppStore()
-const application = useFrontendAppStore()
+const _app = app.useApplicationStore()
 
 const getApplication = () => {
-  application.getApp({
-    AppID: AppID,
+  _app.getApp({
     Message: {
       Error: {
         Title: t('MSG_GET_APP_FAIL'),
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, () => {
-    app.setApp(application.App)
+    // TODO
   })
 }
 

@@ -18,8 +18,7 @@
 <script setup lang='ts'>
 import { defineProps, toRef, withDefaults, ref, defineEmits } from 'vue'
 import Compressor from 'compressorjs'
-import { NotificationType, useNotificationStore } from 'npool-cli-v2'
-import { useI18n } from 'vue-i18n'
+import { notify } from 'src/npoolstore'
 
 import addImage from 'src/assets/icon-plus.svg'
 
@@ -36,12 +35,9 @@ const props = withDefaults(defineProps<Props>(), {
 const src = toRef(props, 'src')
 const updatable = toRef(props, 'updatable')
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
 const selectImgFile = ref<HTMLDivElement>()
 type Base64Handler = (base64: string) => void
-const notification = useNotificationStore()
+const notification = notify.useNotificationStore()
 
 const toBase64 = (filename: File, onLoaded: Base64Handler) => {
   const maxSize = 4000000
@@ -52,10 +48,11 @@ const toBase64 = (filename: File, onLoaded: Base64Handler) => {
       const reader = new FileReader()
       reader.onloadend = () => {
         if ((reader.result as string).length > maxSize) {
-          notification.Notifications.push({
-            Title: t('MSG_COMPRESS_IMAGE_FAIL'),
+          notification.pushNotification({
+            Title: 'MSG_COMPRESS_IMAGE',
+            Message: 'MSG_COMPRESS_IMAGE_FAIL',
             Popup: true,
-            Type: NotificationType.Error
+            Type: notify.NotifyType.Error
           })
           return
         }
@@ -64,11 +61,12 @@ const toBase64 = (filename: File, onLoaded: Base64Handler) => {
       reader.readAsDataURL(result)
     },
     error (err: Error) {
-      notification.Notifications.push({
-        Title: t('MSG_COMPRESS_IMAGE_FAIL'),
+      notification.pushNotification({
+        Title: 'MSG_COMPRESS_IMAGE',
+        Message: 'MSG_COMPRESS_IMAGE_FAIL',
         Description: err.message,
         Popup: true,
-        Type: NotificationType.Error
+        Type: notify.NotifyType.Error
       })
     }
   })

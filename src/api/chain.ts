@@ -1,41 +1,41 @@
-import { AppCoin, CoinDescription, CoinCurrency, useAdminAppCoinStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
+import { appcoin, appcoindescription, coincurrency, coincurrencybase } from 'src/npoolstore'
 
-const coin = useAdminAppCoinStore()
+const coin = appcoin.useAppCoinStore()
 
 export const getCoins = (offset: number, limit: number) => {
   coin.getAppCoins({
     Offset: offset,
     Limit: limit,
     Message: {}
-  }, (error: boolean, rows: Array<AppCoin>) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<appcoin.AppCoin>) => {
+    if (error || !rows?.length) {
       return
     }
     getCoins(offset + limit, limit)
   })
 }
 
-const description = useAdminCoinDescriptionStore()
+const description = appcoindescription.useCoinDescriptionStore()
 export const getDescriptions = (offset: number, limit: number) => {
   description.getCoinDescriptions({
     Offset: offset,
     Limit: limit,
     Message: {}
-  }, (error: boolean, rows: Array<CoinDescription>) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<appcoindescription.CoinDescription>) => {
+    if (error || !rows?.length) {
       return
     }
     getDescriptions(offset + limit, limit)
   })
 }
 
-const currency = useAdminCurrencyStore()
+const currency = coincurrency.useCurrencyStore()
 export const getCurrencies = (offset: number, limit: number) => {
   currency.getCurrencies({
     Offset: offset,
     Limit: limit,
     Message: {}
-  }, (error: boolean, rows: Array<CoinCurrency>) => {
+  }, (error: boolean, rows: Array<coincurrencybase.CoinCurrency>) => {
     if (error || rows.length <= 0) {
       return
     }

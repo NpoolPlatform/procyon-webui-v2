@@ -10,50 +10,50 @@
 <script setup lang='ts'>
 import { computed, onMounted, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NotifyType, useFrontendUserStore, LoginHistory, formatTime } from 'npool-cli-v4'
+import { user, notify, utils } from 'src/npoolstore'
 
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const user = useFrontendUserStore()
-const histories = computed(() => user.loginHistories)
+const _user = user.useUserStore()
+const histories = computed(() => _user.loginHistories)
 
 const table = computed(() => [
   {
     name: 'Date',
     label: t('MSG_DATE'),
     align: 'left',
-    field: (row: LoginHistory) => formatTime(row.CreatedAt)
+    field: (row: user.LoginHistory) => utils.formatTime(row.CreatedAt)
   },
   {
     name: 'IP Addr',
     label: t('MSG_IP_ADDRESS'),
     align: 'center',
-    field: (row: LoginHistory) => row.ClientIP
+    field: (row: user.LoginHistory) => row.ClientIP
   },
   {
     name: 'Location',
     label: t('MSG_LOCATION'),
     align: 'center',
-    field: (row: LoginHistory) => row.Location
+    field: (row: user.LoginHistory) => row.Location
   }
 ])
 
 const getHistory = (offset: number, limit: number) => {
-  user.getLoginHistories({
+  _user.getLoginHistories({
     Offset: offset,
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_LOGIN_HISTORIES_FAIL'),
+        Title: 'MSG_GET_LOGIN_HISTORIES_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (histories: Array<LoginHistory>) => {
-    if (histories.length === 0) {
+  }, (error: boolean, histories?: Array<user.LoginHistory>) => {
+    if (error || !histories?.length) {
       return
     }
     getHistory(offset + limit, limit)
@@ -61,7 +61,7 @@ const getHistory = (offset: number, limit: number) => {
 }
 
 onMounted(() => {
-  if (user.History.LoginHistories.length <= 0) {
+  if (!_user.loginHistories) {
     getHistory(0, 100)
   }
 })

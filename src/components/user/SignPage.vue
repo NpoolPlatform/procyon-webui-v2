@@ -22,16 +22,16 @@
       </div>
     </template>
     <template #form-body>
-      <div v-show='signupMethod === AccountType.Mobile'>
+      <div v-show='signupMethod === appuserbase.SignMethodType.Mobile'>
         <PhoneNO
           v-model:value='phoneNO' :error='accountError' @focus='onPhoneNOFocusIn' @blur='onPhoneNOFocusOut'
-          :required='signupMethod === AccountType.Mobile'
+          :required='signupMethod === appuserbase.SignMethodType.Mobile'
         />
       </div>
-      <div v-show='signupMethod === AccountType.Email'>
+      <div v-show='signupMethod === appuserbase.SignMethodType.Email'>
         <Input
           v-model:value='emailAddress' label='MSG_EMAIL_ADDRESS' type='email' id='email'
-          :required='signupMethod === AccountType.Email' :error='accountError' message='MSG_EMAIL_TIP'
+          :required='signupMethod === appuserbase.SignMethodType.Email' :error='accountError' message='MSG_EMAIL_TIP'
           placeholder='MSG_EMAIL_PLACEHOLDER' @focus='onEmailFocusIn' @blur='onEmailFocusOut'
         />
       </div>
@@ -51,12 +51,7 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  validateEmailAddress,
-  validatePassword,
-  validateMobileNO
-} from 'npool-cli-v2'
-import { AccountType } from 'npool-cli-v4'
+import { utils, appuserbase } from 'src/npoolstore'
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted } from 'vue'
 
 interface Props {
@@ -89,7 +84,7 @@ const onPhoneNOFocusIn = () => {
   accountError.value = false
 }
 const onPhoneNOFocusOut = () => {
-  accountError.value = !validateMobileNO(phoneNO.value)
+  accountError.value = !utils.validateMobileNO(phoneNO.value)
 }
 
 const emailAddress = ref('')
@@ -97,7 +92,7 @@ const onEmailFocusIn = () => {
   accountError.value = false
 }
 const onEmailFocusOut = () => {
-  accountError.value = !validateEmailAddress(emailAddress.value)
+  accountError.value = !utils.validateEmailAddress(emailAddress.value)
 }
 
 const myPassword = ref('')
@@ -106,7 +101,7 @@ const onPasswordFocusIn = () => {
   pwdError.value = false
 }
 const onPasswordFocusOut = () => {
-  pwdError.value = !validatePassword(myPassword.value)
+  pwdError.value = !utils.validatePassword(myPassword.value)
 }
 
 const emit = defineEmits<{(e: 'update:accountType', type: string): void;
@@ -116,7 +111,7 @@ const emit = defineEmits<{(e: 'update:accountType', type: string): void;
   (e: 'submit'): void;
 }>()
 
-const signupMethod = ref(AccountType.Email)
+const signupMethod = ref(appuserbase.SignMethodType.Email)
 
 const onSwitcherClick = (flag: boolean) => {
   if (flag === loginWithEmail.value) {
@@ -124,11 +119,11 @@ const onSwitcherClick = (flag: boolean) => {
   }
   loginWithEmail.value = flag
   switch (signupMethod.value) {
-    case AccountType.Email:
-      signupMethod.value = AccountType.Mobile
+    case appuserbase.SignMethodType.Email:
+      signupMethod.value = appuserbase.SignMethodType.Mobile
       break
-    case AccountType.Mobile:
-      signupMethod.value = AccountType.Email
+    case appuserbase.SignMethodType.Mobile:
+      signupMethod.value = appuserbase.SignMethodType.Email
       break
   }
   accountError.value = false

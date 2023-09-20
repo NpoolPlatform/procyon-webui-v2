@@ -1,20 +1,20 @@
 <template>
   <div :class='[ showStatus || showWarning ? "blur" : "" ]'>
-    <PurchasePage :good='good'>
+    <PurchasePage :good='(good as appgood.Good)'>
       <div class='info'>
         <h3 class='form-title'>
-          {{ order?.CoinName?.length ? currencies.formatCoinName(order?.CoinName as string) : '' }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
+          {{ _order?.CoinName?.length ? utils.formatCoinName(_order?.CoinName as string) : '' }} | <strong>{{ $t('MSG_ORDER_ID') }}: {{ orderId }}</strong>
         </h3>
         <div class='info-flex'>
           <div class='three-section'>
             <h4>{{ $t('MSG_PURCHASE_AMOUNT') }}:</h4>
-            <span class='number'>{{ order?.Units }}</span>
-            <span class='unit'>{{ order?.GoodUnit?.length ? $t(order?.GoodUnit) : '' }}</span>
+            <span class='number'>{{ _order?.Units }}</span>
+            <span class='unit'>{{ _order?.GoodUnit?.length ? $t(_order?.GoodUnit) : '' }}</span>
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_AMOUNT_DUE') }}:</h4>
-            <span class='number'>{{ order?.PaymentAmount }}</span>
-            <span class='unit'>{{ order?.PaymentCoinUnit }}</span>
+            <span class='number'>{{ _order?.PaymentAmount }}</span>
+            <span class='unit'>{{ _order?.PaymentCoinUnit }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAmountClick'>
             <div class='tooltip'>
               <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -44,7 +44,7 @@
               <span v-html='$t("MSG_COIN_PAYMENT_TIP", { COIN_NAME: coinName })' />
             </div>
             <span class='wallet-type'>{{ coinName }} &nbsp; </span>
-            <span class='number'>  {{ order?.PaymentAddress }}</span>
+            <span class='number'>  {{ _order?.PaymentAddress }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAddressClick'>
             <div class='tooltip'>
               <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -66,7 +66,7 @@
           <div class='qr-code-container' ref='qrCodeContainer'>
             <h5>{{ coinName }}  {{ $t('MSG_ADDRESS') }}</h5>
             <qrcode-vue
-              :value='order?.PaymentAddress'
+              :value='_order?.PaymentAddress'
               :size='qrCodeContainer?.clientWidth as number - 1'
               :margin='3'
               class='qr-code'
@@ -159,16 +159,14 @@
 </template>
 
 <script setup lang='ts'>
-import { NotificationType, RemainMax, RemainZero, remain, OrderTimeoutSeconds, useNotificationStore, useCurrencyStore } from 'npool-cli-v2'
+import { order, appgood, utils, notify } from 'src/npoolstore'
 import { defineAsyncComponent, computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import copy from 'copy-to-clipboard'
 
 import copyIcon from 'src/assets/icon-copy.svg'
 import question from 'src/assets/question.svg'
 import warning from 'src/assets/warning.svg'
-import { NotifyType, useFrontendOrderStore, Order, useAdminAppGoodStore, AppGood } from 'npool-cli-v4'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
@@ -178,22 +176,19 @@ interface Query {
   orderId: string
 }
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const orderId = computed(() => query.value.orderId)
 
-const odr = useFrontendOrderStore()
-const order = computed(() => odr.getOrderByID(orderId.value))
+const odr = order.useOrderStore()
+const _order = computed(() => odr.order(orderId.value))
 
-const appGood = useAdminAppGoodStore()
-const good = computed(() => appGood.getGoodByID(order.value?.GoodID as string) as AppGood)
+const appGood = appgood.useAppGoodStore()
+const good = computed(() => appGood.good(undefined, _order.value?.GoodID as string))
 
-const notification = useNotificationStore()
+const notification = notify.useNotificationStore()
 
-const remainSeconds = ref(odr.getOrderState(order.value as Order))
+const remainSeconds = ref(odr.orderState(_order.value?.GoodID as string))
 const ticker = ref(-1)
 const counter = ref(0)
 
@@ -204,42 +199,41 @@ const popupTitle = ref('')
 const tipMessage = ref('')
 const orderStatus = ref('')
 const showType = ref('')
-const remainTime = ref(RemainMax)
+const remainTime = ref(order.RemainMax)
 const showWarning = ref(true)
 const showCancelling = ref(false)
-const currencies = useCurrencyStore()
 
 const coinName = computed(() => {
-  if (!order.value?.PaymentCoinName?.length) {
+  if (!_order.value?.PaymentCoinName?.length) {
     return
   }
-  if (order.value?.PaymentCoinName?.toLowerCase()?.includes('bitcoin')) {
+  if (_order.value?.PaymentCoinName?.toLowerCase()?.includes('bitcoin')) {
     return 'BTC (Bitcoin)'
-  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('binanceusd')) {
+  } else if (_order.value?.PaymentCoinName?.toLowerCase()?.includes('binanceusd')) {
     return 'BUSD (BEP20)'
-  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('usdcerc20')) {
+  } else if (_order.value?.PaymentCoinName?.toLowerCase()?.includes('usdcerc20')) {
     return 'USDC (ERC20)'
-  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('usdterc20')) {
+  } else if (_order.value?.PaymentCoinName?.toLowerCase()?.includes('usdterc20')) {
     return 'USDT (ERC20)'
-  } else if (order.value?.PaymentCoinName?.toLowerCase()?.includes('usdttrc20')) {
+  } else if (_order.value?.PaymentCoinName?.toLowerCase()?.includes('usdttrc20')) {
     return 'USDT (TRC20)'
   }
-  return currencies.formatCoinName(order.value?.PaymentCoinName)
+  return utils.formatCoinName(_order.value?.PaymentCoinName)
 })
 
-const showBUSDTip = computed(() => order.value?.PaymentCoinName?.toLowerCase()?.includes('binanceusd'))
+const showBUSDTip = computed(() => _order.value?.PaymentCoinName?.toLowerCase()?.includes('binanceusd'))
 
 const remainTicker = ref(-1)
 watch(counter, () => {
   if (counter.value % 30 === 0) {
     odr.getOrder({
-      ID: order.value?.ID as string,
+      ID: _order.value?.ID as string,
       Message: {
         Error: {
-          Title: t('MSG_GET_ORDER'),
-          Message: t('MSG_GET_ORDER_FAIL'),
+          Title: 'MSG_GET_ORDER',
+          Message: 'MSG_GET_ORDER_FAIL',
           Popup: true,
-          Type: NotifyType.Error
+          Type: notify.NotifyType.Error
         }
       }
     }, () => {
@@ -250,9 +244,9 @@ watch(counter, () => {
 
 const launchTicker = () => {
   ticker.value = window.setInterval(() => {
-    remainSeconds.value = odr.getOrderState(order.value as Order)
+    remainSeconds.value = odr.orderState(_order.value?.ID as string)
 
-    if (odr.orderPaid(order.value as Order)) {
+    if (odr.orderPaid(_order.value?.ID as string)) {
       showStatus.value = true
       popupTitle.value = 'MSG_ORDER_COMPLETE'
       tipMessage.value = 'MSG_REVIEW_ORDER'
@@ -265,10 +259,10 @@ const launchTicker = () => {
       return
     }
 
-    let start = order.value ? order.value?.CreatedAt : 0
-    start += OrderTimeoutSeconds
-    remainTime.value = remain(start)
-    if (remainTime.value === RemainZero) {
+    let start = _order.value ? _order.value?.CreatedAt : 0
+    start += order.OrderTimeoutSeconds
+    remainTime.value = utils.remain(start)
+    if (remainTime.value === utils.RemainZero) {
       showStatus.value = true
       popupTitle.value = 'MSG_ORDER_TIMEOUT'
       tipMessage.value = 'MSG_ORDER_TIMEOUT'
@@ -287,14 +281,14 @@ onMounted(() => {
     ID: orderId.value,
     Message: {
       Error: {
-        Title: t('MSG_GET_ORDER'),
-        Message: t('MSG_GET_ORDER_FAIL'),
+        Title: 'MSG_GET_ORDER',
+        Message: 'MSG_GET_ORDER_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (o: Order, error: boolean) => {
-    if (error || !odr.validateOrder(o)) {
+  }, (error: boolean, o?: order.Order) => {
+    if (error || !odr.validateOrder(o?.ID as string)) {
       return
     }
     launchTicker()
@@ -323,18 +317,17 @@ const onPaymentCanceled = () => {
 const onCancelOrderClick = () => {
   showCancelling.value = false
   odr.updateOrder({
-    ID: order.value?.ID as string,
-    PaymentID: order.value?.PaymentID as string,
+    ID: _order.value?.ID as string,
     Canceled: true,
     Message: {
       Error: {
-        Title: t('MSG_UPDATE_PAYMENT'),
-        Message: t('MSG_UPDATE_PAYMENT_FAIL'),
+        Title: 'MSG_UPDATE_PAYMENT',
+        Message: 'MSG_UPDATE_PAYMENT_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (o: Order, error: boolean) => {
+  }, (error: boolean) => {
     if (error) return
 
     void router.push({
@@ -344,22 +337,22 @@ const onCancelOrderClick = () => {
 }
 
 const onCopyAmountClick = () => {
-  copy(order.value?.PaymentAmount as string)
+  copy(_order.value?.PaymentAmount as string)
   notification.Notifications.push({
-    Title: t('MSG_AMOUNT_COPIED'),
-    Message: t('MSG_COPY_AMOUNT_SUCCESS'),
+    Title: 'MSG_AMOUNT_COPIED',
+    Message: 'MSG_COPY_AMOUNT_SUCCESS',
     Popup: true,
-    Type: NotificationType.Success
+    Type: notify.NotifyType.Success
   })
 }
 
 const onCopyAddressClick = () => {
-  copy(order.value?.PaymentAddress as string)
+  copy(_order.value?.PaymentAddress as string)
   notification.Notifications.push({
-    Title: t('MSG_ADDRESS_COPIED'),
-    Message: t('MSG_COPY_ADDRESS_SUCCESS'),
+    Title: 'MSG_ADDRESS_COPIED',
+    Message: 'MSG_COPY_ADDRESS_SUCCESS',
     Popup: true,
-    Type: NotificationType.Success
+    Type: notify.NotifyType.Success
   })
 }
 

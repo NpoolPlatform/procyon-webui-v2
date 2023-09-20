@@ -22,11 +22,11 @@
         </template>
         <div class='product-button-box'>
           <button
-            :class='[getStatus(_good) ? "in-active" : ""]'
+            :class='[showProductPage(_good) ? "in-active" : ""]'
             @click='onPurchaseClick(_good)'
-            :disabled='getStatus(_good)'
+            :disabled='showProductPage(_good)'
           >
-            {{ $t(good.getGoodBtnMsg(_good)) }}
+            {{ $t(good.goodPurchaseBtnMsg(undefined, _good.ID)) }}
           </button>
           <button
             :class='["alt", _good?.Descriptions?.[4]?.length > 0 ? "" : "in-active"]'
@@ -44,18 +44,16 @@
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
-import { AppGood, useAdminAppGoodStore } from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
+import { appgood } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
-const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
+const showProductPage = computed(() => (_good: appgood.Good) => !_good.EnableProductPage || !good.canBuy(undefined, _good.ID) || !good.spotQuantity(undefined, _good.ID))
 
 const router = useRouter()
-const onPurchaseClick = (_good: AppGood) => {
-  console.log('EnableProductPage: ', _good.EnableProductPage)
-  console.log('ProductPage: ', _good.ProductPage)
-  if (getStatus.value(_good)) {
+const onPurchaseClick = (_good: appgood.Good) => {
+  if (showProductPage.value(_good)) {
     return
   }
 
@@ -77,8 +75,8 @@ const onPurchaseClick = (_good: AppGood) => {
   })
 }
 
-const good = useAdminAppGoodStore()
-const goods = computed(() => good.AppGoods.AppGoods?.filter((el) => el.Visible))
+const good = appgood.useAppGoodStore()
+const goods = computed(() => good.goods(undefined).filter((el) => el.Visible))
 
 const onLearnMoreClick = (url: string) => {
   console.log('url: ', url)

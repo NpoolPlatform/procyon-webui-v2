@@ -16,11 +16,11 @@
 </template>
 
 <script setup lang='ts'>
-import { AppGood } from 'npool-cli-v4'
+import { appgood } from 'src/npoolstore'
 import { defineAsyncComponent, defineProps, toRef } from 'vue'
 
 interface Props {
-  good: AppGood
+  good: appgood.Good
 }
 
 const props = defineProps<Props>()

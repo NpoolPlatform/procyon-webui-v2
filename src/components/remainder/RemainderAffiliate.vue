@@ -9,23 +9,21 @@
 </template>
 
 <script setup lang='ts'>
-import { useFrontendUserStore, User } from 'npool-cli-v4'
-import {
-  defineAsyncComponent
-} from 'vue'
+import { user } from 'src/npoolstore'
+import { defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
 
 const RemainderPage = defineAsyncComponent(() => import('src/components/remainder/RemainderPage.vue'))
 
 const router = useRouter()
 
-const user = useFrontendUserStore()
+const _user = user.useUserStore()
 
 const onSubmit = () => {
-  user.updateUser({
+  _user.updateUser({
     KolConfirmed: true,
     Message: {}
-  }, (u: User, error: boolean) => {
+  }, (error: boolean) => {
     if (error) {
       return
     }

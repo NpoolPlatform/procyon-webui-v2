@@ -126,45 +126,34 @@
 import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
+import { getNotifs, onMarkAll } from 'src/api/notif'
+import { notify, user, notif, _locale, localapp, applang } from 'src/npoolstore'
+
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
 import userAvatar from '../../assets/icon-user.svg'
-import {
-  NotifyType,
-  useFrontendUserStore,
-  useLocalUserStore,
-  useFrontendNotifStore,
-  useLocaleStore,
-  useFrontendAppStore,
-  useAdminAppLangStore
-} from 'npool-cli-v4'
-import { getNotifs, onMarkAll } from 'src/api/notif'
-import { useI18n } from 'vue-i18n'
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 
 const LangSwitcher = defineAsyncComponent(() => import('src/components/lang/LangSwitcher.vue'))
 const SignHelper = defineAsyncComponent(() => import('src/components/header/SignHelper.vue'))
 const ExpandList = defineAsyncComponent(() => import('src/components/list/ExpandList.vue'))
 const NotifCard = defineAsyncComponent(() => import('src/components/notification/NotifCard.vue'))
 
-const locale = useLocaleStore()
-const special = computed(() => locale.AppLang?.Lang === 'ja-JP')
+const special = computed(() => locale.lang() === 'ja-JP')
 
-const user = useFrontendUserStore()
-const localUser = useLocalUserStore()
+const _user = user.useUserStore()
+const localUser = user.useLocalUserStore()
 
 const router = useRouter()
 
 const onSwitchMenu = (item: MenuItem) => {
   if (item.label === 'MSG_LOGOUT') {
-    user.logout({
+    _user.logout({
       Token: localUser.User.LoginToken,
       Message: {
         Error: {
-          Title: t('MSG_LOGOUT_FAIL'),
+          Title: 'MSG_LOGOUT_FAIL',
           Popup: true,
-          Type: NotifyType.Error
+          Type: notify.NotifyType.Error
         }
       }
     }, () => {
@@ -213,9 +202,10 @@ const initialize = () => {
   }
 }
 
-const notif = useFrontendNotifStore()
-const unReads = computed(() => notif.unReads)
-const lastFiveNotifs = computed(() => notif.notifs?.length >= 5 ? notif.notifs?.slice(0, 5) : notif.notifs)
+const _notif = notif.useNotifStore()
+const unReads = computed(() => _notif.unreads(undefined, localUser.loginedUserID))
+const notifs = computed(() => _notif.notifs(undefined, localUser.loginedUserID))
+const lastFiveNotifs = computed(() => notifs.value.length > 5 ? notifs.value.slice(0, 5) : notifs.value)
 
 onMounted(() => {
   if (logined.value) {
@@ -229,45 +219,46 @@ onMounted(() => {
       if (!logined.value) {
         return
       }
-      notif.$reset()
+      _notif.$reset()
       getNotifs(0, 500)
     }, 120000)
   }
 })
 
 onMounted(() => {
-  if (localUser.logined && notif.Notifs.Notifs.length === 0) {
+  if (localUser.logined && notifs.value.length) {
     getNotifs(0, 500)
   }
 })
 
-const app = useFrontendAppStore()
-watch(() => app.App?.Maintaining, () => {
-  if (app.App?.Maintaining) {
+const app = localapp.useLocalApplicationStore()
+const maintaining = computed(() => app.maintaining())
+
+watch(maintaining, () => {
+  if (maintaining.value) {
     void router.push({ path: '/maintenance' })
   }
 })
 
 onMounted(() => {
-  if (app.App?.Maintaining) {
+  if (maintaining.value) {
     void router.push({ path: '/maintenance' })
   }
 })
 
-const lang = useAdminAppLangStore()
+const lang = applang.useAppLangStore()
+const langs = computed(() => lang.langs(undefined))
 const getLangByName = computed(() => (name: string) => {
-  const appLang = lang.AppLangs.AppLangs.find((el) => el.Lang === name)
+  const appLang = lang.lang(undefined, undefined, name)
   return appLang
 })
 
+const locale = _locale.useLocaleStore()
 const setLocale = computed(() => (path: string) => {
   const name = path.split('/')?.[1]
-  console.log('locale: ', name)
   if (name?.length < 2) return
   const lang = getLangByName.value(name)
-  console.log('lang: ', lang)
   if (!lang) return
-  const locale = useLocaleStore()
   locale.setLang(lang)
 })
 
@@ -275,7 +266,7 @@ watch(() => router.currentRoute.value.path, (newValue) => {
   setLocale.value(newValue)
 }, { immediate: true })
 
-watch(lang.AppLangs.AppLangs, () => {
+watch(langs, () => {
   setLocale.value(router.currentRoute.value.path)
 }, { immediate: true })
 

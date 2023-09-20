@@ -1,12 +1,12 @@
-import { useFrontendNotifStore, Notif } from 'npool-cli-v4'
+import { notif } from 'src/npoolstore'
 
-const notif = useFrontendNotifStore()
+const _notif = notif.useNotifStore()
 export const getNotifs = (offset: number, limit: number) => {
-  notif.getNotifs({
+  _notif.getNotifs({
     Offset: offset,
     Limit: limit,
     Message: {}
-  }, (error: boolean, rows: Array<Notif>) => {
+  }, (error: boolean, rows: Array<notif.Notif>) => {
     if (error || rows.length < limit) {
       return
     }
@@ -14,7 +14,7 @@ export const getNotifs = (offset: number, limit: number) => {
   })
 }
 
-export const onMarkAll = (rows: Array<Notif>) => {
+export const onMarkAll = (rows: Array<notif.Notif>) => {
   if (rows.length === 0) {
     return
   }
@@ -22,7 +22,7 @@ export const onMarkAll = (rows: Array<Notif>) => {
   for (let i = 0; i < rows.length; i++) {
     reqs.push({ ID: rows[i].ID, Notified: true })
   }
-  notif.updateNotifs({
+  _notif.updateNotifs({
     Infos: reqs,
     Message: {
     }

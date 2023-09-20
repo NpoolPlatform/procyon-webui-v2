@@ -14,10 +14,10 @@
           />
         </q-td>
         <q-td key='Date' :props='myProps'>
-          {{ formatTime(myProps.row.CreatedAt) }}
+          {{ utils.formatTime(myProps.row.CreatedAt) }}
         </q-td>
         <q-td key='Amount' :props='myProps'>
-          {{ util.getLocaleString(myProps.row.Amount) }}{{ myProps.row.CoinUnit }}
+          {{ utils.getLocaleString(myProps.row.Amount) }}{{ myProps.row.CoinUnit }}
         </q-td>
         <q-td key='Status' :props='myProps'>
           {{ $t(withdrawStatus(myProps.row)) }}
@@ -32,7 +32,7 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
-import { formatTime, NotifyType, useFrontendWithdrawStore, useLocaleStringStore, Withdraw, WithdrawState } from 'npool-cli-v4'
+import { utils, notify, ledgerwithdraw, user } from 'src/npoolstore'
 import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -40,12 +40,11 @@ const { t } = useI18n({ useScope: 'global' })
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
-const util = useLocaleStringStore()
+const logined = user.useLocalUserStore()
+const withdraw = ledgerwithdraw.useWithdrawStore()
+const withdraws = computed(() => withdraw.withdraws(undefined, logined.loginedUserID))
 
-const withdraw = useFrontendWithdrawStore()
-const withdraws = computed(() => withdraw.withdraws)
-
-const withdrawLabel = (w: Withdraw) => {
+const withdrawLabel = (w: ledgerwithdraw.Withdraw) => {
   let label = w.CoinName
   if (w.DisplayNames?.length > 2 && w.DisplayNames[2]?.length > 0) {
     label = w.DisplayNames[2]
@@ -53,17 +52,17 @@ const withdrawLabel = (w: Withdraw) => {
   return label
 }
 
-const withdrawStatus = (wd: Withdraw) => {
+const withdrawStatus = (wd: ledgerwithdraw.Withdraw) => {
   switch (wd.State) {
-    case WithdrawState.Reviewing:
+    case ledgerwithdraw.WithdrawState.Reviewing:
       return 'MSG_UNDER_REVIEW'
-    case WithdrawState.Transferring:
+    case ledgerwithdraw.WithdrawState.Transferring:
       return 'MSG_IN_PROGRESS'
-    case WithdrawState.Rejected:
+    case ledgerwithdraw.WithdrawState.Rejected:
       return 'MSG_FAILED'
-    case WithdrawState.TransactionFail:
+    case ledgerwithdraw.WithdrawState.TransactionFail:
       return 'MSG_FAILED'
-    case WithdrawState.Successful:
+    case ledgerwithdraw.WithdrawState.Successful:
       return 'MSG_COMPLETED'
     default:
       return 'MSG_UNKNOWN'
@@ -84,10 +83,10 @@ const getWithdraws = (offset: number, limit: number) => {
       Error: {
         Title: t('MSG_GET_WITHDRAWS_FAIL'),
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (error: boolean, rows: Array<Withdraw>) => {
+  }, (error: boolean, rows: Array<ledgerwithdraw.Withdraw>) => {
     if (error || rows.length < limit) {
       return
     }
@@ -100,19 +99,19 @@ const table = computed(() => [
     name: 'Name',
     label: t('MSG_NAME'),
     align: 'left',
-    field: (row: Withdraw) => row.CoinName
+    field: (row: ledgerwithdraw.Withdraw) => row.CoinName
   },
   {
     name: 'Date',
     label: t('MSG_DATE'),
     align: 'center',
-    field: (row: Withdraw) => formatTime(row.CreatedAt)
+    field: (row: ledgerwithdraw.Withdraw) => utils.formatTime(row.CreatedAt)
   },
   {
     name: 'Amount',
     label: t('MSG_TRANSACTION_AMOUNT'),
     align: 'center',
-    field: (row: Withdraw) => row.Amount + row.CoinUnit
+    field: (row: ledgerwithdraw.Withdraw) => row.Amount + row.CoinUnit
   },
   {
     name: 'Status',
@@ -124,7 +123,7 @@ const table = computed(() => [
     name: 'Address',
     label: t('MSG_WITHDRAW_ADDRESS'),
     align: 'center',
-    field: (row: Withdraw) => row.Address
+    field: (row: ledgerwithdraw.Withdraw) => row.Address
   }
 ])
 </script>

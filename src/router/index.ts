@@ -4,10 +4,10 @@ import {
   createWebHistory
 } from 'vue-router'
 import routes from './routes'
-import { loginInterceptor } from 'npool-cli-v4/utils'
+import { loginInterceptor } from 'src/npoolstore/utils'
 import { useSettingStore } from 'src/localstore'
 import { BaseMenu } from 'src/menus/menus'
-import { useLocalAppStore } from 'src/localstore/app'
+import { useLocalApplicationStore } from 'src/npoolstore/appuser/app/local'
 
 /*
  * If not building with SSR mode, you can
@@ -58,9 +58,8 @@ export default route(function (/* { store, ssrContext } */) {
     setting.ShowMainHeader = to.meta.ShowMainHeader ? to.meta.ShowMainHeader : false
     setting.ShowFooterTop = to.meta.ShowMainHeader ? to.meta.ShowMainHeader : false
 
-    const app = useLocalAppStore()
-
-    if (app.App?.Maintaining) {
+    const app = useLocalApplicationStore()
+    if (app.myApp?.Maintaining) {
       if (to.path !== '/maintenance') {
         next({ path: '/maintenance', replace: true })
         return

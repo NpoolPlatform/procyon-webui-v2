@@ -13,7 +13,7 @@
         <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
         <Input
           v-model:value='verificationCode'
-          :label='accountType === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
+          :label='accountType === appuserbase.SignMethodType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
           type='text'
           id='ver-code'
           required
@@ -102,18 +102,8 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  NotifyType,
-  AccountType,
-  useFrontendUserStore,
-  useFrontendVerifyStore,
-  UsedFor,
-  validateVerificationCode,
-  validatePassword,
-  encryptPassword
-} from 'npool-cli-v4'
+import { utils, notify, user, coderepo, basetypes, appuserbase } from 'src/npoolstore'
 import { defineAsyncComponent, ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
 interface Query {
@@ -124,9 +114,6 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const originInvitationCode = computed(() => query.value.code)
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
 const SignPage = defineAsyncComponent(() => import('src/components/user/SignPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
@@ -134,7 +121,7 @@ const Legal = defineAsyncComponent(() => import('src/pages/Legal.vue'))
 
 const accountError = ref(false)
 const account = ref('')
-const accountType = ref(AccountType.Email)
+const accountType = ref(appuserbase.SignMethodType.Email)
 const password = ref('')
 
 const verificationCode = ref('')
@@ -143,7 +130,7 @@ const onVerificationCodeFocusIn = () => {
   verificationCodeError.value = false
 }
 const onVerificationCodeFocusOut = () => {
-  verificationCodeError.value = !validateVerificationCode(verificationCode.value)
+  verificationCodeError.value = !utils.validateVerificationCode(verificationCode.value)
 }
 
 const confirmPassword = ref('')
@@ -152,7 +139,7 @@ const onConfirmPasswordFocusIn = () => {
   confirmPasswdError.value = false
 }
 const onConfirmPasswordFocusOut = () => {
-  confirmPasswdError.value = !validatePassword(confirmPassword.value) ||
+  confirmPasswdError.value = !utils.validatePassword(confirmPassword.value) ||
                              password.value !== confirmPassword.value
 }
 const onConfirmInvCodeErrorFocusIn = () => {
@@ -191,7 +178,7 @@ const onCancelClick = () => {
   onAgreeFocusOut()
 }
 
-const coderepo = useFrontendVerifyStore()
+const _coderepo = coderepo.useCodeRepoStore()
 
 const router = useRouter()
 
@@ -200,10 +187,10 @@ const onSendCodeClick = () => {
   if (accountError.value) {
     return
   }
-  coderepo.sendVerificationCode(account.value, accountType.value, UsedFor.Signup, account.value)
+  _coderepo.sendVerificationCode(account.value, accountType.value as unknown as appuserbase.SigninVerifyType, basetypes.EventType.Signup, account.value)
 }
 
-const user = useFrontendUserStore()
+const _user = user.useUserStore()
 
 const onSubmit = () => {
   onConfirmPasswordFocusOut()
@@ -217,18 +204,18 @@ const onSubmit = () => {
     return
   }
 
-  user.signup({
-    PasswordHash: encryptPassword(password.value),
+  _user.signup({
+    PasswordHash: utils.encryptPassword(password.value),
     Account: account.value,
     AccountType: accountType.value,
     VerificationCode: verificationCode.value,
     InvitationCode: invitationCode.value,
     Message: {
       Error: {
-        Title: t('MSG_SIGNUP'),
-        Message: t('MSG_SIGNUP_FAIL'),
+        Title: 'MSG_SIGNUP',
+        Message: 'MSG_SIGNUP_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, () => {

@@ -5,13 +5,13 @@
       <ul class='notification-center'>
         <li class='first'>
           <span>
-            <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: util.getLocaleString(unReads.length)})' />
+            <span v-html='$t("MSG_NEW_NOTIFICATIONS",{TOTAL: utils.getLocaleString(unReads.length)})' />
             <span class='clear-all'>
               <a @click='onMarkAll(unReads)'>{{ $t('MSG_MARK_ALL_AS_READ') }}</a>
             </span>
           </span>
         </li>
-        <NotifCard v-for='row in notifications' :key='row.ID' :notif='row' />
+        <NotifCard v-for='row in notifications' :key='(row as notif.Notif).ID' :notif='row' />
       </ul>
     </div>
   </div>
@@ -19,16 +19,15 @@
 
 <script lang='ts' setup>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
-import { useFrontendNotifStore, useLocaleStringStore } from 'npool-cli-v4'
+import { notif, utils, user } from 'src/npoolstore'
 import { getNotifs, onMarkAll } from 'src/api/notif'
 
 const NotifCard = defineAsyncComponent(() => import('src/components/notification/NotifCard.vue'))
 
-const util = useLocaleStringStore()
-
-const notif = useFrontendNotifStore()
-const notifications = computed(() => notif.notifs)
-const unReads = computed(() => notif.unReads)
+const _notif = notif.useNotifStore()
+const notifications = computed(() => _notif.notifs)
+const logined = user.useLocalUserStore()
+const unReads = computed(() => _notif.unreads(undefined, logined.loginedUserID))
 
 onMounted(() => {
   if (notifications.value?.length === 0) {

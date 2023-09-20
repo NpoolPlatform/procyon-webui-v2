@@ -1,7 +1,7 @@
 import { boot } from 'quasar/wrappers'
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios'
 import { AppID } from 'src/const/const'
-import { createAPI } from 'npool-cli-v2/api'
+import { createAPI } from 'src/npoolstore/request/axiosapi'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {

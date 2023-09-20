@@ -1,6 +1,6 @@
 <template>
   <ProductPage
-    :good-id='goodID'
+    :good-id='(goodID as string)'
     :purchase-amount='purchaseAmount'
     project-class='project-aleo'
     bg-img='product/aleo/aleo-banner.jpg'
@@ -9,8 +9,8 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ util.getLocaleString(good.getPrice(goodID)) }}</span>
-        <span class='unit'>{{ PriceCoinName }}</span>
+        <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, goodID as string)) }}</span>
+        <span class='unit'>{{ constant.PriceCoinName }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -31,7 +31,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
-        <span class='number'>{{ util.getLocaleString(target?.DurationDays) }}</span>
+        <span class='number'>{{ utils.getLocaleString(target?.DurationDays?.toString() as string) }}</span>
         <span class='unit'>{{ $t('MSG_DAYS') }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -53,7 +53,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span class='number'>{{ true ? 'TBD*' : good.getFormatTime(target?.StartAt) }}</span>
+        <span class='number'>{{ true ? 'TBD*' : utils.formatTime(target?.StartAt as number, 'YYYY/MM/DD') }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -61,11 +61,11 @@
           </p>
         </div>
       </div>
-      <div class='three-section' v-if='good.haveSale(target)'>
+      <div class='three-section' v-if='good.canBuy(undefined, target?.ID as string)'>
         <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
-        <span class='number'>{{ good.getSaleEndDate(target) }}</span>
+        <span class='number'>{{ good.saleEndDate(undefined, target?.ID as string) }}</span>
         <br>
-        <span class='unit'>{{ good.getSaleEndTime(target) }} {{ $t("MSG_JST") }}</span>
+        <span class='unit'>{{ good.saleEndTime(undefined, target?.ID as string) }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -76,7 +76,7 @@
       <div class='hr' />
     </template>
     <template #product-detail>
-      <div v-if='locale === "en-US"'>
+      <div v-if='__locale === "en-US"'>
         <ProductDetailUS />
       </div>
       <div v-else>
@@ -121,18 +121,13 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, onMounted, watch } from 'vue'
+import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { PriceCoinName } from 'npool-cli-v2'
-import { useI18n } from 'vue-i18n'
+import { appgood, notify, appcoin, appcoindescription, coincurrency, utils, constant, _locale } from 'src/npoolstore'
+import { getCurrencies, getDescriptions } from 'src/api/chain'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
-import { AppGood, InvalidID, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore, useLocaleStringStore } from 'npool-cli-v4'
-import { getCurrencies, getDescriptions } from 'src/api/chain'
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t, locale } = useI18n({ useScope: 'global' })
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 const ProductDetailUS = defineAsyncComponent(() => import('src/components/product/en-US/Detail.vue'))
@@ -146,79 +141,52 @@ interface Query {
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 
-const util = useLocaleStringStore()
+const locale = _locale.useLocaleStore()
+const __locale = computed(() => locale.locale())
 
-const getGood = (goodID:string) => {
+const getGood = (_goodID:string) => {
+  if (_good.value) {
+    return
+  }
   good.getAppGood({
-    GoodID: goodID,
+    GoodID: _goodID,
     Message: {
       Error: {
-        Title: t('MSG_GET_GOOD'),
-        Message: t('MSG_GET_GOOD_FAIL'),
+        Title: 'MSG_GET_GOOD',
+        Message: 'MSG_GET_GOOD_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, () => {
-    // TODO
+    if (!goodID.value) {
+      void router.push({ path: '/' })
+    }
   })
 }
 
-const coin = useAdminAppCoinStore()
+const coin = appcoin.useAppCoinStore()
 // Use CoinUnit to find GoodID from AppCoin
 const coinUnit = 'ALEO'
-const defaultGoodID = computed(() => {
-  if (query.value?.goodId?.length > 0) {
-    getGood(query.value?.goodId)
-    return query.value?.goodId
-  }
-  if (coin.AppCoins.AppCoins?.length === 0) {
-    return `${InvalidID}_`
-  }
-  const goodID = coin.getGoodIDByCoinUnit(coinUnit)
-  if (!goodID || goodID?.length === 0) {
-    return InvalidID
-  }
-  if (goodID?.length > 0) {
-    getGood(goodID)
-  }
-  return goodID
-})
-
-const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : defaultGoodID.value)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
-const good = useAdminAppGoodStore()
-const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
+const good = appgood.useAppGoodStore()
+const target = computed(() => good.good(undefined, goodID.value as string))
+const goodID = computed(() => query.value?.goodId || coin.defaultGoodID(undefined, coinUnit))
+const _good = computed(() => good.good(undefined, goodID.value as string))
 
-const currency = useAdminCurrencyStore()
-const description = useAdminCoinDescriptionStore()
+const currency = coincurrency.useCurrencyStore()
+const description = appcoindescription.useCoinDescriptionStore()
 
 const router = useRouter()
 
-watch(defaultGoodID, () => {
-  if (defaultGoodID.value === InvalidID) {
-    void router.push({ path: '/' })
-  }
-})
-
 onMounted(() => {
-  console.log('CoinUnit: ', coinUnit)
-
-  if (description.CoinDescriptions.CoinDescriptions.length === 0) {
+  getGood(query.value?.goodId)
+  if (!description.descriptions(undefined)?.length) {
     getDescriptions(0, 100)
   }
-
-  if (currency.Currencies.Currencies.length === 0) {
-    getCurrencies(0, 500)
-  }
-
-  if (defaultGoodID.value === `${InvalidID}_`) {
-    return
-  }
-
-  if (defaultGoodID.value === InvalidID) {
-    void router.push({ path: '/' })
+  if (!currency.currencies.length) {
+    getCurrencies(0, 100)
   }
 })
 

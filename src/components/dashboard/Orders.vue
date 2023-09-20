@@ -17,62 +17,62 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { formatTime } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
-import { useFrontendOrderStore, Order, useAdminAppGoodStore, OrderState, useFrontendDetailStore, GoodType, useLocaleStringStore } from 'npool-cli-v4'
+import { utils, order, appgood, ledgerstatement, goodbase, user } from 'src/npoolstore'
 import { stringify } from 'csv-stringify/sync'
 import saveAs from 'file-saver'
+
 const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.vue'))
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const util = useLocaleStringStore()
+const logined = user.useLocalUserStore()
 
-const order = useFrontendOrderStore()
-const orders = computed(() => order.orders)
+const _order = order.useOrderStore()
+const orders = computed(() => _order.orders(undefined, logined.loginedUserID))
 
-const detail = useFrontendDetailStore()
+const detail = ledgerstatement.useStatementStore()
 
-const good = useAdminAppGoodStore()
-const getDeservedRatio = computed(() => (goodID: string) => 1 - Number(good.getGoodByID(goodID)?.TechnicalFeeRatio) / 100)
+const good = appgood.useAppGoodStore()
+const getDeservedRatio = computed(() => (goodID: string) => 1 - Number(good.techniqueFeeTatio(undefined, goodID)) / 100)
 
 const table = computed(() => [
   {
     name: 'Date',
     label: t('MSG_DATE'),
     align: 'left',
-    field: (row: Order) => formatTime(row.CreatedAt)
+    field: (row: order.Order) => utils.formatTime(row.CreatedAt)
   },
   {
     name: 'Product',
     label: t('MSG_PRODUCT'),
     align: 'center',
-    field: (row: Order) => good.getGoodByID(row?.GoodID)?.DisplayNames?.[3] ? t(good.getGoodByID(row?.GoodID)?.DisplayNames?.[3] as string) : row.GoodName
+    field: (row: order.Order) => good.displayNames(undefined, row.GoodID).length >= 4 ? t(good.displayNames(undefined, row.GoodID)[3]) : row.GoodName
   },
   {
     name: 'Total',
     label: t('MSG_PURCHASE_AMOUNT'),
     align: 'center',
-    field: (row: Order) => `${util.getLocaleString(parseFloat(row.Units))} ${t(row.GoodUnit)}`
+    field: (row: order.Order) => `${utils.getLocaleString(parseFloat(row.Units))} ${t(row.GoodUnit)}`
   },
   {
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: Order) => util.getLocaleString(Number(row.PaymentAmount) + Number(row.PayWithBalanceAmount)) + ' ' + row.PaymentCoinUnit
+    field: (row: order.Order) => utils.getLocaleString(Number(row.PaymentAmount) + Number(row.PayWithBalanceAmount)) + ' ' + row.PaymentCoinUnit
   },
   {
     name: 'Period',
     label: t('MSG_PERIOD'),
     align: 'center',
-    field: (row: Order) => util.getLocaleString(row.GoodServicePeriodDays) + t('MSG_DAY')
+    field: (row: order.Order) => utils.getLocaleString(row.GoodServicePeriodDays) + t('MSG_DAY')
   },
   {
     name: 'State',
     label: t('MSG_STATE'),
     align: 'center',
-    field: (row: Order) => order.getOrderState(row)?.startsWith('MSG') ? t(order.getOrderState(row)) : t('MSG_AWAITING_CONFIRMATION')
+    field: (row: order.Order) => _order.orderState(row.ID)?.startsWith('MSG') ? t(_order.orderState(row.ID)) : t('MSG_AWAITING_CONFIRMATION')
   }
 ])
 
@@ -88,32 +88,33 @@ interface ExportOrder {
   MiningPeriod: number
   CumulativeProfit: number
   ProfitCurrency: string
-  OrderStatus: OrderState
+  OrderStatus: order.OrderState
 }
 
 const getGoodType = computed(() => (goodID:string) => {
-  const _good = good.getGoodByID(goodID)
-  return _good?.GoodType === GoodType.GoodTypeClassicMining || _good?.GoodType === GoodType.GoodTypeUnionMining ? 'Mining' : _good?.GoodType
+  const _good = good.good(undefined, goodID)
+  return _good?.GoodType === goodbase.GoodType.PowerRenting || _good?.GoodType === goodbase.GoodType.MachineHosting ? 'Mining' : _good?.GoodType
 })
 
-const exportOrders = computed(() => Array.from(orders.value.filter((el) => el.State === OrderState.PAID ||
-  el.State === OrderState.IN_SERVICE ||
-  el.State === OrderState.EXPIRED ||
-  el.State === OrderState.WAIT_START
-)).map((el) => {
+const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
+  return el.OrderState === order.OrderState.PAID ||
+        el.OrderState === order.OrderState.IN_SERVICE ||
+        el.OrderState === order.OrderState.EXPIRED ||
+        el.OrderState === order.OrderState.WAIT_START
+})).map((el) => {
   return {
     CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
     ProductType: getGoodType.value(el.GoodID),
-    ProductName: good.getGoodByID(el?.GoodID)?.DisplayNames?.[3] ? t(good.getGoodByID(el?.GoodID)?.DisplayNames?.[3] as string) : el.GoodName,
+    ProductName: good.displayNames(undefined, el.GoodID)?.[3] ? t(good.displayNames(undefined, el.GoodID)?.[3]) : el.GoodName,
     PurchaseAmount: el.Units,
     UnitType: t(el.GoodUnit),
-    Price: parseFloat(good.getGoodByID(el.GoodID)?.Price as string),
+    Price: good.priceFloat(undefined, el.GoodID),
     PaymentCurrency: el.PaymentCoinUnit,
     TotalCost: (Number(el.PaymentAmount) + Number(el.PayWithBalanceAmount)).toString(),
     MiningPeriod: el.GoodServicePeriodDays,
-    CumulativeProfit: detail.getMiningRewardsByOrderID(el.ID) / getDeservedRatio.value(el.GoodID),
-    ProfitCurrency: good.getGoodByID(el.GoodID)?.CoinUnit,
-    OrderStatus: order.getOrderState(el)?.startsWith('MSG') ? t(order.getOrderState(el)) : t('MSG_AWAITING_CONFIRMATION')
+    CumulativeProfit: detail.miningRewardFloat(undefined, logined.loginedUserID, el.CoinTypeID, el.ID) / getDeservedRatio.value(el.GoodID),
+    ProfitCurrency: good.good(undefined, el.GoodID)?.CoinUnit,
+    OrderStatus: _order.orderState(el.ID)?.startsWith('MSG') ? t(_order.orderState(el.ID)) : t('MSG_AWAITING_CONFIRMATION')
   } as ExportOrder
 }))
 
@@ -137,7 +138,7 @@ const onExportClick = () => {
   })
 
   const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), output], { type: 'text/plain;charset=utf-8' })
-  const filename = t('MSG_ORDER_HISTORY') + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
+  const filename = t('MSG_ORDER_HISTORY') + '-' + utils.formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)
 }
 

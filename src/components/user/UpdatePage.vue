@@ -9,7 +9,7 @@
       </div>
       <Input
         v-model:value='myVerificationCode'
-        :label='accountType === AccountType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
+        :label='accountType === appuserbase.SignMethodType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
         type='text'
         id='ver-code'
         required
@@ -26,12 +26,12 @@
 </template>
 
 <script setup lang='ts'>
-import { useLocalUserStore, AccountType, useFrontendVerifyStore, UsedFor, validateVerificationCode } from 'npool-cli-v4'
+import { user, appuserbase, coderepo, basetypes, utils } from 'src/npoolstore'
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted, computed } from 'vue'
 
 interface Props {
   label: string
-  accountType: AccountType
+  accountType: appuserbase.SignMethodType
   account: string
   verificationCode: string
   verificationCodeError: boolean
@@ -53,21 +53,25 @@ const onVerificationCodeFocusIn = () => {
   myVerificationCodeError.value = false
 }
 const onVerificationCodeFocusOut = () => {
-  myVerificationCodeError.value = !validateVerificationCode(myVerificationCode.value)
+  myVerificationCodeError.value = !utils.validateVerificationCode(myVerificationCode.value)
 }
 
-const coderepo = useFrontendVerifyStore()
+const _coderepo = coderepo.useCodeRepoStore()
 
 const onSendCodeClick = () => {
   if (!myAccount.value?.length) {
     return
   }
-  coderepo.sendVerificationCode(myAccount.value, myAccountType.value, UsedFor.Update, myAccount.value)
+  _coderepo.sendVerificationCode(
+    myAccount.value,
+    myAccountType.value as unknown as appuserbase.SigninVerifyType,
+    basetypes.EventType.Update,
+    myAccount.value)
 }
 
-const logined = useLocalUserStore()
-const myAccountType = computed(() => logined.User?.EmailAddress?.length ? AccountType.Email : AccountType.Mobile)
-const myAccount = computed(() => myAccountType.value === AccountType.Email ? logined.User?.EmailAddress : logined.User?.PhoneNO)
+const logined = user.useLocalUserStore()
+const myAccountType = computed(() => logined.User?.EmailAddress?.length ? appuserbase.SignMethodType.Email : appuserbase.SignMethodType.Mobile)
+const myAccount = computed(() => myAccountType.value === appuserbase.SignMethodType.Email ? logined.User?.EmailAddress : logined.User?.PhoneNO)
 
 const emit = defineEmits<{(e: 'update:accountType', type: string): void;
   (e: 'update:account', type: string): void;

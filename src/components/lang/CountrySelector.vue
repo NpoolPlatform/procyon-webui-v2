@@ -43,25 +43,21 @@
 
 <script setup lang='ts'>
 import { computed, onBeforeMount, defineProps, toRef, defineEmits } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useAdminAppCountryStore, AppCountry, NotifyType } from 'npool-cli-v4'
+import { appcountry, notify } from 'src/npoolstore'
 
 interface Props {
-  country: AppCountry
+  country: appcountry.Country
 }
 
 const props = defineProps<Props>()
 const country = toRef(props, 'country')
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+const _country = appcountry.useAppCountryStore()
+const countries = computed(() => _country.countries(undefined))
 
-const _country = useAdminAppCountryStore()
-const countries = computed(() => _country.AppCountries.AppCountries)
+const emit = defineEmits<{(e: 'update:country', country: appcountry.Country): void;}>()
 
-const emit = defineEmits<{(e: 'update:country', country: AppCountry): void;}>()
-
-const onItemClick = (country: AppCountry) => {
+const onItemClick = (country: appcountry.Country) => {
   emit('update:country', country)
 }
 
@@ -80,13 +76,13 @@ const getAppCountries = (offset: number, limit: number) => {
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_COUNTRIES_CODE'),
-        Message: t('MSG_GET_COUNTRIES_FAIL'),
+        Title: 'MSG_GET_COUNTRIES_CODE',
+        Message: 'MSG_GET_COUNTRIES_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (error: boolean, rows: Array<AppCountry>) => {
+  }, (error: boolean, rows: Array<appcountry.Country>) => {
     if (error || rows.length === 0) {
       return
     }

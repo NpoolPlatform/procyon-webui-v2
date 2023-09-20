@@ -14,20 +14,20 @@
           />
         </q-td>
         <q-td key='Balance' :props='myProps'>
-          {{ util.getLocaleString(myProps.row.Balance?.toFixed(4)) }} {{ myProps.row.CoinUnit }}
+          {{ utils.getLocaleString(myProps.row.Balance?.toFixed(4)) }} {{ myProps.row.CoinUnit }}
         </q-td>
         <q-td key='TotalUSDTValue' :props='myProps'>
-          {{ !currency.getCurrency(myProps.row.CoinTypeID) ? '-' : util.getLocaleString(myProps.row.TotalUSDValue?.toFixed(4)) }}
+          {{ !_coincurrency.currency(myProps.row.CoinTypeID) ? '-' : utils.getLocaleString(myProps.row.TotalUSDValue?.toFixed(4)) }}
         </q-td>
         <q-td key='TotalJPYValue' :props='myProps'>
-          {{ !currency.getCurrency(myProps.row.CoinTypeID) ? '-' : util.getLocaleString(myProps.row.TotalJPYValue?.toFixed(4)) }}
+          {{ !_coincurrency.currency(myProps.row.CoinTypeID) ? '-' : utils.getLocaleString(myProps.row.TotalJPYValue?.toFixed(4)) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps' class='asset-button'>
           <button :class='["small", "alt", (myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled) ? "in-active" : ""]' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled'>
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
-          <button :class='["small", "alt", (!coin.forPay(myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick) ? "in-active" : ""]' @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick'>
+          <button :class='["small", "alt", (!coin.forPay(undefined, myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick) ? "in-active" : ""]' @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(undefined, myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick'>
             {{ $t('MSG_DEPOSIT') }}
           </button>
         </q-td>
@@ -79,23 +79,21 @@
 import { computed, defineAsyncComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
-import {
-  Account,
-  AccountUsedFor,
-  General,
-  KYCState,
-  NotifyType,
-  useAdminAppCoinStore,
-  useAdminCurrencyStore,
-  useFrontendGeneralStore,
-  useFrontendKYCStore,
-  useFrontendTransferAccountStore,
-  useFrontendUserAccountStore,
-  useNotificationStore,
-  useAdminFiatCurrencyStore,
-  useLocaleStringStore
-} from 'npool-cli-v4'
 import { IntervalKey } from 'src/const/const'
+import {
+  appcoin,
+  notify,
+  coincurrency,
+  ledger,
+  kyc,
+  transferaccount,
+  useraccount,
+  fiatcurrency,
+  user,
+  useraccountbase,
+  accountbase,
+  utils
+} from 'src/npoolstore'
 import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -104,16 +102,14 @@ const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 const QrcodeVue = defineAsyncComponent(() => import('qrcode.vue'))
 
-interface MyGeneral extends General {
+interface MyLedger extends ledger.Ledger {
   Balance: number
   Last24HoursBalance: number
   TotalUSDValue: number
   TotalJPYValue: number
 }
 
-const util = useLocaleStringStore()
-
-const assetLabel = (asset: General) => {
+const assetLabel = (asset: ledger.Ledger) => {
   let label = asset.CoinName
   if (asset.DisplayNames?.length > 2 && asset.DisplayNames?.[2]?.length > 0) {
     label = asset.DisplayNames?.[2]
@@ -122,29 +118,32 @@ const assetLabel = (asset: General) => {
 }
 
 const router = useRouter()
-const coin = useAdminAppCoinStore()
-const kyc = useFrontendKYCStore()
-const currency = useAdminCurrencyStore()
-const fiat = useAdminFiatCurrencyStore()
+const coin = appcoin.useAppCoinStore()
+const _kyc = kyc.useKYCStore()
+const _coincurrency = coincurrency.useCurrencyStore()
+const _fiatcurrency = fiatcurrency.useFiatCurrencyStore()
+const logined = user.useLocalUserStore()
 
-const general = useFrontendGeneralStore()
+const general = ledger.useLedgerStore()
 const generals = computed(() => {
-  return Array.from(general.Generals.Generals.filter((el) => !coin.preSale(el.CoinTypeID) && el.CoinDisplay)).map((el) => {
+  return Array.from(general.ledgers(undefined, logined.loginedUserID).filter((el) => {
+    return !coin.preSale(undefined, el.CoinTypeID) && el.CoinDisplay
+  })).map((el) => {
     return {
       ...el,
       Balance: Number(el.Spendable),
-      Last24HoursBalance: general.getIntervalInComing(IntervalKey.LastDay, el.CoinTypeID),
-      TotalUSDValue: Number(el.Spendable) * currency.getUSDCurrency(el.CoinTypeID),
-      TotalJPYValue: Number(el.Spendable) * currency.getUSDCurrency(el.CoinTypeID) * fiat.getJPYCurrency()
-    } as MyGeneral
+      Last24HoursBalance: general.intervalIncoming(undefined, el.CoinTypeID, IntervalKey.LastDay),
+      TotalUSDValue: Number(el.Spendable) * _coincurrency.currency(el.CoinTypeID),
+      TotalJPYValue: Number(el.Spendable) * _coincurrency.currency(el.CoinTypeID) * _fiatcurrency.jpy()
+    } as MyLedger
   }).sort((a, b) => a.TotalUSDValue > b.TotalUSDValue ? -1 : 1)
 })
 
-const transferAccount = useFrontendTransferAccountStore()
-const transfers = computed(() => transferAccount.TransferAccounts.TransferAccounts)
+const transferAccount = transferaccount.useTransferAccountStore()
+const transfers = computed(() => transferAccount.transferAccounts(undefined, logined.loginedUserID))
 
-const account = useFrontendUserAccountStore()
-const depositAccount = ref({} as Account)
+const account = useraccount.useUserAccountStore()
+const depositAccount = ref({} as useraccountbase.Account)
 
 const qrCodeContainer = ref<HTMLDivElement>()
 const depositClick = ref(false)
@@ -152,37 +151,39 @@ const submitting = ref(false)
 const showing = ref(false)
 
 const onMenuHide = () => {
-  depositAccount.value = {} as Account
+  depositAccount.value = {} as useraccountbase.Account
   showing.value = false
 }
 const onReturnWallet = () => {
   onMenuHide()
 }
 
-const onDepositClick = (row: MyGeneral) => {
+const onDepositClick = (row: MyLedger) => {
   depositClick.value = true
   account.getDepositAccount({
     CoinTypeID: row.CoinTypeID,
-    UsedFor: AccountUsedFor.UserDeposit,
+    UsedFor: accountbase.AccountUsedFor.UserDeposit,
     Message: {
       Error: {
         Title: t('MSG_FAIL_TO_GET_DEPOSIT_ACCOUNT'),
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (row: Account, error: boolean) => {
+  }, (error: boolean, row?: useraccountbase.Account) => {
     depositClick.value = false
     if (error) {
       return
     }
-    depositAccount.value = { ...row }
+    if (row) {
+      depositAccount.value = { ...row }
+    }
     showing.value = true
   })
 }
-const onWithdrawClick = (row: MyGeneral) => {
+const onWithdrawClick = (row: MyLedger) => {
   submitting.value = true
-  kyc.getKYC({
+  _kyc.getKYC({
     Message: {}
   }, (error: boolean) => {
     submitting.value = false
@@ -195,7 +196,7 @@ const onWithdrawClick = (row: MyGeneral) => {
       })
       return
     }
-    if (kyc.KYC?.State !== KYCState.Approved) {
+    if (_kyc.kyc(undefined, logined.loginedUserID as string)?.State !== kyc.KYCState.Approved) {
       void router.push({
         path: '/remainder/kyc',
         query: {
@@ -205,7 +206,7 @@ const onWithdrawClick = (row: MyGeneral) => {
       return
     }
 
-    if (account.getWithdrawAddressByID(row.CoinTypeID)) {
+    if (account.accounts(undefined, logined.loginedUserID, row.CoinTypeID, accountbase.AccountUsedFor.UserWithdraw)) {
       void router.push({
         path: '/withdraw',
         query: {
@@ -233,14 +234,14 @@ const onWithdrawClick = (row: MyGeneral) => {
   })
 }
 
-const notification = useNotificationStore()
+const notification = notify.useNotificationStore()
 function onCopyDepositAddress () {
   copy(depositAccount.value.Address)
-  notification.Notifications.push({
-    Title: t('MSG_DEPOSIT_ADDRESS_COPIED'),
-    Message: t('MSG_COPY_DEPOSIT_ADDRESS_SUCCESS'),
+  notification.pushNotification({
+    Title: 'MSG_DEPOSIT_ADDRESS_COPIED',
+    Message: 'MSG_COPY_DEPOSIT_ADDRESS_SUCCESS',
     Popup: true,
-    Type: NotifyType.Success
+    Type: notify.NotifyType.Success
   })
 }
 

@@ -37,7 +37,7 @@
             {{ myProps.row.Labels?.join(',') }}
           </q-td>
           <q-td key='DateAdded' :props='myProps'>
-            {{ formatTime(myProps.row?.CreatedAt) }}
+            {{ utils.formatTime(myProps.row?.CreatedAt) }}
           </q-td>
           <q-td key='ActionButtons' :props='myProps' class='asset-button'>
             <button class='small alt' @click='onRemove(myProps.row)'>
@@ -88,21 +88,22 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, ref } from 'vue'
-import { NotificationType, useNotificationStore } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
-import { NotifyType, formatTime, useFrontendUserAccountStore, Account } from 'npool-cli-v4'
+import { utils, notify, useraccount, useraccountbase, user, accountbase } from 'src/npoolstore'
+
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
 const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/ShowSwitchTable.vue'))
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
-const account = useFrontendUserAccountStore()
-const accounts = computed(() => account.withdrawAddress)
+const logined = user.useLocalUserStore()
+const account = useraccount.useUserAccountStore()
+const accounts = computed(() => account.accounts(undefined, logined.loginedUserID, undefined, accountbase.AccountUsedFor.UserWithdraw))
 
-const accountLabel = (acc: Account) => {
+const accountLabel = (acc: useraccountbase.Account) => {
   let label = acc.CoinName
   if (acc.CoinDisplayNames?.length > 2 && acc.CoinDisplayNames[2]?.length > 0) {
     label = acc.CoinDisplayNames[2]
@@ -110,10 +111,10 @@ const accountLabel = (acc: Account) => {
   return label
 }
 
-const target = ref({} as Account)
+const target = ref({} as useraccountbase.Account)
 const showing = ref(false)
 
-const onRemove = (row: Account) => {
+const onRemove = (row: useraccountbase.Account) => {
   showing.value = true
   target.value = { ...row }
 }
@@ -124,7 +125,7 @@ const onCancelClick = () => {
 
 const onMenuHide = () => {
   showing.value = false
-  target.value = {} as Account
+  target.value = {} as useraccountbase.Account
 }
 
 const router = useRouter()
@@ -141,9 +142,10 @@ const onDeleteClick = () => {
     ID: target.value.ID,
     Message: {
       Error: {
-        Title: t('MSG_DELETE_WITHDRAW_ACCOUNT_FAIL'),
+        Title: 'MSG_DELETE_WITHDRAW_ACCOUNT',
+        Message: 'MSG_DELETE_WITHDRAW_ACCOUNT_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, () => {
@@ -151,14 +153,14 @@ const onDeleteClick = () => {
   })
 }
 
-const notification = useNotificationStore()
+const notification = notify.useNotificationStore()
 const onCopyAddressClick = () => {
   copy(target.value?.Address)
-  notification.Notifications.push({
-    Title: t('MSG_ADDRESS_COPIED'),
-    Message: t('MSG_COPY_ADDRESS_SUCCESS'),
+  notification.pushNotification({
+    Title: 'MSG_ADDRESS_COPIED',
+    Message: 'MSG_COPY_ADDRESS_SUCCESS',
     Popup: true,
-    Type: NotificationType.Success
+    Type: notify.NotifyType.Success
   })
 }
 
@@ -167,31 +169,31 @@ const table = computed(() => [
     name: 'Blockchain',
     label: t('MSG_BLOCKCHAIN'),
     align: 'left',
-    field: (row: Account) => row.CoinName
+    field: (row: useraccountbase.Account) => row.CoinName
   },
   {
     name: 'Address',
     label: t('MSG_ADDRESS'),
     align: 'center',
-    field: (row: Account) => row.Address
+    field: (row: useraccountbase.Account) => row.Address
   },
   {
     name: 'Memo',
     label: t('MSG_MEMO'),
     align: 'center',
-    field: (row: Account) => row?.Memo
+    field: (row: useraccountbase.Account) => row?.Memo
   },
   {
     name: 'Label',
     label: t('MSG_LABEL'),
     align: 'center',
-    field: (row: Account) => row.Labels?.join(',')
+    field: (row: useraccountbase.Account) => row.Labels?.join(',')
   },
   {
     name: 'DateAdded',
     label: t('MSG_DATE_ADDED'),
     align: 'center',
-    field: (row: Account) => formatTime(row.CreatedAt)
+    field: (row: useraccountbase.Account) => utils.formatTime(row.CreatedAt)
   },
   {
     name: 'ActionButtons',

@@ -47,7 +47,7 @@
         v-model:account='account'
         v-model:account-type='accountType'
         @verify='onCodeVerify'
-        :used-for='UsedFor.SetTransferTargetUser'
+        :used-for='basetypes.EventType.SetTransferTargetUser'
         @cancel='onCancelClick'
         show-cancel
       />
@@ -58,10 +58,7 @@
 <script setup lang='ts'>
 import { ref, defineAsyncComponent, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useFrontendTransferAccountStore, AccountType, NotifyType, TransferAccount, validateEmailAddress, validateMobileNO, UsedFor } from 'npool-cli-v4'
-import { useI18n } from 'vue-i18n'
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+import { transferaccount, notify, utils, basetypes, appuserbase } from 'src/npoolstore'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
@@ -85,14 +82,14 @@ const labelsError = ref(false)
 
 const verifying = ref(false)
 
-const targetAccountType = ref(AccountType.Email)
+const targetAccountType = ref(appuserbase.SignMethodType.Email)
 
 const onSubmit = () => {
-  if (validateEmailAddress(submitAddress.value)) {
-    targetAccountType.value = AccountType.Email
+  if (utils.validateEmailAddress(submitAddress.value)) {
+    targetAccountType.value = appuserbase.SignMethodType.Email
   }
-  if (validateMobileNO(submitAddress.value)) {
-    targetAccountType.value = AccountType.Mobile
+  if (utils.validateMobileNO(submitAddress.value)) {
+    targetAccountType.value = appuserbase.SignMethodType.Mobile
   }
   verifying.value = true
 }
@@ -102,10 +99,10 @@ const onMenuHide = () => {
 }
 
 const account = ref('')
-const accountType = ref(AccountType.Email)
+const accountType = ref(appuserbase.SignMethodType.Email)
 
 const router = useRouter()
-const transferAccount = useFrontendTransferAccountStore()
+const transferAccount = transferaccount.useTransferAccountStore()
 
 const onCancelClick = () => {
   verifying.value = false
@@ -114,20 +111,20 @@ const onCancelClick = () => {
 const onCodeVerify = (code: string) => {
   submitting.value = true
   transferAccount.createTransfer({
-    Account: accountType.value === AccountType.Google ? undefined as unknown as string : account.value,
+    Account: accountType.value === appuserbase.SignMethodType.Google ? undefined as unknown as string : account.value,
     AccountType: accountType.value,
     VerificationCode: code,
     TargetAccount: submitAddress.value,
     TargetAccountType: targetAccountType.value,
     Message: {
       Error: {
-        Title: t('MSG_SET_TRANSFER_ADDRESS'),
-        Message: t('MSG_SET_TRANSFER_ADDRESS_FAIL'),
+        Title: 'MSG_SET_TRANSFER_ADDRESS',
+        Message: 'MSG_SET_TRANSFER_ADDRESS_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (address: TransferAccount, error: boolean) => {
+  }, (error: boolean) => {
     if (error) {
       submitting.value = false
       onMenuHide()

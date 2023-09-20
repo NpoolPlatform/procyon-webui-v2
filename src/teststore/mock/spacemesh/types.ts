@@ -1,4 +1,4 @@
-import { BaseRequest } from 'npool-cli-v4'
+import { request } from 'src/npoolstore'
 
 export interface DevNet {
   netName: string
@@ -59,9 +59,9 @@ export interface Pagination {
   current: number
 }
 
-export type GetNetworksRequest = BaseRequest
+export type GetNetworksRequest = request.BaseRequest
 
-export type GetEpochsRequest = BaseRequest
+export type GetEpochsRequest = request.BaseRequest
 export interface GetEpochsResponse {
   data: Array<Epoch>
   pagination: Pagination

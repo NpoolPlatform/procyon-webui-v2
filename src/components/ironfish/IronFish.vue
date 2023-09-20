@@ -1,6 +1,6 @@
 <template>
   <IronProductPage
-    :good-id='goodID'
+    :good-id='(goodID as string)'
     :purchase-amount='purchaseAmount'
     project-class='project-iron-fish'
     bg-img='product/iron/iron-fish-banner.jpg'
@@ -9,8 +9,8 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ good.getPrice(goodID) }}</span>
-        <span class='unit'>{{ PriceCoinName }} / {{ $t(target?.Unit) }}</span>
+        <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, goodID as string)) }}</span>
+        <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.Unit ? $t(target?.Unit) : '' }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -53,9 +53,9 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span class='number'>{{ target?.ServiceStartAt === 0 ? 'TBD*' : good.getJSTDate(target?.ServiceStartAt, 'YYYY-MM-DD') }}</span>
+        <span class='number'>{{ target?.ServiceStartAt === 0 ? 'TBD*' : utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD', 9) }}</span>
         <br>
-        <span class='unit'>{{ good.getJSTDate(target?.ServiceStartAt, 'HH:mm') }} {{ $t("MSG_JST") }}</span>
+        <span class='unit'>{{ utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD', 9) }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -63,11 +63,11 @@
           </p>
         </div>
       </div>
-      <div class='three-section' v-if='good.haveSale(target)'>
+      <div class='three-section' v-if='good.canBuy(undefined, target?.ID as string)'>
         <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE") }}</h4>
-        <span class='number'>{{ good.getSaleEndDate(target) }}</span>
+        <span class='number'>{{ good.saleEndDate(undefined, target?.ID as string) }}</span>
         <br>
-        <span class='unit'>{{ good.getSaleEndTime(target) }} {{ $t("MSG_JST") }}</span>
+        <span class='unit'>{{ good.saleEndDate(undefined, target?.ID as string) }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -103,18 +103,17 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, onMounted, watch } from 'vue'
+import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { PriceCoinName } from 'npool-cli-v2'
 import { useI18n } from 'vue-i18n'
+import { getCurrencies, getDescriptions } from 'src/api/chain'
+import { appgood, notify, appcoin, appcoindescription, coincurrency, utils, constant } from 'src/npoolstore'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
-import { AppGood, InvalidID, NotifyType, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCoinDescriptionStore, useAdminCurrencyStore } from 'npool-cli-v4'
-import { getCurrencies, getDescriptions } from 'src/api/chain'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const { t, locale } = useI18n({ useScope: 'global' })
+const { locale } = useI18n({ useScope: 'global' })
 
 const IronProductPage = defineAsyncComponent(() => import('src/components/ironfish/IronProductPage.vue'))
 const ProductDetailUS = defineAsyncComponent(() => import('src/components/ironfish/en-US/Detail.vue'))
@@ -128,78 +127,49 @@ interface Query {
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 
-const getGood = (goodID:string) => {
+const getGood = (_goodID:string) => {
+  if (_good.value) {
+    return
+  }
   good.getAppGood({
-    GoodID: goodID,
+    GoodID: _goodID,
     Message: {
       Error: {
-        Title: t('MSG_GET_GOOD'),
-        Message: t('MSG_GET_GOOD_FAIL'),
+        Title: 'MSG_GET_GOOD',
+        Message: 'MSG_GET_GOOD_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, () => {
-    // TODO
+    if (!goodID.value) {
+      void router.push({ path: '/' })
+    }
   })
 }
 
-const coin = useAdminAppCoinStore()
+const coin = appcoin.useAppCoinStore()
 // Use CoinUnit to find GoodID from AppDefaultGood
 const coinUnit = 'IRON'
-const defaultGoodID = computed(() => {
-  if (query.value?.goodId?.length > 0) {
-    getGood(query.value?.goodId)
-    return query.value?.goodId
-  }
-  if (coin.AppCoins.AppCoins?.length === 0) {
-    return `${InvalidID}_`
-  }
-  const goodID = coin.getGoodIDByCoinUnit(coinUnit)
-  if (!goodID || goodID?.length === 0) {
-    return InvalidID
-  }
-  if (goodID?.length > 0) {
-    getGood(goodID)
-  }
-  return goodID
-})
-
-const goodID = computed(() => query.value.goodId?.length ? query.value.goodId : defaultGoodID.value)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
-const good = useAdminAppGoodStore()
-const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
+const good = appgood.useAppGoodStore()
+const target = computed(() => good.good(undefined, goodID.value as string))
+const goodID = computed(() => query.value?.goodId || coin.defaultGoodID(undefined, coinUnit))
+const _good = computed(() => good.good(undefined, goodID.value as string))
 
-const currency = useAdminCurrencyStore()
-
-const description = useAdminCoinDescriptionStore()
+const currency = coincurrency.useCurrencyStore()
+const description = appcoindescription.useCoinDescriptionStore()
 
 const router = useRouter()
 
-watch(defaultGoodID, () => {
-  if (defaultGoodID.value === InvalidID) {
-    void router.push({ path: '/' })
-  }
-})
-
 onMounted(() => {
-  console.log('CoinUnit: ', coinUnit)
-
-  if (description.CoinDescriptions.CoinDescriptions.length === 0) {
+  getGood(query.value?.goodId)
+  if (!description.descriptions(undefined)?.length) {
     getDescriptions(0, 100)
   }
-
-  if (currency.Currencies.Currencies.length === 0) {
-    getCurrencies(0, 500)
-  }
-
-  if (defaultGoodID.value === `${InvalidID}_`) {
-    return
-  }
-
-  if (defaultGoodID.value === InvalidID) {
-    void router.push({ path: '/' })
+  if (!currency.currencies.length) {
+    getCurrencies(0, 100)
   }
 })
 

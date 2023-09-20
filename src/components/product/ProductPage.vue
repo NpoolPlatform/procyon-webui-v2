@@ -15,7 +15,7 @@
           {{ $t('MSG_MINING_PURCHASE') }}
         </h3>
         <form action='javascript:void(0)' id='purchase'>
-          <div class='full-section' v-if='good.haveSale(target)'>
+          <div class='full-section' v-if='good.canBuy(undefined, target?.ID as string)'>
             <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
             <span class='number'>{{ remainDays }}</span>
             <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -62,7 +62,7 @@
               label='MSG_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target?.EnablePurchase || !good.haveSale(target) || good.getPurchaseLimit(target) <= 0'
+              :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.ID) || good.purchaseLimit(undefined, target?.ID) <= 0'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -87,7 +87,7 @@
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
           <form action='javascript:void(0)' id='purchase'>
-            <div class='full-section' v-if='good.haveSale(target)'>
+            <div class='full-section' v-if='good.canBuy(undefined, target?.ID as string)'>
               <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
               <span class='number'>{{ remainDays }}</span>
               <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -133,7 +133,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !target?.EnablePurchase || !good.haveSale(target) || good.getPurchaseLimit(target) <= 0'
+                :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.ID) || good.purchaseLimit(undefined, target?.ID) <= 0'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -148,18 +148,12 @@
 </template>
 
 <script setup lang='ts'>
-import { PriceCoinName } from 'npool-cli-v2'
 import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import warning from 'src/assets/warning.svg'
-import {
-  AppGood,
-  useAdminAppCoinStore,
-  useAdminAppGoodStore,
-  useFrontendGeneralStore,
-  useLocalUserStore
-} from 'npool-cli-v4'
 import { getCoins } from 'src/api/chain'
+import { constant, appgood, appcoin, ledger, user } from 'src/npoolstore'
+
+import warning from 'src/assets/warning.svg'
 
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
@@ -183,27 +177,25 @@ const purchaseAmount = toRef(props, 'purchaseAmount')
 
 const router = useRouter()
 
-const logined = useLocalUserStore()
+const logined = user.useLocalUserStore()
+const general = ledger.useLedgerStore()
+const good = appgood.useAppGoodStore()
+const target = computed(() => good.good(undefined, goodID.value))
+const total = computed(() => good.purchaseLimit(undefined, target.value?.ID as string))
 
-const general = useFrontendGeneralStore()
-
-const good = useAdminAppGoodStore()
-const target = computed(() => good.getGoodByID(goodID.value) as AppGood)
-const total = computed(() => good.getPurchaseLimit(target?.value))
-
-const coin = useAdminAppCoinStore()
-const coins = computed(() => coin.getAvailableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
+const coin = appcoin.useAppCoinStore()
+const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
 
 const defaultCoinTypeID = computed(() => {
   return coins.value?.length > 0 ? coins.value?.[0].CoinTypeID : undefined as unknown as string
 })
 const selectedCoinID = ref(defaultCoinTypeID.value)
-const paymentCoin = computed(() => coin.getCoinByID(selectedCoinID.value))
+const paymentCoin = computed(() => coin.coin(undefined, selectedCoinID.value))
 
 const showRateTip = computed(() => {
   return paymentCoin.value?.Unit?.length &&
-        !paymentCoin.value?.Unit?.includes(PriceCoinName) &&
-        !paymentCoin.value?.Name?.includes(PriceCoinName) &&
+        !paymentCoin.value?.Unit?.includes(constant.PriceCoinName) &&
+        !paymentCoin.value?.Name?.includes(constant.PriceCoinName) &&
         !paymentCoin.value?.Unit?.includes('BUSD') &&
         !paymentCoin.value?.Unit?.includes('USDC')
 })
@@ -229,7 +221,7 @@ const onPurchaseClick = () => {
       path: '/signin',
       query: {
         target: '/product/aleo',
-        goodId: target.value.GoodID,
+        goodId: target.value?.GoodID,
         purchaseAmount: myPurchaseAmount.value
       }
     })
@@ -278,7 +270,7 @@ watch(target, () => {
 })
 
 onMounted(() => {
-  if (coin.AppCoins.AppCoins.length === 0) {
+  if (!coin.coins(undefined).length) {
     getCoins(0, 100)
   }
 
@@ -293,7 +285,7 @@ onMounted(() => {
 
   ticker.value = window.setInterval(() => {
     const now = Math.floor(Date.now() / 1000)
-    const remain = endTime.value - now >= 0 ? endTime.value - now : 0
+    const remain = endTime.value as number - now >= 0 ? endTime.value as number - now : 0
     remainDays.value = Math.floor(remain / 24 / 60 / 60)
     remainHours.value = Math.floor((remain - remainDays.value * 24 * 60 * 60) / 60 / 60)
     remainMinutes.value = Math.floor((remain - remainDays.value * 24 * 60 * 60 - remainHours.value * 60 * 60) / 60)
