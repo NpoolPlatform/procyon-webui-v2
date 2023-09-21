@@ -124,7 +124,7 @@
 import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { appgood, notify, appcoin, appcoindescription, coincurrency, utils, constant, _locale } from 'src/npoolstore'
-import { getCurrencies, getDescriptions } from 'src/api/chain'
+import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
@@ -144,12 +144,16 @@ const query = computed(() => route.query as unknown as Query)
 const locale = _locale.useLocaleStore()
 const __locale = computed(() => locale.locale())
 
-const getGood = (_goodID:string) => {
+const getGood = () => {
   if (_good.value) {
     return
   }
+  if (!goodID.value) {
+    void router.push({ path: '/' })
+    return
+  }
   good.getAppGood({
-    GoodID: _goodID,
+    ID: goodID.value,
     Message: {
       Error: {
         Title: 'MSG_GET_GOOD',
@@ -159,7 +163,7 @@ const getGood = (_goodID:string) => {
       }
     }
   }, () => {
-    if (!goodID.value) {
+    if (!_good.value) {
       void router.push({ path: '/' })
     }
   })
@@ -181,7 +185,13 @@ const description = appcoindescription.useCoinDescriptionStore()
 const router = useRouter()
 
 onMounted(() => {
-  getGood(query.value?.goodId)
+  if (!coin.coins(undefined).length) {
+    getCoins(0, 100, () => {
+      getGood()
+    })
+  } else {
+    getGood()
+  }
   if (!description.descriptions(undefined)?.length) {
     getDescriptions(0, 100)
   }
