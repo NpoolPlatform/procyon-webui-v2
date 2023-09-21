@@ -11,7 +11,7 @@
             </span>
           </span>
         </li>
-        <NotifCard v-for='row in notifications' :key='(row as notif.Notif).ID' :notif='row' />
+        <NotifCard class='cursor-pointer' v-for='row in notifications' :key='(row as notif.Notif).ID' :notif='row' />
       </ul>
     </div>
   </div>
@@ -25,7 +25,7 @@ import { getNotifs, onMarkAll } from 'src/api/notif'
 const NotifCard = defineAsyncComponent(() => import('src/components/notification/NotifCard.vue'))
 
 const _notif = notif.useNotifStore()
-const notifications = computed(() => _notif.notifs)
+const notifications = computed(() => _notif.notifs(undefined, logined.loginedUserID))
 const logined = user.useLocalUserStore()
 const unReads = computed(() => _notif.unreads(undefined, logined.loginedUserID))
 

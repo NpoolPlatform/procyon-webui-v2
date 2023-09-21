@@ -42,7 +42,7 @@ const logined = user.useLocalUserStore()
 const lang = applang.useAppLangStore()
 
 watch([() => logined.User?.SelectedLangID, lang.langs(sdk.AppID.value)], () => {
-  if (logined.selectedLangID.length) {
+  if (logined.selectedLangID?.length) {
     const _lang = lang.lang(undefined, logined.selectedLangID)
     if (!_lang) {
       return

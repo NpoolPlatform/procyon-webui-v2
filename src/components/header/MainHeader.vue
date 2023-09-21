@@ -123,7 +123,7 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent, computed, watch, onMounted } from 'vue'
+import { defineAsyncComponent, computed, watch, onMounted, ref } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
 import { getNotifs, onMarkAll } from 'src/api/notif'
@@ -186,21 +186,25 @@ const onBellClick = () => {
 }
 
 const logined = computed(() => localUser.logined)
+const notifFetcher = ref(-1)
 
 watch(logined, () => {
+  if (notifFetcher.value >= 0) {
+    if (!logined.value) {
+      window.clearInterval(notifFetcher.value)
+      notifFetcher.value = -1
+    }
+    return
+  }
   if (!logined.value) {
     return
   }
-  setTimeout(() => {
-    initialize()
-  }, 2000)
+  getNotifs(0, 100)
+  notifFetcher.value = window.setInterval(() => {
+    _notif.$reset()
+    getNotifs(0, 100)
+  }, 120000)
 })
-
-const initialize = () => {
-  if (localUser.User?.InvitationCode?.length) {
-    // TODO
-  }
-}
 
 const _notif = notif.useNotifStore()
 const unReads = computed(() => _notif.unreads(undefined, localUser.loginedUserID))
@@ -209,25 +213,11 @@ const lastFiveNotifs = computed(() => notifs.value.length > 5 ? notifs.value.sli
 
 onMounted(() => {
   if (logined.value) {
-    setTimeout(() => {
-      initialize()
-    }, 2000)
-  }
-
-  if (logined.value) {
-    setInterval(() => {
-      if (!logined.value) {
-        return
-      }
+    getNotifs(0, 100)
+    notifFetcher.value = window.setInterval(() => {
       _notif.$reset()
-      getNotifs(0, 500)
+      getNotifs(0, 100)
     }, 120000)
-  }
-})
-
-onMounted(() => {
-  if (localUser.logined && notifs.value.length) {
-    getNotifs(0, 500)
   }
 })
 
