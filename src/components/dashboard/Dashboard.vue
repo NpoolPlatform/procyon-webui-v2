@@ -102,7 +102,7 @@ const getProfits = (offset:number, limit: number) => {
       }
     }
   }, (error: boolean, rows: Array<ledgerprofit.Profit>) => {
-    if (error || rows.length < limit) {
+    if (error || !rows.length) {
       return
     }
     getProfits(limit + offset, limit)
@@ -123,7 +123,7 @@ const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, of
       }
     }
   }, key, (error: boolean, rows: Array<ledgerprofit.Profit>) => {
-    if (error || rows.length < limit) {
+    if (error || !rows.length) {
       return
     }
     getIntervalProfits(key, startAt, endAt, limit + offset, limit)
@@ -144,7 +144,7 @@ const getGoodProfits = (offset: number, limit: number, startAt: number, endAt: n
       }
     }
   }, (error: boolean, rows: Array<ledgerprofit.GoodProfit>) => {
-    if (error || rows.length < limit) {
+    if (error || !rows.length) {
       return
     }
     getGoodProfits(limit + offset, limit, startAt, endAt)
@@ -165,7 +165,7 @@ const getIntervalGoodProfits = (key: IntervalKey, startAt: number, endAt: number
       }
     }
   }, key, (error: boolean, rows: Array<ledgerprofit.GoodProfit>) => {
-    if (error || rows.length < limit) {
+    if (error || !rows.length) {
       return
     }
     getIntervalGoodProfits(key, startAt, endAt, limit + offset, limit)
