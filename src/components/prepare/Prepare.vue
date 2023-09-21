@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { app, appgood, notify } from 'src/npoolstore'
 
@@ -7,10 +7,11 @@ import { app, appgood, notify } from 'src/npoolstore'
 const { t } = useI18n({ useScope: 'global' })
 
 const good = appgood.useAppGoodStore()
+const goods = computed(() => good.goods(undefined))
 const application = app.useApplicationStore()
 
 onMounted(() => {
-  if (!good.goods(undefined)) {
+  if (!goods.value?.length) {
     getAppGoods(0, 100)
   }
   getApplication()
