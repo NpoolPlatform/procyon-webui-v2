@@ -15,40 +15,40 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
-        <span class='value'>{{ util.getLocaleString(_totalEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
-        <span class='sub-value'> (* {{ PriceCoinName }})</span>
+        <span class='value'>{{ utils.getLocaleString(_totalEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
+        <span class='sub-value'> (* {{ constant.PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}: </span>
-        <span class='value'>{{ util.getLocaleString(_last24HoursEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
-        <span class='sub-value'> (* {{ PriceCoinName }})</span>
+        <span class='value'>{{ utils.getLocaleString(_last24HoursEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
+        <span class='sub-value'> (* {{ constant.PriceCoinName }})</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}:</span>
-        <span class='value'>{{ util.getLocaleString(totalUnits) }} {{ $t(goodUnit) }}</span>
+        <span class='value'>{{ utils.getLocaleString(totalUnits) }} {{ $t(goodUnit) }}</span>
       </div>
     </div>
     <q-slide-transition>
       <div class='detailed-summary' v-show='!short'>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_OUTPUT') }}:</span>
-          <span class='value'>{{ util.getLocaleString(_last30DaysDailyEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
+          <span class='value'>{{ utils.getLocaleString(_last30DaysDailyEarningCoin?.toFixed(4)) }} {{ target?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
-          <span class='value'>{{ util.getLocaleString((_last24HoursEarningCoin * 0.2)?.toFixed(4)) }} {{ target?.Unit }} (20%)</span>
+          <span class='value'>{{ utils.getLocaleString((_last24HoursEarningCoin * 0.2)?.toFixed(4)) }} {{ target?.Unit }} (20%)</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_30_DAYS_AVERAGE_NET_OUTPUT') }}:</span>
-          <span class='value'>{{ util.getLocaleString((_last30DaysDailyEarningCoin * 0.8)?.toFixed(4)) }} {{ target?.Unit }}</span>
+          <span class='value'>{{ utils.getLocaleString((_last30DaysDailyEarningCoin * 0.8)?.toFixed(4)) }} {{ target?.Unit }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
-          <span class='value'>{{ util.getLocaleString(goodPeriod) }} {{ $t('MSG_DAYS') }}</span>
+          <span class='value'>{{ utils.getLocaleString(goodPeriod) }} {{ $t('MSG_DAYS') }}</span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_NETWORK_DAILY_OUTPUT') }}:</span>
-          <span class='value'>{{ util.getLocaleString(daily?.toFixed(2)) }} {{ target?.Unit }}</span>
+          <span class='value'>{{ utils.getLocaleString(daily?.toFixed(2)) }} {{ target?.Unit }}</span>
         </div>
       </div>
     </q-slide-transition>
@@ -67,32 +67,28 @@
 </template>
 
 <script setup lang='ts'>
-import { AppCoin, useAdminAppCoinStore, useAdminAppGoodStore, useFrontendProfitStore, PriceCoinName, NotifyType, useLocaleStringStore } from 'npool-cli-v4'
 import { spacemesh } from 'src/teststore'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { appcoin, appgood, ledgerprofit, constant, notify, utils, user } from 'src/npoolstore'
 
 import chevrons from '../../assets/chevrons.svg'
 import warning from '../../assets/warning.svg'
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+const coin = appcoin.useAppCoinStore()
+const target = computed(() => coin.coins(undefined).find((el) => el.Name?.toLowerCase()?.includes('spacemesh')) as appcoin.AppCoin)
 
-const util = useLocaleStringStore()
+const logined = user.useLocalUserStore()
 
-const coin = useAdminAppCoinStore()
-const target = computed(() => coin.AppCoins.AppCoins.find((el) => el.Name?.toLowerCase()?.includes('spacemesh')) as AppCoin)
-
-const profit = useFrontendProfitStore()
-const goodProfits = computed(() => profit.GoodProfits.GoodProfits.filter((el) => el.CoinTypeID === target?.value?.CoinTypeID))
+const profit = ledgerprofit.useProfitStore()
+const goodProfits = computed(() => profit.goodProfits(undefined, logined.loginedUserID).filter((el) => el.CoinTypeID === target?.value?.CoinTypeID))
 
 const goodUnit = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodUnit : '')
 const goodPeriod = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodServicePeriodDays : '')
 const totalUnits = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].Units : 0)
 
-const good = useAdminAppGoodStore()
-const total = computed(() => goodProfits.value?.length ? good.getGoodByID(goodProfits.value?.[0].GoodID)?.Total : 0)
+const good = appgood.useAppGoodStore()
+const total = computed(() => goodProfits.value?.length ? good.good(undefined, goodProfits.value?.[0].AppGoodID)?.GoodTotal : 0)
 const unitsRatio = computed(() => goodProfits.value?.length && total.value ? Number(totalUnits.value) / Number(total.value) : 0)
 const daily = computed(() => _spacemesh.getNetworkDailyOutput)
 
@@ -137,10 +133,10 @@ const updater = () => {
   _spacemesh.getNetworks({
     Message: {
       Error: {
-        Title: t('MSG_GET_SPACEMESH_NETWORKS'),
-        Message: t('MSG_GET_SPACEMESH_NETWORKS_FAIL'),
+        Title: 'MSG_GET_SPACEMESH_NETWORKS',
+        Message: 'MSG_GET_SPACEMESH_NETWORKS_FAIL',
         Popup: false,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, (error: boolean) => {
@@ -150,10 +146,10 @@ const updater = () => {
     _spacemesh.getEpochs({
       Message: {
         Error: {
-          Title: t('MSG_GET_SPACEMESH_NETWORK_INFOS'),
-          Message: t('MSG_GET_SPACEMESH_NETWORK_INFOS_FAIL'),
+          Title: 'MSG_GET_SPACEMESH_NETWORK_INFOS',
+          Message: 'MSG_GET_SPACEMESH_NETWORK_INFOS_FAIL',
           Popup: false,
-          Type: NotifyType.Error
+          Type: notify.NotifyType.Error
         }
       }
     }, () => {

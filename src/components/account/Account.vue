@@ -164,34 +164,29 @@
 </template>
 
 <script setup lang='ts'>
-import { NotifyType, useFrontendUserStore, useLocalUserStore, validateUsername } from 'npool-cli-v4'
 import { defineAsyncComponent, ref, computed } from 'vue'
-
-import { useI18n } from 'vue-i18n'
+import { notify, utils, user } from 'src/npoolstore'
 
 import warning from '../../assets/warning.svg'
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 
-const user = useLocalUserStore()
+const logined = user.useLocalUserStore()
 
-const username = ref(user.User?.Username)
+const username = ref(logined.username)
 const usernameError = ref(false)
 const onUsernameFocusIn = () => {
   usernameError.value = false
 }
 const onUsernameFocusOut = () => {
-  usernameError.value = !username.value || !validateUsername(username.value)
+  usernameError.value = !username.value || !utils.validateUsername(username.value)
 }
 
 const genders = ref(['MSG_FAMALE', 'MSG_MALE', 'MSG_OTHER'])
-const gender = ref(user.User?.Gender)
+const gender = ref(logined.gender)
 
-const firstName = ref(user.User?.FirstName)
+const firstName = ref(logined.firstName)
 const firstNameError = ref(false)
 const onFirstNameFocusIn = () => {
   firstNameError.value = false
@@ -200,7 +195,7 @@ const onFirstNameFocusOut = () => {
   firstNameError.value = !firstName.value?.length
 }
 
-const lastName = ref(user.User?.LastName)
+const lastName = ref(logined.lastName)
 const lastNameError = ref(false)
 const onLastNameFocusIn = () => {
   lastNameError.value = false
@@ -209,12 +204,12 @@ const onLastNameFocusOut = () => {
   lastNameError.value = !lastName.value?.length
 }
 
-const postalCode = ref(user.User?.PostalCode)
+const postalCode = ref(logined.postalCode)
 const postalCodeError = ref(false)
 
-const addressFields = ref(user.User?.AddressFields ? user.User?.AddressFields : [])
+const addressFields = ref(logined.addressFields)
 const country = computed({
-  get: () => addressFields.value.length > 0 ? addressFields.value[0] : '',
+  get: () => addressFields.value?.[0] || '',
   set: (val) => {
     addressFields.value = [val, province.value, city.value, street1.value, street2.value]
   }
@@ -222,7 +217,7 @@ const country = computed({
 const countryError = ref(false)
 
 const province = computed({
-  get: () => addressFields.value.length > 1 ? addressFields.value[1] : '',
+  get: () => addressFields.value?.[1] || '',
   set: (val) => {
     addressFields.value = [country.value, val, city.value, street1.value, street2.value]
   }
@@ -231,7 +226,7 @@ const province = computed({
 const provinceError = ref(false)
 
 const city = computed({
-  get: () => addressFields.value.length > 2 ? addressFields.value[2] : '',
+  get: () => addressFields.value?.[2] || '',
   set: (val) => {
     addressFields.value = [country.value, province.value, val, street1.value, street2.value]
   }
@@ -240,7 +235,7 @@ const city = computed({
 const cityError = ref(false)
 
 const street1 = computed({
-  get: () => addressFields.value.length > 3 ? addressFields.value[3] : '',
+  get: () => addressFields.value?.[3] || '',
   set: (val) => {
     addressFields.value = [country.value, province.value, city.value, val, street2.value]
   }
@@ -249,7 +244,7 @@ const street1 = computed({
 const street1Error = ref(false)
 
 const street2 = computed({
-  get: () => addressFields.value.length > 4 ? addressFields.value[4] : '',
+  get: () => addressFields.value?.[4] || '',
   set: (val) => {
     addressFields.value = [country.value, province.value, city.value, street1.value, val]
   }
@@ -257,7 +252,7 @@ const street2 = computed({
 
 const street2Error = ref(false)
 
-const fuser = useFrontendUserStore()
+const fuser = user.useUserStore()
 
 const submitting = ref(false)
 const onSubmit = () => {
@@ -280,16 +275,16 @@ const onSubmit = () => {
     LastName: lastName.value,
     Message: {
       Error: {
-        Title: t('MSG_UPDATE_EXTRA'),
-        Message: t('MSG_UPDATE_EXTRA_FAIL'),
+        Title: 'MSG_UPDATE_EXTRA',
+        Message: 'MSG_UPDATE_EXTRA_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       },
       Info: {
-        Title: t('MSG_UPDATE_EXTRA'),
-        Message: t('MSG_UPDATE_EXTRA_SUCCESS'),
+        Title: 'MSG_UPDATE_EXTRA',
+        Message: 'MSG_UPDATE_EXTRA_SUCCESS',
         Popup: true,
-        Type: NotifyType.Success
+        Type: notify.NotifyType.Success
       }
     }
   }, () => {

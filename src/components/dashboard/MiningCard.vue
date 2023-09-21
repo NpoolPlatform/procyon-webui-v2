@@ -11,17 +11,17 @@
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : util.getLocaleString(parseFloat(goodProfit?.TotalInComing?.toFixed(4))) }}</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : utils.getLocaleString(parseFloat(goodProfit?.TotalInComing?.toFixed(4))) }}</span>
         <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}: </span>
-        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : util.getLocaleString(parseFloat(goodProfit?.Last24HoursInComing?.toFixed(4))) }}</span>
+        <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : utils.getLocaleString(parseFloat(goodProfit?.Last24HoursInComing?.toFixed(4))) }}</span>
         <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}: </span>
-        <span class='value'>{{ util.getLocaleString(goodProfit?.Units) }}</span>
+        <span class='value'>{{ utils.getLocaleString(goodProfit?.Units) }}</span>
         <span class='sub-value'>{{ goodProfit ? $t(goodProfit?.GoodUnit) : '' }}</span>
       </div>
     </div>
@@ -36,35 +36,35 @@
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
           <span class='value'>
-            {{ util.getLocaleString(goodProfit?.GoodServicePeriodDays) }}
+            {{ utils.getLocaleString(goodProfit?.GoodServicePeriodDays) }}
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_DAYS_MINED') }}:</span>
           <span class='value'>
-            {{ util.getLocaleString(goodProfit?.DaysMined) }}
+            {{ utils.getLocaleString(goodProfit?.DaysMined) }}
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_DAYS_REMAINING') }}:</span>
           <span class='value'>
-            {{ util.getLocaleString(goodProfit?.DaysRemaining) }}
+            {{ utils.getLocaleString(goodProfit?.DaysRemaining) }}
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
           <span class='value'>
-            {{ goodProfit?.CoinPreSale ? '*' : util.getLocaleString(parseFloat((goodProfit.Last24HoursInComing / deservedRatio * techServiceFee)?.toFixed(4))) }}
+            {{ goodProfit?.CoinPreSale ? '*' : utils.getLocaleString(parseFloat((goodProfit.Last24HoursInComing / deservedRatio * techServiceFee)?.toFixed(4))) }}
             <span class='unit'>{{ goodProfit?.CoinUnit }} ({{ target?.TechnicalFeeRatio }}%)</span>
           </span>
         </div>
-        <div class='line' v-if='goodProfit.GoodID === "de420061-e878-4a8b-986a-805cadd59233"'>
+        <div class='line' v-if='goodProfit.AppGoodID === "de420061-e878-4a8b-986a-805cadd59233"'>
           <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
           <span class='value'>
-            {{ goodProfit.TotalEstimatedDailyReward === 0 ? '*' : util.getLocaleString(goodProfit.TotalEstimatedDailyReward) }}
+            {{ goodProfit.TotalEstimatedDailyReward === 0 ? '*' : utils.getLocaleString(goodProfit.TotalEstimatedDailyReward) }}
             <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
         </div>
         <div class='warning' v-if='target?.Descriptions?.[3] && target?.Descriptions?.[3]?.length > 0'>
@@ -81,9 +81,9 @@
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
       <button
-        :class='["alt", getStatus(target as AppGood) ? "in-active" : ""]'
-        :disabled='getStatus(target as AppGood)'
-        @click='onPurchaseClick(target as AppGood)'
+        :class='["alt", showProductPage(target as appgood.Good) ? "" : "in-active"]'
+        :disabled='!showProductPage(target as appgood.Good)'
+        @click='onPurchaseClick(target as appgood.Good)'
       >
         {{ $t('MSG_PURCHASE_CAPACITY') }}
       </button>
@@ -93,12 +93,12 @@
 
 <script setup lang='ts'>
 import saveAs from 'file-saver'
-import { useAdminAppGoodStore, useFrontendDetailStore, formatTime, MiningReward, AppGood, useLocaleStringStore } from 'npool-cli-v4'
-import { MyGoodProfit } from 'src/localstore/ledger/types'
+import { MyGoodProfit } from 'src/localstore'
 import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { stringify } from 'csv-stringify/sync'
 import { useI18n } from 'vue-i18n'
+import { appgood, ledgerstatement, utils, user } from 'src/npoolstore'
 
 import chevrons from '../../assets/chevrons.svg'
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -113,32 +113,22 @@ const goodProfit = toRef(props, 'profit')
 
 const short = ref(true)
 
-const util = useLocaleStringStore()
-
-const good = useAdminAppGoodStore()
-const target = computed(() => good.getGoodByID(goodProfit.value?.GoodID))
-const coinUnit = computed(() => good.getGoodByID(goodProfit.value?.GoodID)?.CoinUnit as string)
-const techServiceFee = computed(() => Number(target?.value?.TechnicalFeeRatio) / 100)
+const logined = user.useLocalUserStore()
+const good = appgood.useAppGoodStore()
+const target = computed(() => good.good(undefined, goodProfit.value?.AppGoodID))
+const coinUnit = computed(() => target.value?.CoinUnit as string)
+const techServiceFee = computed(() => good.techniqueFeeTatio(undefined, goodProfit.value?.AppGoodID) / 100)
 const deservedRatio = computed(() => 1 - techServiceFee.value)
 
-const getStatus = computed(() => (_good: AppGood) => !_good.EnableProductPage || !good.haveSale(_good) || !good.haveStock(_good))
+const showProductPage = computed(() => (_good: appgood.Good) => _good.EnableProductPage && good.canBuy(undefined, _good.ID) && good.spotQuantity(undefined, _good.ID))
 
-const detail = useFrontendDetailStore()
-const miningDetails = computed(() => detail.MiningRewards.MiningRewards.filter((el) => el.GoodID === goodProfit?.value?.GoodID))
+const detail = ledgerstatement.useStatementStore()
+const miningDetails = computed(() => detail.miningRewards(undefined, logined.loginedUserID).filter((el) => el.AppGoodID === goodProfit?.value?.AppGoodID))
 
 const router = useRouter()
-const onPurchaseClick = (_good: AppGood) => {
-  if (_good.ProductPage?.length === 0 || !_good.ProductPage) {
-    void router.push({
-      path: '/product/aleo',
-      query: {
-        goodId: _good.GoodID
-      }
-    })
-    return
-  }
+const onPurchaseClick = (_good: appgood.Good) => {
   void router.push({
-    path: _good?.ProductPage,
+    path: _good.ProductPage?.length ? _good.ProductPage : '/product/aleo',
     query: {
       goodId: _good.GoodID
     }
@@ -160,7 +150,7 @@ interface ExportMiningReward {
 }
 
 const exportMiningRewards = computed(() => {
-  const rowMap = new Map<string, Array<MiningReward>>()
+  const rowMap = new Map<string, Array<ledgerstatement.MiningReward>>()
   const keys = [] as Array<string>
   miningDetails.value.forEach((el) => {
     const benefitDate = new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC')?.split(' ')[0]
@@ -219,7 +209,7 @@ const onExportClick = () => {
   const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), output], { type: 'text/plain;charset=utf-8' })
   let name = target?.value?.DisplayNames?.[2] ? t(target?.value?.DisplayNames?.[2]) : goodProfit.value?.GoodName
   name = name.replace(/<.*?>/g, '')
-  const filename = name + '-' + formatTime(new Date().getTime() / 1000) + '.csv'
+  const filename = name + '-' + utils.formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)
 }
 </script>

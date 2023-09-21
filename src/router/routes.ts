@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from 'vue-router'
-import { RouteMetaImpl } from 'npool-cli-v2/utils'
+import { RouteMetaImpl } from 'src/npoolstore/utils'
 
 declare module 'vue-router' {
   interface RouteMeta extends RouteMetaImpl {

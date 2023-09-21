@@ -31,7 +31,7 @@
 
     <div class='line'>
       <span class='label'>{{ $t('MSG_ORDER_EFFECTIVE') }}:</span>
-      <span class='value'>{{ utils.formatTime(good.StartAt, true) }}</span>
+      <span class='value'>{{ utils.formatTime(good.StartAt, undefined, 9) }}</span>
     </div>
     <button class='alt' @click='onPurchaseClick'>
       {{ $t('MSG_PURCHASE') }}

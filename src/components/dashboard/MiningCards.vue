@@ -10,27 +10,26 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { AppGood, useAdminAppCoinStore, useAdminAppGoodStore, useAdminCurrencyStore, useFrontendProfitStore } from 'npool-cli-v4'
 import { IntervalKey } from 'src/const/const'
-import { MyGoodProfit } from 'src/localstore/ledger/types'
+import { MyGoodProfit } from 'src/localstore'
+import { appgood, appcoin, coincurrency, ledgerprofit, user, utils } from 'src/npoolstore'
 
 const MiningCard = defineAsyncComponent(() => import('src/components/dashboard/MiningCard.vue'))
 // const SpaceMeshMockCard = defineAsyncComponent(() => import('src/components/dashboard/SpacemeshMockCard.vue'))
 
-const currency = useAdminCurrencyStore()
-const coin = useAdminAppCoinStore()
+const currency = coincurrency.useCurrencyStore()
+const coin = appcoin.useAppCoinStore()
+const logined = user.useLocalUserStore()
 
-const good = useAdminAppGoodStore()
+const good = appgood.useAppGoodStore()
 const getTBD = computed(() => (goodID:string) => {
-  const _good = good.getGoodByID(goodID)
-  if (!_good) return '*'
-  console.log(_good.Descriptions)
-  return _good?.Descriptions?.[5]?.length > 0 ? _good?.Descriptions?.[5] : '*'
+  const _good = good.good(undefined, goodID)
+  return _good?.Descriptions?.[5] || '*'
 })
 
-const profit = useFrontendProfitStore()
-const goodProfits = computed(() => Array.from(profit.GoodProfits.GoodProfits).map((el) => {
-  const _good = good.getGoodByID(el.GoodID) as AppGood
+const profit = ledgerprofit.useProfitStore()
+const goodProfits = computed(() => Array.from(profit.goodProfits(undefined, logined.loginedUserID)).map((el) => {
+  const _good = good.good(undefined, el.AppGoodID) as appgood.Good
   const now = Math.floor(Date.now() / 1000)
 
   const remain = now - _good?.ServiceStartAt >= 0 ? now - _good?.ServiceStartAt : 0
@@ -40,16 +39,16 @@ const goodProfits = computed(() => Array.from(profit.GoodProfits.GoodProfits).ma
   return {
     ...el,
     Units: el.Units,
-    CoinPreSale: coin.preSale(el.CoinTypeID),
-    TotalInComing: profit.getGoodTotalIncoming(el.CoinTypeID, el.GoodID),
-    TotalUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getGoodTotalIncoming(el.CoinTypeID, el.GoodID),
-    Last24HoursInComing: profit.getGoodIntervalProfitInComing(IntervalKey.LastDay, el.CoinTypeID, el.GoodID),
-    Last24HoursUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getGoodIntervalProfitInComing(IntervalKey.LastDay, el.CoinTypeID, el.GoodID),
-    Last30DaysInComing: profit.getGoodIntervalProfitInComing(IntervalKey.LastMonth, el.CoinTypeID, el.GoodID),
-    Last30DaysUSDInComing: currency.getUSDCurrency(el.CoinTypeID) * profit.getGoodIntervalProfitInComing(IntervalKey.LastMonth, el.CoinTypeID, el.GoodID),
-    TotalEstimatedDailyReward: Number(el.Units) * parseFloat(good.getGoodByID(el.GoodID)?.DailyRewardAmount as string),
+    CoinPreSale: coin.preSale(undefined, el.CoinTypeID),
+    TotalInComing: profit.totalIncoming(undefined, logined.loginedUserID, el.CoinTypeID, el.AppGoodID),
+    TotalUSDInComing: currency.currency(el.CoinTypeID) * profit.totalIncoming(undefined, logined.loginedUserID, el.CoinTypeID, el.AppGoodID),
+    Last24HoursInComing: profit.intervalGoodIncoming(undefined, logined.loginedUserID, IntervalKey.LastDay, el.CoinTypeID, el.AppGoodID),
+    Last24HoursUSDInComing: currency.currency(el.CoinTypeID) * profit.intervalGoodIncoming(undefined, logined.loginedUserID, IntervalKey.LastDay, el.CoinTypeID, el.AppGoodID),
+    Last30DaysInComing: profit.intervalGoodIncoming(undefined, logined.loginedUserID, IntervalKey.LastMonth, el.CoinTypeID, el.AppGoodID),
+    Last30DaysUSDInComing: currency.currency(el.CoinTypeID) * profit.intervalGoodIncoming(undefined, logined.loginedUserID, IntervalKey.LastMonth, el.CoinTypeID, el.AppGoodID),
+    TotalEstimatedDailyReward: Number(el.Units) * parseFloat(good.good(undefined, el.AppGoodID)?.DailyRewardAmount as string),
     GoodSaleEndAt: _good?.SaleEndAt,
-    MiningStartDate: _good?.ServiceStartAt > Math.ceil(Date.now() / 1000) ? getTBD.value(el.GoodID) : good.getJSTDate(_good?.ServiceStartAt, 'YYYY-MM-DD'),
+    MiningStartDate: _good?.ServiceStartAt > Math.ceil(Date.now() / 1000) ? getTBD.value(el.AppGoodID) : utils.formatTime(_good?.ServiceStartAt, 'YYYY-MM-DD', 9),
     DaysMined: daysMined > el.GoodServicePeriodDays ? el.GoodServicePeriodDays : daysMined,
     DaysRemaining: daysRemaining
   } as MyGoodProfit

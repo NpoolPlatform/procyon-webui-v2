@@ -1,7 +1,6 @@
-import { GoodProfit } from 'npool-cli-v4'
-import { achievement } from 'src/teststore'
+import { achievement, ledgerprofit } from 'src/npoolstore'
 
-export interface MyGoodProfit extends GoodProfit {
+export interface MyGoodProfit extends ledgerprofit.GoodProfit {
   GoodSaleEndAt: number
   CoinPreSale: boolean
   TotalInComing: number

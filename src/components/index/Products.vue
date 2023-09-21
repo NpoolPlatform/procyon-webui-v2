@@ -15,23 +15,19 @@
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { NotifyType, useAdminAppGoodStore, AppGood } from 'npool-cli-v4'
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
+import { notify, appgood } from 'src/npoolstore'
 
 const CardSmall = defineAsyncComponent(() => import('src/components/product/CardSmall.vue'))
 
-const good = useAdminAppGoodStore()
+const good = appgood.useAppGoodStore()
 
-const goods = computed(() => good.AppGoods.AppGoods.filter((el) => el?.RecommenderID))
+const goods = computed(() => good.goods(undefined).filter((el) => el?.RecommenderID))
 
 onMounted(() => {
   if (goods.value.length > 0) {
     return
   }
-  if (good.AppGoods.AppGoods.length === 0) {
+  if (!good.goods(undefined).length) {
     getAppGoods(0, 500)
   }
 })
@@ -42,13 +38,13 @@ const getAppGoods = (offset: number, limit: number) => {
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_APP_GOODS_FAIL'),
+        Title: 'MSG_GET_APP_GOODS_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (g: Array<AppGood>, error: boolean) => {
-    if (error || g.length < limit) {
+  }, (error: boolean, g?: Array<appgood.Good>) => {
+    if (error || !g?.length) {
       return
     }
     getAppGoods(offset + limit, limit)

@@ -20,6 +20,7 @@
 import { defineAsyncComponent, onMounted, computed, watch } from 'vue'
 import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
+import 'src/api/app'
 import { _locale, notify, requesterror, user, applang, sdk } from 'src/npoolstore'
 
 const MainHeader = defineAsyncComponent(() => import('src/components/header/MainHeader.vue'))

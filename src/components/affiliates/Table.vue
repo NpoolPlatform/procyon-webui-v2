@@ -44,9 +44,9 @@
           <tr class='aff-info total-row'>
             <td><span class='aff-product'>{{ $t('MSG_TOTAL') }}</span></td>
             <td><span class='aff-number'><span class='unit'>{{ $t('MSG_NOT_AVAILABLE') }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(totalUnits.toFixed(0)) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(totalAmount * 100) / 100, 2) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(totalSuperiorCommission * 100) / 100, 2) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ utils.getLocaleString(totalUnits.toFixed(0)) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
+            <td><span class='aff-number'>{{ utils.getLocaleString(Math.floor(totalAmount * 100) / 100, 2) }}<span class='unit'>{{ constant.PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ utils.getLocaleString(Math.floor(totalSuperiorCommission * 100) / 100, 2) }}<span class='unit'>{{ constant.PriceCoinName }}</span></span></td>
           </tr>
           <!-- summary end -->
           <tr class='aff-info' v-for='referral in pageReferrals' :key='referral.UserID'>
@@ -55,9 +55,9 @@
               <img class='copy-button' :src='edit' @click='onSetKolClick(referral)'>
             </td>
             <td><span class='aff-number'>{{ joinDate(referral) }}<span class='unit'>{{ joinTime(referral) }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(userTotalUnits(referral)) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(userTotalAmount(referral) * 100) / 100, 2) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
-            <td><span class='aff-number'>{{ util.getLocaleString(Math.floor(userSuperiorCommission(referral) * 100) / 100, 2) }}<span class='unit'>{{ PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ utils.getLocaleString(userTotalUnits(referral)) }}<span class='unit'>{{ goodUnit?.length ? $t(goodUnit) : '' }}</span></span></td>
+            <td><span class='aff-number'>{{ utils.getLocaleString(Math.floor(userTotalAmount(referral) * 100) / 100, 2) }}<span class='unit'>{{ constant.PriceCoinName }}</span></span></td>
+            <td><span class='aff-number'>{{ utils.getLocaleString(Math.floor(userSuperiorCommission(referral) * 100) / 100, 2) }}<span class='unit'>{{ constant.PriceCoinName }}</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -84,22 +84,17 @@
 import edit from '../../assets/edit.svg'
 import { computed, defineAsyncComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import {
-  useAdminAppCoinStore,
-  PriceCoinName,
-  useLocaleStringStore
-} from 'npool-cli-v4'
-import { achievement } from 'src/teststore'
+import { achievement, appcoin, constant, utils, user } from 'src/npoolstore'
 
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 
-const util = useLocaleStringStore()
+const logined = user.useLocalUserStore()
 
 const _achievement = achievement.useAchievementStore()
-const referrals = computed(() => _achievement.Achievements.filter((el) => !el.Kol))
+const referrals = computed(() => _achievement.achievements(undefined, logined.loginedUserID).filter((el) => !el.Kol))
 
-const coin = useAdminAppCoinStore()
-const coins = computed(() => coin.AppCoins.AppCoins.filter((el) => {
+const coin = appcoin.useAppCoinStore()
+const coins = computed(() => coin.coins(undefined).filter((el) => {
   const rfs = referrals.value?.filter((rel) => {
     for (const g of rel?.Achievements) {
       if (g.CoinTypeID === el.CoinTypeID) return true
@@ -110,8 +105,8 @@ const coins = computed(() => coin.AppCoins.AppCoins.filter((el) => {
 }))
 const selectedCoinID = ref(undefined as unknown as string)
 
-const joinDate = computed(() => (referral: achievement.Achievement) => _achievement.joinDate(referral))
-const joinTime = computed(() => (referral: achievement.Achievement) => _achievement.joinTime(referral))
+const joinDate = computed(() => (referral: achievement.Achievement) => utils.formatTime(referral.InvitedAt, 'YYYY/MM/DD', 9))
+const joinTime = computed(() => (referral: achievement.Achievement) => utils.formatTime(referral.InvitedAt, 'HH:mm:ss', 9))
 
 const goodUnit = computed(() => {
   for (const rf of referrals.value) {
@@ -123,13 +118,13 @@ const goodUnit = computed(() => {
   }
   return ''
 })
-const totalUnits = computed(() => _achievement.totalUnits(referrals.value, selectedCoinID.value))
-const totalAmount = computed(() => _achievement.totalAmount(referrals.value, selectedCoinID.value))
-const totalSuperiorCommission = computed(() => _achievement.totalSuperiorCommission(referrals.value, selectedCoinID.value))
+const totalUnits = computed(() => _achievement.totalUnits(undefined, logined.loginedUserID, selectedCoinID.value))
+const totalAmount = computed(() => _achievement.totalAmount(undefined, logined.loginedUserID, selectedCoinID.value))
+const totalSuperiorCommission = computed(() => _achievement.totalSuperiorCommission(undefined, logined.loginedUserID, selectedCoinID.value))
 
-const userTotalUnits = computed(() => (referral: achievement.Achievement) => _achievement.userTotalUnits(referral.UserID, selectedCoinID.value))
-const userTotalAmount = computed(() => (referral: achievement.Achievement) => _achievement.userTotalAmount(referral.UserID, selectedCoinID.value))
-const userSuperiorCommission = computed(() => (referral: achievement.Achievement) => _achievement.userSuperiorCommission(referral.UserID, selectedCoinID.value))
+const userTotalUnits = computed(() => (referral: achievement.Achievement) => _achievement.totalUnits(undefined, referral.UserID, selectedCoinID.value))
+const userTotalAmount = computed(() => (referral: achievement.Achievement) => _achievement.totalAmount(undefined, referral.UserID, selectedCoinID.value))
+const userSuperiorCommission = computed(() => (referral: achievement.Achievement) => _achievement.totalSuperiorCommission(undefined, referral.UserID, selectedCoinID.value))
 
 const searchStr = ref('')
 const displayReferrals = computed(() => referrals.value.filter((el) => {

@@ -20,9 +20,9 @@
 </template>
 
 <script setup lang='ts'>
-import { AppCoin, NotifyType, useAdminAppCoinStore } from 'npool-cli-v4'
 import { computed, defineEmits, ref, defineProps, toRef, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { appcoin, notify } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -32,7 +32,7 @@ interface Props {
   label: string
   disabled?: boolean
   hideLabel?: boolean
-  coins?: Array<AppCoin>
+  coins?: Array<appcoin.AppCoin>
   default?: boolean
   nameIndex?: number
   tipIndex?: number
@@ -46,7 +46,7 @@ const setDefaultValue = toRef(props, 'default')
 const nameIndex = toRef(props, 'nameIndex')
 const tipIndex = toRef(props, 'tipIndex')
 
-const coinLabel = (coin: AppCoin) => {
+const coinLabel = (coin: appcoin.AppCoin) => {
   let label = coin.Name
   if (nameIndex.value !== undefined && nameIndex.value >= 0 && coin.DisplayNames?.length > nameIndex.value && coin.DisplayNames[nameIndex.value]?.length > 0) {
     label = coin.DisplayNames[nameIndex.value]
@@ -59,12 +59,12 @@ const coinLabel = (coin: AppCoin) => {
 
 const emit = defineEmits<{(e: 'update:id', id: string): void;}>()
 
-const coin = useAdminAppCoinStore()
-const displayCoins = computed(() => !coins.value ? coin.AppCoins.AppCoins.filter((el) => !el.Presale && el.Display) : coins.value)
+const coin = appcoin.useAppCoinStore()
+const displayCoins = computed(() => !coins.value ? coin.coins(undefined).filter((el) => !el.Presale && el.Display) : coins.value)
 
 const target = ref(id.value)
 const selectedCoin = computed({
-  get: () => coin.getCoinByID(target.value),
+  get: () => coin.coin(undefined, target.value),
   set: (val) => {
     target.value = val?.CoinTypeID as string
   }
@@ -87,7 +87,7 @@ const setDefault = () => {
 
 onMounted(() => {
   if (!coins.value) {
-    if (coin.AppCoins.AppCoins.length === 0) {
+    if (!coin.coins(undefined).length) {
       getCoins(0, 100)
     }
   }
@@ -101,14 +101,14 @@ const getCoins = (offset: number, limit: number) => {
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_COINS'),
-        Message: t('MSG_GET_COINS_FAIL'),
+        Title: 'MSG_GET_COINS',
+        Message: 'MSG_GET_COINS_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (error: boolean, rows: Array<AppCoin>) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<appcoin.AppCoin>) => {
+    if (error || !rows?.length) {
       if (!target.value && setDefaultValue.value) setDefault()
       return
     }

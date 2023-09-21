@@ -1,15 +1,11 @@
 <script setup lang='ts'>
-import { CoinDescription, NotifyType, useAdminCoinDescriptionStore } from 'npool-cli-v4'
 import { onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { appcoindescription, notify } from 'src/npoolstore'
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
-const description = useAdminCoinDescriptionStore()
+const description = appcoindescription.useCoinDescriptionStore()
 
 onMounted(() => {
-  if (description.CoinDescriptions.CoinDescriptions.length === 0) {
+  if (!description.descriptions(undefined)) {
     getDescriptions(0, 100)
   }
 })
@@ -20,14 +16,14 @@ const getDescriptions = (offset: number, limit: number) => {
     Limit: limit,
     Message: {
       Error: {
-        Title: t('MSG_GET_COIN_DESCRIPTIONS'),
-        Message: t('MSG_GET_COIN_DESCRIPTIONS_FAIL'),
+        Title: 'MSG_GET_COIN_DESCRIPTIONS',
+        Message: 'MSG_GET_COIN_DESCRIPTIONS_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
-  }, (error: boolean, rows: Array<CoinDescription>) => {
-    if (error || rows.length < limit) {
+  }, (error: boolean, rows?: Array<appcoindescription.CoinDescription>) => {
+    if (error || !rows?.length) {
       return
     }
     getDescriptions(offset + limit, limit)

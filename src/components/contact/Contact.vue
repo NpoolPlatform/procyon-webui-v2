@@ -56,19 +56,15 @@
 </template>
 
 <script setup lang='ts'>
-import { NotifyType, UsedFor, useFrontendContactStore } from 'npool-cli-v4'
 import { defineAsyncComponent, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { contact, basetypes, notify } from 'src/npoolstore'
 
 import lineQr from '../../assets/line-qr.png'
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 
-const contact = useFrontendContactStore()
+const _contact = contact.useContactStore()
 const router = useRouter()
 
 const sender = ref('')
@@ -77,17 +73,18 @@ const body = ref('')
 const senderName = ref('')
 
 const onSubmit = () => {
-  contact.contactVIAEmail({
-    UsedFor: UsedFor.Contact,
+  _contact.contactVIAEmail({
+    UsedFor: basetypes.EventType.Contact,
     Sender: sender.value,
     Subject: subject.value,
     Body: body.value,
     SenderName: senderName.value,
     Message: {
       Error: {
-        Title: t('MSG_SEND_EMAIL_FAIL'),
+        Title: 'MSG_SEND_EMAIL',
+        Message: 'MSG_SEND_EMAIL_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, () => {

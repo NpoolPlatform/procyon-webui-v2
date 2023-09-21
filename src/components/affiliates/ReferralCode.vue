@@ -15,25 +15,20 @@
 
 <script setup lang='ts'>
 import { computed } from 'vue'
-import { NotificationType, useNotificationStore } from 'npool-cli-v2'
-import { useI18n } from 'vue-i18n'
 import copy from 'copy-to-clipboard'
-import { useLocalUserStore } from 'npool-cli-v4'
+import { notify, user } from 'src/npoolstore'
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
-
-const logined = useLocalUserStore()
+const logined = user.useLocalUserStore()
 const inviteLink = computed(() => 'https://procyon.vip/invitation?code=' + (logined.User?.InvitationCode))
-const notification = useNotificationStore()
+const notification = notify.useNotificationStore()
 
 function onCopyCodeClick () {
   copy(inviteLink.value)
   notification.Notifications.push({
-    Title: t('MSG_REFERRAL_CODE_COPIED'),
-    Message: t('MSG_COPY_REFERRAL_CODE_SUCCESS'),
+    Title: 'MSG_REFERRAL_CODE_COPIED',
+    Message: 'MSG_COPY_REFERRAL_CODE_SUCCESS',
     Popup: true,
-    Type: NotificationType.Success
+    Type: notify.NotifyType.Success
   })
 }
 

@@ -1,5 +1,7 @@
 import { AppID } from 'src/const/const'
-import { sdk } from 'src/npoolstore'
+import { useLocalApplicationStore } from 'src/npoolstore/appuser/app/local'
+
+const localapp = useLocalApplicationStore()
 
 export * from 'src/npoolstore/sdk/localapp'
-sdk.MyAppID.value = AppID
+localapp.MyAppID = AppID

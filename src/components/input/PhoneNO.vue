@@ -21,7 +21,7 @@
 
 <script setup lang='ts'>
 import { defineProps, toRef, defineEmits, watch, ref, defineAsyncComponent } from 'vue'
-import { AppCountry } from 'npool-cli-v4'
+import { appcountry } from 'src/npoolstore'
 
 interface Props {
   value: string
@@ -37,7 +37,7 @@ const value = toRef(props, 'value')
 const required = toRef(props, 'required')
 
 const myValue = ref(value.value)
-const country = ref(undefined as unknown as AppCountry)
+const country = ref(undefined as unknown as appcountry.Country)
 
 const emit = defineEmits<{(e: 'update:value', value: string): void;
   (e: 'focus'): void;

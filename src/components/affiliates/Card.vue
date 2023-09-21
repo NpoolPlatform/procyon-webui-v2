@@ -7,7 +7,7 @@
         {{ username }}
       </h3>
       <span class='aff-email'>{{ referral?.EmailAddress?.length > 0 ? referral?.EmailAddress : referral?.PhoneNO }}</span>
-      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ util.getLocaleString(referral.TotalInvitees)
+      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ utils.getLocaleString(referral.TotalInvitees)
       }}</span></span>
     </div>
     <div class='aff-table'>
@@ -55,27 +55,27 @@
               <span class='aff-number'>{{ _good.CommissionValue }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
-                :class='["alt", !good.enableSetCommission(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood) ? "in-active" : ""]'
-                :disabled='!good.enableSetCommission(_good.GoodID) || !good.haveSale(good.getGoodByID(_good.GoodID) as AppGood)'
+                :class='["alt", !good.enableSetCommission(undefined, _good.GoodID) || !good.canBuy(undefined, _good.GoodID) ? "in-active" : ""]'
+                :disabled='!good.enableSetCommission(undefined, _good.GoodID) || !good.canBuy(undefined, _good.GoodID)'
                 @click='(_good.Editing = true)'
               >
                 {{ $t('MSG_SET') }}
               </button>
             </td>
             <td>
-              <span class='aff-number'>{{ util.getLocaleString(_good.TotalUnits) }}<span class='unit'>{{
+              <span class='aff-number'>{{ utils.getLocaleString(_good.TotalUnits) }}<span class='unit'>{{
                 _good.GoodUnit?.length ? $t(_good.GoodUnit) : '' }}</span></span>
             </td>
             <td>
-              <span class='aff-number'>{{ util.getLocaleString(Math.floor(Number(_good.TotalAmount) * 100) / 100, 2)
-              }}<span class='unit'>{{ PriceCoinName }}</span></span>
+              <span class='aff-number'>{{ utils.getLocaleString(Math.floor(Number(_good.TotalAmount) * 100) / 100, 2)
+              }}<span class='unit'>{{ constant.PriceCoinName }}</span></span>
             </td>
             <td>
               <span class='aff-number'>
-                {{ child ? (_good.SuperiorCommission ? util.getLocaleString(Math.floor(Number(_good.SuperiorCommission) *
-                  100) / 100, 2) : "0.00") : util.getLocaleString(Math.floor(Number(_good.TotalCommission) * 100) / 100, 2)
+                {{ child ? (_good.SuperiorCommission ? utils.getLocaleString(Math.floor(Number(_good.SuperiorCommission) *
+                  100) / 100, 2) : "0.00") : utils.getLocaleString(Math.floor(Number(_good.TotalCommission) * 100) / 100, 2)
                 }}
-                <span class='unit'>{{ PriceCoinName }}</span>
+                <span class='unit'>{{ constant.PriceCoinName }}</span>
               </span>
             </td>
           </tr>
@@ -100,12 +100,12 @@
                 <td>
                   <span
                     class='aff-product'
-                    v-html='getDisplayNames(__commission.GoodID)?.[4] ? $t(getDisplayNames(__commission.GoodID)?.[4] as string) : good.getGoodByID(__commission.GoodID)?.GoodName'
+                    v-html='$t(getDisplayNames(__commission.GoodID)?.[4] || good.good(undefined, __commission.GoodID)?.GoodName || "")'
                   />
                 </td>
                 <td>
-                  <span class='aff-number'>{{ _commission.settingDate(__commission) }}<span class='unit'>{{
-                    _commission.settingTime(__commission) }}</span></span>
+                  <span class='aff-number'>{{ utils.formatTime(__commission.CreatedAt, 'YYYY/MM/DD', 9) }}<span class='unit'>{{
+                    utils.formatTime(__commission.CreatedAt, 'HH:mm:ss', 9) }}</span></span>
                 </td>
                 <td><span class='aff-number'>{{ __commission.AmountOrPercent }}<span class='unit'>%</span></span></td>
               </tr>
@@ -123,26 +123,14 @@
 </template>
 
 <script setup lang='ts'>
-import {
-  PriceCoinName
-} from 'npool-cli-v2'
 import { ref, toRef, defineProps, computed, defineAsyncComponent } from 'vue'
 import chevrons from '../../assets/chevrons.svg'
-import {
-  useBaseUserStore,
-  useLocalUserStore,
-  User,
-  useAdminAppGoodStore,
-  NotifyType,
-  AppGood,
-  useLocaleStringStore
-} from 'npool-cli-v4'
 import { useI18n } from 'vue-i18n'
-import { MyGoodAchievement } from 'src/localstore/ledger/types'
-import { commission, achievement } from 'src/teststore'
+import { MyGoodAchievement } from 'src/localstore'
+import { commission, achievement, constant, user, appgood, notify, utils } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
-const { locale, t } = useI18n({ useScope: 'global' })
+const { locale } = useI18n({ useScope: 'global' })
 
 const KolOption = defineAsyncComponent(() => import('src/components/affiliates/KolOption.vue'))
 
@@ -160,22 +148,18 @@ const lastChild = toRef(props, 'lastChild')
 const target = toRef(props, 'referral')
 const referral = ref(target.value)
 
-const util = useLocaleStringStore()
+const _user = user.useUserStore()
+const username = computed(() => _user.displayName(undefined, undefined, referral.value?.FirstName,
+  referral.value?.LastName, locale.value as string))
 
-const baseUser = useBaseUserStore()
-const username = computed(() => baseUser.displayName({
-  FirstName: referral.value.FirstName,
-  LastName: referral.value.LastName
-} as User, locale.value as string))
+const logined = user.useLocalUserStore()
 
-const logined = useLocalUserStore()
-
-const good = useAdminAppGoodStore()
-const getDisplayNames = computed(() => (goodID: string) => good.getGoodByID(goodID)?.DisplayNames)
+const good = appgood.useAppGoodStore()
+const getDisplayNames = computed(() => (goodID: string) => good.displayNames(undefined, goodID))
 
 const _achievement = achievement.useAchievementStore()
 const goodAchievements = computed(() => Array.from(referral.value?.Achievements.filter((el) => {
-  return good.visible(el.GoodID)
+  return good.visible(undefined, el.GoodID)
 })).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
   return {
     ...el,
@@ -184,19 +168,19 @@ const goodAchievements = computed(() => Array.from(referral.value?.Achievements.
 }))
 const visibleGoodAchievements = ref(goodAchievements.value)
 const getGoodCommissionValue = computed(() => (goodID: string) => {
-  return Number(_achievement.inviterGoodCommissionValue(logined?.User.ID, goodID))
+  return Number(_achievement.commission(undefined, logined?.User.ID, undefined, goodID))
 })
 const getGoodCommissionSettleMode = computed(() => (goodID: string) => {
-  return _achievement.inviterGoodCommissionSettleMode(logined?.User.ID, goodID) as commission.SettleMode
+  return _achievement.settleMode(undefined, logined?.User.ID, undefined, goodID) as commission.SettleMode
 })
 const getGoodCommissionSettleAmountType = computed(() => (goodID: string) => {
-  return _achievement.inviterGoodCommissionSettleAmountType(logined?.User.ID, goodID) as commission.SettleAmountType
+  return _achievement.settleAmountType(undefined, logined?.User.ID, undefined, goodID) as commission.SettleAmountType
 })
 const getGoodCommissionSettleInterval = computed(() => (goodID: string) => {
-  return _achievement.inviterGoodCommissionSettleInterval(logined?.User.ID, goodID) as commission.SettleInterval
+  return _achievement.settleInterval(undefined, logined?.User.ID, undefined, goodID) as commission.SettleInterval
 })
 const getGoodCommissionThreshold = computed(() => (goodID: string) => {
-  return _achievement.inviterGoodCommissionThreshold(logined?.User.ID, goodID)
+  return _achievement.threshold(undefined, logined?.User.ID, undefined, goodID)
 })
 
 const showDetailSummary = ref(false)
@@ -205,11 +189,7 @@ const onShowMoreClick = () => {
 }
 
 const _commission = commission.useCommissionStore()
-const commissions = computed(() => _commission.Commissions.filter((el) => {
-  return el.UserID === referral.value.UserID
-}).sort((a, b) => {
-  return a.StartAt < b.StartAt ? 1 : -1
-}))
+const commissions = computed(() => _commission.commissions(undefined, referral.value.UserID))
 
 const onSaveCommissionClick = (row: MyGoodAchievement) => {
   if (Number(row.CommissionValue) > getGoodCommissionValue.value(row.GoodID)) {
@@ -222,19 +202,19 @@ const onSaveCommissionClick = (row: MyGoodAchievement) => {
   row.Editing = false
   _commission.createCommission({
     TargetUserID: referral.value.UserID,
-    GoodID: row.GoodID,
+    AppGoodID: row.AppGoodID,
     SettleType: commission.SettleType.GoodOrderPayment,
     SettleAmountType: getGoodCommissionSettleAmountType.value(row.GoodID),
     SettleMode: getGoodCommissionSettleMode.value(row.GoodID),
     SettleInterval: getGoodCommissionSettleInterval.value(row.GoodID),
-    Threshold: getGoodCommissionThreshold.value(row.GoodID),
+    Threshold: getGoodCommissionThreshold.value(row.GoodID).toString(),
     AmountOrPercent: `${row.CommissionValue}`,
     StartAt: Math.ceil(Date.now() / 1000),
     Message: {
       Error: {
-        Title: t('MSG_CREATE_COMMISSION_FAIL'),
+        Title: 'MSG_CREATE_COMMISSION_FAIL',
         Popup: true,
-        Type: NotifyType.Error
+        Type: notify.NotifyType.Error
       }
     }
   }, () => {
