@@ -9,7 +9,7 @@ const _message = message.useMessageStore()
 const messages = computed(() => _message.messages(undefined, langID.value))
 watch(langID, () => {
   if (messages.value.length === 0) {
-    getMessages(0, 500, langID.value)
+    getMessages(0, 100, langID.value)
   }
 })
 
@@ -35,6 +35,7 @@ const getAppLangs = (offset: number, limit: number) => {
     }
   }, (error: boolean, rows: Array<g11nbase.AppLang>) => {
     if (error || rows.length < limit) {
+      getMessages(0, 100, langID.value)
       return
     }
     getAppLangs(offset + limit, limit)
