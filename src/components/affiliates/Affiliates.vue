@@ -97,7 +97,7 @@ const getFiatCurrency = () => {
 }
 
 const getCommissions = (offset: number, limit: number) => {
-  _commission.getCommissions({
+  _commission.getCommissionHistories({
     Offset: offset,
     Limit: limit,
     Message: {

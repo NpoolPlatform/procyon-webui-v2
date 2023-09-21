@@ -42,11 +42,11 @@
             <td>
               <span
                 class='aff-product'
-                v-html='getDisplayNames(_good.GoodID)?.[4] ? $t(getDisplayNames(_good.GoodID)?.[4] as string) : _good.GoodName'
+                v-html='getDisplayNames(_good.AppGoodID)?.[4] ? $t(getDisplayNames(_good.AppGoodID)?.[4] as string) : _good.GoodName'
               />
             </td>
             <td v-if='_good.Editing'>
-              <KolOption v-model:percent='_good.CommissionValue' :max='getGoodCommissionValue(_good.GoodID)' />
+              <KolOption v-model:percent='_good.CommissionValue' :max='getGoodCommissionValue(_good.AppGoodID)' />
               <button @click='onSaveCommissionClick(_good)'>
                 {{ $t('MSG_SAVE') }}
               </button>
@@ -55,8 +55,8 @@
               <span class='aff-number'>{{ _good.CommissionValue }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
-                :class='["alt", !good.enableSetCommission(undefined, _good.GoodID) || !good.canBuy(undefined, _good.GoodID) ? "in-active" : ""]'
-                :disabled='!good.enableSetCommission(undefined, _good.GoodID) || !good.canBuy(undefined, _good.GoodID)'
+                :class='["alt", !good.enableSetCommission(undefined, _good.AppGoodID) || !good.canBuy(undefined, _good.AppGoodID) ? "in-active" : ""]'
+                :disabled='!good.enableSetCommission(undefined, _good.AppGoodID) || !good.canBuy(undefined, _good.AppGoodID)'
                 @click='(_good.Editing = true)'
               >
                 {{ $t('MSG_SET') }}
@@ -100,12 +100,12 @@
                 <td>
                   <span
                     class='aff-product'
-                    v-html='$t(getDisplayNames(__commission.GoodID)?.[4] || good.good(undefined, __commission.GoodID)?.GoodName || "")'
+                    v-html='$t(getDisplayNames(__commission.AppGoodID)?.[4] || good.good(undefined, __commission.AppGoodID)?.GoodName || "")'
                   />
                 </td>
                 <td>
-                  <span class='aff-number'>{{ utils.formatTime(__commission.CreatedAt, 'YYYY/MM/DD', 9) }}<span class='unit'>{{
-                    utils.formatTime(__commission.CreatedAt, 'HH:mm:ss', 9) }}</span></span>
+                  <span class='aff-number'>{{ utils.formatTime(__commission.StartAt, 'YYYY/MM/DD', 9) }}</span>
+                  <span class='unit'>{{ ' ' + utils.formatTime(__commission.StartAt, 'HH:mm:ss', 9) }}</span>
                 </td>
                 <td><span class='aff-number'>{{ __commission.AmountOrPercent }}<span class='unit'>%</span></span></td>
               </tr>
@@ -159,7 +159,7 @@ const getDisplayNames = computed(() => (goodID: string) => good.displayNames(und
 
 const _achievement = achievement.useAchievementStore()
 const goodAchievements = computed(() => Array.from(referral.value?.Achievements.filter((el) => {
-  return good.visible(undefined, el.GoodID)
+  return good.visible(undefined, el.AppGoodID)
 })).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
   return {
     ...el,
@@ -192,7 +192,7 @@ const _commission = commission.useCommissionStore()
 const commissions = computed(() => _commission.commissions(undefined, referral.value.UserID))
 
 const onSaveCommissionClick = (row: MyGoodAchievement) => {
-  if (Number(row.CommissionValue) > getGoodCommissionValue.value(row.GoodID)) {
+  if (Number(row.CommissionValue) > getGoodCommissionValue.value(row.AppGoodID)) {
     row.CommissionValue = getGoodCommissionValue.value(row.GoodID).toString()
   }
   if (Number(row.CommissionValue) < 0) {
@@ -204,15 +204,16 @@ const onSaveCommissionClick = (row: MyGoodAchievement) => {
     TargetUserID: referral.value.UserID,
     AppGoodID: row.AppGoodID,
     SettleType: commission.SettleType.GoodOrderPayment,
-    SettleAmountType: getGoodCommissionSettleAmountType.value(row.GoodID),
-    SettleMode: getGoodCommissionSettleMode.value(row.GoodID),
-    SettleInterval: getGoodCommissionSettleInterval.value(row.GoodID),
-    Threshold: getGoodCommissionThreshold.value(row.GoodID).toString(),
+    SettleAmountType: getGoodCommissionSettleAmountType.value(row.AppGoodID),
+    SettleMode: getGoodCommissionSettleMode.value(row.AppGoodID),
+    SettleInterval: getGoodCommissionSettleInterval.value(row.AppGoodID),
+    Threshold: getGoodCommissionThreshold.value(row.AppGoodID).toString(),
     AmountOrPercent: `${row.CommissionValue}`,
     StartAt: Math.ceil(Date.now() / 1000),
     Message: {
       Error: {
-        Title: 'MSG_CREATE_COMMISSION_FAIL',
+        Title: 'MSG_CREATE_COMMISSION',
+        Message: 'MSG_CREATE_COMMISSION_FAIL',
         Popup: true,
         Type: notify.NotifyType.Error
       }
