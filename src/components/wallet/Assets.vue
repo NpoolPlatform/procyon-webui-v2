@@ -92,7 +92,8 @@ import {
   user,
   useraccountbase,
   accountbase,
-  utils
+  utils,
+  ledgerprofit
 } from 'src/npoolstore'
 import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -125,6 +126,8 @@ const _fiatcurrency = fiatcurrency.useFiatCurrencyStore()
 const logined = user.useLocalUserStore()
 
 const general = ledger.useLedgerStore()
+const profit = ledgerprofit.useProfitStore()
+
 const generals = computed(() => {
   return Array.from(general.ledgers(undefined, logined.loginedUserID).filter((el) => {
     return !coin.preSale(undefined, el.CoinTypeID) && el.CoinDisplay
@@ -132,7 +135,7 @@ const generals = computed(() => {
     return {
       ...el,
       Balance: Number(el.Spendable),
-      Last24HoursBalance: general.intervalIncoming(undefined, el.CoinTypeID, IntervalKey.LastDay),
+      Last24HoursBalance: profit.intervalIncoming(undefined, logined.loginedUserID, el.CoinTypeID, IntervalKey.LastDay),
       TotalUSDValue: Number(el.Spendable) * _coincurrency.currency(el.CoinTypeID),
       TotalJPYValue: Number(el.Spendable) * _coincurrency.currency(el.CoinTypeID) * _fiatcurrency.jpy()
     } as MyLedger

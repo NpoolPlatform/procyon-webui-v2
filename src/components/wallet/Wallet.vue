@@ -38,7 +38,9 @@ import {
   notify,
   fiat,
   constant,
-  useraccountbase
+  useraccountbase,
+  user,
+  ledgerprofit
 } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -52,18 +54,20 @@ const WithdrawRecords = defineAsyncComponent(() => import('src/components/wallet
 const TransferAccounts = defineAsyncComponent(() => import('src/components/wallet/TransferAccounts.vue'))
 
 const general = ledger.useLedgerStore()
+const profit = ledgerprofit.useProfitStore()
 const coin = appcoin.useAppCoinStore()
 const account = useraccount.useUserAccountStore()
 const transfer = transferaccount.useTransferAccountStore()
 const _coincurrency = coincurrency.useCurrencyStore()
 const _fiatcurrency = fiatcurrency.useFiatCurrencyStore()
+const logined = user.useLocalUserStore()
 
 onMounted(() => {
   if (!general.ledgers().length) {
     getGenerals(0, 100)
   }
-  if (!general.intervalLedgers(undefined, undefined, undefined, IntervalKey.LastDay).length) {
-    getIntervalGenerals(
+  if (!profit.intervalProfits(undefined, logined.loginedUserID, undefined, IntervalKey.LastDay).length) {
+    getIntervalProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - constant.SecondsEachDay,
       Math.ceil(new Date().getTime() / 1000),
@@ -75,7 +79,7 @@ onMounted(() => {
   if (!account.accounts(undefined).length) {
     getUserAccounts(0, 100)
   }
-  if (!transfer.transferAccounts(undefined).length) {
+  if (!transfer.transferAccounts(undefined, logined.loginedUserID).length) {
     getTransfers(0, 100)
   }
   if (!_coincurrency.currencies().length) {
@@ -105,8 +109,8 @@ const getGenerals = (offset:number, limit: number) => {
   })
 }
 
-const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
-  general.getIntervalLedgers({
+const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
+  profit.getIntervalProfits({
     StartAt: startAt,
     EndAt: endAt,
     Offset: offset,
@@ -118,11 +122,11 @@ const getIntervalGenerals = (key: IntervalKey, startAt: number, endAt: number, o
         Type: notify.NotifyType.Error
       }
     }
-  }, key, (error: boolean, rows?: Array<ledger.Ledger>) => {
+  }, key, (error: boolean, rows?: Array<ledgerprofit.Profit>) => {
     if (error || !rows?.length) {
       return
     }
-    getIntervalGenerals(key, startAt, endAt, limit + offset, limit)
+    getIntervalProfits(key, startAt, endAt, limit + offset, limit)
   })
 }
 
@@ -165,9 +169,7 @@ const getUserAccounts = (offset: number, limit: number) => {
 
 const getFiatCurrency = () => {
   _fiatcurrency.getFiatCurrency({
-    FiatName: fiat.FiatType.JPY,
-    Message: {
-    }
+    FiatName: fiat.FiatType.JPY
   }, () => {
     // TODO
   })

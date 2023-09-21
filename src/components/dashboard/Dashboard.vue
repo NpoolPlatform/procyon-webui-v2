@@ -44,7 +44,7 @@ onMounted(() => {
   if (!profit.profits(undefined, logined.loginedUserID).length) {
     getProfits(0, 100)
   }
-  if (!profit.intervalProfits(undefined, logined.loginedUserID, IntervalKey.LastDay).length) {
+  if (!profit.intervalProfits(undefined, logined.loginedUserID, undefined, IntervalKey.LastDay).length) {
     getIntervalProfits(
       IntervalKey.LastDay,
       Math.ceil(new Date().getTime() / 1000) - constant.SecondsEachDay,
