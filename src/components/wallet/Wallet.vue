@@ -83,7 +83,7 @@ onMounted(() => {
     getTransfers(0, 100)
   }
   if (!_coincurrency.currencies().length) {
-    getCurrencies(0, 500)
+    getCurrencies(0, 100)
   }
   if (!_fiatcurrency.currencies().length) {
     getFiatCurrency()
