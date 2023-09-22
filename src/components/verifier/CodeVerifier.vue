@@ -36,7 +36,7 @@
         class='margin-top-0'
         :target-error='false'
       />
-      <button class='btn' @click='onVerifyClick' :disabled='disabled'>
+      <button class='btn' @click='onVerifyClick' :disabled='disabled || !utils.validateVerificationCode(myCode)'>
         {{ $t('MSG_VERIFY') }}
       </button>
       <button v-if='showCancel' class='send-code alt' @click='onCancelClick' :disabled='disabled'>
