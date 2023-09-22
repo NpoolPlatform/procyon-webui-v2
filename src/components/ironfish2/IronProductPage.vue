@@ -234,7 +234,7 @@ const onPurchaseClick = () => {
       path: '/signin',
       query: {
         target: '/product/ironfish',
-        goodId: target.value?.GoodID,
+        goodId: target.value?.ID,
         purchaseAmount: myPurchaseAmount.value
       }
     })
