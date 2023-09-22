@@ -102,7 +102,7 @@
 </template>
 
 <script setup lang='ts'>
-import { utils, notify, user, coderepo, basetypes, appuserbase } from 'src/npoolstore'
+import { utils, notify, user, basetypes, appuserbase, notifverify } from 'src/npoolstore'
 import { defineAsyncComponent, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -178,7 +178,7 @@ const onCancelClick = () => {
   onAgreeFocusOut()
 }
 
-const _coderepo = coderepo.useCodeRepoStore()
+const _notifverify = notifverify.useVerifyStore()
 
 const router = useRouter()
 
@@ -187,7 +187,7 @@ const onSendCodeClick = () => {
   if (accountError.value) {
     return
   }
-  _coderepo.sendVerificationCode(account.value, accountType.value as unknown as appuserbase.SigninVerifyType, basetypes.EventType.Signup, account.value)
+  _notifverify.sendVerificationCode(account.value, accountType.value as unknown as appuserbase.SigninVerifyType, basetypes.EventType.Signup, account.value)
 }
 
 const _user = user.useUserStore()
