@@ -14,7 +14,7 @@
           <div class='three-section'>
             <h4>{{ $t('MSG_AMOUNT_DUE') }}:</h4>
             <span class='number'>{{ _order?.PaymentAmount }}</span>
-            <span class='unit'>{{ _order?.PaymentCoinUnit }}</span>
+            <span class='unit'>{{ _order?.PaymentCoinUnit.length ? _order.PaymentCoinUnit : constant.PriceCoinName }}</span>
             <img class='copy-button' :src='copyIcon' @click='onCopyAmountClick'>
             <div class='tooltip'>
               <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -159,7 +159,7 @@
 </template>
 
 <script setup lang='ts'>
-import { order, appgood, utils, notify } from 'src/npoolstore'
+import { order, appgood, utils, notify, constant } from 'src/npoolstore'
 import { defineAsyncComponent, computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
