@@ -170,17 +170,17 @@ const visibleGoodAchievements = ref(goodAchievements.value)
 const getGoodCommissionValue = computed(() => (goodID: string) => {
   return Number(_achievement.commissionPercent(undefined, logined?.User.ID, undefined, goodID))
 })
-const getGoodCommissionSettleMode = computed(() => (goodID: string) => {
-  return _achievement.settleMode(undefined, logined?.User.ID, undefined, goodID) as commission.SettleMode
+const getGoodCommissionSettleMode = computed(() => (appGoodID: string) => {
+  return _achievement.settleMode(undefined, logined?.User.ID, undefined, appGoodID) as commission.SettleMode
 })
-const getGoodCommissionSettleAmountType = computed(() => (goodID: string) => {
-  return _achievement.settleAmountType(undefined, logined?.User.ID, undefined, goodID) as commission.SettleAmountType
+const getGoodCommissionSettleAmountType = computed(() => (appGoodID: string) => {
+  return _achievement.settleAmountType(undefined, logined?.User.ID, undefined, appGoodID) as commission.SettleAmountType
 })
-const getGoodCommissionSettleInterval = computed(() => (goodID: string) => {
-  return _achievement.settleInterval(undefined, logined?.User.ID, undefined, goodID) as commission.SettleInterval
+const getGoodCommissionSettleInterval = computed(() => (appGoodID: string) => {
+  return _achievement.settleInterval(undefined, logined?.User.ID, undefined, appGoodID) as commission.SettleInterval
 })
-const getGoodCommissionThreshold = computed(() => (goodID: string) => {
-  return _achievement.threshold(undefined, logined?.User.ID, undefined, goodID)
+const getGoodCommissionThreshold = computed(() => (appGoodID: string) => {
+  return _achievement.threshold(undefined, logined?.User.ID, undefined, appGoodID)
 })
 
 const showDetailSummary = ref(false)
