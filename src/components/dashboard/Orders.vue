@@ -60,7 +60,7 @@ const table = computed(() => [
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: order.Order) => utils.getLocaleString(Number(row.GoodValue)) + ' ' + row.PaymentCoinUnit
+    field: (row: order.Order) => utils.getLocaleString(Number(row.GoodValueUSD)) + ' ' + row.PaymentCoinUnit
   },
   {
     name: 'Period',
