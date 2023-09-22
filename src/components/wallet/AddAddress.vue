@@ -124,7 +124,6 @@ const labelsError = ref(false)
 const verifying = ref(false)
 const onSubmit = () => {
   verifying.value = true
-  submitting.value = true
 }
 
 const onMenuHide = () => {
@@ -145,6 +144,7 @@ const userAccount = useraccount.useUserAccountStore()
 const submitting = ref(false)
 
 const onCodeVerify = (code: string) => {
+  submitting.value = true
   const _memo = memo.value === '' ? undefined : memo.value
   userAccount.createUserAccount({
     CoinTypeID: selectedCoinTypeID.value,
