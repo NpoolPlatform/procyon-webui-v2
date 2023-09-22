@@ -65,7 +65,7 @@ const onPurchaseClick = () => {
   void router.push({
     path: target,
     query: {
-      goodId: good.value.GoodID
+      goodId: good.value.ID
     }
   })
 }
