@@ -54,14 +54,22 @@ const withdrawLabel = (w: ledgerwithdraw.Withdraw) => {
 
 const withdrawStatus = (wd: ledgerwithdraw.Withdraw) => {
   switch (wd.State) {
+    case ledgerwithdraw.WithdrawState.Created:
     case ledgerwithdraw.WithdrawState.Reviewing:
       return 'MSG_UNDER_REVIEW'
+    case ledgerwithdraw.WithdrawState.Approved:
     case ledgerwithdraw.WithdrawState.Transferring:
       return 'MSG_IN_PROGRESS'
+    case ledgerwithdraw.WithdrawState.PreRejected:
+    case ledgerwithdraw.WithdrawState.ReturnRejectedBalance:
     case ledgerwithdraw.WithdrawState.Rejected:
       return 'MSG_FAILED'
+    case ledgerwithdraw.WithdrawState.PreFail:
+    case ledgerwithdraw.WithdrawState.ReturnFailBalance:
     case ledgerwithdraw.WithdrawState.TransactionFail:
       return 'MSG_FAILED'
+    case ledgerwithdraw.WithdrawState.PreSuccessful:
+    case ledgerwithdraw.WithdrawState.SpendSuccessfulBalance:
     case ledgerwithdraw.WithdrawState.Successful:
       return 'MSG_COMPLETED'
     default:
