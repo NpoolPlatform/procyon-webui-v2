@@ -228,7 +228,7 @@ onMounted(() => {
   }
   if (!target.value) {
     good.getAppGood({
-      GoodID: goodID.value,
+      ID: goodID.value,
       Message: {
         Error: {
           Title: 'MSG_GET_GOOD',
