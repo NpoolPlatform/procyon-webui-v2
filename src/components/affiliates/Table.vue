@@ -91,7 +91,7 @@ const CoinSelector = defineAsyncComponent(() => import('src/components/coin/Coin
 const logined = user.useLocalUserStore()
 
 const _achievement = achievement.useAchievementStore()
-const referrals = computed(() => _achievement.achievements(undefined, logined.loginedUserID).filter((el) => !el.Kol))
+const referrals = computed(() => _achievement.inviteeAchievements(undefined, logined.loginedUserID as string).filter((el) => !el.Kol))
 
 const coin = appcoin.useAppCoinStore()
 const coins = computed(() => coin.coins(undefined).filter((el) => {
