@@ -184,11 +184,11 @@ const target = computed(() => good.good(undefined, goodID.value))
 const total = computed(() => good.purchaseLimit(undefined, target.value?.ID as string))
 
 const coin = appcoin.useAppCoinStore()
-const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
+const coins = computed(() => coin.payableCoins(undefined).filter((el) => {
+  return el.ENV === target.value?.CoinEnv
+}))
 
-const defaultCoinTypeID = computed(() => {
-  return coins.value?.length > 0 ? coins.value?.[0].CoinTypeID : undefined as unknown as string
-})
+const defaultCoinTypeID = computed(() => coins.value?.[0]?.CoinTypeID)
 const selectedCoinID = ref(defaultCoinTypeID.value)
 const paymentCoin = computed(() => coin.coin(undefined, selectedCoinID.value))
 
