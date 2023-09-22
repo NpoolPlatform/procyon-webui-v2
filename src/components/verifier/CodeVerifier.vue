@@ -48,7 +48,7 @@
 
 <script setup lang='ts'>
 import { defineProps, toRef, defineEmits, computed, watch, onMounted, ref, defineAsyncComponent } from 'vue'
-import { user, basetypes, utils, coderepo, appuserbase } from 'src/npoolstore'
+import { user, basetypes, utils, appuserbase, notifverify } from 'src/npoolstore'
 
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
@@ -71,7 +71,6 @@ const disabled = toRef(props, 'disabled')
 const showCancel = toRef(props, 'showCancel')
 
 const logined = user.useLocalUserStore()
-const _coderepo = coderepo.useCodeRepoStore()
 
 const myVerifyMethod = computed(() => {
   if (verifyMethod.value?.length) {
@@ -166,8 +165,9 @@ const onCancelClick = () => {
   emit('cancel')
 }
 
+const verify = notifverify.useFrontendVerifyStore()
 const onSendCodeClick = () => {
-  _coderepo.sendVerificationCode(account.value, myVerifyMethod.value, usedFor.value, toUsername.value?.length ? toUsername.value : account.value)
+  verify.sendVerificationCode(account.value, myVerifyMethod.value, usedFor.value, toUsername.value?.length ? toUsername.value : account.value)
 }
 
 onMounted(() => {
