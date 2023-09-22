@@ -84,7 +84,7 @@ const details = computed(() => {
     if (el.IOSubType === ledgerstatement.IOSubType.Withdrawal) {
       const extra = JSON.parse(el.IOExtra) as IOExtra
       row.TransactionID = extra.CID
-      row = { ...el, ...{ TransactionID: extra.CID, ShortTransactionID: `${row.TransactionID?.substring(0, 6)}...` } }
+      row = { ...el, ...{ TransactionID: extra.CID, ShortTransactionID: `${extra.CID?.substring(0, 8)}...${extra.CID?.substring(extra.CID.length - 6, extra.CID.length)}` } }
     }
     rows.push(row)
   })
