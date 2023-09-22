@@ -54,7 +54,7 @@ const logined = user.useLocalUserStore()
 
 const good = appgood.useAppGoodStore()
 const getGoodCommissionValue = computed(() => (goodID: string) => {
-  return _achievement.commission(undefined, logined?.User.ID, undefined, goodID)
+  return _achievement.commissionAmount(undefined, logined?.User.ID, undefined, goodID)
 })
 const getGoodCommissionSettleMode = computed(() => (goodID: string) => {
   return _achievement.settleMode(undefined, logined?.User.ID, undefined, goodID) as commission.SettleMode
