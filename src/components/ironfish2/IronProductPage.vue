@@ -248,7 +248,7 @@ const onPurchaseClick = () => {
   void router.push({
     path: '/payment',
     query: {
-      goodID: target.value?.GoodID,
+      goodID: target.value?.ID,
       coinTypeID: selectedCoinID.value,
       purchaseAmount: myPurchaseAmount.value
     }
