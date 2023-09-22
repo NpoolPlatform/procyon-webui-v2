@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang='ts'>
-import { user, appuserbase, coderepo, basetypes, utils } from 'src/npoolstore'
+import { user, appuserbase, notifverify, basetypes, utils } from 'src/npoolstore'
 import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted, computed } from 'vue'
 
 interface Props {
@@ -56,13 +56,13 @@ const onVerificationCodeFocusOut = () => {
   myVerificationCodeError.value = !utils.validateVerificationCode(myVerificationCode.value)
 }
 
-const _coderepo = coderepo.useCodeRepoStore()
+const _notifverify = notifverify.useVerifyStore()
 
 const onSendCodeClick = () => {
   if (!myAccount.value?.length) {
     return
   }
-  _coderepo.sendVerificationCode(
+  _notifverify.sendVerificationCode(
     myAccount.value,
     myAccountType.value as unknown as appuserbase.SigninVerifyType,
     basetypes.EventType.Update,
