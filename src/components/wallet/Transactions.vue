@@ -82,9 +82,13 @@ const details = computed(() => {
     let row = {} as MyStatement
     row = { ...el, ...{ TransactionID: '', ShortTransactionID: '' } }
     if (el.IOSubType === ledgerstatement.IOSubType.Withdrawal) {
-      const extra = JSON.parse(el.IOExtra) as IOExtra
-      row.TransactionID = extra.CID
-      row = { ...el, ...{ TransactionID: extra.CID, ShortTransactionID: `${extra.CID?.substring(0, 8)}...${extra.CID?.substring(extra.CID.length - 6, extra.CID.length)}` } }
+      try {
+        const extra = JSON.parse(el.IOExtra) as IOExtra
+        row.TransactionID = extra.CID
+        row = { ...el, ...{ TransactionID: extra.CID, ShortTransactionID: `${extra.CID?.substring(0, 8)}...${extra.CID?.substring(extra.CID.length - 6, extra.CID.length)}` } }
+      } catch {
+        // TODO
+      }
     }
     rows.push(row)
   })
