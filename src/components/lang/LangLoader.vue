@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import { onMounted, computed, watch } from 'vue'
 import { _locale, notify, applang, message, g11nbase } from 'src/npoolstore'
+import { useSettingStore } from 'src/localstore'
 
 const locale = _locale.useLocaleStore()
 const langID = computed(() => locale.langID())
@@ -10,10 +11,13 @@ const messages = computed(() => _message.messages(undefined, langID.value, undef
 watch(langID, () => {
   if (messages.value.length === 0) {
     getMessages(0, 100, langID.value)
+    return
   }
+  setting.LangThrottling = false
 })
 
 const lang = applang.useAppLangStore()
+const setting = useSettingStore()
 
 onMounted(() => {
   if (!lang.langs(undefined).length) {
@@ -57,6 +61,7 @@ const getMessages = (offset: number, limit: number, langID: string) => {
     }
   }, (error: boolean, rows?: Array<g11nbase.Message>) => {
     if (error || !rows?.length) {
+      setting.LangThrottling = false
       return
     }
     getMessages(offset + limit, limit, langID)

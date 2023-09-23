@@ -6,7 +6,8 @@ export const useSettingStore = defineStore('local-setting', {
     ShowSideMenu: false,
     ActiveMenuTarget: undefined as unknown as string,
     ShowMainHeader: true,
-    ShowFooterTop: true
+    ShowFooterTop: true,
+    LangThrottling: false
   }),
   getters: {},
   actions: {}

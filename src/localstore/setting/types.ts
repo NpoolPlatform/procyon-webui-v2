@@ -3,6 +3,7 @@ interface SettingState {
   ActiveMenuTarget: string
   ShowMainHeader: boolean
   ShowFooterTop: boolean
+  LangThrottling: boolean
 }
 
 export {
