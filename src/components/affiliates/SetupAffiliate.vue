@@ -10,8 +10,8 @@
       <div v-for='(_good, idx) in visibleGoodAchievements' :key='idx'>
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
         <KolOption
-          v-model:percent='_good.CommissionValue' :max='getGoodCommissionValue(_good.GoodID)' ignore-style
-          :disabled='!good.canBuy(undefined, _good.GoodID)'
+          v-model:percent='_good.CommissionValue' :max='getGoodCommissionValue(_good.AppGoodID)' ignore-style
+          :disabled='!good.canBuy(undefined, _good.AppGoodID)'
         />
       </div>
     </template>
@@ -53,20 +53,20 @@ const subUsername = computed(() => referral.value?.EmailAddress?.length ? referr
 const logined = user.useLocalUserStore()
 
 const good = appgood.useAppGoodStore()
-const getGoodCommissionValue = computed(() => (goodID: string) => {
-  return _achievement.commissionAmount(undefined, logined?.User.ID, undefined, goodID)
+const getGoodCommissionValue = computed(() => (appGoodID: string) => {
+  return _achievement.commissionAmount(undefined, logined?.User.ID, undefined, appGoodID)
 })
-const getGoodCommissionSettleMode = computed(() => (goodID: string) => {
-  return _achievement.settleMode(undefined, logined?.User.ID, undefined, goodID) as commission.SettleMode
+const getGoodCommissionSettleMode = computed(() => (appGoodID: string) => {
+  return _achievement.settleMode(undefined, logined?.User.ID, undefined, appGoodID) as commission.SettleMode
 })
-const getGoodCommissionSettleAmountType = computed(() => (goodID: string) => {
-  return _achievement.settleAmountType(undefined, logined?.User.ID, undefined, goodID) as commission.SettleAmountType
+const getGoodCommissionSettleAmountType = computed(() => (appGoodID: string) => {
+  return _achievement.settleAmountType(undefined, logined?.User.ID, undefined, appGoodID) as commission.SettleAmountType
 })
-const getGoodCommissionSettleInterval = computed(() => (goodID: string) => {
-  return _achievement.settleInterval(undefined, logined?.User.ID, undefined, goodID) as commission.SettleInterval
+const getGoodCommissionSettleInterval = computed(() => (appGoodID: string) => {
+  return _achievement.settleInterval(undefined, logined?.User.ID, undefined, appGoodID) as commission.SettleInterval
 })
-const getGoodCommissionThreshold = computed(() => (goodID: string) => {
-  return _achievement.threshold(undefined, logined?.User.ID, undefined, goodID)
+const getGoodCommissionThreshold = computed(() => (appGoodID: string) => {
+  return _achievement.threshold(undefined, logined?.User.ID, undefined, appGoodID)
 })
 
 const visibleGoodAchievements = computed(() => referral.value?.Achievements?.filter((el) => good.visible(undefined, el.AppGoodID)))
@@ -78,8 +78,8 @@ const _commission = commission.useCommissionStore()
 const onSubmit = () => {
   submitting.value = true
   referral.value?.Achievements?.forEach((g) => {
-    if (Number(g.CommissionValue) > getGoodCommissionValue.value(g.GoodID)) {
-      g.CommissionValue = getGoodCommissionValue.value(g.GoodID).toString()
+    if (Number(g.CommissionValue) > getGoodCommissionValue.value(g.AppGoodID)) {
+      g.CommissionValue = getGoodCommissionValue.value(g.AppGoodID).toString()
     }
     if (Number(g.CommissionValue) < 0) {
       g.CommissionValue = '0'
@@ -109,7 +109,7 @@ const onSubmit = () => {
     }
 
     visibleGoodAchievements?.value?.forEach((row) => {
-      switch (getGoodCommissionSettleAmountType.value(row.GoodID)) {
+      switch (getGoodCommissionSettleAmountType.value(row.AppGoodID)) {
         case commission.SettleAmountType.SettleByAmount:
           break
         case commission.SettleAmountType.SettleByPercent:
@@ -121,10 +121,10 @@ const onSubmit = () => {
         TargetUserID: referral.value?.UserID as string,
         AppGoodID: row.AppGoodID,
         SettleType: commission.SettleType.GoodOrderPayment,
-        SettleAmountType: getGoodCommissionSettleAmountType.value(row.GoodID),
-        SettleMode: getGoodCommissionSettleMode.value(row.GoodID),
-        SettleInterval: getGoodCommissionSettleInterval.value(row.GoodID),
-        Threshold: getGoodCommissionThreshold.value(row.GoodID).toString(),
+        SettleAmountType: getGoodCommissionSettleAmountType.value(row.AppGoodID),
+        SettleMode: getGoodCommissionSettleMode.value(row.AppGoodID),
+        SettleInterval: getGoodCommissionSettleInterval.value(row.AppGoodID),
+        Threshold: getGoodCommissionThreshold.value(row.AppGoodID).toString(),
         AmountOrPercent: `${row.CommissionValue}`,
         StartAt: Math.ceil(Date.now() / 1000),
         Message: {
