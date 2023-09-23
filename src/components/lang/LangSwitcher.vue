@@ -33,6 +33,9 @@ const _setting = useSettingStore()
 const throtting = computed(() => _setting.LangThrottling)
 
 const onLangClick = (language: g11nbase.AppLang) => {
+  if (language.LangID === locale.langID()) {
+    return
+  }
   _setting.LangThrottling = true
   locale.setLang(language)
   if (logined.logined) {
