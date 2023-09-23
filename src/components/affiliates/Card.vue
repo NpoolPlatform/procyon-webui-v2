@@ -155,7 +155,7 @@ const username = computed(() => _user.displayName(undefined, undefined, referral
 const logined = user.useLocalUserStore()
 
 const good = appgood.useAppGoodStore()
-const getDisplayNames = computed(() => (goodID: string) => good.displayNames(undefined, goodID))
+const getDisplayNames = computed(() => (appGoodID: string) => good.displayNames(undefined, appGoodID))
 
 const _achievement = achievement.useAchievementStore()
 const goodAchievements = computed(() => Array.from(referral.value?.Achievements.filter((el) => {
@@ -167,8 +167,8 @@ const goodAchievements = computed(() => Array.from(referral.value?.Achievements.
   } as MyGoodAchievement
 }))
 const visibleGoodAchievements = ref(goodAchievements.value)
-const getGoodCommissionValue = computed(() => (goodID: string) => {
-  return Number(_achievement.commissionPercent(undefined, logined?.User.ID, undefined, goodID))
+const getGoodCommissionValue = computed(() => (appGoodID: string) => {
+  return Number(_achievement.commissionPercent(undefined, logined?.User.ID, undefined, appGoodID))
 })
 const getGoodCommissionSettleMode = computed(() => (appGoodID: string) => {
   return _achievement.settleMode(undefined, logined?.User.ID, undefined, appGoodID) as commission.SettleMode
