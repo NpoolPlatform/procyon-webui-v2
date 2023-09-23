@@ -6,7 +6,7 @@
           <div class='product-page-icon'>
             <img :src='target?.CoinLogo'>
           </div>
-          <h1 v-html='target?.DisplayNames?.[1]? $t(target?.DisplayNames?.[1]) : target?.GoodName' />
+          <h1 v-html='good.displayName(undefined, target?.ID as string, 1)' />
         </div>
       </div>
       <!-- mobile start -->

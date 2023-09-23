@@ -46,12 +46,10 @@ const setDefaultValue = toRef(props, 'default')
 const nameIndex = toRef(props, 'nameIndex')
 const tipIndex = toRef(props, 'tipIndex')
 
-const coinLabel = (coin: appcoin.AppCoin) => {
-  let label = (nameIndex.value !== undefined ? coin.DisplayNames?.[nameIndex.value] : undefined) || coin.Name
-  if (tipIndex.value !== undefined && tipIndex.value >= 0 && coin.SettleTips?.[tipIndex.value]?.length) {
-    label += ' (' + t(coin.SettleTips?.[tipIndex.value]).toUpperCase() + ')'
-  }
-  return label
+const coinLabel = (_coin: appcoin.AppCoin) => {
+  const label = coin.displayName(undefined, _coin.CoinTypeID, nameIndex.value as number)
+  const tip = coin.settleTip(undefined, _coin.CoinTypeID, tipIndex.value as number)
+  return label + (tip.length ? ' (' + t(tip).toUpperCase() + ')' : '')
 }
 
 const emit = defineEmits<{(e: 'update:id', id: string): void;}>()
