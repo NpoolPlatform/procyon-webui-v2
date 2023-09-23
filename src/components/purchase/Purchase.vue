@@ -28,7 +28,7 @@
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-            <span class='number'>{{ utils.formatTime(good?.StartAt as number, true) }}</span>
+            <span class='number'>{{ utils.formatTime(good?.StartAt as number) }}</span>
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_PRICE') }}:</h4>
@@ -173,15 +173,15 @@ const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'
 const { t } = useI18n({ useScope: 'global' })
 
 interface Query {
-  goodID: string
+  appGoodID: string
 }
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
-const goodID = computed(() => query.value.goodID)
+const appGoodID = computed(() => query.value.appGoodID)
 
 const appGood = appgood.useAppGoodStore()
-const good = computed(() => appGood.good(undefined, goodID.value))
+const good = computed(() => appGood.good(undefined, appGoodID.value))
 
 const total = computed(() => Math.min(good.value?.PurchaseLimit as number, Number(good.value?.GoodSpotQuantity)))
 
@@ -266,7 +266,7 @@ const onPurchaseClick = throttle(() => {
       path: '/signin',
       query: {
         target: '/product/aleo',
-        goodId: goodID.value,
+        appGoodID: appGoodID.value,
         purchaseAmount: purchaseAmount.value
       }
     })
@@ -312,7 +312,7 @@ const onSubmit = throttle(() => {
   submitting.value = true
 
   odr.createOrder({
-    AppGoodID: goodID.value,
+    AppGoodID: appGoodID.value,
     Units: purchaseAmount.value.toString(),
     PaymentCoinID: paymentCoin.value?.ID as string,
     PayWithBalanceAmount: `${inputBalance.value}`,
@@ -343,7 +343,7 @@ const onSubmit = throttle(() => {
 onMounted(() => {
   if (!good.value) {
     appGood.getAppGood({
-      GoodID: goodID.value,
+      ID: appGoodID.value,
       Message: {
         Error: {
           Title: 'MSG_GET_GOOD',
