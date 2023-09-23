@@ -55,7 +55,7 @@ const onCloseClick = () => {
 }
 
 onMounted(() => {
-  if (googleSecret.value?.length) {
+  if (!googleSecret.value?.length) {
     ga.setupGoogleAuth({
       AppID: AppID,
       UserID: logined.loginedUserID as string,
