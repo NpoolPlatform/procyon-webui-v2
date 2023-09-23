@@ -35,7 +35,7 @@ const orders = computed(() => _order.orders(undefined, logined.loginedUserID))
 const detail = ledgerstatement.useStatementStore()
 
 const good = appgood.useAppGoodStore()
-const getDeservedRatio = computed(() => (goodID: string) => 1 - Number(good.techniqueFeeTatio(undefined, goodID)) / 100)
+const getDeservedRatio = computed(() => (appGoodID: string) => 1 - Number(good.techniqueFeeTatio(undefined, appGoodID)) / 100)
 
 const table = computed(() => [
   {
@@ -48,7 +48,7 @@ const table = computed(() => [
     name: 'Product',
     label: t('MSG_PRODUCT'),
     align: 'center',
-    field: (row: order.Order) => good.displayNames(undefined, row.GoodID).length >= 4 ? t(good.displayNames(undefined, row.GoodID)[3]) : row.GoodName
+    field: (row: order.Order) => good.displayNames(undefined, row.AppGoodID).length >= 4 ? t(good.displayNames(undefined, row.AppGoodID)[3]) : row.GoodName
   },
   {
     name: 'Total',
@@ -100,8 +100,8 @@ interface ExportOrder {
   OrderStatus: order.OrderState
 }
 
-const getGoodType = computed(() => (goodID:string) => {
-  const _good = good.good(undefined, goodID)
+const getGoodType = computed(() => (appGoodID: string) => {
+  const _good = good.good(undefined, appGoodID)
   return _good?.GoodType === goodbase.GoodType.PowerRenting || _good?.GoodType === goodbase.GoodType.MachineHosting ? 'Mining' : _good?.GoodType
 })
 
@@ -119,16 +119,16 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
   }
   return {
     CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
-    ProductType: getGoodType.value(el.GoodID),
-    ProductName: good.displayNames(undefined, el.GoodID)?.[3] ? t(good.displayNames(undefined, el.GoodID)?.[3]) : el.GoodName,
+    ProductType: getGoodType.value(el.AppGoodID),
+    ProductName: good.displayNames(undefined, el.AppGoodID)?.[3] ? t(good.displayNames(undefined, el.AppGoodID)?.[3]) : el.GoodName,
     PurchaseAmount: el.Units,
     UnitType: t(el.GoodUnit),
-    Price: good.priceFloat(undefined, el.GoodID),
+    Price: good.priceFloat(undefined, el.AppGoodID),
     PaymentCurrency: el.PaymentCoinUnit.length ? el.PaymentCoinUnit : constant.PriceCoinName,
     TotalCost: Number(el.PaymentAmount).toString(),
     MiningPeriod: el.GoodServicePeriodDays,
-    CumulativeProfit: detail.miningRewardFloat(undefined, logined.loginedUserID, el.CoinTypeID, el.ID) / getDeservedRatio.value(el.GoodID),
-    ProfitCurrency: good.good(undefined, el.GoodID)?.CoinUnit,
+    CumulativeProfit: detail.miningRewardFloat(undefined, logined.loginedUserID, el.CoinTypeID, el.ID) / getDeservedRatio.value(el.AppGoodID),
+    ProfitCurrency: good.good(undefined, el.AppGoodID)?.CoinUnit,
     OrderStatus: (_order.orderState(el.ID)?.startsWith('MSG') ? t(_order.orderState(el.ID)) : t('MSG_AWAITING_CONFIRMATION')) +
                 (orderType ? '(' + orderType + ')' : '')
   } as ExportOrder
