@@ -4,7 +4,7 @@ pipeline {
     stage('Clone') {
       steps {
         git(url: scm.userRemoteConfigs[0].url, branch: '$BRANCH_NAME', changelog: true, credentialsId: 'KK-github-key', poll: true)
-        sh 'git submodule update --init --recursive'
+        sh 'rm src/npoolstore -rf; git submodule update --init --recursive'
       }
     }
 
