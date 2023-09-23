@@ -184,6 +184,7 @@ const onDepositClick = (row: MyLedger) => {
     showing.value = true
   })
 }
+
 const onWithdrawClick = (row: MyLedger) => {
   submitting.value = true
   _kyc.getKYC({
@@ -209,7 +210,7 @@ const onWithdrawClick = (row: MyLedger) => {
       return
     }
 
-    if (account.accounts(undefined, logined.loginedUserID, row.CoinTypeID, accountbase.AccountUsedFor.UserWithdraw)) {
+    if (account.accounts(undefined, logined.loginedUserID, row.CoinTypeID, accountbase.AccountUsedFor.UserWithdraw).length) {
       void router.push({
         path: '/withdraw',
         query: {
