@@ -120,7 +120,7 @@ const goodUnit = computed(() => {
 })
 const totalUnits = computed(() => _achievement.totalInviteeUnits(undefined, logined.loginedUserID, selectedCoinID.value, undefined, false))
 const totalAmount = computed(() => _achievement.totalInviteeAmount(undefined, logined.loginedUserID, selectedCoinID.value, undefined, false))
-const totalSuperiorCommission = computed(() => _achievement.totalSuperiorCommission(undefined, logined.loginedUserID, selectedCoinID.value))
+const totalSuperiorCommission = computed(() => _achievement.totalInviteeSuperiorCommission(undefined, logined.loginedUserID, selectedCoinID.value, undefined, false))
 
 const userTotalUnits = computed(() => (referral: achievement.Achievement) => _achievement.totalUnits(undefined, referral.UserID, selectedCoinID.value))
 const userTotalAmount = computed(() => (referral: achievement.Achievement) => _achievement.totalAmount(undefined, referral.UserID, selectedCoinID.value))
