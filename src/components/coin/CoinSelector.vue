@@ -47,12 +47,9 @@ const nameIndex = toRef(props, 'nameIndex')
 const tipIndex = toRef(props, 'tipIndex')
 
 const coinLabel = (coin: appcoin.AppCoin) => {
-  let label = coin.Name
-  if (nameIndex.value !== undefined && nameIndex.value >= 0 && coin.DisplayNames?.length > nameIndex.value && coin.DisplayNames[nameIndex.value]?.length > 0) {
-    label = coin.DisplayNames[nameIndex.value]
-  }
-  if (tipIndex.value !== undefined && tipIndex.value >= 0 && coin.SettleTips?.length > tipIndex.value && coin.SettleTips[tipIndex.value]?.length > 0) {
-    label += ' (' + t(coin.SettleTips[tipIndex.value]).toUpperCase() + ')'
+  let label = (nameIndex.value !== undefined ? coin.DisplayNames?.[nameIndex.value] : undefined) || coin.Name
+  if (tipIndex.value !== undefined && tipIndex.value >= 0 && coin.SettleTips?.[tipIndex.value]?.length) {
+    label += ' (' + t(coin.SettleTips?.[tipIndex.value]).toUpperCase() + ')'
   }
   return label
 }
@@ -81,7 +78,7 @@ const onChange = () => {
 }
 
 const setDefault = () => {
-  target.value = displayCoins?.value[0]?.CoinTypeID
+  target.value = displayCoins.value?.[0]?.CoinTypeID
   emit('update:id', target.value)
 }
 
