@@ -61,7 +61,7 @@ const getHistory = (offset: number, limit: number) => {
 }
 
 onMounted(() => {
-  if (!_user.loginHistories) {
+  if (!_user.loginHistories.length) {
     getHistory(0, 100)
   }
 })
