@@ -184,11 +184,11 @@ const odr = order.useOrderStore()
 const _order = computed(() => odr.order(orderId.value))
 
 const appGood = appgood.useAppGoodStore()
-const good = computed(() => appGood.good(undefined, _order.value?.GoodID as string))
+const good = computed(() => appGood.good(undefined, _order.value?.AppGoodID as string))
 
 const notification = notify.useNotificationStore()
 
-const remainSeconds = ref(odr.orderState(_order.value?.GoodID as string))
+const remainSeconds = ref(odr.orderState(_order.value?.ID as string))
 const ticker = ref(-1)
 const counter = ref(0)
 
