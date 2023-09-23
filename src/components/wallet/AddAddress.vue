@@ -104,7 +104,7 @@ const gotoWithdraw = computed(() => query.value.gotoWithdraw !== undefined)
 const selectedCoinTypeID = ref(coinTypeID.value)
 
 const coin = appcoin.useAppCoinStore()
-const needMemo = computed(() => coin.needMemo(undefined, selectedCoinTypeID.value))
+const needMemo = computed(() => !selectedCoinTypeID.value?.length || coin.needMemo(undefined, selectedCoinTypeID.value))
 
 const address = ref('')
 const addressError = ref(false)
