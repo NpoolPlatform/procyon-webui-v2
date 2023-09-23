@@ -99,7 +99,7 @@ const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 
 interface Query {
-  goodID: string
+  appGoodID: string
   purchaseAmount: number
   coinTypeID: string
 }
@@ -108,7 +108,7 @@ const router = useRouter()
 const route = useRoute()
 
 const query = computed(() => route.query as unknown as Query)
-const goodID = computed(() => query.value.goodID)
+const appGoodID = computed(() => query.value.appGoodID)
 const coinTypeID = ref(query.value.coinTypeID)
 
 const coin = appcoin.useAppCoinStore()
@@ -116,13 +116,13 @@ const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === targe
 const paymentCoin = computed(() => coin.coin(undefined, coinTypeID.value))
 
 const good = appgood.useAppGoodStore()
-const target = computed(() => good.good(undefined, goodID.value))
+const target = computed(() => good.good(undefined, appGoodID.value))
 const purchaseLimit = computed(() => good.purchaseLimit(undefined, target.value?.ID as string))
 const logined = user.useLocalUserStore()
 
 const _order = order.useOrderStore()
 const purchaseLimited = computed(() => {
-  const purchasedUnits = _order.purchasedUnits(undefined, logined.loginedUserID as string, target.value?.CoinTypeID as string, goodID.value)
+  const purchasedUnits = _order.purchasedUnits(undefined, logined.loginedUserID as string, target.value?.CoinTypeID as string, appGoodID.value)
   return purchasedUnits >= Number(target?.value?.UserPurchaseLimit) ||
         (purchasedUnits + Number(purchaseAmount.value)) > Number(target?.value?.UserPurchaseLimit)
 })
@@ -132,7 +132,7 @@ const general = ledger.useLedgerStore()
 const balance = computed(() => parseFloat((Number(general.coinBalance(undefined, logined.loginedUserID as string, coinTypeID.value)) * selectedCoinCurrency.value).toFixed(4)))
 
 const purchaseAmount = ref(query.value.purchaseAmount) // 购买数量
-const paymentAmount = computed(() => Number(good.priceFloat(undefined, goodID.value)) * purchaseAmount.value) // 支付金额
+const paymentAmount = computed(() => Number(good.priceFloat(undefined, appGoodID.value)) * purchaseAmount.value) // 支付金额
 const usdToOtherAmount = computed(() => parseFloat((Math.ceil(paymentAmount.value / selectedCoinCurrency.value * 10000) / 10000).toFixed(4)))
 const usedToOtherAmountISNaN = computed(() => isNaN(usdToOtherAmount.value))
 const insufficientFunds = computed(() => balance.value < paymentAmount.value)
@@ -169,7 +169,7 @@ const onPurchaseClick = () => {
   }
   submitting.value = true
   _order.createOrder({
-    AppGoodID: goodID.value,
+    AppGoodID: appGoodID.value,
     Units: `${purchaseAmount.value}`,
     PaymentCoinID: coinTypeID.value,
     PayWithBalanceAmount: `${usdToOtherAmount.value}`,
@@ -228,7 +228,7 @@ onMounted(() => {
   }
   if (!target.value) {
     good.getAppGood({
-      ID: goodID.value,
+      ID: appGoodID.value,
       Message: {
         Error: {
           Title: 'MSG_GET_GOOD',
