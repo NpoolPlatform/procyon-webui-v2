@@ -42,7 +42,7 @@
             <td>
               <span
                 class='aff-product'
-                v-html='getDisplayNames(_good.AppGoodID)?.[4] ? $t(getDisplayNames(_good.AppGoodID)?.[4] as string) : _good.GoodName'
+                v-html='$t(good.displayName(undefined, _good.AppGoodID, 4))'
               />
             </td>
             <td v-if='_good.Editing'>
@@ -100,7 +100,7 @@
                 <td>
                   <span
                     class='aff-product'
-                    v-html='$t(getDisplayNames(__commission.AppGoodID)?.[4] || good.good(undefined, __commission.AppGoodID)?.GoodName || "")'
+                    v-html='$t(good.displayName(undefined, __commission.AppGoodID, 4))'
                   />
                 </td>
                 <td>
@@ -153,9 +153,7 @@ const username = computed(() => _user.displayName(undefined, undefined, referral
   referral.value?.LastName, locale.value as string))
 
 const logined = user.useLocalUserStore()
-
 const good = appgood.useAppGoodStore()
-const getDisplayNames = computed(() => (appGoodID: string) => good.displayNames(undefined, appGoodID))
 
 const _achievement = achievement.useAchievementStore()
 const goodAchievements = computed(() => Array.from(referral.value?.Achievements.filter((el) => {
