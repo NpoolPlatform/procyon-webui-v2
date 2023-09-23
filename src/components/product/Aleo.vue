@@ -1,6 +1,6 @@
 <template>
   <ProductPage
-    :good-id='(goodID as string)'
+    :app-good-i-d='(appGoodID as string)'
     :purchase-amount='purchaseAmount'
     project-class='project-aleo'
     bg-img='product/aleo/aleo-banner.jpg'
@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, goodID as string)) }}</span>
+        <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, appGoodID as string)) }}</span>
         <span class='unit'>{{ constant.PriceCoinName }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -134,7 +134,7 @@ const ProductDetailUS = defineAsyncComponent(() => import('src/components/produc
 const ProductDetailJP = defineAsyncComponent(() => import('src/components/product/ja-JP/Detail.vue'))
 
 interface Query {
-  goodId: string
+  appGoodID: string
   purchaseAmount: number
 }
 
@@ -148,12 +148,12 @@ const getGood = () => {
   if (_good.value) {
     return
   }
-  if (!goodID.value) {
+  if (!appGoodID.value) {
     void router.push({ path: '/' })
     return
   }
   good.getAppGood({
-    ID: goodID.value,
+    ID: appGoodID.value,
     Message: {
       Error: {
         Title: 'MSG_GET_GOOD',
@@ -170,14 +170,14 @@ const getGood = () => {
 }
 
 const coin = appcoin.useAppCoinStore()
-// Use CoinUnit to find GoodID from AppCoin
+// Use CoinUnit to find AppGoodID from AppCoin
 const coinUnit = 'ALEO'
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = appgood.useAppGoodStore()
-const target = computed(() => good.good(undefined, goodID.value as string))
-const goodID = computed(() => query.value?.goodId || coin.defaultGoodID(undefined, coinUnit))
-const _good = computed(() => good.good(undefined, goodID.value as string))
+const appGoodID = computed(() => query.value?.appGoodID || coin.defaultGoodID(undefined, coinUnit))
+const target = computed(() => good.good(undefined, appGoodID.value as string))
+const _good = computed(() => good.good(undefined, appGoodID.value as string))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()

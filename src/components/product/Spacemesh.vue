@@ -1,6 +1,6 @@
 <template>
   <ProductPage
-    :good-id='(goodID as string)'
+    :app-good-i-d='(appGoodID as string)'
     :purchase-amount='purchaseAmount'
     project-class='project-spacemesh'
     bg-img='product/spacemesh/spacemesh-banner.jpg'
@@ -84,11 +84,11 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { appgood, notify, appcoin, appcoindescription } from 'src/npoolstore'
-import { getDescriptions } from 'src/api/chain'
+import { appgood, notify, appcoin, appcoindescription, coincurrency } from 'src/npoolstore'
+import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
 
 interface Query {
-  goodId: string
+  appGoodID: string
   purchaseAmount: number
 }
 
@@ -97,19 +97,23 @@ const query = computed(() => route.query as unknown as Query)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = appgood.useAppGoodStore()
-const target = computed(() => good.good(undefined, goodID.value as string))
+const target = computed(() => good.good(undefined, appGoodID.value as string))
 
-// Use CoinUnit to find GoodID from AppDefaultGood
+// Use CoinUnit to find AppGoodID from AppDefaultGood
 const coinUnit = 'SMH'
-const goodID = computed(() => query.value?.goodId || coin.defaultGoodID(undefined, coinUnit))
-const _good = computed(() => good.good(undefined, goodID.value as string))
+const appGoodID = computed(() => query.value?.appGoodID || coin.defaultGoodID(undefined, coinUnit))
+const _good = computed(() => good.good(undefined, appGoodID.value as string))
 
-const getGood = (_goodID:string) => {
+const getGood = () => {
   if (_good.value) {
     return
   }
+  if (!appGoodID.value) {
+    void router.push({ path: '/' })
+    return
+  }
   good.getAppGood({
-    GoodID: _goodID,
+    ID: appGoodID.value,
     Message: {
       Error: {
         Title: 'MSG_GET_GOOD',
@@ -119,7 +123,7 @@ const getGood = (_goodID:string) => {
       }
     }
   }, () => {
-    if (!goodID.value) {
+    if (!_good.value) {
       void router.push({ path: '/' })
     }
   })
@@ -137,10 +141,21 @@ const coinDescription = computed(() => description.coinUsedForDescription(
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 const router = useRouter()
 
+const currency = coincurrency.useCurrencyStore()
+
 onMounted(() => {
-  getGood(query.value?.goodId)
+  if (!coin.coins(undefined).length) {
+    getCoins(0, 100, () => {
+      getGood()
+    })
+  } else {
+    getGood()
+  }
   if (!description.descriptions(undefined)?.length) {
     getDescriptions(0, 100)
+  }
+  if (!currency.currencies.length) {
+    getCurrencies(0, 100)
   }
 })
 
