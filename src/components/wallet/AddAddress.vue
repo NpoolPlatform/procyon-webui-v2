@@ -25,7 +25,7 @@
           <img src='font-awesome/warning.svg'>
           <span v-html='$t("MSG_WITHDRAW_ADDRESS_WARNING")' />
         </div>
-        <template v-if='needMemo'>
+        <div v-show='needMemo'>
           <Input
             v-model:value='memo'
             label='MSG_MEMO'
@@ -40,7 +40,7 @@
             <img src='font-awesome/warning.svg'>
             <span v-html='$t("MSG_WITHDRAW_MEMO_WARNING")' />
           </div>
-        </template>
+        </div>
         <Input
           v-model:value='labels'
           label='MSG_WALLET_ADDRESS_LABELS'
@@ -127,7 +127,7 @@ const onSubmit = () => {
 }
 
 const onMenuHide = () => {
-  if (selectedCoinTypeID.value.length === 0) {
+  if (selectedCoinTypeID.value?.length === 0) {
     return
   }
   verifying.value = false
