@@ -59,7 +59,7 @@ const onPurchaseClick = (_good: appgood.Good) => {
   void router.push({
     path: _good?.ProductPage?.length ? _good?.ProductPage : '/product/aleo',
     query: {
-      goodId: _good.ID
+      appGoodID: _good.ID
     }
   })
 }
