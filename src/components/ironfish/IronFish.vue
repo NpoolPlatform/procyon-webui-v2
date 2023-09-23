@@ -1,6 +1,6 @@
 <template>
   <IronProductPage
-    :good-id='(goodID as string)'
+    :app-good-i-d='(appGoodID as string)'
     :purchase-amount='purchaseAmount'
     project-class='project-iron-fish'
     bg-img='product/iron/iron-fish-banner.jpg'
@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, goodID as string)) }}</span>
+        <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, appGoodID as string)) }}</span>
         <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.Unit ? $t(target?.Unit) : '' }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
@@ -106,7 +106,7 @@
 import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { getCurrencies, getDescriptions } from 'src/api/chain'
+import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
 import { appgood, notify, appcoin, appcoindescription, coincurrency, utils, constant } from 'src/npoolstore'
 
 import question from '../../assets/question.svg'
@@ -120,19 +120,23 @@ const ProductDetailUS = defineAsyncComponent(() => import('src/components/ironfi
 const ProductDetailJP = defineAsyncComponent(() => import('src/components/ironfish/ja-JP/Detail.vue'))
 
 interface Query {
-  goodId: string
+  appGoodID: string
   purchaseAmount: number
 }
 
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 
-const getGood = (_goodID:string) => {
+const getGood = () => {
   if (_good.value) {
     return
   }
+  if (!appGoodID.value) {
+    void router.push({ path: '/' })
+    return
+  }
   good.getAppGood({
-    GoodID: _goodID,
+    ID: appGoodID.value,
     Message: {
       Error: {
         Title: 'MSG_GET_GOOD',
@@ -142,21 +146,21 @@ const getGood = (_goodID:string) => {
       }
     }
   }, () => {
-    if (!goodID.value) {
+    if (!_good.value) {
       void router.push({ path: '/' })
     }
   })
 }
 
 const coin = appcoin.useAppCoinStore()
-// Use CoinUnit to find GoodID from AppDefaultGood
+// Use CoinUnit to find AppGoodID from AppDefaultGood
 const coinUnit = 'IRON'
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = appgood.useAppGoodStore()
-const target = computed(() => good.good(undefined, goodID.value as string))
-const goodID = computed(() => query.value?.goodId || coin.defaultGoodID(undefined, coinUnit))
-const _good = computed(() => good.good(undefined, goodID.value as string))
+const target = computed(() => good.good(undefined, appGoodID.value as string))
+const appGoodID = computed(() => query.value?.appGoodID || coin.defaultGoodID(undefined, coinUnit))
+const _good = computed(() => good.good(undefined, appGoodID.value as string))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()
@@ -164,7 +168,13 @@ const description = appcoindescription.useCoinDescriptionStore()
 const router = useRouter()
 
 onMounted(() => {
-  getGood(query.value?.goodId)
+  if (!coin.coins(undefined).length) {
+    getCoins(0, 100, () => {
+      getGood()
+    })
+  } else {
+    getGood()
+  }
   if (!description.descriptions(undefined)?.length) {
     getDescriptions(0, 100)
   }
