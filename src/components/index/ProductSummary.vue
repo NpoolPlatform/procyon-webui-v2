@@ -68,7 +68,6 @@ const good = appgood.useAppGoodStore()
 const goods = computed(() => good.goods(undefined).filter((el) => el.Visible))
 
 const onLearnMoreClick = (url: string) => {
-  console.log('url: ', url)
   window.open(url, '_blank')
 }
 

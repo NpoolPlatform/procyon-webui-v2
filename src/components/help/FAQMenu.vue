@@ -69,7 +69,6 @@ const showing = ref(false)
 
 const onSearchClick = () => {
   showing.value = true
-  console.log('showing: ', showing.value)
 }
 
 interface FaqItem {
