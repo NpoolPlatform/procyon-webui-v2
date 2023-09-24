@@ -27,6 +27,5 @@ const Search = defineAsyncComponent(() => import('src/components/help/Search.vue
 const showing = ref(false)
 const onSearchClick = () => {
   showing.value = true
-  console.log('showing: ', showing.value)
 }
 </script>
