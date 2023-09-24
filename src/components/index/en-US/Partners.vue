@@ -6,19 +6,19 @@
 
     <img src='../../../assets/partners-diagram-en.svg'>
 
-    <h2>Hpool</h2>
+    <h2>H9</h2>
 
     <div class='logo-display'>
-      <a href='https://www.hpool.in/' target='_blank'><img src='vc-logos/hpool.png'></a>
+      <a href='https://www.h9.com/' target='_blank'><img src='vc-logos/h9.png'></a>
     </div>
 
-    <p>Founded in 2017, Hpool is the world's largest PoC (Proof of Consensus) mining pool operating 150,000 mining machines, serving nearly 300,000 users worldwide, and managing hundreds of millions of dollars in assets.</p>
+    <p>Founded in 2017, H9 is the world's largest PoC (Proof of Consensus) mining pool operating 150,000 mining machines, serving nearly 300,000 users worldwide, and managing hundreds of millions of dollars in assets.</p>
 
     <p>
-      <strong>Hpool is most famous for dominating over 80% network hashpower on the Chia blockchain 1 month after its mainnet launch.</strong>
+      <strong>H9 is most famous for dominating over 80% network hashpower on the Chia blockchain 1 month after its mainnet launch.</strong>
     </p>
 
-    <p>Large-scale mining pools such as Hpool provide peak return on investment, but offer first-batch mining opportunities only to institutional investors. However, as Hpool is Procyon’s official mining partner, they have opened their doors to our community, regardless of investment size, giving our community members an extremely rare and exclusive opportunity to participate in Hpool’s world-class mining operations.</p>
+    <p>Large-scale mining pools such as H9 provide peak return on investment, but offer first-batch mining opportunities only to institutional investors. However, as H9 is Procyon’s official mining partner, they have opened their doors to our community, regardless of investment size, giving our community members an extremely rare and exclusive opportunity to participate in H9’s world-class mining operations.</p>
 
     <h2>Inazuma Capital</h2>
 
