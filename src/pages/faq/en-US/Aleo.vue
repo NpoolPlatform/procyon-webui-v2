@@ -138,7 +138,7 @@
 
           <h3 id='' />
 
-          <p>As of December 2nd, 2022, Aleo started the “Prover Incentives Program” for its testnet participants. This is significant news for our first-batch mining investors, as it means the Aleo credits Hpool mines during this phase of the testnet will become redeemable for Aleo tokens at a 5 to 1 ratio (20%) upon mainnet launch. In other words, your Aleo purchase is already generating ROI for you even before mainnet launch. This is official news from the Aleo team.</p>
+          <p>As of December 2nd, 2022, Aleo started the “Prover Incentives Program” for its testnet participants. This is significant news for our first-batch mining investors, as it means the Aleo credits mined during this phase of the testnet will become redeemable for Aleo tokens at a 5 to 1 ratio (20%) upon mainnet launch. In other words, your Aleo purchase is already generating ROI for you even before mainnet launch. This is official news from the Aleo team.</p>
 
           <h4 id='What is the Aleo Prover Incentive Program? '>
             What you need to know about the Aleo incentives program:
@@ -168,9 +168,9 @@
 
           <p>The specific hash power per unit will not be known until the main net starts. This is due to fluctuations in hash power due to machine optimization and other factors.</p>
 
-          <p>Also, because Aleo uses GPU mining, unlike hard disk mining, hash power is not fixed even after the main network is up and running, as is the case with the above hardware. However, our mining pool partner Hpool is superior to other mining pools based on its past performance, so we expect to achieve high figures.</p>
+          <p>Also, because Aleo uses GPU mining, unlike hard disk mining, hash power is not fixed even after the main network is up and running, as is the case with the above hardware. However, our mining pool partner is superior to other mining pools based on its past performance, so we expect to achieve high figures.</p>
 
-          <p>Hpool is in the top 5 in Aleo's testnet ranking, where many well-known mining pools are competing. (as of January 26, 2023).</p>
+          <p>Our mining pool partner is in the top 5 in Aleo's testnet ranking, where many well-known mining pools are competing. (as of January 26, 2023).</p>
 
           <h3 id='Can I see my mining rewards on Procyon.vip starting the day after mining starts?'>
             Can I see my mining rewards on Procyon.vip starting the day after mining starts?
@@ -182,7 +182,7 @@
             Will the mining machine stop functioning due to power outages or other problems?
           </h3>
 
-          <p>We checked with our partner, Hpool, and they told us that there is a backup in place and that the system will not stop in the event of a power outage. We have redundancy in place for other risks as well.</p>
+          <p>We checked with our mining pool partner and they told us that there is a backup in place and that the system will not stop in the event of a power outage. We have redundancy in place for other risks as well.</p>
 
           <p>We will also notify you in the event of an actual power outage.</p>
 
