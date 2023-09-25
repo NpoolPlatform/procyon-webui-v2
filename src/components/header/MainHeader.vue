@@ -127,7 +127,7 @@ import { defineAsyncComponent, computed, watch, onMounted, ref } from 'vue'
 import { HeaderAvatarMenu, MenuItem } from 'src/menus/menus'
 import { useRouter } from 'vue-router'
 import { getNotifs, onMarkAll } from 'src/api/notif'
-import { notify, user, notif, _locale, localapp, applang } from 'src/npoolstore'
+import { notify, user, notif, _locale, localapp } from 'src/npoolstore'
 
 import lightLogo from '../../assets/procyon-light.svg'
 import logo from '../../assets/procyon-logo.svg'
@@ -236,29 +236,7 @@ onMounted(() => {
   }
 })
 
-const lang = applang.useAppLangStore()
-const langs = computed(() => lang.langs(undefined))
-const getLangByName = computed(() => (name: string) => {
-  const appLang = lang.lang(undefined, undefined, name)
-  return appLang
-})
-
 const locale = _locale.useLocaleStore()
-const setLocale = computed(() => (path: string) => {
-  const name = path.split('/')?.[1]
-  if (name?.length < 2) return
-  const lang = getLangByName.value(name)
-  if (!lang) return
-  locale.setLang(lang)
-})
-
-watch(() => router.currentRoute.value.path, (newValue) => {
-  setLocale.value(newValue)
-}, { immediate: true })
-
-watch(langs, () => {
-  setLocale.value(router.currentRoute.value.path)
-}, { immediate: true })
 
 </script>
 
