@@ -11,58 +11,36 @@ const _message = message.useMessageStore()
 const messages = computed(() => _message.messages(undefined, langID.value, undefined))
 watch(langID, () => {
   if (messages.value.length === 0) {
-    getMessages(0, 100, langID.value)
+    getMessages(0, 100)
     return
   }
   _setting.LangThrottling = false
 })
 
 const lang = applang.useAppLangStore()
-const langs = computed(() => lang.langs(undefined))
+const router = useRouter()
 const _setting = useSettingStore()
 const logined = user.useLocalUserStore()
-const userLangID = computed(() => logined.selectedLangID)
+const langName = computed(() => router.currentRoute.value.path.split('/')?.[1])
+const targetLangID = computed(() => lang.langID(undefined, langName.value) || logined.selectedLangID || lang.mainLangID(undefined))
 
-const setLang = (__lang: g11nbase.AppLang) => {
+const setLang = () => {
+  const _lang = lang.lang(undefined, targetLangID.value)
+  if (!_lang) {
+    return
+  }
   setTimeout(() => {
     if (_setting.LangThrottling) {
-      setLang(__lang)
+      setLang()
+      return
     }
-    locale.setLang(__lang)
+    locale.setLang(_lang)
   }, 1000)
 }
 
-watch(userLangID, () => {
-  if (userLangID.value) {
-    const _lang = lang.lang(undefined, userLangID.value)
-    if (_lang) {
-      setLang(_lang)
-    }
-  }
+watch(targetLangID, () => {
+  setLang()
 })
-
-const getLangByName = computed(() => (name: string) => {
-  const appLang = lang.lang(undefined, undefined, name)
-  return appLang
-})
-
-const router = useRouter()
-const setLocale = computed(() => (path: string) => {
-  const name = path.split('/')?.[1]
-  if (name?.length < 2) return
-  const _lang = getLangByName.value(name)
-  if (_lang) {
-    setLang(_lang)
-  }
-})
-
-watch(() => router.currentRoute.value.path, (newValue) => {
-  setLocale.value(newValue)
-}, { immediate: true })
-
-watch(langs, () => {
-  setLocale.value(router.currentRoute.value.path)
-}, { immediate: true })
 
 onMounted(() => {
   if (!lang.langs(undefined).length) {
@@ -84,14 +62,15 @@ const getAppLangs = (offset: number, limit: number) => {
     }
   }, (error: boolean, rows: Array<g11nbase.AppLang>) => {
     if (error || rows.length < limit) {
-      getMessages(0, 100, langID.value)
+      setLang()
+      getMessages(0, 100)
       return
     }
     getAppLangs(offset + limit, limit)
   })
 }
 
-const getMessages = (offset: number, limit: number, langID: string) => {
+const getMessages = (offset: number, limit: number) => {
   _setting.LangThrottling = true
   _message.getMessages({
     Disabled: false,
@@ -110,7 +89,7 @@ const getMessages = (offset: number, limit: number, langID: string) => {
       _setting.LangThrottling = false
       return
     }
-    getMessages(offset + limit, limit, langID)
+    getMessages(offset + limit, limit)
   })
 }
 </script>
