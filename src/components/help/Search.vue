@@ -172,11 +172,10 @@ const onClick = (record: Record) => {
     url = record.url_without_anchor?.replace(`/${locale.AppLang.Lang}`, '')
   }
   url = record.url_without_variables?.replace(`/${locale.AppLang.Lang}`, '')
-  const urlArr = url.split('?')
-  const path = urlArr?.[0]
+  const urlArr = url.split('faq?')
   const topic = urlArr?.[1]?.split('topic=')?.[1]
   void router.push({
-    path: path,
+    path: '/faq',
     query: {
       topic: topic
     }
