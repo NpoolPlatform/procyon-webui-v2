@@ -40,7 +40,7 @@
                     v-for='child in item.children'
                     :key='child.objectID'
                   >
-                    <a :href='getUrl(child)'>
+                    <a href='javascript:void(0)' @click='onClick(child)'>
                       <div class='docsearch-hit-container'>
                         <div class='docsearch-hit-content-wrapper'>
                           <template v-if='child.type==="content"'>
@@ -69,6 +69,7 @@ import { AppID, TypesenseApiKey } from 'src/const/const'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import { computed, defineProps, toRef, defineEmits, ref } from 'vue'
 import { _locale } from 'src/npoolstore'
+import { useRouter } from 'vue-router'
 
 interface Props {
   visible: boolean
@@ -164,12 +165,23 @@ interface Parent {
   children: Children[]
 }
 
-const getUrl = computed(() => (record: Record) => {
+const router = useRouter()
+const onClick = (record: Record) => {
+  let url = ''
   if (record.type === 'lvl0') {
-    return record.url_without_anchor?.replace(`/${locale.AppLang.Lang}`, '')
+    url = record.url_without_anchor?.replace(`/${locale.AppLang.Lang}`, '')
   }
-  return record.url_without_variables?.replace(`/${locale.AppLang.Lang}`, '')
-})
+  url = record.url_without_variables?.replace(`/${locale.AppLang.Lang}`, '')
+  const urlArr = url.split('?')
+  const path = urlArr?.[0]
+  const topic = urlArr?.[1]?.split('topic=')?.[1]
+  void router.push({
+    path: path,
+    query: {
+      topic: topic
+    }
+  })
+}
 
 const transformItems = (items: Record[]) => {
   const parents = [] as Array<Parent>
