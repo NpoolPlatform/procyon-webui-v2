@@ -105,8 +105,8 @@ const coins = computed(() => coin.coins(undefined).filter((el) => {
 }))
 const selectedCoinID = ref(undefined as unknown as string)
 
-const joinDate = computed(() => (referral: achievement.Achievement) => utils.formatTime(referral.InvitedAt, 'YYYY/MM/DD', 9))
-const joinTime = computed(() => (referral: achievement.Achievement) => utils.formatTime(referral.InvitedAt, 'HH:mm:ss', 9))
+const joinDate = computed(() => (referral: achievement.Achievement) => utils.formatTime(referral.InvitedAt, 'YYYY/MM/DD'))
+const joinTime = computed(() => (referral: achievement.Achievement) => utils.formatTime(referral.InvitedAt, 'HH:mm:ss'))
 
 const goodUnit = computed(() => {
   for (const rf of referrals.value) {

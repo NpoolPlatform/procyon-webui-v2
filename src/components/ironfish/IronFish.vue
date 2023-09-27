@@ -53,9 +53,9 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span class='number'>{{ target?.ServiceStartAt === 0 ? 'TBD*' : utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD', 9) }}</span>
+        <span class='number'>{{ target?.ServiceStartAt === 0 ? 'TBD*' : utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD') }}</span>
         <br>
-        <span class='unit'>{{ utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD', 9) }} {{ $t("MSG_JST") }}</span>
+        <span class='unit'>{{ utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD') }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>

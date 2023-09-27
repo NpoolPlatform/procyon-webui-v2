@@ -53,7 +53,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span class='number'>{{ target?.ServiceStartAt === 0 ? 'TBD*' : utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD', 9) }}</span>
+        <span class='number'>{{ target?.ServiceStartAt === 0 ? 'TBD*' : utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD') }}</span>
         <br>
         <!-- <span class='unit'>{{ good.getJSTDate(target?.ServiceStartAt, 'HH:mm') }} {{ $t("MSG_JST") }}</span> -->
         <div class='tooltip'>
