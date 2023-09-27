@@ -63,7 +63,6 @@ const getAppLangs = (offset: number, limit: number) => {
   }, (error: boolean, rows: Array<g11nbase.AppLang>) => {
     if (error || rows.length < limit) {
       setLang()
-      getMessages(0, 100)
       return
     }
     getAppLangs(offset + limit, limit)
@@ -84,12 +83,33 @@ const getMessages = (offset: number, limit: number) => {
         Type: notify.NotifyType.Error
       }
     }
-  }, (error: boolean, rows?: Array<g11nbase.Message>) => {
+  }, (error: boolean, rows?: Array<g11nbase.Message>, total?: number) => {
     if (error || !rows?.length) {
       _setting.LangThrottling = false
       return
     }
-    getMessages(offset + limit, limit)
+    const arrays = new Array(Math.floor(total as number / 100)).fill(1).map((v, i) => ++i)
+    arrays.forEach((index) => {
+      batchGetMessages(index * 100, 100)
+    })
+  })
+}
+
+const batchGetMessages = (offset: number, limit: number) => {
+  _message.getMessages({
+    Disabled: false,
+    Offset: offset,
+    Limit: limit,
+    Message: {
+      Error: {
+        Title: 'MSG_GET_LANG_MESSAGES',
+        Message: 'MSG_GET_LANG_MESSAGES_FAIL',
+        Popup: true,
+        Type: notify.NotifyType.Error
+      }
+    }
+  }, () => {
+    _setting.LangThrottling = false
   })
 }
 </script>
