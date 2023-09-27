@@ -104,8 +104,8 @@
                   />
                 </td>
                 <td>
-                  <span class='aff-number'>{{ utils.formatTime(__commission.StartAt, 'YYYY/MM/DD', 9) }}</span>
-                  <span class='unit'>{{ ' ' + utils.formatTime(__commission.StartAt, 'HH:mm:ss', 9) }}</span>
+                  <span class='aff-number'>{{ utils.formatTime(__commission.StartAt, 'YYYY/MM/DD') }}</span>
+                  <span class='unit'>{{ ' ' + utils.formatTime(__commission.StartAt, 'HH:mm:ss') }}</span>
                 </td>
                 <td><span class='aff-number'>{{ __commission.AmountOrPercent }}<span class='unit'>%</span></span></td>
               </tr>
