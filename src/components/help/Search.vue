@@ -180,7 +180,7 @@ const onClick = (record: Record) => {
     query: {
       topic: topic
     },
-    hash: hashStr
+    hash: `#${hashStr}`
   })
 }
 
