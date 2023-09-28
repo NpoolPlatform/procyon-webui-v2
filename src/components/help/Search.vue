@@ -182,6 +182,7 @@ const onClick = (record: Record) => {
     },
     hash: `#${hashStr}`
   })
+  onUpdate()
 }
 
 const transformItems = (items: Record[]) => {
