@@ -8,6 +8,7 @@
         <div v-html='target?.DisplayNames?.[2]? $t(target?.DisplayNames?.[2]) : goodProfit.GoodName' />
       </h3>
     </div>
+    <div>{{ goodProfit.AppGoodID }}</div>
     <div class='top-line-summary'>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
