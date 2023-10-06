@@ -40,7 +40,9 @@ watch(langID, () => {
       _setting.LangThrottling = true
       getMessages(i * 100, 100, concurrent)
     }
+    return
   }
+  _setting.LangThrottling = false
 })
 
 onMounted(() => {
