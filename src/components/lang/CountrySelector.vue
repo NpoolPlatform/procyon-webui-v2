@@ -44,7 +44,6 @@
 <script setup lang='ts'>
 import { computed, onBeforeMount, defineProps, toRef, defineEmits } from 'vue'
 import { appcountry, notify } from 'src/npoolstore'
-
 interface Props {
   country: appcountry.Country
 }
@@ -54,7 +53,6 @@ const country = toRef(props, 'country')
 
 const _country = appcountry.useAppCountryStore()
 const countries = computed(() => _country.countries(undefined))
-
 const emit = defineEmits<{(e: 'update:country', country: appcountry.Country): void;}>()
 
 const onItemClick = (country: appcountry.Country) => {
