@@ -6,25 +6,42 @@ import { useSettingStore } from 'src/localstore'
 const logined = user.useLocalUserStore()
 
 const locale = _locale.useLocaleStore()
-const langID = computed(() => locale.langID() || logined.selectedLangID)
+const langID = computed(() => locale.langID())
 
 const _setting = useSettingStore()
 const lang = applang.useAppLangStore()
 
 const _message = message.useMessageStore()
 const messages = computed(() => _message.messages(undefined, langID.value, undefined))
-const targetLangID = computed(() => locale.langID() || logined.selectedLangID || lang.mainLangID(undefined))
+const userLangID = computed(() => logined.selectedLangID)
+const targetLangID = computed(() => locale.langID() || userLangID.value || lang.mainLangID(undefined))
 
-const setLang = () => {
-  const _lang = lang.lang(undefined, targetLangID.value)
+watch(userLangID, () => {
+  if (!userLangID.value) {
+    return
+  }
+  setLang(userLangID.value)
+})
+
+const setLang = (_langID: string) => {
+  const _lang = lang.lang(undefined, _langID)
   if (!_lang) {
     return
   }
-  locale.setLang(_lang)
+  setTimeout(() => {
+    if (_setting.LangThrottling) {
+      setLang(_langID)
+      return
+    }
+    locale.setLang(_lang)
+  }, 100)
 }
 
 watch(targetLangID, () => {
-  setLang()
+  if (!targetLangID.value) {
+    return
+  }
+  setLang(targetLangID.value)
 })
 
 const _getMessages = () => {
@@ -57,7 +74,7 @@ const getAppLangs = (offset: number, limit: number) => {
     }
   }, (error: boolean, rows: Array<g11nbase.AppLang>) => {
     if (error || !rows.length) {
-      setLang()
+      setLang(targetLangID.value as string)
       if (messages.value.length === 0) {
         _getMessages()
       }
