@@ -20,13 +20,7 @@ const setLang = () => {
   if (!_lang) {
     return
   }
-  setTimeout(() => {
-    if (_setting.LangThrottling) {
-      setLang()
-      return
-    }
-    locale.setLang(_lang)
-  }, 100)
+  locale.setLang(_lang)
 }
 
 watch(targetLangID, () => {
@@ -49,12 +43,6 @@ watch(langID, () => {
   _setting.LangThrottling = false
 })
 
-onMounted(() => {
-  if (!lang.langs(undefined).length) {
-    getAppLangs(0, 100)
-  }
-})
-
 const getAppLangs = (offset: number, limit: number) => {
   lang.getAppLangs({
     Offset: offset,
@@ -70,6 +58,9 @@ const getAppLangs = (offset: number, limit: number) => {
   }, (error: boolean, rows: Array<g11nbase.AppLang>) => {
     if (error || !rows.length) {
       setLang()
+      if (messages.value.length === 0) {
+        _getMessages()
+      }
       return
     }
     getAppLangs(offset + limit, limit)
@@ -99,8 +90,8 @@ const getMessages = (offset: number, limit: number, concurrent: number) => {
 }
 
 onMounted(() => {
-  if (messages.value.length === 0) {
-    _getMessages()
+  if (!lang.langs(undefined).length) {
+    getAppLangs(0, 100)
   }
 })
 
