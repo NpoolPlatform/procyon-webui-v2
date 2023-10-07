@@ -33,13 +33,17 @@ watch(targetLangID, () => {
   setLang()
 })
 
+const _getMessages = () => {
+  const concurrent = 10
+  for (let i = 0; i < concurrent; i++) {
+    _setting.LangThrottling = true
+    getMessages(i * 100, 100, concurrent)
+  }
+}
+
 watch(langID, () => {
   if (messages.value.length === 0) {
-    const concurrent = 10
-    for (let i = 0; i < concurrent; i++) {
-      _setting.LangThrottling = true
-      getMessages(i * 100, 100, concurrent)
-    }
+    _getMessages()
     return
   }
   _setting.LangThrottling = false
@@ -93,5 +97,11 @@ const getMessages = (offset: number, limit: number, concurrent: number) => {
     getMessages(offset + concurrent * limit, limit, concurrent)
   })
 }
+
+onMounted(() => {
+  if (messages.value.length === 0) {
+    _getMessages()
+  }
+})
 
 </script>
