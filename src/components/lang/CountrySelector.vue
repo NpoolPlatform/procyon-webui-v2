@@ -52,7 +52,7 @@ const props = defineProps<Props>()
 const country = toRef(props, 'country')
 
 const _country = appcountry.useAppCountryStore()
-const countries = computed(() => _country.countries(undefined))
+const countries = computed(() => _country.countries(undefined).sort((a, b) => a.Country.localeCompare(b.Country, 'zh-CN')))
 const emit = defineEmits<{(e: 'update:country', country: appcountry.Country): void;}>()
 
 const onItemClick = (country: appcountry.Country) => {
