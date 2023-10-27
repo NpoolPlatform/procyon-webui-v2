@@ -84,17 +84,6 @@ const myVerifyMethod = computed(() => {
   if (logined.User?.GoogleAuthVerified) {
     return appuserbase.SigninVerifyType.Google
   }
-  switch (logined.User?.SigninVerifyType) {
-    case appuserbase.SigninVerifyType.Email:
-      if (logined.User?.EmailAddress?.length && utils.validateEmailAddress(logined.User?.EmailAddress)) {
-        return appuserbase.SigninVerifyType.Email
-      }
-      break
-    case appuserbase.SigninVerifyType.Mobile:
-      if (logined.User?.PhoneNO?.length && utils.validateMobileNO(logined.User?.PhoneNO)) {
-        return appuserbase.SigninVerifyType.Mobile
-      }
-  }
   if (logined.User?.EmailAddress?.length) {
     return appuserbase.SigninVerifyType.Email
   }
