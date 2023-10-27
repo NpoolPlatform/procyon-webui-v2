@@ -18,8 +18,8 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ 0 -eq $rc ]; then
-            tag=`git describe --tags $revlist`
+          if [[ 0 -eq $rc && x"revlist" -eq x ]]; then
+            tag=`git tag -l | sort -V | tail -n1`
             major=`echo $tag | awk -F '.' '{ print $1 }'`
             minor=`echo $tag | awk -F '.' '{ print $2 }'`
             patch=`echo $tag | awk -F '.' '{ print $3 }'`
@@ -100,8 +100,8 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ 0 -eq $rc ]; then
-            tag=`git describe --tags $revlist`
+          if [[ 0 -eq $rc && x"revlist" -eq x ]]; then
+            tag=`git tag -l | sort -V | tail -n1`
             major=`echo $tag | awk -F '.' '{ print $1 }'`
             minor=`echo $tag | awk -F '.' '{ print $2 }'`
             patch=`echo $tag | awk -F '.' '{ print $3 }'`
@@ -143,8 +143,8 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ 0 -eq $rc ]; then
-            tag=`git describe --tags $revlist`
+          if [[ 0 -eq $rc && x"revlist" -eq x ]]; then
+            tag=`git tag -l | sort -V | tail -n1`
             major=`echo $tag | awk -F '.' '{ print $1 }'`
             minor=`echo $tag | awk -F '.' '{ print $2 }'`
             patch=`echo $tag | awk -F '.' '{ print $3 }'`
@@ -178,8 +178,8 @@ pipeline {
           revlist=`git rev-list --tags --max-count=1`
           rc=$?
           set -e
-          if [ 0 -eq $rc ]; then
-            tag=`git describe --tags $revlist`
+          if [[ 0 -eq $rc && x"revlist" -eq x ]]; then
+            tag=`git tag -l | sort -V | tail -n1`
             major=`echo $tag | awk -F '.' '{ print $1 }'`
             minor=`echo $tag | awk -F '.' '{ print $2 }'`
             patch=`echo $tag | awk -F '.' '{ print $3 }'`
@@ -210,8 +210,7 @@ pipeline {
       }
       steps {
         sh(returnStdout: false, script: '''
-          revlist=`git rev-list --tags --max-count=1`
-          tag=`git describe --tags $revlist`
+          tag=`git tag -l | sort -V | tail -n1`
           git reset --hard
           git checkout $tag
           set +e
@@ -280,8 +279,7 @@ pipeline {
       }
       steps {
         sh(returnStdout: false, script: '''
-          revlist=`git rev-list --tags --max-count=1`
-          tag=`git describe --tags $revlist`
+          tag=`git tag -l | sort -V | tail -n1`
 
           set +e
           docker images | grep procyon-webui-v2 | grep $tag
@@ -300,8 +298,7 @@ pipeline {
       }
       steps {
         sh(returnStdout: false, script: '''
-          revlist=`git rev-list --tags --max-count=1`
-          tag=`git describe --tags $revlist`
+          tag=`git tag -l | sort -V | tail -n1`
 
           major=`echo $tag | awk -F '.' '{ print $1 }'`
           minor=`echo $tag | awk -F '.' '{ print $2 }'`
@@ -362,8 +359,7 @@ pipeline {
       }
       steps {
         sh(returnStdout: false, script: '''
-          revlist=`git rev-list --tags --max-count=1`
-          tag=`git describe --tags $revlist`
+          tag=`git tag -l | sort -V | tail -n1`
 
           git reset --hard
           git checkout $tag
@@ -384,8 +380,7 @@ pipeline {
       }
       steps {
         sh(returnStdout: false, script: '''
-          revlist=`git rev-list --tags --max-count=1`
-          tag=`git describe --tags $revlist`
+          tag=`git tag -l | sort -V | tail -n1`
 
           major=`echo $tag | awk -F '.' '{ print $1 }'`
           minor=`echo $tag | awk -F '.' '{ print $2 }'`
