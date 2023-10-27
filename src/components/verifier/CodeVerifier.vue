@@ -86,12 +86,12 @@ const myVerifyMethod = computed(() => {
   }
   switch (logined.User?.SigninVerifyType) {
     case appuserbase.SigninVerifyType.Email:
-      if (logined.User?.EmailAddress?.length) {
+      if (logined.User?.EmailAddress?.length && utils.validateEmailAddress(logined.User?.EmailAddress)) {
         return appuserbase.SigninVerifyType.Email
       }
       break
     case appuserbase.SigninVerifyType.Mobile:
-      if (logined.User?.PhoneNO?.length) {
+      if (logined.User?.PhoneNO?.length && utils.validateMobileNO(logined.User?.PhoneNO)) {
         return appuserbase.SigninVerifyType.Mobile
       }
   }
