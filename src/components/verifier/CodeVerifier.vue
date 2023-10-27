@@ -84,11 +84,23 @@ const myVerifyMethod = computed(() => {
   if (logined.User?.GoogleAuthVerified) {
     return appuserbase.SigninVerifyType.Google
   }
+  switch (logined.User?.SigninVerifyType) {
+    case appuserbase.SigninVerifyType.Email:
+      if (logined.User?.EmailAddress?.length) {
+        return appuserbase.SigninVerifyType.Email
+      }
+      break
+    case appuserbase.SigninVerifyType.Mobile:
+      if (logined.User?.PhoneNO?.length) {
+        return appuserbase.SigninVerifyType.Mobile
+      }
+  }
   if (logined.User?.EmailAddress?.length) {
     return appuserbase.SigninVerifyType.Email
   }
   return appuserbase.SigninVerifyType.Mobile
 })
+
 const title = computed(() => {
   switch (myVerifyMethod.value) {
     case appuserbase.SigninVerifyType.Mobile:
