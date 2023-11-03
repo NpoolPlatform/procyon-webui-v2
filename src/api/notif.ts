@@ -20,7 +20,7 @@ export const onMarkAll = (rows: Array<notif.Notif>) => {
   }
   const reqs = []
   for (let i = 0; i < rows.length; i++) {
-    reqs.push({ ID: rows[i].ID, Notified: true })
+    reqs.push({ ID: rows[i].ID, Notified: true, EntID: rows[i].EntID })
   }
   _notif.updateNotifs({
     Infos: reqs,
