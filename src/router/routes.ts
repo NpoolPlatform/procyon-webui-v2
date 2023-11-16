@@ -1136,6 +1136,36 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'AleoSilver2',
+        path: 'product/private/aleosilver',
+        component: () => import('pages/product/AleoSilver2.vue'),
+        meta: {
+          Title: 'AleoSilver2',
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false,
+          ShowSideMenu: false
+        }
+      }, {
+        name: 'AleoSilver2Fallback',
+        path: '#/product/private/aleosilver',
+        component: () => import('pages/product/AleoSilver2.vue'),
+        meta: {
+          Title: 'AleoSilver2',
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false,
+          ShowSideMenu: false
+        }
+      }, {
         name: 'IronFish2',
         path: 'product/ironfish',
         component: () => import('pages/product/IronFish2.vue'),
