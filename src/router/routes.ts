@@ -1137,7 +1137,7 @@ const routes: RouteRecordRaw[] = [
         }
       }, {
         name: 'AleoSilver2',
-        path: 'product/private/aleosilver',
+        path: 'product/hgkfh97hg5497h',
         component: () => import('pages/product/AleoSilver2.vue'),
         meta: {
           Title: 'AleoSilver2',
@@ -1152,7 +1152,7 @@ const routes: RouteRecordRaw[] = [
         }
       }, {
         name: 'AleoSilver2Fallback',
-        path: '#/product/private/aleosilver',
+        path: '#/product/hgkfh97hg5497h',
         component: () => import('pages/product/AleoSilver2.vue'),
         meta: {
           Title: 'AleoSilver2',
