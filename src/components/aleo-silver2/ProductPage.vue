@@ -15,7 +15,7 @@
           {{ $t('MSG_MINING_PURCHASE') }}
         </h3>
         <form action='javascript:void(0)' id='purchase'>
-          <div class='full-section' v-if='canBuy'>
+          <div class='full-section' v-if='good.canBuy(undefined, target?.ID as string)'>
             <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
             <span class='number'>{{ remainDays }}</span>
             <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -62,7 +62,7 @@
               label='MSG_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.ID) || good.purchaseLimit(undefined, target?.ID) <= 0'
+              :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.ID as string) || good.purchaseLimit(undefined, target?.ID) <= 0'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -87,7 +87,7 @@
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
           <form action='javascript:void(0)' id='purchase'>
-            <div class='full-section' v-if='canBuy'>
+            <div class='full-section' v-if='good.canBuy(undefined, target?.ID as string)'>
               <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
               <span class='number'>{{ remainDays }}</span>
               <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -133,7 +133,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !target?.EnablePurchase || !canBuy || good.purchaseLimit(undefined, target?.ID) <= 0'
+                :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.ID as string) || good.purchaseLimit(undefined, target?.ID) <= 0'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -181,8 +181,6 @@ const general = ledger.useLedgerStore()
 const good = appgood.useAppGoodStore()
 const target = computed(() => good.good(undefined, appGoodID.value))
 const total = computed(() => good.purchaseLimit(undefined, target.value?.ID as string))
-// this function is different from canBuy form npool-cli-v5, current product page is private
-const canBuy = computed(() => good.spotQuantity(undefined, appGoodID.value) && good.good(undefined, appGoodID.value)?.Online)
 
 const coin = appcoin.useAppCoinStore()
 const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
@@ -256,6 +254,7 @@ watch(target, () => {
   if (!target.value) {
     return
   }
+  console.log('AppGoodID: ', target.value?.ID)
   showMe.value = true
 })
 
@@ -265,6 +264,7 @@ onMounted(() => {
   }
 
   if (target.value) {
+    console.log('AppGoodID: ', target.value?.ID)
     showMe.value = true
   }
 
