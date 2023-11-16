@@ -15,7 +15,7 @@
           {{ $t('MSG_MINING_PURCHASE') }}
         </h3>
         <form action='javascript:void(0)' id='purchase'>
-          <div class='full-section' v-if='good.canBuy(undefined, target?.ID as string)'>
+          <div class='full-section' v-if='canBuy'>
             <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
             <span class='number'>{{ remainDays }}</span>
             <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -87,7 +87,7 @@
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
           <form action='javascript:void(0)' id='purchase'>
-            <div class='full-section' v-if='good.canBuy(undefined, target?.ID as string)'>
+            <div class='full-section' v-if='canBuy'>
               <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
               <span class='number'>{{ remainDays }}</span>
               <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -133,7 +133,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.ID) || good.purchaseLimit(undefined, target?.ID) <= 0'
+                :disabled='submitting || !target?.EnablePurchase || !canBuy || good.purchaseLimit(undefined, target?.ID) <= 0'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -157,7 +157,6 @@ import warning from 'src/assets/warning.svg'
 
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
-// const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 interface Props {
@@ -182,6 +181,8 @@ const general = ledger.useLedgerStore()
 const good = appgood.useAppGoodStore()
 const target = computed(() => good.good(undefined, appGoodID.value))
 const total = computed(() => good.purchaseLimit(undefined, target.value?.ID as string))
+// this function is different from canBuy form npool-cli-v5, current product page is private
+const canBuy = computed(() => good.spotQuantity(undefined, appGoodID.value) && good.good(undefined, appGoodID.value)?.Online)
 
 const coin = appcoin.useAppCoinStore()
 const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
@@ -242,12 +243,6 @@ const onPurchaseClick = () => {
   })
 }
 
-const goIndexPage = () => {
-  if (!target.value?.EnableProductPage) {
-    void router.push({ path: '/' })
-  }
-}
-
 const endTime = computed(() => target.value?.SaleEndAt)
 const ticker = ref(-1)
 const remainDays = ref(27)
@@ -261,11 +256,6 @@ watch(target, () => {
   if (!target.value) {
     return
   }
-  if (target.value && !target.value.EnableProductPage) {
-    goIndexPage()
-    return
-  }
-
   showMe.value = true
 })
 
@@ -274,12 +264,7 @@ onMounted(() => {
     getCoins(0, 100)
   }
 
-  if (target.value && !target.value.EnableProductPage) {
-    goIndexPage()
-    return
-  }
-
-  if (target.value && target.value.EnableProductPage) {
+  if (target.value) {
     showMe.value = true
   }
 

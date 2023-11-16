@@ -123,7 +123,7 @@
 
 <script setup lang='ts'>
 import { defineAsyncComponent, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
 import { appgood, notify, appcoin, appcoindescription, coincurrency, utils, constant } from 'src/npoolstore'
@@ -150,7 +150,7 @@ const getGood = () => {
     return
   }
   if (!appGoodID.value) {
-    void router.push({ path: '/' })
+    console.log('Default AppGoodID not found by CoinUnit(ALEO)')
     return
   }
   good.getAppGood({
@@ -165,7 +165,7 @@ const getGood = () => {
     }
   }, () => {
     if (!_good.value) {
-      void router.push({ path: '/' })
+      // void router.push({ path: '/' })
     }
   })
 }
@@ -182,8 +182,6 @@ const _good = computed(() => good.good(undefined, appGoodID.value as string))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()
-
-const router = useRouter()
 
 onMounted(() => {
   if (!coin.coins(undefined).length) {
