@@ -2,7 +2,7 @@
   <div class='product-detail-text'>
     <div class='warning'>
       <img src='font-awesome/warning.svg'>
-      <span>A hard sales deadline is not set for Aleo First Batch Mining: Silver. The sale will close shortly before mainnet launch.</span>
+      <span>Please refer to Aleo official announcements for updates on the mainnet launch date.</span>
     </div>
 
     <br>
@@ -12,65 +12,12 @@
     <p><img class='project-promo-content' src='product/aleo/aleo-web3-en.png'></p>
 
     <ul>
-      <li>Web1 was about making information searchable &amp; exchangeable. Google was the big winner.</li>
-      <li>Web2 was about platforms and gave us Facebook, but value only flowed through these massive platforms.</li>
-      <li>Web3 is about ownership: users are capturing value themselves! Web3 is the next evolutionary step of the internet!</li>
+      <li><strong>Web1 was about information.</strong> Google was the big winner.</li>
+      <li><strong>Web2 was about platforms</strong> and gave us Facebook and Amazon. But value flowed through platforms and all user information was owned by centralized organizations.</li>
+      <li><strong>Web3 is about ownership</strong>: you are capturing value yourselves! You own your own money, data, and online activity. Web3 is the next evolutionary step of the internet!</li>
     </ul>
 
-    <p>Since the creation of blockchain technology and cryptocurrency, privacy has been one of the biggest unresolved issues. This industry has pioneered transparency and decentralization, solving big problems at which centralized banking has so far failed.</p>
-
-    <p>However, a great deal of time has gone by, and the next big problem that needs to be solved is privacy. The less privacy someone has the more vulnerable they are to people with bad agendas. It’s equivalent to "Do you want people to know your home address?" "Do you want people to know how much money you have in your bank account?"</p>
-
-    <p>Projects such as Aleo will spearhead the solution to privacy on blockchain.</p>
-
-    <h3>Procyon’s Project Selection</h3>
-
-    <p>Procyon selects projects for a number of reasons, so here are a few of the most important:</p>
-
-    <div class='info-table-container table-2-columns'>
-      <table class='info-table'>
-        <thead>
-          <tr>
-            <th id='aqua'>
-              <span>Good Projects</span>
-            </th>
-            <th id='pink'>
-              <span>Scam Projects</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Produce great innovations</td>
-            <td>Add no value to the industry</td>
-          </tr>
-          <tr>
-            <td>Are more public about their code and progress</td>
-            <td>Hide code and keep quiet</td>
-          </tr>
-          <tr>
-            <td>Get investments from famous large institutions</td>
-            <td>Do ICO and sell tokens directly to individuals before going on exchanges</td>
-          </tr>
-          <tr>
-            <td>Have teams with top education, work experience from well-known enterprises, and experience in blockchain, not just crypto</td>
-            <td>Do not disclose the team</td>
-          </tr>
-          <tr>
-            <td>Invest time into development of its tech: always check the R&amp;D time!</td>
-            <td>Launch fast and poorly</td>
-          </tr>
-          <tr>
-            <td>Clearly communicate the token distribution, future road map, and backers</td>
-            <td>Promise fixed returns and look like Ponzi schemes</td>
-          </tr>
-          <tr>
-            <td>Foster active communities</td>
-            <td>Use bots and low quality conversations</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <p>While Web3 allows for self-ownership, the technology of blockchain allows for your information viewed publicly on the distributed ledger. <strong>The less privacy you have, the more vulnerable you are to people who have a bad agenda.</strong> It’s equivalent to “Do you want people to know your home address?” “Do you want people to know how much money you have in your bank account?”</p>
 
     <h3>Why is Aleo Special?</h3>
 
@@ -78,13 +25,11 @@
 
     <p><img class='project-promo-content' src='product/aleo/aleo-privacy-prog-en.png'></p>
 
-    <p>Most blockchains either prioritize programmability at the expense of privacy or the other way around. So far, no project has been able to offer both. Aleo is the key to scaling Web3 and opening up real use cases with programmable privacy.</p>
+    <p>Using Zero-Knowledge Proofs, Aleo can privatize payments, digital identity, NFTs, dApps, gaming, and more. Zero-Knowledge Proofs will be woven into the fabric of the internet, eliminating a trade-off: your privacy for the right to operate online.</p>
 
-    <p>Using Zero-Knowledge Proofs, Aleo can anonymize payments, NFT, dApps, gaming, and more. Zero-Knowledge Proofs will be woven into the fabric of the internet, eliminating a trade-off: one’s privacy for the right to operate online.</p>
+    <h4>Never before has there been a technology like Aleo.</h4>
 
     <h3>Which VC Firms Invest in Aleo?</h3>
-
-    <p>The funding stands as the largest fundraising round ever in the zero-knowledge industry. <a href='https://www.crunchbase.com/search/principal.investors/field/organizations/num_investors/aleo-673f' target='_blank'>Backers include SoftBank, Coinbase, a16z, and over 19 other world-class investors.</a></p>
 
     <div class='logo-display'>
       <div><img src='vc-logos/softbank-vision-fund.png'></div>
@@ -108,7 +53,9 @@
       <div><img src='vc-logos/balaji-srinivasan.png'></div>
     </div>
 
-    <p>Investors have high hopes for Aleo to deliver on its mission of a fully private Web3 experience. Some Ethereum-based projects use zero-knowledge proofs (ZKP) to solve Ethereum’s scalability issue. Aleo, on the other hand, has developed its own Layer 1 blockchain that significantly improves both scalability and privacy. According to a16z, "Aleo uses a new computation system called Zexe, that is entirely private and that scales far beyond most blockchains that are live today."</p>
+    <p>Aleo raised approximately $298 million in just two funding rounds. The funding stands as the largest fundraising round ever in the zero-knowledge industry. <a href='https://www.crunchbase.com/search/principal.investors/field/organizations/num_investors/aleo-673f' target='_blank'>Backers include SoftBank, Coinbase, a16z, and over 19 other world-class investors.</a></p>
+
+    <p>While Filecoin raised approximately $258 million, it took six rounds of funding to achieve. It is very rare that the Softbank Vision Fund invests in a crypto project. SoftBank Vision Fund has not only invested in Aleo, but it also serves as a member of Aleo's board of directors.</p>
 
     <h3>Aleo Team</h3>
 
@@ -176,10 +123,6 @@
       </div>
     </div>
 
-    <h3>Project Roadmap</h3>
-
-    <p><img class='project-promo-content' src='project-aleo/aleo-roadmap-en.png'></p>
-
     <h3>Media Coverage</h3>
 
     <h4>Aleo is a hot topic!</h4>
@@ -195,7 +138,14 @@
       <li>Companies will have to choose a side on privacy.</li>
     </ul>
 
-    <p><a href='https://www.tomshardware.com/news/new-aleo-crypto-coin-may-give-gpu-miners-a-second-chance' target='_blank'>Tom’s Hardware reports</a> that many ETH mining pools are shifting over to Aleo testnet mining.</p>
+    <h4>Aleo Headlines</h4>
+
+    <ul>
+      <li><a href='https://www.tomshardware.com/news/new-aleo-crypto-coin-may-give-gpu-miners-a-second-chance' target='_blank'>Tom’s Hardware</a>: Many ETH mining pools are shifting over to Aleo testnet mining.</li>
+      <li><a href='https://cointelegraph.com/news/zk-proofs-help-internet-privacy-aleo-executive' target='_blank'>Cointelegraph</a>: ZK-proofs could change the internet, not just Web3 — Aleo exec</li>
+      <li><a href='https://blockworks.co/news/privacy-zk-tech-data' target='_blank'>BlockWorks</a>: Privacy is paramount, and zero-knowledge cryptography is the way by Aleo CEO Alex Pruden</li>
+      <li><a href='https://cryptonews.com/exclusives/john-reynolds-product-manager-for-aleo-zk-tech-privacy-safeguarding-personal-information-ep-268.htm' target='_blank'>Cryptonews</a>: John Reynolds, Product Manager for Aleo, on ZK Tech, Privacy, and Safeguarding Personal Information</li>
+    </ul>
 
     <h3>Exchange Listing</h3>
 
@@ -249,6 +199,55 @@
             <td class='table-highlight'>
               Aleo is now in its 3rd Testnet phase, with the mainnet quickly approaching. Hpool, f2pool, ZK.Work, and other massive mining pools are already deploying on Aleo.
             </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Procyon’s Project Selection</h3>
+
+    <p>Procyon selects projects for a number of reasons, so here are a few of the most important:</p>
+
+    <div class='info-table-container table-2-columns'>
+      <table class='info-table'>
+        <thead>
+          <tr>
+            <th id='aqua'>
+              <span>Good Projects</span>
+            </th>
+            <th id='pink'>
+              <span>Scam Projects</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Produce great innovations</td>
+            <td>Add no value to the industry</td>
+          </tr>
+          <tr>
+            <td>Are more public about their code and progress</td>
+            <td>Hide code and keep quiet</td>
+          </tr>
+          <tr>
+            <td>Get investments from famous large institutions</td>
+            <td>Do ICO and sell tokens directly to individuals before going on exchanges</td>
+          </tr>
+          <tr>
+            <td>Have teams with top education, work experience from well-known enterprises, and experience in blockchain, not just crypto</td>
+            <td>Do not disclose the team</td>
+          </tr>
+          <tr>
+            <td>Invest time into development of its tech: always check the R&amp;D time!</td>
+            <td>Launch fast and poorly</td>
+          </tr>
+          <tr>
+            <td>Clearly communicate the token distribution, future road map, and backers</td>
+            <td>Promise fixed returns and look like Ponzi schemes</td>
+          </tr>
+          <tr>
+            <td>Foster active communities</td>
+            <td>Use bots and low quality conversations</td>
           </tr>
         </tbody>
       </table>

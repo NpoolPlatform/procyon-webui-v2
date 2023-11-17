@@ -33,7 +33,7 @@ const BaseMenu = {
       menuId: uid(),
       label: 'MSG_ALEO_PURCHASE',
       caption: '',
-      icon: 'https://procyon-public.s3.ap-northeast-1.amazonaws.com/product-aleo.png',
+      icon: 'font-awesome/product-aleo.svg',
       target: '/product/aleo',
       level: 0,
       children: []

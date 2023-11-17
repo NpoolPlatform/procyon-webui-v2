@@ -2,73 +2,22 @@
   <div class='product-detail-text'>
     <div class='warning'>
       <img src='font-awesome/warning.svg'>
-      <span>Aleoファーストバッチマイニング: シルバーにおいては、明確な販売締め切りはございません。<br class='desktop'>メインネットローンチの直前で締め切りとなります。</span>
+      <span>最新のメインネットローンチ日時に関しては、Aleo公式からの発表をご参照ください。</span>
     </div>
-
     <br>
-
     <h3>なぜAleoがWeb3において重要なのか?</h3>
 
     <p><img class='project-promo-content' src='product/aleo/aleo-web3-jp.png'></p>
 
     <ul>
-      <li>Web1 では、情報を検索・交換できるようになりました。Googleなどの検索エンジンが覇権を握りました。</li>
-      <li>Web2 はFacebookや、Twitterなどのプラットフォームが主流となりました、しかし、価値や個人情報が、利便性と引き換えにプラットフォームに吸い取られてしまいました。</li>
-      <li>Web3 のテーマは所有権であり、ユーザー自身が価値や個人情報を所有しているのです。Web3は、インターネットの次の進化形です。</li>
+      <li>Web1は情報の時代でした: Googleが機先を制しました。</li>
+      <li>Web2はFacebookやAmazonをはじめとするプラットフォームの時代でした。ユーザーの価値はすべてプラットフォームに取られました。</li>
+      <li>Web3はオーナーシップを重要視する時代で、ユーザー価値を自身で利用可能です。Web3は、インターネットの次の進化形です。</li>
     </ul>
 
-    <p>この業界を作り上げたパイオニアたちは、中央集権的な銀行が失敗してきた大きな問題を解決してきました。しかし、多くの時間が経過し、次に解決しなければならない大きな問題はプライバシーです。</p>
+    <p>Web3は各々でのオーナーシップが認められた一方、ブロックチェーン技術の特徴により、自分の情報が分散型台帳上で公開されるようになります。</p>
 
-    <p>プライバシーが低ければ低いほど、ハッカーなどの悪い意図を持った人間たちに対して無防備になるのです。</p>
-
-    <p>自分の家の住所や銀行口座にいくら資産があるかを他人に知られたくないのは当然のことです。</p>
-
-    <p>Aleoはプライバシーにまつわるさまざまな問題の解決の先陣を切ってくれるでしょう。</p>
-
-    <h3>プロシオンのプロジェクト選定基準</h3>
-
-    <p>プロシオンは、様々な基準からプロジェクトを厳選していますが、その中でも特に重要なものをご紹介いたします:</p>
-
-    <div class='info-table-container table-2-columns'>
-      <table class='info-table'>
-        <thead>
-          <tr>
-            <th id='aqua'>
-              <span>優秀なプロジェクト</span>
-            </th>
-            <th id='pink'>
-              <span>劣っているプロジェクト</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>革新的なテクノロジーを生み出している</td>
-            <td>業界において価値をもたらさない</td>
-          </tr>
-          <tr>
-            <td>コードと進捗を公開している</td>
-            <td>コードを公開せず、進捗の発信が少ない</td>
-          </tr>
-          <tr>
-            <td>著名な大手企業／大手機関投資家から出資を受けている</td>
-            <td>ICOを行い、取引所で上場する前にトークンを直接個人投資家に販売している</td>
-          </tr>
-          <tr>
-            <td>技術開発に時間を費やしている</td>
-            <td>ローンチが早く、質の管理ができていない</td>
-          </tr>
-          <tr>
-            <td>トークンの配布と今後のスケジュールを明確に発表している</td>
-            <td>元本保証を約束し、ポンジスキームのように見える</td>
-          </tr>
-          <tr>
-            <td>活発なコミュニティを構築している</td>
-            <td>ボットやサクラを使ってコミュニティを形成している</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <p><strong>プライバシーがない分、悪意を持つ人に狙われやすくなります。</strong>それは、「自宅の住所を知られてしまう」、「銀行口座の残高を知られてしまう」と同じ意味合いです。</p>
 
     <h3>なぜAleoは特別なのか？</h3>
 
@@ -76,15 +25,11 @@
 
     <p><img class='project-promo-content' src='product/aleo/aleo-privacy-prog-jp.png'></p>
 
-    <p>ほとんどのブロックチェーンは、プライバシーを犠牲にしてプログラミング性を優先しているか、その逆になっています。今のところ、両方の利点をもつプロジェクトはありません。</p>
+    <p>ゼロ知識証明を使用することで、Aleoは決済、オンライン上の身分、NFT、dApps、ゲームなどを匿名化することができます。ゼロ知識証明は、インターネットの次の革命となり、オンラインで活動する権利と、プライバシーを完璧に保護します。</p>
 
-    <p>Aleoは、Web3をスケールアップし、プログラミング可能で、かつプライバシーが守られた未来を切り開く鍵となるテクノロジーです。</p>
-
-    <p>ゼロ知識証明を使って、Aleoは決済、NFT、dApps、ゲームなどを匿名化することができます。ゼロ知識証明は、インターネットの次の革命となり、オンラインをフル活用する利便性と、プライバシーの保護を両立します。</p>
+    <h4>未だかつてAleoのような技術はありませんでした。</h4>
 
     <h3>Aleoに出資をしている世界トップクラスのVC一覧</h3>
-
-    <p>Aleoの資金調達額ー255億円 (約2.28億ドル)は、ゼロ知識証明技術において過去最大の資金調達額となります。<a href='https://www.crunchbase.com/search/principal.investors/field/organizations/num_investors/aleo-673f' target='_blank'>ソフトバンク、Coinbase、a16z、その他19社以上の世界トップクラスのVCがAleoに出資をしております。</a></p>
 
     <div class='logo-display'>
       <div><img src='vc-logos/softbank-vision-fund.png'></div>
@@ -108,7 +53,9 @@
       <div><img src='vc-logos/balaji-srinivasan.png'></div>
     </div>
 
-    <p>上記のVCは、Aleoが史上初の匿名性のWeb3体験という使命を果たすことに大きな期待を寄せています。イーサリアムベースのプロジェクトの中には、イーサリアムのスケーラビリティ問題を解決するためにゼロ知識証明（ZKP）を使用しているものがあります。</p>
+    <p><a href='https://www.crunchbase.com/organization/aleo-673f' target='_blank'>Aleoはたった2回の資金調達ラウンドで約448億円 (2.98億ドル) を調達しました</a>。この資金調達は、ゼロ知識証明技術の業界において過去最大の資金額となります。</p>
+
+    <p>Filecoinは約388億円 (2.58億ドル) を調達しましたが、6回の資金調達ラウンドを行いました。ソフトバンクが暗号資産プロジェクトに投資するのは、非常に稀なことです。ソフトバンクはAleoに投資を行なっただけではなく、Aleoの役員会にも就任しています。</p>
 
     <h3>Aleoを牽引する優秀なコアチーム</h3>
 
@@ -176,10 +123,6 @@
       </div>
     </div>
 
-    <h3>Aleoロードマップ</h3>
-
-    <p><img class='project-promo-content' src='product/aleo/aleo-roadmap-jp.png'></p>
-
     <h3>メディア掲載実績</h3>
 
     <h4>全世界のトップメディアにAleoが掲載されています！</h4>
@@ -195,7 +138,14 @@
       <li>企業はプライバシーについて二者択一を迫られるでしょう。</li>
     </ul>
 
-    <p><a href='https://www.tomshardware.com/news/new-aleo-crypto-coin-may-give-gpu-miners-a-second-chance' target='_blank'>Tom's Hardwareのレポート</a>によると、多くのETHマイニングプールがAleoテストネットマイニングに移行しているとのことです。</p>
+    <h4>Aleo 掲載メディア</h4>
+
+    <ul>
+      <li><a href='https://www.tomshardware.com/news/new-aleo-crypto-coin-may-give-gpu-miners-a-second-chance' target='_blank'>Tom's Hardware</a> - 多くのETHマイニングプールがAleoテストネットマイニングに移行しているとのことです。</li>
+      <li><a href='https://cointelegraph.com/news/zk-proofs-help-internet-privacy-aleo-executive' target='_blank'>Cointelegraph</a> - ゼロ知識証明はWeb3だけでなくインターネット全体を変える可能性がある ─ Aleo幹部</li>
+      <li><a href='https://blockworks.co/news/privacy-zk-tech-data' target='_blank'>BlockWorks</a> - プライバシーは最優先で、ゼロ知識証明技術がその方法であるとAleo CEO Alex Pruden氏</li>
+      <li><a href='https://cryptonews.com/exclusives/john-reynolds-product-manager-for-aleo-zk-tech-privacy-safeguarding-personal-information-ep-268.htm' target='_blank'>Cryptonews</a> - Aleoのプロダクトマネージャー、John Reynolds氏が語るゼロ知識証明技術、プライバシー、個人情報の保護</li>
+    </ul>
 
     <h3>取引所への上場</h3>
 
@@ -204,11 +154,11 @@
       <div><img src='vc-logos/binance.png'></div>
       <div><img src='vc-logos/kraken.png'></div>
       <div />
-      <div><img src='vc-logos/okex.png'></div>
-      <div><img src='vc-logos/huobi.png'></div>
+      <div><img src='logos/okex.png'></div>
+      <div><img src='logos/huobi.png'></div>
     </div>
 
-    <p>Aleoに明確にチャンスと注目が集まっています。アーリーアダプターは誰でも、プロジェクトがどの世界トップクラスの取引所に上場するのかが気になるでしょう。そこで、CEX（中央集権取引所）の主な上場基準をご紹介させていただきます。</p>
+    <p>Aleoへ明確にチャンスと注目が集まっています。アーリーアダプターは誰でも、プロジェクトがどの世界トップクラスの取引所に上場するのかが気になるでしょう。そこで、CEX（中央集権取引所）の主な上場基準をご紹介させていただきます。</p>
 
     <div class='info-table-container'>
       <table class='info-table'>
@@ -240,7 +190,7 @@
             <td><strong>出資者(VC)</strong></td>
             <td>取引所は上場前にプロジェクトへの出資者/資本政策表を確認します。大手VCは、プロジェクトの成長を助けるリソースをもたらすためです。</td>
             <td class='table-highlight'>
-              Aleoは非常に潤沢な資金を有しています。。最初の資金調達ラウンドでは、a16z、Galaxy Digital、Coinbase Ventures、Polychain Capitalが参加、2回目のラウンドでは、SoftBank Vision Fund 2、Tiger Global、Samsung Venturesが参加しました。
+              Aleoは非常に潤沢な資金を有しています。最初の資金調達ラウンドでは、a16z、Galaxy Digital、Coinbase Ventures、Polychain Capitalが参加、2回目のラウンドでは、SoftBank Vision Fund 2、Tiger Global、Samsung Venturesが参加しました。
             </td>
           </tr>
           <tr>
@@ -254,10 +204,52 @@
       </table>
     </div>
 
+    <h3>プロシオンのプロジェクト選定基準</h3>
+
+    <p>プロシオンは、様々な基準からプロジェクトを厳選していますが、その中でも特に重要なものをご紹介いたします:</p>
+
+    <div class='info-table-container table-2-columns'>
+      <table class='info-table'>
+        <thead>
+          <tr>
+            <th id='aqua'>
+              <span>優秀なプロジェクト</span>
+            </th>
+            <th id='pink'>
+              <span>劣っているプロジェクト</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>革新的なテクノロジーを生み出している</td>
+            <td>業界において価値をもたらさない</td>
+          </tr>
+          <tr>
+            <td>コードと進捗を公開している</td>
+            <td>コードを公開せず、進捗の発信が少ない</td>
+          </tr>
+          <tr>
+            <td>著名な大手企業／大手機関投資家から出資を受けている</td>
+            <td>ICOを行い、取引所で上場する前にトークンを直接個人投資家に販売している</td>
+          </tr>
+          <tr>
+            <td>技術開発に時間を費やしている</td>
+            <td>ローンチが早く、質の管理ができていない</td>
+          </tr>
+          <tr>
+            <td>トークンの配布と今後のスケジュールを明確に発表している</td>
+            <td>元本保証を約束し、ポンジスキームのように見える</td>
+          </tr>
+          <tr>
+            <td>活発なコミュニティを構築している</td>
+            <td>ボットやサクラを使ってコミュニティを形成している</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <h3>ファーストバッチマイニングとその優位性</h3>
-
     <p>プロシオンは、優れたプロジェクトを選別するだけでなく、ユーザー様にとって最高の価値を生み出すために、先行者利益に特化した機会をご提供しております。そのため、最もベストなタイミングのマイニングである、ファーストバッチマイニングをご紹介させていただいております:</p>
-
     <ul>
       <li>タイミングが重要: マイニングはメインネット立ち上げ（マイニング初日）が最も収益性が高いです。</li>
       <li>なぜ初日の収益性が一番高いのか？参加するマイナーの数が少ないので、必然的に1人当たりの報酬が多くなります。</li>
@@ -268,7 +260,7 @@
 
     <h4>前提として、プロシオンとそのチームは、ユーザー様のために最善の努力を尽くします。</h4>
 
-    <p>とはいえ、一般的なルールとして、ユーザー様はご自分がよく知り、そのリスクを理解しているプロダクトを選択すべきです。これらのプロダクトは、政府の政策、経済状況、市場動向の変化など様々な要因により価値が変動する可能性があります。また、当該プロダクトは、関連する法域の適用法令の対象となります。最後に、オンラインプラットフォーム上で取引を行う場合、当社のコントロール外の状況により、ハードウェア及びソフトウェアの予測不可能な故障を含むシステムに関連するリスクにさらされる可能性があります。</p>
+    <p>しかしながら、ご購入を検討されているユーザーの皆さまには、ご自身にてよく精査いただき、リスクを理解している製品を選択いただきますようお願い申し上げます。これらのプロダクトは、政府の政策、経済状況、市場動向の変化など様々な要因により価値が変動する可能性があります。また、当該プロダクトは、関連する法域の適用法令の対象となります。最後に、オンラインプラットフォーム上で取引を行う場合、当社のコントロール外の状況により、ハードウェア及びソフトウェアの予測不可能な故障を含むシステムに関連するリスクにさらされる可能性があります。</p>
   </div>
 </template>
 
