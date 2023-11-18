@@ -38,7 +38,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class='aff-info' v-for='(_good, idx) in visibleGoodAchievements' :key='idx'>
+          <tr class='aff-info' v-for='(_good, idx) in goodAchievements' :key='idx'>
             <td>
               <span
                 class='aff-product'
@@ -157,14 +157,13 @@ const good = appgood.useAppGoodStore()
 
 const _achievement = achievement.useAchievementStore()
 const goodAchievements = computed(() => Array.from(referral.value?.Achievements.filter((el) => {
-  return good.visible(undefined, el.AppGoodID)
+  return (good.canBuy(undefined, el.AppGoodID) || good.visible(undefined, el.AppGoodID)) && !good.testOnly(undefined, el.AppGoodID)
 })).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
   return {
     ...el,
     Editing: false
   } as MyGoodAchievement
 }))
-const visibleGoodAchievements = ref(goodAchievements.value)
 const getGoodCommissionValue = computed(() => (appGoodID: string) => {
   return Number(_achievement.commissionPercent(undefined, logined?.User.ID, undefined, appGoodID))
 })

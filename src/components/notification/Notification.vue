@@ -31,7 +31,7 @@ const unReads = computed(() => _notif.unreads(undefined, logined.loginedUserID))
 
 onMounted(() => {
   if (notifications.value?.length === 0) {
-    getNotifs(0, 500)
+    getNotifs(0, 100)
   }
 })
 

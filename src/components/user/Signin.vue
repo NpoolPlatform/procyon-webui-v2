@@ -163,7 +163,7 @@ const _verify = () => {
     void router.push({ path: '/' })
     remainder()
     if (logined.logined && notifications.value?.length === 0) {
-      getNotifs(0, 500)
+      getNotifs(0, 100)
     }
     return
   }
@@ -269,7 +269,7 @@ const remainder = () => {
   })
 
   if (logined.logined && notifications.value?.length === 0) {
-    getNotifs(0, 500)
+    getNotifs(0, 100)
   }
 }
 </script>
