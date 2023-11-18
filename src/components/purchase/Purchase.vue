@@ -183,12 +183,12 @@ const appGoodID = computed(() => query.value.appGoodID)
 const appGood = appgood.useAppGoodStore()
 const good = computed(() => appGood.good(undefined, appGoodID.value))
 
-const total = computed(() => Math.min(good.value?.PurchaseLimit as number, Number(good.value?.GoodSpotQuantity)))
+const total = computed(() => appGood.purchaseLimit(undefined, good.value?.ID as string))
 
 const usedFor = ref(appcoindescription.CoinDescriptionUsedFor.ProductPage)
 const coindescription = appcoindescription.useCoinDescriptionStore()
 const _coin = coin.useCoinStore()
-const targetCoin = computed(() => _coin.coin(good.value?.CoinTypeID as string))
+const targetCoin = computed(() => _coin.coinByEntID(good.value?.CoinTypeID as string))
 
 const description = computed(() => coindescription.coinUsedForDescription(undefined, good.value?.CoinTypeID as string, usedFor.value))
 const coins = computed(() => _coin.coins().filter((coin) => coin.ForPay && !coin.Presale && coin.ENV === targetCoin.value?.ENV))
@@ -196,7 +196,7 @@ const coins = computed(() => _coin.coins().filter((coin) => coin.ForPay && !coin
 const selectedCoinID = ref(undefined as unknown as string)
 const paymentCoin = computed({
   get: () => {
-    const myCoin = _coin.coin(selectedCoinID.value)
+    const myCoin = _coin.coinByEntID(selectedCoinID.value)
     if (!myCoin) {
       for (const scoin of coins.value) {
         if (scoin.Name?.toLowerCase().includes(constant.PriceCoinName.toLowerCase())) {
@@ -211,7 +211,7 @@ const paymentCoin = computed({
     return myCoin
   },
   set: (val) => {
-    selectedCoinID.value = val?.ID as string
+    selectedCoinID.value = val?.EntID as string
   }
 })
 
@@ -232,7 +232,7 @@ const showBalanceDialog = ref(false)
 const logined = user.useLocalUserStore()
 const general = ledger.useLedgerStore()
 const balance = computed(() => {
-  return Number(general.coinBalance(undefined, logined.loginedUserID as string, paymentCoin.value?.ID as string))
+  return Number(general.coinBalance(undefined, logined.loginedUserID as string, paymentCoin.value?.EntID as string))
 })
 
 const selectedCoinCurrency = ref(1)
@@ -314,7 +314,7 @@ const onSubmit = throttle(() => {
   odr.createOrder({
     AppGoodID: appGoodID.value,
     Units: purchaseAmount.value.toString(),
-    PaymentCoinID: paymentCoin.value?.ID as string,
+    PaymentCoinID: paymentCoin.value?.EntID as string,
     PayWithBalanceAmount: `${inputBalance.value}`,
     InvestmentType: order.InvestmentType.FullPayment,
     Message: {
