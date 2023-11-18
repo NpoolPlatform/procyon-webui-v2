@@ -254,7 +254,6 @@ watch(target, () => {
   if (!target.value) {
     return
   }
-  console.log('AppGoodID: ', target.value?.ID)
   showMe.value = true
 })
 
@@ -264,7 +263,6 @@ onMounted(() => {
   }
 
   if (target.value) {
-    console.log('AppGoodID: ', target.value?.ID)
     showMe.value = true
   }
 

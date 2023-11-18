@@ -151,7 +151,6 @@ const getGood = () => {
     return
   }
   if (!appGoodID.value) {
-    console.log('Default AppGoodID not found by CoinUnit(ALEO)')
     return
   }
   good.getAppGood({
