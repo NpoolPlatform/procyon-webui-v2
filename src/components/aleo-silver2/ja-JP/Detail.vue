@@ -153,9 +153,8 @@
       <div><img src='vc-logos/coinbase.png'></div>
       <div><img src='vc-logos/binance.png'></div>
       <div><img src='vc-logos/kraken.png'></div>
-      <div />
-      <div><img src='logos/okex.png'></div>
-      <div><img src='logos/huobi.png'></div>
+      <div><img src='vc-logos/okex.png'></div>
+      <div><img src='vc-logos/huobi.png'></div>
     </div>
 
     <p>Aleoへ明確にチャンスと注目が集まっています。アーリーアダプターは誰でも、プロジェクトがどの世界トップクラスの取引所に上場するのかが気になるでしょう。そこで、CEX（中央集権取引所）の主な上場基準をご紹介させていただきます。</p>
