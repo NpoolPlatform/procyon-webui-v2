@@ -53,7 +53,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span v-if='target?.ServiceStartAt === 0 || target?.StartMode === appgood.GoodStartMode.GoodStartModeTBD' class='number'>TBA</span>
+        <span v-if='target?.ServiceStartAt === 0 || target?.StartMode === appgood.GoodStartMode.GoodStartModeTBD' class='number'>{{ $t("MSG_TBA") }}</span>
         <div v-else>
           <span class='number'>{{ utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD') }}</span>
           <br>
