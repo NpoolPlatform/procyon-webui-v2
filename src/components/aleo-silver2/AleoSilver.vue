@@ -12,9 +12,9 @@
         <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, appGoodID as string)) }}</span>
         <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.Unit ? $t(target?.Unit) : '' }}</span>
         <div class='tooltip'>
-          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE1') }}</span>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_PRICE_TIP1') }}
+            {{ $t('MSG_ALEO_SILVER_PRICE_TIP') }}
           </p>
         </div>
       </div>
@@ -23,9 +23,9 @@
         <span class='number'>*</span>
         <span class='unit'>{{ target?.CoinUnit }} / {{ $t('MSG_DAY') }}</span>
         <div class='tooltip'>
-          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE1') }}</span>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_DAILY_REWARD_TIP1') }}
+            {{ $t('MSG_ALEO_SILVER_DAILY_REWARD_TIP') }}
           </p>
         </div>
       </div>
@@ -34,9 +34,9 @@
         <span class='number'>{{ target?.DurationDays }}</span>
         <span class='unit'>{{ $t('MSG_DAYS') }}</span>
         <div class='tooltip'>
-          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE1') }}</span>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_SERVICE_PERIOD_TIP1') }}
+            {{ $t('MSG_ALEO_SILVER_SERVICE_PERIOD_TIP') }}
           </p>
         </div>
       </div>
@@ -45,9 +45,9 @@
         <span class='number'>20</span>
         <span class='unit'>%</span>
         <div class='tooltip'>
-          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE1') }}</span>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_TECHNIQUE_SERVICE_FEE_TIP1') }}
+            {{ $t('MSG_ALEO_SILVER_TECHNIQUE_SERVICE_FEE_TIP') }}
           </p>
         </div>
       </div>
@@ -60,9 +60,9 @@
           <span class='unit'>{{ utils.formatTime(target?.ServiceStartAt as number, 'HH:mm:ss') }} {{ $t("MSG_JST") }}</span>
         </div>
         <div class='tooltip'>
-          <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE1') }}</span>
+          <img class='more-info' :src='question'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_ORDER_EFFECTIVE_TIP1') }}
+            {{ $t('MSG_ALEO_SILVER_ORDER_EFFECTIVE_TIP') }}
           </p>
         </div>
       </div>
@@ -72,9 +72,9 @@
         <br>
         <span class='unit'>{{ good.saleEndTime(undefined, target?.ID as string, 'HH:mm:ss') }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
-          <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_LEARN_MORE1') }}</span>
+          <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_SALE_END_DATE_TIP1') }}
+            {{ $t('MSG_ALEO_SILVER_SALE_END_DATE_TIP') }}
           </p>
         </div>
       </div>
