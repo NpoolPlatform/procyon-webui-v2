@@ -157,7 +157,11 @@ const good = appgood.useAppGoodStore()
 
 const _achievement = achievement.useAchievementStore()
 const _goodAchievements = ref(computed(() => Array.from(referral.value?.Achievements.filter((el) => {
-  return (good.canBuy(undefined, el.AppGoodID) || good.visible(undefined, el.AppGoodID)) && !good.testOnly(undefined, el.AppGoodID)
+  return (
+    good.canBuy(undefined, el.AppGoodID) ||
+    good.visible(undefined, el.AppGoodID) ||
+    good.spotQuantity(undefined, el.AppGoodID)
+  ) && !good.testOnly(undefined, el.AppGoodID)
 })).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
   return {
     ...el,
