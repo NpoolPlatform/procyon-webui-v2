@@ -14,7 +14,7 @@
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
-            {{ $t('MSG_PRICE_TIP1') }}
+            {{ $t('MSG_ALEO_SILVER_PRICE_TIP') }}
           </p>
         </div>
       </div>
