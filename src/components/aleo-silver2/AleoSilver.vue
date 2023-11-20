@@ -174,14 +174,12 @@ const getGood = () => {
 }
 
 const coin = appcoin.useAppCoinStore()
-// Use CoinUnit to find AppGoodID from AppDefaultGood
-const coinUnit = 'ALEO'
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const good = appgood.useAppGoodStore()
-const appGoodID = computed(() => query.value?.appGoodID || coin.defaultGoodID(undefined, coinUnit))
-const target = computed(() => good.good(undefined, appGoodID.value as string))
-const _good = computed(() => good.good(undefined, appGoodID.value as string))
+const appGoodID = computed(() => query.value?.appGoodID || 'de78c770-7f77-4935-9976-0fbc5af5bbaf')
+const target = computed(() => good.good(undefined, appGoodID.value))
+const _good = computed(() => good.good(undefined, appGoodID.value))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()
