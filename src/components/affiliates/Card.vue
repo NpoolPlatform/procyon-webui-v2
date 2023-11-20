@@ -57,7 +57,7 @@
                 v-if='child'
                 :class='["alt", !good.enableSetCommission(undefined, _good.AppGoodID) || !good.canBuy(undefined, _good.AppGoodID) ? "in-active" : ""]'
                 :disabled='!good.enableSetCommission(undefined, _good.AppGoodID) || !good.canBuy(undefined, _good.AppGoodID)'
-                @click='(_good.Editing = true)'
+                @click='() => _good.Editing = true'
               >
                 {{ $t('MSG_SET') }}
               </button>
@@ -156,14 +156,15 @@ const logined = user.useLocalUserStore()
 const good = appgood.useAppGoodStore()
 
 const _achievement = achievement.useAchievementStore()
-const goodAchievements = computed(() => Array.from(referral.value?.Achievements.filter((el) => {
+const _goodAchievements = ref(computed(() => Array.from(referral.value?.Achievements.filter((el) => {
   return (good.canBuy(undefined, el.AppGoodID) || good.visible(undefined, el.AppGoodID)) && !good.testOnly(undefined, el.AppGoodID)
 })).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
   return {
     ...el,
     Editing: false
   } as MyGoodAchievement
-}))
+})))
+const goodAchievements = ref(_goodAchievements.value)
 const getGoodCommissionValue = computed(() => (appGoodID: string) => {
   return Number(_achievement.commissionPercent(undefined, logined?.User.ID, undefined, appGoodID))
 })
