@@ -10,8 +10,9 @@
       <div v-for='(_good, idx) in visibleGoodAchievements' :key='idx'>
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
         <KolOption
-          v-model:percent='_good.CommissionValue' :max='getGoodCommissionValue(_good.AppGoodID)' ignore-style
-          :disabled='!good.canBuy(undefined, _good.AppGoodID)'
+          v-model:percent='_good.CommissionValue'
+          :max='getGoodCommissionValue(_good.AppGoodID)'
+          ignore-style
         />
       </div>
     </template>
@@ -69,7 +70,9 @@ const getGoodCommissionThreshold = computed(() => (appGoodID: string) => {
   return _achievement.threshold(undefined, logined?.User.ID, undefined, appGoodID)
 })
 
-const visibleGoodAchievements = computed(() => referral.value?.Achievements?.filter((el) => good.visible(undefined, el.AppGoodID)))
+const visibleGoodAchievements = computed(() => referral.value?.Achievements?.filter((el) => {
+  return good.canBuy(undefined, el.AppGoodID) && good.enableSetCommission(undefined, el.AppGoodID) && !good.testOnly(undefined, el.AppGoodID)
+}))
 
 const backTimer = ref(-1)
 const submitting = ref(false)
