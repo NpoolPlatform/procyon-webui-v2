@@ -8,7 +8,7 @@
         <h2>
           <span v-html='$t("MSG_SUB_SLOGAN")' />
         </h2>
-        <button @click='onAvailableNowClick' disabled>
+        <button @click='onAvailableNowClick' class='in-active' disabled>
           <span v-html='$t("MSG_AVAILABLE_NOW")' />
         </button>
       </div>
