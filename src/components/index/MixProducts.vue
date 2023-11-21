@@ -5,7 +5,7 @@
         <h1 v-html='$t("MSG_FIRST_BATCH_MINING_TITLE")' />
         <h2 v-html='$t("MSG_FIRST_BATCH_MINING_SUBTITLE")' />
         <p v-html='$t("MSG_FIRST_BATCH_MINING_CONTENT")' />
-        <button @click='onIronFishClick' disabled>
+        <button @click='onIronFishClick' class='in-active' disabled>
           {{ $t('MSG_IRON_FISH_BUTTON_LEARN_MORE') }}
         </button>
       </div>
