@@ -208,7 +208,7 @@ const onCodeVerify = (code: string) => {
   _user.loginVerify({
     Account: verifyAccount.value,
     AccountType: verifyAccountType.value,
-    UserID: logined.User?.ID,
+    UserID: logined.User?.EntID,
     Token: logined.User?.LoginToken,
     VerificationCode: code,
     Message: {
