@@ -173,7 +173,7 @@ const selectedType = ref(types.value[0])
 const uploadKyc = () => {
   if (myKyc.value) {
     const req = {
-      KycID: myKyc.value.ID,
+      KycID: myKyc.value.EntID,
       SelfieImg: _kyc.image(undefined, undefined, kyc.ImageType.SelfieImg)?.URI as string,
       FrontImg: _kyc.image(undefined, undefined, kyc.ImageType.FrontImg)?.URI as string,
       DocumentType: selectedType.value.value,
