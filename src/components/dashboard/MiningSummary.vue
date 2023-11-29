@@ -34,7 +34,7 @@ const logined = user.useLocalUserStore()
 
 const profit = ledgerprofit.useProfitStore()
 const profits = computed(() => profit.profits(undefined, logined.loginedUserID))
-const intervalProfits = computed(() => profit.intervalProfits(undefined, logined.loginedUserID, IntervalKey.LastDay))
+const intervalProfits = computed(() => profit.intervalProfits(undefined, logined.loginedUserID, undefined, IntervalKey.LastDay))
 
 const totalProfit = computed(() => {
   let total = 0

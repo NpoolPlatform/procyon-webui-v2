@@ -28,6 +28,6 @@ const Card = defineAsyncComponent(() => import('src/components/affiliates/Card.v
 const logined = user.useLocalUserStore()
 
 const _achievement = achievement.useAchievementStore()
-const inviter = computed(() => _achievement.achievement(undefined, logined?.User?.ID))
-const invitees = computed(() => _achievement.inviteeAchievements(undefined, logined.User?.ID).sort((a, b) => a.InvitedAt > b.InvitedAt ? 1 : -1))
+const inviter = computed(() => _achievement.achievement(undefined, logined?.User?.EntID))
+const invitees = computed(() => _achievement.inviteeAchievements(undefined, logined.User?.EntID).sort((a, b) => a.InvitedAt > b.InvitedAt ? 1 : -1))
 </script>
