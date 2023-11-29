@@ -181,14 +181,14 @@ const query = computed(() => route.query as unknown as Query)
 const orderId = computed(() => query.value.orderId)
 
 const odr = order.useOrderStore()
-const _order = computed(() => odr.order(orderId.value))
+const _order = computed(() => odr.getOrderByEntID(orderId.value))
 
 const appGood = appgood.useAppGoodStore()
 const good = computed(() => appGood.good(undefined, _order.value?.AppGoodID as string))
 
 const notification = notify.useNotificationStore()
 
-const remainSeconds = ref(odr.orderState(_order.value?.ID as string))
+const remainSeconds = ref(odr.orderState(_order.value?.ID as number))
 const ticker = ref(-1)
 const counter = ref(0)
 
@@ -227,7 +227,7 @@ const remainTicker = ref(-1)
 watch(counter, () => {
   if (counter.value % 30 === 0) {
     odr.getOrder({
-      ID: _order.value?.ID as string,
+      EntID: _order.value?.EntID as string,
       Message: {
         Error: {
           Title: 'MSG_GET_ORDER',
@@ -244,9 +244,9 @@ watch(counter, () => {
 
 const launchTicker = () => {
   ticker.value = window.setInterval(() => {
-    remainSeconds.value = odr.orderState(_order.value?.ID as string)
+    remainSeconds.value = odr.orderState(_order.value?.ID as number)
 
-    if (odr.orderPaid(_order.value?.ID as string)) {
+    if (odr.orderPaid(_order.value?.ID as number)) {
       showStatus.value = true
       popupTitle.value = 'MSG_ORDER_COMPLETE'
       tipMessage.value = 'MSG_REVIEW_ORDER'
@@ -278,7 +278,7 @@ const launchTicker = () => {
 
 onMounted(() => {
   odr.getOrder({
-    ID: orderId.value,
+    EntID: orderId.value,
     Message: {
       Error: {
         Title: 'MSG_GET_ORDER',
@@ -288,7 +288,7 @@ onMounted(() => {
       }
     }
   }, (error: boolean, o?: order.Order) => {
-    if (error || !odr.validateOrder(o?.ID as string)) {
+    if (error || !odr.validateOrder(o?.ID as number)) {
       return
     }
     launchTicker()
@@ -317,7 +317,8 @@ const onPaymentCanceled = () => {
 const onCancelOrderClick = () => {
   showCancelling.value = false
   odr.updateOrder({
-    ID: _order.value?.ID as string,
+    ID: _order.value?.ID as number,
+    EntID: _order.value?.EntID as string,
     Canceled: true,
     Message: {
       Error: {

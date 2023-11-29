@@ -127,7 +127,7 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
     PaymentCurrency: el.PaymentCoinUnit.length ? el.PaymentCoinUnit : constant.PriceCoinName,
     TotalCost: Number(el.PaymentAmount).toString(),
     MiningPeriod: el.GoodServicePeriodDays,
-    CumulativeProfit: detail.miningRewardFloat(undefined, logined.loginedUserID, el.CoinTypeID, el.ID) / getDeservedRatio.value(el.AppGoodID),
+    CumulativeProfit: detail.miningRewardFloat(undefined, logined.loginedUserID, el.CoinTypeID, el.EntID) / getDeservedRatio.value(el.AppGoodID),
     ProfitCurrency: good.good(undefined, el.AppGoodID)?.CoinUnit,
     OrderStatus: (_order.orderState(el.ID)?.startsWith('MSG') ? t(_order.orderState(el.ID)) : t('MSG_AWAITING_CONFIRMATION')) +
                 (orderType ? '(' + orderType + ')' : '')

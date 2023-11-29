@@ -62,7 +62,7 @@ const orderId = toRef(props, 'orderId')
 const title = toRef(props, 'title')
 
 const odr = order.useOrderStore()
-const _order = computed(() => odr.order(orderId.value))
+const _order = computed(() => odr.getOrderByEntID(orderId.value))
 
 const emit = defineEmits<{(e: 'proceed'): void;}>()
 
