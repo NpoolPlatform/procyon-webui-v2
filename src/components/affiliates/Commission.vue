@@ -26,7 +26,7 @@ import { achievement, user, constant, fiatcurrency, utils } from 'src/npoolstore
 
 const logined = user.useLocalUserStore()
 const _achievement = achievement.useAchievementStore()
-const inviter = computed(() => _achievement.achievement(undefined, logined?.User.ID))
+const inviter = computed(() => _achievement.achievement(undefined, logined?.User.EntID))
 
 const totalCommission = computed(() => {
   let total = 0
