@@ -29,5 +29,5 @@ const logined = user.useLocalUserStore()
 
 const _achievement = achievement.useAchievementStore()
 const inviter = computed(() => _achievement.achievement(undefined, logined?.User?.EntID))
-const invitees = computed(() => _achievement.inviteeAchievements(undefined, logined.User?.EntID).sort((a, b) => a.InvitedAt > b.InvitedAt ? 1 : -1))
+const invitees = computed(() => _achievement.inviteeAchievements(undefined, logined.User?.EntID, true).sort((a, b) => a.InvitedAt > b.InvitedAt ? 1 : -1))
 </script>
