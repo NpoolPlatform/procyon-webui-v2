@@ -105,7 +105,7 @@ const onSubmit = () => {
     if (error) {
       return
     }
-    if (visibleGoodAchievements.value?.length === 0) {
+    if (!visibleGoodAchievements.value?.length) {
       _achievement.$reset()
       void router.push({ path: '/affiliates' })
       return
