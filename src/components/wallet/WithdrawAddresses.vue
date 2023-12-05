@@ -140,6 +140,7 @@ const onDeleteClick = () => {
 
   account.deleteUserAccount({
     ID: target.value.ID,
+    EntID: target.value.EntID,
     Message: {
       Error: {
         Title: 'MSG_DELETE_WITHDRAW_ACCOUNT',
