@@ -108,6 +108,7 @@ const onCancelClick = () => {
 const onDeleteClick = () => {
   transferAccount.deleteTransfer({
     TransferID: target.value.ID,
+    EntID: target.value.EntID,
     Message: {
       Error: {
         Title: 'MSG_DELETE_TRANSFER_ACCOUNT_FAIL',
