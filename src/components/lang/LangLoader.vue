@@ -23,17 +23,18 @@ watch(userLangID, () => {
   setLang(userLangID.value)
 })
 
-const setLang = (_langID: string) => {
+const setLang = (_langID: string, done?: () => void) => {
   const _lang = lang.lang(undefined, _langID)
   if (!_lang) {
     return
   }
   setTimeout(() => {
     if (_setting.LangThrottling) {
-      setLang(_langID)
+      setLang(_langID, done)
       return
     }
     locale.setLang(_lang)
+    done?.()
   }, 100)
 }
 
@@ -74,10 +75,11 @@ const getAppLangs = (offset: number, limit: number) => {
     }
   }, (error: boolean, rows: Array<g11nbase.AppLang>) => {
     if (error || !rows.length) {
-      setLang(targetLangID.value as string)
-      if (messages.value.length === 0) {
-        _getMessages()
-      }
+      setLang(targetLangID.value as string, () => {
+        if (messages.value.length === 0) {
+          _getMessages()
+        }
+      })
       return
     }
     getAppLangs(offset + limit, limit)
