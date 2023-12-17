@@ -23,11 +23,17 @@
           {{ !_coincurrency.currency(myProps.row.CoinTypeID) ? '-' : utils.getLocaleString(myProps.row.TotalJPYValue?.toFixed(4)) }}
         </q-td>
         <q-td key='ActionButtons' :props='myProps' class='asset-button'>
-          <button :class='["small", "alt", (myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled) ? "in-active" : ""]' @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled'>
+          <button
+            :class='["small", "alt", (myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled) ? "in-active" : ""]'
+            @click='onWithdrawClick(myProps.row)' :disabled='myProps.row.Balance <= 0.0001 || submitting || depositClick || myProps.row.CoinDisabled'
+          >
             {{ $t('MSG_WITHDRAW') }}
           </button>
           <span class='btn-gap' />
-          <button :class='["small", "alt", (!coin.forPay(undefined, myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick) ? "in-active" : ""]' @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(undefined, myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick'>
+          <button
+            :class='["small", "alt", (!coin.forPay(undefined, myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick) ? "in-active" : ""]'
+            @click='onDepositClick(myProps.row)' :disabled='!coin.forPay(undefined, myProps.row.CoinTypeID) || myProps.row.CoinDisabled || depositClick'
+          >
             {{ $t('MSG_DEPOSIT') }}
           </button>
         </q-td>
@@ -44,7 +50,7 @@
         <div class='confirmation'>
           <h3>{{ $t('MSG_DEPOSIT_ADDRESS') }}</h3>
           <div class='qr-code-container' ref='qrCodeContainer'>
-            <h5>{{ depositAccount?.CoinName }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
+            <h5>{{ depositAccount?.CoinDisplayNames?.length > 3 ? depositAccount?.CoinDisplayNames[2] : depositAccount.CoinName }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
             <qrcode-vue
               :value='depositAccount?.Address'
               :size='qrCodeContainer?.clientWidth as number - 1'
@@ -56,7 +62,7 @@
           <div class='full-section'>
             <h4>{{ $t('MSG_YOUR_ADDRESS') }}</h4>
             <div class='wallet-type'>
-              {{ depositAccount?.CoinName }}
+              {{ depositAccount?.CoinDisplayNames?.length > 3 ? depositAccount?.CoinDisplayNames[2] : depositAccount.CoinName }}
             </div>
             <span class='number word-wrapper'>{{ depositAccount?.Address }}</span>
             <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyDepositAddress'>
