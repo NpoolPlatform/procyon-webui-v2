@@ -50,7 +50,7 @@
         <div class='confirmation'>
           <h3>{{ $t('MSG_DEPOSIT_ADDRESS') }}</h3>
           <div class='qr-code-container' ref='qrCodeContainer'>
-            <h5>{{ depositAccount?.CoinDisplayNames?.length > 3 ? depositAccount?.CoinDisplayNames[2] : depositAccount.CoinName }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
+            <h5>{{ depositAccount?.CoinDisplayNames?.length >= 3 ? depositAccount?.CoinDisplayNames[2] : depositAccount.CoinName }} {{ $t('MSG_DEPOSIT_ADDRESS') }}</h5>
             <qrcode-vue
               :value='depositAccount?.Address'
               :size='qrCodeContainer?.clientWidth as number - 1'
@@ -62,7 +62,7 @@
           <div class='full-section'>
             <h4>{{ $t('MSG_YOUR_ADDRESS') }}</h4>
             <div class='wallet-type'>
-              {{ depositAccount?.CoinDisplayNames?.length > 3 ? depositAccount?.CoinDisplayNames[2] : depositAccount.CoinName }}
+              {{ depositAccount?.CoinDisplayNames?.length >= 3 ? depositAccount?.CoinDisplayNames[2] : depositAccount.CoinName }}
             </div>
             <span class='number word-wrapper'>{{ depositAccount?.Address }}</span>
             <img class='copy-button' src='font-awesome/copy.svg' @click='onCopyDepositAddress'>
