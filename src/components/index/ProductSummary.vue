@@ -3,7 +3,7 @@
     <h2>{{ $t('MSG_PREMIERE_PRODUCTS') }}</h2>
     <div class='products'>
       <div
-        v-for='_good in goods' :key='_good.ID'
+        v-for='_good in goods' :key='_good.EntID'
         class='product content-glass dark-glass'
         :class='[_good.DisplayColors?.[0] ? _good.DisplayColors?.[0]: ""]'
       >
@@ -26,7 +26,7 @@
             @click='onPurchaseClick(_good)'
             :disabled='showProductPage(_good)'
           >
-            {{ $t(good.goodPurchaseBtnMsg(undefined, _good.ID)) }}
+            {{ $t(good.goodPurchaseBtnMsg(undefined, _good.EntID)) }}
           </button>
           <button
             :class='["alt", _good?.Descriptions?.[4]?.length > 0 ? "" : "in-active"]'
@@ -49,7 +49,7 @@ import { appgood } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
-const showProductPage = computed(() => (_good: appgood.Good) => !_good.EnableProductPage || !good.canBuy(undefined, _good.ID) || !good.spotQuantity(undefined, _good.ID))
+const showProductPage = computed(() => (_good: appgood.Good) => !_good.EnableProductPage || !good.canBuy(undefined, _good.EntID) || !good.spotQuantity(undefined, _good.EntID))
 
 const router = useRouter()
 const onPurchaseClick = (_good: appgood.Good) => {
@@ -59,7 +59,7 @@ const onPurchaseClick = (_good: appgood.Good) => {
   void router.push({
     path: _good?.ProductPage?.length ? _good?.ProductPage : '/product/aleo',
     query: {
-      appGoodID: _good.ID
+      appGoodID: _good.EntID
     }
   })
 }

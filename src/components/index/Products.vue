@@ -8,7 +8,7 @@
     purchase-caption='MSG_ALEO_PURCHASE_CAPTION'
   /> -->
   <div class='products'>
-    <CardSmall v-for='g in goods' :key='g.ID' :good='g' />
+    <CardSmall v-for='g in goods' :key='g.EntID' :good='g' />
   </div>
   <div class='hr' />
 </template>
