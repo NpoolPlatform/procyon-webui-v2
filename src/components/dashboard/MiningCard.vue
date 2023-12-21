@@ -120,7 +120,7 @@ const coinUnit = computed(() => target.value?.CoinUnit as string)
 const techServiceFee = computed(() => good.techniqueFeeTatio(undefined, goodProfit.value?.AppGoodID) / 100)
 const deservedRatio = computed(() => 1 - techServiceFee.value)
 
-const showProductPage = computed(() => (_good: appgood.Good) => _good.EnableProductPage && good.canBuy(undefined, _good.ID) && good.spotQuantity(undefined, _good.ID))
+const showProductPage = computed(() => (_good: appgood.Good) => _good.EnableProductPage && good.canBuy(undefined, _good.EntID) && good.spotQuantity(undefined, _good.EntID))
 
 const detail = ledgerstatement.useStatementStore()
 const miningDetails = computed(() => detail.miningRewards(undefined, logined.loginedUserID).filter((el) => el.AppGoodID === goodProfit?.value?.AppGoodID))
@@ -130,7 +130,7 @@ const onPurchaseClick = (_good: appgood.Good) => {
   void router.push({
     path: _good.ProductPage?.length ? _good.ProductPage : '/product/aleo',
     query: {
-      appGoodID: _good.ID
+      appGoodID: _good.EntID
     }
   })
 }
