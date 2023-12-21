@@ -32,7 +32,7 @@
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_PRICE') }}:</h4>
-            <span class='number'>{{ appGood?.priceFloat(undefined, good?.ID as string) }}</span>
+            <span class='number'>{{ appGood?.priceFloat(undefined, good?.EntID as string) }}</span>
             <span class='unit'>{{ constant.PriceCoinName }}</span>
           </div>
           <div class='product-detail-text'>
@@ -183,7 +183,7 @@ const appGoodID = computed(() => query.value.appGoodID)
 const appGood = appgood.useAppGoodStore()
 const good = computed(() => appGood.good(undefined, appGoodID.value))
 
-const total = computed(() => appGood.purchaseLimit(undefined, good.value?.ID as string))
+const total = computed(() => appGood.purchaseLimit(undefined, good.value?.EntID as string))
 
 const usedFor = ref(appcoindescription.CoinDescriptionUsedFor.ProductPage)
 const coindescription = appcoindescription.useCoinDescriptionStore()
@@ -343,7 +343,7 @@ const onSubmit = throttle(() => {
 onMounted(() => {
   if (!good.value) {
     appGood.getAppGood({
-      ID: appGoodID.value,
+      EntID: appGoodID.value,
       Message: {
         Error: {
           Title: 'MSG_GET_GOOD',
