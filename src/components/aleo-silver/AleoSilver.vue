@@ -157,7 +157,7 @@ const getGood = () => {
     return
   }
   good.getAppGood({
-    ID: appGoodID.value,
+    EntID: appGoodID.value,
     Message: {
       Error: {
         Title: 'MSG_GET_GOOD',
