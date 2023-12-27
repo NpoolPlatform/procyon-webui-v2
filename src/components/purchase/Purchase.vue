@@ -32,7 +32,7 @@
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_PRICE') }}:</h4>
-            <span class='number'>{{ appGood?.priceFloat(undefined, good?.EntID as string) }}</span>
+            <span class='number'>{{ appGood?.packagePriceFloat(undefined, good?.EntID as string) }}</span>
             <span class='unit'>{{ constant.PriceCoinName }}</span>
           </div>
           <div class='product-detail-text'>
@@ -236,7 +236,7 @@ const balance = computed(() => {
 })
 
 const selectedCoinCurrency = ref(1)
-const totalAmount = computed(() => Number(good.value?.Price) * purchaseAmount.value / selectedCoinCurrency.value)
+const totalAmount = computed(() => appGood?.packagePriceFloat(undefined, good.value?.EntID as string) * purchaseAmount.value / selectedCoinCurrency.value)
 const inputBalance = ref(0)
 
 const remainOrderAmount = computed(() => {

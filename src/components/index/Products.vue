@@ -21,7 +21,7 @@ const CardSmall = defineAsyncComponent(() => import('src/components/product/Card
 
 const good = appgood.useAppGoodStore()
 
-const goods = computed(() => good.goods(undefined).filter((el) => el?.RecommenderID))
+const goods = computed(() => good.goods(undefined))
 
 onMounted(() => {
   if (goods.value.length > 0) {

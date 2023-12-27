@@ -123,7 +123,7 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
     ProductName: good.displayNames(undefined, el.AppGoodID)?.[3] ? t(good.displayNames(undefined, el.AppGoodID)?.[3]) : el.GoodName,
     PurchaseAmount: el.Units,
     UnitType: t(el.GoodUnit),
-    Price: good.priceFloat(undefined, el.AppGoodID),
+    Price: good.packagePriceFloat(undefined, el.AppGoodID),
     PaymentCurrency: el.PaymentCoinUnit.length ? el.PaymentCoinUnit : constant.PriceCoinName,
     TotalCost: Number(el.PaymentAmount).toString(),
     MiningPeriod: el.GoodServicePeriodDays,
