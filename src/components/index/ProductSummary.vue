@@ -13,11 +13,16 @@
         />
         <div class='product-heading'>
           <img class='icon' :src='_good.CoinLogo'>
-          <template v-for='(title,index) in _good?.DisplayNames?.slice(0, 1)' :key='index'>
-            <div v-html='t(title)' class='inner-container' />
-          </template>
+          <div v-if='_good?.DisplayNames?.length'>
+            <template v-for='(title, index) in _good?.DisplayNames?.slice(0, 1)' :key='index'>
+              <div v-html='t(title)' class='inner-container' />
+            </template>
+          </div>
+          <div v-else>
+            {{ _good.GoodName }}
+          </div>
         </div>
-        <template v-for='(desc,idx) in _good?.Descriptions?.slice(0, 2)' :key='idx'>
+        <template v-for='(desc, idx) in _good?.Descriptions?.slice(0, 2)' :key='idx'>
           <div v-html='t(desc)' class='inner-container' />
         </template>
         <div class='product-button-box'>
