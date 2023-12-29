@@ -66,7 +66,7 @@ const table = computed(() => [
     name: 'Period',
     label: t('MSG_PERIOD'),
     align: 'center',
-    field: (row: order.Order) => utils.getLocaleString(row.GoodServicePeriodDays) + t('MSG_DAY')
+    field: (row: order.Order) => utils.getLocaleString(row.Duration) + ' ' + t('MSG_DAYS')
   },
   {
     name: 'State',
@@ -126,7 +126,7 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
     Price: good.packagePriceFloat(undefined, el.AppGoodID),
     PaymentCurrency: el.PaymentCoinUnit.length ? el.PaymentCoinUnit : constant.PriceCoinName,
     TotalCost: Number(el.PaymentAmount).toString(),
-    MiningPeriod: el.GoodServicePeriodDays,
+    MiningPeriod: el.Duration,
     CumulativeProfit: detail.miningRewardFloat(undefined, logined.loginedUserID, el.CoinTypeID, el.EntID) / getDeservedRatio.value(el.AppGoodID),
     ProfitCurrency: good.good(undefined, el.AppGoodID)?.CoinUnit,
     OrderStatus: (_order.orderState(el.ID)?.startsWith('MSG') ? t(_order.orderState(el.ID)) : t('MSG_AWAITING_CONFIRMATION')) +

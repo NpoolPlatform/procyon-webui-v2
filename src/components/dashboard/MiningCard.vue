@@ -36,7 +36,7 @@
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
           <span class='value'>
-            {{ utils.getLocaleString(goodProfit?.GoodServicePeriodDays) }}
+            {{ utils.getLocaleString(goodProfit?.MaxOrderDuration) }}
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
@@ -60,12 +60,6 @@
             {{ goodProfit?.CoinPreSale ? '*' : utils.getLocaleString(parseFloat((goodProfit.Last24HoursInComing / deservedRatio * techServiceFee)?.toFixed(4))) }}
             <span class='unit'>{{ goodProfit?.CoinUnit }} ({{ target?.TechnicalFeeRatio }}%)</span>
           </span>
-        </div>
-        <div class='line' v-if='goodProfit.AppGoodID === "de420061-e878-4a8b-986a-805cadd59233"'>
-          <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
-          <span class='value'>
-            {{ goodProfit.TotalEstimatedDailyReward === 0 ? '*' : utils.getLocaleString(goodProfit.TotalEstimatedDailyReward) }}
-            <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
         </div>
         <div class='warning' v-if='target?.Descriptions?.[3] && target?.Descriptions?.[3]?.length > 0'>
           <img src='font-awesome/warning.svg'>
