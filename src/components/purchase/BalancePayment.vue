@@ -123,8 +123,8 @@ const logined = user.useLocalUserStore()
 const _order = order.useOrderStore()
 const purchaseLimited = computed(() => {
   const purchasedUnits = _order.purchasedUnits(undefined, logined.loginedUserID as string, target.value?.CoinTypeID as string, appGoodID.value)
-  return purchasedUnits >= Number(target?.value?.UserPurchaseLimit) ||
-        (purchasedUnits + Number(purchaseAmount.value)) > Number(target?.value?.UserPurchaseLimit)
+  return purchasedUnits >= Number(target?.value?.MaxUserAmount) ||
+        (purchasedUnits + Number(purchaseAmount.value)) > Number(target?.value?.MaxUserAmount)
 })
 
 const selectedCoinCurrency = ref(1) // 币种汇率
@@ -145,7 +145,7 @@ const message = computed(() => {
     return t('MSG_NOT_SUPPORT_FLOAT_VALUE')
   }
   if (purchaseLimited.value) {
-    return t('MSG_USER_TOTAL_PURCHASE_LIMIT', { MAX: parseFloat(target.value?.UserPurchaseLimit || '0') })
+    return t('MSG_USER_TOTAL_PURCHASE_LIMIT', { MAX: parseFloat(target.value?.MaxUserAmount || '0') })
   }
   return ''
 })
