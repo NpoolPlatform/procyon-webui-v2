@@ -2,6 +2,7 @@
 import { onMounted, computed, watch } from 'vue'
 import { _locale, notify, applang, message, g11nbase, user } from 'src/npoolstore'
 import { useSettingStore } from 'src/localstore'
+import { useRouter } from 'vue-router'
 
 const logined = user.useLocalUserStore()
 
@@ -14,7 +15,11 @@ const lang = applang.useAppLangStore()
 const _message = message.useMessageStore()
 const messages = computed(() => _message.messages(undefined, langID.value, undefined))
 const userLangID = computed(() => logined.selectedLangID)
-const targetLangID = computed(() => locale.langID() || userLangID.value || lang.mainLangID(undefined))
+
+const router = useRouter()
+const langName = computed(() => router.currentRoute.value.path.split('/')?.[1]) // for typesense
+
+const targetLangID = computed(() => locale.langID() || userLangID.value || lang.lang(undefined, undefined, langName.value)?.LangID || lang.mainLangID(undefined))
 
 watch(userLangID, () => {
   if (!userLangID.value) {
