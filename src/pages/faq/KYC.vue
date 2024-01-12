@@ -1,8 +1,6 @@
 <template>
   <Page>
     <template #body>
-      <h2>Procyon Platform - KYC</h2>
-      <!-- <div id='kyc' /> -->
       <div v-html='content' />
     </template>
   </Page>
@@ -24,7 +22,7 @@ const { locale } = useI18n({ useScope: 'global' })
 const lang = computed(() => locale.value as string)
 const content = ref('')
 
-const contentUrl = `faq/kyc/${lang.value}/kyc-${lang.value.toLowerCase()?.split('-').join('_')}.html`
+const contentUrl = `faq/kyc/${lang.value}/kyc-${lang.value.toLowerCase()?.split('-')?.join('_')}.html`
 
 const article = useArticleStore()
 const getContent = () => {
