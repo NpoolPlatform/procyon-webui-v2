@@ -18,11 +18,21 @@ const topic = ref(query.value.topic)
 
 const FAQ = ref<Component>()
 watch(locale, () => {
+  if (topic.value === 'KYC') {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    FAQ.value = defineAsyncComponent(() => import(`src/pages/faq/${topic.value}.vue`))
+    return
+  }
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/restrict-template-expressions
   FAQ.value = defineAsyncComponent(() => import(`src/pages/faq/${locale.value}/${topic.value}.vue`))
 })
 
 onMounted(() => {
+  if (topic.value === 'KYC') {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/restrict-template-expressions
+    FAQ.value = defineAsyncComponent(() => import(`src/pages/faq/${topic.value}.vue`))
+    return
+  }
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/restrict-template-expressions
   FAQ.value = defineAsyncComponent(() => import(`src/pages/faq/${locale.value}/${topic.value}.vue`))
 })
