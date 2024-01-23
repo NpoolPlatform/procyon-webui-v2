@@ -162,7 +162,7 @@ import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ThrottleSeconds } from 'src/const/const'
-import { appgood, ledger, notify, order, user, appcoindescription, constant, coin, utils } from 'src/npoolstore'
+import { appgood, ledger, notify, order, user, appcoindescription, constant, coin, utils, sdk } from 'src/npoolstore'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
@@ -183,7 +183,7 @@ const appGoodID = computed(() => query.value.appGoodID)
 const appGood = appgood.useAppGoodStore()
 const good = computed(() => appGood.good(undefined, appGoodID.value))
 
-const total = computed(() => appGood.purchaseLimit(undefined, good.value?.EntID as string))
+const total = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
 
 const usedFor = ref(appcoindescription.CoinDescriptionUsedFor.ProductPage)
 const coindescription = appcoindescription.useCoinDescriptionStore()
