@@ -94,6 +94,10 @@ if (window.location.hostname.includes('.npool.top')) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   baseURL = window.location.protocol + '//api.npool.top' + (window.location.port.length ? ':' + window.location.port : '') + '/api'
 }
+if (window.location.hostname.includes('localhost')) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  baseURL = window.location.protocol + '//localhost' + (window.location.port.length ? ':' + window.location.port : '') + '/api'
+}
 
 const locale = _locale.useLocaleStore()
 const lang = computed(() => `tags:=[${locale.lang()}]`)
@@ -175,6 +179,8 @@ const onClick = (record: Record) => {
   const urlArr = url.split('faq?')
   const topic = urlArr?.[1]?.split('topic=')?.[1]?.split('#')?.[0]
   const hashStr = urlArr?.[1]?.split('topic=')?.[1]?.split('#')?.[1]
+  console.log('topic: ', topic)
+  console.log('hashStr: ', hashStr)
   void router.push({
     path: '/faq',
     query: {
@@ -182,7 +188,7 @@ const onClick = (record: Record) => {
     },
     hash: `#${hashStr}`
   })
-  onUpdate()
+  // onUpdate()
 }
 
 const transformItems = (items: Record[]) => {
