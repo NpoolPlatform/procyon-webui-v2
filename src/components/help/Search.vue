@@ -179,8 +179,6 @@ const onClick = (record: Record) => {
   const urlArr = url.split('faq?')
   const topic = urlArr?.[1]?.split('topic=')?.[1]?.split('#')?.[0]
   const hashStr = urlArr?.[1]?.split('topic=')?.[1]?.split('#')?.[1]
-  console.log('topic: ', topic)
-  console.log('hashStr: ', hashStr)
   void router.push({
     path: '/faq',
     query: {
@@ -188,7 +186,7 @@ const onClick = (record: Record) => {
     },
     hash: `#${hashStr}`
   })
-  // onUpdate()
+  onUpdate()
 }
 
 const transformItems = (items: Record[]) => {
