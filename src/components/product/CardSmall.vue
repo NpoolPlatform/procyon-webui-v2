@@ -7,7 +7,8 @@
       </h3>
     </div>
     <h4 class='price'>
-      <span>{{ good.Price }}</span> {{ constant.PriceCoinName }} / {{ $t(good.Unit) }}
+      <span>{{ _appgood.priceString(undefined, good.EntID) }}</span>
+      {{ constant.PriceCoinName }} / {{ good.QuantityUnitAmount + $t(good.QuantityUnit) }}
     </h4>
     <div class='line'>
       <span class='label'>{{ $t('MSG_DAILY_MINING_REWARDS') }}:</span>
@@ -54,6 +55,7 @@ const good = toRef(props, 'good')
 
 const coin = appcoin.useAppCoinStore()
 const productInfo = computed(() => coin.productPage(undefined, good.value?.CoinTypeID))
+const _appgood = appgood.useAppGoodStore()
 
 const router = useRouter()
 const onPurchaseClick = () => {
@@ -65,7 +67,7 @@ const onPurchaseClick = () => {
   void router.push({
     path: target,
     query: {
-      appGoodID: good.value.ID
+      appGoodID: good.value.EntID
     }
   })
 }

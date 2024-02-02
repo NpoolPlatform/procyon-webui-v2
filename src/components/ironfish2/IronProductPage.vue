@@ -15,7 +15,7 @@
           {{ $t('MSG_MINING_PURCHASE') }}
         </h3>
         <form action='javascript:void(0)' id='purchase'>
-          <div class='full-section' v-if='good.canBuy(undefined, target?.ID as string) '>
+          <div class='full-section' v-if='good.canBuy(undefined, target?.EntID as string) '>
             <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE2") }}</h4>
             <span class='number'>{{ remainDays }}</span>
             <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -68,7 +68,7 @@
               label='MSG_IRON_FISH_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.ID as string) || good.purchaseLimit(undefined, target?.ID as string) <= 0'
+              :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.EntID as string) || sdk.appGoodPurchaseLimit(target?.EntID) <= 0'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -93,7 +93,7 @@
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
           <form action='javascript:void(0)' id='purchase'>
-            <div class='full-section' v-if='good.canBuy(undefined, target?.ID as string)'>
+            <div class='full-section' v-if='good.canBuy(undefined, target?.EntID as string)'>
               <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE2") }}</h4>
               <span class='number'>{{ remainDays }}</span>
               <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -145,7 +145,7 @@
                 label='MSG_IRON_FISH_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.ID as string) || good.purchaseLimit(undefined, target?.ID as string) <= 0'
+                :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.EntID as string) || sdk.appGoodPurchaseLimit(target?.EntID) <= 0'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -163,7 +163,7 @@
 import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import warning from 'src/assets/warning.svg'
-import { constant, appgood, appcoin, ledger, user } from 'src/npoolstore'
+import { constant, appgood, appcoin, ledger, user, sdk } from 'src/npoolstore'
 import { getCoins } from 'src/api/chain'
 
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
@@ -193,7 +193,7 @@ const general = ledger.useLedgerStore()
 
 const good = appgood.useAppGoodStore()
 const target = computed(() => good.good(undefined, appGoodID.value))
-const total = computed(() => good.purchaseLimit(undefined, target.value?.ID as string))
+const total = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
 
 const coin = appcoin.useAppCoinStore()
 const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))

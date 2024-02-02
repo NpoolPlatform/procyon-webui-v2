@@ -72,7 +72,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='!target?.EnablePurchase || !good.canBuy(undefined, target?.ID) || purchaseLimited || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
+                :disabled='!target?.EnablePurchase || !good.canBuy(undefined, target?.EntID) || purchaseLimited || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang='ts'>
-import { order, notify, ledger, appgood, appcoin, coincurrency, utils, user, coincurrencybase } from 'src/npoolstore'
+import { order, notify, ledger, appgood, appcoin, coincurrency, utils, user, coincurrencybase, sdk } from 'src/npoolstore'
 import { defineAsyncComponent, onMounted, ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -117,14 +117,14 @@ const paymentCoin = computed(() => coin.coin(undefined, coinTypeID.value))
 
 const good = appgood.useAppGoodStore()
 const target = computed(() => good.good(undefined, appGoodID.value))
-const purchaseLimit = computed(() => good.purchaseLimit(undefined, target.value?.ID as string))
+const purchaseLimit = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
 const logined = user.useLocalUserStore()
 
 const _order = order.useOrderStore()
 const purchaseLimited = computed(() => {
   const purchasedUnits = _order.purchasedUnits(undefined, logined.loginedUserID as string, target.value?.CoinTypeID as string, appGoodID.value)
-  return purchasedUnits >= Number(target?.value?.UserPurchaseLimit) ||
-        (purchasedUnits + Number(purchaseAmount.value)) > Number(target?.value?.UserPurchaseLimit)
+  return purchasedUnits >= Number(target?.value?.MaxUserAmount) ||
+        (purchasedUnits + Number(purchaseAmount.value)) > Number(target?.value?.MaxUserAmount)
 })
 
 const selectedCoinCurrency = ref(1) // 币种汇率
@@ -132,7 +132,7 @@ const general = ledger.useLedgerStore()
 const balance = computed(() => parseFloat((Number(general.coinBalance(undefined, logined.loginedUserID as string, coinTypeID.value)) * selectedCoinCurrency.value).toFixed(4)))
 
 const purchaseAmount = ref(query.value.purchaseAmount) // 购买数量
-const paymentAmount = computed(() => Number(good.priceFloat(undefined, appGoodID.value)) * purchaseAmount.value) // 支付金额
+const paymentAmount = computed(() => Number(good.packagePriceFloat(undefined, appGoodID.value)) * purchaseAmount.value) // 支付金额
 const usdToOtherAmount = computed(() => parseFloat((Math.ceil(paymentAmount.value / selectedCoinCurrency.value * 10000) / 10000).toFixed(4)))
 const usedToOtherAmountISNaN = computed(() => isNaN(usdToOtherAmount.value))
 const insufficientFunds = computed(() => balance.value < paymentAmount.value)
@@ -145,7 +145,7 @@ const message = computed(() => {
     return t('MSG_NOT_SUPPORT_FLOAT_VALUE')
   }
   if (purchaseLimited.value) {
-    return t('MSG_USER_TOTAL_PURCHASE_LIMIT', { MAX: parseFloat(target.value?.UserPurchaseLimit || '0') })
+    return t('MSG_USER_TOTAL_PURCHASE_LIMIT', { MAX: parseFloat(target.value?.MaxUserAmount || '0') })
   }
   return ''
 })
@@ -228,7 +228,7 @@ onMounted(() => {
   }
   if (!target.value) {
     good.getAppGood({
-      ID: appGoodID.value,
+      EntID: appGoodID.value,
       Message: {
         Error: {
           Title: 'MSG_GET_GOOD',

@@ -8,7 +8,7 @@
     purchase-caption='MSG_ALEO_PURCHASE_CAPTION'
   /> -->
   <div class='products'>
-    <CardSmall v-for='g in goods' :key='g.ID' :good='g' />
+    <CardSmall v-for='g in goods' :key='g.EntID' :good='g' />
   </div>
   <div class='hr' />
 </template>
@@ -21,7 +21,7 @@ const CardSmall = defineAsyncComponent(() => import('src/components/product/Card
 
 const good = appgood.useAppGoodStore()
 
-const goods = computed(() => good.goods(undefined).filter((el) => el?.RecommenderID))
+const goods = computed(() => good.goods(undefined))
 
 onMounted(() => {
   if (goods.value.length > 0) {
