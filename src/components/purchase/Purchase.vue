@@ -32,7 +32,7 @@
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_PRICE') }}:</h4>
-            <span class='number'>{{ appGood?.priceFloat(undefined, good?.ID as string) }}</span>
+            <span class='number'>{{ appGood?.packagePriceFloat(undefined, good?.EntID as string) }}</span>
             <span class='unit'>{{ constant.PriceCoinName }}</span>
           </div>
           <div class='product-detail-text'>
@@ -162,7 +162,7 @@ import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ThrottleSeconds } from 'src/const/const'
-import { appgood, ledger, notify, order, user, appcoindescription, constant, coin, utils } from 'src/npoolstore'
+import { appgood, ledger, notify, order, user, appcoindescription, constant, coin, utils, sdk } from 'src/npoolstore'
 
 const PurchasePage = defineAsyncComponent(() => import('src/components/purchase/PurchasePage.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
@@ -183,7 +183,7 @@ const appGoodID = computed(() => query.value.appGoodID)
 const appGood = appgood.useAppGoodStore()
 const good = computed(() => appGood.good(undefined, appGoodID.value))
 
-const total = computed(() => appGood.purchaseLimit(undefined, good.value?.ID as string))
+const total = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
 
 const usedFor = ref(appcoindescription.CoinDescriptionUsedFor.ProductPage)
 const coindescription = appcoindescription.useCoinDescriptionStore()
@@ -236,7 +236,7 @@ const balance = computed(() => {
 })
 
 const selectedCoinCurrency = ref(1)
-const totalAmount = computed(() => Number(good.value?.Price) * purchaseAmount.value / selectedCoinCurrency.value)
+const totalAmount = computed(() => appGood?.packagePriceFloat(undefined, good.value?.EntID as string) * purchaseAmount.value / selectedCoinCurrency.value)
 const inputBalance = ref(0)
 
 const remainOrderAmount = computed(() => {
@@ -343,7 +343,7 @@ const onSubmit = throttle(() => {
 onMounted(() => {
   if (!good.value) {
     appGood.getAppGood({
-      ID: appGoodID.value,
+      EntID: appGoodID.value,
       Message: {
         Error: {
           Title: 'MSG_GET_GOOD',
