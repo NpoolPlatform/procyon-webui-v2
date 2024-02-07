@@ -10,7 +10,7 @@
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
         <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, appGoodID as string)) }}</span>
-        <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.Unit ? $t(target?.Unit) : '' }}</span>
+        <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.QuantityUnit ? $t(target?.QuantityUnit) : '' }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
