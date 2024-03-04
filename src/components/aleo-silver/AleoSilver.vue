@@ -10,7 +10,7 @@
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
         <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, appGoodID as string)) }}</span>
-        <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.Unit ? $t(target?.Unit) : '' }}</span>
+        <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.QuantityUnit ? $t(target?.QuantityUnit) : '' }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -53,7 +53,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span v-if='target?.ServiceStartAt === 0 || target?.StartMode === appgood.GoodStartMode.GoodStartModeTBD' class='number'>{{ $t("MSG_TBA") }}</span>
+        <span v-if='target?.ServiceStartAt === 0 || target?.StartMode === goodbase.StartMode.GoodStartModeTBD' class='number'>{{ $t("MSG_TBA") }}</span>
         <div v-else>
           <span class='number'>{{ utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD') }}</span>
           <br>
@@ -129,7 +129,7 @@ import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
-import { appgood, notify, appcoin, appcoindescription, coincurrency, utils, constant } from 'src/npoolstore'
+import { appgood, notify, appcoin, appcoindescription, coincurrency, utils, constant, goodbase } from 'src/npoolstore'
 
 import question from '../../assets/question.svg'
 

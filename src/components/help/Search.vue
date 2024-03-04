@@ -94,6 +94,10 @@ if (window.location.hostname.includes('.npool.top')) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   baseURL = window.location.protocol + '//api.npool.top' + (window.location.port.length ? ':' + window.location.port : '') + '/api'
 }
+if (window.location.hostname.includes('localhost')) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  baseURL = window.location.protocol + '//localhost' + (window.location.port.length ? ':' + window.location.port : '') + '/api'
+}
 
 const locale = _locale.useLocaleStore()
 const lang = computed(() => `tags:=[${locale.lang()}]`)

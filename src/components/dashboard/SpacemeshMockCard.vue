@@ -84,7 +84,7 @@ const profit = ledgerprofit.useProfitStore()
 const goodProfits = computed(() => profit.goodProfits(undefined, logined.loginedUserID).filter((el) => el.CoinTypeID === target?.value?.CoinTypeID))
 
 const goodUnit = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodUnit : '')
-const goodPeriod = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodServicePeriodDays : '')
+const goodPeriod = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].MaxOrderDuration : '')
 const totalUnits = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].Units : 0)
 
 const good = appgood.useAppGoodStore()

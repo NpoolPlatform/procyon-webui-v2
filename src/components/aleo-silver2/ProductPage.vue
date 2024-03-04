@@ -62,7 +62,7 @@
               label='MSG_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.EntID as string) || good.purchaseLimit(undefined, target?.EntID) <= 0'
+              :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.EntID as string) || sdk.appGoodPurchaseLimit(target?.EntID) <= 0'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -133,7 +133,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.EntID as string) || good.purchaseLimit(undefined, target?.EntID) <= 0'
+                :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.EntID as string) || sdk.appGoodPurchaseLimit(target?.EntID) <= 0'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -151,7 +151,7 @@
 import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { getCoins } from 'src/api/chain'
-import { constant, appgood, appcoin, ledger, user } from 'src/npoolstore'
+import { constant, appgood, appcoin, ledger, user, sdk } from 'src/npoolstore'
 
 import warning from 'src/assets/warning.svg'
 
@@ -180,7 +180,7 @@ const logined = user.useLocalUserStore()
 const general = ledger.useLedgerStore()
 const good = appgood.useAppGoodStore()
 const target = computed(() => good.good(undefined, appGoodID.value))
-const total = computed(() => good.purchaseLimit(undefined, target.value?.EntID as string))
+const total = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
 
 const coin = appcoin.useAppCoinStore()
 const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
