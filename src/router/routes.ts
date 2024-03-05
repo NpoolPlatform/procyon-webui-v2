@@ -242,6 +242,20 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false
         }
       }, {
+        name: 'Company',
+        path: 'company',
+        component: () => import('pages/Company.vue'),
+        meta: {
+          Title: 'Company',
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false
+        }
+      }, {
         name: 'FAQFallback',
         path: '#/faq',
         component: () => import('pages/faq/FAQ.vue'),

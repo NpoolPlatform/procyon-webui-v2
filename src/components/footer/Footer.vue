@@ -26,6 +26,7 @@
         <div class='column-4'>
           <h4>{{ $t('MSG_HELP') }}</h4>
           <ul>
+            <li><a class='footer-link' target='_blank' @click='router.push({ path: "/company" })'>{{ $t('MSG_COMPANY_INFO') }}</a></li>
             <li><a class='footer-link' target='_blank' @click='router.push({ path: "/", hash: "#support" })'>{{ $t('MSG_FAQ') }}</a></li>
             <li><a class='footer-link' target='_blank' @click='router.push({ path: "/contact" })'>{{ $t('MSG_CONTACT') }}</a></li>
             <li><a class='footer-link' target='_blank' @click='router.push({ path: "/legal" })'>{{ $t('MSG_LEGAL') }}</a></li>
