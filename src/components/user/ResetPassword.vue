@@ -1,16 +1,6 @@
 <template>
   <FormPage @submit='onSubmit' label='MSG_RESET_PASSWORD' submit-text='MSG_SUBMIT'>
     <template #top-center>
-      <!-- <div class='switcher' @click='onSwitcherClick'>
-        <q-icon
-          class='icon'
-          size='1.5em'
-          :name='signupMethod === AccountType.Email ? "smartphone" : "email"'
-        />
-        <q-tooltip anchor='center end'>
-          {{ signupMethod === AccountType.Email ? $t('MSG_SWITCH_REGISTER_WITH_MOBILE') : $t('MSG_SWITCH_REGISTER_WITH_EMAIL') }}
-        </q-tooltip>
-      </div> -->
       <div class='email-phone-selector'>
         <div :class='["top", loginWithEmail ? "selected" : ""]' @click='onSwitcherClick(true)'>
           <img src='font-awesome/email.svg'><span>{{ $t('MSG_SWITCH_REGISTER_WITH_EMAIL') }}</span>
@@ -43,19 +33,33 @@
         @focus='onEmailFocusIn'
         @blur='onEmailFocusOut'
       />
-      <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
       <Input
         v-model:value='verificationCode'
         :label='signupMethod === appuserbase.SignMethodType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
         type='text'
         id='ver-code'
-        required
+        :required='false'
         :error='verificationCodeError'
         message='MSG_VERIFICATION_CODE_TIP'
         placeholder='MSG_VERIFICATION_CODE_PLACEHOLDER'
         @focus='onVerificationCodeFocusIn'
-        @blur='onVerificationCodeFocusOut'
       />
+      <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
+      <Input
+        v-model:value='recoveryCode'
+        :label='"MSG_RECOVERY_CODE"'
+        type='text'
+        id='ver-code'
+        :required='false'
+        :error='recoveryCodeError'
+        message='MSG_RECOVERY_CODE_TIP'
+        placeholder='MSG_RECOVERY_CODE_PLACEHOLDER'
+        @focus='onRecoveryCodeFocusIn'
+      />
+      <div class='warning'>
+        <img src='font-awesome/warning.svg'>
+        <span>{{ $t('MSG_YOU_CAN_ALSO_USE_YOUR_RECOVERY_CODE') }}</span>
+      </div>
       <Input
         v-model:value='password'
         label='MSG_PASSWORD'
@@ -127,6 +131,15 @@ const onVerificationCodeFocusOut = () => {
   verificationCodeError.value = !utils.validateVerificationCode(verificationCode.value)
 }
 
+const recoveryCode = ref('')
+const recoveryCodeError = ref(false)
+const onRecoveryCodeFocusIn = () => {
+  recoveryCodeError.value = false
+}
+// const onRecoveryCodeFocusOut = () => {
+//   recoveryCodeError.value = !utils.validateRecoveryCode(recoveryCode.value)
+// }
+
 const password = ref('')
 const pwdError = ref(false)
 const onPasswordFocusIn = () => {
@@ -171,10 +184,14 @@ const router = useRouter()
 const onSubmit = () => {
   onConfirmPasswordFocusOut()
   onPasswordFocusOut()
-  onVerificationCodeFocusOut()
   onAccountError()
 
-  if (accountError.value || pwdError.value || confirmPwdError.value || verificationCodeError.value) {
+  if (accountError.value || pwdError.value || confirmPwdError.value) {
+    return
+  }
+
+  if (!utils.validateRecoveryCode(recoveryCode.value) && !utils.validateVerificationCode(verificationCode.value)) {
+    onVerificationCodeFocusOut()
     return
   }
 
@@ -182,7 +199,8 @@ const onSubmit = () => {
   _user.resetUser({
     Account: account,
     AccountType: signupMethod.value,
-    VerificationCode: verificationCode.value,
+    VerificationCode: verificationCode.value?.length === 0 ? undefined as unknown as string : verificationCode.value,
+    RecoveryCode: recoveryCode.value?.length === 0 ? undefined as unknown as string : recoveryCode.value,
     PasswordHash: utils.encryptPassword(password.value),
     Message: {
       Error: {
