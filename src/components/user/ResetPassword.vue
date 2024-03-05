@@ -52,7 +52,7 @@
         id='ver-code'
         :required='false'
         :error='recoveryCodeError'
-        message='MSG_RECOVERY_CODE_TIP'
+        message='MSG_RECOVERY_CODE_USE_TIP'
         placeholder='MSG_RECOVERY_CODE_PLACEHOLDER'
         @focus='onRecoveryCodeFocusIn'
       />
