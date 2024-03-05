@@ -1,7 +1,11 @@
 <template>
   <FormPage @submit='onSubmit' label='MSG_RESET_PASSWORD' submit-text='MSG_SUBMIT'>
     <template #top-center>
-      <div class='email-phone-selector'>
+      <div class='q-gutter-sm'>
+        <q-radio v-model='verifyMethod' :val='VerifyMethod.VerificationCode' :label='$t("MSG_VERIFICATION_CODE_METHOD")' color='teal' />
+        <q-radio v-model='verifyMethod' :val='VerifyMethod.RecoveryCode' :label='$t("MSG_RECOVERY_CODE_METHOD")' color='teal' />
+      </div>
+      <div class='email-phone-selector' v-if='verifyMethod === VerifyMethod.VerificationCode'>
         <div :class='["top", loginWithEmail ? "selected" : ""]' @click='onSwitcherClick(true)'>
           <img src='font-awesome/email.svg'><span>{{ $t('MSG_SWITCH_REGISTER_WITH_EMAIL') }}</span>
         </div>
@@ -12,40 +16,45 @@
       </div>
     </template>
     <template #form-body>
-      <PhoneNO
-        v-if='signupMethod === appuserbase.SignMethodType.Mobile'
-        v-model:value='phoneNO'
-        :error='accountError'
-        :required='signupMethod === appuserbase.SignMethodType.Mobile'
-        @focus='onPhoneNOFocusIn'
-        @blur='onPhoneNOFocusOut'
-      />
+      <div v-if='verifyMethod === VerifyMethod.VerificationCode'>
+        <PhoneNO
+          v-if='signupMethod === appuserbase.SignMethodType.Mobile'
+          v-model:value='phoneNO'
+          :error='accountError'
+          :required='signupMethod === appuserbase.SignMethodType.Mobile'
+          @focus='onPhoneNOFocusIn'
+          @blur='onPhoneNOFocusOut'
+        />
+        <Input
+          v-if='signupMethod === appuserbase.SignMethodType.Email'
+          v-model:value='emailAddress'
+          label='MSG_EMAIL_ADDRESS'
+          type='email'
+          id='email'
+          :required='signupMethod === appuserbase.SignMethodType.Email'
+          :error='accountError'
+          message='MSG_EMAIL_TIP'
+          placeholder='MSG_EMAIL_PLACEHOLDER'
+          @focus='onEmailFocusIn'
+          @blur='onEmailFocusOut'
+        />
+        <Input
+          v-model:value='verificationCode'
+          :label='signupMethod === appuserbase.SignMethodType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
+          type='text'
+          id='ver-code'
+          :required='false'
+          :error='verificationCodeError'
+          message='MSG_VERIFICATION_CODE_TIP'
+          placeholder='MSG_VERIFICATION_CODE_PLACEHOLDER'
+          @focus='onVerificationCodeFocusIn'
+          @blur='onVerificationCodeFocusOut'
+        />
+        <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
+      </div>
+      <div v-if='verifyMethod === VerifyMethod.RecoveryCode' class='recovery-code-title' />
       <Input
-        v-if='signupMethod === appuserbase.SignMethodType.Email'
-        v-model:value='emailAddress'
-        label='MSG_EMAIL_ADDRESS'
-        type='email'
-        id='email'
-        :required='signupMethod === appuserbase.SignMethodType.Email'
-        :error='accountError'
-        message='MSG_EMAIL_TIP'
-        placeholder='MSG_EMAIL_PLACEHOLDER'
-        @focus='onEmailFocusIn'
-        @blur='onEmailFocusOut'
-      />
-      <Input
-        v-model:value='verificationCode'
-        :label='signupMethod === appuserbase.SignMethodType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
-        type='text'
-        id='ver-code'
-        :required='false'
-        :error='verificationCodeError'
-        message='MSG_VERIFICATION_CODE_TIP'
-        placeholder='MSG_VERIFICATION_CODE_PLACEHOLDER'
-        @focus='onVerificationCodeFocusIn'
-      />
-      <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
-      <Input
+        v-if='verifyMethod === VerifyMethod.RecoveryCode'
         v-model:value='recoveryCode'
         :label='"MSG_RECOVERY_CODE"'
         type='text'
@@ -55,11 +64,8 @@
         message='MSG_RECOVERY_CODE_USE_TIP'
         placeholder='MSG_RECOVERY_CODE_PLACEHOLDER'
         @focus='onRecoveryCodeFocusIn'
+        @blur='onRecoveryCodeFocusOut'
       />
-      <div class='warning'>
-        <img src='font-awesome/warning.svg'>
-        <span>{{ $t('MSG_YOU_CAN_ALSO_USE_YOUR_RECOVERY_CODE') }}</span>
-      </div>
       <Input
         v-model:value='password'
         label='MSG_PASSWORD'
@@ -95,11 +101,18 @@
 import { defineAsyncComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { appuserbase, notify, user, notifverify, utils, basetypes } from 'src/npoolstore'
+import { ResetUserRequest } from 'src/npoolstore/appuser/user'
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
 const TimeoutSendBtn = defineAsyncComponent(() => import('src/components/button/TimeoutSendBtn.vue'))
 
+enum VerifyMethod {
+  VerificationCode,
+  RecoveryCode
+}
+
+const verifyMethod = ref(VerifyMethod.VerificationCode)
 const accountError = ref(false)
 const onAccountError = () => {
   accountError.value = signupMethod.value === appuserbase.SignMethodType.Email
@@ -136,9 +149,10 @@ const recoveryCodeError = ref(false)
 const onRecoveryCodeFocusIn = () => {
   recoveryCodeError.value = false
 }
-// const onRecoveryCodeFocusOut = () => {
-//   recoveryCodeError.value = !utils.validateRecoveryCode(recoveryCode.value)
-// }
+
+const onRecoveryCodeFocusOut = () => {
+  recoveryCodeError.value = !utils.validateRecoveryCode(recoveryCode.value)
+}
 
 const password = ref('')
 const pwdError = ref(false)
@@ -185,22 +199,23 @@ const onSubmit = () => {
   onConfirmPasswordFocusOut()
   onPasswordFocusOut()
   onAccountError()
+  onVerificationCodeFocusOut()
+  onRecoveryCodeFocusOut()
 
+  if (verifyMethod.value === VerifyMethod.VerificationCode && verificationCodeError.value) {
+    return
+  }
+  if (verifyMethod.value === VerifyMethod.RecoveryCode && recoveryCodeError.value) {
+    return
+  }
   if (accountError.value || pwdError.value || confirmPwdError.value) {
     return
   }
 
-  if (!utils.validateRecoveryCode(recoveryCode.value) && !utils.validateVerificationCode(verificationCode.value)) {
-    onVerificationCodeFocusOut()
-    return
-  }
-
   const account = signupMethod.value === appuserbase.SignMethodType.Email ? emailAddress.value : phoneNO.value
-  _user.resetUser({
+  const req = {
     Account: account,
     AccountType: signupMethod.value,
-    VerificationCode: verificationCode.value?.length === 0 ? undefined as unknown as string : verificationCode.value,
-    RecoveryCode: recoveryCode.value?.length === 0 ? undefined as unknown as string : recoveryCode.value,
     PasswordHash: utils.encryptPassword(password.value),
     Message: {
       Error: {
@@ -210,7 +225,15 @@ const onSubmit = () => {
         Type: notify.NotifyType.Error
       }
     }
-  }, (error: boolean) => {
+  } as ResetUserRequest
+
+  if (verifyMethod.value === VerifyMethod.VerificationCode) {
+    req.VerificationCode = verificationCode.value?.length === 0 ? undefined as unknown as string : verificationCode.value
+  }
+  if (verifyMethod.value === VerifyMethod.RecoveryCode) {
+    req.RecoveryCode = recoveryCode.value?.length === 0 ? undefined as unknown as string : recoveryCode.value
+  }
+  _user.resetUser(req, (error: boolean) => {
     if (error) {
       return
     }
@@ -245,4 +268,7 @@ const onSendCodeClick = () => {
 .icon
   margin-right: -48px
   margin-top: -56px
+
+.recovery-code-title
+  margin-top: 10px
 </style>
