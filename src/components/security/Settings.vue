@@ -110,6 +110,24 @@
         {{ $t('MSG_VERIFY_ID') }}
       </button>
     </div>
+    <div class='setting-box column content-glass'>
+      <div class='settings-box-heading'>
+        <img :src='lock'>
+        <h3 class='box-title'>
+          {{ $t('MSG_RECOVERY_CODES') }}
+        </h3>
+      </div>
+      <p>{{ $t('MSG_RECOVERY_CODE_TIP') }}</p>
+      <q-space />
+      <div class='warning '>
+        <img src='font-awesome/warning.svg'>
+        <span>{{ $t('MSG_GENERATE_RECOVERY_CODE_TIP') }}</span>
+      </div>
+      <div class='verification' />
+      <button @click='onGenerateCodeClick'>
+        {{ $t('MSG_GENERATE_RECOVERY_CODE') }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -184,6 +202,10 @@ const onSignVerifyClick = () => {
 
 const onKYCClick = () => {
   void router.push({ path: '/kyc' })
+}
+
+const onGenerateCodeClick = () => {
+  void router.push({ path: '/generate/code' })
 }
 
 </script>

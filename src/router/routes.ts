@@ -732,6 +732,36 @@ const routes: RouteRecordRaw[] = [
           ShowSideMenu: false
         }
       }, {
+        name: 'GenerateCode',
+        path: 'generate/code',
+        component: () => import('pages/GenerateCode.vue'),
+        meta: {
+          Title: 'GenerateCode',
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
+        name: 'GenerateCodeFallback',
+        path: '#/generate/code',
+        component: () => import('pages/GenerateCode.vue'),
+        meta: {
+          Title: 'GenerateCode',
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: true,
+          ShowSideMenu: false
+        }
+      }, {
         name: 'UpdateEmail',
         path: 'update/email',
         component: () => import('pages/UpdateEmail.vue'),
