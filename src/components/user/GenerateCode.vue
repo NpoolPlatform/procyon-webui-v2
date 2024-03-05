@@ -4,11 +4,9 @@
       <div class='form-container content-glass'>
         <div class='confirmation'>
           <h3>{{ $t('MSG_TWO_FACTOR_AUTH_RECOVERY_CODES') }}</h3>
-          <p>
-            {{ $t('MSG_TWO_FACTOR_AUTH_RECOVERY_CODES_TIP') }}
-          </p>
+          <p v-html='$t("MSG_TWO_FACTOR_AUTH_RECOVERY_CODES_TIP")' />
           <div class='hr' />
-          <h4>{{ $t('MSG_RECOVERY_CODES_TITLE') }}:</h4>
+          <h4>{{ $t('MSG_RECOVERY_CODES_TITLE') }}</h4>
           <table class='recovery-codes'>
             <tr v-for='(child,idx) in pairsCode' :key='idx'>
               <td v-for='code in child' :key='code.EntID'>
