@@ -124,17 +124,24 @@
         <span>{{ $t('MSG_GENERATE_RECOVERY_CODE_TIP') }}</span>
       </div>
       <div class='verification' />
-      <button @click='onGenerateCodeClick'>
-        {{ $t('MSG_GENERATE_RECOVERY_CODE') }}
-      </button>
+      <WaitingBtn
+        :disabled='false'
+        label='MSG_GENERATE_RECOVERY_CODE'
+        type='submit'
+        class='submit-btn'
+        :waiting='loading'
+        @click='generateNewRecoveryCode'
+      />
     </div>
   </div>
 </template>
 
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
-import { ref, computed } from 'vue'
-import { kyc, notify, appuserbase, user } from 'src/npoolstore'
+import { ref, computed, defineAsyncComponent } from 'vue'
+import { kyc, notify, appuserbase, user, recoverycode } from 'src/npoolstore'
+
+const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 
 import lock from 'src/assets/lock.svg'
 import mail from 'src/assets/mail.svg'
@@ -204,10 +211,27 @@ const onKYCClick = () => {
   void router.push({ path: '/kyc' })
 }
 
-const onGenerateCodeClick = () => {
-  void router.push({ path: '/generate/code' })
-}
+const recovery = recoverycode.useRecoveryCodeStore()
 
+const loading = ref(false)
+const generateNewRecoveryCode = () => {
+  loading.value = true
+  recovery.generateRecoveryCodes({
+    Message: {
+      Error: {
+        Title: 'MSG_GENERATE_RECOVERY_CODES',
+        Message: 'MSG_GENERATE_RECOVERY_CODES_FAIL',
+        Popup: true,
+        Type: notify.NotifyType.Error
+      }
+    }
+  }, (error:boolean) => {
+    loading.value = false
+    if (!error) {
+      void router.push({ path: '/generate/code' })
+    }
+  })
+}
 </script>
 
 <style lang='sass' scoped>

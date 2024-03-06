@@ -1,11 +1,7 @@
 <template>
   <FormPage @submit='onSubmit' label='MSG_RESET_PASSWORD' submit-text='MSG_SUBMIT'>
     <template #top-center>
-      <div class='q-gutter-sm'>
-        <q-radio v-model='verifyMethod' :val='VerifyMethod.VerificationCode' :label='$t("MSG_VERIFICATION_CODE_METHOD")' color='teal' />
-        <q-radio v-model='verifyMethod' :val='VerifyMethod.RecoveryCode' :label='$t("MSG_RECOVERY_CODE_METHOD")' color='teal' />
-      </div>
-      <div class='email-phone-selector' v-if='verifyMethod === VerifyMethod.VerificationCode'>
+      <div class='email-phone-selector'>
         <div :class='["top", loginWithEmail ? "selected" : ""]' @click='onSwitcherClick(true)'>
           <img src='font-awesome/email.svg'><span>{{ $t('MSG_SWITCH_REGISTER_WITH_EMAIL') }}</span>
         </div>
@@ -16,7 +12,7 @@
       </div>
     </template>
     <template #form-body>
-      <div v-if='verifyMethod === VerifyMethod.VerificationCode'>
+      <div>
         <PhoneNO
           v-if='signupMethod === appuserbase.SignMethodType.Mobile'
           v-model:value='phoneNO'
@@ -38,7 +34,23 @@
           @focus='onEmailFocusIn'
           @blur='onEmailFocusOut'
         />
+        <q-btn-toggle
+          v-model='verifyMethod'
+          spread
+          class='verify-method-toggle'
+          unelevated
+          toggle-color='primary'
+          color='white'
+          text-color='black'
+          :options='[
+            // {label: $t("MSG_VERIFICATION_CODE_METHOD"), value: VerifyMethod.VerificationCode},
+            {label: $t("VERIFICATION_CODE"), value: VerifyMethod.VerificationCode},
+            {label: $t("RECOVERY_CODE"), value: VerifyMethod.RecoveryCode}
+            // {label: $t("MSG_RECOVERY_CODE_METHOD"), value: VerifyMethod.RecoveryCode}
+          ]'
+        />
         <Input
+          v-if='verifyMethod === VerifyMethod.VerificationCode'
           v-model:value='verificationCode'
           :label='signupMethod === appuserbase.SignMethodType.Email ? "MSG_EMAIL_VERIFICATION_CODE" : "MSG_MOBILE_VERIFICATION_CODE"'
           type='text'
@@ -50,9 +62,8 @@
           @focus='onVerificationCodeFocusIn'
           @blur='onVerificationCodeFocusOut'
         />
-        <TimeoutSendBtn :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
+        <TimeoutSendBtn v-if='verifyMethod === VerifyMethod.VerificationCode' :initial-clicked='false' :target-error='accountError' @click='onSendCodeClick' />
       </div>
-      <div v-if='verifyMethod === VerifyMethod.RecoveryCode' class='recovery-code-title' />
       <Input
         v-if='verifyMethod === VerifyMethod.RecoveryCode'
         v-model:value='recoveryCode'
@@ -271,4 +282,10 @@ const onSendCodeClick = () => {
 
 .recovery-code-title
   margin-top: 10px
+
+.verify-method-toggle
+  ::v-deep button
+    margin: 0
+    margin-bottom: 12px
+    margin-top: 12px
 </style>
