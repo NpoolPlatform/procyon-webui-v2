@@ -19,17 +19,9 @@
             <span>{{ $t('MSG_BE_SURE_TO_STORE_IN_SAFE_PLACE') }}</span>
           </div>
           <div class='hr' />
-          <WaitingBtn
-            :disabled='false'
-            label='MSG_GENERATE_NEW_RECOVERY_CODES'
-            type='submit'
-            class='submit-btn'
-            :waiting='loading'
-            @click='generateNewRecoveryCode'
-          />
-          <!-- <button @click='onSaveCodeClick'>
+          <button @click='onSaveCodeClick'>
             {{ $t('MSG_HAVE_SAVED_MY_CODES') }}
-          </button> -->
+          </button>
         </div>
       </div>
     </div>
@@ -37,11 +29,11 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
-import { recoverycode, notify } from 'src/npoolstore'
+import { computed, defineAsyncComponent, onMounted } from 'vue'
+import { recoverycode } from 'src/npoolstore'
+import { useRouter } from 'vue-router'
 
 const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
-const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
 
 const recovery = recoverycode.useRecoveryCodeStore()
 const codes = computed(() => recovery.RecoveryCodes)
@@ -66,28 +58,18 @@ const getRecoveryCodes = (offset: number, limit: number) => {
   })
 }
 
-const loading = ref(false)
-const generateNewRecoveryCode = () => {
-  loading.value = true
-  recovery.generateRecoveryCodes({
-    Message: {
-      Error: {
-        Title: 'MSG_GENERATE_RECOVERY_CODES',
-        Message: 'MSG_GENERATE_RECOVERY_CODES_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, () => {
-    loading.value = false
-  })
-}
-
 onMounted(() => {
   if (codes.value?.length === 0) {
     getRecoveryCodes(0, 100)
   }
 })
+
+const router = useRouter()
+
+const onSaveCodeClick = () => {
+  void router.push({ path: '/security' })
+}
+
 </script>
 
 <style lang='sass' scoped>
