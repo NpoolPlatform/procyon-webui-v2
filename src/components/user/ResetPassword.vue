@@ -43,10 +43,8 @@
           color='white'
           text-color='black'
           :options='[
-            // {label: $t("MSG_VERIFICATION_CODE_METHOD"), value: VerifyMethod.VerificationCode},
-            {label: $t("VERIFICATION_CODE"), value: VerifyMethod.VerificationCode},
-            {label: $t("RECOVERY_CODE"), value: VerifyMethod.RecoveryCode}
-            // {label: $t("MSG_RECOVERY_CODE_METHOD"), value: VerifyMethod.RecoveryCode}
+            {label: $t("MSG_VERIFICATION_CODE_METHOD"), value: VerifyMethod.VerificationCode},
+            {label: $t("MSG_RECOVERY_CODE_METHOD"), value: VerifyMethod.RecoveryCode}
           ]'
         />
         <Input
@@ -288,4 +286,6 @@ const onSendCodeClick = () => {
     margin: 0
     margin-bottom: 12px
     margin-top: 12px
+  ::v-deep .bg-primary
+     background: linear-gradient(to left, #54e280 0, #1ec498 50%) !important
 </style>
