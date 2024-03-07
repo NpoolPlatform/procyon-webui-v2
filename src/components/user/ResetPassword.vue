@@ -36,7 +36,7 @@
         />
         <div class='email-phone-selector'>
           <div :class='{ "top": true, "selected": verifyMethod === VerifyMethod.VerificationCode }' @click='verifyMethod = VerifyMethod.VerificationCode'>
-            <img src='font-awesome/verification-code.svg'><span>{{ $t('MSG_VERIFICATION_CODE_METHOD') }}</span>
+            <img src='font-awesome/key.svg'><span>{{ $t('MSG_VERIFICATION_CODE_METHOD') }}</span>
           </div>
           <div class='divider' />
           <div :class='{"bottom": true, "selected": verifyMethod === VerifyMethod.RecoveryCode }' @click='verifyMethod = VerifyMethod.RecoveryCode'>
