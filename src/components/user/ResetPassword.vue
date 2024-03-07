@@ -43,19 +43,6 @@
             <img src='font-awesome/recovery.svg'><span>{{ $t('MSG_RECOVERY_CODE_METHOD') }}</span>
           </div>
         </div>
-        <!-- <q-btn-toggle
-          v-model='verifyMethod'
-          spread
-          class='verify-method-toggle'
-          unelevated
-          toggle-color='primary'
-          color='white'
-          text-color='black'
-          :options='[
-            {label: $t("MSG_VERIFICATION_CODE_METHOD"), value: VerifyMethod.VerificationCode},
-            {label: $t("MSG_RECOVERY_CODE_METHOD"), value: VerifyMethod.RecoveryCode}
-          ]'
-        /> -->
         <Input
           v-if='verifyMethod === VerifyMethod.VerificationCode'
           v-model:value='verificationCode'
@@ -289,12 +276,4 @@ const onSendCodeClick = () => {
 
 .recovery-code-title
   margin-top: 10px
-
-.verify-method-toggle
-  ::v-deep button
-    margin: 0
-    margin-bottom: 12px
-    margin-top: 12px
-  ::v-deep .bg-primary
-     background: linear-gradient(to left, #54e280 0, #1ec498 50%) !important
 </style>
