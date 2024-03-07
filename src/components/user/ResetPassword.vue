@@ -34,7 +34,16 @@
           @focus='onEmailFocusIn'
           @blur='onEmailFocusOut'
         />
-        <q-btn-toggle
+        <div class='email-phone-selector'>
+          <div :class='{ "top": true, "selected": verifyMethod === VerifyMethod.VerificationCode }' @click='verifyMethod = VerifyMethod.VerificationCode'>
+            <img src='font-awesome/verification-code.svg'><span>{{ $t('MSG_VERIFICATION_CODE_METHOD') }}</span>
+          </div>
+          <div class='divider' />
+          <div :class='{"bottom": true, "selected": verifyMethod === VerifyMethod.RecoveryCode }' @click='verifyMethod = VerifyMethod.RecoveryCode'>
+            <img src='font-awesome/recovery.svg'><span>{{ $t('MSG_RECOVERY_CODE_METHOD') }}</span>
+          </div>
+        </div>
+        <!-- <q-btn-toggle
           v-model='verifyMethod'
           spread
           class='verify-method-toggle'
@@ -46,7 +55,7 @@
             {label: $t("MSG_VERIFICATION_CODE_METHOD"), value: VerifyMethod.VerificationCode},
             {label: $t("MSG_RECOVERY_CODE_METHOD"), value: VerifyMethod.RecoveryCode}
           ]'
-        />
+        /> -->
         <Input
           v-if='verifyMethod === VerifyMethod.VerificationCode'
           v-model:value='verificationCode'
