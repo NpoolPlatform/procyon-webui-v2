@@ -40,7 +40,7 @@
           </div>
           <div class='divider' />
           <div :class='{"bottom": true, "selected": verifyMethod === VerifyMethod.RecoveryCode }' @click='verifyMethod = VerifyMethod.RecoveryCode'>
-            <img src='font-awesome/recovery.svg'><span>{{ $t('MSG_RECOVERY_CODE_METHOD') }}</span>
+            <img src='font-awesome/recover.svg'><span>{{ $t('MSG_RECOVERY_CODE_METHOD') }}</span>
           </div>
         </div>
         <Input
