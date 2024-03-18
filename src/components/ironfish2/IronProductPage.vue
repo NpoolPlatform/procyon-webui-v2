@@ -234,7 +234,7 @@ const onPurchaseClick = () => {
       path: '/signin',
       query: {
         target: '/product/ironfish',
-        appGoodID: target.value?.ID,
+        appGoodID: target.value?.EntID,
         purchaseAmount: myPurchaseAmount.value
       }
     })
@@ -248,7 +248,7 @@ const onPurchaseClick = () => {
   void router.push({
     path: '/payment',
     query: {
-      appGoodID: target.value?.ID,
+      appGoodID: target.value?.EntID,
       coinTypeID: selectedCoinID.value,
       purchaseAmount: myPurchaseAmount.value
     }
