@@ -3,17 +3,17 @@
     <div class='content'>
       <div class='hero-left'>
         <h1>
-          <span v-html='$t("MSG_SLOGAN")' />
+          <span v-html='$t("MSG_BTC_SLOGAN")' />
         </h1>
         <h2>
-          <span v-html='$t("MSG_SUB_SLOGAN")' />
+          <span v-html='$t("MSG_BTC_SUB_SLOGAN")' />
         </h2>
-        <button @click='onAvailableNowClick' class='in-active' disabled>
-          <span v-html='$t("MSG_AVAILABLE_NOW")' />
+        <button @click='onAvailableNowClick' class='active'>
+          <span v-html='$t("MSG_BTC_LEARN_MORE")' />
         </button>
       </div>
       <img
-        class='hero-image' src='product/aleo/aleo-design.png'
+        class='hero-image' src='product/btc/bitcoin-banner.png'
       >
     </div>
     <div class='content'>
@@ -37,7 +37,7 @@ import { useRouter } from 'vue-router'
 import { localapp } from 'src/npoolstore'
 
 const app = localapp.useLocalApplicationStore()
-const jumpPath = computed(() => app.commitBtnTargets()[0] || '/product/aleo')
+const jumpPath = computed(() => app.commitBtnTargets()[0] || '/product/btc')
 
 const router = useRouter()
 const onAvailableNowClick = () => {

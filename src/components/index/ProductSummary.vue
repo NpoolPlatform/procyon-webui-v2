@@ -31,7 +31,7 @@
             @click='onPurchaseClick(_good)'
             :disabled='showProductPage(_good)'
           >
-            {{ _good.GoodName?.toLowerCase().includes('btc') ? $t('MSG_LEARN_BTC_MORE') : $t(good.goodPurchaseBtnMsg(undefined, _good.EntID)) }}
+            {{ _good.GoodName?.toLowerCase().includes('btc') ? $t('MSG_BTC_LEARN_MORE') : $t(good.goodPurchaseBtnMsg(undefined, _good.EntID)) }}
           </button>
           <button
             :class='["alt", _good?.Descriptions?.[4]?.length > 0 ? "" : "in-active"]'
