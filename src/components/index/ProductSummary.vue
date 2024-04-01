@@ -31,14 +31,14 @@
             @click='onPurchaseClick(_good)'
             :disabled='showProductPage(_good)'
           >
-            {{ $t(good.goodPurchaseBtnMsg(undefined, _good.EntID)) }}
+            {{ _good.GoodName?.toLowerCase().includes('btc') ? $t('MSG_LEARN_BTC_MORE') : $t(good.goodPurchaseBtnMsg(undefined, _good.EntID)) }}
           </button>
           <button
             :class='["alt", _good?.Descriptions?.[4]?.length > 0 ? "" : "in-active"]'
             @click='onLearnMoreClick($t(_good?.Descriptions?.[4]))'
             :disabled='_good?.Descriptions?.[4]?.length === 0'
           >
-            {{ $t('MSG_LEARN_MORE_ON_OUR_BLOG') }}
+            {{ _good.GoodName?.toLowerCase().includes('btc') ? $t('MSG_SIGN_UP_FOR_SEMINAR') : $t('MSG_LEARN_MORE_ON_OUR_BLOG') }}
           </button>
         </div>
       </div>
@@ -82,4 +82,5 @@ const onLearnMoreClick = (url: string) => {
   width: 100%
 .product-button-box
   align-self: flex-end
+  width: 100%
 </style>
