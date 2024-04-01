@@ -723,6 +723,17 @@ img.content-image
   transform: translate(0, -50%)
   z-index: 1
 
+.hero-image-academy
+  max-height: 100%
+  max-width: 100%
+  position: absolute
+  top: 50%
+  right: 24px
+  transform: translate(0, -50%)
+  z-index: 1
+  mask-image: linear-gradient(to left, black 0, black 50%, transparent 100%)
+  -webkit-mask-image: linear-gradient(to left, black 0, black 50%, transparent 100%)
+
 .logo-feature
   align-items: center
   display: flex
@@ -1044,7 +1055,7 @@ h3.feature-title::after
   background-image: url('../../public/product/btc/btc-mining-product-2.jpg')
 
 .products .project-bitcoin .product-note 
-  color: #E1EEEF
+  color: #f7931a
 
 .product
   border-right: 1px solid var(--dark-blue-2)
@@ -1134,6 +1145,7 @@ h4.product-tagline
   font-weight: 400
   line-height: 1.2
   text-transform: none
+  width: 100%
 
 .product-note
   font-size: 16px
