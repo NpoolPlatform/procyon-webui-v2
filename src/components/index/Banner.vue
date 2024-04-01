@@ -16,8 +16,8 @@
         class='hero-image' src='product/btc/bitcoin-banner.png'
       >
     </div>
-    <div v-if='false' class='content'>
-      <div class='logo-feature'>
+    <div class='content'>
+      <div v-if='false' class='logo-feature'>
         <h3 class='logo-feature-title'>
           <span v-html='$t("MSG_ALEO_BACKER")' />
         </h3>
