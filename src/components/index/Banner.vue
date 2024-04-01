@@ -17,15 +17,15 @@
       >
     </div>
     <div class='content'>
-      <div v-if='false' class='logo-feature'>
-        <h3 class='logo-feature-title'>
+      <div class='logo-feature'>
+        <h3 v-if='false' class='logo-feature-title'>
           <span v-html='$t("MSG_ALEO_BACKER")' />
         </h3>
-        <img src='vc-logos/softbank.png'>
-        <img src='vc-logos/a16z.png'>
-        <img src='vc-logos/coinbase.png'>
-        <img src='vc-logos/kora.png'>
-        <img src='vc-logos/slow-ventures.png'>
+        <img v-if='false' src='vc-logos/softbank.png'>
+        <img v-if='false' src='vc-logos/a16z.png'>
+        <img v-if='false' src='vc-logos/coinbase.png'>
+        <img v-if='false' src='vc-logos/kora.png'>
+        <img v-if='false' src='vc-logos/slow-ventures.png'>
       </div>
     </div>
   </div>
