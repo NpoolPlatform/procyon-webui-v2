@@ -1299,6 +1299,36 @@ const routes: RouteRecordRaw[] = [
           NeedLogined: false,
           ShowSideMenu: false
         }
+      }, {
+        name: 'Btc',
+        path: 'product/btc',
+        component: () => import('pages/product/Btc.vue'),
+        meta: {
+          Title: 'Btc',
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false,
+          ShowSideMenu: false
+        }
+      }, {
+        name: 'BtcFallback',
+        path: '#/product/btc',
+        component: () => import('pages/product/Btc.vue'),
+        meta: {
+          Title: 'Btc',
+          ShowHeaderAnnouncement: true,
+          ShowMainHeader: true,
+          ShowBigLogo: true,
+          ShowFooterTop: true,
+          ShowSignHelper: true,
+          ShowTopTip: false,
+          NeedLogined: false,
+          ShowSideMenu: false
+        }
       }
     ]
   },
