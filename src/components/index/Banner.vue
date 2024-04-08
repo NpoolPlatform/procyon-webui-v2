@@ -47,4 +47,13 @@ const onAvailableNowClick = () => {
 </script>
 
 <style lang='sass' scoped>
+.hero-left h1
+  margin-top: 0px
+#home-hero .content
+  padding-top: 30px
+@media (max-width: $breakpoint-sm-max)
+  #home-hero .content
+    padding: 0 12px
+    padding-top: 15px
+
 </style>
