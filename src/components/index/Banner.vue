@@ -54,6 +54,4 @@ const onAvailableNowClick = () => {
 @media (max-width: $breakpoint-sm-max)
   #home-hero .content
     padding: 0 12px
-    padding-top: 15px
-
 </style>
