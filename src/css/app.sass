@@ -714,6 +714,8 @@ img.content-image
 .hero-left
   max-width: 60%
   position: relative
+  padding: 12px 0
+  position: relative
   z-index: 2
 
 .hero-image
@@ -1061,7 +1063,7 @@ h3.feature-title::after
 .products .project-bitcoin .product-note 
   color: #f7931a
 
-.project-bitcoin h3
+.project-bitcoin h3,h1
   background: linear-gradient(to top right, var(--orange-1) 20%, var(--yellow-2) 120%)
   background-clip: border-box
   -webkit-background-clip: text
@@ -1072,10 +1074,13 @@ h3.feature-title::after
   .hero-left
     background: linear-gradient(to right, transparent 0%, #00000099 30%, transparent 90%)
     max-width: unset
+    padding: 24px 0
 
   #home-hero h1
     font-size: 32px
     margin-top: 0
+  #home-hero .content
+    padding: 0 12px
 
   .hero-image
     max-height: 100%
