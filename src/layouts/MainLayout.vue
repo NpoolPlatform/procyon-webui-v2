@@ -22,6 +22,10 @@ import { useSettingStore } from 'src/localstore'
 import { useRouter } from 'vue-router'
 import 'src/api/app'
 import { _locale, notify, requesterror, user } from 'src/npoolstore'
+import { useI18n } from 'vue-i18n'
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const { t } = useI18n({ useScope: 'global' })
 
 const MainHeader = defineAsyncComponent(() => import('src/components/header/MainHeader.vue'))
 const Footer = defineAsyncComponent(() => import('src/components/footer/Footer.vue'))
@@ -57,6 +61,15 @@ onMounted(() => {
     state.Notifications.forEach((notif, index) => {
       if (notif.Popup) {
         state.Notifications.splice(index, 1)
+        if (notif.Description) {
+          notif.Description = t(notif.Description)
+        }
+        if (notif.Message) {
+          notif.Message = t(notif.Message)
+        }
+        if (notif.Title) {
+          notif.Title = t(notif.Title)
+        }
         notify.notify(notif)
       }
     })
