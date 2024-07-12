@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class='form-container'>
     <div class='confirmation'>
       <h3>{{ $t(title) }}</h3>
@@ -79,4 +79,4 @@ const onProceedClick = () => {
 
 .form-container
   max-width: 600px
-</style>
+</style> -->
