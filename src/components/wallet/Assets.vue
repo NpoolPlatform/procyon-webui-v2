@@ -92,14 +92,12 @@ import {
   coincurrency,
   ledger,
   kyc,
-  transferaccount,
-  useraccount,
   fiatcurrency,
   user,
   useraccountbase,
-  accountbase,
   utils,
-  ledgerprofit
+  ledgerprofit,
+  sdk
 } from 'src/npoolstore'
 import { useI18n } from 'vue-i18n'
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -148,10 +146,7 @@ const generals = computed(() => {
   }).sort((a, b) => a.TotalUSDValue > b.TotalUSDValue ? -1 : 1)
 })
 
-const transferAccount = transferaccount.useTransferAccountStore()
-const transfers = computed(() => transferAccount.transferAccounts(undefined, logined.loginedUserID))
-
-const account = useraccount.useUserAccountStore()
+const transferAccounts = computed(() => sdk.userTransferAccounts(undefined))
 const depositAccount = ref({} as useraccountbase.Account)
 
 const qrCodeContainer = ref<HTMLDivElement>()
@@ -169,17 +164,7 @@ const onReturnWallet = () => {
 
 const onDepositClick = (row: MyLedger) => {
   depositClick.value = true
-  account.getDepositAccount({
-    CoinTypeID: row.CoinTypeID,
-    UsedFor: accountbase.AccountUsedFor.UserDeposit,
-    Message: {
-      Error: {
-        Title: t('MSG_FAIL_TO_GET_DEPOSIT_ACCOUNT'),
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, (error: boolean, row?: useraccountbase.Account) => {
+  sdk.getDepositAccount(row.CoinTypeID, (error: boolean, row?: useraccountbase.Account) => {
     depositClick.value = false
     if (error) {
       return
@@ -216,7 +201,7 @@ const onWithdrawClick = (row: MyLedger) => {
       return
     }
 
-    if (account.accounts(undefined, logined.loginedUserID, row.CoinTypeID, accountbase.AccountUsedFor.UserWithdraw).length) {
+    if (sdk.userWithdrawAccounts(logined.loginedUserID, row.CoinTypeID).length) {
       void router.push({
         path: '/withdraw',
         query: {
@@ -224,7 +209,7 @@ const onWithdrawClick = (row: MyLedger) => {
           type: 'ExternalAddress'
         }
       })
-    } else if (transfers.value.length > 0) {
+    } else if (transferAccounts.value.length > 0) {
       void router.push({
         path: '/withdraw',
         query: {

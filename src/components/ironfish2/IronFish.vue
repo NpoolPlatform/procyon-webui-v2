@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, appGoodID as string)) }}</span>
+        <span class='number'>{{ utils.getLocaleString(sdk.priceString(appGoodID as string)) }}</span>
         <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.QuantityUnit ? $t(target?.QuantityUnit) : '' }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
@@ -63,11 +63,11 @@
           </p>
         </div>
       </div>
-      <div class='three-section' v-if='good.canBuy(undefined, target?.EntID as string)'>
+      <div class='three-section' v-if='sdk.canBuy(target?.AppGoodID as string)'>
         <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE") }}</h4>
-        <span class='number'>{{ good.saleEndDate(undefined, target?.EntID as string) }}</span>
+        <span class='number'>{{ sdk.saleEndDate(target?.EntID as string) }}</span>
         <br>
-        <span class='unit'>{{ good.saleEndDate(undefined, target?.EntID as string) }} {{ $t("MSG_JST") }}</span>
+        <span class='unit'>{{ sdk.saleEndDate(target?.EntID as string) }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -107,7 +107,7 @@ import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
-import { constant, appgood, appcoin, notify, coincurrency, appcoindescription, utils } from 'src/npoolstore'
+import { constant, appcoin, coincurrency, appcoindescription, utils, sdk } from 'src/npoolstore'
 
 import question from '../../assets/question.svg'
 // import lightbulb from '../../assets/lightbulb.svg'
@@ -128,25 +128,15 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 
 const getGood = () => {
-  if (_good.value) {
+  if (_appPowerRental.value) {
     return
   }
   if (!appGoodID.value) {
     void router.push({ path: '/' })
     return
   }
-  good.getAppGood({
-    EntID: appGoodID.value,
-    Message: {
-      Error: {
-        Title: 'MSG_GET_GOOD',
-        Message: 'MSG_GET_GOOD_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, () => {
-    if (!_good.value) {
+  sdk.getAppPowerRental(appGoodID.value, () => {
+    if (!_appPowerRental.value) {
       void router.push({ path: '/' })
     }
   })
@@ -157,10 +147,9 @@ const coin = appcoin.useAppCoinStore()
 const coinUnit = 'IRON'
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
-const good = appgood.useAppGoodStore()
 const appGoodID = computed(() => query.value?.appGoodID || coin.defaultGoodID(undefined, coinUnit))
-const target = computed(() => good.good(undefined, appGoodID.value as string))
-const _good = computed(() => good.good(undefined, appGoodID.value as string))
+const target = computed(() => sdk.appPowerRental(appGoodID.value as string))
+const _appPowerRental = computed(() => sdk.appPowerRental(appGoodID.value as string))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()

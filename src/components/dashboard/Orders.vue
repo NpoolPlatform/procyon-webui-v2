@@ -18,7 +18,7 @@
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { utils, order, appgood, ledgerstatement, goodbase, user, constant } from 'src/npoolstore'
+import { utils, order, ledgerstatement, goodbase, user, constant, sdk, powerrentalorder } from 'src/npoolstore'
 import { stringify } from 'csv-stringify/sync'
 import saveAs from 'file-saver'
 
@@ -29,57 +29,55 @@ const { t } = useI18n({ useScope: 'global' })
 
 const logined = user.useLocalUserStore()
 
-const _order = order.useOrderStore()
-const orders = computed(() => _order.orders(undefined, logined.loginedUserID))
+const orders = computed(() => sdk.powerRentalOrders.value)
 
 const detail = ledgerstatement.useStatementStore()
 
-const good = appgood.useAppGoodStore()
-const getDeservedRatio = computed(() => (appGoodID: string) => 1 - Number(good.techniqueFeeTatio(undefined, appGoodID)) / 100)
+const getDeservedRatio = computed(() => (appGoodID: string) => 1 - Number(sdk.appPowerRental(appGoodID)?.TechniqueFeeRatio) / 100)
 
 const table = computed(() => [
   {
     name: 'Date',
     label: t('MSG_DATE'),
     align: 'left',
-    field: (row: order.Order) => utils.formatTime(row.CreatedAt)
+    field: (row: powerrentalorder.PowerRentalOrder) => utils.formatTime(row.CreatedAt)
   },
   {
     name: 'Product',
     label: t('MSG_PRODUCT'),
     align: 'center',
-    field: (row: order.Order) => good.displayNames(undefined, row.AppGoodID).length >= 4 ? t(good.displayNames(undefined, row.AppGoodID)[3]) : row.GoodName
+    field: (row: powerrentalorder.PowerRentalOrder) => sdk.displayName(row.AppGoodID, 3).length > 0 ? t(sdk.displayName(row.AppGoodID, 3)) : row.GoodName
   },
   {
     name: 'Total',
     label: t('MSG_PURCHASE_AMOUNT'),
     align: 'center',
-    field: (row: order.Order) => `${utils.getLocaleString(parseFloat(row.Units))} ${t(row.GoodUnit)}`
+    field: (row: powerrentalorder.PowerRentalOrder) => `${utils.getLocaleString(parseFloat(row.Units))} ${t(row.Unit)}`
   },
   {
     name: 'Price',
     label: t('MSG_PRICE'),
     align: 'center',
-    field: (row: order.Order) => utils.getLocaleString(Number(row.GoodValueUSD)) + ' ' + constant.PriceCoinName
+    field: (row: powerrentalorder.PowerRentalOrder) => utils.getLocaleString(Number(row.GoodValueUSD)) + ' ' + constant.PriceCoinName
   },
   {
     name: 'Period',
     label: t('MSG_PERIOD'),
     align: 'center',
-    field: (row: order.Order) => utils.getLocaleString(row.Duration) + ' ' + t('MSG_DAYS')
+    field: (row: powerrentalorder.PowerRentalOrder) => utils.getLocaleString(row.Durations) + ' ' + t('MSG_DAYS')
   },
   {
     name: 'State',
     label: t('MSG_STATE'),
     align: 'center',
-    field: (row: order.Order) => {
+    field: (row: powerrentalorder.PowerRentalOrder) => {
       let orderType = undefined as unknown as order.OrderType
       if (row.OrderType === order.OrderType.Offline) {
         orderType = order.OrderType.Offline
       } else if (row.OrderType === order.OrderType.Airdrop) {
         orderType = order.OrderType.Airdrop
       }
-      return (_order.orderState(row.ID)?.startsWith('MSG') ? t(_order.orderState(row.ID)) : t('MSG_AWAITING_CONFIRMATION')) +
+      return (sdk.orderState(row.OrderID)?.startsWith('MSG') ? t(sdk.orderState(row.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
             (orderType ? ' (' + orderType + ')' : '')
     }
   }
@@ -101,8 +99,8 @@ interface ExportOrder {
 }
 
 const getGoodType = computed(() => (appGoodID: string) => {
-  const _good = good.good(undefined, appGoodID)
-  return _good?.GoodType === goodbase.GoodType.PowerRenting || _good?.GoodType === goodbase.GoodType.MachineHosting ? 'Mining' : _good?.GoodType
+  const _good = sdk.appPowerRental(appGoodID)
+  return _good?.GoodType === goodbase.GoodType.PowerRental || _good?.GoodType === goodbase.GoodType.MachineRental ? 'Mining' : _good?.GoodType
 })
 
 const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
@@ -120,16 +118,16 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
   return {
     CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
     ProductType: getGoodType.value(el.AppGoodID),
-    ProductName: good.displayNames(undefined, el.AppGoodID)?.[3] ? t(good.displayNames(undefined, el.AppGoodID)?.[3]) : el.GoodName,
+    ProductName: sdk.displayName(el.AppGoodID, 3)?.length > 0 ? t(sdk.displayName(el.AppGoodID, 3)) : el.GoodName,
     PurchaseAmount: el.Units,
     UnitType: t(el.GoodUnit),
-    Price: good.packagePriceFloat(undefined, el.AppGoodID),
-    PaymentCurrency: el.PaymentCoinUnit.length ? el.PaymentCoinUnit : constant.PriceCoinName,
-    TotalCost: Number(el.PaymentAmount).toString(),
-    MiningPeriod: el.Duration,
-    CumulativeProfit: detail.miningRewardFloat(undefined, logined.loginedUserID, el.CoinTypeID, el.EntID) / getDeservedRatio.value(el.AppGoodID),
-    ProfitCurrency: good.good(undefined, el.AppGoodID)?.CoinUnit,
-    OrderStatus: (_order.orderState(el.ID)?.startsWith('MSG') ? t(_order.orderState(el.ID)) : t('MSG_AWAITING_CONFIRMATION')) +
+    Price: Number(sdk.appPowerRental(el.AppGoodID)?.UnitPrice),
+    PaymentCurrency: el.PaymentBalances.length ? el.PaymentBalances?.[0]?.CoinUnit : constant.PriceCoinName,
+    TotalCost: Number(el.PaymentAmountUSD).toString(),
+    MiningPeriod: el.Durations,
+    CumulativeProfit: detail.miningRewardFloat(undefined, logined.loginedUserID, el.PaymentBalances?.[0]?.CoinTypeID, el.OrderID) / getDeservedRatio.value(el.AppGoodID),
+    ProfitCurrency: sdk.appPowerRental(el.AppGoodID)?.CoinUnit,
+    OrderStatus: (sdk.orderState(el.OrderID)?.startsWith('MSG') ? t(sdk.orderState(el.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
                 (orderType ? '(' + orderType + ')' : '')
   } as ExportOrder
 }))

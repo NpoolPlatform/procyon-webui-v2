@@ -8,46 +8,26 @@
     purchase-caption='MSG_ALEO_PURCHASE_CAPTION'
   /> -->
   <div class='products'>
-    <CardSmall v-for='g in goods' :key='g.EntID' :good='g' />
+    <CardSmall v-for='g in appPowerRentals' :key='g.EntID' :good='g' />
   </div>
   <div class='hr' />
 </template>
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent, onMounted } from 'vue'
-import { notify, appgood } from 'src/npoolstore'
+import { sdk } from 'src/npoolstore'
 
 const CardSmall = defineAsyncComponent(() => import('src/components/product/CardSmall.vue'))
 
-const good = appgood.useAppGoodStore()
-
-const goods = computed(() => good.goods(undefined))
+const appPowerRentals = computed(() => sdk.appPowerRentals.value)
 
 onMounted(() => {
-  if (goods.value.length > 0) {
+  if (appPowerRentals.value.length > 0) {
     return
   }
-  if (!good.goods(undefined).length) {
-    getAppGoods(0, 500)
+  if (!appPowerRentals.value.length) {
+    sdk.getAppPowerRentals(0, 0)
   }
 })
 
-const getAppGoods = (offset: number, limit: number) => {
-  good.getAppGoods({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: 'MSG_GET_APP_GOODS_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, (error: boolean, g?: Array<appgood.Good>) => {
-    if (error || !g?.length) {
-      return
-    }
-    getAppGoods(offset + limit, limit)
-  })
-}
 </script>

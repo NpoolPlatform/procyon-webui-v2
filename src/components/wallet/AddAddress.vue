@@ -82,7 +82,7 @@
 <script setup lang='ts'>
 import { ref, defineAsyncComponent, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useraccount, basetypes, accountbase, notify, appcoin, appuserbase } from 'src/npoolstore'
+import { basetypes, accountbase, notify, appcoin, appuserbase, sdk } from 'src/npoolstore'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
@@ -139,14 +139,13 @@ const onCancelClick = () => {
 
 const account = ref('')
 const accountType = ref(appuserbase.SignMethodType.Email)
-const userAccount = useraccount.useUserAccountStore()
 
 const submitting = ref(false)
 
 const onCodeVerify = (code: string) => {
   submitting.value = true
   const _memo = memo.value === '' ? undefined : memo.value
-  userAccount.createUserAccount({
+  sdk.createUserAccount({
     CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
     Account: accountType.value === appuserbase.SignMethodType.Google ? undefined as unknown as string : account.value,

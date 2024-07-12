@@ -171,9 +171,7 @@ import {
   appcoin,
   utils,
   transferaccount,
-  useraccount,
   user,
-  accountbase,
   ledger,
   coincurrency,
   ledgerstatement,
@@ -182,7 +180,8 @@ import {
   notify,
   appuserbase,
   useraccountbase,
-  basetypes
+  basetypes,
+  sdk
 } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -218,12 +217,10 @@ watch(withdrawType, () => {
   selectedAccountIndex.value = 0
 })
 
-const transferAccount = transferaccount.useTransferAccountStore()
-const transferAccounts = computed(() => transferAccount.transferAccounts(undefined, logined.loginedUserID))
+const transferAccounts = computed(() => sdk.userTransferAccounts(undefined))
 const selectedTransferAccount = computed(() => transferAccounts.value[selectedAccountIndex.value])
 
-const userAccount = useraccount.useUserAccountStore()
-const withdraws = computed(() => userAccount.accounts(undefined, logined.loginedUserID, coinTypeID.value, accountbase.AccountUsedFor.UserWithdraw))
+const withdraws = computed(() => sdk.userWithdrawAccounts(logined.loginedUserID, coinTypeID.value))
 const selectedAccountIndex = ref(0)
 const selectedAccount = computed(() => withdraws.value[selectedAccountIndex.value])
 
@@ -382,13 +379,12 @@ onMounted(() => {
     getGenerals(0, 20)
   }
 
-  userAccount.$reset()
   if (!withdraws.value.length) {
-    getUserAccounts(0, 20)
+    sdk.getUserWithdrawAccounts(0, 0)
   }
 
   if (!transferAccounts.value.length) {
-    getTransferAccounts(0, 20)
+    sdk.getTransfers(0, 0)
   }
   if (!coin.coins(undefined).length) {
     getCoins(0, 100)
@@ -400,43 +396,6 @@ onMounted(() => {
     getCurrencies(0, 100)
   }
 })
-
-const getUserAccounts = (offset: number, limit: number) => {
-  userAccount.getUserAccounts({
-    Offset: offset,
-    Limit: limit,
-    UsedFor: accountbase.AccountUsedFor.UserWithdraw,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, (error: boolean, accounts?: Array<useraccountbase.Account>) => {
-    if (error || !accounts?.length) return
-    getUserAccounts(offset + limit, limit)
-  })
-}
-
-const getTransferAccounts = (offset: number, limit: number) => {
-  transferAccount.getTransfers({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_WITHDRAWS_FAIL'),
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, (error: boolean, transfers?: Array<transferaccount.TransferAccount>) => {
-    if (error || !transfers?.length) {
-      return
-    }
-    getTransferAccounts(limit + offset, limit)
-  })
-}
 
 const getGenerals = (offset: number, limit: number) => {
   general.getLedgers({

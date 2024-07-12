@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div :class='[ showStatus || showWarning ? "blur" : "" ]'>
     <PurchasePage :good='(good as appgood.Good)'>
       <div class='info'>
@@ -392,4 +392,4 @@ const onCopyAddressClick = () => {
   -webkit-background-clip: text
   -webkit-box-decoration-break: clone
   -webkit-text-fill-color: transparent
-</style>
+</style> -->

@@ -28,19 +28,16 @@ import { IntervalKey } from 'src/const/const'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
-  accountbase,
   appcoin,
   ledger,
-  useraccount,
-  transferaccount,
   coincurrency,
   fiatcurrency,
   notify,
   fiat,
   constant,
-  useraccountbase,
   user,
-  ledgerprofit
+  ledgerprofit,
+  sdk
 } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -56,11 +53,12 @@ const TransferAccounts = defineAsyncComponent(() => import('src/components/walle
 const general = ledger.useLedgerStore()
 const profit = ledgerprofit.useProfitStore()
 const coin = appcoin.useAppCoinStore()
-const account = useraccount.useUserAccountStore()
-const transfer = transferaccount.useTransferAccountStore()
 const _coincurrency = coincurrency.useCurrencyStore()
 const _fiatcurrency = fiatcurrency.useFiatCurrencyStore()
 const logined = user.useLocalUserStore()
+
+const withdrawAccounts = sdk.userWithdrawAccounts(undefined, undefined)
+const transferAccounts = sdk.userTransferAccounts(undefined)
 
 onMounted(() => {
   if (!general.ledgers().length) {
@@ -76,11 +74,11 @@ onMounted(() => {
   if (!coin.coins(undefined).length) {
     getCoins(0, 100)
   }
-  if (!account.accounts(undefined).length) {
-    getUserAccounts(0, 100)
+  if (!withdrawAccounts.length) {
+    sdk.getUserWithdrawAccounts(0, 0)
   }
-  if (!transfer.transferAccounts(undefined, logined.loginedUserID).length) {
-    getTransfers(0, 100)
+  if (!transferAccounts.length) {
+    sdk.getTransfers(0, 100)
   }
   if (!_coincurrency.currencies().length) {
     getCurrencies(0, 100)
@@ -127,43 +125,6 @@ const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, of
       return
     }
     getIntervalProfits(key, startAt, endAt, limit + offset, limit)
-  })
-}
-
-const getTransfers = (offset: number, limit: number) => {
-  transfer.getTransfers({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_TRANSFER_ACCOUNTS_FAIL'),
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, (error: boolean, transfers?: Array<transferaccount.TransferAccount>) => {
-    if (error || !transfers?.length) {
-      return
-    }
-    getTransfers(limit + offset, limit)
-  })
-}
-
-const getUserAccounts = (offset: number, limit: number) => {
-  account.getUserAccounts({
-    Offset: offset,
-    Limit: limit,
-    UsedFor: accountbase.AccountUsedFor.UserWithdraw,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_WITHDRAW_ACCOUNTS_FAIL'),
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, (error: boolean, accounts?: Array<useraccountbase.Account>) => {
-    if (error || !accounts?.length) return
-    getUserAccounts(offset + limit, limit)
   })
 }
 

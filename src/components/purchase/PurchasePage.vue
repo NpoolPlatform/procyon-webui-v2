@@ -16,11 +16,11 @@
 </template>
 
 <script setup lang='ts'>
-import { appgood } from 'src/npoolstore'
+import { apppowerrental } from 'src/npoolstore'
 import { defineAsyncComponent, defineProps, toRef } from 'vue'
 
 interface Props {
-  good: appgood.Good
+  good: apppowerrental.AppPowerRental
 }
 
 const props = defineProps<Props>()

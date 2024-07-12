@@ -42,7 +42,7 @@
             <td>
               <span
                 class='aff-product'
-                v-html='$t(good.displayName(undefined, _good.AppGoodID, 4))'
+                v-html='$t(sdk.displayName(_good.AppGoodID, 4))'
               />
             </td>
             <td v-if='_good.Editing'>
@@ -55,8 +55,8 @@
               <span class='aff-number'>{{ _good.CommissionValue }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
-                :class='["alt", !good.enableSetCommission(undefined, _good.AppGoodID) || !good.canBuy(undefined, _good.AppGoodID) ? "in-active" : ""]'
-                :disabled='!good.enableSetCommission(undefined, _good.AppGoodID) || !good.canBuy(undefined, _good.AppGoodID)'
+                :class='["alt", !sdk.appPowerRental(_good.AppGoodID)?.EnableSetCommission || !sdk.canBuy(_good.AppGoodID) ? "in-active" : ""]'
+                :disabled='!sdk.appPowerRental(_good.AppGoodID)?.EnableSetCommission || !sdk.canBuy(_good.AppGoodID)'
                 @click='() => _good.Editing = true'
               >
                 {{ $t('MSG_SET') }}
@@ -100,7 +100,7 @@
                 <td>
                   <span
                     class='aff-product'
-                    v-html='$t(good.displayName(undefined, __commission.AppGoodID, 4))'
+                    v-html='$t(sdk.displayName(__commission.AppGoodID, 4))'
                   />
                 </td>
                 <td>
@@ -127,7 +127,7 @@ import { ref, toRef, defineProps, computed, defineAsyncComponent } from 'vue'
 import chevrons from '../../assets/chevrons.svg'
 import { useI18n } from 'vue-i18n'
 import { MyGoodAchievement } from 'src/localstore'
-import { commission, achievement, constant, user, appgood, notify, utils } from 'src/npoolstore'
+import { commission, achievement, constant, user, notify, utils, sdk } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale } = useI18n({ useScope: 'global' })
@@ -153,15 +153,14 @@ const username = computed(() => _user.displayName(undefined, undefined, referral
   referral.value?.LastName, locale.value as string))
 
 const logined = user.useLocalUserStore()
-const good = appgood.useAppGoodStore()
 
 const _achievement = achievement.useAchievementStore()
 const _goodAchievements = ref(computed(() => Array.from(referral.value?.Achievements.filter((el) => {
   return (
-    good.canBuy(undefined, el.AppGoodID) ||
-    good.visible(undefined, el.AppGoodID) ||
-    good.spotQuantity(undefined, el.AppGoodID)
-  ) && !good.testOnly(undefined, el.AppGoodID)
+    sdk.canBuy(el.AppGoodID) ||
+    sdk.appPowerRental(el.AppGoodID)?.Visible ||
+    sdk.spotQuantity(el.AppGoodID)
+  ) && !sdk.appPowerRental(el.AppGoodID)?.TestOnly
 })).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
   return {
     ...el,

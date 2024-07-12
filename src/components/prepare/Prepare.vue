@@ -1,41 +1,28 @@
 <script setup lang='ts'>
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { app, appgood, notify } from 'src/npoolstore'
+import { app, sdk, notify } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const good = appgood.useAppGoodStore()
-const goods = computed(() => good.goods(undefined))
 const application = app.useApplicationStore()
+const appGoods = computed(() => sdk.appGoods.value)
+const appPowerRentals = computed(() => sdk.powerRentals.value)
+const goodCoins = computed(() => sdk.goodCoins.value)
 
 onMounted(() => {
-  if (!goods.value?.length) {
-    getAppGoods(0, 100)
+  if (!appGoods.value?.length) {
+    sdk.getAppGoods(0, 0)
+  }
+  if (!appPowerRentals.value?.length) {
+    sdk.getAppPowerRentals(0, 0)
+  }
+  if (!goodCoins.value?.length) {
+    sdk.getGoodCoins(0, 0)
   }
   getApplication()
 })
-
-const getAppGoods = (offset: number, limit: number) => {
-  good.getAppGoods({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: 'MSG_GET_APP_GOODS',
-        Message: 'MSG_GET_APP_GOODS_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, (error: boolean, g?: Array<appgood.Good>) => {
-    if (error || !g?.length) {
-      return
-    }
-    getAppGoods(offset + limit, limit)
-  })
-}
 
 const getApplication = () => {
   application.getApp({

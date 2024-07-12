@@ -12,7 +12,7 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { IntervalKey } from 'src/const/const'
 import { MyGoodProfit } from 'src/localstore'
-import { appgood, appcoin, coincurrency, ledgerprofit, user, utils } from 'src/npoolstore'
+import { appcoin, coincurrency, ledgerprofit, user, utils, apppowerrental, sdk } from 'src/npoolstore'
 import { GoodDurationType } from 'src/npoolstore/good/base'
 
 const MiningCard = defineAsyncComponent(() => import('src/components/dashboard/MiningCard.vue'))
@@ -22,15 +22,13 @@ const currency = coincurrency.useCurrencyStore()
 const coin = appcoin.useAppCoinStore()
 const logined = user.useLocalUserStore()
 
-const good = appgood.useAppGoodStore()
 const getTBD = computed(() => (appGoodID: string) => {
-  const _good = good.good(undefined, appGoodID)
-  return _good?.Descriptions?.[5] || '*'
+  return sdk.description(appGoodID, 5)?.length > 0 ? sdk.description(appGoodID, 5) : '*'
 })
 
 const profit = ledgerprofit.useProfitStore()
 const goodProfits = computed(() => Array.from(profit.goodProfits(undefined, logined.loginedUserID)).map((el) => {
-  const _good = good.good(undefined, el.AppGoodID) as appgood.Good
+  const _good = sdk.appPowerRental(el.AppGoodID) as apppowerrental.AppPowerRental
   const now = Math.floor(Date.now() / 1000)
 
   const remain = now - _good?.ServiceStartAt >= 0 ? now - _good?.ServiceStartAt : 0

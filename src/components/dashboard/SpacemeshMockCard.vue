@@ -70,7 +70,7 @@
 import { spacemesh } from 'src/teststore'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { appcoin, appgood, ledgerprofit, constant, notify, utils, user } from 'src/npoolstore'
+import { appcoin, ledgerprofit, constant, notify, utils, user, sdk } from 'src/npoolstore'
 
 import chevrons from '../../assets/chevrons.svg'
 import warning from '../../assets/warning.svg'
@@ -87,8 +87,7 @@ const goodUnit = computed(() => goodProfits.value?.length ? goodProfits.value?.[
 const goodPeriod = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].MaxOrderDuration : '')
 const totalUnits = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].Units : 0)
 
-const good = appgood.useAppGoodStore()
-const total = computed(() => goodProfits.value?.length ? good.good(undefined, goodProfits.value?.[0].AppGoodID)?.GoodTotal : 0)
+const total = computed(() => goodProfits.value?.length ? sdk.appPowerRental(goodProfits.value?.[0].AppGoodID)?.GoodTotal : 0)
 const unitsRatio = computed(() => goodProfits.value?.length && total.value ? Number(totalUnits.value) / Number(total.value) : 0)
 const daily = computed(() => _spacemesh.getNetworkDailyOutput)
 

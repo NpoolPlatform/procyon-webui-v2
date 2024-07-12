@@ -6,7 +6,7 @@
           <div class='product-page-icon'>
             <img :src='target?.CoinLogo'>
           </div>
-          <h1 v-html='good.displayName(undefined, target?.EntID as string, 1) ? $t(good.displayName(undefined, target?.EntID as string, 1)) : "Aleo Silver"' />
+          <h1 v-html='sdk.displayName(target?.AppGoodID as string, 1) ? $t(sdk.displayName(target?.AppGoodID as string, 1)) : "Aleo Silver"' />
         </div>
       </div>
       <!-- mobile start -->
@@ -15,7 +15,7 @@
           {{ $t('MSG_MINING_PURCHASE') }}
         </h3>
         <form action='javascript:void(0)' id='purchase'>
-          <div class='full-section' v-if='good.canBuy(undefined, target?.EntID as string)'>
+          <div class='full-section' v-if='sdk.canBuy(target?.AppGoodID as string)'>
             <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
             <span class='number'>{{ remainDays }}</span>
             <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -62,7 +62,7 @@
               label='MSG_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.EntID as string) || sdk.appGoodPurchaseLimit(target?.EntID) <= 0'
+              :disabled='submitting || !target?.AppGoodPurchasable || !sdk.canBuy(target?.AppGoodID as string) || sdk.appGoodPurchaseLimit(target?.AppGoodID) <= 0'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -87,7 +87,7 @@
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
           <form action='javascript:void(0)' id='purchase'>
-            <div class='full-section' v-if='good.canBuy(undefined, target?.EntID as string)'>
+            <div class='full-section' v-if='sdk.canBuy(target?.AppGoodID as string)'>
               <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
               <span class='number'>{{ remainDays }}</span>
               <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -133,7 +133,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !target?.EnablePurchase || !good.canBuy(undefined, target?.EntID as string) || sdk.appGoodPurchaseLimit(target?.EntID) <= 0'
+                :disabled='submitting || !target?.AppGoodPurchasable || !sdk.canBuy(target?.AppGoodID as string) || sdk.appGoodPurchaseLimit(target?.AppGoodID) <= 0'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -151,7 +151,7 @@
 import { defineAsyncComponent, defineProps, toRef, ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { getCoins } from 'src/api/chain'
-import { constant, appgood, appcoin, ledger, user, sdk } from 'src/npoolstore'
+import { constant, appcoin, ledger, user, sdk } from 'src/npoolstore'
 
 import warning from 'src/assets/warning.svg'
 
@@ -178,12 +178,11 @@ const router = useRouter()
 
 const logined = user.useLocalUserStore()
 const general = ledger.useLedgerStore()
-const good = appgood.useAppGoodStore()
-const target = computed(() => good.good(undefined, appGoodID.value))
+const target = computed(() => sdk.appPowerRental(appGoodID.value))
 const total = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
 
 const coin = appcoin.useAppCoinStore()
-const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
+const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinENV))
 
 const defaultCoinTypeID = computed(() => {
   return coins.value?.length > 0 ? coins.value?.[0].CoinTypeID : undefined as unknown as string
@@ -220,7 +219,7 @@ const onPurchaseClick = () => {
       path: '/signin',
       query: {
         target: '/product/aleo',
-        appGoodID: target.value?.EntID,
+        appGoodID: target.value?.AppGoodID,
         purchaseAmount: myPurchaseAmount.value
       }
     })
@@ -234,7 +233,7 @@ const onPurchaseClick = () => {
   void router.push({
     path: '/payment',
     query: {
-      appGoodID: target.value?.EntID,
+      appGoodID: target.value?.AppGoodID,
       coinTypeID: selectedCoinID.value,
       purchaseAmount: myPurchaseAmount.value
     }
