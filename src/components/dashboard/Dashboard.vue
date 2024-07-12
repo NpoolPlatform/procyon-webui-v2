@@ -20,7 +20,7 @@ import { defineAsyncComponent, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { IntervalKey } from 'src/const/const'
 import { QAjaxBar } from 'quasar'
-import { appgood, ledgerprofit, notify, order, constant, appcoin, coincurrency, ledgerstatement, user } from 'src/npoolstore'
+import { ledgerprofit, notify, constant, appcoin, coincurrency, ledgerstatement, user, sdk } from 'src/npoolstore'
 import { getCoins, getCurrencies } from 'src/api/chain'
 
 // const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
@@ -32,8 +32,6 @@ const { t } = useI18n({ useScope: 'global' })
 
 const profit = ledgerprofit.useProfitStore()
 const coin = appcoin.useAppCoinStore()
-const _order = order.useOrderStore()
-const good = appgood.useAppGoodStore()
 const currency = coincurrency.useCurrencyStore()
 const logined = user.useLocalUserStore()
 
@@ -70,12 +68,8 @@ onMounted(() => {
       0, 100)
   }
 
-  if (!_order.orders(undefined, logined.loginedUserID).length) {
-    getOrders(0, 100)
-  }
-
-  if (!good.goods(undefined).length) {
-    getAppGoods(0, 100)
+  if (!sdk.powerRentalOrders.value?.length) {
+    sdk.getPowerRentalOrders(0, 0)
   }
 
   if (!coin.coins(undefined).length) {
@@ -169,44 +163,6 @@ const getIntervalGoodProfits = (key: IntervalKey, startAt: number, endAt: number
       return
     }
     getIntervalGoodProfits(key, startAt, endAt, limit + offset, limit)
-  })
-}
-
-const getOrders = (offset:number, limit: number) => {
-  _order.getOrders({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: 'MSG_GET_ORDERS_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, (error: boolean, rows?: Array<order.Order>) => {
-    if (error || !rows?.length) {
-      return
-    }
-    getOrders(offset + limit, limit)
-  })
-}
-
-const getAppGoods = (offset: number, limit: number) => {
-  good.getAppGoods({
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: 'MSG_GET_APP_GOODS_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, (error: boolean, rows?: Array<appgood.Good>) => {
-    if (error || !rows?.length) {
-      return
-    }
-    getAppGoods(offset + limit, limit)
   })
 }
 

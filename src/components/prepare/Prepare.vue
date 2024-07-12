@@ -7,14 +7,10 @@ import { app, sdk, notify } from 'src/npoolstore'
 const { t } = useI18n({ useScope: 'global' })
 
 const application = app.useApplicationStore()
-const appGoods = computed(() => sdk.appGoods.value)
 const appPowerRentals = computed(() => sdk.powerRentals.value)
 const goodCoins = computed(() => sdk.goodCoins.value)
 
 onMounted(() => {
-  if (!appGoods.value?.length) {
-    sdk.getAppGoods(0, 0)
-  }
   if (!appPowerRentals.value?.length) {
     sdk.getAppPowerRentals(0, 0)
   }
