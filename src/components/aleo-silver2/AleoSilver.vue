@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, appGoodID as string)) }}</span>
+        <span class='number'>{{ utils.getLocaleString(sdk.priceString(appGoodID as string)) }}</span>
         <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.QuantityUnit ? $t(target?.QuantityUnit) : '' }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
@@ -53,7 +53,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span v-if='target?.ServiceStartAt === 0 || target?.StartMode === goodbase.StartMode.GoodStartModeTBD' class='number'>{{ $t("MSG_TBA") }}</span>
+        <span v-if='target?.ServiceStartAt === 0 || target?.GoodStartMode === goodbase.StartMode.GoodStartModeTBD' class='number'>{{ $t("MSG_TBA") }}</span>
         <div v-else>
           <span class='number'>{{ utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD') }}</span>
           <br>
@@ -66,11 +66,11 @@
           </p>
         </div>
       </div>
-      <div class='three-section' v-if='good.canBuy(undefined, target?.EntID as string)'>
+      <div class='three-section' v-if='sdk.canBuy(target?.AppGoodID as string)'>
         <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
-        <span class='number'>{{ good.saleEndDate(undefined, target?.EntID as string, 'YYYY-MM-DD') }}</span>
+        <span class='number'>{{ sdk.saleEndDate(target?.AppGoodID as string, 'YYYY-MM-DD') }}</span>
         <br>
-        <span class='unit'>{{ good.saleEndTime(undefined, target?.EntID as string, 'HH:mm:ss') }} {{ $t("MSG_JST") }}</span>
+        <span class='unit'>{{ sdk.saleEndTime(target?.AppGoodID as string, 'HH:mm:ss') }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -130,7 +130,7 @@ import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
-import { appgood, notify, appcoin, appcoindescription, coincurrency, utils, constant, goodbase } from 'src/npoolstore'
+import { appcoin, appcoindescription, coincurrency, utils, constant, goodbase, sdk } from 'src/npoolstore'
 
 import question from '../../assets/question.svg'
 
@@ -149,25 +149,15 @@ interface Query {
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 
-const getGood = () => {
-  if (_good.value) {
+const getPowerRental = () => {
+  if (_appPowerRental.value) {
     return
   }
   if (!appGoodID.value) {
     return
   }
-  good.getAppGood({
-    EntID: appGoodID.value,
-    Message: {
-      Error: {
-        Title: 'MSG_GET_GOOD',
-        Message: 'MSG_GET_GOOD_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, () => {
-    if (!_good.value) {
+  sdk.getAppPowerRental(appGoodID.value, () => {
+    if (!_appPowerRental.value) {
       // void router.push({ path: '/' })
     }
   })
@@ -176,10 +166,9 @@ const getGood = () => {
 const coin = appcoin.useAppCoinStore()
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
-const good = appgood.useAppGoodStore()
 const appGoodID = computed(() => query.value?.appGoodID || 'de78c770-7f77-4935-9976-0fbc5af5bbaf')
-const target = computed(() => good.good(undefined, appGoodID.value))
-const _good = computed(() => good.good(undefined, appGoodID.value))
+const target = computed(() => sdk.appPowerRental(appGoodID.value))
+const _appPowerRental = computed(() => sdk.appPowerRental(appGoodID.value))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()
@@ -187,10 +176,10 @@ const description = appcoindescription.useCoinDescriptionStore()
 onMounted(() => {
   if (!coin.coins(undefined).length) {
     getCoins(0, 100, () => {
-      getGood()
+      getPowerRental()
     })
   } else {
-    getGood()
+    getPowerRental()
   }
   if (!description.descriptions(undefined)?.length) {
     getDescriptions(0, 100)

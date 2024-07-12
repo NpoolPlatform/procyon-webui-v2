@@ -3,42 +3,42 @@
     <h2>{{ $t('MSG_PREMIERE_PRODUCTS') }}</h2>
     <div class='products'>
       <div
-        v-for='_good in goods' :key='_good.EntID'
+        v-for='good in visibleAppPowerRentals' :key='good.EntID'
         class='product content-glass dark-glass'
-        :class='[_good.DisplayColors?.[0] ? _good.DisplayColors?.[0]: ""]'
+        :class='[sdk.displayColor(good.AppGoodID, 0)?.length ? sdk.displayColor(good.AppGoodID, 0): ""]'
       >
         <div
           class='good-banner'
-          :style='{"background-image": "url(" + _good.GoodBanner + ")"}'
+          :style='{"background-image": "url(" + good.Banner + ")"}'
         />
         <div class='product-heading'>
-          <img class='icon' :src='_good.CoinLogo'>
-          <div v-if='_good?.DisplayNames?.length'>
-            <template v-for='(title, index) in _good?.DisplayNames?.slice(0, 1)' :key='index'>
-              <div v-html='t(title)' class='inner-container' />
+          <img class='icon' :src='good.CoinLogo'>
+          <div v-if='good?.DisplayNames?.length'>
+            <template v-for='(name, index) in [sdk.displayName(good.AppGoodID, 0), sdk.displayName(good.AppGoodID, 1)]' :key='index'>
+              <div v-html='t(name as string)' class='inner-container' />
             </template>
           </div>
           <div v-else>
-            {{ _good.GoodName }}
+            {{ good.GoodName }}
           </div>
         </div>
-        <template v-for='(desc, idx) in _good?.Descriptions?.slice(0, 2)' :key='idx'>
-          <div v-html='t(desc)' class='inner-container' />
+        <template v-for='(desc, idx) in [sdk.description(good.AppGoodID, 0), sdk.description(good.AppGoodID, 1), sdk.description(good.AppGoodID, 2)]' :key='idx'>
+          <div v-html='t(desc as string)' class='inner-container' />
         </template>
         <div class='product-button-box'>
           <button
-            :class='[showProductPage(_good) ? "in-active" : ""]'
-            @click='onPurchaseClick(_good)'
-            :disabled='showProductPage(_good)'
+            :class='[showProductPage(good) ? "in-active" : ""]'
+            @click='onPurchaseClick(good)'
+            :disabled='showProductPage(good)'
           >
-            {{ _good.GoodName?.toLowerCase().includes('btc') ? $t('MSG_BTC_LEARN_MORE') : $t(good.goodPurchaseBtnMsg(undefined, _good.EntID)) }}
+            {{ good.GoodName?.toLowerCase().includes('btc') ? $t('MSG_BTC_LEARN_MORE') : $t(getBtnMsg(good.AppGoodID)) }}
           </button>
           <button
-            :class='["alt", _good?.Descriptions?.[4]?.length > 0 ? "" : "in-active"]'
-            @click='onLearnMoreClick($t(_good?.Descriptions?.[4]))'
-            :disabled='_good?.Descriptions?.[4]?.length === 0'
+            :class='["alt", sdk.description(good.AppGoodID, 4).length ? "" : "in-active"]'
+            @click='onLearnMoreClick($t(sdk.description(good.AppGoodID, 4) as string))'
+            :disabled='!sdk.description(good.AppGoodID, 4)?.length'
           >
-            {{ _good.GoodName?.toLowerCase().includes('btc') ? $t('MSG_SIGN_UP_FOR_SEMINAR') : $t('MSG_LEARN_MORE_ON_OUR_BLOG') }}
+            {{ good.GoodName?.toLowerCase().includes('btc') ? $t('MSG_SIGN_UP_FOR_SEMINAR') : $t('MSG_LEARN_MORE_ON_OUR_BLOG') }}
           </button>
         </div>
       </div>
@@ -50,31 +50,48 @@
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { appgood } from 'src/npoolstore'
+import { sdk, apppowerrental } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
-const showProductPage = computed(() => (_good: appgood.Good) => !_good.EnableProductPage || !good.canBuy(undefined, _good.EntID) || !good.spotQuantity(undefined, _good.EntID))
+
+const appPowerRentals = computed(() => sdk.appPowerRentals.value)
+const visibleAppPowerRentals = computed(() => appPowerRentals.value?.filter((el) => el.Visible))
+
+const showProductPage = computed(() => (good: apppowerrental.AppPowerRental) => !good.EnableProductPage || !sdk.canBuy(good.AppGoodID) || !sdk.spotQuantity(good.AppGoodID))
 
 const router = useRouter()
-const onPurchaseClick = (_good: appgood.Good) => {
-  if (showProductPage.value(_good)) {
+const onPurchaseClick = (good: apppowerrental.AppPowerRental) => {
+  if (showProductPage.value(good)) {
     return
   }
   void router.push({
-    path: _good?.ProductPage?.length ? _good?.ProductPage : '/product/aleo',
+    path: good?.ProductPage?.length ? good?.ProductPage : '/product/aleo',
     query: {
-      appGoodID: _good.EntID
+      appGoodID: good.AppGoodID
     }
   })
 }
 
-const good = appgood.useAppGoodStore()
-const goods = computed(() => good.goods(undefined).filter((el) => el.Visible))
-
 const onLearnMoreClick = (url: string) => {
   window.open(url, '_blank')
 }
+
+const getBtnMsg = computed(() => (appGoodID: string) => {
+  const good = sdk.appPowerRental(appGoodID)
+  if (!good) {
+    return 'MSG_SOLD_OUT'
+  }
+  const now = Math.floor(Date.now() / 1000)
+  if (now > good?.SaleEndAt || Number(good?.GoodSpotQuantity) + Number(good?.AppGoodSpotQuantity) <= 0) {
+    return 'MSG_SOLD_OUT'
+  }
+  if (now < good?.SaleStartAt) {
+    return 'MSG_NOT_YET_AVAILABLE'
+  }
+
+  return 'MSG_PURCHASE'
+})
 
 </script>
 <style lang='sass' scoped>

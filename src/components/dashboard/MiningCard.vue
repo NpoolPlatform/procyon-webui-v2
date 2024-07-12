@@ -5,7 +5,7 @@
         <img :src='goodProfit?.CoinLogo'>
       </div>
       <h3 class='mining-title'>
-        <div v-html='target?.DisplayNames?.[2]? $t(target?.DisplayNames?.[2]) : goodProfit.GoodName' />
+        <div v-html='sdk.displayName(target?.AppGoodID as string, 2)?.length > 0? $t(sdk.displayName(target?.AppGoodID as string, 2)) : goodProfit.GoodName' />
       </h3>
     </div>
     <div class='top-line-summary'>
@@ -58,12 +58,12 @@
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
           <span class='value'>
             {{ goodProfit?.CoinPreSale ? '*' : utils.getLocaleString(parseFloat((goodProfit.Last24HoursInComing / deservedRatio * techServiceFee)?.toFixed(4))) }}
-            <span class='unit'>{{ goodProfit?.CoinUnit }} ({{ target?.TechnicalFeeRatio }}%)</span>
+            <span class='unit'>{{ goodProfit?.CoinUnit }} ({{ target?.TechniqueFeeRatio }}%)</span>
           </span>
         </div>
-        <div class='warning' v-if='target?.Descriptions?.[3] && target?.Descriptions?.[3]?.length > 0'>
+        <div class='warning' v-if='sdk.description(target?.AppGoodID as string, 3)?.length > 0'>
           <img src='font-awesome/warning.svg'>
-          <span v-html='$t(target?.Descriptions?.[3])' />
+          <span v-html='$t(sdk.description(target?.AppGoodID as string, 3))' />
         </div>
       </div>
     </q-slide-transition>
@@ -75,9 +75,9 @@
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
       <button
-        :class='["alt", showProductPage(target as appgood.Good) ? "" : "in-active"]'
-        :disabled='!showProductPage(target as appgood.Good)'
-        @click='onPurchaseClick(target as appgood.Good)'
+        :class='["alt", showProductPage(target as apppowerrental.AppPowerRental) ? "" : "in-active"]'
+        :disabled='!showProductPage(target as apppowerrental.AppPowerRental)'
+        @click='onPurchaseClick(target as apppowerrental.AppPowerRental)'
       >
         {{ $t('MSG_PURCHASE_CAPACITY') }}
       </button>
@@ -92,7 +92,7 @@ import { defineProps, toRef, computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { stringify } from 'csv-stringify/sync'
 import { useI18n } from 'vue-i18n'
-import { appgood, ledgerstatement, utils, user } from 'src/npoolstore'
+import { ledgerstatement, utils, user, apppowerrental, sdk } from 'src/npoolstore'
 
 import chevrons from '../../assets/chevrons.svg'
 // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -108,23 +108,23 @@ const goodProfit = toRef(props, 'profit')
 const short = ref(true)
 
 const logined = user.useLocalUserStore()
-const good = appgood.useAppGoodStore()
-const target = computed(() => good.good(undefined, goodProfit.value?.AppGoodID))
+
+const target = computed(() => sdk.appPowerRental(goodProfit.value?.AppGoodID))
 const coinUnit = computed(() => target.value?.CoinUnit as string)
-const techServiceFee = computed(() => good.techniqueFeeTatio(undefined, goodProfit.value?.AppGoodID) / 100)
+const techServiceFee = computed(() => target.value?.TechniqueFeeRatio as number / 100)
 const deservedRatio = computed(() => 1 - techServiceFee.value)
 
-const showProductPage = computed(() => (_good: appgood.Good) => _good.EnableProductPage && good.canBuy(undefined, _good.EntID) && good.spotQuantity(undefined, _good.EntID))
+const showProductPage = computed(() => (_good: apppowerrental.AppPowerRental) => _good.EnableProductPage && sdk.canBuy(_good.AppGoodID) && sdk.spotQuantity(_good.AppGoodID))
 
 const detail = ledgerstatement.useStatementStore()
 const miningDetails = computed(() => detail.miningRewards(undefined, logined.loginedUserID).filter((el) => el.AppGoodID === goodProfit?.value?.AppGoodID))
 
 const router = useRouter()
-const onPurchaseClick = (_good: appgood.Good) => {
+const onPurchaseClick = (_good: apppowerrental.AppPowerRental) => {
   void router.push({
     path: _good.ProductPage?.length ? _good.ProductPage : '/product/aleo',
     query: {
-      appGoodID: _good.EntID
+      appGoodID: _good.AppGoodID
     }
   })
 }
@@ -201,7 +201,7 @@ const onExportClick = () => {
   })
 
   const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), output], { type: 'text/plain;charset=utf-8' })
-  let name = target?.value?.DisplayNames?.[2] ? t(target?.value?.DisplayNames?.[2]) : goodProfit.value?.GoodName
+  let name = sdk.displayName(target?.value?.AppGoodID as string, 2)?.length > 0 ? t(sdk.displayName(target?.value?.AppGoodID as string, 2)) : goodProfit.value?.GoodName
   name = name.replace(/<.*?>/g, '')
   const filename = name + '-' + utils.formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)

@@ -27,7 +27,7 @@
 import { defineAsyncComponent, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { commission, achievement, user, appgood, notify, sdk } from 'src/npoolstore'
+import { commission, achievement, user, notify, sdk } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { locale } = useI18n({ useScope: 'global' })
@@ -53,7 +53,6 @@ const subUsername = computed(() => referral.value?.EmailAddress?.length ? referr
 
 const logined = user.useLocalUserStore()
 
-const good = appgood.useAppGoodStore()
 const getGoodCommissionValue = computed(() => (appGoodID: string) => {
   return _achievement.commissionAmount(undefined, logined?.User.EntID, undefined, appGoodID)
 })
@@ -71,7 +70,7 @@ const getGoodCommissionThreshold = computed(() => (appGoodID: string) => {
 })
 
 const visibleGoodAchievements = computed(() => referral.value?.Achievements?.filter((el) => {
-  return good.canBuy(undefined, el.AppGoodID) && good.enableSetCommission(undefined, el.AppGoodID) && !good.testOnly(undefined, el.AppGoodID)
+  return sdk.canBuy(el.AppGoodID) && sdk.appPowerRental(el.AppGoodID)?.EnableSetCommission && !sdk.appPowerRental(el.AppGoodID)?.TestOnly
 }))
 
 const backTimer = ref(-1)
@@ -152,9 +151,6 @@ const onSubmit = () => {
 }
 
 onMounted(() => {
-  if (!good.goods(undefined).length) {
-    sdk.getAppGoods(0, 0)
-  }
   if (!_achievement.achievements(undefined, logined.loginedUserID).length) {
     getAchievements(0, 100)
   }

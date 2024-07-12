@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, appGoodID as string)) }}</span>
+        <span class='number'>{{ utils.getLocaleString(sdk.priceString(appGoodID as string)) }}</span>
         <span class='unit'>{{ constant.PriceCoinName }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -53,7 +53,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span class='number'>{{ true ? 'TBD*' : utils.formatTime(target?.StartAt as number, 'YYYY/MM/DD') }}</span>
+        <span class='number'>{{ true ? 'TBD*' : utils.formatTime(target?.ServiceStartAt as number, 'YYYY/MM/DD') }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -61,11 +61,11 @@
           </p>
         </div>
       </div>
-      <div class='three-section' v-if='good.canBuy(undefined, target?.EntID as string)'>
+      <div class='three-section' v-if='sdk.canBuy(target?.AppGoodID as string)'>
         <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
-        <span class='number'>{{ good.saleEndDate(undefined, target?.EntID as string) }}</span>
+        <span class='number'>{{ sdk.saleEndDate(target?.AppGoodID as string) }}</span>
         <br>
-        <span class='unit'>{{ good.saleEndTime(undefined, target?.EntID as string) }} {{ $t("MSG_JST") }}</span>
+        <span class='unit'>{{ sdk.saleEndTime(target?.AppGoodID as string) }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -123,7 +123,7 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { appgood, notify, appcoin, appcoindescription, coincurrency, utils, constant, _locale } from 'src/npoolstore'
+import { appcoin, appcoindescription, coincurrency, utils, constant, _locale, sdk } from 'src/npoolstore'
 import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
 
 import question from '../../assets/question.svg'
@@ -144,26 +144,16 @@ const query = computed(() => route.query as unknown as Query)
 const locale = _locale.useLocaleStore()
 const __locale = computed(() => locale.locale())
 
-const getGood = () => {
-  if (_good.value) {
+const getAppPowerRental = () => {
+  if (_appPowerRental.value) {
     return
   }
   if (!appGoodID.value) {
     void router.push({ path: '/' })
     return
   }
-  good.getAppGood({
-    EntID: appGoodID.value,
-    Message: {
-      Error: {
-        Title: 'MSG_GET_GOOD',
-        Message: 'MSG_GET_GOOD_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, () => {
-    if (!_good.value) {
+  sdk.getAppPowerRental(appGoodID.value, () => {
+    if (!_appPowerRental.value) {
       void router.push({ path: '/' })
     }
   })
@@ -174,10 +164,9 @@ const coin = appcoin.useAppCoinStore()
 const coinUnit = 'ALEO'
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
-const good = appgood.useAppGoodStore()
 const appGoodID = computed(() => query.value?.appGoodID || coin.defaultGoodID(undefined, coinUnit))
-const target = computed(() => good.good(undefined, appGoodID.value as string))
-const _good = computed(() => good.good(undefined, appGoodID.value as string))
+const target = computed(() => sdk.appPowerRental(appGoodID.value as string))
+const _appPowerRental = computed(() => sdk.appPowerRental(appGoodID.value as string))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()
@@ -187,10 +176,10 @@ const router = useRouter()
 onMounted(() => {
   if (!coin.coins(undefined).length) {
     getCoins(0, 100, () => {
-      getGood()
+      getAppPowerRental()
     })
   } else {
-    getGood()
+    getAppPowerRental()
   }
   if (!description.descriptions(undefined)?.length) {
     getDescriptions(0, 100)

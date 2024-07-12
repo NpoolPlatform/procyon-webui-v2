@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ utils.getLocaleString(good.priceString(undefined, appGoodID as string)) }}</span>
+        <span class='number'>{{ utils.getLocaleString(sdk.priceString(appGoodID as string)) }}</span>
         <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.QuantityUnit ? $t(target?.QuantityUnit) : '' }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -53,7 +53,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_ORDER_EFFECTIVE') }}:</h4>
-        <span v-if='target?.ServiceStartAt === 0 || target?.StartMode === goodbase.StartMode.GoodStartModeTBD' class='number'>{{ $t("MSG_TBA") }}</span>
+        <span v-if='target?.ServiceStartAt === 0 || target?.GoodStartMode === goodbase.StartMode.GoodStartModeTBD' class='number'>{{ $t("MSG_TBA") }}</span>
         <div v-else>
           <span class='number'>{{ utils.formatTime(target?.ServiceStartAt as number, 'YYYY-MM-DD') }}</span>
           <br>
@@ -129,7 +129,7 @@ import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
-import { appgood, notify, appcoin, appcoindescription, coincurrency, utils, constant, goodbase } from 'src/npoolstore'
+import { appcoin, appcoindescription, coincurrency, utils, constant, goodbase, sdk } from 'src/npoolstore'
 
 import question from '../../assets/question.svg'
 
@@ -148,26 +148,16 @@ interface Query {
 const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 
-const getGood = () => {
-  if (_good.value) {
+const getPowerRental = () => {
+  if (appPowerRental.value) {
     return
   }
   if (!appGoodID.value) {
     void router.push({ path: '/' })
     return
   }
-  good.getAppGood({
-    EntID: appGoodID.value,
-    Message: {
-      Error: {
-        Title: 'MSG_GET_GOOD',
-        Message: 'MSG_GET_GOOD_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, () => {
-    if (!_good.value) {
+  sdk.getAppPowerRental(appGoodID.value, () => {
+    if (!appPowerRental.value) {
       void router.push({ path: '/' })
     }
   })
@@ -178,10 +168,9 @@ const coin = appcoin.useAppCoinStore()
 const coinUnit = 'ALEO'
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
-const good = appgood.useAppGoodStore()
 const appGoodID = computed(() => query.value?.appGoodID || coin.defaultGoodID(undefined, coinUnit))
-const target = computed(() => good.good(undefined, appGoodID.value as string))
-const _good = computed(() => good.good(undefined, appGoodID.value as string))
+const target = computed(() => sdk.appPowerRental(appGoodID.value as string))
+const appPowerRental = computed(() => sdk.appPowerRental(appGoodID.value as string))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()
@@ -191,10 +180,10 @@ const router = useRouter()
 onMounted(() => {
   if (!coin.coins(undefined).length) {
     getCoins(0, 100, () => {
-      getGood()
+      getPowerRental()
     })
   } else {
-    getGood()
+    getPowerRental()
   }
   if (!description.descriptions(undefined)?.length) {
     getDescriptions(0, 100)

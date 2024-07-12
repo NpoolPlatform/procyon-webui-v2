@@ -84,7 +84,7 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { appgood, notify, appcoin, appcoindescription, coincurrency } from 'src/npoolstore'
+import { appcoin, appcoindescription, coincurrency, sdk } from 'src/npoolstore'
 import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
 
 interface Query {
@@ -96,34 +96,23 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
-const good = appgood.useAppGoodStore()
-const target = computed(() => good.good(undefined, appGoodID.value as string))
+const target = computed(() => sdk.appPowerRental(appGoodID.value as string))
 
 // Use CoinUnit to find AppGoodID from AppDefaultGood
 const coinUnit = 'SMH'
 const appGoodID = computed(() => query.value?.appGoodID || coin.defaultGoodID(undefined, coinUnit))
-const _good = computed(() => good.good(undefined, appGoodID.value as string))
+const _appPowerRental = computed(() => sdk.appPowerRental(appGoodID.value as string))
 
-const getGood = () => {
-  if (_good.value) {
+const getAppPowerRental = () => {
+  if (_appPowerRental.value) {
     return
   }
   if (!appGoodID.value) {
     void router.push({ path: '/' })
     return
   }
-  good.getAppGood({
-    EntID: appGoodID.value,
-    Message: {
-      Error: {
-        Title: 'MSG_GET_GOOD',
-        Message: 'MSG_GET_GOOD_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, () => {
-    if (!_good.value) {
+  sdk.getAppPowerRental(appGoodID.value, () => {
+    if (!_appPowerRental.value) {
       void router.push({ path: '/' })
     }
   })
@@ -146,10 +135,10 @@ const currency = coincurrency.useCurrencyStore()
 onMounted(() => {
   if (!coin.coins(undefined).length) {
     getCoins(0, 100, () => {
-      getGood()
+      getAppPowerRental()
     })
   } else {
-    getGood()
+    getAppPowerRental()
   }
   if (!description.descriptions(undefined)?.length) {
     getDescriptions(0, 100)

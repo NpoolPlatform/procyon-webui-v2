@@ -91,7 +91,7 @@ import { computed, defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
-import { utils, notify, useraccount, useraccountbase, user, accountbase } from 'src/npoolstore'
+import { utils, notify, useraccountbase, user, sdk } from 'src/npoolstore'
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
@@ -100,8 +100,7 @@ const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
 const logined = user.useLocalUserStore()
-const account = useraccount.useUserAccountStore()
-const accounts = computed(() => account.accounts(undefined, logined.loginedUserID, undefined, accountbase.AccountUsedFor.UserWithdraw))
+const accounts = computed(() => sdk.userWithdrawAccounts(logined.loginedUserID, undefined))
 
 const accountLabel = (acc: useraccountbase.Account) => {
   let label = acc.CoinName
@@ -138,18 +137,7 @@ const onDeleteClick = () => {
     return
   }
 
-  account.deleteUserAccount({
-    ID: target.value.ID,
-    EntID: target.value.EntID,
-    Message: {
-      Error: {
-        Title: 'MSG_DELETE_WITHDRAW_ACCOUNT',
-        Message: 'MSG_DELETE_WITHDRAW_ACCOUNT_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, () => {
+  sdk.deleteUserAccount(target.value, () => {
     onMenuHide()
   })
 }
