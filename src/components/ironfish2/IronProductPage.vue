@@ -6,7 +6,7 @@
           <div class='product-page-icon'>
             <img :src='target?.CoinLogo'>
           </div>
-          <h1 v-html='sdk?.displayName(target?.AppGoodID as string, 1)?.length > 0 ? $t(sdk?.displayName(target?.AppGoodID as string, 1)) : target?.GoodName' />
+          <h1 v-html='sdk?.appPowerRental.displayName(target?.AppGoodID as string, 1)' />
         </div>
       </div>
       <!-- mobile start -->
@@ -15,7 +15,7 @@
           {{ $t('MSG_MINING_PURCHASE') }}
         </h3>
         <form action='javascript:void(0)' id='purchase'>
-          <div class='full-section' v-if='sdk.canBuy(target?.AppGoodID as string) '>
+          <div class='full-section' v-if='sdk.appPowerRental.canBuy(target?.AppGoodID as string) '>
             <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE2") }}</h4>
             <span class='number'>{{ remainDays }}</span>
             <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -42,7 +42,7 @@
           />
           <div class='warning iron-fish-warning' v-if='showIronFishWarning && target?.Descriptions?.[2]'>
             <img src='font-awesome/warning.svg'>
-            <span v-html='$t(sdk.description(target?.AppGoodID as string, 2))' />
+            <span v-html='$t(sdk.appPowerRental.description(target?.AppGoodID as string, 2))' />
           </div>
           <br>
           <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
@@ -68,7 +68,7 @@
               label='MSG_IRON_FISH_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target?.AppGoodPurchasable || !sdk.canBuy(target?.AppGoodID as string) || sdk.appGoodPurchaseLimit(target?.AppGoodID) <= 0'
+              :disabled='submitting || !(target?.AppGoodPurchasable && target?.GoodPurchasable) || !sdk.appPowerRental.canBuy(target?.AppGoodID as string) || sdk.appPowerRental.purchaseLimit(target?.AppGoodID) <= 0'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -93,7 +93,7 @@
             {{ $t('MSG_MINING_PURCHASE') }}
           </h3>
           <form action='javascript:void(0)' id='purchase'>
-            <div class='full-section' v-if='sdk.canBuy(target?.AppGoodID as string)'>
+            <div class='full-section' v-if='sdk.appPowerRental.canBuy(target?.AppGoodID as string)'>
               <h4>{{ $t("MSG_IRON_FISH_SALE_END_DATE2") }}</h4>
               <span class='number'>{{ remainDays }}</span>
               <span class='unit'> {{ $t("MSG_DAYS") }} </span>
@@ -119,7 +119,7 @@
             />
             <div class='warning iron-fish-warning' v-if='showIronFishWarning && target?.Descriptions?.[2]'>
               <img src='font-awesome/warning.svg'>
-              <span v-html='$t(sdk.description(target?.AppGoodID as string, 2))' />
+              <span v-html='$t(sdk.appPowerRental.description(target?.AppGoodID as string, 2))' />
             </div>
             <br>
             <h4>{{ $t('MSG_PAYMENT_METHOD') }}</h4>
@@ -145,7 +145,7 @@
                 label='MSG_IRON_FISH_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !target?.AppGoodPurchasable || !sdk.canBuy(target?.AppGoodID as string) || sdk.appGoodPurchaseLimit(target?.AppGoodID) <= 0'
+                :disabled='submitting || !(target?.AppGoodPurchasable && target?.GoodPurchasable) || !sdk.appPowerRental.canBuy(target?.AppGoodID as string) || sdk.appPowerRental.purchaseLimit(target?.AppGoodID) <= 0'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -191,11 +191,11 @@ const router = useRouter()
 const logined = user.useLocalUserStore()
 const general = ledger.useLedgerStore()
 
-const target = computed(() => sdk.appPowerRental(appGoodID.value))
-const total = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
+const target = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value))
+const total = computed(() => sdk.appPowerRental.purchaseLimit(appGoodID.value))
 
 const coin = appcoin.useAppCoinStore()
-const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinENV))
+const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
 
 const defaultCoinTypeID = computed(() => {
   return coins.value?.length > 0 ? coins.value?.[0].CoinTypeID : undefined as unknown as string
@@ -203,7 +203,7 @@ const defaultCoinTypeID = computed(() => {
 const selectedCoinID = ref(defaultCoinTypeID.value)
 const paymentCoin = computed(() => coin.coin(undefined, selectedCoinID.value))
 
-const showIronFishWarning = computed(() => sdk.description(target.value?.AppGoodID as string, 2)?.length > 0)
+const showIronFishWarning = computed(() => sdk.appPowerRental.description(target.value?.AppGoodID as string, 2)?.length > 0)
 const showRateTip = computed(() => {
   return paymentCoin.value?.Unit?.length &&
         !paymentCoin.value?.Unit?.includes(constant.PriceCoinName) &&

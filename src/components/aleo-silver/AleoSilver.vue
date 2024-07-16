@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ utils.getLocaleString(sdk.priceString(appGoodID as string)) }}</span>
+        <span class='number'>{{ utils.getLocaleString(sdk.appPowerRental.priceString(appGoodID as string)) }}</span>
         <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.QuantityUnit ? $t(target?.QuantityUnit) : '' }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_LEARN_MORE') }}</span>
@@ -156,7 +156,7 @@ const getPowerRental = () => {
     void router.push({ path: '/' })
     return
   }
-  sdk.getAppPowerRental(appGoodID.value, () => {
+  sdk.appPowerRental.getAppPowerRental(appGoodID.value, () => {
     if (!appPowerRental.value) {
       void router.push({ path: '/' })
     }
@@ -169,8 +169,8 @@ const coinUnit = 'ALEO'
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const appGoodID = computed(() => query.value?.appGoodID || coin.defaultGoodID(undefined, coinUnit))
-const target = computed(() => sdk.appPowerRental(appGoodID.value as string))
-const appPowerRental = computed(() => sdk.appPowerRental(appGoodID.value as string))
+const target = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value as string))
+const appPowerRental = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value as string))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()

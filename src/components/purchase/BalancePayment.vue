@@ -59,9 +59,9 @@
               <img src='font-awesome/warning.svg'>
               <span>{{ $t('MSG_COIN_USDT_EXCHANGE_RATE_TIP', { COIN_NAME: paymentCoin?.Unit }) }}</span>
             </div>
-            <div class='warning warning-pink' v-if='sdk.description(target?.AppGoodID as string, 2)?.length > 0'>
+            <div class='warning warning-pink' v-if='sdk.appPowerRental.description(target?.AppGoodID as string, 2)?.length > 0'>
               <img src='font-awesome/warning.svg'>
-              <span v-html='$t(sdk.description(target?.AppGoodID as string, 2))' />
+              <span v-html='$t(sdk.appPowerRental.description(target?.AppGoodID as string, 2))' />
             </div>
             <div class='warning warning-pink' v-if='insufficientFunds'>
               <img src='font-awesome/warning.svg'>
@@ -72,7 +72,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='!(target?.AppGoodPurchasable && target?.GoodPurchasable) || !sdk.canBuy(target?.AppGoodID) || reachedPurchaseLimit || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
+                :disabled='!(target?.AppGoodPurchasable && target?.GoodPurchasable) || !sdk.appPowerRental.canBuy(target?.AppGoodID) || reachedPurchaseLimit || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -116,8 +116,8 @@ const coin = appcoin.useAppCoinStore()
 const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
 const paymentCoin = computed(() => coin.coin(undefined, coinTypeID.value))
 
-const target = computed(() => sdk.appPowerRental(appGoodID.value))
-const purchaseLimit = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
+const target = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value))
+const purchaseLimit = computed(() => sdk.appPowerRental.purchaseLimit(appGoodID.value))
 const logined = user.useLocalUserStore()
 
 const reachedPurchaseLimit = computed(() => (purchaseLimit.value + Number(purchaseAmount.value)) > Number(target?.value?.MaxUserAmount))
@@ -127,7 +127,7 @@ const general = ledger.useLedgerStore()
 const balance = computed(() => parseFloat((Number(general.coinBalance(undefined, logined.loginedUserID as string, coinTypeID.value)) * selectedCoinCurrency.value).toFixed(4)))
 
 const purchaseAmount = ref(query.value.purchaseAmount) // 购买数量
-const paymentAmount = computed(() => Number(sdk.appPowerRental(appGoodID.value)?.UnitPrice) * purchaseAmount.value) // 支付金额
+const paymentAmount = computed(() => Number(sdk.appPowerRental.appPowerRental(appGoodID.value)?.UnitPrice) * purchaseAmount.value) // 支付金额
 const usdToOtherAmount = computed(() => parseFloat((Math.ceil(paymentAmount.value / selectedCoinCurrency.value * 10000) / 10000).toFixed(4)))
 const usedToOtherAmountISNaN = computed(() => isNaN(usdToOtherAmount.value))
 const insufficientFunds = computed(() => balance.value < paymentAmount.value)
@@ -215,7 +215,7 @@ onMounted(() => {
     getGenerals(0, 100)
   }
   if (!target.value) {
-    sdk.getAppPowerRental(appGoodID.value, () => {
+    sdk.appPowerRental.getAppPowerRental(appGoodID.value, () => {
       onPurchaseAmountFocusOut()
     })
   }

@@ -5,7 +5,7 @@
       <div
         v-for='good in visibleAppPowerRentals' :key='good.EntID'
         class='product content-glass dark-glass'
-        :class='[sdk.displayColor(good.AppGoodID, 0)]'
+        :class='[sdk.appPowerRental.displayColor(good.AppGoodID, 0)]'
       >
         <div
           class='good-banner'
@@ -14,15 +14,15 @@
         <div class='product-heading'>
           <img class='icon' :src='good.CoinLogo'>
           <div v-if='good?.DisplayNames?.length'>
-            <template v-for='(name, index) in [sdk.displayName(good.AppGoodID, 0)]' :key='index'>
+            <template v-for='(name, index) in [sdk.appPowerRental.displayName(good.AppGoodID, 0)]' :key='index'>
               <div v-html='$t(name as string)' class='inner-container' />
             </template>
           </div>
           <div v-else>
-            {{ good.GoodName }}
+            {{ good.AppGoodName }}
           </div>
         </div>
-        <template v-for='(desc, idx) in [sdk.description(good.AppGoodID, 0), sdk.description(good.AppGoodID, 1)]' :key='idx'>
+        <template v-for='(desc, idx) in [sdk.appPowerRental.description(good.AppGoodID, 0), sdk.appPowerRental.description(good.AppGoodID, 1)]' :key='idx'>
           <div v-html='$t(desc as string)' class='inner-container' />
         </template>
         <div class='product-button-box'>
@@ -31,14 +31,14 @@
             @click='onPurchaseClick(good)'
             :disabled='showProductPage(good)'
           >
-            {{ good.GoodName?.toLowerCase().includes('btc') ? $t('MSG_BTC_LEARN_MORE') : $t(getBtnMsg(good.AppGoodID)) }}
+            {{ good.AppGoodName?.toLowerCase().includes('btc') ? $t('MSG_BTC_LEARN_MORE') : $t(getBtnMsg(good.AppGoodID)) }}
           </button>
           <button
-            :class='["alt", sdk.description(good.AppGoodID, 4).length ? "" : "in-active"]'
-            @click='onLearnMoreClick($t(sdk.description(good.AppGoodID, 4) as string))'
-            :disabled='!sdk.description(good.AppGoodID, 4)?.length'
+            :class='["alt", sdk.appPowerRental.description(good.AppGoodID, 4).length ? "" : "in-active"]'
+            @click='onLearnMoreClick($t(sdk.appPowerRental.description(good.AppGoodID, 4) as string))'
+            :disabled='!sdk.appPowerRental.description(good.AppGoodID, 4)?.length'
           >
-            {{ good.GoodName?.toLowerCase().includes('btc') ? $t('MSG_SIGN_UP_FOR_SEMINAR') : $t('MSG_LEARN_MORE_ON_OUR_BLOG') }}
+            {{ good.AppGoodName?.toLowerCase().includes('btc') ? $t('MSG_SIGN_UP_FOR_SEMINAR') : $t('MSG_LEARN_MORE_ON_OUR_BLOG') }}
           </button>
         </div>
       </div>
@@ -51,10 +51,10 @@ import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { sdk, apppowerrental } from 'src/npoolstore'
 
-const appPowerRentals = computed(() => sdk.appPowerRentals.value)
+const appPowerRentals = computed(() => sdk.appPowerRental.appPowerRentals.value)
 const visibleAppPowerRentals = computed(() => appPowerRentals.value?.filter((el) => el.Visible))
 
-const showProductPage = computed(() => (good: apppowerrental.AppPowerRental) => !good.EnableProductPage || !sdk.canBuy(good.AppGoodID) || !sdk.spotQuantity(good.AppGoodID))
+const showProductPage = computed(() => (good: apppowerrental.AppPowerRental) => !good.EnableProductPage || !sdk.appPowerRental.canBuy(good.AppGoodID) || !sdk.appPowerRental.spotQuantity(good.AppGoodID))
 
 const router = useRouter()
 const onPurchaseClick = (good: apppowerrental.AppPowerRental) => {
@@ -74,7 +74,7 @@ const onLearnMoreClick = (url: string) => {
 }
 
 const getBtnMsg = computed(() => (appGoodID: string) => {
-  const good = sdk.appPowerRental(appGoodID)
+  const good = sdk.appPowerRental.appPowerRental(appGoodID)
   if (!good) {
     return 'MSG_SOLD_OUT'
   }
