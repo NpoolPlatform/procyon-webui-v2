@@ -5,7 +5,7 @@
       <div
         v-for='good in visibleAppPowerRentals' :key='good.EntID'
         class='product content-glass dark-glass'
-        :class='[sdk.displayColor(good.AppGoodID, 0)?.length ? sdk.displayColor(good.AppGoodID, 0): ""]'
+        :class='[sdk.displayColor(good.AppGoodID, 0)]'
       >
         <div
           class='good-banner'
@@ -14,16 +14,16 @@
         <div class='product-heading'>
           <img class='icon' :src='good.CoinLogo'>
           <div v-if='good?.DisplayNames?.length'>
-            <template v-for='(name, index) in [sdk.displayName(good.AppGoodID, 0), sdk.displayName(good.AppGoodID, 1)]' :key='index'>
-              <div v-html='t(name as string)' class='inner-container' />
+            <template v-for='(name, index) in [sdk.displayName(good.AppGoodID, 0)]' :key='index'>
+              <div v-html='$t(name as string)' class='inner-container' />
             </template>
           </div>
           <div v-else>
             {{ good.GoodName }}
           </div>
         </div>
-        <template v-for='(desc, idx) in [sdk.description(good.AppGoodID, 0), sdk.description(good.AppGoodID, 1), sdk.description(good.AppGoodID, 2)]' :key='idx'>
-          <div v-html='t(desc as string)' class='inner-container' />
+        <template v-for='(desc, idx) in [sdk.description(good.AppGoodID, 0), sdk.description(good.AppGoodID, 1)]' :key='idx'>
+          <div v-html='$t(desc as string)' class='inner-container' />
         </template>
         <div class='product-button-box'>
           <button
@@ -49,11 +49,7 @@
 <script setup lang='ts'>
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { sdk, apppowerrental } from 'src/npoolstore'
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const { t } = useI18n({ useScope: 'global' })
 
 const appPowerRentals = computed(() => sdk.appPowerRentals.value)
 const visibleAppPowerRentals = computed(() => appPowerRentals.value?.filter((el) => el.Visible))
