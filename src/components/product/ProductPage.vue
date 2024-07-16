@@ -62,7 +62,7 @@
               label='MSG_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target?.AppGoodPurchasable || !sdk.canBuy(target?.AppGoodID) || sdk.appGoodPurchaseLimit(target?.AppGoodID) <= 0'
+              :disabled='submitting || !(target?.AppGoodPurchasable && target?.GoodPurchasable) || !sdk.canBuy(target?.AppGoodID) || sdk.appGoodPurchaseLimit(target?.AppGoodID) <= 0'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
@@ -133,7 +133,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 class='submit-btn'
-                :disabled='submitting || !target?.AppGoodPurchasable || !sdk.canBuy(target?.AppGoodID) || sdk.appGoodPurchaseLimit(target?.AppGoodID) <= 0'
+                :disabled='submitting || !(target?.AppGoodPurchasable && target?.GoodPurchasable) || !sdk.canBuy(target?.AppGoodID) || sdk.appGoodPurchaseLimit(target?.AppGoodID) <= 0'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -161,7 +161,7 @@ const WaitingBtn = defineAsyncComponent(() => import('src/components/button/Wait
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 interface Props {
-  appGoodID: string
+  appGoodId: string
   projectClass: string
   bgImg: string
   customizeInfo?: boolean
@@ -169,7 +169,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const appGoodID = toRef(props, 'appGoodID')
+const appGoodId = toRef(props, 'appGoodId')
 const projectClass = toRef(props, 'projectClass')
 const bgImg = toRef(props, 'bgImg')
 const customizeInfo = toRef(props, 'customizeInfo')
@@ -180,8 +180,8 @@ const router = useRouter()
 const logined = user.useLocalUserStore()
 const general = ledger.useLedgerStore()
 
-const target = computed(() => sdk.appPowerRental(appGoodID.value))
-const total = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
+const target = computed(() => sdk.appPowerRental(appGoodId.value))
+const total = computed(() => sdk.appGoodPurchaseLimit(appGoodId.value))
 
 const coin = appcoin.useAppCoinStore()
 const coins = computed(() => coin.payableCoins(undefined).filter((el) => {
@@ -221,7 +221,7 @@ const onPurchaseClick = () => {
       path: '/signin',
       query: {
         target: '/product/aleo',
-        appGoodID: target.value?.AppGoodID,
+        appGoodId: target.value?.AppGoodID,
         purchaseAmount: myPurchaseAmount.value
       }
     })
@@ -235,7 +235,7 @@ const onPurchaseClick = () => {
   void router.push({
     path: '/payment',
     query: {
-      appGoodID: target.value?.AppGoodID,
+      appGoodId: target.value?.AppGoodID,
       coinTypeID: selectedCoinID.value,
       purchaseAmount: myPurchaseAmount.value
     }

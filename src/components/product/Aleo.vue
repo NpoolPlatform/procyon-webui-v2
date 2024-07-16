@@ -1,6 +1,6 @@
 <template>
   <ProductPage
-    :app-good-i-d='(appGoodID as string)'
+    :app-good-id='(appGoodID as string)'
     :purchase-amount='purchaseAmount'
     project-class='project-aleo'
     bg-img='product/aleo/aleo-banner.jpg'
