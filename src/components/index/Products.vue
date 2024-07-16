@@ -19,14 +19,14 @@ import { sdk } from 'src/npoolstore'
 
 const CardSmall = defineAsyncComponent(() => import('src/components/product/CardSmall.vue'))
 
-const appPowerRentals = computed(() => sdk.appPowerRentals.value)
+const appPowerRentals = computed(() => sdk.appPowerRental.appPowerRentals.value)
 
 onMounted(() => {
   if (appPowerRentals.value.length > 0) {
     return
   }
   if (!appPowerRentals.value.length) {
-    sdk.getAppPowerRentals(0, 0)
+    sdk.appPowerRental.getAppPowerRentals(0, 0)
   }
 })
 

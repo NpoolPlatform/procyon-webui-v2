@@ -9,7 +9,7 @@
     <template #product-info>
       <div class='three-section'>
         <h4>{{ $t('MSG_PRICE') }}:</h4>
-        <span class='number'>{{ utils.getLocaleString(sdk.priceString(appGoodID as string)) }}</span>
+        <span class='number'>{{ utils.getLocaleString(sdk.appPowerRental.priceString(appGoodID as string)) }}</span>
         <span class='unit'>{{ constant.PriceCoinName }} / {{ target?.QuantityUnit ? $t(target?.QuantityUnit) : '' }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
@@ -66,11 +66,11 @@
           </p>
         </div>
       </div>
-      <div class='three-section' v-if='sdk.canBuy(target?.AppGoodID as string)'>
+      <div class='three-section' v-if='sdk.appPowerRental.canBuy(target?.AppGoodID as string)'>
         <h4>{{ $t("MSG_SALE_END_DATE") }}</h4>
-        <span class='number'>{{ sdk.saleEndDate(target?.AppGoodID as string, 'YYYY-MM-DD') }}</span>
+        <span class='number'>{{ sdk.appPowerRental.saleEndDate(target?.AppGoodID as string, 'YYYY-MM-DD') }}</span>
         <br>
-        <span class='unit'>{{ sdk.saleEndTime(target?.AppGoodID as string, 'HH:mm:ss') }} {{ $t("MSG_JST") }}</span>
+        <span class='unit'>{{ sdk.appPowerRental.saleEndTime(target?.AppGoodID as string, 'HH:mm:ss') }} {{ $t("MSG_JST") }}</span>
         <div class='tooltip'>
           <img class='more-info' src='font-awesome/question.svg'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
           <p class='tooltip-text'>
@@ -156,7 +156,7 @@ const getPowerRental = () => {
   if (!appGoodID.value) {
     return
   }
-  sdk.getAppPowerRental(appGoodID.value, () => {
+  sdk.appPowerRental.getAppPowerRental(appGoodID.value, () => {
     if (!_appPowerRental.value) {
       // void router.push({ path: '/' })
     }
@@ -167,8 +167,8 @@ const coin = appcoin.useAppCoinStore()
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
 const appGoodID = computed(() => query.value?.appGoodID || 'de78c770-7f77-4935-9976-0fbc5af5bbaf')
-const target = computed(() => sdk.appPowerRental(appGoodID.value))
-const _appPowerRental = computed(() => sdk.appPowerRental(appGoodID.value))
+const target = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value))
+const _appPowerRental = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()

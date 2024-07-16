@@ -177,9 +177,9 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const appGoodID = computed(() => query.value.appGoodID)
 
-const appPowerRental = computed(() => sdk.appPowerRental(appGoodID.value))
+const appPowerRental = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value))
 
-const total = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
+const total = computed(() => sdk.appPowerRental.purchaseLimit(appGoodID.value))
 
 const usedFor = ref(appcoindescription.CoinDescriptionUsedFor.ProductPage)
 const coindescription = appcoindescription.useCoinDescriptionStore()
@@ -335,7 +335,7 @@ const onSubmit = throttle(() => {
 const requiredAppGoods = computed(() => sdk.requiredAppGoods.value)
 onMounted(() => {
   if (!appPowerRental.value) {
-    sdk.getAppPowerRental(appGoodID.value, () => {
+    sdk.appPowerRental.getAppPowerRental(appGoodID.value, () => {
       // TODO
     })
   }

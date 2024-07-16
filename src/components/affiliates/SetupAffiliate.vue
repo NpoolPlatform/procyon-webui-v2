@@ -70,7 +70,7 @@ const getGoodCommissionThreshold = computed(() => (appGoodID: string) => {
 })
 
 const visibleGoodAchievements = computed(() => referral.value?.Achievements?.filter((el) => {
-  return sdk.canBuy(el.AppGoodID) && sdk.appPowerRental(el.AppGoodID)?.EnableSetCommission && !sdk.appPowerRental(el.AppGoodID)?.TestOnly
+  return sdk.appPowerRental.canBuy(el.AppGoodID) && sdk.appPowerRental.appPowerRental(el.AppGoodID)?.EnableSetCommission && !sdk.appPowerRental.appPowerRental(el.AppGoodID)?.TestOnly
 }))
 
 const backTimer = ref(-1)

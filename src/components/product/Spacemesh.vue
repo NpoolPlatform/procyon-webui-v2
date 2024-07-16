@@ -96,12 +96,12 @@ const route = useRoute()
 const query = computed(() => route.query as unknown as Query)
 const purchaseAmount = computed(() => query.value.purchaseAmount)
 
-const target = computed(() => sdk.appPowerRental(appGoodID.value as string))
+const target = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value as string))
 
 // Use CoinUnit to find AppGoodID from AppDefaultGood
 const coinUnit = 'SMH'
 const appGoodID = computed(() => query.value?.appGoodID || coin.defaultGoodID(undefined, coinUnit))
-const _appPowerRental = computed(() => sdk.appPowerRental(appGoodID.value as string))
+const _appPowerRental = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value as string))
 
 const getAppPowerRental = () => {
   if (_appPowerRental.value) {
@@ -111,7 +111,7 @@ const getAppPowerRental = () => {
     void router.push({ path: '/' })
     return
   }
-  sdk.getAppPowerRental(appGoodID.value, () => {
+  sdk.appPowerRental.getAppPowerRental(appGoodID.value, () => {
     if (!_appPowerRental.value) {
       void router.push({ path: '/' })
     }

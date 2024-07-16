@@ -11,7 +11,7 @@ const appPowerRentals = computed(() => sdk.powerRentals.value)
 
 onMounted(() => {
   if (!appPowerRentals.value?.length) {
-    sdk.getAppPowerRentals(0, 0)
+    sdk.appPowerRental.getAppPowerRentals(0, 0)
   }
   getApplication()
 })

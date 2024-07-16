@@ -42,7 +42,7 @@
             <td>
               <span
                 class='aff-product'
-                v-html='$t(sdk.displayName(_good.AppGoodID, 4))'
+                v-html='$t(sdk.appPowerRental.displayName(_good.AppGoodID, 4) as string)'
               />
             </td>
             <td v-if='_good.Editing'>
@@ -55,8 +55,8 @@
               <span class='aff-number'>{{ _good.CommissionValue }}<span class='unit'>%</span></span>
               <button
                 v-if='child'
-                :class='["alt", !sdk.appPowerRental(_good.AppGoodID)?.EnableSetCommission || !sdk.canBuy(_good.AppGoodID) ? "in-active" : ""]'
-                :disabled='!sdk.appPowerRental(_good.AppGoodID)?.EnableSetCommission || !sdk.canBuy(_good.AppGoodID)'
+                :class='["alt", !sdk.appPowerRental.enableSetCommission(_good.AppGoodID) || !sdk.appPowerRental.canBuy(_good.AppGoodID) ? "in-active" : ""]'
+                :disabled='!sdk.appPowerRental.enableSetCommission(_good.AppGoodID) || !sdk.appPowerRental.canBuy(_good.AppGoodID)'
                 @click='() => _good.Editing = true'
               >
                 {{ $t('MSG_SET') }}
@@ -100,7 +100,7 @@
                 <td>
                   <span
                     class='aff-product'
-                    v-html='$t(sdk.displayName(__commission.AppGoodID, 4))'
+                    v-html='$t(sdk.appPowerRental.displayName(__commission.AppGoodID, 4) as string)'
                   />
                 </td>
                 <td>
@@ -157,10 +157,10 @@ const logined = user.useLocalUserStore()
 const _achievement = achievement.useAchievementStore()
 const _goodAchievements = ref(computed(() => Array.from(referral.value?.Achievements.filter((el) => {
   return (
-    sdk.canBuy(el.AppGoodID) ||
-    sdk.appPowerRental(el.AppGoodID)?.Visible ||
-    sdk.spotQuantity(el.AppGoodID)
-  ) && !sdk.appPowerRental(el.AppGoodID)?.TestOnly
+    sdk.appPowerRental.canBuy(el.AppGoodID) ||
+    sdk.appPowerRental.appPowerRental(el.AppGoodID)?.Visible ||
+    sdk.appPowerRental.spotQuantity(el.AppGoodID)
+  ) && !sdk.appPowerRental.appPowerRental(el.AppGoodID)?.TestOnly
 })).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
   return {
     ...el,
