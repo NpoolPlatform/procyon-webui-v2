@@ -72,7 +72,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='!target?.AppGoodPurchasable || !sdk.canBuy(target?.AppGoodID) || purchaseLimited || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
+                :disabled='!(target?.AppGoodPurchasable && target?.GoodPurchasable) || !sdk.canBuy(target?.AppGoodID) || reachedPurchaseLimit || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
@@ -113,18 +113,14 @@ const appGoodID = computed(() => query.value.appGoodID)
 const coinTypeID = ref(query.value.coinTypeID)
 
 const coin = appcoin.useAppCoinStore()
-const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinENV))
+const coins = computed(() => coin.payableCoins().filter((el) => el.ENV === target.value?.CoinEnv))
 const paymentCoin = computed(() => coin.coin(undefined, coinTypeID.value))
 
 const target = computed(() => sdk.appPowerRental(appGoodID.value))
 const purchaseLimit = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
 const logined = user.useLocalUserStore()
 
-const purchaseLimited = computed(() => {
-  const purchasedUnits = sdk.purchasedUnits(appGoodID.value)
-  return purchasedUnits >= Number(target?.value?.MaxUserAmount) ||
-        (purchasedUnits + Number(purchaseAmount.value)) > Number(target?.value?.MaxUserAmount)
-})
+const reachedPurchaseLimit = computed(() => (purchaseLimit.value + Number(purchaseAmount.value)) > Number(target?.value?.MaxUserAmount))
 
 const selectedCoinCurrency = ref(1) // 币种汇率
 const general = ledger.useLedgerStore()
@@ -143,7 +139,7 @@ const message = computed(() => {
   if (purchaseAmount.value?.toString().includes('.')) {
     return t('MSG_NOT_SUPPORT_FLOAT_VALUE')
   }
-  if (purchaseLimited.value) {
+  if (reachedPurchaseLimit.value) {
     return t('MSG_USER_TOTAL_PURCHASE_LIMIT', { MAX: parseFloat(target.value?.MaxUserAmount || '0') })
   }
   return ''
@@ -157,7 +153,7 @@ const onPurchaseAmountFocusOut = () => {
   purchaseAmountError.value = purchaseAmount.value <= 0 ||
                               purchaseAmount.value > purchaseLimit.value ||
                               purchaseAmount.value?.toString().includes('.') ||
-                              purchaseLimited.value
+                              reachedPurchaseLimit.value
 }
 
 const submitting = ref(false)
@@ -172,8 +168,7 @@ const onPurchaseClick = () => {
     Units: `${purchaseAmount.value}`,
     Balances: [{ CoinTypeID: coinTypeID.value, Amount: `${usdToOtherAmount.value}` } as PaymentBalance],
     InvestmentType: order.InvestmentType.FullPayment,
-    CouponIDs: [],
-    FeeAppGoodIDs: [],
+    FeeAppGoodIDs: target.value?.Requireds?.map((el) => el.RequiredAppGoodID) as Array<string>,
     AppGoodStockID: target.value?.AppGoodStockID as string
   }, (error: boolean) => {
     submitting.value = false
@@ -239,7 +234,7 @@ onMounted(() => {
 
   sdk.resetPowerRentalOrders()
   if (!sdk.powerRentalOrders.value.length) {
-    sdk.getPowerRentalOrders(0, 0)
+    sdk.getMyPowerRentalOrders(0, 0)
   }
 
   getCoinCurrency(coinTypeID.value)

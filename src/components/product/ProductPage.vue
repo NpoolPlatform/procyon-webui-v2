@@ -161,7 +161,7 @@ const WaitingBtn = defineAsyncComponent(() => import('src/components/button/Wait
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 interface Props {
-  appGoodId: string
+  appGoodID: string
   projectClass: string
   bgImg: string
   customizeInfo?: boolean
@@ -169,7 +169,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const appGoodId = toRef(props, 'appGoodId')
+const appGoodID = toRef(props, 'appGoodID')
 const projectClass = toRef(props, 'projectClass')
 const bgImg = toRef(props, 'bgImg')
 const customizeInfo = toRef(props, 'customizeInfo')
@@ -180,12 +180,12 @@ const router = useRouter()
 const logined = user.useLocalUserStore()
 const general = ledger.useLedgerStore()
 
-const target = computed(() => sdk.appPowerRental(appGoodId.value))
-const total = computed(() => sdk.appGoodPurchaseLimit(appGoodId.value))
+const target = computed(() => sdk.appPowerRental(appGoodID.value))
+const total = computed(() => sdk.appGoodPurchaseLimit(appGoodID.value))
 
 const coin = appcoin.useAppCoinStore()
 const coins = computed(() => coin.payableCoins(undefined).filter((el) => {
-  return el.ENV === target.value?.CoinENV
+  return el.ENV === target.value?.CoinEnv
 }))
 
 const defaultCoinTypeID = computed(() => coins.value?.[0]?.CoinTypeID)
@@ -221,7 +221,7 @@ const onPurchaseClick = () => {
       path: '/signin',
       query: {
         target: '/product/aleo',
-        appGoodId: target.value?.AppGoodID,
+        appGoodID: target.value?.AppGoodID,
         purchaseAmount: myPurchaseAmount.value
       }
     })
@@ -235,7 +235,7 @@ const onPurchaseClick = () => {
   void router.push({
     path: '/payment',
     query: {
-      appGoodId: target.value?.AppGoodID,
+      appGoodID: target.value?.AppGoodID,
       coinTypeID: selectedCoinID.value,
       purchaseAmount: myPurchaseAmount.value
     }

@@ -8,14 +8,10 @@ const { t } = useI18n({ useScope: 'global' })
 
 const application = app.useApplicationStore()
 const appPowerRentals = computed(() => sdk.powerRentals.value)
-const goodCoins = computed(() => sdk.goodCoins.value)
 
 onMounted(() => {
   if (!appPowerRentals.value?.length) {
     sdk.getAppPowerRentals(0, 0)
-  }
-  if (!goodCoins.value?.length) {
-    sdk.getGoodCoins(0, 0)
   }
   getApplication()
 })
