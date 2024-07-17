@@ -5,61 +5,42 @@
     :key='goodProfit.CoinTypeID'
     :profit='goodProfit'
   />
-  <!-- <SpaceMeshMockCard /> -->
 </template>
 
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
-import { IntervalKey } from 'src/const/const'
 import { MyGoodProfit } from 'src/localstore'
-import { appcoin, coincurrency, ledgerprofit, user, utils, apppowerrental, sdk } from 'src/npoolstore'
-import { GoodDurationType } from 'src/npoolstore/good/base'
+import { appcoin, coincurrency, utils, apppowerrental, sdk } from 'src/npoolstore'
 
 const MiningCard = defineAsyncComponent(() => import('src/components/dashboard/MiningCard.vue'))
-// const SpaceMeshMockCard = defineAsyncComponent(() => import('src/components/dashboard/SpacemeshMockCard.vue'))
 
 const currency = coincurrency.useCurrencyStore()
 const coin = appcoin.useAppCoinStore()
-const logined = user.useLocalUserStore()
 
 const getTBD = computed(() => (appGoodID: string) => {
-  return sdk.description(appGoodID, 5)?.length > 0 ? sdk.description(appGoodID, 5) : '*'
+  return sdk.appPowerRental.description(appGoodID, 5)?.length > 0 ? sdk.appPowerRental.description(appGoodID, 5) : '*'
 })
 
-const profit = ledgerprofit.useProfitStore()
-const goodProfits = computed(() => Array.from(profit.goodProfits(undefined, logined.loginedUserID)).map((el) => {
-  const _good = sdk.appPowerRental(el.AppGoodID) as apppowerrental.AppPowerRental
+const goodProfits = computed(() => Array.from(sdk.ledgerProfit.goodProfits(utils.IntervalKey.All)).map((el) => {
+  const _good = sdk.appPowerRental.appPowerRental(el.AppGoodID) as apppowerrental.AppPowerRental
   const now = Math.floor(Date.now() / 1000)
 
   const remain = now - _good?.ServiceStartAt >= 0 ? now - _good?.ServiceStartAt : 0
   const daysMined = Math.floor(remain / 24 / 60 / 60)
 
-  let durationDays = Number(el.MaxOrderDuration)
-  switch (el.DurationType) {
-    case GoodDurationType.GoodDurationByHour:
-      durationDays = durationDays / 24
-      break
-    case GoodDurationType.GoodDurationByDay:
-      break
-    case GoodDurationType.GoodDurationByMonth:
-      durationDays = durationDays * 30
-      break
-    case GoodDurationType.GoodDurationByYear:
-      durationDays = durationDays * 365
-      break
-  }
+  const durationDays = Number(_good?.MaxOrderDurationSeconds / 60 / 60 / 24)
 
   const daysRemaining = durationDays - daysMined > 0 ? durationDays - daysMined : 0
   return {
     ...el,
     Units: el.Units,
     CoinPreSale: coin.preSale(undefined, el.CoinTypeID),
-    TotalInComing: profit.totalIncoming(undefined, logined.loginedUserID, el.CoinTypeID, el.AppGoodID),
-    TotalUSDInComing: currency.currency(el.CoinTypeID) * profit.totalIncoming(undefined, logined.loginedUserID, el.CoinTypeID, el.AppGoodID),
-    Last24HoursInComing: profit.intervalGoodIncoming(undefined, logined.loginedUserID, el.CoinTypeID, el.AppGoodID, IntervalKey.LastDay),
-    Last24HoursUSDInComing: currency.currency(el.CoinTypeID) * profit.intervalGoodIncoming(undefined, logined.loginedUserID, el.CoinTypeID, el.AppGoodID, IntervalKey.LastDay),
-    Last30DaysInComing: profit.intervalGoodIncoming(undefined, logined.loginedUserID, el.CoinTypeID, el.AppGoodID, IntervalKey.LastMonth),
-    Last30DaysUSDInComing: currency.currency(el.CoinTypeID) * profit.intervalGoodIncoming(undefined, logined.loginedUserID, el.CoinTypeID, el.AppGoodID, IntervalKey.LastMonth),
+    TotalInComing: Number(el.Incoming),
+    TotalUSDInComing: currency.currency(el.CoinTypeID) * Number(el.Incoming),
+    Last24HoursInComing: sdk.ledgerProfit.totalIncoming(utils.IntervalKey.LastDay, el.CoinTypeID, el.AppGoodID),
+    Last24HoursUSDInComing: currency.currency(el.CoinTypeID) * sdk.ledgerProfit.totalIncoming(utils.IntervalKey.LastDay, el.CoinTypeID, el.AppGoodID),
+    Last30DaysInComing: sdk.ledgerProfit.totalIncoming(utils.IntervalKey.LastMonth, el.CoinTypeID, el.AppGoodID),
+    Last30DaysUSDInComing: currency.currency(el.CoinTypeID) * sdk.ledgerProfit.totalIncoming(utils.IntervalKey.LastMonth, el.CoinTypeID, el.AppGoodID),
     GoodSaleEndAt: _good?.SaleEndAt,
     TotalEstimatedDailyReward: Number(el.Units) * parseFloat(good.good(undefined, el.AppGoodID)?.LastUnitRewardAmount as string),
     MiningStartDate: _good?.ServiceStartAt > Math.ceil(Date.now() / 1000) ? getTBD.value(el.AppGoodID) : utils.formatTime(_good?.ServiceStartAt, 'YYYY-MM-DD'),
