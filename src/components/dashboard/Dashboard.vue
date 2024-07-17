@@ -61,8 +61,8 @@ onMounted(() => {
       0
     )
   }
-  if (!sdk.powerRentalOrders.value?.length) {
-    sdk.getMyPowerRentalOrders(0, 0)
+  if (!sdk.powerRentalOrder.powerRentalOrders.value?.length) {
+    sdk.powerRentalOrder.getMyPowerRentalOrders(0, 0)
   }
   if (!coin.coins(undefined).length) {
     getCoins(0, 100)

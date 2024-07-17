@@ -27,7 +27,7 @@ const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const orders = computed(() => sdk.powerRentalOrders.value)
+const orders = computed(() => sdk.powerRentalOrder.powerRentalOrders.value)
 
 const getDeservedRatio = computed(() => (appGoodID: string) => 1 - Number(sdk.appPowerRental.appPowerRental(appGoodID)?.TechniqueFeeRatio) / 100)
 
@@ -73,7 +73,7 @@ const table = computed(() => [
       } else if (row.OrderType === order.OrderType.Airdrop) {
         orderType = order.OrderType.Airdrop
       }
-      return (sdk.orderState(row.OrderID)?.startsWith('MSG') ? t(sdk.orderState(row.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
+      return (sdk.powerRentalOrder.orderState(row.OrderID)?.startsWith('MSG') ? t(sdk.powerRentalOrder.orderState(row.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
             (orderType ? ' (' + orderType + ')' : '')
     }
   }
@@ -123,7 +123,7 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
     MiningPeriod: el.Durations,
     CumulativeProfit: sdk.ledgerStatement.totalMiningReward(el.PaymentBalances?.[0]?.CoinTypeID, el.AppGoodID, el.OrderID) / getDeservedRatio.value(el.AppGoodID),
     ProfitCurrency: sdk.appPowerRental.appPowerRental(el.AppGoodID)?.CoinUnit,
-    OrderStatus: (sdk.orderState(el.OrderID)?.startsWith('MSG') ? t(sdk.orderState(el.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
+    OrderStatus: (sdk.powerRentalOrder.orderState(el.OrderID)?.startsWith('MSG') ? t(sdk.powerRentalOrder.orderState(el.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
                 (orderType ? '(' + orderType + ')' : '')
   } as ExportOrder
 }))

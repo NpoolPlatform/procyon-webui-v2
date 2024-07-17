@@ -307,7 +307,7 @@ const onSubmit = throttle(() => {
   showBalanceDialog.value = false
   submitting.value = true
 
-  sdk.createPowerRentalOrder({
+  sdk.powerRentalOrder.createPowerRentalOrder({
     AppGoodID: appGoodID.value,
     Units: purchaseAmount.value.toString(),
     DurationSeconds: appPowerRental.value?.MinOrderDurationSeconds,

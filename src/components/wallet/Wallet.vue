@@ -24,7 +24,6 @@
 <script setup lang="ts">
 import { QAjaxBar } from 'quasar'
 import { getCoins, getCurrencies } from 'src/api/chain'
-import { IntervalKey } from 'src/const/const'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
@@ -34,9 +33,6 @@ import {
   fiatcurrency,
   notify,
   fiat,
-  constant,
-  user,
-  ledgerprofit,
   sdk
 } from 'src/npoolstore'
 
@@ -51,34 +47,25 @@ const WithdrawRecords = defineAsyncComponent(() => import('src/components/wallet
 const TransferAccounts = defineAsyncComponent(() => import('src/components/wallet/TransferAccounts.vue'))
 
 const general = ledger.useLedgerStore()
-const profit = ledgerprofit.useProfitStore()
 const coin = appcoin.useAppCoinStore()
 const _coincurrency = coincurrency.useCurrencyStore()
 const _fiatcurrency = fiatcurrency.useFiatCurrencyStore()
-const logined = user.useLocalUserStore()
 
-const withdrawAccounts = sdk.userWithdrawAccounts(undefined, undefined)
-const transferAccounts = sdk.userTransferAccounts(undefined)
+const withdrawAccounts = sdk.userWithdrawAccount.userWithdrawAccounts(undefined, undefined)
+const transferAccounts = sdk.userTransferAccount.userTransferAccounts()
 
 onMounted(() => {
   if (!general.ledgers().length) {
     getGenerals(0, 100)
   }
-  if (!profit.intervalProfits(undefined, logined.loginedUserID, undefined, IntervalKey.LastDay).length) {
-    getIntervalProfits(
-      IntervalKey.LastDay,
-      Math.ceil(new Date().getTime() / 1000) - constant.SecondsEachDay,
-      Math.ceil(new Date().getTime() / 1000),
-      0, 100)
-  }
   if (!coin.coins(undefined).length) {
     getCoins(0, 100)
   }
   if (!withdrawAccounts.length) {
-    sdk.getUserWithdrawAccounts(0, 0)
+    sdk.userWithdrawAccount.getMyUserWithdrawAccounts(0, 0)
   }
   if (!transferAccounts.length) {
-    sdk.getTransfers(0, 100)
+    sdk.userTransferAccount.getTransfers(0, 100)
   }
   if (!_coincurrency.currencies().length) {
     getCurrencies(0, 100)
@@ -104,27 +91,6 @@ const getGenerals = (offset:number, limit: number) => {
       return
     }
     getGenerals(limit + offset, limit)
-  })
-}
-
-const getIntervalProfits = (key: IntervalKey, startAt: number, endAt: number, offset:number, limit: number) => {
-  profit.getIntervalProfits({
-    StartAt: startAt,
-    EndAt: endAt,
-    Offset: offset,
-    Limit: limit,
-    Message: {
-      Error: {
-        Title: t('MSG_GET_GENERAL_FAIL'),
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
-  }, key, (error: boolean, rows?: Array<ledgerprofit.Profit>) => {
-    if (error || !rows?.length) {
-      return
-    }
-    getIntervalProfits(key, startAt, endAt, limit + offset, limit)
   })
 }
 

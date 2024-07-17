@@ -49,16 +49,9 @@
           <div class='confirmation'>
             <h3>{{ $t('MSG_DELETE_TRANSFER_ACCOUNTS') }}</h3>
             <p v-html='$t("MSG_DELETE_TRANSFER_ACCOUNTS_CAPTION")' />
-            <!-- <div class='full-section'>
-              <h4>{{ $t('MSG_DELETE_LABEL') }}:</h4>
-              <span class='number'>{{ target.AppID }}</span>
-            </div> -->
             <div class='full-section'>
-              <!-- <h4>{{ $t('MSG_WITHDRAW_ADDRESS') }}:</h4> -->
               <span class='wallet-type'>{{ target.TargetEmailAddress.length > 0 ? target.TargetEmailAddress : target.TargetPhoneNO }}</span><br>
-              <!-- <img class='copy-button' src='font-awesome/copy.svg'> -->
             </div>
-
             <button class='alt' @click='onCancelClick'>
               {{ $t('MSG_CANCEL1') }}
             </button>

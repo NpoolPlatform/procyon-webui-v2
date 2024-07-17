@@ -58,7 +58,7 @@
 <script setup lang='ts'>
 import { ref, defineAsyncComponent, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { transferaccount, notify, utils, basetypes, appuserbase } from 'src/npoolstore'
+import { sdk, notify, utils, basetypes, appuserbase } from 'src/npoolstore'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
@@ -102,7 +102,6 @@ const account = ref('')
 const accountType = ref(appuserbase.SignMethodType.Email)
 
 const router = useRouter()
-const transferAccount = transferaccount.useTransferAccountStore()
 
 const onCancelClick = () => {
   verifying.value = false
@@ -110,7 +109,7 @@ const onCancelClick = () => {
 
 const onCodeVerify = (code: string) => {
   submitting.value = true
-  transferAccount.createTransfer({
+  sdk.userTransferAccount.createTransfer({
     Account: accountType.value === appuserbase.SignMethodType.Google ? undefined as unknown as string : account.value,
     AccountType: accountType.value,
     VerificationCode: code,

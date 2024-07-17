@@ -217,10 +217,10 @@ watch(withdrawType, () => {
   selectedAccountIndex.value = 0
 })
 
-const transferAccounts = computed(() => sdk.userTransferAccounts(undefined))
+const transferAccounts = computed(() => sdk.userTransferAccount.userTransferAccounts(undefined))
 const selectedTransferAccount = computed(() => transferAccounts.value[selectedAccountIndex.value])
 
-const withdraws = computed(() => sdk.userWithdrawAccounts(logined.loginedUserID, coinTypeID.value))
+const withdraws = computed(() => sdk.userWithdrawAccount.userWithdrawAccounts(logined.loginedUserID, coinTypeID.value))
 const selectedAccountIndex = ref(0)
 const selectedAccount = computed(() => withdraws.value[selectedAccountIndex.value])
 
@@ -380,11 +380,11 @@ onMounted(() => {
   }
 
   if (!withdraws.value.length) {
-    sdk.getUserWithdrawAccounts(0, 0)
+    sdk.userWithdrawAccount.getUserWithdrawAccounts(0, 0)
   }
 
   if (!transferAccounts.value.length) {
-    sdk.getTransfers(0, 0)
+    sdk.userTransferAccount.getTransfers(0, 0)
   }
   if (!coin.coins(undefined).length) {
     getCoins(0, 100)

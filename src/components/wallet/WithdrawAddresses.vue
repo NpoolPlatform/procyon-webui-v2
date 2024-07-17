@@ -100,7 +100,7 @@ const ShowSwitchTable = defineAsyncComponent(() => import('src/components/table/
 const LogoName = defineAsyncComponent(() => import('src/components/logo/LogoName.vue'))
 
 const logined = user.useLocalUserStore()
-const accounts = computed(() => sdk.userWithdrawAccounts(logined.loginedUserID, undefined))
+const accounts = computed(() => sdk.userWithdrawAccount.userWithdrawAccounts(logined.loginedUserID, undefined))
 
 const accountLabel = (acc: useraccountbase.Account) => {
   let label = acc.CoinName
@@ -137,7 +137,7 @@ const onDeleteClick = () => {
     return
   }
 
-  sdk.deleteUserAccount(target.value, () => {
+  sdk.userWithdrawAccount.deleteUserAccount(target.value, () => {
     onMenuHide()
   })
 }
