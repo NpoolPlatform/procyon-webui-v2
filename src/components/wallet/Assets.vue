@@ -85,7 +85,6 @@
 import { computed, defineAsyncComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import copy from 'copy-to-clipboard'
-import { IntervalKey } from 'src/const/const'
 import {
   appcoin,
   notify,
@@ -96,7 +95,6 @@ import {
   user,
   useraccountbase,
   utils,
-  ledgerprofit,
   sdk
 } from 'src/npoolstore'
 import { useI18n } from 'vue-i18n'
@@ -130,7 +128,6 @@ const _fiatcurrency = fiatcurrency.useFiatCurrencyStore()
 const logined = user.useLocalUserStore()
 
 const general = ledger.useLedgerStore()
-const profit = ledgerprofit.useProfitStore()
 
 const generals = computed(() => {
   return Array.from(general.ledgers(undefined, logined.loginedUserID).filter((el) => {
@@ -139,14 +136,13 @@ const generals = computed(() => {
     return {
       ...el,
       Balance: Number(el.Spendable),
-      Last24HoursBalance: profit.intervalIncoming(undefined, logined.loginedUserID, el.CoinTypeID, IntervalKey.LastDay),
       TotalUSDValue: Number(el.Spendable) * _coincurrency.currency(el.CoinTypeID),
       TotalJPYValue: Number(el.Spendable) * _coincurrency.currency(el.CoinTypeID) * _fiatcurrency.jpy()
     } as MyLedger
   }).sort((a, b) => a.TotalUSDValue > b.TotalUSDValue ? -1 : 1)
 })
 
-const transferAccounts = computed(() => sdk.userTransferAccounts(undefined))
+const transferAccounts = computed(() => sdk.userTransferAccount.userTransferAccounts())
 const depositAccount = ref({} as useraccountbase.Account)
 
 const qrCodeContainer = ref<HTMLDivElement>()
@@ -164,7 +160,7 @@ const onReturnWallet = () => {
 
 const onDepositClick = (row: MyLedger) => {
   depositClick.value = true
-  sdk.getDepositAccount(row.CoinTypeID, (error: boolean, row?: useraccountbase.Account) => {
+  sdk.userDepositAccount.getDepositAccount(row.CoinTypeID, (error: boolean, row?: useraccountbase.Account) => {
     depositClick.value = false
     if (error) {
       return
@@ -201,7 +197,7 @@ const onWithdrawClick = (row: MyLedger) => {
       return
     }
 
-    if (sdk.userWithdrawAccounts(logined.loginedUserID, row.CoinTypeID).length) {
+    if (sdk.userWithdrawAccount.userWithdrawAccounts(logined.loginedUserID, row.CoinTypeID).length) {
       void router.push({
         path: '/withdraw',
         query: {
@@ -253,12 +249,6 @@ const table = computed(() => [
     align: 'center',
     field: 'Balance'
   },
-  /* {
-    name: 'Last24HoursBalance',
-    label: t('MSG_24_HOUR_CHANGE'),
-    align: 'center',
-    field: 'Last24HoursBalance'
-  } */
   {
     name: 'TotalUSDTValue',
     label: t('MSG_MARKET_VALUE_USDT'),

@@ -82,7 +82,7 @@
 <script setup lang='ts'>
 import { ref, defineAsyncComponent, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { basetypes, accountbase, notify, appcoin, appuserbase, sdk } from 'src/npoolstore'
+import { basetypes, accountbase, appcoin, appuserbase, userwithdrawaccount } from 'src/npoolstore'
 
 const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage.vue'))
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
@@ -142,10 +142,11 @@ const accountType = ref(appuserbase.SignMethodType.Email)
 
 const submitting = ref(false)
 
+const userWithdrawAccount = userwithdrawaccount.useUserWithdrawAccountStore()
 const onCodeVerify = (code: string) => {
-  submitting.value = true
+  submitting.value = false
   const _memo = memo.value === '' ? undefined : memo.value
-  sdk.createUserAccount({
+  userWithdrawAccount.createUserAccount({
     CoinTypeID: selectedCoinTypeID.value,
     Address: address.value,
     Account: accountType.value === appuserbase.SignMethodType.Google ? undefined as unknown as string : account.value,
@@ -153,15 +154,7 @@ const onCodeVerify = (code: string) => {
     AccountType: accountType.value as unknown as appuserbase.SignMethodType,
     VerificationCode: code,
     Labels: labels.value?.split(','),
-    UsedFor: accountbase.AccountUsedFor.UserWithdraw,
-    Message: {
-      Error: {
-        Title: 'MSG_SET_WITHDRAW_ADDRESS',
-        Message: 'MSG_SET_WITHDRAW_ADDRESS_FAIL',
-        Popup: true,
-        Type: notify.NotifyType.Error
-      }
-    }
+    UsedFor: accountbase.AccountUsedFor.UserWithdraw
   }, (error: boolean) => {
     if (error) {
       submitting.value = false

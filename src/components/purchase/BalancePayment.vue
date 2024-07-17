@@ -163,7 +163,7 @@ const onPurchaseClick = () => {
     return
   }
   submitting.value = true
-  sdk.createPowerRentalOrder({
+  sdk.powerRentalOrder.createPowerRentalOrder({
     AppGoodID: appGoodID.value,
     Units: `${purchaseAmount.value}`,
     Balances: [{ CoinTypeID: coinTypeID.value, Amount: `${usdToOtherAmount.value}` } as PaymentBalance],
@@ -175,7 +175,7 @@ const onPurchaseClick = () => {
     if (error) {
       return
     }
-    sdk.resetPowerRentalOrders()
+    sdk.powerRentalOrder.resetPowerRentalOrders()
     general.$reset()
     void router.push({
       path: '/dashboard'
@@ -232,9 +232,9 @@ onMounted(() => {
     getCurrencies(0, 500)
   }
 
-  sdk.resetPowerRentalOrders()
-  if (!sdk.powerRentalOrders.value.length) {
-    sdk.getMyPowerRentalOrders(0, 0)
+  sdk.powerRentalOrder.resetPowerRentalOrders()
+  if (!sdk.powerRentalOrder.powerRentalOrders.value.length) {
+    sdk.powerRentalOrder.getMyPowerRentalOrders(0, 0)
   }
 
   getCoinCurrency(coinTypeID.value)
