@@ -5,7 +5,7 @@
         <img :src='goodProfit?.CoinLogo'>
       </div>
       <h3 class='mining-title'>
-        <div v-html='sdk.displayName(target?.AppGoodID as string, 2)?.length > 0? $t(sdk.displayName(target?.AppGoodID as string, 2)) : goodProfit.GoodName' />
+        <div v-html='sdk.appPowerRental.displayName(target?.AppGoodID as string, 2)' />
       </h3>
     </div>
     <div class='top-line-summary'>
@@ -22,7 +22,7 @@
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}: </span>
         <span class='value'>{{ utils.getLocaleString(goodProfit?.Units) }}</span>
-        <span class='sub-value'>{{ goodProfit ? $t(goodProfit?.GoodUnit) : '' }}</span>
+        <span class='sub-value'>{{ goodProfit.GoodUnit?.length > 0 ? $t(goodProfit?.GoodUnit) : '' }}</span>
       </div>
     </div>
     <q-slide-transition>
@@ -36,7 +36,7 @@
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
           <span class='value'>
-            {{ utils.getLocaleString(goodProfit?.MaxOrderDuration) }}
+            <!-- {{ utils.getLocaleString(goodProfit?.MaxOrderDuration) }} -->
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>
@@ -61,9 +61,9 @@
             <span class='unit'>{{ goodProfit?.CoinUnit }} ({{ target?.TechniqueFeeRatio }}%)</span>
           </span>
         </div>
-        <div class='warning' v-if='sdk.description(target?.AppGoodID as string, 3)?.length > 0'>
+        <div class='warning' v-if='sdk.appPowerRental.description(target?.AppGoodID as string, 3)?.length > 0'>
           <img src='font-awesome/warning.svg'>
-          <span v-html='$t(sdk.description(target?.AppGoodID as string, 3))' />
+          <span v-html='$t(sdk.appPowerRental.description(target?.AppGoodID as string, 3))' />
         </div>
       </div>
     </q-slide-transition>
@@ -109,12 +109,12 @@ const short = ref(true)
 
 const logined = user.useLocalUserStore()
 
-const target = computed(() => sdk.appPowerRental(goodProfit.value?.AppGoodID))
+const target = computed(() => sdk.appPowerRental.appPowerRental(goodProfit.value?.AppGoodID))
 const coinUnit = computed(() => target.value?.CoinUnit as string)
 const techServiceFee = computed(() => target.value?.TechniqueFeeRatio as number / 100)
 const deservedRatio = computed(() => 1 - techServiceFee.value)
 
-const showProductPage = computed(() => (_good: apppowerrental.AppPowerRental) => _good.EnableProductPage && sdk.canBuy(_good.AppGoodID) && sdk.spotQuantity(_good.AppGoodID))
+const showProductPage = computed(() => (_good: apppowerrental.AppPowerRental) => _good.EnableProductPage && sdk.appPowerRental.canBuy(_good.AppGoodID) && sdk.appPowerRental.spotQuantity(_good.AppGoodID))
 
 const detail = ledgerstatement.useStatementStore()
 const miningDetails = computed(() => detail.miningRewards(undefined, logined.loginedUserID).filter((el) => el.AppGoodID === goodProfit?.value?.AppGoodID))
@@ -201,7 +201,7 @@ const onExportClick = () => {
   })
 
   const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), output], { type: 'text/plain;charset=utf-8' })
-  let name = sdk.displayName(target?.value?.AppGoodID as string, 2)?.length > 0 ? t(sdk.displayName(target?.value?.AppGoodID as string, 2)) : goodProfit.value?.GoodName
+  let name = sdk.appPowerRental.displayName(target?.value?.AppGoodID as string, 2) as string
   name = name.replace(/<.*?>/g, '')
   const filename = name + '-' + utils.formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)

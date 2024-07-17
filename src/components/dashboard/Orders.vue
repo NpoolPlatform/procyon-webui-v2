@@ -18,7 +18,7 @@
 <script setup lang='ts'>
 import { computed, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { utils, order, ledgerstatement, goodbase, user, constant, sdk, powerrentalorder } from 'src/npoolstore'
+import { utils, order, goodbase, constant, sdk, powerrentalorder } from 'src/npoolstore'
 import { stringify } from 'csv-stringify/sync'
 import saveAs from 'file-saver'
 
@@ -27,13 +27,9 @@ const OpTable = defineAsyncComponent(() => import('src/components/table/OpTable.
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { t } = useI18n({ useScope: 'global' })
 
-const logined = user.useLocalUserStore()
-
 const orders = computed(() => sdk.powerRentalOrders.value)
 
-const detail = ledgerstatement.useStatementStore()
-
-const getDeservedRatio = computed(() => (appGoodID: string) => 1 - Number(sdk.appPowerRental(appGoodID)?.TechniqueFeeRatio) / 100)
+const getDeservedRatio = computed(() => (appGoodID: string) => 1 - Number(sdk.appPowerRental.appPowerRental(appGoodID)?.TechniqueFeeRatio) / 100)
 
 const table = computed(() => [
   {
@@ -46,13 +42,13 @@ const table = computed(() => [
     name: 'Product',
     label: t('MSG_PRODUCT'),
     align: 'center',
-    field: (row: powerrentalorder.PowerRentalOrder) => sdk.displayName(row.AppGoodID, 3).length > 0 ? t(sdk.displayName(row.AppGoodID, 3)) : row.GoodName
+    field: (row: powerrentalorder.PowerRentalOrder) => sdk.appPowerRental.displayName(row.AppGoodID, 3)
   },
   {
     name: 'Total',
     label: t('MSG_PURCHASE_AMOUNT'),
     align: 'center',
-    field: (row: powerrentalorder.PowerRentalOrder) => `${utils.getLocaleString(parseFloat(row.Units))} ${t(row.Unit)}`
+    field: (row: powerrentalorder.PowerRentalOrder) => `${utils.getLocaleString(parseFloat(row.Units))} ${row.QuantityUnit?.length > 0 ? t(row.QuantityUnit) : ''}`
   },
   {
     name: 'Price',
@@ -99,7 +95,7 @@ interface ExportOrder {
 }
 
 const getGoodType = computed(() => (appGoodID: string) => {
-  const _good = sdk.appPowerRental(appGoodID)
+  const _good = sdk.appPowerRental.appPowerRental(appGoodID)
   return _good?.GoodType === goodbase.GoodType.PowerRental || _good?.GoodType === goodbase.GoodType.MachineRental ? 'Mining' : _good?.GoodType
 })
 
@@ -118,15 +114,15 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
   return {
     CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
     ProductType: getGoodType.value(el.AppGoodID),
-    ProductName: sdk.displayName(el.AppGoodID, 3)?.length > 0 ? t(sdk.displayName(el.AppGoodID, 3)) : el.GoodName,
+    ProductName: sdk.appPowerRental?.displayName(el.AppGoodID, 3),
     PurchaseAmount: el.Units,
-    UnitType: t(el.GoodUnit),
-    Price: Number(sdk.appPowerRental(el.AppGoodID)?.UnitPrice),
+    UnitType: el.QuantityUnit?.length > 0 ? t(el.QuantityUnit) : '',
+    Price: Number(sdk.appPowerRental.appPowerRental(el.AppGoodID)?.UnitPrice),
     PaymentCurrency: el.PaymentBalances.length ? el.PaymentBalances?.[0]?.CoinUnit : constant.PriceCoinName,
     TotalCost: Number(el.PaymentAmountUSD).toString(),
     MiningPeriod: el.Durations,
-    CumulativeProfit: detail.miningRewardFloat(undefined, logined.loginedUserID, el.PaymentBalances?.[0]?.CoinTypeID, el.OrderID) / getDeservedRatio.value(el.AppGoodID),
-    ProfitCurrency: sdk.appPowerRental(el.AppGoodID)?.CoinUnit,
+    CumulativeProfit: sdk.ledgerStatement.totalMiningReward(el.PaymentBalances?.[0]?.CoinTypeID, el.AppGoodID, el.OrderID) / getDeservedRatio.value(el.AppGoodID),
+    ProfitCurrency: sdk.appPowerRental.appPowerRental(el.AppGoodID)?.CoinUnit,
     OrderStatus: (sdk.orderState(el.OrderID)?.startsWith('MSG') ? t(sdk.orderState(el.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
                 (orderType ? '(' + orderType + ')' : '')
   } as ExportOrder

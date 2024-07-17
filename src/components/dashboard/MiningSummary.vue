@@ -24,21 +24,18 @@
 </template>
 
 <script setup lang="ts">
-import { constant, coincurrency, ledgerprofit, user } from 'src/npoolstore'
-import { IntervalKey } from 'src/const/const'
+import { constant, coincurrency, utils, sdk } from 'src/npoolstore'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const currency = coincurrency.useCurrencyStore()
-const logined = user.useLocalUserStore()
 
-const profit = ledgerprofit.useProfitStore()
-const profits = computed(() => profit.profits(undefined, logined.loginedUserID))
-const intervalProfits = computed(() => profit.intervalProfits(undefined, logined.loginedUserID, undefined, IntervalKey.LastDay))
+const coinProfit = computed(() => sdk.ledgerProfit.coinProfits(utils.IntervalKey.All))
+const intervalCoinProfits = computed(() => sdk.ledgerProfit.coinProfits(utils.IntervalKey.LastDay))
 
 const totalProfit = computed(() => {
   let total = 0
-  profits.value.forEach((el) => {
+  coinProfit.value.forEach((el) => {
     total += Number(el.Incoming) * currency.currency(el.CoinTypeID)
   })
   return total.toFixed(4)
@@ -46,7 +43,7 @@ const totalProfit = computed(() => {
 
 const last24HoursEarning = computed(() => {
   let total = 0
-  intervalProfits.value.forEach((el) => {
+  intervalCoinProfits.value.forEach((el) => {
     total += Number(el.Incoming) * currency.currency(el.CoinTypeID)
   })
   return total.toFixed(4)
