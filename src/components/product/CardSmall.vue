@@ -7,7 +7,7 @@
       </h3>
     </div>
     <h4 class='price'>
-      <span>{{ sdk.priceString(good.AppGoodID) }}</span>
+      <span>{{ sdk.appPowerRental.unitPrice(good.AppGoodID) }}</span>
       {{ constant.PriceCoinName }} / {{ good.QuantityUnitAmount + $t(good.QuantityUnit) }}
     </h4>
     <div class='line'>
