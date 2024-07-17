@@ -70,7 +70,7 @@
 import { spacemesh } from 'src/teststore'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { appcoin, ledgerprofit, constant, notify, utils, user, sdk } from 'src/npoolstore'
+import { appcoin, constant, notify, utils, sdk } from 'src/npoolstore'
 
 import chevrons from '../../assets/chevrons.svg'
 import warning from '../../assets/warning.svg'
@@ -78,16 +78,13 @@ import warning from '../../assets/warning.svg'
 const coin = appcoin.useAppCoinStore()
 const target = computed(() => coin.coins(undefined).find((el) => el.Name?.toLowerCase()?.includes('spacemesh')) as appcoin.AppCoin)
 
-const logined = user.useLocalUserStore()
-
-const profit = ledgerprofit.useProfitStore()
-const goodProfits = computed(() => profit.goodProfits(undefined, logined.loginedUserID).filter((el) => el.CoinTypeID === target?.value?.CoinTypeID))
+const goodProfits = computed(() => sdk.ledgerProfit.goodProfits(utils.IntervalKey.All, target?.value?.CoinTypeID))
 
 const goodUnit = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodUnit : '')
-const goodPeriod = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].MaxOrderDuration : '')
+const goodPeriod = computed(() => goodProfits.value?.length ? sdk.appPowerRental.appPowerRental(goodProfits?.value?.[0]?.AppGoodID)?.MaxOrderDurationSeconds as number / 60 / 60 / 24 : '')
 const totalUnits = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].Units : 0)
 
-const total = computed(() => goodProfits.value?.length ? sdk.appPowerRental(goodProfits.value?.[0].AppGoodID)?.GoodTotal : 0)
+const total = computed(() => goodProfits.value?.length ? sdk.appPowerRental.appPowerRental(goodProfits.value?.[0].AppGoodID)?.GoodTotal : 0)
 const unitsRatio = computed(() => goodProfits.value?.length && total.value ? Number(totalUnits.value) / Number(total.value) : 0)
 const daily = computed(() => _spacemesh.getNetworkDailyOutput)
 
