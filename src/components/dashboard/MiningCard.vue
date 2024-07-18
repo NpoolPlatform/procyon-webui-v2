@@ -201,7 +201,7 @@ const onExportClick = () => {
   })
 
   const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), output], { type: 'text/plain;charset=utf-8' })
-  let name = sdk.appPowerRental.displayName(target?.value?.AppGoodID, 2) as string
+  let name = sdk.appPowerRental.displayName(target?.value?.AppGoodID, 2)
   name = name.replace(/<.*?>/g, '')
   const filename = name + '-' + utils.formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)

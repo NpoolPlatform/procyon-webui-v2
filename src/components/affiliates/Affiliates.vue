@@ -1,6 +1,6 @@
 <template>
   <div class='content' v-if='logined.isKol'>
-    <CommissionCard />
+    <Commission />
     <div class='hr' />
     <ReferralCode />
     <div class='hr' />
@@ -18,7 +18,7 @@ import { getCoins } from 'src/api/chain'
 import { defineAsyncComponent, onMounted } from 'vue'
 import { commission, achievement, user, notify, appcoin, fiatcurrency, fiat } from 'src/npoolstore'
 
-const CommissionCard = defineAsyncComponent(() => import('src/components/affiliates/Commission.vue'))
+const Commission = defineAsyncComponent(() => import('src/components/affiliates/Commission.vue'))
 const ReferralCode = defineAsyncComponent(() => import('src/components/affiliates/ReferralCode.vue'))
 const Tree = defineAsyncComponent(() => import('src/components/affiliates/Tree.vue'))
 const Table = defineAsyncComponent(() => import('src/components/affiliates/Table.vue'))
