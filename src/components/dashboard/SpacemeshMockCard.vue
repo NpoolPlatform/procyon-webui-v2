@@ -80,7 +80,7 @@ const target = computed(() => coin.coins(undefined).find((el) => el.Name?.toLowe
 
 const goodProfits = computed(() => sdk.ledgerProfit.goodProfits(utils.IntervalKey.All, target?.value?.CoinTypeID))
 
-const goodUnit = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodUnit : '')
+const goodUnit = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].GoodQuantityUnit : '')
 const goodPeriod = computed(() => goodProfits.value?.length ? sdk.appPowerRental.appPowerRental(goodProfits?.value?.[0]?.AppGoodID)?.MaxOrderDurationSeconds as number / 60 / 60 / 24 : '')
 const totalUnits = computed(() => goodProfits.value?.length ? goodProfits.value?.[0].Units : 0)
 
