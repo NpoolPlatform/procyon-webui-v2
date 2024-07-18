@@ -62,7 +62,7 @@
               label='MSG_PURCHASE'
               type='submit'
               class='submit-btn'
-              :disabled='submitting || !target?.AppGoodPurchasable || !sdk.appPowerRental.canBuy(target?.AppGoodID as string) || sdk.appPowerRental.purchaseLimit(target?.AppGoodID) <= 0'
+              :disabled='submitting || !sdk.appPowerRental.enablePurchase(target?.AppGoodID as string)'
               :waiting='submitting'
               @click='onPurchaseClick'
             />
