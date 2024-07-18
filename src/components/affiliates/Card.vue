@@ -7,7 +7,7 @@
         {{ username }}
       </h3>
       <span class='aff-email'>{{ referral?.EmailAddress?.length > 0 ? referral?.EmailAddress : referral?.PhoneNO }}</span>
-      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ utils.getLocaleString(referral.TotalInvitees)
+      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ utils.getLocaleString(referral.DirectInvites)
       }}</span></span>
     </div>
     <div class='aff-table'>
@@ -158,7 +158,7 @@ const _achievement = achievement.useAchievementStore()
 const _goodAchievements = ref(computed(() => Array.from(referral.value?.Achievements.filter((el) => {
   return (
     sdk.appPowerRental.canBuy(el.AppGoodID) ||
-    sdk.appPowerRental.appPowerRental(el.AppGoodID)?.Visible ||
+    sdk.appPowerRental.visible(el.AppGoodID) ||
     sdk.appPowerRental.spotQuantity(el.AppGoodID)
   ) && !sdk.appPowerRental.appPowerRental(el.AppGoodID)?.TestOnly
 })).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
