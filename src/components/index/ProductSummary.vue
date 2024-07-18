@@ -15,7 +15,7 @@
           <img class='icon' :src='good.CoinLogo'>
           <div>
             <template v-for='(name, index) in [sdk.appPowerRental.displayName(good.AppGoodID, 0)]' :key='index'>
-              <div v-html='$t(name as string)' class='inner-container' /> {{ good.ID }}
+              <div v-html='$t(name as string)' class='inner-container' />
             </template>
           </div>
         </div>
