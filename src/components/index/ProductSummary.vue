@@ -13,13 +13,10 @@
         />
         <div class='product-heading'>
           <img class='icon' :src='good.CoinLogo'>
-          <div v-if='good?.DisplayNames?.length'>
+          <div>
             <template v-for='(name, index) in [sdk.appPowerRental.displayName(good.AppGoodID, 0)]' :key='index'>
               <div v-html='$t(name as string)' class='inner-container' />
             </template>
-          </div>
-          <div v-else>
-            {{ good.AppGoodName }}
           </div>
         </div>
         <template v-for='(desc, idx) in [sdk.appPowerRental.description(good.AppGoodID, 0), sdk.appPowerRental.description(good.AppGoodID, 1)]' :key='idx'>
