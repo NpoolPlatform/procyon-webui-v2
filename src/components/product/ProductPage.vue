@@ -157,7 +157,6 @@ import warning from 'src/assets/warning.svg'
 
 const CoinSelector = defineAsyncComponent(() => import('src/components/coin/CoinSelector.vue'))
 const WaitingBtn = defineAsyncComponent(() => import('src/components/button/WaitingBtn.vue'))
-// const BackPage = defineAsyncComponent(() => import('src/components/page/BackPage.vue'))
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 
 interface Props {
