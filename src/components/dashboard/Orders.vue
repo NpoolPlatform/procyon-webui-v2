@@ -48,7 +48,7 @@ const table = computed(() => [
     name: 'Total',
     label: t('MSG_PURCHASE_AMOUNT'),
     align: 'center',
-    field: (row: powerrentalorder.PowerRentalOrder) => `${utils.getLocaleString(parseFloat(row.Units))} ${row.QuantityUnit?.length > 0 ? t(row.QuantityUnit) : ''}`
+    field: (row: powerrentalorder.PowerRentalOrder) => `${utils.getLocaleString(parseFloat(row.Units))} ${t(row.GoodQuantityUnit)}`
   },
   {
     name: 'Price',
@@ -116,7 +116,7 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
     ProductType: getGoodType.value(el.AppGoodID),
     ProductName: sdk.appPowerRental?.displayName(el.AppGoodID, 3),
     PurchaseAmount: el.Units,
-    UnitType: el.QuantityUnit?.length > 0 ? t(el.QuantityUnit) : '',
+    UnitType: t(el.GoodQuantityUnit),
     Price: Number(sdk.appPowerRental.appPowerRental(el.AppGoodID)?.UnitPrice),
     PaymentCurrency: el.PaymentBalances.length ? el.PaymentBalances?.[0]?.CoinUnit : constant.PriceCoinName,
     TotalCost: Number(el.PaymentAmountUSD).toString(),
