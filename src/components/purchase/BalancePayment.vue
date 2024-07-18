@@ -72,7 +72,7 @@
                 label='MSG_PURCHASE'
                 type='submit'
                 :class='[insufficientFunds ? "submit-gray" : "", "submit"]'
-                :disabled='!(target?.AppGoodPurchasable && target?.GoodPurchasable) || !sdk.appPowerRental.canBuy(target?.AppGoodID) || reachedPurchaseLimit || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
+                :disabled='!sdk.appPowerRental.purchasable(target?.AppGoodID as string) || !sdk.appPowerRental.canBuy(target?.AppGoodID as string) || reachedPurchaseLimit || submitting || insufficientFunds || purchaseAmountError || usedToOtherAmountISNaN'
                 :waiting='submitting'
                 @click='onPurchaseClick'
               />
