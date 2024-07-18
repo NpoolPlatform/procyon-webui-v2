@@ -60,7 +60,7 @@ const table = computed(() => [
     name: 'Period',
     label: t('MSG_PERIOD'),
     align: 'center',
-    field: (row: powerrentalorder.PowerRentalOrder) => utils.getLocaleString(row.Durations) + ' ' + t('MSG_DAYS')
+    field: (row: powerrentalorder.PowerRentalOrder) => utils.getLocaleString(row.Durations) + ' ' + t(row.DurationUnit)
   },
   {
     name: 'State',
@@ -117,11 +117,11 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
     ProductName: sdk.appPowerRental?.displayName(el.AppGoodID, 3),
     PurchaseAmount: el.Units,
     UnitType: t(el.GoodQuantityUnit),
-    Price: Number(sdk.appPowerRental.appPowerRental(el.AppGoodID)?.UnitPrice),
+    Price: Number(sdk.appPowerRental.appPowerRental(el.AppGoodID)?.UnitPrice) || 0,
     PaymentCurrency: el.PaymentBalances.length ? el.PaymentBalances?.[0]?.CoinUnit : constant.PriceCoinName,
     TotalCost: Number(el.PaymentAmountUSD).toString(),
     MiningPeriod: el.Durations,
-    CumulativeProfit: sdk.ledgerStatement.totalMiningReward(el.PaymentBalances?.[0]?.CoinTypeID, el.AppGoodID, el.OrderID) / getDeservedRatio.value(el.AppGoodID),
+    CumulativeProfit: sdk.ledgerStatement.totalMiningReward(el.PaymentBalances?.[0]?.CoinTypeID, el.AppGoodID, el.OrderID) / getDeservedRatio.value(el.AppGoodID) || 0,
     ProfitCurrency: sdk.appPowerRental.appPowerRental(el.AppGoodID)?.CoinUnit,
     OrderStatus: (sdk.powerRentalOrder.orderState(el.OrderID)?.startsWith('MSG') ? t(sdk.powerRentalOrder.orderState(el.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
                 (orderType ? '(' + orderType + ')' : '')
