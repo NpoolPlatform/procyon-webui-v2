@@ -22,7 +22,7 @@
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}: </span>
         <span class='value'>{{ utils.getLocaleString(goodProfit?.Units) }}</span>
-        <span class='sub-value'>{{ goodProfit.GoodUnit?.length > 0 ? $t(goodProfit?.GoodUnit) : '' }}</span>
+        <span class='sub-value'>{{ goodProfit.GoodQuantityUnit }}</span>
       </div>
     </div>
     <q-slide-transition>
@@ -81,9 +81,9 @@
         {{ $t('MSG_EXPORT_DAILY_OUTPUT_CSV') }}
       </button>
       <button
-        :class='["alt", showProductPage(target as apppowerrental.AppPowerRental) ? "" : "in-active"]'
-        :disabled='!showProductPage(target as apppowerrental.AppPowerRental)'
-        @click='onPurchaseClick(target as apppowerrental.AppPowerRental)'
+        :class='["alt", showProductPage(target) ? "" : "in-active"]'
+        :disabled='!showProductPage(target)'
+        @click='onPurchaseClick(target)'
       >
         {{ $t('MSG_PURCHASE_CAPACITY') }}
       </button>
@@ -115,12 +115,12 @@ const short = ref(true)
 
 const logined = user.useLocalUserStore()
 
-const target = computed(() => sdk.appPowerRental.appPowerRental(goodProfit.value?.AppGoodID))
-const coinUnit = computed(() => target.value?.CoinUnit as string)
+const target = computed(() => sdk.appPowerRental.appPowerRental(goodProfit.value?.AppGoodID) as apppowerrental.AppPowerRental)
+const coinUnit = computed(() => target.value?.CoinUnit)
 const techServiceFee = computed(() => target.value?.TechniqueFeeRatio as number / 100)
 const deservedRatio = computed(() => 1 - techServiceFee.value)
 
-const showProductPage = computed(() => (_good: apppowerrental.AppPowerRental) => _good.EnableProductPage && sdk.appPowerRental.canBuy(_good.AppGoodID) && sdk.appPowerRental.spotQuantity(_good.AppGoodID))
+const showProductPage = computed(() => (_good: apppowerrental.AppPowerRental) => sdk.appPowerRental.showProductPage(_good?.AppGoodID))
 
 const detail = ledgerstatement.useStatementStore()
 const miningDetails = computed(() => detail.miningRewards(undefined, logined.loginedUserID).filter((el) => el.AppGoodID === goodProfit?.value?.AppGoodID))
@@ -207,7 +207,7 @@ const onExportClick = () => {
   })
 
   const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), output], { type: 'text/plain;charset=utf-8' })
-  let name = sdk.appPowerRental.displayName(target?.value?.AppGoodID as string, 2) as string
+  let name = sdk.appPowerRental.displayName(target?.value?.AppGoodID, 2) as string
   name = name.replace(/<.*?>/g, '')
   const filename = name + '-' + utils.formatTime(new Date().getTime() / 1000) + '.csv'
   saveAs(blob, filename)

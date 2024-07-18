@@ -15,7 +15,7 @@
           <img class='icon' :src='good.CoinLogo'>
           <div>
             <template v-for='(name, index) in [sdk.appPowerRental.displayName(good.AppGoodID, 0)]' :key='index'>
-              <div v-html='$t(name as string)' class='inner-container' />
+              <div v-html='$t(name as string)' class='inner-container' /> {{ good.ID }}
             </template>
           </div>
         </div>
@@ -24,9 +24,9 @@
         </template>
         <div class='product-button-box'>
           <button
-            :class='[showProductPage(good) ? "in-active" : ""]'
+            :class='[showProductPage(good) ? "" : "in-active"]'
+            :disabled='!showProductPage(good)'
             @click='onPurchaseClick(good)'
-            :disabled='showProductPage(good)'
           >
             {{ good.AppGoodName?.toLowerCase().includes('btc') ? $t('MSG_BTC_LEARN_MORE') : $t(getBtnMsg(good.AppGoodID)) }}
           </button>
@@ -51,13 +51,10 @@ import { sdk, apppowerrental } from 'src/npoolstore'
 const appPowerRentals = computed(() => sdk.appPowerRental.appPowerRentals.value)
 const visibleAppPowerRentals = computed(() => appPowerRentals.value?.filter((el) => el.Visible))
 
-const showProductPage = computed(() => (good: apppowerrental.AppPowerRental) => !good.EnableProductPage || !sdk.appPowerRental.canBuy(good.AppGoodID) || !sdk.appPowerRental.spotQuantity(good.AppGoodID))
+const showProductPage = computed(() => (good: apppowerrental.AppPowerRental) => sdk.appPowerRental.showProductPage(good.AppGoodID))
 
 const router = useRouter()
 const onPurchaseClick = (good: apppowerrental.AppPowerRental) => {
-  if (showProductPage.value(good)) {
-    return
-  }
   void router.push({
     path: good?.ProductPage?.length ? good?.ProductPage : '/product/aleo',
     query: {

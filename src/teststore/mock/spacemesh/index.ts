@@ -1,4 +1,4 @@
-import { request, constant } from 'src/npoolstore'
+import { request, utils } from 'src/npoolstore'
 import { defineStore } from 'pinia'
 import { API, DEVNET_PATTERN } from './const'
 import {
@@ -35,7 +35,7 @@ export const useMockSpacemeshStore = defineStore('mock-spacemesh', {
     getLastDaysAvgOutput (): (ratio: number, accounts: number) => number {
       return (ratio: number, accounts: number) => {
         ratio = accounts / (accounts + this.latestEpoch?.stats?.current?.accounts) * ratio * 20
-        const days = (new Date().getTime() / 1000 - this.genesis) / constant.SecondsEachDay
+        const days = (new Date().getTime() / 1000 - this.genesis) / utils.SecondsPerDay
         const scale = Math.random() / 10 * 2 + 0.9
         return this.latestEpoch?.stats?.cumulative?.circulation / days * ratio / 1000000000000 * scale
       }
@@ -48,12 +48,12 @@ export const useMockSpacemeshStore = defineStore('mock-spacemesh', {
     },
     get30DaysAvgOutput (): (ratio: number, accounts: number) => number {
       return (ratio: number, accounts: number) => {
-        const days = (new Date().getTime() / 1000 - this.genesis) / constant.SecondsEachDay
+        const days = (new Date().getTime() / 1000 - this.genesis) / utils.SecondsPerDay
         return this.getEarning(ratio, accounts) / days
       }
     },
     getNetworkDailyOutput (): number {
-      const days = (new Date().getTime() / 1000 - this.genesis) / constant.SecondsEachDay
+      const days = (new Date().getTime() / 1000 - this.genesis) / utils.SecondsPerDay
       return this.latestEpoch?.stats?.cumulative?.circulation / days / 1000000000000
     }
   },

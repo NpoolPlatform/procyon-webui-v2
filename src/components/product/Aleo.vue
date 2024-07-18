@@ -127,7 +127,6 @@ import { appcoin, appcoindescription, coincurrency, utils, constant, _locale, sd
 import { getCoins, getCurrencies, getDescriptions } from 'src/api/chain'
 
 import question from '../../assets/question.svg'
-// import lightbulb from '../../assets/lightbulb.svg'
 
 const ProductPage = defineAsyncComponent(() => import('src/components/product/ProductPage.vue'))
 const ProductDetailUS = defineAsyncComponent(() => import('src/components/product/en-US/Detail.vue'))
