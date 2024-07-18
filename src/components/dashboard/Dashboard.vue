@@ -1,7 +1,5 @@
 <template>
   <div class='content'>
-    <!-- <MiningSummary /> -->
-    <!-- <div class='hr' /> -->
     <MiningCards />
     <div class='hr' />
     <Orders />
@@ -18,10 +16,9 @@
 <script setup lang='ts'>
 import { defineAsyncComponent, onMounted, computed } from 'vue'
 import { QAjaxBar } from 'quasar'
-import { appcoin, coincurrency, sdk, utils, constant } from 'src/npoolstore'
+import { appcoin, coincurrency, sdk, utils } from 'src/npoolstore'
 import { getCoins, getCurrencies } from 'src/api/chain'
 
-// const MiningSummary = defineAsyncComponent(() => import('src/components/dashboard/MiningSummary.vue'))
 const MiningCards = defineAsyncComponent(() => import('src/components/dashboard/MiningCards.vue'))
 const Orders = defineAsyncComponent(() => import('src/components/dashboard/Orders.vue'))
 
@@ -43,7 +40,7 @@ onMounted(() => {
   if (!intervalGoodProfits.value?.length) {
     sdk.ledgerProfit.getGoodProfits(
       utils.IntervalKey.LastDay,
-      Math.ceil(new Date().getTime() / 1000) - constant.SecondsEachDay,
+      Math.ceil(new Date().getTime() / 1000) - utils.SecondsPerDay,
       Math.ceil(new Date().getTime() / 1000),
       0,
       0
@@ -55,7 +52,7 @@ onMounted(() => {
   if (!intervalCoinProfits.value?.length) {
     sdk.ledgerProfit.getCoinProfits(
       utils.IntervalKey.LastDay,
-      Math.ceil(new Date().getTime() / 1000) - constant.SecondsEachDay,
+      Math.ceil(new Date().getTime() / 1000) - utils.SecondsPerDay,
       Math.ceil(new Date().getTime() / 1000),
       0,
       0
