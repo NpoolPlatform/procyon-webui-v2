@@ -10,6 +10,7 @@ export interface MyGoodProfit extends ledgerprofit.GoodProfit {
   Last30DaysInComing: number
   Last30DaysUSDInComing: number
   MiningStartDate: string
+  TotalEstimatedDailyReward: number
   DaysMined: number
   DaysRemaining: number
 }
