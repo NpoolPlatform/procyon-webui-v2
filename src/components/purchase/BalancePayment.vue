@@ -120,7 +120,7 @@ const target = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value)
 const purchaseLimit = computed(() => sdk.appPowerRental.purchaseLimit(appGoodID.value))
 const logined = user.useLocalUserStore()
 
-const reachedPurchaseLimit = computed(() => (purchaseLimit.value + Number(purchaseAmount.value)) > Number(target?.value?.MaxUserAmount))
+const reachedPurchaseLimit = computed(() => (Number(purchaseAmount.value)) > Number(purchaseLimit.value))
 
 const selectedCoinCurrency = ref(1) // 币种汇率
 const general = ledger.useLedgerStore()
