@@ -26,9 +26,9 @@ const target = ref(percent.value)
 const emit = defineEmits<{(e: 'update:percent', percent: string): void;}>()
 
 const options = computed(() => {
-  const percents = [30, 25, 15, 10, 5, 0]
-  let index = percents.findIndex(kol => kol <= max.value)
-  return index === percents.length - 1 || index === -1 ? [0] : percents.splice(++index)
+  const ratios = [30, 25, 15, 10, 5, 0]
+  let index = ratios.findIndex(ratio => ratio <= max.value)
+  return index === ratios.length - 1 || index === -1 ? [0] : ratios.splice(++index)
 })
 
 const onChange = () => {
