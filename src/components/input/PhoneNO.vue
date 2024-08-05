@@ -43,8 +43,11 @@ const emit = defineEmits<{(e: 'update:value', value: string): void;
   (e: 'focus'): void;
   (e: 'blur'): void;
 }>()
-watch(myValue, () => {
+
+watch([myValue, () => country.value?.Code], () => {
   emit('update:value', country.value?.Code?.replace(/ /g, '') + myValue.value?.replace(/ /g, ''))
+  onFocus()
+  onBlur()
 })
 
 const onFocus = () => {
