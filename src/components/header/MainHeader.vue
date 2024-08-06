@@ -186,6 +186,7 @@ const onBellClick = () => {
 }
 
 const logined = computed(() => localUser.logined)
+
 const notifFetcher = ref(-1)
 
 watch(logined, () => {
@@ -196,7 +197,7 @@ watch(logined, () => {
     }
     return
   }
-  if (!logined.value) {
+  if (!logined.value || !locale?.langID()) {
     return
   }
   getNotifs(0, 100)
@@ -212,7 +213,7 @@ const notifs = computed(() => _notif.notifs(undefined, localUser.loginedUserID))
 const lastFiveNotifs = computed(() => notifs.value.length > 5 ? notifs.value.slice(0, 5) : notifs.value)
 
 onMounted(() => {
-  if (logined.value) {
+  if (logined.value && locale?.langID()) {
     getNotifs(0, 100)
     notifFetcher.value = window.setInterval(() => {
       _notif.$reset()
