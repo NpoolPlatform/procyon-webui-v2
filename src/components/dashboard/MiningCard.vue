@@ -36,7 +36,7 @@
         <div class='line'>
           <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
           <span class='value'>
-            <!-- {{ utils.getLocaleString(goodProfit?.MaxOrderDuration) }} -->
+            {{ utils.getLocaleString(goodProfit?.ServicePeriod) }}
             <span class='unit'>{{ $t('MSG_DAYS') }}</span>
           </span>
         </div>

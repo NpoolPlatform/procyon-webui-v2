@@ -21,16 +21,23 @@ const getTBD = computed(() => (appGoodID: string) => {
   return sdk.appPowerRental.description(appGoodID, 5)?.length > 0 ? sdk.appPowerRental.description(appGoodID, 5) : '*'
 })
 
-const goodProfits = computed(() => Array.from(sdk.ledgerProfit.goodProfits(utils.IntervalKey.All)).map((el) => {
+const _goodProfits = computed(() => sdk.ledgerProfit.goodProfits(utils.IntervalKey.All))
+
+const goodProfits = computed(() => Array.from(_goodProfits.value).filter((fl) => {
+  const _good = sdk.appPowerRental.appPowerRental(fl.AppGoodID) as apppowerrental.AppPowerRental
+  if (!_good) {
+    return false
+  }
+  return true
+}).map((el) => {
   const _good = sdk.appPowerRental.appPowerRental(el.AppGoodID) as apppowerrental.AppPowerRental
   const now = Math.floor(Date.now() / 1000)
-
   const remain = now - _good?.ServiceStartAt >= 0 ? now - _good?.ServiceStartAt : 0
   const daysMined = Math.floor(remain / 24 / 60 / 60)
-
   const durationDays = Number(_good?.MaxOrderDurationSeconds / 60 / 60 / 24)
-
   const daysRemaining = durationDays - daysMined > 0 ? durationDays - daysMined : 0
+
+  const servicePeriod = _good.MaxOrderDurationSeconds / 60 / 60 / 24
   return {
     ...el,
     Units: el.Units,
@@ -44,7 +51,8 @@ const goodProfits = computed(() => Array.from(sdk.ledgerProfit.goodProfits(utils
     GoodSaleEndAt: _good?.SaleEndAt,
     MiningStartDate: _good?.ServiceStartAt > Math.ceil(Date.now() / 1000) ? getTBD.value(el.AppGoodID) : utils.formatTime(_good?.ServiceStartAt, 'YYYY-MM-DD'),
     DaysMined: daysMined > durationDays ? durationDays : daysMined,
-    DaysRemaining: daysRemaining
+    DaysRemaining: daysRemaining,
+    ServicePeriod: servicePeriod
   } as MyGoodProfit
 }).sort((a, b) => {
   if (a.CoinUnit.localeCompare(b.CoinUnit, 'zh-CN')) {
