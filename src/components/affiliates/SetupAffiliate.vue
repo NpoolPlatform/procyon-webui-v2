@@ -11,7 +11,7 @@
         <label>{{ _good.GoodName }} {{ $t('MSG_KOL_COMMISSION_RATE') }}:</label>
         <KolOption
           v-model:percent='_good.CommissionValue'
-          :max='getGoodCommissionRatio(_good.AppGoodID)'
+          :max='getGoodCommissionValue(_good.AppGoodID)'
           ignore-style
         />
       </div>
@@ -53,7 +53,7 @@ const subUsername = computed(() => referral.value?.EmailAddress?.length ? referr
 
 const logined = user.useLocalUserStore()
 
-const getGoodCommissionRatio = computed(() => (appGoodID: string) => {
+const getGoodCommissionValue = computed(() => (appGoodID: string) => {
   return _achievement.commissionPercent(undefined, logined?.User.EntID, undefined, appGoodID)
 })
 const getGoodCommissionSettleMode = computed(() => (appGoodID: string) => {
@@ -80,8 +80,8 @@ const _commission = commission.useCommissionStore()
 const onSubmit = () => {
   submitting.value = true
   referral.value?.Achievements?.forEach((g) => {
-    if (Number(g.CommissionValue) > getGoodCommissionRatio.value(g.AppGoodID)) {
-      g.CommissionValue = getGoodCommissionRatio.value(g.AppGoodID).toString()
+    if (Number(g.CommissionValue) > getGoodCommissionValue.value(g.AppGoodID)) {
+      g.CommissionValue = getGoodCommissionValue.value(g.AppGoodID).toString()
     }
     if (Number(g.CommissionValue) < 0) {
       g.CommissionValue = '0'

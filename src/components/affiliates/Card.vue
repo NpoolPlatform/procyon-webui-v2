@@ -7,8 +7,9 @@
         {{ username }}
       </h3>
       <span class='aff-email'>{{ referral?.EmailAddress?.length > 0 ? referral?.EmailAddress : referral?.PhoneNO }}</span>
-      <span>{{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ utils.getLocaleString(referral.DirectInvites)
-      }}</span></span>
+      <span>
+        {{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ utils.getLocaleString(referral.TotalInvitees)}}</span>
+      </span>
     </div>
     <div class='aff-table'>
       <table id='commission-table'>
@@ -63,8 +64,12 @@
               </button>
             </td>
             <td>
-              <span class='aff-number'>{{ utils.getLocaleString(_good.TotalUnits) }}<span class='unit'>{{
-                _good.GoodUnit?.length ? $t(_good.GoodUnit) : '' }}</span></span>
+              <span class='aff-number'>
+                {{ utils.getLocaleString(_good.TotalUnits) }}
+                <span class='unit'>{{
+                  _good.GoodUnit?.length ? $t(_good.GoodUnit) : '' }}
+                </span>
+              </span>
             </td>
             <td>
               <span class='aff-number'>{{ utils.getLocaleString(Math.floor(Number(_good.TotalAmount) * 100) / 100, 2)
@@ -72,8 +77,9 @@
             </td>
             <td>
               <span class='aff-number'>
-                {{ child ? (_good.SuperiorCommission ? utils.getLocaleString(Math.floor(Number(_good.SuperiorCommission) *
-                  100) / 100, 2) : "0.00") : utils.getLocaleString(Math.floor(Number(_good.TotalCommission) * 100) / 100, 2)
+                {{ child ?
+                  (_good.SuperiorCommission ? utils.getLocaleString(Math.floor(Number(_good.SuperiorCommission) * 100) / 100, 2) : "0.00") :
+                  utils.getLocaleString(Math.floor(Number(_good.TotalCommission) * 100) / 100, 2)
                 }}
                 <span class='unit'>{{ constant.PriceCoinName }}</span>
               </span>
