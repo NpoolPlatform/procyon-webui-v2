@@ -49,7 +49,7 @@ import { computed } from 'vue'
 import { sdk, apppowerrental } from 'src/npoolstore'
 
 const appPowerRentals = computed(() => sdk.appPowerRental.appPowerRentals.value)
-const visibleAppPowerRentals = computed(() => appPowerRentals.value?.filter((el) => el.Visible)?.sort((a, b) => b.DisplayIndex - a.DisplayIndex))
+const visibleAppPowerRentals = computed(() => appPowerRentals.value?.filter((el) => el.Visible)?.sort((a, b) => a.DisplayIndex - b.DisplayIndex))
 
 const showProductPage = computed(() => (good: apppowerrental.AppPowerRental) => sdk.appPowerRental.showProductPage(good.AppGoodID))
 
