@@ -167,7 +167,7 @@ const _goodAchievements = ref(computed(() => Array.from(referral.value?.Achievem
     sdk.appPowerRental.visible(el.AppGoodID) ||
     sdk.appPowerRental.spotQuantity(el.AppGoodID)
   ) && !sdk.appPowerRental.appPowerRental(el.AppGoodID)?.TestOnly
-})).sort((a, b) => a.GoodName.localeCompare(b.GoodName, 'zh-CN')).map((el) => {
+})).sort((a, b) => a.AppGoodName.localeCompare(b.AppGoodName, 'zh-CN')).map((el) => {
   return {
     ...el,
     Editing: false
