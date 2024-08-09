@@ -55,7 +55,7 @@ const coinLabel = (_coin: appcoin.AppCoin) => {
 const emit = defineEmits<{(e: 'update:id', id: string): void;}>()
 
 const coin = appcoin.useAppCoinStore()
-const displayCoins = computed(() => coins.value || coin.coins(undefined).filter((el) => !el.Presale && el.Display))
+const displayCoins = computed(() => coins.value || coin.coins(undefined).filter((el) => !el.Presale && el.Display)?.sort((a, b) => a.DisplayIndex - b.DisplayIndex))
 
 const target = ref(id.value)
 const selectedCoin = computed({
