@@ -49,7 +49,7 @@ const goodProfits = computed(() => Array.from(_goodProfits.value).filter((fl) =>
     Last30DaysInComing: sdk.ledgerProfit.totalIncoming(utils.IntervalKey.LastMonth, el.CoinTypeID, el.AppGoodID),
     Last30DaysUSDInComing: currency.currency(el.CoinTypeID) * sdk.ledgerProfit.totalIncoming(utils.IntervalKey.LastMonth, el.CoinTypeID, el.AppGoodID),
     GoodSaleEndAt: _good?.SaleEndAt,
-    TotalEstimatedDailyReward: Number(el.Units) * parseFloat(good.good(undefined, el.AppGoodID)?.LastUnitRewardAmount as string),
+    TotalEstimatedDailyReward: Number(el.Units) * Number(_good.Rewards?.find((el) => el.MainCoin)?.LastUnitRewardAmount),
     MiningStartDate: _good?.ServiceStartAt > Math.ceil(Date.now() / 1000) ? getTBD.value(el.AppGoodID) : utils.formatTime(_good?.ServiceStartAt, 'YYYY-MM-DD'),
     DaysMined: daysMined > durationDays ? durationDays : daysMined,
     DaysRemaining: daysRemaining,
