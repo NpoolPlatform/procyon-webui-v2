@@ -380,7 +380,7 @@ onMounted(() => {
   }
 
   if (!withdraws.value.length) {
-    sdk.userWithdrawAccount.getUserWithdrawAccounts(0, 0)
+    sdk.userWithdrawAccount.getMyUserWithdrawAccounts(0, 0)
   }
 
   if (!transferAccounts.value.length) {
