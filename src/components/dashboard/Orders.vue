@@ -42,7 +42,7 @@ const table = computed(() => [
     name: 'Product',
     label: t('MSG_PRODUCT'),
     align: 'center',
-    field: (row: powerrentalorder.PowerRentalOrder) => sdk.appPowerRental.displayName(row.AppGoodID, 3)
+    field: (row: powerrentalorder.PowerRentalOrder) => t(sdk.appPowerRental.displayName(row.AppGoodID, 3))
   },
   {
     name: 'Total',
