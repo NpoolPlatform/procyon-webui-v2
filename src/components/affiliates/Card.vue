@@ -8,7 +8,7 @@
       </h3>
       <span class='aff-email'>{{ referral?.EmailAddress?.length > 0 ? referral?.EmailAddress : referral?.PhoneNO }}</span>
       <span>
-        {{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ utils.getLocaleString(referral.DirectInvites) }}</span>
+        {{ $t('MSG_ONBOARDED_USERS') }}:<span class='aff-number'>{{ utils.getLocaleString(referral.DirectInvitees) }}</span>
       </span>
     </div>
     <div class='aff-table'>
