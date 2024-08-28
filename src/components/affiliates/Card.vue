@@ -161,15 +161,15 @@ const username = computed(() => _user.displayName(undefined, undefined, referral
 const logined = user.useLocalUserStore()
 
 const _achievement = achievement.useAchievementStore()
-const _goodAchievements = ref(computed(() => Array.from(referral.value?.Achievements.filter((el) => {
+const _goodAchievements = computed(() => Array.from(referral.value?.Achievements.filter((el) => {
   return (
     sdk.appPowerRental.canBuy(el.AppGoodID) ||
     sdk.appPowerRental.visible(el.AppGoodID) ||
     sdk.appPowerRental.spotQuantity(el.AppGoodID)
   ) && !sdk.appPowerRental.appPowerRental(el.AppGoodID)?.TestOnly
 })).sort((a, b) => {
-  if (a.AppGoodName !== b.AppGoodName) {
-    return a.AppGoodName.localeCompare(b.AppGoodName, 'zh-CN')
+  if (sdk.appPowerRental.displayName(a.AppGoodID, 4) !== sdk.appPowerRental.displayName(b.AppGoodID, 4)) {
+    return sdk.appPowerRental.displayName(a.AppGoodID, 4).localeCompare(sdk.appPowerRental.displayName(b.AppGoodID, 4), 'zh-CN')
   }
   return (sdk.appPowerRental.appPowerRental(a.AppGoodID)?.CreatedAt as number) - (sdk.appPowerRental.appPowerRental(b.AppGoodID)?.CreatedAt as number)
 }).map((el) => {
@@ -177,7 +177,7 @@ const _goodAchievements = ref(computed(() => Array.from(referral.value?.Achievem
     ...el,
     Editing: false
   } as MyGoodAchievement
-})))
+}))
 const goodAchievements = ref(_goodAchievements.value)
 const getGoodCommissionValue = computed(() => (appGoodID: string) => {
   return Number(_achievement.commissionPercent(undefined, logined?.User.EntID, undefined, appGoodID))
