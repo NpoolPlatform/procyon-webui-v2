@@ -114,7 +114,7 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
   return {
     CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
     ProductType: getGoodType.value(el.AppGoodID),
-    ProductName: sdk.appPowerRental?.displayName(el.AppGoodID, 3),
+    ProductName: t(sdk.appPowerRental.displayName(el.AppGoodID, 3)),
     PurchaseAmount: el.Units,
     UnitType: t(el.GoodQuantityUnit),
     Price: Number(sdk.appPowerRental.appPowerRental(el.AppGoodID)?.UnitPrice) || 0,
