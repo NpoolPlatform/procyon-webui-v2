@@ -29,7 +29,7 @@ const { t } = useI18n({ useScope: 'global' })
 
 const orders = computed(() => sdk.powerRentalOrder.powerRentalOrders.value)
 
-const getDeservedRatio = computed(() => (appGoodID: string) => 1 - Number(sdk.appPowerRental.appPowerRental(appGoodID)?.TechniqueFeeRatio) / 100)
+const getDeservedRatio = (appGoodID: string) => 1 - sdk.appPowerRental.techniqueFeeRatio(appGoodID) / 100
 
 const table = computed(() => [
   {
@@ -123,7 +123,7 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
     PaymentCurrency: el.PaymentBalances.length ? el.PaymentBalances?.[0]?.CoinUnit : constant.PriceCoinName,
     TotalCost: Number(el.PaymentAmountUSD).toString(),
     MiningPeriod: el.Durations,
-    CumulativeProfit: sdk.ledgerStatement.totalMiningReward(sdk.appPowerRental.mainCoinTypeID(el.AppGoodID), el.AppGoodID, el.OrderID) / getDeservedRatio.value(el.AppGoodID) || 0,
+    CumulativeProfit: sdk.ledgerStatement.totalMiningReward(sdk.appPowerRental.mainCoinTypeID(el.AppGoodID), el.AppGoodID, el.OrderID) / getDeservedRatio(el.AppGoodID) || 0,
     ProfitCurrency: sdk.appPowerRental.appPowerRental(el.AppGoodID)?.CoinUnit,
     OrderStatus: (sdk.powerRentalOrder.orderState(el.OrderID)?.startsWith('MSG') ? t(sdk.powerRentalOrder.orderState(el.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
                 (orderType ? '(' + orderType + ')' : '')
