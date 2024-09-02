@@ -34,6 +34,12 @@ const coin = appcoin.useAppCoinStore()
 const currency = coincurrency.useCurrencyStore()
 
 onMounted(() => {
+  if (!sdk.appPowerRental.appPowerRentals.value.length) {
+    sdk.appPowerRental.getAppPowerRentals(0, 0)
+  }
+  if (!sdk.requiredAppGood.requiredAppGoods.value.length) {
+    sdk.requiredAppGood.getRequiredAppGoods(0, 0)
+  }
   if (!goodProfits.value?.length) {
     sdk.ledgerProfit.getGoodProfits(utils.IntervalKey.All, 0, Math.ceil(new Date().getTime() / 1000), 0, 0)
   }
