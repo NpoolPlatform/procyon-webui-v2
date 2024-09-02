@@ -121,7 +121,7 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
     PaymentCurrency: el.PaymentBalances.length ? el.PaymentBalances?.[0]?.CoinUnit : constant.PriceCoinName,
     TotalCost: Number(el.PaymentAmountUSD).toString(),
     MiningPeriod: el.Durations,
-    CumulativeProfit: sdk.ledgerStatement.totalMiningReward(el.PaymentBalances?.[0]?.CoinTypeID, el.AppGoodID, el.OrderID) / getDeservedRatio.value(el.AppGoodID) || 0,
+    CumulativeProfit: sdk.ledgerStatement.totalMiningReward(sdk.appPowerRental.mainCoinTypeID(el.AppGoodID), el.AppGoodID, el.OrderID) / getDeservedRatio.value(el.AppGoodID) || 0,
     ProfitCurrency: sdk.appPowerRental.appPowerRental(el.AppGoodID)?.CoinUnit,
     OrderStatus: (sdk.powerRentalOrder.orderState(el.OrderID)?.startsWith('MSG') ? t(sdk.powerRentalOrder.orderState(el.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
                 (orderType ? '(' + orderType + ')' : '')
