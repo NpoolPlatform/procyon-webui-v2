@@ -18,7 +18,7 @@
           </div>
           <div class='three-section'>
             <h4>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</h4>
-            <span class='number'>20</span>
+            <span class='number'>{{ techServiceFeePercent }}</span>
             <span class='unit'>%</span>
           </div>
           <div class='three-section'>
@@ -188,6 +188,7 @@ const targetCoin = computed(() => _coin.coinByEntID(appPowerRental.value?.CoinTy
 
 const description = computed(() => coindescription.coinUsedForDescription(undefined, appPowerRental.value?.CoinTypeID as string, usedFor.value))
 const coins = computed(() => _coin.coins().filter((coin) => coin.ForPay && !coin.Presale && coin.ENV === targetCoin.value?.ENV))
+const techServiceFeePercent = computed(() => sdk.appPowerRental.techniqueFeeRatio(appGoodID.value))
 
 const selectedCoinID = ref(undefined as unknown as string)
 const paymentCoin = computed({

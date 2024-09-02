@@ -42,7 +42,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</h4>
-        <span class='number'>20</span>
+        <span class='number'>{{ techServiceFeePercent }}</span>
         <span class='unit'>%</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_ALEO_SILVER_LEARN_MORE') }}</span>
@@ -169,6 +169,7 @@ const purchaseAmount = computed(() => query.value.purchaseAmount)
 const appGoodID = computed(() => query.value?.appGoodID || 'de78c770-7f77-4935-9976-0fbc5af5bbaf')
 const target = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value))
 const _appPowerRental = computed(() => sdk.appPowerRental.appPowerRental(appGoodID.value))
+const techServiceFeePercent = computed(() => sdk.appPowerRental.techniqueFeeRatio(appGoodID.value))
 
 const currency = coincurrency.useCurrencyStore()
 const description = appcoindescription.useCoinDescriptionStore()
