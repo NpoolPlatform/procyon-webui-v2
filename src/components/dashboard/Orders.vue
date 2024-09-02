@@ -96,7 +96,9 @@ interface ExportOrder {
 
 const getGoodType = computed(() => (appGoodID: string) => {
   const _good = sdk.appPowerRental.appPowerRental(appGoodID)
-  return _good?.GoodType === goodbase.GoodType.PowerRental || _good?.GoodType === goodbase.GoodType.MachineRental ? 'Mining' : _good?.GoodType
+  return _good?.GoodType === goodbase.GoodType.PowerRental ||
+         _good?.GoodType === goodbase.GoodType.MachineRental ||
+         _good?.GoodType === goodbase.GoodType.LegacyPowerRental ? 'Mining' : _good?.GoodType
 })
 
 const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
