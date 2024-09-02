@@ -17,7 +17,7 @@
 
     <div class='line'>
       <span class='label'>{{ $t('MSG_SERVICE_PERIOD') }}:</span>
-      <span class='value'>{{ good.DurationDays }} {{ $t('MSG_DAYS') }}</span>
+      <span class='number'>{{ sdk.appPowerRental.minOrderDurationDays(good.AppGoodID) }}</span>
     </div>
 
     <div class='line'>

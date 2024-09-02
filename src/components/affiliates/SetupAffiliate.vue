@@ -44,7 +44,7 @@ const router = useRouter()
 const query = computed(() => route.query as unknown as Query)
 
 const _achievement = achievement.useAchievementStore()
-const referral = computed(() => _achievement.achievement(undefined, query.value?.userID))
+const referral = computed(() => _achievement.achievement(undefined, query.value?.userID) as achievement.Achievement)
 
 const _user = user.useUserStore()
 const username = computed(() => _user.displayName(undefined, undefined, referral.value?.FirstName,
@@ -69,8 +69,17 @@ const getGoodCommissionThreshold = computed(() => (appGoodID: string) => {
   return _achievement.threshold(undefined, logined?.User.EntID, undefined, appGoodID)
 })
 
-const visibleGoodAchievements = computed(() => referral.value?.Achievements?.filter((el) => {
-  return sdk.appPowerRental.canBuy(el.AppGoodID) && sdk.appPowerRental.appPowerRental(el.AppGoodID)?.EnableSetCommission && !sdk.appPowerRental.appPowerRental(el.AppGoodID)?.TestOnly
+const visibleGoodAchievements = computed(() => Array.from(referral.value?.Achievements.filter((el) => {
+  return (
+    sdk.appPowerRental.canBuy(el.AppGoodID) ||
+    sdk.appPowerRental.visible(el.AppGoodID) ||
+    sdk.appPowerRental.spotQuantity(el.AppGoodID)
+  ) && !sdk.appPowerRental.appPowerRental(el.AppGoodID)?.TestOnly
+})).sort((a, b) => {
+  if (sdk.appPowerRental.displayName(a.AppGoodID, 4) !== sdk.appPowerRental.displayName(b.AppGoodID, 4)) {
+    return sdk.appPowerRental.displayName(a.AppGoodID, 4).localeCompare(sdk.appPowerRental.displayName(b.AppGoodID, 4), 'zh-CN')
+  }
+  return (sdk.appPowerRental.appPowerRental(a.AppGoodID)?.CreatedAt as number) - (sdk.appPowerRental.appPowerRental(b.AppGoodID)?.CreatedAt as number)
 }))
 
 const backTimer = ref(-1)
@@ -89,7 +98,7 @@ const onSubmit = () => {
   })
 
   _user.updateUserKol({
-    TargetUserID: referral.value?.UserID as string,
+    TargetUserID: referral.value?.UserID,
     Kol: true,
     Message: {
       Error: {
@@ -120,7 +129,7 @@ const onSubmit = () => {
           return
       }
       _commission.createCommission({
-        TargetUserID: referral.value?.UserID as string,
+        TargetUserID: referral.value?.UserID,
         AppGoodID: row.AppGoodID,
         SettleType: commission.SettleType.GoodOrderPayment,
         SettleAmountType: getGoodCommissionSettleAmountType.value(row.AppGoodID),

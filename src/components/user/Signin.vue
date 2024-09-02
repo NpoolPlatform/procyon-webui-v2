@@ -154,9 +154,11 @@ const verify = () => {
 const _verify = () => {
   if (!_localapp.myApp?.SigninVerifyEnable) {
     if (target.value?.length) {
+      const query = route.query
+      query.target = undefined as unknown as string
       void router.push({
         path: target.value,
-        query: route.query
+        query: query
       })
       return
     }
@@ -231,9 +233,11 @@ const onCodeVerify = (code: string) => {
       return
     }
     if (target.value?.length) {
+      const query = route.query
+      query.target = undefined as unknown as string
       void router.push({
         path: target.value,
-        query: route.query
+        query: query
       })
       resetStatus()
       return

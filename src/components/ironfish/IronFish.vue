@@ -31,7 +31,7 @@
       </div>
       <div class='three-section'>
         <h4>{{ $t('MSG_SERVICE_PERIOD') }}:</h4>
-        <span class='number'>{{ target?.DurationDays }}</span>
+        <span class='number'>{{ sdk.appPowerRental.minOrderDurationDays(target?.AppGoodID as string) }}</span>
         <span class='unit'>{{ $t('MSG_DAYS') }}</span>
         <div class='tooltip'>
           <img class='more-info' :src='question'><span>{{ $t('MSG_IRON_FISH_LEARN_MORE') }}</span>

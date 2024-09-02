@@ -42,7 +42,7 @@ const table = computed(() => [
     name: 'Product',
     label: t('MSG_PRODUCT'),
     align: 'center',
-    field: (row: powerrentalorder.PowerRentalOrder) => sdk.appPowerRental.displayName(row.AppGoodID, 3)
+    field: (row: powerrentalorder.PowerRentalOrder) => t(sdk.appPowerRental.displayName(row.AppGoodID, 3))
   },
   {
     name: 'Total',
@@ -114,14 +114,14 @@ const exportOrders = computed(() => Array.from(orders.value.filter((el) => {
   return {
     CreatedAt: new Date(el.CreatedAt * 1000).toISOString()?.replace('T', ' ')?.replace('.000Z', ' UTC'),
     ProductType: getGoodType.value(el.AppGoodID),
-    ProductName: sdk.appPowerRental?.displayName(el.AppGoodID, 3),
+    ProductName: t(sdk.appPowerRental.displayName(el.AppGoodID, 3)),
     PurchaseAmount: el.Units,
     UnitType: t(el.GoodQuantityUnit),
     Price: Number(sdk.appPowerRental.appPowerRental(el.AppGoodID)?.UnitPrice) || 0,
     PaymentCurrency: el.PaymentBalances.length ? el.PaymentBalances?.[0]?.CoinUnit : constant.PriceCoinName,
     TotalCost: Number(el.PaymentAmountUSD).toString(),
     MiningPeriod: el.Durations,
-    CumulativeProfit: sdk.ledgerStatement.totalMiningReward(el.PaymentBalances?.[0]?.CoinTypeID, el.AppGoodID, el.OrderID) / getDeservedRatio.value(el.AppGoodID) || 0,
+    CumulativeProfit: sdk.ledgerStatement.totalMiningReward(sdk.appPowerRental.mainCoinTypeID(el.AppGoodID), el.AppGoodID, el.OrderID) / getDeservedRatio.value(el.AppGoodID) || 0,
     ProfitCurrency: sdk.appPowerRental.appPowerRental(el.AppGoodID)?.CoinUnit,
     OrderStatus: (sdk.powerRentalOrder.orderState(el.OrderID)?.startsWith('MSG') ? t(sdk.powerRentalOrder.orderState(el.OrderID)) : t('MSG_AWAITING_CONFIRMATION')) +
                 (orderType ? '(' + orderType + ')' : '')
