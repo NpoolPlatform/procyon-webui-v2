@@ -301,7 +301,7 @@ const getGenerals = (offset:number, limit: number) => {
   })
 }
 
-const getRequiredAppGoods = computed(() => sdk.requiredAppGoods.value?.filter((el) => el.MainAppGoodID === appGoodID.value).map((al) => al.RequiredAppGoodID))
+const getRequiredAppGoods = computed(() => sdk.requiredAppGood.requiredAppGoods.value?.filter((el) => el.MainAppGoodID === appGoodID.value).map((al) => al.RequiredAppGoodID))
 
 const onSubmit = throttle(() => {
   showBalanceDialog.value = false
@@ -332,7 +332,7 @@ const onSubmit = throttle(() => {
   })
 }, ThrottleSeconds * 1000)
 
-const requiredAppGoods = computed(() => sdk.requiredAppGoods.value)
+const requiredAppGoods = computed(() => sdk.requiredAppGood.requiredAppGoods.value)
 onMounted(() => {
   if (!appPowerRental.value) {
     sdk.appPowerRental.getAppPowerRental(appGoodID.value, () => {
@@ -340,7 +340,7 @@ onMounted(() => {
     })
   }
   if (!requiredAppGoods.value?.length) {
-    sdk.getRequiredAppGoods(0, 0)
+    sdk.requiredAppGood.getRequiredAppGoods(0, 0)
   }
 
   if (coins.value.length === 0) {
