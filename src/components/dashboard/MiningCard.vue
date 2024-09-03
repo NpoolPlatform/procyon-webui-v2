@@ -195,7 +195,7 @@ const onExportClick = () => {
     CreatedAt: `${t('MSG_DATE_IN_TEMPLATE')}`,
     Units: `${t('MSG_UNITS_IN_TEMPLATE')}`,
     RewardAmount: `${t('MSG_REWARDS_IN_TEMPLATE')} (${coinUnit.value})`,
-    TechServiceFee: `${t('MSG_TECH_SERVICE_FEE_IN_TEMPLATE')} (${coinUnit.value})`,
+    TechServiceFee: `${t('MSG_TECH_SERVICE_FEE_IN_TEMPLATE', { TECHNIQUE_FEE_PERCENT: techServiceFee.value * 100 })} (${coinUnit.value})`,
     NetRewards: `${t('NSG_NET_REWARDS_IN_TEMPLATE')} (${coinUnit.value})`,
     RewardAmountPerUnit: `${t('MSG_REWARDS_AMOUNT_PER_UNIT_IN_TEMPLATE')} (${coinUnit.value})`,
     CumulativeTotal: `${t('MSG_CUMULATIVE_TOTAL_IN_TEMPLATE')} (${coinUnit.value})`
