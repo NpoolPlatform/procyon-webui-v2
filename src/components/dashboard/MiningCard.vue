@@ -64,10 +64,10 @@
         <div class='line' v-if='goodProfit.AppGoodID === "e6cf6276-adc8-42c1-8452-5458931f74c5"'>
           <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
           <span class='value'>
-            {{ goodProfit.TotalEstimatedDailyReward === 0 ? '*' : utils.getLocaleString(goodProfit.TotalEstimatedDailyReward) }}
+            {{ (1.1321 * Number(goodProfit.Units)).toFixed(4) }}
             <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
         </div>
-        <div class='warning' v-if='sdk.appPowerRental.description(target?.AppGoodID as string, 3)?.length > 0'>
+        <div class='warning' v-if='$t(sdk.appPowerRental.description(target?.AppGoodID as string, 3))?.length > 0'>
           <img src='font-awesome/warning.svg'>
           <span v-html='$t(sdk.appPowerRental.description(target?.AppGoodID as string, 3))' />
         </div>
