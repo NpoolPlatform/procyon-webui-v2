@@ -12,17 +12,17 @@
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_EARNINGS') }}: </span>
         <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : utils.getLocaleString(parseFloat(goodProfit?.TotalInComing?.toFixed(4))) }}</span>
-        <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
+        <span class='sub-value'> {{ $t(goodProfit?.CoinUnit || '') }}</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_LAST_24_HOURS') }}: </span>
         <span class='value'>{{ goodProfit?.CoinPreSale ? '*' : utils.getLocaleString(parseFloat(goodProfit?.Last24HoursInComing?.toFixed(4))) }}</span>
-        <span class='sub-value'> {{ goodProfit?.CoinUnit }}</span>
+        <span class='sub-value'> {{ $t(goodProfit?.CoinUnit || '') }}</span>
       </div>
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}: </span>
         <span class='value'>{{ utils.getLocaleString(goodProfit?.Units) }}</span>
-        <span class='sub-value'>{{ goodProfit.GoodQuantityUnit }}</span>
+        <span class='sub-value'>{{ $t(goodProfit.GoodQuantityUnit) }}</span>
       </div>
     </div>
     <q-slide-transition>
@@ -62,9 +62,15 @@
           </span>
         </div>
         <div class='line' v-if='goodProfit.AppGoodID === "e6cf6276-adc8-42c1-8452-5458931f74c5"'>
-          <span class='label'>{{ $t('MSG_PROVER_INCENTIVE') }}:</span>
+          <span class='label'>{{ $t('MSG_TESTNET_3_INCENTIVE') }}:</span>
           <span class='value'>
             {{ (1.1321 * Number(goodProfit.Units)).toFixed(4) }}
+            <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
+        </div>
+        <div class='line' v-if='goodProfit.AppGoodID === "e6cf6276-adc8-42c1-8452-5458931f74c5" || goodProfit.AppGoodID === "380d41fe-64af-4e2d-bee3-3dec74ab3a3d" || goodProfit.AppGoodID === "de78c770-7f77-4935-9976-0fbc5af5bbaf"'>
+          <span class='label'>{{ $t('MSG_TESTNET_BETA_INCENTIVE') }}:</span>
+          <span class='value'>
+            {{ (0.69 * Number(goodProfit.Units)).toFixed(4) }}
             <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
         </div>
         <div class='warning' v-if='$t(sdk.appPowerRental.description(target?.AppGoodID as string, 3))?.length > 0'>
