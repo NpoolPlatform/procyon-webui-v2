@@ -22,7 +22,7 @@
       <div class='top-line-item'>
         <span class='label'>{{ $t('MSG_CAPACITY') }}: </span>
         <span class='value'>{{ utils.getLocaleString(goodProfit?.Units) }}</span>
-        <span class='sub-value'>{{ $t(goodProfit.GoodQuantityUnit) }}</span>
+        <span class='sub-value'>{{ $t(goodProfit?.GoodQuantityUnit) }}</span>
       </div>
     </div>
     <q-slide-transition>
@@ -57,20 +57,20 @@
         <div class='line'>
           <span class='label'>{{ $t('MSG_TECHNIQUE_SERVICE_FEE') }}:</span>
           <span class='value'>
-            {{ goodProfit?.CoinPreSale ? '*' : utils.getLocaleString(parseFloat((goodProfit.TotalInComing / deservedRatio * techServiceFee)?.toFixed(4))) }}
+            {{ goodProfit?.CoinPreSale ? '*' : utils.getLocaleString(parseFloat((goodProfit?.TotalInComing / deservedRatio * techServiceFee)?.toFixed(4))) }}
             <span class='unit'>{{ goodProfit?.CoinUnit }} ({{ techServiceFee * 100 }}%)</span>
           </span>
         </div>
-        <div class='line' v-if='goodProfit.AppGoodID === "e6cf6276-adc8-42c1-8452-5458931f74c5"'>
+        <div class='line' v-if='goodProfit?.AppGoodID === "e6cf6276-adc8-42c1-8452-5458931f74c5"'>
           <span class='label'>{{ $t('MSG_TESTNET_3_INCENTIVE') }}:</span>
           <span class='value'>
-            {{ (1.1321 * Number(goodProfit.Units)).toFixed(4) }}
+            {{ (1.1321 * Number(goodProfit?.Units)).toFixed(4) }}
             <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
         </div>
-        <div class='line' v-if='goodProfit.AppGoodID === "e6cf6276-adc8-42c1-8452-5458931f74c5" || goodProfit.AppGoodID === "380d41fe-64af-4e2d-bee3-3dec74ab3a3d" || goodProfit.AppGoodID === "de78c770-7f77-4935-9976-0fbc5af5bbaf"'>
+        <div class='line' v-if='goodProfit?.AppGoodID === "e6cf6276-adc8-42c1-8452-5458931f74c5" || goodProfit?.AppGoodID === "380d41fe-64af-4e2d-bee3-3dec74ab3a3d" || goodProfit?.AppGoodID === "de78c770-7f77-4935-9976-0fbc5af5bbaf"'>
           <span class='label'>{{ $t('MSG_TESTNET_BETA_INCENTIVE') }}:</span>
           <span class='value'>
-            {{ (0.69 * Number(goodProfit.Units)).toFixed(4) }}
+            {{ (0.69 * Number(goodProfit?.Units)).toFixed(4) }}
             <span class='unit'>{{ $t('MSG_CREDITS') }}</span></span>
         </div>
         <div class='warning' v-if='$t(sdk.appPowerRental.description(target?.AppGoodID as string, 3))?.length > 0'>
@@ -120,12 +120,12 @@ const goodProfit = toRef(props, 'profit')
 const short = ref(true)
 
 const logined = user.useLocalUserStore()
-const target = computed(() => sdk.appPowerRental.appPowerRental(goodProfit.value?.AppGoodID))
-const coinUnit = computed(() => sdk.appPowerRental.mainCoinUnit(goodProfit.value?.AppGoodID) || '')
-const techServiceFee = computed(() => sdk.appPowerRental.techniqueFeeRatio(goodProfit.value?.AppGoodID) / 100)
+const target = computed(() => sdk.appPowerRental.appPowerRental(goodProfit?.value?.AppGoodID))
+const coinUnit = computed(() => sdk.appPowerRental.mainCoinUnit(goodProfit?.value?.AppGoodID) || '')
+const techServiceFee = computed(() => sdk.appPowerRental.techniqueFeeRatio(goodProfit?.value?.AppGoodID) / 100)
 const deservedRatio = computed(() => 1 - techServiceFee.value)
 
-const showProductPage = computed(() => sdk.appPowerRental.showProductPage(goodProfit.value?.AppGoodID))
+const showProductPage = computed(() => sdk.appPowerRental.showProductPage(goodProfit?.value?.AppGoodID))
 
 const detail = ledgerstatement.useStatementStore()
 const miningDetails = computed(() => detail.miningRewards(undefined, logined.loginedUserID).filter((el) => el.AppGoodID === goodProfit?.value?.AppGoodID))
