@@ -120,15 +120,15 @@ const goodProfit = toRef(props, 'profit')
 const short = ref(true)
 
 const logined = user.useLocalUserStore()
-const target = computed(() => sdk.appPowerRental.appPowerRental(goodProfit?.value?.AppGoodID))
-const coinUnit = computed(() => sdk.appPowerRental.mainCoinUnit(goodProfit?.value?.AppGoodID) || '')
-const techServiceFee = computed(() => sdk.appPowerRental.techniqueFeeRatio(goodProfit?.value?.AppGoodID) / 100)
+const target = computed(() => sdk.appPowerRental.appPowerRental(goodProfit.value?.AppGoodID))
+const coinUnit = computed(() => sdk.appPowerRental.mainCoinUnit(goodProfit.value?.AppGoodID) || '')
+const techServiceFee = computed(() => sdk.appPowerRental.techniqueFeeRatio(goodProfit.value?.AppGoodID) / 100)
 const deservedRatio = computed(() => 1 - techServiceFee.value)
 
-const showProductPage = computed(() => sdk.appPowerRental.showProductPage(goodProfit?.value?.AppGoodID))
+const showProductPage = computed(() => sdk.appPowerRental.showProductPage(goodProfit.value?.AppGoodID))
 
 const detail = ledgerstatement.useStatementStore()
-const miningDetails = computed(() => detail.miningRewards(undefined, logined.loginedUserID).filter((el) => el.AppGoodID === goodProfit?.value?.AppGoodID))
+const miningDetails = computed(() => detail.miningRewards(undefined, logined.loginedUserID).filter((el) => el.AppGoodID === goodProfit.value?.AppGoodID))
 
 const router = useRouter()
 const onPurchaseClick = (_good: apppowerrental.AppPowerRental) => {
