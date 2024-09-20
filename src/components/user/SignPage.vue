@@ -12,11 +12,11 @@
         </q-tooltip>
       </div> -->
       <div class='email-phone-selector'>
-        <div :class='["top", loginWithEmail ? "selected" : ""]' @click='onSwitcherClick(true)'>
+        <div :class='["top", loginWithEmail ? "selected" : ""]' @click='onSwitcherClick(appuserbase.SignMethodType.Mobile)'>
           <img src='font-awesome/email.svg'><span>{{ $t('MSG_SWITCH_REGISTER_WITH_EMAIL') }}</span>
         </div>
         <div class='divider' />
-        <div :class='["bottom", !loginWithEmail ? "selected" : ""]' @click='onSwitcherClick(false)'>
+        <div :class='["bottom", !loginWithEmail ? "selected" : ""]' @click='onSwitcherClick(appuserbase.SignMethodType.Email)'>
           <img src='font-awesome/phone.svg'><span>{{ $t('MSG_SWITCH_REGISTER_WITH_MOBILE') }}</span>
         </div>
       </div>
@@ -52,7 +52,7 @@
 
 <script setup lang='ts'>
 import { utils, appuserbase } from 'src/npoolstore'
-import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted } from 'vue'
+import { defineAsyncComponent, ref, defineProps, toRef, defineEmits, watch, onMounted, computed } from 'vue'
 
 interface Props {
   label: string
@@ -72,7 +72,7 @@ const FormPage = defineAsyncComponent(() => import('src/components/page/FormPage
 const Input = defineAsyncComponent(() => import('src/components/input/Input.vue'))
 const PhoneNO = defineAsyncComponent(() => import('src/components/input/PhoneNO.vue'))
 
-const loginWithEmail = ref(true)
+const loginWithEmail = computed(() => signupMethod.value === appuserbase.SignMethodType.Email)
 const accountError = ref(false)
 
 watch(_accountError, () => {
@@ -113,19 +113,8 @@ const emit = defineEmits<{(e: 'update:accountType', type: string): void;
 
 const signupMethod = ref(appuserbase.SignMethodType.Email)
 
-const onSwitcherClick = (flag: boolean) => {
-  if (flag === loginWithEmail.value) {
-    return
-  }
-  loginWithEmail.value = flag
-  switch (signupMethod.value) {
-    case appuserbase.SignMethodType.Email:
-      signupMethod.value = appuserbase.SignMethodType.Mobile
-      break
-    case appuserbase.SignMethodType.Mobile:
-      signupMethod.value = appuserbase.SignMethodType.Email
-      break
-  }
+const onSwitcherClick = (_signMethod: appuserbase.SignMethodType) => {
+  signupMethod.value = _signMethod
   accountError.value = false
   emit('update:accountType', signupMethod.value)
 }
