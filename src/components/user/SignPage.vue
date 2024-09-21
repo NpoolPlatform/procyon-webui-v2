@@ -114,7 +114,7 @@ const emit = defineEmits<{(e: 'update:accountType', type: string): void;
 const signupMethod = ref(appuserbase.SignMethodType.Email)
 
 const onSwitcherClick = (_signMethod: appuserbase.SignMethodType) => {
-  signupMethod.value = _signMethod
+  signupMethod.value = _signMethod === appuserbase.SignMethodType.Mobile ? appuserbase.SignMethodType.Email : appuserbase.SignMethodType.Mobile
   accountError.value = false
   emit('update:accountType', signupMethod.value)
 }
