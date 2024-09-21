@@ -1,4 +1,4 @@
-FROM nginx:1.20
+FROM uhub.service.ucloud.cn/entropypool_public/nginx:1.20
 
 user root
 
