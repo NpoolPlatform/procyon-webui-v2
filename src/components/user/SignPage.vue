@@ -12,11 +12,11 @@
         </q-tooltip>
       </div> -->
       <div class='email-phone-selector'>
-        <div :class='["top", signupMethod === appuserbase.SignMethodType.Mobile ? "selected" : ""]' @click='onSwitcherClick(appuserbase.SignMethodType.Mobile)'>
+        <div :class='["top", signupMethod === appuserbase.SignMethodType.Email ? "selected" : ""]' @click='onSwitcherClick(appuserbase.SignMethodType.Email)'>
           <img src='font-awesome/email.svg'><span>{{ $t('MSG_SWITCH_REGISTER_WITH_EMAIL') }}</span>
         </div>
         <div class='divider' />
-        <div :class='["bottom", signupMethod === appuserbase.SignMethodType.Email ? "selected" : ""]' @click='onSwitcherClick(appuserbase.SignMethodType.Email)'>
+        <div :class='["bottom", signupMethod === appuserbase.SignMethodType.Mobile ? "selected" : ""]' @click='onSwitcherClick(appuserbase.SignMethodType.Mobile)'>
           <img src='font-awesome/phone.svg'><span>{{ $t('MSG_SWITCH_REGISTER_WITH_MOBILE') }}</span>
         </div>
       </div>
